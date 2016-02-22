@@ -119,7 +119,7 @@ class ReportEvolutionController extends ResourceController
             $em->persist($trend);
             $em->flush(); 
 
-            $this->get('session')->getFlashBag()->add('success', "Analisis de Tendencia Añadido Correctamente");                        
+            $this->get('session')->getFlashBag()->add('success', "Analisis de Tendencia Añadido Exitosamente");                        
         }     
     }
 
@@ -538,7 +538,7 @@ class ReportEvolutionController extends ResourceController
             $em->flush();  
 
         }  
-        $this->get('session')->getFlashBag()->add('success', "Verificación Cargada Correctamente");                                
+        $this->get('session')->getFlashBag()->add('success', "Verificación Cargada Exitosamente");                                
     }
 
     /**
@@ -559,7 +559,7 @@ class ReportEvolutionController extends ResourceController
             $em->remove($verification);
             $em->flush();        
             
-            $this->get('session')->getFlashBag()->add('success', "Verificación Eliminada Correctamente");                        
+            $this->get('session')->getFlashBag()->add('success', "Verificación Eliminada Exitosamente");                        
         }
 
     }
