@@ -471,6 +471,11 @@ class OnePerTenController extends SEIPController {
         $texts[0] = 'No';
         $texts[1] = 'Sí';
         
+        $isAllowToAddAnalisis = false;
+        if($user->getId() == 70 || $user->getId() == 112){
+            $isAllowToAddAnalisis = true;
+        }
+        
         $formSearchOne = $this->createForm(new OnePerTenType);
         return $this->render('PequivenSEIPBundle:Sip:onePerTen\show.html.twig', array(
                     "form" => $formSearchOne->createView(),
@@ -482,6 +487,44 @@ class OnePerTenController extends SEIPController {
                     "texts" => $texts,
                     "members" => $members,
                     "efectividad" => $efectividad,
+                    "isAllowToAddAnalisis" => $isAllowToAddAnalisis,
+        ));
+    }
+    
+    public function addAnalisisAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+        $onePerTen = new OnePerTen();
+        $form = $this->createForm(new OnePerTenType, $onePerTen);
+        $form->handleRequest($request);
+        $idOnePerTen = $request->get("idOnePerTen");
+
+        $onePerTen = $em->getRepository('PequivenSEIPBundle:Sip\OnePerTen')->findOneBy(array('user' => $request->get("idOnePerTen")));
+
+        if ($form->isSubmitted()) {
+//            var_dump($request->get("onePerTen_search")["analisis"]);
+            $onePerTen->setAnalisis($request->get("onePerTen_search")["analisis"]);
+//            $onePerTen->getAnalisis();
+//            die();
+//            $this->addWorkStudyCircleToUser($workStudyCircleRepo, $request->get("workStudyCircle_data")["userWorkerId"], array('includeUser' => false));
+
+            $em->persist($onePerTen);
+            
+            try {
+                $em->flush();
+                $em->getConnection()->commit();
+            } catch (Exception $e) {
+                $em->getConnection()->rollback();
+                throw $e;
+            }
+            $this->get('session')->getFlashBag()->add('success', 'Análisis agregado con éxito ');
+            //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
+            return $this->redirect($this->generateUrl('pequiven_search_members', array("user" => $idOnePerTen)));
+        }
+
+        return $this->render('PequivenSEIPBundle:Sip:onePerTen\addAnalisis.html.twig', array(
+                    'idOnePerTen' => $request->get("idOnePerTen"),
+                    'form' => $form->createView()
         ));
     }
 
@@ -559,6 +602,8 @@ class OnePerTenController extends SEIPController {
         $texts[-1] = 'Sin Información';
         $texts[0] = 'No';
         $texts[1] = 'Sí';
+        
+//        var_dump($object->getAnalisis());die();
 
         $data = array(
             "one" => $one,
