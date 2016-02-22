@@ -1,6 +1,11 @@
 {# Configuración de meses #}
-{% set monthInit = 1 %} 
-{% set monthFinish = "now"|date("m") %} 
+{% if period == "2015" %}
+    {% set monthInit = 9 %} 
+    {% set monthFinish = 12 %} 
+{% else %}
+    {% set monthInit = 1 %} 
+    {% set monthFinish = "now"|date("m") %} 
+{% endif %}
 
 {% set month =  "now"|date("m") %}
 {% set year =  "now"|date("Y") %}    

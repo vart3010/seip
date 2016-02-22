@@ -39,14 +39,11 @@ class ReportEvolutionCausesController extends ResourceController
         $id = $request->get('idIndicator');// Id generico pero debo cambiar que diga id indicator
         
         if ($typeObj == 1) {
-
             $result = $this->findIndicatorOr404($request);  
-
         }elseif ($typeObj == 2) {
             $repository = $this->get('pequiven_seip.repository.arrangementprogram');
             $result = $repository->find($id); 
         }
-
         
         $causeAnalysis = new EvolutionCauseAnalysis();
         $form  = $this->createForm(new EvolutionCauseAnalysisType(), $causeAnalysis);
@@ -58,6 +55,7 @@ class ReportEvolutionCausesController extends ResourceController
             ->setData(array(
                 'indicator' => $result,
                 'form' => $form->createView(),
+                'period'        => $result->getPeriod()->getName()                
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -125,9 +123,7 @@ class ReportEvolutionCausesController extends ResourceController
         $id = $request->get('idIndicator');// Id generico pero debo cambiar que diga id indicator
         
         if ($typeObj == 1) {
-
             $result = $this->findIndicatorOr404($request);                    
-
         }elseif ($typeObj == 2) {
             $repository = $this->get('pequiven_seip.repository.arrangementprogram');
             $result = $repository->find($id); 
@@ -142,7 +138,8 @@ class ReportEvolutionCausesController extends ResourceController
             ->setData(array(
                 'form'           => $form->createView(),
                 'indicator'      => $result,
-                'id' => $id
+                'id' => $id,
+                'period'        => $result->getPeriod()->getName()                
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));

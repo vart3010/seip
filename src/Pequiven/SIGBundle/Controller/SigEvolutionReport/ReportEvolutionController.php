@@ -49,12 +49,9 @@ class ReportEvolutionController extends ResourceController
         $id = $request->get('idIndicator');
 
         $typeObject = $request->get('typeObj');
-        if ($typeObject == 1) {
-            
-            $result = $this->findIndicatorOr404($request);        
-            
-        }elseif($typeObject == 2){
-            
+        if ($typeObject == 1) {            
+            $result = $this->findIndicatorOr404($request);                    
+        }elseif($typeObject == 2){            
             $repository = $this->get('pequiven_seip.repository.arrangementprogram');
             $result = $repository->find($id); 
         }
@@ -69,6 +66,7 @@ class ReportEvolutionController extends ResourceController
             ->setData(array(
                 'indicator' => $result,
                 'form'      => $form->createView(),                
+                'period'        => $result->getPeriod()->getName()
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -160,12 +158,10 @@ class ReportEvolutionController extends ResourceController
 
         $typeObject = $request->get('typeObj');//Tipo de objeto Indicador o PG
 
-        if ($typeObject == 1) {
-            
+        if ($typeObject == 1) {            
             $result = $this->findIndicatorOr404($request); 
 
-            foreach ($result->getObjetives() as $value) {
-                
+            foreach ($result->getObjetives() as $value) {                
                 $compData = $value->getComplejo();//Consultando si tiene complejo
                 $gerData = $value->getGerencia();//Si tiene gerencia
                 
@@ -189,8 +185,7 @@ class ReportEvolutionController extends ResourceController
                 //$gerencia = $value->getGerencia()->getAbbreviation();
             }
             
-        }elseif($typeObject == 2){
-            
+        }elseif($typeObject == 2){            
             $repository = $this->get('pequiven_seip.repository.arrangementprogram');
             $result = $repository->find($id); 
 
@@ -199,9 +194,7 @@ class ReportEvolutionController extends ResourceController
         }
         
         $user = $this->getUser();//Carga de usuario
-
         $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
-
         //$action = $data["cant"];
         $id = $result->getId();
 
@@ -248,12 +241,9 @@ class ReportEvolutionController extends ResourceController
 
         $typeObject = $request->get('typeObj');
 
-        if ($typeObject == 1) {
-            
-            $result = $this->findIndicatorOr404($request);        
-            
-        }elseif($typeObject == 2){
-            
+        if ($typeObject == 1) {            
+            $result = $this->findIndicatorOr404($request);                    
+        }elseif($typeObject == 2){            
             $repository = $this->get('pequiven_seip.repository.arrangementprogram');
             $result = $repository->find($id); 
         }
@@ -278,7 +268,8 @@ class ReportEvolutionController extends ResourceController
                 'code'          => $codifigication,
                 'config'        => $config,
                 'form_value'    => $form_value->createView(),
-                'form'          => $form
+                'form'          => $form,
+                'period'        => $result->getPeriod()->getName()                
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -378,6 +369,7 @@ class ReportEvolutionController extends ResourceController
                     //$AcValue = 0;
                 }
             }
+            $this->get('session')->getFlashBag()->add('success', "Plan de Acción Cargado Exitosamente");            
     
     }
 
@@ -447,8 +439,8 @@ class ReportEvolutionController extends ResourceController
                 }
 
             }
-            //$this->get('session')->getFlashBag()->add('success', "Valores Cargados Correctamente");                        
         }
+            $this->get('session')->getFlashBag()->add('success', "Avance Cargado Exitosamente");                        
 
     }    
 
@@ -676,7 +668,7 @@ class ReportEvolutionController extends ResourceController
         $id = $request->get('idIndicator');
         $typeObject = $request->get('typeObj');
         $cont = 1; 
-        $posCause = 0;        
+        $posCause = 1;        
         
         //Mes Actual
         $monthActual = date("m");
@@ -700,6 +692,10 @@ class ReportEvolutionController extends ResourceController
                         $cont++; 
                     }
                     $action = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause));
+                }
+                if (!isset($action)) {
+                    $this->get('session')->getFlashBag()->add('error', "Plan de Acción no Cargado! Ha seleccionado un mes que no posee Causas Cargadas"); 
+                    die();                                           
                 }
                 $cantAction = count($action) + 1;
                 $cantAction = "0".''.$cantAction.''."-";                
