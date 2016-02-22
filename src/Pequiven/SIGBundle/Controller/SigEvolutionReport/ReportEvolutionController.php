@@ -68,7 +68,7 @@ class ReportEvolutionController extends ResourceController
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(
                 'indicator' => $result,
-                'form' => $form->createView(),
+                'form'      => $form->createView(),                
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -229,6 +229,7 @@ class ReportEvolutionController extends ResourceController
                 'code'          => $codifigication,
                 'form_value'    => $form_value->createView(),
                 'form'          => $form->createView(),
+                'period'        => $result->getPeriod()->getName()
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
