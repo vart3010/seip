@@ -76,7 +76,7 @@ class ReportEvolutionCausesController extends ResourceController
 
         $typeObject = $request->get('typeObj');//Tipo de Objeto
 
-        $month = $request->get('causeAnalysis_form')['month'];//Carga de Mes pasado
+        $month = $request->get('set_data')['month'];//Carga de Mes pasado
 
         $user = $this->getUser();        
         $causeAnalysis = new EvolutionCauseAnalysis();
@@ -162,7 +162,7 @@ class ReportEvolutionCausesController extends ResourceController
 
         $typeObject = $request->get('typeObj');
         
-        $month = $request->get('evolutioncause')['month'];//Carga de Mes pasado
+        $month = $request->get('set_data')['month'];//Carga de Mes pasado
         
         $user = $this->getUser();
         $cause = new EvolutionCause();

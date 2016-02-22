@@ -87,7 +87,7 @@ class ReportEvolutionController extends ResourceController
 
         $typeObject = $request->get('typeObj');
         
-        $month = $request->get('evolutiontrend')['month'];//Carga de Mes pasado
+        $month = $request->get('set_data')['month'];//Carga de Mes pasado
         
         $user = $this->getUser();
         
@@ -300,7 +300,7 @@ class ReportEvolutionController extends ResourceController
         
         $user = $this->getUser();
         
-        $monthSet = $request->get('actionResults')['month'];//recibiendo mes
+        $monthSet = $request->get('set_data')['month'];//recibiendo mes
 
         $causeAction = $request->get('actionResults')['evolutionCause'];//Recibiendo Causa
         
