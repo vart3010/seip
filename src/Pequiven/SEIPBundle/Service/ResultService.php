@@ -802,7 +802,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if (!$arrangementRange) {
             throw new \LogicException(sprintf('El indicador "%s(%s)" no tiene un rango de gestión definido.', $indicator->getRef(), $indicator->getId()));
         }
-
+        
+        //Validamos que no existe error en el rango del Indicador para que pueda ser recalculado sin problemas
         $error = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendenty);
         $result = 0;
         if ($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX) {
@@ -813,24 +814,27 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($error == null) {
                 if ($indicator->hasNotification()) {
                     if ($this->calculateRangeGood($indicator, $tendenty)) {//Rango Verde R*100% (Máximo 100)
+                            $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_GOOD);
 //                        if ($result > 100) {
                             $result = 100;
 //                        }
                     } else if ($this->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_MIDDLE);
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
                         $value = $result;
                         $varMulti = 10 * $result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($value, $varDiv, 2);
                     } else if ($this->calculateRangeBad($indicator, $tendenty)) {//Rango Rojo R*0%
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_BAD);
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
                         $value = $result;
                         $varMulti = 20 * $result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($value, $varDiv, 2);
-                        if ($result < 0) {
-                            $result = 0;
-                        }
+//                        if ($result < 0) {
+//                            $result = 0;
+//                        }
                     }
                 } else {
                     $result = 0;
@@ -847,6 +851,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($error == null) {
                 if ($indicator->hasNotification()) {
                     if ($this->calculateRangeGood($indicator, $tendenty)) {//Rango Verde R*100% (Máximo 100)
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_GOOD);
 //                        if ($result > 100) {
 //                            $result = 100;
 //                        }
@@ -856,13 +861,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //                        }
                         $result = 100;
                     } else if ($this->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_MIDDLE);
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
                         $varMulti = 10 * $result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($result, $varDiv, 2);
 //                        $result = $result/2;
                     } else if ($this->calculateRangeBad($indicator, $tendenty)) {//Rango Rojo R*0%
-                        
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_BAD);
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
 //                        var_dump($result);die();
                         $varMulti = 20 * $result;
@@ -886,24 +892,27 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($error == null) {
                 if ($indicator->hasNotification()) {
                     if ($this->calculateRangeGood($indicator, $tendenty)) {//Rango Verde R*100% (Máximo 100)
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_GOOD);
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
-                        if ($result > 100) {
-                            $result = 100;
-                        }
+//                        if ($result > 100) {
+//                            $result = 100;
+//                        }
                     } else if ($this->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_MIDDLE);
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
                         $varMulti = 10 * $result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($result, $varDiv, 2);
 //                        $result = $result / 2;
                     } else if ($this->calculateRangeBad($indicator, $tendenty)) {//Rango Rojo R*0%
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_BAD);
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
                         $varMulti = 20 * $result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($result, $varDiv, 2);
-                        if ($result < 0) {
-                            $result = 0;
-                        }
+//                        if ($result < 0) {
+//                            $result = 0;
+//                        }
 //                        $result = 0;
                     }
                 } else {
@@ -922,7 +931,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if ($result == 0) {
             $amountPenalty = 0;
         }
-        $indicator->setResult($result - $amountPenalty);
+        
+        $resultComplete = $result - $amountPenalty;
+        $resultComplete = $resultComplete > 100 ? 100: ($resultComplete < 0 ? 0:$resultComplete);
+        
+//        $indicator->setResult($result - $amountPenalty);
+        $indicator->setResult($resultComplete);
 
         $em->persist($indicator);
         $em->persist($details);
