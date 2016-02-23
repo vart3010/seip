@@ -118,15 +118,19 @@ class MonitoringController extends ResourceController
     public function addAction(Request $request){
         
         $id = $request->get('id');  
+        $period = $this->getPeriodService()->getPeriodActive();
 
         $standardization = new standardization();
-        $form  = $this->createForm(new StandardizationType(), $standardization);
+        $form  = $this->createForm(new StandardizationType($period), $standardization);
         
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
             $managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id); 
-
             $em = $this->getDoctrine()->getManager();                        
+
+            if ($request->get('analysis')) {
+                $standardization->setAnalysis(1);
+            }
 
             $standardization->setManagementSystem($managemensystems);
             $em->persist($standardization);            
@@ -259,5 +263,13 @@ class MonitoringController extends ResourceController
      */
     protected function getNotificationService() {        
         return $this->container->get('seip.service.notification');
+    }
+
+    /**
+     *  Period
+     *
+     */
+    protected function getPeriodService() {
+        return $this->container->get('pequiven_seip.service.period');
     }
 }

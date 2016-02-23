@@ -47,15 +47,16 @@ class Standardization extends model
 
     /**
      * arrangementProgram
-     * @var string
-     * @ORM\Column(name="arrangementProgram",type="string")
+     * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
+     * @ORM\ManyToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",inversedBy="standardization")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $arrangementProgram;
 
     /**
      * analysis
      * @var string
-     * @ORM\Column(name="analysis",type="string")
+     * @ORM\Column(name="analysis",type="string", nullable=true)
      */
     private $analysis;
 

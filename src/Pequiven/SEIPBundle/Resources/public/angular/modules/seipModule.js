@@ -2545,7 +2545,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormTracing = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(650);                
+                $scope.setHeight(700);                
                 var parameters = {
                     id: $scope.id_managementSystem,                    
                     _dc: numero

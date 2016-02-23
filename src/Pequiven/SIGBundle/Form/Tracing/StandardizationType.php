@@ -16,6 +16,8 @@ class StandardizationType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {   
+        $period = $this->period;
+
         $builder
             ->add('area', 'text', array(
                 'label' => 'Área o Proceso',
@@ -47,6 +49,21 @@ class StandardizationType extends AbstractType
                 'label' => 'Programa de Gestión',
                 'label_attr' => array('class' => 'label'),
                 'attr'=> array('class'=> 'input input-xlarge ' )))
+            ->add('arrangementProgram', null, array(
+                    'query_builder' => function(\Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository $repository) use($period) {
+                        return $repository->getArrangementByStandardization($period);
+                    },                               
+                    'label' => 'Causa del Plan',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array(
+                        'class' => "input-large select2",
+                        //'onclick' => 'cargaData()',
+                        'style' => 'width: 270px',
+                        //'multiple' => 'multiple'
+                    ),
+                    'empty_value' => 'Seleccione...',
+                    'required' => true,
+                ))
         ;
     }
     
@@ -70,6 +87,13 @@ class StandardizationType extends AbstractType
     public function getName()
     {
         return 'sig_standardization';
+    }
+
+    protected $period;
+    
+    public function __construct ($period)
+    {
+        $this->period = $period;               
     }
     
 }

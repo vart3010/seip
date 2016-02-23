@@ -23,9 +23,26 @@
                 {{ form_widget(form.description) }}            
             </div>  
             <div class="field-block button-height" >            
-                {{ form_label(form.arrangementProgram) }}            
-                {{ form_widget(form.arrangementProgram) }}            
-            </div>                
+                <label class="label">Tratamiento</label>                
+                <input type="checkbox" name="analysis" id="analysis" value="1" class="checkbox mid-margin-left"> <label for="checkbox-2" class="">Análisis Causa Raíz</label>
+                
+                <input type="checkbox" name="arrangementProgram" id="arrangementProgram" value="1" class="checkbox mid-margin-left" onchange="showPg();">                 
+                <label for="checkbox-2" class="">Programa de Gestión</label>
+            </div>    
     </fieldset>
+    
+    <fieldset class="fieldset" style='display:none;' id="loadPg">
+        <legend class="legend">Programa de Gestión</legend>
+        <label class="label">Seleccione programa de Gestión</label>
+            {{ form_label(form.arrangementProgram) }}            
+            {{ form_widget(form.arrangementProgram) }} 
+        <p></p>
+    </fieldset>            
+
 </form>    
+<script type="text/javascript">
+    function showPg(){
+        document.getElementById('loadPg').style.display = 'block';                        
+    }    
+</script>
 {% endblock %}

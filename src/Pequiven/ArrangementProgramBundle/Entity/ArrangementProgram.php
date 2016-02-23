@@ -288,6 +288,14 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      */
     protected $arrangementProgramVerification;
 
+    /**
+     * Standardization
+     * 
+     * @var \Pequiven\SIGBundle\Entity\Tracing\Standardization
+     * @ORM\OneToMany(targetEntity="Pequiven\SIGBundle\Entity\Tracing\Standardization",mappedBy="arrangementProgram",cascade={"persist","remove"})
+     */
+    protected $standardization;
+
 
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1045,6 +1053,37 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
 
             $this->managementSystems = new ArrayCollection();
         }
+    }
+
+    /**
+     * Add standardization
+     *
+     * @param \Pequiven\SIGBundle\Entity\Tracing\Standardization $standardization
+     * @return Standardization
+     */
+    public function addStandardization(\Pequiven\SIGBundle\Entity\Tracing\Standardization $observation) {
+        $observation->setArrangementProgram($this);
+        $this->standardization->add($observation);
+
+        return $this;
+    }
+
+    /**
+     * Remove standardization
+     *
+     * @param \Pequiven\SIGBundle\Entity\Tracing\Standardization $standardization
+     */
+    public function removeStandardization(\Pequiven\SIGBundle\Entity\Tracing\Standardization $standardization) {
+        $this->standardization->removeElement($standardization);
+    }
+
+    /**
+     * Get standardization
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getStandardization() {
+        return $this->standardization;
     }
 
 }
