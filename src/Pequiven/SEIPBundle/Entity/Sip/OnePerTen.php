@@ -70,6 +70,13 @@ class OnePerTen {
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="analisis", type="text", nullable=true)
+     */
+    private $analisis;
 
     /**
      * fecha voto
@@ -461,5 +468,15 @@ class OnePerTen {
     function setMemberOnePerTenPsuv($memberOnePerTenPsuv) {
         $this->memberOnePerTenPsuv = $memberOnePerTenPsuv;
     }
+    
+    function getAnalisis() {
+        return $this->analisis;
+    }
+
+    function setAnalisis($analisis) {
+        $this->analisis = $analisis;
+    }
+
+
 
 }

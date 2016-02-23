@@ -203,7 +203,6 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 $form
                     ->with('Estratégico')
                     ->add('lineStrategics')
-                    ->add('orderShowFromParent')
                     ->end();
             }
         }
@@ -211,8 +210,10 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->with('Gráficos Personalizados')
             ->add('lineStrategics')
             ->add('complejoDashboardSpecific','sonata_type_model_autocomplete',array(
-                'property' => array('description')
+                'property' => array('description'),
+                'required' => false,
             ))
+            ->add('orderShowFromParent')
             ->add('showByDashboardSpecific', null, array(
                 'required' => false,
             ))

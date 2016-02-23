@@ -134,13 +134,17 @@ class WorkStudyCircleController extends SEIPController {
 
             $user = $em->getRepository('PequivenSEIPBundle:User')->findOneBy(array('id' => $member));
 
-            if ($options['typeCoordinator'] == WorkStudyCircle::TYPE_COORDINATOR) {
-                $workStudyCircle->setCoordinator($user);
-            } elseif ($options['typeCoordinator'] == WorkStudyCircle::TYPE_COORDINATOR_DISCUSSION) {
-                $workStudyCircle->setCoordinatorDiscussion($user);
+            if(isset($options['typeCoordinator'])){
+                if ($options['typeCoordinator'] == WorkStudyCircle::TYPE_COORDINATOR) {
+                    $workStudyCircle->setCoordinator($user);
+                } elseif ($options['typeCoordinator'] == WorkStudyCircle::TYPE_COORDINATOR_DISCUSSION) {
+                    $workStudyCircle->setCoordinatorDiscussion($user);
+                }
+                $em->persist($workStudyCircle);
+            } else{
+                $user->setWorkStudyCircle($workStudyCircle);
+                $em->persist($user);
             }
-//            $user->setWorkStudyCircle($workStudyCircle);
-            $em->persist($workStudyCircle);
         }
 
 //        if($includeUser){
