@@ -82,6 +82,40 @@ class GoalRepository extends EntityRepository {
         return $result;
     }
 
+    /**
+     * FUNCION QUE RETORNA LOS RESPONSABLES DE METAS EN UN PROGRAMA DE GESTIÓN. LO UTILIZO PARA EL SENCHA DE NOTIFICACION DE PG
+     * @param type $idAP
+     * @return type
+     */
+    function getGoalResponsiblesbyAP($idAP) {
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = '
+            SELECT DISTINCT
+    user.id,
+    (CONCAT(COALESCE(user.firstname, " "),
+            " ",
+            COALESCE(user.lastname, " "))) AS Responsable
+FROM
+    goals_users AS g_u
+        INNER JOIN
+    seip_user AS user ON (user.id = g_u.user_id)
+        INNER JOIN
+    Goal AS goal ON (goal.id = g_u.goal_id)
+        INNER JOIN
+    ArrangementProgram AS ap ON (goal.timeline_id = ap.timeline_id)
+WHERE
+    ap.id = ' . $idAP . '
+            '
+        ;
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        return $result;
+    }
+
     protected function getAlias() {
         return 'g';
     }

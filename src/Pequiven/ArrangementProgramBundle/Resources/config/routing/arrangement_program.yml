@@ -227,3 +227,9 @@ AP_movement_remove:
     methods: [GET|POST]
     options:
         expose: true
+        
+AP_notification_search:
+    path: /
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram_rest:getGoalsDetailsAction
+    methods: [GET|POST]

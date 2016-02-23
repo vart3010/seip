@@ -126,3 +126,12 @@ TecnocreacionesToolsBundleExtraFormTypes:
 _console:
     resource: "@CoreSphereConsoleBundle/Resources/config/routing.yml"
     prefix: /admin/_console
+    
+AP_movement:
+    path: /mov.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram_movement:showAPAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]

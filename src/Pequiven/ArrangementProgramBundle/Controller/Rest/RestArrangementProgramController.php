@@ -16,26 +16,33 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
- * Controlador rest de los programas de gestion
+ * Controlador rest de Notificacion de los programas de gestion
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
- * @Route("/arrangement-program")
+ * @Route("/arrangementprogram")
  */
-class RestArrangementProgramController extends FOSRestController 
-{
+class RestArrangementProgramController extends FOSRestController {
+
     /**
      * @Annotations\Get("/{id}/goals-details.{_format}",name="get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
      */
     function getGoalsDetailsAction($id, Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        
+        //var_dump($request);
 
+        $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
-        $timeline = $entity->getTimeline();
+
         $data = array();
+        $responsibles = array();
+
+        $timeline = $entity->getTimeline();
+        $responsibles = $em->getRepository('PequivenArrangementProgramBundle:Goal')->getGoalResponsiblesbyAP($entity->getid());
+
         foreach ($timeline->getGoals() as $goal) {
             $data[] = $goal->getGoalDetails();
         }
@@ -44,8 +51,10 @@ class RestArrangementProgramController extends FOSRestController
         $result = array(
             'data' => $data,
             'success' => true,
-            'total' => count($data)
+            'total' => count($data),
+            'responsibles' => $responsibles,
         );
+
         if ($request->get('_format') == 'html') {
 //            $date = new DateTime();
 //            $month = $date->format('m');
@@ -83,7 +92,7 @@ class RestArrangementProgramController extends FOSRestController
     }
 
     /**
-     * @Annotations\Put("/{id}/goals-details.{_format}/{slug}",name="put_arrangementprogram_rest_restarrangementprogram_putgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
+     * @Annotations\Put("/{id}/{user}/goals-details.{_format}/{slug}",name="put_arrangementprogram_rest_restarrangementprogram_putgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
      */
     function putGoalsDetailsAction($id, Request $request, $slug) {
         $em = $this->getDoctrine()->getManager();
@@ -94,12 +103,11 @@ class RestArrangementProgramController extends FOSRestController
             throw $this->createNotFoundException('Unable to find GoalDetails entity.');
         }
         $arrangementProgram = $entity->getGoal()->getTimeline()->getArrangementProgram();
-        
+
         $hasPermissionToNotify = $this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram);
         $hasPermissionToPlanned = $this->getArrangementProgramManager()->hasPermissionToPlanned($arrangementProgram);
-        if (!$hasPermissionToNotify
-                && !$hasPermissionToPlanned
-                ) {
+        if (!$hasPermissionToNotify && !$hasPermissionToPlanned
+        ) {
             throw new AccessDeniedException();
         }
 
@@ -108,24 +116,22 @@ class RestArrangementProgramController extends FOSRestController
 
         unset($dataRequest['id']);
         unset($dataRequest['null']);
-        
+
         foreach ($dataRequest as $property => $value) {
             $permission = true;
-            if(GoalDetails::isPlannedProperty($property) === true
-                && $hasPermissionToPlanned === false
-            ){
+            if (GoalDetails::isPlannedProperty($property) === true && $hasPermissionToPlanned === false
+            ) {
                 $permission = false;
             }
-            if(GoalDetails::isRealProperty($property) === true && 
-                    $hasPermissionToNotify === false)
-            {
+            if (GoalDetails::isRealProperty($property) === true &&
+                    $hasPermissionToNotify === false) {
                 $permission = false;
             }
-            if($permission === false){
+            if ($permission === false) {
                 throw new AccessDeniedException();
             }
         }
-        
+
         $form->submit($dataRequest, false);
         $success = false;
         if ($form->isValid()) {
@@ -193,14 +199,14 @@ class RestArrangementProgramController extends FOSRestController
         $view->setTemplate("PequivenArrangementProgramBundle:Rest:ArrangementProgram/form.html.twig");
         return $view;
     }
-    
+
     /**
      * Manejador de programa de gestion
      * 
      * @return \Pequiven\ArrangementProgramBundle\Model\ArrangementProgramManager
      */
-    private function getArrangementProgramManager()
-    {
+    private function getArrangementProgramManager() {
         return $this->get('seip.arrangement_program.manager');
     }
+
 }
