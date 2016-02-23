@@ -43,8 +43,8 @@ class StandardizationType extends AbstractType
                 'label' => 'Descripción de la NC',
                 'label_attr' => array('class' => 'label'),
                 'attr'=> array('class'=> 'input input-xlarge ' ))) 
-            ->add('treatment', 'text', array(
-                'label' => 'Tratamiento',
+            ->add('arrangementProgram', 'text', array(
+                'label' => 'Programa de Gestión',
                 'label_attr' => array('class' => 'label'),
                 'attr'=> array('class'=> 'input input-xlarge ' )))
         ;

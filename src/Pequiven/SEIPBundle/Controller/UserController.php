@@ -53,6 +53,8 @@ class UserController extends baseController {
             2 => "Programas",
             3 => "Indicadores",
             4 => "Seguimiento y Eficacia",
+            5 => "Producción",
+            6 => "Informes de Evolución",
         ];
 
         $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('user' => $securityContext->getToken()->getUser()), array('createdAt' => 'DESC'));

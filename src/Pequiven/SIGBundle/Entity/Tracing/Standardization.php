@@ -46,11 +46,18 @@ class Standardization extends model
     private $description;
 
     /**
-     * treatment
+     * arrangementProgram
      * @var string
-     * @ORM\Column(name="treatment",type="string")
+     * @ORM\Column(name="arrangementProgram",type="string")
      */
-    private $treatment;
+    private $arrangementProgram;
+
+    /**
+     * analysis
+     * @var string
+     * @ORM\Column(name="analysis",type="string")
+     */
+    private $analysis;
 
     /**
      * status
@@ -181,26 +188,49 @@ class Standardization extends model
     }
 
     /**
-     * Set treatment
+     * Set arrangementProgram
      *
-     * @param string $treatment
-     * @return treatment
+     * @param string $arrangementProgram
+     * @return arrangementProgram
      */
-    public function setTreatment($treatment)
+    public function setArrangementProgram($arrangementProgram)
     {
-        $this->treatment = $treatment;
+        $this->arrangementProgram = $arrangementProgram;
 
         return $this;
     }
 
     /**
-     * Get treatment
+     * Get arrangementProgram
      *
      * @return string 
      */
-    public function getTreatment()
+    public function getArrangementProgram()
     {
-        return $this->treatment;
+        return $this->arrangementProgram;
+    }
+
+    /**
+     * Set analysis
+     *
+     * @param string $analysis
+     * @return analysis
+     */
+    public function setAnalysis($analysis)
+    {
+        $this->analysis = $analysis;
+
+        return $this;
+    }
+
+    /**
+     * Get analysis
+     *
+     * @return string 
+     */
+    public function getAnalysis()
+    {
+        return $this->analysis;
     }
 
     /**
