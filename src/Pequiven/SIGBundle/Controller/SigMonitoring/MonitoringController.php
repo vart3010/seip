@@ -193,10 +193,15 @@ class MonitoringController extends ResourceController
     }
 
     public function exportAction(Request $request){
+        
+        $em = $this->getDoctrine()->getManager();
+
         $id = $request->get('id');
         $managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id); 
         
         $resource = $this->findOr404($request);
+
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('managementSystem' => $id));
         
         //Formato para todo el documento
         $styleArrayBordersContent = array(
