@@ -19,7 +19,7 @@ class StandardizationType extends AbstractType
         $period = $this->period;
 
         $builder
-            ->add('area', 'text', array(
+            ->add('area', 'textarea', array(
                 'label' => 'Área o Proceso',
                 'label_attr' => array('class' => 'label'),
                 'attr'=> array('class'=> 'input input-xlarge ' ))) 

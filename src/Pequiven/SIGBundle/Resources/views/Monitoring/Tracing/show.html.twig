@@ -28,12 +28,12 @@
                                 {% for dataStandardization in standardization %}
                                     <tr {{ cycle(["even", "odd"], loop.index) }}>
                                         <td width="3%"><B>{{ loop.index }}</B></td>
-                                        <td>{{ dataStandardization.area }}</td>
-                                        <td>{{ detection[dataStandardization.detection - 1].description }}</td>
-                                        <td>{{ dataStandardization.code }}</td>
-                                        <td>{{ labelsTypeNc[dataStandardization.type - 1].description }}</td>
-                                        <td>{{ dataStandardization.description }}</td>
-                                        <td>
+                                        <td width="15%" align="justify">{{ dataStandardization.area }}</td>
+                                        <td width="8%">{{ detection[dataStandardization.detection - 1].description }}</td>
+                                        <td width="8%">{{ dataStandardization.code }}</td>
+                                        <td width="8%">{{ labelsTypeNc[dataStandardization.type - 1].description }}</td>
+                                        <td width="25%" align="justify">{{ dataStandardization.description }}</td>
+                                        <td width="15%">
                                             {% if dataStandardization.analysis %}
                                                 <a href class="" title="Programa de Gestión">
                                                     <i class="fa fa-file-text"></i>
@@ -45,7 +45,7 @@
                                                 {{ generateLink(dataStandardization.arrangementProgram) }}                                            
                                             {% endif %}                                            
                                         </td>                            
-                                        <td><B>{{ status[dataStandardization.status] }}</B></td>
+                                        <td width="8%"><B>{{ status[dataStandardization.status] }}</B></td>
                                         <th class="align-right vertical-center" width="8%">  
                                             {% if dataStandardization.status == 0 %}
                                                 <a href  class="button icon-pencil with-tooltip" title="Editar"></a>

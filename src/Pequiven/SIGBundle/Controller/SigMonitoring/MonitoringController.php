@@ -241,10 +241,72 @@ class MonitoringController extends ResourceController
                 ->setActiveSheetIndex(0);
         $activeSheet = $objPHPExcel->getActiveSheet();
         $activeSheet->getDefaultRowDimension()->setRowHeight();
-        
-        ///$fileName = sprintf('SEIP-Seguimiento y Verificación-%s-%s.xls',$now->format('Ymd-His'));
-        $fileName = 'SEIP-Seguimiento y Verificación-%s-%s.xls'.$now->format('Ymd-His');
 
+        $row = $iniFile = 10;//Fila Inicial del skeleton
+        $contResult = $contData = 0;//Contador de resultados totales
+        $rowHeight = 70;//Alto de la fila
+        $countStandardization = count($standardization);
+        $rowIni = $row;//Fila Inicial 
+        $rowFin = $row;//Fila Final 
+        $contRow = 1;
+
+        foreach ($standardization as $key => $standardizationData) {
+            $analysis = $arrangementProgram = $cp = $ai = $ae = $re = $po = "";
+
+            $activeSheet->setCellValue('A'.$row, $standardizationData->getArea());//Seteamos 
+            $activeSheet->setCellValue('B'.$row, $contRow);//Seteamos 
+            
+            if ($standardizationData->getDetection() == 1) {
+                $cp = "X";
+            }elseif ($standardizationData->getDetection() == 2) {
+                $ai = "X";
+            }elseif ($standardizationData->getDetection() == 3) {
+                $ae = "X";
+            }
+
+            $activeSheet->setCellValue('C'.$row, $cp);//Seteamos 
+            $activeSheet->setCellValue('D'.$row, $ai);//Seteamos 
+            $activeSheet->setCellValue('E'.$row, $ae);//Seteamos 
+
+            $activeSheet->setCellValue('F'.$row, $standardizationData->getCode());//Seteamos el Codigo
+            
+            if ($standardizationData->getType() == 1) {
+                $re = "X";
+            }elseif ($standardizationData->getType() == 2) {
+                $po = "X";
+            }
+
+            $activeSheet->setCellValue('G'.$row, $re);//Seteamos 
+            $activeSheet->setCellValue('H'.$row, $po);//Seteamos 
+
+            $activeSheet->setCellValue('I'.$row, $standardizationData->getDescription());//Seteamos 
+            
+            //Seteamos si hay analisis cargado
+            if ($standardizationData->getAnalysis() == 1) {
+                $analysis = "X";
+            }            
+            $activeSheet->setCellValue('J'.$row, $analysis);//Seteamos 
+            
+            if ($standardizationData->getArrangementProgram()) {
+                $arrangementProgram = $standardizationData->getArrangementProgram();
+            }
+            $activeSheet->setCellValue('K'.$row, $arrangementProgram);//Seteamos 
+
+            $row++;                                
+            $contResult++; 
+            $contRow++;
+        }
+
+        $row = 10;//Fila Inicial del skeleton
+        $contRow = ($contRow + $row) - 2;
+        for($i=$row;$i<=$contRow;$i++){//Recorremos toda la matriz para setear el alto y los bordes en cada celda
+            $activeSheet->getRowDimension($i)->setRowHeight($rowHeight);
+            $activeSheet->getStyle(sprintf('A%s:S%s',$i,$i))->applyFromArray($styleArrayBordersContent);
+        }
+        $row = 16 + 1;
+
+        $fileName = sprintf('SEIP-Seguimiento y Verificación de las Acciones-%s-%s.xls',$managemensystems->getDescription(),$now->format('Ymd-His'));
+        
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'.$fileName.'"');
         header('Cache-Control: max-age=0');
