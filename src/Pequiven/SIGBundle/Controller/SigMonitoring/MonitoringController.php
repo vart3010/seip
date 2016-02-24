@@ -221,10 +221,39 @@ class MonitoringController extends ResourceController
         
         //Formato en negrita
         $styleArray = array(
-            'font' => array(
-                'bold' => true
-            )
+            "1" => [      
+                'fill' => array(
+                    'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                    'startcolor' => array(
+                    'rgb' => "007e20"
+                    )
+                )
+            ],
+            "2" => [                          
+                'fill' => array(
+                    'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                    'startcolor' => array(
+                    'rgb' => "e4f200"
+                    )
+                )
+            ],
+            "3" => [                          
+                'fill' => array(
+                    'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                    'startcolor' => array(
+                    'rgb' => "ff0000"
+                    )
+                )
+            ]
         );
+
+        //Formato en negrita
+        $styleFont = [
+            'font' => [
+                'bold' => true
+            ]
+            
+        ];
         
         $path = $this->get('kernel')->locateResource('@PequivenSIGBundle/Resources/skeleton/base-sig-se.xls');
         $now = new \DateTime();
@@ -308,6 +337,7 @@ class MonitoringController extends ResourceController
         }
         
         $activeSheet->setCellValue('B'.$rowLeyend, "LEYENDA:");//Seteamos la Leyenda        
+        $activeSheet->getStyle(sprintf('B%s:B%s',$rowLeyend,$rowLeyend))->applyFromArray($styleFont);                           
         
         $leyens = [
             1 => "CERRADA: LA ACCIÓN SE CUMPLIÓ EN UN 100%",
@@ -326,10 +356,13 @@ class MonitoringController extends ResourceController
         for ($i=1; $i < 6; $i++) { 
             $rowLeyend = $rowLeyend + 1;
             if ($i < 4) {
+                $activeSheet->getStyle(sprintf('B%s:B%s',$rowLeyend,$rowLeyend))->applyFromArray($styleArray[$i]);           
+                $activeSheet->getStyle(sprintf('C%s:C%s',$rowLeyend,$rowLeyend))->applyFromArray($styleFont);                           
                 $activeSheet->setCellValue('C'.$rowLeyend, $leyens[$i]);//Seteamos                                         
                 $activeSheet->mergeCells(sprintf('C%s:I%s',($rowLeyend),($rowLeyend)));
             }
-            $activeSheet->setCellValue('J'.$rowLeyend, $leyensData[$i]);//Seteamos Codigifacion
+            $activeSheet->setCellValue('J'.$rowLeyend, $leyensData[$i]);//Seteamos Codigifacion 
+            $activeSheet->getStyle(sprintf('J%s:J%s',$rowLeyend,$rowLeyend))->applyFromArray($styleFont);                           
             $activeSheet->mergeCells(sprintf('J%s:K%s',($rowLeyend),($rowLeyend)));
         }
 
