@@ -18,6 +18,7 @@ use Pequiven\SIGBundle\Form\Tracing\MaintenanceType;
 class MaintenanceController extends ResourceController
 {
     public function addAction(Request $request){
+        $em = $this->getDoctrine()->getManager();                        
         
         $id = $request->get('id');  
         $period = $this->getPeriodService()->getPeriodActive();
@@ -27,20 +28,15 @@ class MaintenanceController extends ResourceController
         
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
-            $managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id); 
-            $em = $this->getDoctrine()->getManager();                        
-
-            if ($request->get('analysis')) {
-                $maintenance->setAnalysis(1);
-            }
-
-            $maintenance->setManagementSystem($managemensystems);
+            
             $em->persist($maintenance);            
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('success', "Datos Cargados Exitosamente");
             die();
         }                
+        
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($id);
 
         $view = $this
             ->view()
@@ -48,7 +44,8 @@ class MaintenanceController extends ResourceController
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(                
                 'form' => $form->createView(),
-                'period_valid'        => '2016'
+                'period_valid'        => '2016',
+                'standardization'     => $standardization
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));

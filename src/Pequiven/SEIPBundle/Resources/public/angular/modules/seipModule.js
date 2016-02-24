@@ -2607,7 +2607,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormTracing = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(700);                
+                $scope.setHeight(700); 
                 var parameters = {
                     id: $scope.id_managementSystem,                    
                     _dc: numero
@@ -2630,14 +2630,12 @@ angular.module('seipModule.controllers', [])
             $scope.initFormMaintenace = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(700);                
-                var parameters = {
-                    id: $scope.id_managementSystem,                    
+                $scope.setHeight(700); 
+                
+                var parameters = {                                     
+                    id: $scope.id_standardization,
                     _dc: numero
-                };
-                if (resource) {
-                    parameters.id = resource.id;
-                }
+                };                
                 var url = Routing.generate('pequiven_sig_monitoring_maintenance', parameters);
                 $scope.templates = [
                     {

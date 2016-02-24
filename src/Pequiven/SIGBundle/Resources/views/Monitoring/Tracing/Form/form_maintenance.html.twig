@@ -1,6 +1,17 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
 
 {% block body %}
+<fieldset class="fieldset ">
+        <legend class="legend">Estandarización</legend>
+        <div class="columns">        
+        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">Area o Proceso</label>
+                    {{ standardization.area }}
+            </p>
+        </div>                
+    </div>    
+</fieldset>
 <form method="POST" id="form_maintenance_add">
     <fieldset class="fieldset fields-list">
         <legend class="legend">Mantenimiento</legend>
