@@ -134,13 +134,17 @@ class WorkStudyCircleController extends SEIPController {
 
             $user = $em->getRepository('PequivenSEIPBundle:User')->findOneBy(array('id' => $member));
 
-            if ($options['typeCoordinator'] == WorkStudyCircle::TYPE_COORDINATOR) {
-                $workStudyCircle->setCoordinator($user);
-            } elseif ($options['typeCoordinator'] == WorkStudyCircle::TYPE_COORDINATOR_DISCUSSION) {
-                $workStudyCircle->setCoordinatorDiscussion($user);
+            if(isset($options['typeCoordinator'])){
+                if ($options['typeCoordinator'] == WorkStudyCircle::TYPE_COORDINATOR) {
+                    $workStudyCircle->setCoordinator($user);
+                } elseif ($options['typeCoordinator'] == WorkStudyCircle::TYPE_COORDINATOR_DISCUSSION) {
+                    $workStudyCircle->setCoordinatorDiscussion($user);
+                }
+                $em->persist($workStudyCircle);
+            } else{
+                $user->setWorkStudyCircle($workStudyCircle);
+                $em->persist($user);
             }
-//            $user->setWorkStudyCircle($workStudyCircle);
-            $em->persist($workStudyCircle);
         }
 
 //        if($includeUser){
@@ -573,6 +577,30 @@ class WorkStudyCircleController extends SEIPController {
         $html = $this->renderView($template, $data);
         $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->Output(utf8_decode($title) . '.pdf', 'D');
+    }
+    
+    /**
+     * Elimina un miembro del Círculo
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function deleteMemberAction(Request $request)
+    {   
+        
+//        $causeId = $request->get('id');
+//        
+//        $em = $this->getDoctrine()->getManager();
+//        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeId);
+//        
+//        if($results){
+//
+//            $em->remove($results);
+//            $em->flush();
+//
+//            $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteCause', array(), 'PequivenSIGBundle'));
+//            return true;
+//        }  
     }
 
     protected function getSecurityService() {

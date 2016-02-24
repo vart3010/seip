@@ -4692,6 +4692,36 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['coordinators'] = null;
                 }
             });
+            
+            $scope.removeMember = function (causesEvolution) {
+                var TextName = '¿Desea Sacar a ' + $scope.user.firstname + '?';
+                console.log(TextName);
+                $scope.openModalConfirm('¿Desea Sacar a?', function () {
+                    notificationBarService.getLoadStatus().loading();
+                    var url = Routing.generate("pequiven_causes_evolution_delete", {id: $scope.user});
+                    $http({
+                        method: 'GET',
+                        url: url,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                    }).success(function (data) {
+                        return true;
+                    }).error(function (data, status, headers, config) {
+                        if (data.errors) {
+                            if (data.errors.errors) {
+                                $.each(data.errors.errors, function (index, value) {
+                                    notifyService.error(Translator.trans(value));
+                                });
+                            }
+                        }
+                        notificationBarService.getLoadStatus().done();
+                        return false;
+                    });
+                    $timeout(callAtTimeout, 3000);
+                });
+                function callAtTimeout() {
+                    location.reload();
+                }
+            };
         })
 
         .controller('ReportSipController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
