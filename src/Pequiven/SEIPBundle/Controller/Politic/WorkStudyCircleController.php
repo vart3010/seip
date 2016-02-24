@@ -578,6 +578,30 @@ class WorkStudyCircleController extends SEIPController {
         $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->Output(utf8_decode($title) . '.pdf', 'D');
     }
+    
+    /**
+     * Elimina un miembro del Círculo
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function deleteMemberAction(Request $request)
+    {   
+        
+//        $causeId = $request->get('id');
+//        
+//        $em = $this->getDoctrine()->getManager();
+//        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeId);
+//        
+//        if($results){
+//
+//            $em->remove($results);
+//            $em->flush();
+//
+//            $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteCause', array(), 'PequivenSIGBundle'));
+//            return true;
+//        }  
+    }
 
     protected function getSecurityService() {
         return $this->container->get('seip.service.security');
