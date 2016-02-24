@@ -35,6 +35,10 @@ class MaintenanceType extends AbstractType
                 'widget' => 'single_text',
                 'attr' => array('class' => 'input input-large')  
                 )) 
+            ->add('advance', 'text', array(
+                'label' => 'Avance',
+                'label_attr' => array('class' => 'label'),
+                'attr'=> array('class'=> 'input input-xlarge ' )))                         
             ->add('observations', 'textarea', array(
                 'label' => 'Observación',
                 'label_attr' => array('class' => 'label'),

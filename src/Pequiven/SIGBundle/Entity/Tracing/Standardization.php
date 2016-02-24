@@ -26,8 +26,8 @@ class Standardization extends model
     
     /**
      * Area
-     * @var string
-     * @ORM\Column(name="area",type="string",length=150)
+     * @var text
+     * @ORM\Column(name="area",type="text")
      */
     private $area;
 
@@ -40,8 +40,8 @@ class Standardization extends model
 
     /**
      * description
-     * @var string
-     * @ORM\Column(name="description",type="string")
+     * @var text
+     * @ORM\Column(name="description",type="text")
      */
     private $description;
 
@@ -101,12 +101,20 @@ class Standardization extends model
      * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem")
      */
     protected $managementSystem;
+
+    /**
+     * Mantenimiento
+     * @var \Pequiven\SIGBundle\Entity\Tracing\Maintenance
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SIGBundle\Entity\Tracing\Maintenance", mappedBy="standardization")     
+     * 
+     */
+    private $maintenance;
     
     /**
      * Constructor
      */
     public function __construct(){
-
+        $this->maintenance = new \Doctrine\Common\Collections\ArrayCollection();        
     }
     
     /**
@@ -348,10 +356,6 @@ class Standardization extends model
     {
         return $this->enabled;
     }
-    
-    public function __toString() {
-        return $this->getDescription()?:'-';
-    }
 
      /**
      * Set managementSystem
@@ -374,6 +378,36 @@ class Standardization extends model
     public function getManagementSystem()
     {
         return $this->managementSystem;
+    }
+
+    /**
+     * Add maintenance
+     *
+     * @param \Pequiven\SIGBundle\Entity\Tracing\Maintenance $maintenance
+     * @return User
+     */
+    public function addMaintenance(\Pequiven\SIGBundle\Entity\Tracing\Maintenance $maintenance) {
+        $this->maintenance[] = $maintenance;
+
+        return $this;
+    }
+
+    /**
+     * Remove maintenance
+     *
+     * @param \Pequiven\SIGBundle\Entity\Tracing\Maintenance $maintenance
+     */
+    public function removeMaintenance(\Pequiven\SIGBundle\Entity\Tracing\Maintenance $maintenance) {
+        $this->maintenance->removeElement($maintenance);
+    }
+
+    /**
+     * Get maintenance
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMaintenance() {
+        return $this->maintenance;
     }
     
 }

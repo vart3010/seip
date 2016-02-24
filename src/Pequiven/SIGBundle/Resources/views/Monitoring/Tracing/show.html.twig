@@ -26,14 +26,13 @@
                                 {% for dataStandardization in standardization %}
                                     <tr {{ cycle(["even", "odd"], loop.index) }}>
                                         <td width="3%"><B>{{ loop.index }}</B></td>
-                                        <td width="20%" align="justify">{{ dataStandardization.area }}</td>
+                                        <td width="20%" align="justify">
+                                            <a href ng-click="loadTemplateMaintenanceShow(id_standardization='{{ dataStandardization.id }}')">{{ dataStandardization.area }}</a>
+                                        </td>
                                         <td width="8%">{{ dataStandardization.code }}</td>
                                         <td width="15%">
                                             {% if dataStandardization.analysis %}
-                                                <a href class="" title="Programa de Gestión">
-                                                    <i class="fa fa-file-text"></i>
-                                                    &nbsp;Análisis Causa Raíz
-                                                </a>
+                                                <a href class="" title="Programa de Gestión"><i class="fa fa-file-text"></i>&nbsp;Análisis Causa Raíz</a>
                                                 <br>
                                             {% endif %}
                                             {% if dataStandardization.arrangementProgram %}                                            
@@ -41,10 +40,17 @@
                                             {% endif %}                                            
                                         </td>                            
                                         <td width="8%"><B>{{ status[dataStandardization.status] }}</B></td>
-                                        <td width="10%">Sin cargar</td>
+                                        <td width="10%">
+                                            {% if dataStandardization.maintenance | length > 0 %}
+                                                {% for dataMaintenance in dataStandardization.maintenance %}
+                                                    {{ statusMaintanence[dataMaintenance.status - 1] }}
+                                                {% endfor %}
+                                            {% else %}
+                                                Sin Carga
+                                            {% endif %}
+                                        </td>
                                         <th class="align-center vertical-center" width="8%">  
-                                            {% if dataStandardization.status == 0 %}
-                                                {#<a href  class="button icon-pencil with-tooltip" title="Editar"></a>#}
+                                            {% if dataStandardization.status == 0 %}                                                
                                                 <a href="{{ path('pequiven_sig_monitoring_notification',{'id':dataStandardization.id, 'idManagement': data.id })}}" class="button icon-bell with-tooltip" title="Notificar"></a>
                                                 <a href ng-click="removeStandardization(dataMonitoring='{{ dataStandardization.id }}')" class="button icon-trash with-tooltip confirm" title="Eliminar"></a>                                            
                                             {% else %}

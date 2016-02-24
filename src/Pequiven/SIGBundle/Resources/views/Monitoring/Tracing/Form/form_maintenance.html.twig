@@ -4,13 +4,27 @@
 <fieldset class="fieldset ">
         <legend class="legend">Estandarización</legend>
         <div class="columns">        
-        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-            <p class="inline-label">
-                <label class="label">Area o Proceso</label>
-                    {{ standardization.area }}
-            </p>
-        </div>                
-    </div>    
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Area</label>
+                        {{ standardization.area }}
+                </p>
+                <p class="inline-label">
+                    <label class="label">Detección</label>
+                        {{ labelsDetection[standardization.detection - 1].description }}
+                </p>            
+            </div>
+            <div class="six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Codigo</label>
+                        {{ standardization.code }}
+                </p>            
+                <p class="inline-label">
+                    <label class="label">Tipo de NC</label>
+                        {{ labelsTypeNc[standardization.type - 1].description }}
+                </p>
+            </div>
+        </div>    
 </fieldset>
 <form method="POST" id="form_maintenance_add">
     <fieldset class="fieldset fields-list">
@@ -26,6 +40,10 @@
             <div class="field-block button-height" >            
                 {{ form_label(form.dateEnd) }}            
                 {{ form_widget(form.dateEnd) }}            
+            </div> 
+            <div class="field-block button-height" >            
+                {{ form_label(form.advance) }}            
+                {{ form_widget(form.advance) }}            
             </div>              
             <div class="field-block button-height" >            
                 {{ form_label(form.observations) }}            

@@ -2481,6 +2481,21 @@ angular.module('seipModule.controllers', [])
                 }
             };
 
+            $scope.loadTemplateMaintenanceShow = function (resource) {
+                $scope.initFormMaintenaceShow(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);                
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+
             //Removiendo 
             $scope.removeStandardization = function (AnalysisTrend) {
                 $scope.openModalConfirm('¿Desea eliminar el registro?', function () {
@@ -2559,7 +2574,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_sig_monitoring_maintenance', {id: $scope.id_managementSystem});                    
+                    var url = Routing.generate('pequiven_sig_monitoring_maintenance', {id: $scope.id_standardization});                    
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2603,11 +2618,17 @@ angular.module('seipModule.controllers', [])
                 });
                 return true;
             };
+
+             var confirmCallBackShow = function () {                
+                return true;
+            };
             //Formulario Tracing
             $scope.initFormTracing = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(700); 
+                $scope.setHeight(700);
+                $scope.setWidth(800);
+
                 var parameters = {
                     id: $scope.id_managementSystem,                    
                     _dc: numero
@@ -2630,8 +2651,8 @@ angular.module('seipModule.controllers', [])
             $scope.initFormMaintenace = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(700); 
-                
+                $scope.setHeight(800); 
+                $scope.setWidth(800);
                 var parameters = {                                     
                     id: $scope.id_standardization,
                     _dc: numero
@@ -2642,6 +2663,27 @@ angular.module('seipModule.controllers', [])
                         name: 'Mantenimiento',
                         url: url,
                         confirmCallBack: confirmCallBackMaintenace,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+            //Formulario Maintenance
+            $scope.initFormMaintenaceShow = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(600); 
+                $scope.setWidth(1000);
+                var parameters = {                                     
+                    id: $scope.id_standardization,
+                    _dc: numero
+                };                
+                var url = Routing.generate('pequiven_sig_monitoring_maintenance_show', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Ficha',
+                        url: url,
+                        confirmCallBack: confirmCallBackShow,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
@@ -4386,6 +4428,11 @@ angular.module('seipModule.controllers', [])
             $scope.setHeight = function (h) {
                 $scope.height = h;
             };
+            
+            $scope.setWidth = function (w) {
+                $scope.width = w;                
+            };
+
             var modalOpen, modalConfirm;
             jQuery(document).ready(function () {
                 var angular = jQuery("#dialog-form");
@@ -4441,9 +4488,11 @@ angular.module('seipModule.controllers', [])
             };
             function openModal(callback) {
                 var height = $scope.height;
+                var width = $scope.width;
                 if ($scope.template.name) {
                     modalOpen.dialog("option", "title", sfTranslator.trans($scope.template.name));
                     modalOpen.dialog("option", "height", height);
+                    modalOpen.dialog("option", "width", width);
                 }
 
                 if ($scope.template.modeEdit) {

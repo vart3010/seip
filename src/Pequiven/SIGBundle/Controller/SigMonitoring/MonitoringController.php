@@ -106,12 +106,19 @@ class MonitoringController extends ResourceController
             1 => "Notificado"            
         ];
 
+        $statusMaintanence = [
+            0 => "Abierta No Vencia",
+            1 => "Cerrada",
+            2 => "Abierta Vencida"            
+        ];
+
     	return $this->render('PequivenSIGBundle:Monitoring:show.html.twig', array(
             'data'              => $managemensystems,
             'standardization'   => $standardization,
             'detection'         => $labelsDetection,
             'labelsTypeNc'      => $labelsTypeNc,
-            'status'            => $status
+            'status'            => $status,
+            'statusMaintanence' => $statusMaintanence
             ));
     }
 

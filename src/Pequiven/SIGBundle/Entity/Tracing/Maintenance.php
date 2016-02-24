@@ -56,14 +56,14 @@ class Maintenance
      * @var integer
      * @ORM\Column(name="status",type="integer")
      */
-    private $status = 0;
+    private $status = 1;
 
     /**
      * statusVerification
      * @var integer
      * @ORM\Column(name="statusVerification",type="integer")
      */
-    private $statusVerification;
+    private $statusVerification = 0;
 
     /**
      * observations
@@ -94,10 +94,19 @@ class Maintenance
     private $deletedAt;
 
     /**
+     * standardization
+     * 
+     * @var \Pequiven\SIGBundle\Entity\Tracing\Standardization
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SIGBundle\Entity\Tracing\Standardization",inversedBy="maintenance", cascade={"persist","remove"}) 
+     * @ORM\JoinTable(name="ManagementSystem_Monitoring_Standardization_Maintenance")    
+     */
+    private $standardization;
+
+    /**
      * Constructor
      */
     public function __construct(){
-
+        $this->standardization = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -342,53 +351,33 @@ class Maintenance
     }
 
     /**
-     * Set enabled
+     * Add standardization
      *
-     * @param boolean $enabled
-     * @return 
+     * @param \Pequiven\SIGBundle\Entity\Tracing\Standardization $standardization
+     * @return Indicator
      */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
+    public function addStandardization(\Pequiven\SIGBundle\Entity\Tracing\Standardization $standardization) {
+        $this->standardization[] = $standardization;
 
         return $this;
     }
 
     /**
-     * Get enabled
+     * Remove standardization
      *
-     * @return boolean 
+     * @param \Pequiven\SIGBundle\Entity\Tracing\Standardization $standardization
      */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
-    
-    public function __toString() {
-        return $this->getDescription()?:'-';
-    }
-
-     /**
-     * Set managementSystem
-     *
-     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem
-     * @return ManagementSystem
-     */
-    public function setManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem = null)
-    {
-        $this->managementSystem = $managementSystem;
-
-        return $this;
+    public function removeStandardization(\Pequiven\SIGBundle\Entity\Tracing\Standardization $responsible) {
+        $this->standardization->removeElement($standardization);
     }
 
     /**
-     * Get managementSystem
+     * Get standardization
      *
-     * @return \Pequiven\SIGBundle\Entity\ManagementSystem 
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getManagementSystem()
-    {
-        return $this->managementSystem;
+    public function getStandardization() {
+        return $this->standardization;
     }
     
 }
