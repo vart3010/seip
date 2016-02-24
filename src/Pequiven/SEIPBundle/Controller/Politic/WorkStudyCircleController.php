@@ -143,7 +143,9 @@ class WorkStudyCircleController extends SEIPController {
                 $em->persist($workStudyCircle);
             } else{
                 $user->setWorkStudyCircle($workStudyCircle);
+                $workStudyCircle->addMembers($user);
                 $em->persist($user);
+                $em->persist($workStudyCircle);
             }
         }
 
@@ -586,21 +588,33 @@ class WorkStudyCircleController extends SEIPController {
      * @return type
      */
     public function deleteMemberAction(Request $request)
-    {   
+    {
+        $idUser = $request->get('idUser');
+
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+        $repository = $this->getRepositoryById('user');
+        $user = $repository->find($idUser);
         
-//        $causeId = $request->get('id');
-//        
-//        $em = $this->getDoctrine()->getManager();
-//        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeId);
-//        
-//        if($results){
-//
-//            $em->remove($results);
-//            $em->flush();
-//
-//            $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteCause', array(), 'PequivenSIGBundle'));
-//            return true;
-//        }  
+        $idWorkStudyCircle = $user->getWorkStudyCircle()->getId();
+        $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $idWorkStudyCircle));
+        $user->setWorkStudyCircle();
+        $workStudyCircle->removeMembers($user);
+        
+        $em->persist($user);
+        $em->persist($workStudyCircle);
+        
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+
+        $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteMember', array('%user%' => $user->getOnlyFullNameUser()), 'workStudyCircle'));
+
+        return true;
     }
 
     protected function getSecurityService() {

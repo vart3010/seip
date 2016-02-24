@@ -44,7 +44,7 @@
                             <td>{{ user.ext }}</td>
                             <td class="align-right vertical-center">
                                 {% if isAllowToEdit == true and workStudyCircle.phase == 1 %}
-                                    <div ng-controller="ToolsController" id="target_{$ paso+1 $}">
+                                    <div {#ng-controller="ToolsController" id="target_{$ paso+1 $}"#}>
                                         <span class="select compact">
                                             <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                                             <span class="select-arrow"></span>
@@ -52,7 +52,7 @@
                                                 <a href="#" class="button icon-pencil editMember" data="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}">
                                                     {{ 'workStudyCircle.members.edit'|trans }}
                                                 </a>
-                                                <a href ng-click="" 
+                                                <a href ng-click="removeMember(user='{{ user.id }}',userName='{{ user.firstname ~ ' ' ~ user.lastname }}',workStudyCircleName = '{{ workStudyCircle.name }}')" 
                                                    class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
                                             {#<span class="drop-down">
                                                 <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>

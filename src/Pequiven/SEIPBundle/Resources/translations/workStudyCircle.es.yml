@@ -76,3 +76,6 @@ workStudyCircle:
         download: Descargar
         file: Archivo
         category: Categoria
+flashes:
+     messages:
+        deleteMember: %user% fue eliminado correctamente del CET
