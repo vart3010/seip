@@ -297,13 +297,44 @@ class MonitoringController extends ResourceController
             $contRow++;
         }
 
+
+
         $row = 10;//Fila Inicial del skeleton
         $contRow = ($contRow + $row) - 2;
+        $rowLeyend = $contRow + 2;
         for($i=$row;$i<=$contRow;$i++){//Recorremos toda la matriz para setear el alto y los bordes en cada celda
             $activeSheet->getRowDimension($i)->setRowHeight($rowHeight);
             $activeSheet->getStyle(sprintf('A%s:S%s',$i,$i))->applyFromArray($styleArrayBordersContent);
         }
-        $row = 16 + 1;
+        
+        $activeSheet->setCellValue('B'.$rowLeyend, "LEYENDA:");//Seteamos la Leyenda        
+        
+        $leyens = [
+            1 => "CERRADA: LA ACCIÓN SE CUMPLIÓ EN UN 100%",
+            2 => "ABIERTA NO VENCIDA: LA ACCIÓN AÚN ESTÁ ABIERTA Y DENTRO DE LA FECHA DE CIERRE",
+            3 => "ABIERTA VENCIDA: LA ACCIÓN AÚN ESTÁ ABIERTA PERO SU FECHA DE CIERRE VENCIÓ"
+        ];
+
+        $leyensData = [
+            1 => "CP: CONTROL DE PROCESOS",
+            2 => "AI: AUDITORÍA INTERNA",
+            3 => "AE: AUDITORÍA EXTERNA",
+            4 => "RE: REAL",
+            5 => "PO: POTENCIAL"
+        ];
+
+        for ($i=1; $i < 6; $i++) { 
+            $rowLeyend = $rowLeyend + 1;
+            if ($i < 4) {
+                $activeSheet->setCellValue('C'.$rowLeyend, $leyens[$i]);//Seteamos                                         
+                $activeSheet->mergeCells(sprintf('C%s:I%s',($rowLeyend),($rowLeyend)));
+            }
+            $activeSheet->setCellValue('J'.$rowLeyend, $leyensData[$i]);//Seteamos Codigifacion
+            $activeSheet->mergeCells(sprintf('J%s:K%s',($rowLeyend),($rowLeyend)));
+        }
+
+
+        
 
         $fileName = sprintf('SEIP-Seguimiento y Verificación de las Acciones-%s-%s.xls',$managemensystems->getDescription(),$now->format('Ymd-His'));
         
