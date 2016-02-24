@@ -418,6 +418,31 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
     
+    
+  
+    sonata.admin.cei.factor_conversion:
+        class: Pequiven\MasterBundle\Admin\CEI\FactorConversionAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Factor de Conversión" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\FactorConversion
+            - ~
+        calls:
+            - [ setTranslationDomain, [FactorConversion]]
+            
+    sonata.admin.cei.factor_conversion_value:
+        class: Pequiven\MasterBundle\Admin\CEI\FactorConversionValueAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Valor del Factor de Conversión" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\FactorConversionValue
+            - ~
+        calls:
+            - [ setTranslationDomain, [FactorConversion]]
+            
+    
     sonata.admin.cei.service:
         class: Pequiven\MasterBundle\Admin\CEI\ServiceAdmin
         tags:
