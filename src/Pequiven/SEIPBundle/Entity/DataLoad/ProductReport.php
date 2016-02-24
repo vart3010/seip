@@ -31,8 +31,8 @@ class ProductReport extends BaseModel {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
-     /**
+
+    /**
      * @var string
      *
      * @ORM\Column(name="nameGroup",type="string",length=255,nullable=true)
@@ -55,6 +55,14 @@ class ProductReport extends BaseModel {
      * @ORM\JoinColumn(nullable=true)
      */
     private $product;
+
+    /**
+     * factores de convercion
+     * @var \Pequiven\SEIPBundle\Entity\CEI\FactorConversionValue
+
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\FactorConversionValue",mappedBy="productReport")
+     */
+    private $factorConversionValue;
 
     /**
      * Presupuesto de Materias prima
@@ -133,6 +141,7 @@ class ProductReport extends BaseModel {
      */
     private $isGroup = false;
     private $name = '';
+    private $nameComplete = '';
 
     public function __construct() {
         $this->productPlannings = new \Doctrine\Common\Collections\ArrayCollection();
@@ -142,6 +151,35 @@ class ProductReport extends BaseModel {
         $this->unrealizedProductions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->childrensGroup = new \Doctrine\Common\Collections\ArrayCollection();
         $this->parentGroup = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->factorConversionValue = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\CEI\FactorConversionValue $factorConversionValue
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
+     */
+    public function addFactorConversionValue(\Pequiven\SEIPBundle\Entity\CEI\FactorConversionValue $factorConversionValue) {
+        $factorConversionValue->setProductReport($this);
+        $this->factorConversionValue->add($factorConversionValue);
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\CEI\FactorConversionValue $factorConversionValue
+     */
+    public function removeFactorConversionValue(\Pequiven\SEIPBundle\Entity\CEI\FactorConversionValue $factorConversionValue) {
+        $this->factorConversionValue->removeElement($factorConversionValue);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getFactorConversionValue() {
+        return $this->factorConversionValue;
     }
 
     /**
@@ -492,6 +530,15 @@ class ProductReport extends BaseModel {
         return $this->name;
     }
 
+    public function getNameComplete() {
+        $name = '';
+        if ($this->getProduct() && $this->getPlantReport()) {
+            $name = $this->getPeriod()->getName() . "-" . $this->getPlantReport()->getPlant()->getName() . ' - ' . $this->getProduct()->getName();
+        }
+        $this->name = $name;
+        return $this->name;
+    }
+
     public function __toString() {
         $_toString = "-";
         if ($this->getProduct()) {
@@ -550,7 +597,7 @@ class ProductReport extends BaseModel {
     function setIsGroup($isGroup) {
         $this->isGroup = $isGroup;
     }
-    
+
     function getNameGroup() {
         return $this->nameGroup;
     }
@@ -558,7 +605,5 @@ class ProductReport extends BaseModel {
     function setNameGroup($nameGroup) {
         $this->nameGroup = $nameGroup;
     }
-
-
 
 }
