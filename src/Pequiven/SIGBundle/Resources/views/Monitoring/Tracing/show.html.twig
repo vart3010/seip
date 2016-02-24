@@ -14,13 +14,11 @@
                             <thead>
                                 <tr>                                
                                     <th scope="col"  class="header">#</th>                                     
-                                    <th scope="col"  class="header">Area o Proceso</th>                                     
-                                    <th scope="col"  class="header">Detección</th>                                     
-                                    <th scope="col"  class="header">Codigo RNC</th>                                     
-                                    <th scope="col"  class="header">Tipo de NC</th>                                     
-                                    <th scope="col"  class="header">Descripción</th>                                     
+                                    <th scope="col"  class="header">Area o Proceso</th>
+                                    <th scope="col"  class="header">Codigo</th>
                                     <th scope="col"  class="header">Tratamiento</th>                                     
                                     <th scope="col"  class="header">Estatus</th>                                     
+                                    <th scope="col"  class="header">Estandarización</th>
                                     <th scope="col"  class="header"></th>                                     
                                 </tr>
                             </thead>
@@ -28,11 +26,8 @@
                                 {% for dataStandardization in standardization %}
                                     <tr {{ cycle(["even", "odd"], loop.index) }}>
                                         <td width="3%"><B>{{ loop.index }}</B></td>
-                                        <td width="15%" align="justify">{{ dataStandardization.area }}</td>
-                                        <td width="8%">{{ detection[dataStandardization.detection - 1].description }}</td>
+                                        <td width="20%" align="justify">{{ dataStandardization.area }}</td>
                                         <td width="8%">{{ dataStandardization.code }}</td>
-                                        <td width="8%">{{ labelsTypeNc[dataStandardization.type - 1].description }}</td>
-                                        <td width="25%" align="justify">{{ dataStandardization.description }}</td>
                                         <td width="15%">
                                             {% if dataStandardization.analysis %}
                                                 <a href class="" title="Programa de Gestión">
@@ -46,11 +41,14 @@
                                             {% endif %}                                            
                                         </td>                            
                                         <td width="8%"><B>{{ status[dataStandardization.status] }}</B></td>
-                                        <th class="align-right vertical-center" width="8%">  
+                                        <td width="10%">Sin cargar</td>
+                                        <th class="align-center vertical-center" width="8%">  
                                             {% if dataStandardization.status == 0 %}
-                                                <a href  class="button icon-pencil with-tooltip" title="Editar"></a>
+                                                {#<a href  class="button icon-pencil with-tooltip" title="Editar"></a>#}
                                                 <a href="{{ path('pequiven_sig_monitoring_notification',{'id':dataStandardization.id, 'idManagement': data.id })}}" class="button icon-bell with-tooltip" title="Notificar"></a>
                                                 <a href ng-click="removeStandardization(dataMonitoring='{{ dataStandardization.id }}')" class="button icon-trash with-tooltip confirm" title="Eliminar"></a>                                            
+                                            {% else %}
+                                                <a href ng-click="loadTemplateMaintenance()" class="button icon-pencil">Cargar</a>
                                             {% endif %}
                                         </th>                        
                                     </tr>                                    

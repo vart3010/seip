@@ -93,3 +93,14 @@ pequiven_indicator_evolution_load:
     defaults: 
         _controller: pequiven.controller.indicator_sig:loadAction
 
+pequiven_sig_monitoring_maintenance:
+    path: /{id}/get-maintenance.{_format}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig_maintenance:addAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+

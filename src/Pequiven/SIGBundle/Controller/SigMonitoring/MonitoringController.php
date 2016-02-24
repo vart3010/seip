@@ -162,8 +162,8 @@ class MonitoringController extends ResourceController
         
         if($standardization){ 
 
-            //$standardization->setStatus(1);        
-            //$em->flush();            
+            $standardization->setStatus(1);        
+            $em->flush();            
             
             $notification = $this->getNotificationService()->setDataNotification('Estandarizacion', "La data de estandarizacion ha sido cargada puede verificar. ", 4 , 1, "'pequiven_sig_monitoring_show',{'id': ". $id ." }");            
             
