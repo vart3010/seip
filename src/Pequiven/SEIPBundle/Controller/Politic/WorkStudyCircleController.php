@@ -204,6 +204,7 @@ class WorkStudyCircleController extends SEIPController {
         $isALlowToEdit = $workStudyCircleService->isAllowToEdit($workStudyCircle);
         $isAllowToAddMembers = $workStudyCircleService->isAllowToAddMembers($workStudyCircle);
         $isAllowToEditMembers = $workStudyCircleService->isAllowToEditMembers($workStudyCircle);
+        $isAllowToDeleteMembers = $workStudyCircleService->isAllowToDeleteMembers($workStudyCircle);
         $isAllowToAddMeetings = $workStudyCircleService->isAllowToAddMeetings($workStudyCircle);
         $isAllowToAddProposals = $workStudyCircleService->isAllowToAddProposals($workStudyCircle);
         $isAllowToEditProposals = $workStudyCircleService->isAllowToEditProposals($workStudyCircle);
@@ -217,6 +218,7 @@ class WorkStudyCircleController extends SEIPController {
                     'isAllowToEdit' => $isALlowToEdit,
                     'isAllowToAddMembers' => $isAllowToAddMembers,
                     'isAllowToEditMembers' => $isAllowToEditMembers,
+                    'isAllowToDeleteMembers' => $isAllowToDeleteMembers,
                     'isAllowToAddMeetings' => $isAllowToAddMeetings,
                     'isAllowToAddProposals' => $isAllowToAddProposals,
                     'isAllowToEditProposals' => $isAllowToEditProposals,

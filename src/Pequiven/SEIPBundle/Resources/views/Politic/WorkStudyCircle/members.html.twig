@@ -52,8 +52,10 @@
                                                 <a href="#" class="button icon-pencil editMember" data="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}">
                                                     {{ 'workStudyCircle.members.edit'|trans }}
                                                 </a>
-                                                <a href ng-click="removeMember(user='{{ user.id }}',userName='{{ user.firstname ~ ' ' ~ user.lastname }}',workStudyCircleName = '{{ workStudyCircle.name }}')" 
+                                                {% if isAllowToDeleteMembers == true %}
+                                                    <a href ng-click="removeMember(user='{{ user.id }}',userName='{{ user.firstname ~ ' ' ~ user.lastname }}',workStudyCircleName = '{{ workStudyCircle.name }}')" 
                                                    class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                                {% endif %}
                                             {#<span class="drop-down">
                                                 <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
                                             </span>#}
