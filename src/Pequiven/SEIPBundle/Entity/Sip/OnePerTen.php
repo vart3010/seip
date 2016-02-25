@@ -253,13 +253,31 @@ class OnePerTen {
     private $memberOnePerTenPsuv;
     
     /**
-     * Fue CUTL en las elecciones asamblea 20156
+     * Fue CUTL en las elecciones asamblea 2015
      * cutl
      * @var integer
      *
      * @ORM\Column(name="cutl", type="integer", nullable=true)
      */
     private $cutl;
+    
+    /**
+     * Fue Trabajador de Sala Situacional en las elecciones asamblea 2015
+     * sala
+     * @var integer
+     *
+     * @ORM\Column(name="sala", type="integer", nullable=true)
+     */
+    private $sala;
+    
+    /**
+     * Fue Trabajador por el CNE en las elecciones asamblea 2015
+     * sala
+     * @var integer
+     *
+     * @ORM\Column(name="cne", type="integer", nullable=true)
+     */
+    private $cne;
 
     public function __construct() {
         $this->ten = new \Doctrine\Common\Collections\ArrayCollection();
@@ -503,5 +521,30 @@ class OnePerTen {
     function setAnalisis($analisis) {
         $this->analisis = $analisis;
     }
+    
+    function getCutl() {
+        return $this->cutl;
+    }
+
+    function setCutl($cutl) {
+        $this->cutl = $cutl;
+    }
+
+    function getSala() {
+        return $this->sala;
+    }
+
+    function getCne() {
+        return $this->cne;
+    }
+
+    function setSala($sala) {
+        $this->sala = $sala;
+    }
+
+    function setCne($cne) {
+        $this->cne = $cne;
+    }
+
 
 }
