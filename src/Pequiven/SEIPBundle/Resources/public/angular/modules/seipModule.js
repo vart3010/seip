@@ -2662,7 +2662,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormMaintenaceShow = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(600); 
+                $scope.setHeight(700); 
                 $scope.setWidth(1000);
                 var parameters = {                                     
                     id: $scope.id_standardization,
@@ -2671,7 +2671,7 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_sig_monitoring_maintenance_show', parameters);
                 $scope.templates = [
                     {
-                        name: 'Ficha',
+                        name: 'Ficha Detalles',
                         url: url,
                         confirmCallBack: confirmCallBackShow, 
                         setTemplateLoad: true                       

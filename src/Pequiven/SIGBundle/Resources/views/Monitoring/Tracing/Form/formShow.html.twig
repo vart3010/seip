@@ -43,7 +43,7 @@
                 <td width="40%">{{ dataMaintenance.analysis }}</td>
                 <td width="20%">{{ dataMaintenance.dateStart | date("d/m/Y") }}</td>
                 <td width="20%">{{ dataMaintenance.dateEnd | date("d/m/Y") }}</td>
-                <td width="20%">{{ dataMaintenance.status }}</td>
+                <td width="20%">{{ statusMaintanence[dataMaintenance.status - 1] }}</td>
             </tr>
             {% endfor %}
         </table>

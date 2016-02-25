@@ -92,6 +92,12 @@ class MaintenanceController extends ResourceController
                     'description' => $this->trans($value, array(), 'PequivenSIGBundle'),
                 );
             }
+        
+        $statusMaintanence = [
+            0 => "Abierta No Vencia",
+            1 => "Cerrada",
+            2 => "Abierta Vencida"            
+        ];
 
         $view = $this
             ->view()
@@ -101,7 +107,8 @@ class MaintenanceController extends ResourceController
                 'period_valid'        => '2016',
                 'standardization'     => $standardization,
                 'labelsDetection'     => $labelsDetection,
-                'labelsTypeNc'        => $labelsTypeNc
+                'labelsTypeNc'        => $labelsTypeNc,
+                'statusMaintanence'   => $statusMaintanence
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));

@@ -101,6 +101,7 @@ class MonitoringController extends ResourceController
                     'description' => $this->trans($value, array(), 'PequivenSIGBundle'),
                 );
             }
+            
         $status = [
             0 => "Sin Notificar",
             1 => "Notificado"            
