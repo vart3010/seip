@@ -72,6 +72,7 @@ class OnePerTen {
     private $deletedAt;
     
     /**
+     * Análisis político de la persona
      * @var string
      *
      * @ORM\Column(name="analisis", type="text", nullable=true)
@@ -79,12 +80,13 @@ class OnePerTen {
     private $analisis;
 
     /**
-     * fecha voto
+     * Fecha en la que reportó el voto por mensaje o llamada en las elecciones de la asamblea 2015
      * @ORM\Column(name="fechaVoto", type="datetime", nullable=true)
      */
     private $fechaVoto;
     
     /**
+     * Reporte del voto por mensaje o llamada en las elecciones de la asamblea 2015
      * voto
      * @var integer
      *
@@ -93,6 +95,7 @@ class OnePerTen {
     private $voto = 0;
     
     /**
+     * Inscrito en el PSUV
      * psuv
      * @var integer
      *
@@ -101,6 +104,7 @@ class OnePerTen {
     private $psuv;
     
     /**
+     * Votó en las internas del PSUV rumbo a las elecciones asamblea 2015
      * intPsuv
      * @var integer
      *
@@ -109,6 +113,7 @@ class OnePerTen {
     private $intPsuv;
     
     /**
+     * Votó en las internas de la MUD rumbo a las elecciones asamblea 2015
      * intOpo
      * @var integer
      *
@@ -117,6 +122,7 @@ class OnePerTen {
     private $intOpo;
     
     /**
+     * ¿La persona se reubicó para las elecciones asamblea 2015?
      * reubicado
      * @var integer
      *
@@ -125,6 +131,7 @@ class OnePerTen {
     private $reubicado;
     
     /**
+     * Firma del decreto Esperanza
      * esperanza
      * @var integer
      *
@@ -133,6 +140,7 @@ class OnePerTen {
     private $esperanza;
     
     /**
+     * Votó en las elecciones presidenciales 2012
      * vpresidencial1
      * @var integer
      *
@@ -141,6 +149,7 @@ class OnePerTen {
     private $vpresidencial1;
     
     /**
+     * Votó en las elecciones regionales 2012
      * vregionales
      * @var integer
      *
@@ -149,6 +158,7 @@ class OnePerTen {
     private $vregionales;
     
     /**
+     * Votó en las elecciones presidenciales 2013
      * vpresidencial2
      * @var integer
      *
@@ -157,6 +167,7 @@ class OnePerTen {
     private $vpresidencial2;
     
     /**
+     * Votó en las elecciones municipales 2013
      * vmunicipales
      * @var integer
      *
@@ -165,6 +176,7 @@ class OnePerTen {
     private $vmunicipales;
     
     /**
+     * Firmó en la Lista Sumate 2002
      * fref
      * @var integer
      *
@@ -173,6 +185,7 @@ class OnePerTen {
     private $fref;
     
     /**
+     * ¿Es vanguardia PSUV?
      * vanguardia
      * @var integer
      *
@@ -181,6 +194,7 @@ class OnePerTen {
     private $vanguardia;
     
     /**
+     * ¿Es miembro de alguna UBCH?
      * ubch
      * @var integer
      *
@@ -189,6 +203,7 @@ class OnePerTen {
     private $ubch;
     
     /**
+     * 
      * miembroOnePerTen
      * @var integer
      *
@@ -197,7 +212,7 @@ class OnePerTen {
     private $miembroOnePerTen;
     
     /**
-     * militante
+     * militante (Que es parte del PSUV)
      * @var integer
      *
      * @ORM\Column(name="militante", type="integer", nullable=true)
@@ -211,6 +226,7 @@ class OnePerTen {
     private $ten;
     
     /**
+     * Votó en las elecciones asamblea 2015
      * vasamblea6
      * @var integer
      *
@@ -219,6 +235,7 @@ class OnePerTen {
     private $vasamblea6;
     
     /**
+     * Realizó 1x10 en el PSUV
      * onePerTenPsuv
      * @var integer
      *
@@ -227,12 +244,22 @@ class OnePerTen {
     private $onePerTenPsuv;
     
     /**
+     * Fue Miembro de algún 1x10 en el PSUV
      * memberOnePerTenPsuv
      * @var integer
      *
      * @ORM\Column(name="memberOnePerTenPsuv", type="integer", nullable=true)
      */
     private $memberOnePerTenPsuv;
+    
+    /**
+     * Fue CUTL en las elecciones asamblea 20156
+     * cutl
+     * @var integer
+     *
+     * @ORM\Column(name="cutl", type="integer", nullable=true)
+     */
+    private $cutl;
 
     public function __construct() {
         $this->ten = new \Doctrine\Common\Collections\ArrayCollection();
@@ -476,7 +503,5 @@ class OnePerTen {
     function setAnalisis($analisis) {
         $this->analisis = $analisis;
     }
-
-
 
 }
