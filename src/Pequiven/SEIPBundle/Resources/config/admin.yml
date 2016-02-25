@@ -83,7 +83,18 @@ services:
             - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Tipo de Punto de Atención" }
         arguments:
             - ~
-            - Pequiven\MasterBundle\Entity\Indicator\TypeFeatureIndicator
+            - Pequiven\IndicatorBundle\Entity\Indicator\TypeFeatureIndicator
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.indicator.type_indicator_file:
+        class: Pequiven\MasterBundle\Admin\Indicator\IndicatorFileAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Archivos de Indicadores" }
+        arguments:
+            - ~
+            - Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
@@ -406,6 +417,31 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+    
+    
+  
+    sonata.admin.cei.factor_conversion:
+        class: Pequiven\MasterBundle\Admin\CEI\FactorConversionAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Factor de Conversión" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\FactorConversion
+            - ~
+        calls:
+            - [ setTranslationDomain, [FactorConversion]]
+            
+    sonata.admin.cei.factor_conversion_value:
+        class: Pequiven\MasterBundle\Admin\CEI\FactorConversionValueAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Valor del Factor de Conversión" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\FactorConversionValue
+            - ~
+        calls:
+            - [ setTranslationDomain, [FactorConversion]]
+            
     
     sonata.admin.cei.service:
         class: Pequiven\MasterBundle\Admin\CEI\ServiceAdmin

@@ -9,12 +9,16 @@
             {% endif %}
         </div>
     </div>
+
+    
+
     <div class="with-padding">
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
                 <tr>
                     <th scope="col" width="30%">{{ 'Month'|trans }}</th>
-                    <th scope="col" width="30%" class="hide-on-mobile-portrait" align="right">{{ 'Total month'|trans }}</th>
+                    <th scope="col" width="15%" class="hide-on-mobile-portrait" align="right">{{ 'Total month'|trans }}</th>
+                    <th scope="col" width="15%" class="hide-on-mobile-portrait" align="right">{{ 'Total month'|trans }}</th>
                     <th scope="col" width="30%" class="hide-on-tablet" align="right">{{ 'Daily production capacity'|trans }}</th>
                     <th scope="col" width="10%">&nbsp;</th>
                 </tr>
@@ -32,6 +36,9 @@
                         <td scope="row" align="right">
                             {{ productPlanning.totalMonth|myNumberFormat }}&nbsp;{{ productUnit }}
                             {% set totalMonth = totalMonth + productPlanning.totalMonth %}
+                        </td>
+                        <td align="right">
+
                         </td>
                         <td align="right">
                             {{ productPlanning.dailyProductionCapacity|myNumberFormat }}&nbsp;{{ productUnit }}
@@ -60,6 +67,6 @@
                 </tr>
             </tfoot>
         </table>
-        
+
     </div>
 </div>

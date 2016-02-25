@@ -432,19 +432,22 @@ class IndicatorRepository extends EntityRepository
     }
     
     
-    
+    /*
+     * Query que retorna los indicadores que se les debe recalcular el resultado
+     */
     public function findQueryWithResultNull(\Pequiven\SEIPBundle\Entity\Period $period)
     {
         $qb = $this->getQueryBuilder();
         $qb
             ->addSelect('i_o')
-            ->leftJoin('i.objetives', 'i_o')
+//            ->leftJoin('i.objetives', 'i_o')
             ->innerJoin('i.indicatorLevel', 'i_il')
             ->andWhere('i.period = :period')
             ->andWhere($qb->expr()->isNull('i.lastDateCalculateResult'))
             ->orderBy('i_il.level','DESC')
             ->setParameter('period', $period)
             ;
+//        print_r($qb->getQuery()->getSQL());die();
         return $qb;
     }
     

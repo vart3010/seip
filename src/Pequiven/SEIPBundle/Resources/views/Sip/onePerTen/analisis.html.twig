@@ -1,0 +1,21 @@
+{% trans_default_domain 'workStudyCircle' %}
+
+<div class="block" >
+    <div class="block-title">
+        <h3 class="ng-binding">Análisis</h3>
+{#        {% if isAllowToAddAnalisis == true %}#}
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="{{ path("pequiven_onePerTen_add_analisis",{idOnePerTen:user.id})}}"  title="">
+                    Añadir Análisis&nbsp;
+                </a>
+            </div>
+{#        {% endif %}#}
+    </div>
+    <div class="columns">
+        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                {{ onePerTen.analisis }}
+            </p>
+        </div>
+    </div>
+</div>

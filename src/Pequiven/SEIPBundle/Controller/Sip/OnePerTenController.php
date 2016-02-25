@@ -436,7 +436,8 @@ class OnePerTenController extends SEIPController {
                         "nombre" => $member->getNombre(),
                         "telefono" => $member->getTelefono(),
                         "idCentro" => $member->getCodCentro(),
-                        "voto" => $member->getVoto() == 0 ? 'No' : 'Sí',
+                        "reporteVoto" => $member->getVoto() == 1 ? 'Sí' : ($member->getVoto() == 0 ? 'No' : 'Sin info'),
+                        "voto" => $member->getVasamblea6() == 1 ? 'Sí' : ($member->getVasamblea6() == 0 ? 'No' : 'Sin info'),
                         "centro" => $member->getNombreCentro()
                     );
                 }
@@ -450,18 +451,30 @@ class OnePerTenController extends SEIPController {
                     "nombre" => $onePerTenMembers[0]->getNombre(),
                     "telefono" => $onePerTenMembers[0]->getTelefono(),
                     "idCentro" => $onePerTenMembers[0]->getCodCentro(),
-                    "voto" => $member->getVoto() == 0 ? 'No' : 'Sí',
+                    "reporteVoto" => $onePerTenMembers[0]->getVoto() == 1 ? 'Sí' : ($onePerTenMembers[0]->getVoto() == 0 ? 'No' : 'Sin info'),
+                    "voto" => $onePerTenMembers[0]->getVasamblea6() == 1 ? 'Sí' : ($onePerTenMembers[0]->getVasamblea6() == 0 ? 'No' : 'Sin info'),
                     "centro" => $onePerTenMembers[0]->getNombreCentro()
                 );
             }
         }
         
-        
+        //Obtenemos efectividad del 1x10 registrado en PQV
+        $contVotos = 0;
+        $totalMiembros = count($members);
+        foreach($members as $member){
+            $contVotos = $member['voto'] == "Sí" ? $contVotos+1 : $contVotos;
+        }
+        $efectividad = number_format(($contVotos/$totalMiembros)*100, 2, ',', '.') . '%';
 
         $texts = array();
         $texts[-1] = 'Sin Información';
         $texts[0] = 'No';
         $texts[1] = 'Sí';
+        
+        $isAllowToAddAnalisis = false;
+        if($user->getId() == 70 || $user->getId() == 112){
+            $isAllowToAddAnalisis = true;
+        }
         
         $formSearchOne = $this->createForm(new OnePerTenType);
         return $this->render('PequivenSEIPBundle:Sip:onePerTen\show.html.twig', array(
@@ -472,7 +485,46 @@ class OnePerTenController extends SEIPController {
                     "isCutl" => $isCutl,
                     "workStudyCircle" => $workStudyCircle,
                     "texts" => $texts,
-                    "members" => $members
+                    "members" => $members,
+                    "efectividad" => $efectividad,
+                    "isAllowToAddAnalisis" => $isAllowToAddAnalisis,
+        ));
+    }
+    
+    public function addAnalisisAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+        $onePerTen = new OnePerTen();
+        $form = $this->createForm(new OnePerTenType, $onePerTen);
+        $form->handleRequest($request);
+        $idOnePerTen = $request->get("idOnePerTen");
+
+        $onePerTen = $em->getRepository('PequivenSEIPBundle:Sip\OnePerTen')->findOneBy(array('user' => $request->get("idOnePerTen")));
+
+        if ($form->isSubmitted()) {
+//            var_dump($request->get("onePerTen_search")["analisis"]);
+            $onePerTen->setAnalisis($request->get("onePerTen_search")["analisis"]);
+//            $onePerTen->getAnalisis();
+//            die();
+//            $this->addWorkStudyCircleToUser($workStudyCircleRepo, $request->get("workStudyCircle_data")["userWorkerId"], array('includeUser' => false));
+
+            $em->persist($onePerTen);
+            
+            try {
+                $em->flush();
+                $em->getConnection()->commit();
+            } catch (Exception $e) {
+                $em->getConnection()->rollback();
+                throw $e;
+            }
+            $this->get('session')->getFlashBag()->add('success', 'Análisis agregado con éxito ');
+            //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
+            return $this->redirect($this->generateUrl('pequiven_search_members', array("user" => $idOnePerTen)));
+        }
+
+        return $this->render('PequivenSEIPBundle:Sip:onePerTen\addAnalisis.html.twig', array(
+                    'idOnePerTen' => $request->get("idOnePerTen"),
+                    'form' => $form->createView()
         ));
     }
 
@@ -513,6 +565,14 @@ class OnePerTenController extends SEIPController {
         if(count($cutl) > 0){
             $isCutl = 'Sí';
         }
+        
+        //Obtenemos efectividad del 1x10 registrado en PQV
+        $contVotos = 0;
+        $totalMiembros = count($members);
+        foreach($members as $member){
+            $contVotos = $member->getVasamblea6() == 1 ? $contVotos+1 : $contVotos;
+        }
+        $efectividad = number_format(($contVotos/$totalMiembros)*100, 2, ',', '.') . '%';
 
         $pdf = new \Pequiven\SEIPBundle\Model\PDF\SipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->setPrintLineFooter(false);
@@ -542,6 +602,8 @@ class OnePerTenController extends SEIPController {
         $texts[-1] = 'Sin Información';
         $texts[0] = 'No';
         $texts[1] = 'Sí';
+        
+//        var_dump($object->getAnalisis());die();
 
         $data = array(
             "one" => $one,
@@ -551,7 +613,8 @@ class OnePerTenController extends SEIPController {
             "texts" => $texts,
             "isCutl" => $isCutl,
             "isCoordinator" => $isCoordinator,
-            "members" => $members
+            "members" => $members,
+            "efectividad" => $efectividad,
         );
         $html = $this->renderView('PequivenSEIPBundle:Sip:onePerTen/reportList.html.twig', $data);
 

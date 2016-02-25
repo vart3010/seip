@@ -4951,6 +4951,7 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['coordinators'] = null;
                 }
             });
+            
         })
 
         .controller('ReportSipController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
@@ -5977,83 +5978,37 @@ angular.module('seipModule.controllers', [])
             };
         })
 
-        .controller('WorkStudyCircleController', function ($scope, notificationBarService, $http, notifyService, $filter) {
-
-            $scope.urlValueIndicatorForm = null;
-            $scope.user = null;
-            var isInit = false;
-            //Carga el formulario de los valores del indicador
-            $scope.loadTemplateUser = function (resource) {
-                $scope.initForm(resource);
-                if (isInit == false) {
-                    isInit = true;
-                }
-                $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(resource);
-                if (resource) {
-                    $scope.templateOptions.enableModeEdit();
-                    $scope.openModalAuto();
-                } else {
-                    $scope.openModalAuto();
-                }
-            };
-            $scope.templateOptions.setVar('evaluationResult', 0);
-            var confirmCallBack = function () {
-                return true;
-            };
-            $scope.initForm = function (resource) {
-                var d = new Date();
-                var numero = d.getTime();
-                var parameters = {
-                    idUser: $scope.user.id,
-                    _dc: numero
-                };
-                if (resource) {
-                    parameters.id = resource.id;
-                }
-                var url = Routing.generate('pequiven_work_study_circle_user_get_form', parameters);
-                $scope.templates = [
-                    {
-                        name: 'pequiven.modal.title.value_indicator',
+        .controller('WorkStudyCircleController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
+            
+            $scope.removeMember = function () {
+                var TextName = '¿Desea Sacar a ' + $scope.userName + ' del Círculo de Estudio y Trabajo ' + $scope.workStudyCircleName + '?';
+                $scope.openModalConfirm(TextName, function () {
+                    notificationBarService.getLoadStatus().loading();
+                    var url = Routing.generate("pequiven_work_study_circle_delete_member", {idUser: $scope.user});
+                    $http({
+                        method: 'GET',
                         url: url,
-                        confirmCallBack: confirmCallBack,
-                    }
-                ];
-                $scope.templateOptions.setTemplate($scope.templates[0]);
-            };
-            var initCallBack = function () {
-                return false;
-            };
-            $scope.getUrlForValueIndicator = function (valueIndicator, numResult)
-            {
-                var url = Routing.generate('pequiven_value_indicator_show_detail', {id: valueIndicator.id, numResult: (numResult + 1)});
-                return url;
-            };
-            $scope.openPopUp = function (url) {
-                var horizontalPadding = 10;
-                var verticalPadding = 10;
-                var width = 1200;
-                var heigth = 600;
-                $('<iframe id="site" src="' + url + '" style="padding:0"/>').dialog({
-                    title: 'SEIP',
-                    autoOpen: true,
-                    width: width,
-                    height: heigth,
-                    modal: true,
-                    resizable: true,
-                    autoResize: true,
-                    overlay: {
-                        opacity: 0.5,
-                        background: "black"
-                    }
-                }).width(width - horizontalPadding).height(heigth - verticalPadding);
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                    }).success(function (data) {
+                        return true;
+                    }).error(function (data, status, headers, config) {
+                        if (data.errors) {
+                            if (data.errors.errors) {
+                                $.each(data.errors.errors, function (index, value) {
+                                    notifyService.error(Translator.trans(value));
+                                });
+                            }
+                        }
+                        notificationBarService.getLoadStatus().done();
+                        return false;
+                    });
+                    $timeout(callAtTimeout, 3000);
+                });
+                function callAtTimeout() {
+                    location.reload();
+                }
             };
         })
-
-
-
-
-
 
 //Controlador para los gráficos a mostrar en el dashboard del indicador
         .controller('ChartsDashboardController', function ($scope, $http) {

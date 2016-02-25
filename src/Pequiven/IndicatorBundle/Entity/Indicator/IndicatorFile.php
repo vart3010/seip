@@ -35,6 +35,13 @@ class IndicatorFile extends Model {
     /**
      * @var string
      *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="nameFileOriginal", type="string", length=255, nullable=true)
      */
     private $nameFileOriginal;
@@ -95,6 +102,13 @@ class IndicatorFile extends Model {
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
      * @ORM\JoinColumn(name="fk_user_updated_at", referencedColumnName="id")
      */
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="enabled", type="boolean")
+     */
+    private $enabled = true;
 
     /**
      * indicador
@@ -210,6 +224,22 @@ class IndicatorFile extends Model {
 
     function setNameFileOriginal($nameFileOriginal) {
         $this->nameFileOriginal = $nameFileOriginal;
+    }
+
+    function getEnabled() {
+        return $this->enabled;
+    }
+
+    function setEnabled($enabled) {
+        $this->enabled = $enabled;
+    }
+
+    function getDescription() {
+        return $this->description;
+    }
+
+    function setDescription($description) {
+        $this->description = $description;
     }
 
 }
