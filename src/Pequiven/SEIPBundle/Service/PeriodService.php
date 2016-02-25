@@ -95,11 +95,11 @@ class PeriodService extends ContainerAware {
                 }
             }
         }
-        
-        if($period->getName() == '2016' && $this->getUser()->getId() == 610){
+
+        if ($period->getName() == '2016' && $this->getUser()->getId() == 610) {
             $result = true;
         }
-        
+
 //        var_dump($period->getName());die();
         return $result;
     }
@@ -200,7 +200,7 @@ class PeriodService extends ContainerAware {
         }
 
         $user = $this->getUser();
-        if ($user->getId() == 295 || $user->getId() == 110|| $user->getId() == 103|| $user->getId() == 106|| $user->getId() == 104 || $user->getId() == 4642) {
+        if ($user->getId() == 295 || $user->getId() == 110 || $user->getId() == 103 || $user->getId() == 106 || $user->getId() == 104 || $user->getId() == 4642 || $user->getId() == 120) {
             $result = true;
         }
 
