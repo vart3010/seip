@@ -107,6 +107,26 @@ class UserController extends baseController {
         return $response;        
     }
 
+     /**
+     *
+     *
+     */
+    public function NotificationFavouriteAction(Request $request){
+        $response = new JsonResponse();        
+        
+        $em = $this->getDoctrine()->getManager();   
+
+        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->find($request->get('idMessage'));
+        
+        $notification->setTypeMessage(2);
+        
+        $em->flush();
+        
+        $response->setData($notification->getDescription());
+
+        return $response;        
+    }
+
     /**
      * Función que devuelve el paginador con los objetivos operativos
      * @param \Symfony\Component\HttpFoundation\Request $request

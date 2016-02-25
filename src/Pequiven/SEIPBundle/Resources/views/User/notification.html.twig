@@ -23,7 +23,8 @@
 								<li class="big-menu grey-gradient with-right-arrow">
 									<span class="blue-gradient"><span class="list-count">0</span>{{ types[cont] }}</span>	
 									<ul class="message-menu">
-										{% for notification in notifications %}
+										<li id="messagesData">
+										{#{% for notification in notifications %}
 											{% if notification.type == cont %}
 											<li id="iMessage_{{ notification.id }}">
 												<span class="message-status">								
@@ -51,7 +52,8 @@
 												</a>
 											</li>
 											{% endif %}
-										{% endfor %}	
+										{% endfor %}	#}
+										</li>
 									</ul>
 								</li>
 								{% set cont = cont + 1 %}							
@@ -59,7 +61,7 @@
 							</ul>
 						</li>
 						<li class="big-menu grey-gradient with-right-arrow">
-							<span class="blue-gradient"><span class="list-count">0</span><i class="fa fa-flag"></i>&nbsp;Importantes</span>	
+							<span class="blue-gradient" onclick="favouriteShow();"><span class="list-count">0</span><i class="fa fa-flag"></i>&nbsp;Importantes</span>	
 								<ul class="message-menu">
 								</ul>
 						</li>
@@ -124,7 +126,7 @@
                         var path = data['path'];
                         console.log(path);
                         document.getElementById("href").innerHTML = "<a href='{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}' class='button red-gradient float-right with-tooltip' title='Visualizar'>Visualizar</a>";
-                        document.getElementById("sectionButton").innerHTML = '<a href class="button" title="Eliminar" onclick="deleteMessage('+id+');"><span class="icon-trash"></span></a><a href class="button" title="Marcar como Importante"><span class="icon-flag"></span></a>';                                                
+                        document.getElementById("sectionButton").innerHTML = '<a href class="button" title="Eliminar" onclick="deleteMessage('+id+');"><span class="icon-trash"></span></a><a href class="button" title="Marcar como Importante" onclick="favouriteMessage('+id+');"><span class="icon-flag"></span></a>';                                                
                     }
             });
 		}   
@@ -149,6 +151,36 @@
                         document.getElementById("messageNone").innerHTML = '<i class="fa fa-check"></i> Notificación Eliminada Satisfactoriamente';
                     }
             });
-		}        
+		} 
+
+		function favouriteMessage(id){			
+			var data = {
+                idMessage: id,                    
+            };     
+
+			$.ajax({
+                    type: 'get',
+                    url: '{{ path("seip_notification_favourite_message") }}',
+                    data: data, 
+                    beforeSend:function(objeto){
+                            $('#loading').css({display:'block'});                            
+                    },
+                    complete:function(){
+                        $('#loading').css('display','none');                        
+                    },                    
+                    success: function (data) {                        
+                        $(location).attr('href', data["url"]);                                                
+                        $('#iMessage_' + id).css('display','none');  
+            			$('#buttonToll').css('display', 'none');                       
+                        document.getElementById("messageNone").innerHTML = '<i class="fa fa-check"></i> Notificación enviada a Importantes';
+                    }
+            });
+		}   
+
+		function favouriteShow(){
+            document.getElementById("messagesData").innerHTML = '<span class="message-status"></span>';			
+			$('#loading').css('display','block');
+
+		}     
     </script>	
 {% endblock %}

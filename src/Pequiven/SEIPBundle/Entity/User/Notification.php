@@ -79,6 +79,11 @@ class Notification {
     private $status;
 
     /**
+     * @ORM\Column(name="typeMessage", type="integer", nullable=true)
+     */
+    private $typeMessage = 1;
+
+    /**
      * @ORM\Column(name="path", type="string", nullable=true)
      */
     private $path;
@@ -176,6 +181,14 @@ class Notification {
 
     function setPath($path) {
         $this->path = $path;
+    }
+
+    function getTypeMessage() {
+        return $this->typeMessage;
+    }
+
+    function setTypeMessage($typeMessage) {
+        $this->typeMessage = $typeMessage;
     }
     
 }
