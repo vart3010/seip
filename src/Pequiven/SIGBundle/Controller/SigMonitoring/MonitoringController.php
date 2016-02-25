@@ -101,7 +101,7 @@ class MonitoringController extends ResourceController
                     'description' => $this->trans($value, array(), 'PequivenSIGBundle'),
                 );
             }
-            
+
         $status = [
             0 => "Sin Notificar",
             1 => "Notificado"            
@@ -213,21 +213,37 @@ class MonitoringController extends ResourceController
         
         //Formato para todo el documento
         $styleArrayBordersContent = array(
-          'borders' => array(
-            'allborders' => array(
-              'style' => \PHPExcel_Style_Border::BORDER_THIN
-            )
-          ),
-          'font' => array(
-          ),
-          'alignment' => array(
-              'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY,
-              'vertical'   => \PHPExcel_Style_Alignment::VERTICAL_TOP,
-              'wrap' => true
-          )
+          "1" => [
+              'borders' => array(
+                'allborders' => array(
+                  'style' => \PHPExcel_Style_Border::BORDER_THIN
+                )
+              ),
+              'font' => array(
+              ),
+              'alignment' => array(
+                  'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY,
+                  'vertical'   => \PHPExcel_Style_Alignment::VERTICAL_TOP,
+                  'wrap' => true
+              )
+            ],
+          "2" => [
+              'borders' => array(
+                'allborders' => array(
+                  'style' => \PHPExcel_Style_Border::BORDER_THIN
+                )
+              ),
+              'font' => array(
+              ),
+              'alignment' => array(
+                  'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                  'vertical'   => \PHPExcel_Style_Alignment::VERTICAL_TOP,
+                  'wrap' => true
+              )
+          ]
         );
         
-        //Formato en negrita y color
+        //Formato color
         $styleArray = array(
             "1" => [      
                 'fill' => array(
@@ -291,7 +307,10 @@ class MonitoringController extends ResourceController
             $analysis = $arrangementProgram = $cp = $ai = $ae = $re = $po = "";
 
             $activeSheet->setCellValue('A'.$row, $standardizationData->getArea());//Seteamos 
-            $activeSheet->setCellValue('B'.$row, $contRow);//Seteamos 
+            $activeSheet->getStyle(sprintf('A%s:A%s',$row,$row))->applyFromArray($styleArrayBordersContent[1]);
+            
+            $activeSheet->setCellValue('B'.$row, $contRow);//Seteamos
+            $activeSheet->getStyle(sprintf('B%s:E%s',$row,$row))->applyFromArray($styleArrayBordersContent[2]);
             
             if ($standardizationData->getDetection() == 1) {
                 $cp = "X";
@@ -306,7 +325,8 @@ class MonitoringController extends ResourceController
             $activeSheet->setCellValue('E'.$row, $ae);//Seteamos 
 
             $activeSheet->setCellValue('F'.$row, $standardizationData->getCode());//Seteamos el Codigo
-            
+            $activeSheet->getStyle(sprintf('F%s:F%s',$row,$row))->applyFromArray($styleArrayBordersContent[1]);
+
             if ($standardizationData->getType() == 1) {
                 $re = "X";
             }elseif ($standardizationData->getType() == 2) {
@@ -315,15 +335,18 @@ class MonitoringController extends ResourceController
 
             $activeSheet->setCellValue('G'.$row, $re);//Seteamos 
             $activeSheet->setCellValue('H'.$row, $po);//Seteamos 
+            $activeSheet->getStyle(sprintf('G%s:H%s',$row,$row))->applyFromArray($styleArrayBordersContent[2]);
 
             $activeSheet->setCellValue('I'.$row, $standardizationData->getDescription());//Seteamos 
-            
+            $activeSheet->getStyle(sprintf('I%s:I%s',$row,$row))->applyFromArray($styleArrayBordersContent[1]);
+
             //Seteamos si hay analisis cargado
             if ($standardizationData->getAnalysis() == 1) {
                 $analysis = "X";
             }            
             $activeSheet->setCellValue('J'.$row, $analysis);//Seteamos 
-            
+            $activeSheet->getStyle(sprintf('J%s:J%s',$row,$row))->applyFromArray($styleArrayBordersContent[2]);
+
             if ($standardizationData->getArrangementProgram()) {
                 $arrangementProgram = $standardizationData->getArrangementProgram();
             }
@@ -358,7 +381,7 @@ class MonitoringController extends ResourceController
         $rowLeyend = $contRow + 2;
         for($i=$row;$i<=$contRow;$i++){//Recorremos toda la matriz para setear el alto y los bordes en cada celda
             $activeSheet->getRowDimension($i)->setRowHeight($rowHeight);
-            $activeSheet->getStyle(sprintf('A%s:S%s',$i,$i))->applyFromArray($styleArrayBordersContent);
+            $activeSheet->getStyle(sprintf('K%s:S%s',$i,$i))->applyFromArray($styleArrayBordersContent[1]);
         }
         
         $activeSheet->setCellValue('B'.$rowLeyend, "LEYENDA:");//Seteamos la Leyenda        
