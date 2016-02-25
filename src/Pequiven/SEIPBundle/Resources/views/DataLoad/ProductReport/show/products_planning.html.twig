@@ -18,7 +18,7 @@
                 <tr>
                     <th scope="col" width="30%">{{ 'Month'|trans }}</th>
                     <th scope="col" width="15%" class="hide-on-mobile-portrait" align="right">{{ 'Total month'|trans }}</th>
-                    <th scope="col" width="15%" class="hide-on-mobile-portrait" align="right">{{ 'Total month'|trans }}</th>
+                    {#<th scope="col" width="15%" class="hide-on-mobile-portrait" align="right">{{ 'Total month'|trans }}</th>#}
                     <th scope="col" width="30%" class="hide-on-tablet" align="right">{{ 'Daily production capacity'|trans }}</th>
                     <th scope="col" width="10%">&nbsp;</th>
                 </tr>
@@ -37,9 +37,9 @@
                             {{ productPlanning.totalMonth|myNumberFormat }}&nbsp;{{ productUnit }}
                             {% set totalMonth = totalMonth + productPlanning.totalMonth %}
                         </td>
-                        <td align="right">
+                        {#<td align="right">
 
-                        </td>
+                        </td>#}
                         <td align="right">
                             {{ productPlanning.dailyProductionCapacity|myNumberFormat }}&nbsp;{{ productUnit }}
                             {% set totalDailyProductionCapacity = totalDailyProductionCapacity + productPlanning.dailyProductionCapacity %}
