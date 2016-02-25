@@ -2482,18 +2482,8 @@ angular.module('seipModule.controllers', [])
             };
 
             $scope.loadTemplateMaintenanceShow = function (resource) {
-                $scope.initFormMaintenaceShow(resource);
-                if (isInit == false) {
-                    isInit = true;
-                }
-                $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(resource);                
-                if (resource) {
-                    $scope.templateOptions.enableModeEdit();
-                    $scope.openModalAuto();
-                } else {
-                    $scope.openModalAuto();
-                }
+                $scope.initFormMaintenaceShow(resource);                
+                $scope.openModalAuto();                
             };
 
             //Removiendo 
@@ -2683,7 +2673,8 @@ angular.module('seipModule.controllers', [])
                     {
                         name: 'Ficha',
                         url: url,
-                        confirmCallBack: confirmCallBackShow,
+                        confirmCallBack: confirmCallBackShow, 
+                        setTemplateLoad: true                       
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
@@ -4388,6 +4379,7 @@ angular.module('seipModule.controllers', [])
             };
             $scope.template = {
                 name: null,
+                setTemplateLoad: null,
                 url: null,
                 load: false,
                 confirmCallBack: null,
@@ -4494,7 +4486,7 @@ angular.module('seipModule.controllers', [])
                     modalOpen.dialog("option", "height", height);
                     modalOpen.dialog("option", "width", width);
                 }
-
+                
                 if ($scope.template.modeEdit) {
                     $scope.template.modeEdit = false;
                     // setter
@@ -4519,6 +4511,23 @@ angular.module('seipModule.controllers', [])
                             }
                         }
                     ]);
+                } else if($scope.template.setTemplateLoad){
+                    // setter
+                    modalOpen.dialog("option", "buttons", [
+                        {text: "Aceptar", click: function () {
+                                if ($scope.template.confirmCallBack) {
+                                    if ($scope.template.confirmCallBack()) {
+                                        modalOpen.dialog("close");
+                                    }
+                                } else {
+                                    modalOpen.dialog("close");
+                                }
+                                $timeout(function () {
+                                    $scope.$apply();
+                                });
+                            }}
+                    ]);
+
                 } else {
                     // setter
                     modalOpen.dialog("option", "buttons", [
@@ -4553,7 +4562,7 @@ angular.module('seipModule.controllers', [])
                 }
                 notificationBarService.getLoadStatus().done();
             }
-
+            
             $scope.openModalConfirm = function (content, confirmCallBack, cancelCallBack) {
                 $scope.dialog.confirm.content = sfTranslator.trans(content);
                 // setter

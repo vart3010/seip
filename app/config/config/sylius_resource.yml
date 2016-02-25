@@ -298,15 +298,15 @@ sylius_resource:
             templates: PequivenSIGBundle:Monitoring/
             classes:
                 controller: Pequiven\SIGBundle\Controller\SigMonitoring\MonitoringController
-                model: Pequiven\SIGBundle\Entity\Tracing\Standardization
-                repository: Pequiven\SIGBundle\Repository\Tracing\StandardizationRepository                 
+                model: Pequiven\ObjetiveBundle\Entity\Objetive
+                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository                
         pequiven.monitoring_sig_maintenance:
             driver: doctrine/orm
             templates: PequivenSIGBundle:Monitoring/
             classes:
                 controller: Pequiven\SIGBundle\Controller\SigMonitoring\MaintenanceController
-                model: Pequiven\SIGBundle\Entity\Tracing\Standardization
-                repository: Pequiven\SIGBundle\Repository\Tracing\StandardizationRepository                                 
+                model: Pequiven\ObjetiveBundle\Entity\Objetive
+                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository                              
         #Causas de Desviación del indicador
         pequiven.sig_causes_report_evolution:
             driver: doctrine/orm
