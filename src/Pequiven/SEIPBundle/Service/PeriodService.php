@@ -199,10 +199,10 @@ class PeriodService extends ContainerAware {
             $result = true;
         }
 
-//        $user = $this->getUser();
-//        if ($user->getId() == 1668 || $user->getId() == 1798 || $user->getId() == 293 || $user->getId() == 5816 || $user->getId() == 110 || $user->getId() == 104 || $user->getId() == 295 || $user->getId() == 121) {
-//            $result = true;
-//        }
+        $user = $this->getUser();
+        if ($user->getId() == 295 || $user->getId() == 110|| $user->getId() == 103|| $user->getId() == 106|| $user->getId() == 104 || $user->getId() == 4642) {
+            $result = true;
+        }
 
         return $result;
     }
