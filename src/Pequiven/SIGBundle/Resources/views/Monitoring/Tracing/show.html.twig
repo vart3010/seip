@@ -41,9 +41,13 @@
                                         </td>                            
                                         <td width="8%"><B>{{ status[dataStandardization.status] }}</B></td>
                                         <td width="10%">
+                                            {% set cont = 0 %}
                                             {% if dataStandardization.maintenance | length > 0 %}
                                                 {% for dataMaintenance in dataStandardization.maintenance %}
-                                                    {{ statusMaintanence[dataMaintenance.status - 1] }}
+                                                    {% if cont == 0 %}
+                                                        {{ statusMaintanence[dataMaintenance.status - 1] }}
+                                                    {% endif %}
+                                                    {% set cont = cont + 1 %}
                                                 {% endfor %}
                                             {% else %}
                                                 Sin Carga

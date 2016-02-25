@@ -226,13 +226,13 @@ class MonitoringController extends ResourceController
           )
         );
         
-        //Formato en negrita
+        //Formato en negrita y color
         $styleArray = array(
             "1" => [      
                 'fill' => array(
                     'type' => \PHPExcel_Style_Fill::FILL_SOLID,
                     'startcolor' => array(
-                    'rgb' => "007e20"
+                    'rgb' => "e4f200"
                     )
                 )
             ],
@@ -240,7 +240,7 @@ class MonitoringController extends ResourceController
                 'fill' => array(
                     'type' => \PHPExcel_Style_Fill::FILL_SOLID,
                     'startcolor' => array(
-                    'rgb' => "e4f200"
+                    'rgb' => "00e203"
                     )
                 )
             ],
@@ -286,7 +286,7 @@ class MonitoringController extends ResourceController
         $rowFin = $row;//Fila Final 
         $contRow = 1;
 
-        foreach ($standardization as $key => $standardizationData) {
+        foreach ($standardization as $standardizationData) {
             $analysis = $arrangementProgram = $cp = $ai = $ae = $re = $po = "";
 
             $activeSheet->setCellValue('A'.$row, $standardizationData->getArea());//Seteamos 
@@ -328,11 +328,28 @@ class MonitoringController extends ResourceController
             }
             $activeSheet->setCellValue('K'.$row, $arrangementProgram);//Seteamos 
 
+            foreach ($standardizationData->getMaintenance() as $valueMaintenance) {
+                $dateStart = $valueMaintenance->getDateStart();
+                $dateStart->setTimestamp((int)$dateStart->format('U'));
+
+                $dateEnd = $valueMaintenance->getDateEnd();
+                $dateEnd->setTimestamp((int)$dateEnd->format('U'));
+
+                $activeSheet->setCellValue('L'.$row, $valueMaintenance->getAnalysis());//Seteamos
+                $activeSheet->setCellValue('M'.$row, $dateStart->format('d-m-Y'));//Seteamos
+                $activeSheet->setCellValue('N'.$row, $dateEnd->format('d-m-Y'));//Seteamos
+                $activeSheet->setCellValue('O'.$row, $valueMaintenance->getAdvance()."%");//Seteamos
+                
+                $activeSheet->getStyle(sprintf('P%s:P%s',$row, $row))->applyFromArray($styleArray[$valueMaintenance->getStatus()]);
+
+                //$activeSheet->setCellValue('Q'.$row, $valueMaintenance->getStatus());//Seteamos
+                //$activeSheet->setCellValue('R'.$row, $valueMaintenance->getStatus());//Seteamos
+                $activeSheet->setCellValue('S'.$row, $valueMaintenance->getObservations());//Seteamos
+            }
             $row++;                                
             $contResult++; 
             $contRow++;
         }
-
 
 
         $row = 10;//Fila Inicial del skeleton
@@ -347,8 +364,8 @@ class MonitoringController extends ResourceController
         $activeSheet->getStyle(sprintf('B%s:B%s',$rowLeyend,$rowLeyend))->applyFromArray($styleFont);                           
         
         $leyens = [
-            1 => "CERRADA: LA ACCIÓN SE CUMPLIÓ EN UN 100%",
-            2 => "ABIERTA NO VENCIDA: LA ACCIÓN AÚN ESTÁ ABIERTA Y DENTRO DE LA FECHA DE CIERRE",
+            1 => "ABIERTA NO VENCIDA: LA ACCIÓN AÚN ESTÁ ABIERTA Y DENTRO DE LA FECHA DE CIERRE",
+            2 => "CERRADA: LA ACCIÓN SE CUMPLIÓ EN UN 100%",
             3 => "ABIERTA VENCIDA: LA ACCIÓN AÚN ESTÁ ABIERTA PERO SU FECHA DE CIERRE VENCIÓ"
         ];
 
@@ -365,7 +382,7 @@ class MonitoringController extends ResourceController
             if ($i < 4) {
                 $activeSheet->getStyle(sprintf('B%s:B%s',$rowLeyend,$rowLeyend))->applyFromArray($styleArray[$i]);           
                 $activeSheet->getStyle(sprintf('C%s:C%s',$rowLeyend,$rowLeyend))->applyFromArray($styleFont);                           
-                $activeSheet->setCellValue('C'.$rowLeyend, $leyens[$i]);//Seteamos                                         
+                $activeSheet->setCellValue('C'.$rowLeyend, $leyens[$i]);//Seteamos                                        
                 $activeSheet->mergeCells(sprintf('C%s:I%s',($rowLeyend),($rowLeyend)));
             }
             $activeSheet->setCellValue('J'.$rowLeyend, $leyensData[$i]);//Seteamos Codigifacion 
