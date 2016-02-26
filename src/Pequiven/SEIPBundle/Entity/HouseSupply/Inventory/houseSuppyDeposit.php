@@ -34,6 +34,14 @@ class houseSupplyDeposit {
     private $description;
 
     /**
+     * 
+     * @var Complejo
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo", inversedBy="deposit")
+     * @ORM\JoinColumn(name="complejo_id", referencedColumnName="id")
+     */
+    private $complejo;
+
+    /**
      * Creado por
      * @var User
      *
@@ -74,7 +82,7 @@ class houseSupplyDeposit {
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge",mappedBy="deposit",cascade={"persist","remove"})
      */
     protected $inventoryCharge;
-    
+
     function getId() {
         return $this->id;
     }
@@ -138,7 +146,5 @@ class houseSupplyDeposit {
     function setInventoryCharge(houseSupplyInventoryCharge $inventoryCharge) {
         $this->inventoryCharge = $inventoryCharge;
     }
-
-
 
 }
