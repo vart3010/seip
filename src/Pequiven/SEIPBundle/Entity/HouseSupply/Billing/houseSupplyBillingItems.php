@@ -1,23 +1,23 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Entity\HouseSupply\Inventory;
+namespace Pequiven\SEIPBundle\Entity\HouseSupply\Billing;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct;
-use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling;
 
 /**
- * Cargo de Items de Inventario
+ * Items de Factura
  *
  * @author Gilbert C. <glavrjk@gmail.com>
  * 
- * @ORM\Table(name="seip_gsh_inventory_charge_items")
+ * @ORM\Table(name="seip_gsh_billing_items")
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class houseSupplyInventoryChargeItems {
+class houseSupplyBillingItems {
 
     /**
      *
@@ -29,19 +29,19 @@ class houseSupplyInventoryChargeItems {
 
     /**
      * 
-     * @var houseSupplyInventoryCharge
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge", inversedBy="inventoryChargeItems")
-     * @ORM\JoinColumn(name="inventoryCharge_id", referencedColumnName="id")
+     * @var houseSupplyBilling
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling", inversedBy="billingItems")
+     * @ORM\JoinColumn(name="bill_id", referencedColumnName="id", nullable=true)
      */
-    private $inventoryCharge;
+    private $bill;
 
     /**
      * 
-     * @var houseSupplyProduct
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct", inversedBy="inventoryChargeItems")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     * @var User
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User", inversedBy="houseSupplyBillingItems")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $product;
+    private $client;
 
     /**
      *
@@ -70,6 +70,14 @@ class houseSupplyInventoryChargeItems {
      * @ORM\Column(name="totalLine",type="float",nullable=true)
      */
     private $totalLine;
+
+    /**
+     * 
+     * @var houseSupplyProduct
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct", inversedBy="billingItems")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     */
+    private $product;
 
     /**
      * Creado por
@@ -101,12 +109,12 @@ class houseSupplyInventoryChargeItems {
         return $this->id;
     }
 
-    function getInventoryCharge() {
-        return $this->inventoryCharge;
+    function getBill() {
+        return $this->bill;
     }
 
-    function getProduct() {
-        return $this->product;
+    function getClient() {
+        return $this->client;
     }
 
     function getCant() {
@@ -123,6 +131,10 @@ class houseSupplyInventoryChargeItems {
 
     function getTotalLine() {
         return $this->totalLine;
+    }
+
+    function getProduct() {
+        return $this->product;
     }
 
     function getCreatedBy() {
@@ -145,12 +157,12 @@ class houseSupplyInventoryChargeItems {
         $this->id = $id;
     }
 
-    function setInventoryCharge(houseSupplyInventoryCharge $inventoryCharge) {
-        $this->inventoryCharge = $inventoryCharge;
+    function setBill(houseSupplyBilling $bill) {
+        $this->bill = $bill;
     }
 
-    function setProduct(houseSupplyProduct $product) {
-        $this->product = $product;
+    function setClient(User $client) {
+        $this->client = $client;
     }
 
     function setCant($cant) {
@@ -169,6 +181,10 @@ class houseSupplyInventoryChargeItems {
         $this->totalLine = $totalLine;
     }
 
+    function setProduct(houseSupplyProduct $product) {
+        $this->product = $product;
+    }
+
     function setCreatedBy(User $createdBy) {
         $this->createdBy = $createdBy;
     }
@@ -184,6 +200,7 @@ class houseSupplyInventoryChargeItems {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
+
 
 
 

@@ -5,7 +5,7 @@ namespace Pequiven\SEIPBundle\Entity\HouseSupply\Inventory;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
-use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventory; 
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventory;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeItems;
 
 /**
@@ -79,6 +79,12 @@ class houseSupplyProduct {
     protected $inventoryChargeItems;
 
     /**
+     * @var houseSupplyBillingItems
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems",mappedBy="product",cascade={"persist"}))
+     */
+    protected $billingItems;
+
+    /**
      * Creado por
      * @var User
      *
@@ -103,7 +109,7 @@ class houseSupplyProduct {
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
+
     function getId() {
         return $this->id;
     }
@@ -134,6 +140,10 @@ class houseSupplyProduct {
 
     function getInventoryChargeItems() {
         return $this->inventoryChargeItems;
+    }
+
+    function getHouseSupplyBillingItems() {
+        return $this->houseSupplyBillingItems;
     }
 
     function getCreatedBy() {
@@ -184,6 +194,10 @@ class houseSupplyProduct {
         $this->inventoryChargeItems = $inventoryChargeItems;
     }
 
+    function setHouseSupplyBillingItems(houseSupplyBillingItems $houseSupplyBillingItems) {
+        $this->houseSupplyBillingItems = $houseSupplyBillingItems;
+    }
+
     function setCreatedBy(User $createdBy) {
         $this->createdBy = $createdBy;
     }
@@ -199,6 +213,7 @@ class houseSupplyProduct {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
+
 
 
 }

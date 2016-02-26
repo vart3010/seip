@@ -254,7 +254,21 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\MovementFeeStructure",mappedBy="User",cascade={"persist"}))
      */
     protected $movementFeeStructure;
-    
+
+    /**
+     * @var Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems",mappedBy="client",cascade={"persist"}))
+     */
+    protected $houseSupplyBillingItems;
+
+    /**
+     * Facturas en HouseSupply
+     * 
+     * @var houseSupplyBilling
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling",mappedBy="client",cascade={"persist","remove"})
+     */
+    protected $houseSupplyBilling;
+
     /**
      * Trimestre que esta permitido notificar en el Módulo de Operaciones/Producción
      * @var integer
@@ -1032,7 +1046,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     public function getEvolutionAction() {
         return $this->evolutionAction;
     }
-    
+
     /**
      * 
      * @param type $quarterToLoadOperationProduction

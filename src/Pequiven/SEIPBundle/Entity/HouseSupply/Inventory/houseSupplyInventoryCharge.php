@@ -57,13 +57,6 @@ class houseSupplyInventoryCharge {
 
     /**
      *
-     * @var datetime
-     * @ORM\Column(name="date",type="datetime",nullable=false)
-     */
-    private $date;
-
-    /**
-     *
      * @var float
      * @ORM\Column(name="totalCharge",type="float",nullable=false)
      */
@@ -94,13 +87,13 @@ class houseSupplyInventoryCharge {
      */
     private $createdBy;
 
-    /**     
+    /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="createdAt", type="datetime")
      */
     private $createdAt;
 
-    /**     
+    /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
      */
@@ -110,7 +103,7 @@ class houseSupplyInventoryCharge {
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
+
     function getId() {
         return $this->id;
     }
@@ -214,7 +207,5 @@ class houseSupplyInventoryCharge {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
-
-
 
 }
