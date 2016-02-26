@@ -20,7 +20,6 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeI
 class houseSupplyInventoryCharge {
 
     /**
-     * @var integer
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id

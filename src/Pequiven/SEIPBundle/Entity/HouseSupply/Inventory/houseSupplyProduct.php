@@ -20,7 +20,6 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeI
 class houseSupplyProduct {
 
     /**
-     * @var integer
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -66,7 +65,7 @@ class houseSupplyProduct {
     /**
      * Inventario
      * 
-     * @var \Pequiven\SEIPBundle\Entity\houseSupply\Inventory\houseSupplyInventory
+     * @var houseSupplyInventory
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\Inventory\houseSupplyInventory",mappedBy="product",cascade={"persist","remove"})
      */
     protected $inventory;
@@ -74,14 +73,14 @@ class houseSupplyProduct {
     /**
      * Carga de Items de Inventario
      * 
-     * @var \Pequiven\SEIPBundle\Entity\houseSupply\Inventory\houseSupplyInventoryChargeItems
+     * @var houseSupplyInventoryChargeItems
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\Inventory\houseSupplyInventoryChargeItems",mappedBy="product",cascade={"persist","remove"})
      */
     protected $inventoryChargeItems;
 
     /**
      * Creado por
-     * @var \Pequiven\SEIPBundle\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
@@ -89,14 +88,12 @@ class houseSupplyProduct {
     private $createdBy;
 
     /**
-     * @var \DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="createdAt", type="datetime")
      */
     private $createdAt;
 
     /**
-     * @var \DateTime
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
      */

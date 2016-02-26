@@ -20,7 +20,6 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge;
 class houseSupplyInventoryChargeItems {
 
     /**
-     * @var integer
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -74,7 +73,7 @@ class houseSupplyInventoryChargeItems {
 
     /**
      * Creado por
-     * @var \Pequiven\SEIPBundle\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
@@ -82,14 +81,12 @@ class houseSupplyInventoryChargeItems {
     private $createdBy;
 
     /**
-     * @var \DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="createdAt", type="datetime")
      */
     private $createdAt;
 
     /**
-     * @var \DateTime
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
      */
