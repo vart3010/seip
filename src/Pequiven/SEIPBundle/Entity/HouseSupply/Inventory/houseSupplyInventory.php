@@ -1,12 +1,12 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Entity\HouseSupply;
+namespace Pequiven\SEIPBundle\Entity\HouseSupply\Inventory;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
-use Pequiven\SEIPBundle\Entity\HouseSupply\houseSupplyDeposit;
-use Pequiven\SEIPBundle\Entity\HouseSupply\houseSupplyProduct;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyDeposit;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct;
 
 /**
  * Productos
@@ -31,7 +31,7 @@ class houseSupplyInventory {
     /**
      * Product
      * @var houseSupplyProduct
-     * @ORM\ManyToOne(targetEntity="houseSupplyProduct", inversedBy="inventory")
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct", inversedBy="inventory")
      * @ORM\JoinColumn(name="producto_id", referencedColumnName="id")
      */
     private $product;
@@ -39,7 +39,7 @@ class houseSupplyInventory {
     /**
      * 
      * @var houseSupplyDeposit
-     * @ORM\ManyToOne(targetEntity="houseSupplyDeposit", inversedBy="inventory")
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyDeposit", inversedBy="inventory")
      * @ORM\JoinColumn(name="deposit_id", referencedColumnName="id")
      */
     private $deposit;

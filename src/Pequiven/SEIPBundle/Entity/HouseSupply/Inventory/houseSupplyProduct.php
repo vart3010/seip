@@ -1,23 +1,23 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Entity\HouseSupply;
+namespace Pequiven\SEIPBundle\Entity\HouseSupply\Inventory;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
-use Pequiven\SEIPBundle\Entity\HouseSupply\houseSupplyDeposit;
-use Pequiven\SEIPBundle\Entity\HouseSupply\houseSupplyInventoryChargeItems;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventory; 
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeItems;
 
 /**
- * Cargo de Inventario
+ * Productos
  *
- * @author Gilbert C. <glavrjk@gmail.com>
+ * @author Máximo Sojo
  * 
- * @ORM\Table(name="seip_gsh_inventory_charge")
+ * @ORM\Table(name="seip_gsh_product")
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class houseSupplyInventoryCharge {
+class houseSupplyProduct {
 
     /**
      * @var integer
@@ -31,58 +31,51 @@ class houseSupplyInventoryCharge {
     /**
      *
      * @var string
-     * @ORM\Column(name="type",type="string",nullable=false)
+     * @ORM\Column(name="code",type="string",nullable=false)
      */
-    private $type;
+    private $code;
 
     /**
      *
-     * @var integer
-     * @ORM\Column(name="nroCharge",type="integer",nullable=true)
+     * @var string
+     * @ORM\Column(name="description",type="string",nullable=false)
      */
-    private $nroCharge;
-
-    /**
-     *
-     * @var integer
-     * @ORM\Column(name="nroDevol",type="integer",nullable=true)
-     */
-    private $nroDevol;
-
-    /**
-     * 
-     * @var integer
-     * @ORM\Column(name="idAffected",type="integer",nullable=true)
-     */
-    private $idAffected;
-
-    /**
-     *
-     * @var datetime
-     * @ORM\Column(name="date",type="datetime",nullable=false)
-     */
-    private $date;
+    private $description;
 
     /**
      *
      * @var float
-     * @ORM\Column(name="totalCharge",type="float",nullable=false)
+     * @ORM\Column(name="price",type="float",nullable=false)
      */
-    private $totalCharge;
+    private $price;
 
     /**
-     * 
-     * @var houseSupplyDeposit
-     * @ORM\ManyToOne(targetEntity="houseSupplyDeposit", inversedBy="inventoryCharge")
-     * @ORM\JoinColumn(name="deposit_id", referencedColumnName="id")
+     *
+     * @var float
+     * @ORM\Column(name="$cost",type="float",nullable=false)
      */
-    private $deposit;
+    private $cost;
+
+    /**
+     *
+     * @var float
+     * @ORM\Column(name="maxPerUser",type="float",nullable=false)
+     */
+    private $maxPerUser;
+
+    /**
+     * Inventario
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\houseSupply\Inventory\houseSupplyInventory
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\Inventory\houseSupplyInventory",mappedBy="product",cascade={"persist","remove"})
+     */
+    protected $inventory;
 
     /**
      * Carga de Items de Inventario
      * 
-     * @var houseSupplyInventoryChargeItems
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\houseSupplyInventoryChargeItems",mappedBy="inventoryCharge",cascade={"persist","remove"})
+     * @var \Pequiven\SEIPBundle\Entity\houseSupply\Inventory\houseSupplyInventoryChargeItems
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\Inventory\houseSupplyInventoryChargeItems",mappedBy="product",cascade={"persist","remove"})
      */
     protected $inventoryChargeItems;
 
@@ -118,32 +111,28 @@ class houseSupplyInventoryCharge {
         return $this->id;
     }
 
-    function getType() {
-        return $this->type;
+    function getCode() {
+        return $this->code;
     }
 
-    function getNroCharge() {
-        return $this->nroCharge;
+    function getDescription() {
+        return $this->description;
     }
 
-    function getNroDevol() {
-        return $this->nroDevol;
+    function getPrice() {
+        return $this->price;
     }
 
-    function getIdAffected() {
-        return $this->idAffected;
+    function getCost() {
+        return $this->cost;
     }
 
-    function getDate() {
-        return $this->date;
+    function getMaxPerUser() {
+        return $this->maxPerUser;
     }
 
-    function getTotalCharge() {
-        return $this->totalCharge;
-    }
-
-    function getDeposit() {
-        return $this->deposit;
+    function getInventory() {
+        return $this->inventory;
     }
 
     function getInventoryChargeItems() {
@@ -170,32 +159,28 @@ class houseSupplyInventoryCharge {
         $this->id = $id;
     }
 
-    function setType($type) {
-        $this->type = $type;
+    function setCode($code) {
+        $this->code = $code;
     }
 
-    function setNroCharge($nroCharge) {
-        $this->nroCharge = $nroCharge;
+    function setDescription($description) {
+        $this->description = $description;
     }
 
-    function setNroDevol($nroDevol) {
-        $this->nroDevol = $nroDevol;
+    function setPrice($price) {
+        $this->price = $price;
     }
 
-    function setIdAffected($idAffected) {
-        $this->idAffected = $idAffected;
+    function setCost($cost) {
+        $this->cost = $cost;
     }
 
-    function setDate(datetime $date) {
-        $this->date = $date;
+    function setMaxPerUser($maxPerUser) {
+        $this->maxPerUser = $maxPerUser;
     }
 
-    function setTotalCharge($totalCharge) {
-        $this->totalCharge = $totalCharge;
-    }
-
-    function setDeposit(houseSupplyDeposit $deposit) {
-        $this->deposit = $deposit;
+    function setInventory(houseSupplyInventory $inventory) {
+        $this->inventory = $inventory;
     }
 
     function setInventoryChargeItems(houseSupplyInventoryChargeItems $inventoryChargeItems) {
@@ -217,7 +202,6 @@ class houseSupplyInventoryCharge {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
-
 
 
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Entity\HouseSupply;
+namespace Pequiven\SEIPBundle\Entity\HouseSupply\Inventory;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
-use Pequiven\SEIPBundle\Entity\HouseSupply\houseSupplyInventoryCharge;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge;
 
 /**
  * Depositos
@@ -36,7 +36,7 @@ class houseSupplyDeposit {
 
     /**
      * Creado por
-     * @var \Pequiven\SEIPBundle\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
@@ -66,7 +66,7 @@ class houseSupplyDeposit {
      * Inventario
      * 
      * @var houseSupplyInventory
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\houseSupplyInventory",mappedBy="deposit",cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventory",mappedBy="deposit",cascade={"persist","remove"})
      */
     protected $inventory;
 
@@ -74,7 +74,7 @@ class houseSupplyDeposit {
      * Cargos de Inventario
      * 
      * @var houseSupplyInventoryCharge
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\houseSupplyInventoryCharge",mappedBy="deposit",cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge",mappedBy="deposit",cascade={"persist","remove"})
      */
     protected $inventoryCharge;
     

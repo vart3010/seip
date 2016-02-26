@@ -1,12 +1,12 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Entity\HouseSupply;
+namespace Pequiven\SEIPBundle\Entity\HouseSupply\Inventory;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
-use Pequiven\SEIPBundle\Entity\HouseSupply\houseSupplyProduct;
-use Pequiven\SEIPBundle\Entity\HouseSupply\houseSupplyInventoryCharge;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge;
 
 /**
  * Cargo de Items de Inventario
@@ -31,7 +31,7 @@ class houseSupplyInventoryChargeItems {
     /**
      * 
      * @var houseSupplyInventoryCharge
-     * @ORM\ManyToOne(targetEntity="houseSupplyInventoryCharge", inversedBy="inventoryChargeItems")
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge", inversedBy="inventoryChargeItems")
      * @ORM\JoinColumn(name="inventoryCharge_id", referencedColumnName="id")
      */
     private $inventoryCharge;
@@ -39,7 +39,7 @@ class houseSupplyInventoryChargeItems {
     /**
      * 
      * @var houseSupplyProduct
-     * @ORM\ManyToOne(targetEntity="houseSupplyProduct", inversedBy="inventoryChargeItems")
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct", inversedBy="inventoryChargeItems")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;
