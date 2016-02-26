@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
-class MaintenanceType extends AbstractType
+class MaintenanceAdvanceType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -17,20 +17,18 @@ class MaintenanceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {   
         $builder
-             ->add('dateStart', 'date', array(
-                'label'=>'Fecha Inicio',
+            ->add('analysis', 'textarea', array(
+                'label' => 'Analisis',
                 'label_attr' => array('class' => 'label'),
-                'format' => 'd/M/y',
-                'widget' => 'single_text',
-                'attr' => array('class' => 'input input-large')               
-                ))
-            ->add('dateEnd', 'date', array(
-                'label'=>'Fecha Cierre',
+                'attr'=> array('class'=> 'input input-xlarge ' )))              
+            ->add('advance', 'text', array(
+                'label' => 'Avance',
                 'label_attr' => array('class' => 'label'),
-                'format' => 'd/M/y',
-                'widget' => 'single_text',
-                'attr' => array('class' => 'input input-large')  
-                ))             
+                'attr'=> array('class'=> 'input input-xlarge ' )))                         
+            ->add('observations', 'textarea', array(
+                'label' => 'Observación',
+                'label_attr' => array('class' => 'label'),
+                'attr'=> array('class'=> 'input input-xlarge ' )))                         
         ;
     }
     
@@ -42,7 +40,7 @@ class MaintenanceType extends AbstractType
     {   
         $resolver->setDefaults(array(
             
-            'data_class' => 'Pequiven\SIGBundle\Entity\Tracing\Maintenance',            
+            'data_class' => 'Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance',            
 
         ));
     }
@@ -53,7 +51,7 @@ class MaintenanceType extends AbstractType
      */
     public function getName()
     {
-        return 'sig_maintenance';
+        return 'sig_maintenance_advance';
     }
     
 }

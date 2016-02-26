@@ -24,13 +24,6 @@ class Maintenance
     private $id;
     
     /**
-     * analysis
-     * @var text
-     * @ORM\Column(name="analysis",type="text", nullable=true)
-     */
-    private $analysis;
-
-    /**
      * dateStart
      * @var string
      * @ORM\Column(name="dateStart",type="datetime")
@@ -45,11 +38,12 @@ class Maintenance
     private $dateEnd;
 
     /**
-     * advance
-     * @var string
-     * @ORM\Column(name="advance",type="string",length=150)
+     * Avance
+     * 
+     * @var \Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance
+     * @ORM\OneToMany(targetEntity="Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance",mappedBy="maintenance",cascade={"persist","remove"})
      */
-    private $advance;
+    protected $advance;
 
     /**
      * status
@@ -64,13 +58,6 @@ class Maintenance
      * @ORM\Column(name="statusVerification",type="integer")
      */
     private $statusVerification = 0;
-
-    /**
-     * observations
-     * @var string
-     * @ORM\Column(name="observations",type="text")
-     */
-    private $observations;
 
     /**
      * Date created
@@ -107,6 +94,7 @@ class Maintenance
      */
     public function __construct(){
         $this->standardization = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->advance = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -118,30 +106,6 @@ class Maintenance
     {
         return $this->id;
     }
-
-    /**
-     * Set analysis
-     *
-     * @param string $analysis
-     * @return analysis
-     */
-    public function setAnalysis($analysis)
-    {
-        $this->analysis = $analysis;
-
-        return $this;
-    }
-
-    /**
-     * Get analysis
-     *
-     * @return string 
-     */
-    public function getAnalysis()
-    {
-        return $this->analysis;
-    }
-
 
     /**
      * Set dateStart
@@ -190,29 +154,6 @@ class Maintenance
     }
 
     /**
-     * Set advance
-     *
-     * @param string $advance
-     * @return 
-     */
-    public function setAdvance($advance)
-    {
-        $this->advance = $advance;
-
-        return $this;
-    }
-
-    /**
-     * Get advance
-     *
-     * @return string 
-     */
-    public function getAdvance()
-    {
-        return $this->advance;
-    }
-
-    /**
      * Set status
      *
      * @param string $status
@@ -256,29 +197,6 @@ class Maintenance
     public function getStatusVerification()
     {
         return $this->statusVerification;
-    }
-
-    /**
-     * Set observations
-     *
-     * @param string $observations
-     * @return observations
-     */
-    public function setObservations($observations)
-    {
-        $this->observations = $observations;
-
-        return $this;
-    }
-
-    /**
-     * Get observations
-     *
-     * @return string 
-     */
-    public function getObservations()
-    {
-        return $this->observations;
     }
 
     /**

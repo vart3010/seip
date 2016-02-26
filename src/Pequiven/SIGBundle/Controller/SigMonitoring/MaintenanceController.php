@@ -8,7 +8,9 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use Pequiven\SIGBundle\Entity\Tracing\Maintenance;
+use Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance;
 use Pequiven\SIGBundle\Form\Tracing\MaintenanceType;
+use Pequiven\SIGBundle\Form\Tracing\MaintenanceAdvanceType;
 use Pequiven\SIGBundle\Entity\Tracing\Standardization;
 
 /**
@@ -22,24 +24,48 @@ class MaintenanceController extends ResourceController
         $em = $this->getDoctrine()->getManager();                        
         
         $id = $request->get('id');  
+        $valueCharge = $advance = 0;
+
         $period = $this->getPeriodService()->getPeriodActive();
 
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($id);
+        
+        foreach ($standardization->getMaintenance() as $valueMaintenance) {            
+            $advance = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance")->findOneBy(array('maintenance' => $valueMaintenance->getId()));                                        
+        }
+        
         $maintenance = new maintenance();
+        $maintenanceAdvance = new maintenanceAdvance();
+
         $form  = $this->createForm(new MaintenanceType($period), $maintenance);
+        $formAdvance  = $this->createForm(new MaintenanceAdvanceType($period), $maintenanceAdvance);
+        
+        if ($advance) {
+            $valueCharge = 1;
+        }
         
         if ($request->isMethod('POST')) {
-            $form->handleRequest($request);            
-
-            $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($id);
+            $form->handleRequest($request);                                    
+            if ($valueCharge != 0 ) {
+                $maintenance->addStandardization($standardization);            
+                $em->persist($maintenance);            
+                $em->flush();                
+            }
             
-            $maintenance->addStandardization($standardization);
+            $maintenanceData = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Maintenance")->findOneById($maintenance->getId());            
+            
+            $maintenanceAdvance->setMaintenance($maintenanceData);
+            $maintenanceAdvance->setAdvance($request->get('sig_maintenance_advance')['advance']);
+            $maintenanceAdvance->setAnalysis($request->get('sig_maintenance_advance')['analysis']);
+            $maintenanceAdvance->setObservations($request->get('sig_maintenance_advance')['observations']);
 
-            $em->persist($maintenance);            
+            $em->persist($maintenanceAdvance);            
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('success', "Datos Cargados Exitosamente");
             die();
-        }                
+        }    
+
         foreach (Standardization::getDetectionArray() as $key => $value) {
                 $labelsDetection[] = array(
                     'id' => $key,
@@ -62,10 +88,12 @@ class MaintenanceController extends ResourceController
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(                
                 'form' => $form->createView(),
+                'formAdvance' => $formAdvance->createView(),
                 'period_valid'        => '2016',
                 'standardization'     => $standardization,
                 'labelsDetection'     => $labelsDetection,
-                'labelsTypeNc'        => $labelsTypeNc
+                'labelsTypeNc'        => $labelsTypeNc,
+                'valueCharge'         => $valueCharge
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));

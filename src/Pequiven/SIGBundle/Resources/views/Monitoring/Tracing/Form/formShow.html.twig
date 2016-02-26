@@ -35,14 +35,16 @@
                     <td>Analisis</td>
                     <td>Fecha Inicio</td>
                     <td>Fecha Cierre</td>
+                    <td>Avance</td>
                     <td>Estatus</td>
                 </tr>
             </thead>
             {% for dataMaintenance in standardization.maintenance %}
             <tr>
                 <td width="40%">{{ dataMaintenance.analysis }}</td>
-                <td width="20%">{{ dataMaintenance.dateStart | date("d/m/Y") }}</td>
-                <td width="20%">{{ dataMaintenance.dateEnd | date("d/m/Y") }}</td>
+                <td width="10%">{{ dataMaintenance.dateStart | date("d/m/Y") }}</td>
+                <td width="10%">{{ dataMaintenance.dateEnd | date("d/m/Y") }}</td>
+                <td width="10%" align="center">{{ dataMaintenance.advance }}%</td>
                 <td width="20%">{{ statusMaintanence[dataMaintenance.status - 1] }}</td>
             </tr>
             {% endfor %}

@@ -30,24 +30,28 @@
     <fieldset class="fieldset fields-list">
         <legend class="legend">Mantenimiento</legend>
             <div class="field-block button-height" >            
-                {{ form_label(form.analysis) }}            
-                {{ form_widget(form.analysis) }}            
+                {{ form_label(formAdvance.analysis) }}            
+                {{ form_widget(formAdvance.analysis) }}            
             </div>  
+            
+            {% if valueCharge == 0 %}
+                <div class="field-block button-height" >            
+                    {{ form_label(form.dateStart) }}            
+                    {{ form_widget(form.dateStart) }}            
+                </div>  
+                <div class="field-block button-height" >            
+                    {{ form_label(form.dateEnd) }}            
+                    {{ form_widget(form.dateEnd) }}            
+                </div> 
+            {% endif %}
+
             <div class="field-block button-height" >            
-                {{ form_label(form.dateStart) }}            
-                {{ form_widget(form.dateStart) }}            
-            </div>  
-            <div class="field-block button-height" >            
-                {{ form_label(form.dateEnd) }}            
-                {{ form_widget(form.dateEnd) }}            
-            </div> 
-            <div class="field-block button-height" >            
-                {{ form_label(form.advance) }}            
-                {{ form_widget(form.advance) }}            
+                {{ form_label(formAdvance.advance) }}            
+                {{ form_widget(formAdvance.advance) }}            
             </div>              
             <div class="field-block button-height" >            
-                {{ form_label(form.observations) }}            
-                {{ form_widget(form.observations) }}            
+                {{ form_label(formAdvance.observations) }}            
+                {{ form_widget(formAdvance.observations) }}            
             </div>              
     </fieldset>    
 </form>   
