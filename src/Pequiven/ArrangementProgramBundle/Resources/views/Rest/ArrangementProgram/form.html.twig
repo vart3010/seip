@@ -1,5 +1,6 @@
 {% extends "PequivenSEIPBundle:Template:ExtJs/layout.html.twig" %}
 
+
 {% trans_default_domain 'PequivenArrangementProgramBundle' %}
 
 {% set summary = entity.summary({'limitMonthToNow':true}) %}
@@ -44,7 +45,9 @@
     <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/colors3860.css?v=1') }}">
 {% endblock %}
 
-{% block javascript %}   
+{% block javascript %}      
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery-1.8.2.min.js') }}"></script>
+
     <script type="text/javascript">
         var formatPhp = "Y-m-d H:i:s";
                 var advancesPlanned = {{ summary['advancesPlanned'] }};
@@ -58,47 +61,39 @@
             'Ext.layout.container.Fit'
         ]);
         Ext.onReady(function () {
-
             Ext.tip.QuickTipManager.init();
-            if (typeof document.getElementById("user").value != "undefined") {
-                var userGoal = document.getElementById("user").value;
-            } else {
-                var userGoal = 0;
-            }
-
             var idPG = '{{app.request.get('id')}}';
             var win, buttonAddComment;
-        {#alert("{{ path('AP_notification_search') }}" + idPG + "/" + userGoal + "/goals-details.json");#}
-                var store = Ext.create('Ext.data.Store', {
-                    autoLoad: true,
-                    autoSync: true,
-                    model: 'Pequiven.ArrangementProgramBundle.Entity.GoalDetails',
-                    groupField: 'project',
-                    proxy: {
-                        type: 'rest',
-                        url: "{{ path('AP_notification_search') }}" + idPG + "/goals-details.json",                        
-                        {#url: "{{ path('get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails',{id:app.request.get('id'),_format:'json'}) }}",#}
-                        reader: {
-                            type: 'json',
-                            rootProperty: 'data'
-                        },
-                        writer: {
-                            type: 'json'
-                        },
-                        actionMethods: {
-                            update: 'POST'
-                        }
+//            alert(data);
+            var store = Ext.create('Ext.data.Store', {
+                autoLoad: true,
+                autoSync: true,
+                model: 'Pequiven.ArrangementProgramBundle.Entity.GoalDetails',
+                groupField: 'project',
+                proxy: {
+                    type: 'rest',
+                    url: "{{ path('AP_notification_search') }}" + idPG + "/goals-details.json",
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'data'
                     },
-                    listeners: {
-                        write: function (store, operation) {
-                            var record = operation.getRecords()[0],
-                                    name = Ext.String.capitalize(operation.action),
-                                    verb;
-                            if (name == 'Destroy') {
-                                verb = 'Destroyed';
-                            } else {
-                                verb = name + 'd';
-                            }
+                    writer: {
+                        type: 'json'
+                    },
+                    actionMethods: {
+                        update: 'POST'
+                    }
+                },
+                listeners: {
+                    write: function (store, operation) {
+                        var record = operation.getRecords()[0],
+                                name = Ext.String.capitalize(operation.action),
+                                verb;
+                        if (name == 'Destroy') {
+                            verb = 'Destroyed';
+                        } else {
+                            verb = name + 'd';
+                        }
         {#                        Ext.example.msg(Translator.trans(name), Ext.String.format("{{ "pequiven.goals.goal"|trans }} {1} {0}", Translator.trans(verb), record.getId()));#}
 
                         },
@@ -232,7 +227,8 @@
                     selType: 'cellmodel',
                     renderTo: 'grid-example-2',
                     plugins: [cellEditing],
-                    height: 580,
+                    height: 600,
+                    width: '100%',
                     frame: true,
                     title: '{{ "pequiven.goals.goals"|trans }}',
                     store: store,
@@ -361,7 +357,7 @@
                         }],
                     columns: [{
                             text: 'Nro',
-                            width: 25,
+                            width: 30,
                             sortable: true,
                             locked: true,
                             renderer: function (v, meta, rec, rowIndex) {
@@ -370,6 +366,7 @@
                         }, {
                             text: '{{ "pequiven.name"|trans({},"messages") }}',
                             flex: 1,
+                            width: 425,
                             sortable: true,
                             dataIndex: 'name',
                             locked: true,
@@ -948,22 +945,77 @@
                     ]
                 });
             });
+
+
+            $(document).ready(function () {
+        {# $("select#user").change(function () {
+             //cargahidden();
+             //alert("olas");
+//                    var select_user = document.getElementById("user").value;
+             var select_user = $(this).val();
+             var idPG = "{{app.request.get('id')}}";
+             //alert(idPG + "-" + select_user);
+             var datos = {
+                 user: select_user,
+                 ifPg: idPG
+             };
+             alert(datos);
+             var url = "{{ path("get_url_reload_notification_by_person") }}";
+             $.post(url, function (data) {
+                 alert(data);
+             });
+                    
+         });#}
+             });
+
+
+
+        {#  function cargahidden() {
+              var select_user = document.getElementById("user").value;
+              var idPG = '{{app.request.get('id')}}';
+              console.log(idPG);
+              var data = {
+                  user: select_user,
+                  ifPg: idPG
+              };
+              $.ajax({
+                  type: 'get',
+                  url: '{{ path("get_url_reload_notification_by_person") }}',
+                  data: data,
+                  success: function (data) {
+                      //window.open(data["url"]);
+                      //alert(data);
+                      console.log(data);
+                  }
+              });
+
+          }#}
+
+
     </script>
 {% endblock javascript %}
 {% block content %}
     <br/>
-    <table>
+    <table width="100%">
         <tr>
-            <td width="30%">
+            <td width="40%">
                 <b>{{ 'pequiven.ref'|trans({},'messages') }}:</b> {{ entity.ref }}
             </td>
-            <td  width="70%" style="text-align: right;">
-                <select onchange="location.reload();" id="user" name="user" class="input-large select2" style="width: 200px;">
-                    <option value="0">Total Grupal</option>
-                    {% for resp in responsibles %}
-                        <option value="{{resp.id}}">{{resp.Responsable|ucwords}}</option>             
-                    {% endfor %}                                                             
-                </select> 
+            <td  width="60%" style="text-align: right;" rowspan="2">
+                <form name="formula" method="POST" action="{{ path('get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails',{id:app.request.get('id'),format:'html'}) }}">
+                    <input type="hidden" value="" id="hidden">
+                    <select  id="user" onchange="this.form.submit();" name="user" class="input-large select2" style="width: 50%;">
+                        {% if userobj %}
+                        <option value="{{userobj.id}}" selected>{{userobj.getfullname|ucwords}}</option>    
+                        <option value="0">Total Grupal</option>
+                            {%else%}
+                        <option value="0" selected >Total Grupal</option>
+                        {%endif%}
+                        {% for resp in responsibles %}
+                            <option value="{{resp.id}}">{{resp.Responsable|ucwords}}</option>             
+                        {% endfor %}                                                             
+                    </select> 
+                </form>
             </td>
         </tr>
         <tr>

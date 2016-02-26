@@ -1678,6 +1678,16 @@ class ArrangementProgramController extends SEIPController {
         $entity->addObservation($observation);
     }
 
+    public function getUrlNotificationByPerson(Request $request) {
+        $response = new JsonResponse();
+        $data = array();
+        $url = $this->generateUrl("get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails", array("idPG" => $request->get("ifPg"), "user" => $request->get("user")));
+        $url .= "/goals-details.json";
+        $data["url"] = $url;
+        $response->setData($data);
+        return $response;
+    }
+
     /**
      * Creates a form to create a ArrangementProgram entity.
      *

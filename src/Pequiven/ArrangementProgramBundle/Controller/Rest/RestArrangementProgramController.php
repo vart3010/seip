@@ -24,11 +24,19 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class RestArrangementProgramController extends FOSRestController {
 
     /**
-     * @Annotations\Get("/{id}/goals-details.{_format}",name="get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
+     * @Route("/{id}/goals-details.{_format}",name="get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"},options={"expose"=true})
+     * @Method({"GET", "POST"})       
      */
     function getGoalsDetailsAction($id, Request $request) {
+        // * @Annotations\Get("/{id}/goals-details.{_format}",name="get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})     
+//        * @Annotations\Get("/{id}/goals-details.{_format}",name="get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
+        //       var_dump($id . ' u: ' . $user);
+//       * @Route("/{id}/{user}/goals-details.{_format}",name="get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"},options={"expose"=true})
+//     * @Method({"GET", "POST"})     
         
-        //var_dump($request);
+        
+        $user=$request->get('user');
+        //var_dump($user);
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
@@ -38,24 +46,34 @@ class RestArrangementProgramController extends FOSRestController {
         }
 
         $data = array();
-        $responsibles = array();
 
-        $timeline = $entity->getTimeline();
-        $responsibles = $em->getRepository('PequivenArrangementProgramBundle:Goal')->getGoalResponsiblesbyAP($entity->getid());
-
-        foreach ($timeline->getGoals() as $goal) {
-            $data[] = $goal->getGoalDetails();
-        }
+        $timeline = $entity->getTimeline();        
+        $responsibles = $em->getRepository('PequivenArrangementProgramBundle:Goal')->getGoalResponsiblesUserbyAP($id, $user);
+        $userobj=$this->get('pequiven.repository.user')->findOneById($user);
+        
+        
+        if ($user != 0) {
+            $list = $em->getRepository('PequivenArrangementProgramBundle:Goal')->getGoalByResponsibleByAP($id, $user);
+            foreach($list as $goal){
+                $data[] = $goal->getGoalDetails();
+            }
+        } else {
+            foreach ($timeline->getGoals() as $goal) {
+                $data[] = $goal->getGoalDetails();
+            }
+        }       
 
         $view = $this->view();
+        
         $result = array(
             'data' => $data,
             'success' => true,
             'total' => count($data),
             'responsibles' => $responsibles,
+            'userobj' => $userobj
         );
 
-        if ($request->get('_format') == 'html') {
+        if ($request->get('_format') == 'html') {            
 //            $date = new DateTime();
 //            $month = $date->format('m');
 //            $percentaje = 0;
@@ -88,11 +106,12 @@ class RestArrangementProgramController extends FOSRestController {
         $view->setData($result);
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'goal', 'goalDetails'));
         $view->setTemplate("PequivenArrangementProgramBundle:Rest:ArrangementProgram/form.html.twig");
+        
         return $view;
     }
 
     /**
-     * @Annotations\Put("/{id}/{user}/goals-details.{_format}/{slug}",name="put_arrangementprogram_rest_restarrangementprogram_putgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
+     * @Annotations\Put("/{id}/goals-details.{_format}/{slug}",name="put_arrangementprogram_rest_restarrangementprogram_putgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
      */
     function putGoalsDetailsAction($id, Request $request, $slug) {
         $em = $this->getDoctrine()->getManager();

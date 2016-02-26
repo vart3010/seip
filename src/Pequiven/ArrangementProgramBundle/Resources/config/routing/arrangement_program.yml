@@ -233,3 +233,12 @@ AP_notification_search:
     defaults:
         _controller: pequiven_seip.controller.arrangementprogram_rest:getGoalsDetailsAction
     methods: [GET|POST]
+    
+get_url_reload_notification_by_person:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:generateUrlFile
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]

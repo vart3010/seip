@@ -87,7 +87,7 @@ class GoalRepository extends EntityRepository {
      * @param type $idAP
      * @return type
      */
-    function getGoalResponsiblesbyAP($idAP) {
+    function getGoalResponsiblesUserbyAP($idAP, $notuser) {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
@@ -106,7 +106,7 @@ FROM
         INNER JOIN
     ArrangementProgram AS ap ON (goal.timeline_id = ap.timeline_id)
 WHERE
-    ap.id = ' . $idAP . '
+    ap.id = ' . $idAP . ' AND user.id NOT IN ("'. $notuser .'") ORDER by (CONCAT(COALESCE(user.firstname, " ")," ",COALESCE(user.lastname, " ")))
             '
         ;
 
@@ -114,6 +114,28 @@ WHERE
         $stmt->execute();
         $result = $stmt->fetchAll();
         return $result;
+    }
+
+    /**
+     * RETORNA LAS METAS DE UN PROGRAMA DE GESTION FILTRADO POR RESPONSABLE
+     * @param type $idAP
+     * @param type $idResp
+     * @return type
+     */
+    function getGoalByResponsibleByAP($idAP, $idResp) {
+
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin('g.timeline', 't')
+                ->innerJoin('g.responsibles', 'g_r')
+                ->innerJoin('t.arrangementProgram', 'ap')
+                ->andWhere('ap.id = :idAP')
+                ->andWhere('g_r.id = :responsible')
+                ->setParameter('idAP', $idAP)
+                ->setParameter('responsible', $idResp)
+        ;
+        //print($qb->getQuery()->getSQL());
+        return $qb->getQuery()->getResult();
     }
 
     protected function getAlias() {
