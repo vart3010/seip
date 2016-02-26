@@ -1,0 +1,5 @@
+## YAML Template.
+pequiven_housesupply_inventory_charge:
+    path: /Charge
+    defaults:
+        _controller: pequiven:controller:HouseSupply:HouseSupplyInventoryController:chargeAction

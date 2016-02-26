@@ -80,6 +80,18 @@ pequiven_politic_meetingl:
 pequiven_politic_assistance:
     resource: "@PequivenSEIPBundle/Resources/config/routing/politic/assistance.yml"
     prefix:   /assistance
+    
+pequiven_houseSupply_Inventory:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/HouseSupply/HouseSupplyInventory.yml"
+    prefix:   /HouseSupply/Inventory
+    
+pequiven_houseSupply_Sell:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/HouseSupply/HouseSupplySell.yml"
+    prefix:   /HouseSupply/Sell
+    
+pequiven_houseSupply_Order:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/HouseSupply/HouseSupplyOrder.yml"
+    prefix:   /HouseSupply/Order
 
 ###SISTEMA DE INFORMACION POLIICA
 pequiven_sip:

@@ -47,7 +47,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
      */
     public function createSidebarMenu(Request $request) {
         $seipConfiguration = $this->getSeipConfiguration();
-$user = $this->getUser();
+        $user = $this->getUser();
         $menu = $this->factory->createItem('root', array(
             'childrenAttributes' => array(
                 'class' => 'big-menu',
@@ -107,6 +107,10 @@ $user = $this->getUser();
             $this->addMenuUsuarios($menu, $section);
         }
 
+        // MENU CASA - ABASTO
+        //     if ($this->isGranted('ROLE_SEIP_HOUSE_SUPPLY_*')) {
+        $this->addMenuHouseSupply($menu, $section);
+        //    }
         //Menú Sistema de Informacion Politica
         if ($this->isGranted('ROLE_SEIP_SIP_*') && $user->getId() != 5942) {
             $this->addMenuSip($menu, $section);
@@ -116,7 +120,7 @@ $user = $this->getUser();
         $this->addMenuModules($menu, $section);
 
         //Menú Administración
-        
+
         if ($this->securityContext->isGranted(array('ROLE_SONATA_ADMIN')) && $user->getId() != 5942) {
             $menu->addChild('admin', array(
                 'route' => 'sonata_admin_dashboard',
@@ -557,7 +561,7 @@ $user = $this->getUser();
                         'route' => 'pequiven_indicator_evolution_load',
                         'labelAttributes' => array('icon' => 'fa fa-bar-chart')
                     ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.evolution', $section)));            
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.evolution', $section)));
 
 
             //Fin sub Ver - menu objetivos
@@ -857,7 +861,7 @@ $user = $this->getUser();
                         ))
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.results.main', $section)));
-        if ($this->isGranted(array('ROLE_SEIP_RESULT_LIST_*', 'ROLE_SEIP_RESULT_MANAGEMENT_CONSULTING_USER','ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA'))) {
+        if ($this->isGranted(array('ROLE_SEIP_RESULT_LIST_*', 'ROLE_SEIP_RESULT_MANAGEMENT_CONSULTING_USER', 'ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA'))) {
             //Menú Nivel 2: Visualizar
             $visualize = $this->factory->createItem('results.visualize', $this->getSubLevelOptions(array('uri' => 'objetive',
                                 'labelAttributes' => array('icon' => '',),
@@ -888,32 +892,32 @@ $user = $this->getUser();
 
             if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_OBJETIVES_STRATEGICS')) {
                 $itemStrategicsObjetives = $this->factory->createItem('results.visualize.objetive.strategics', array(
-                    'route' => 'pequiven_line_strategic_view_objetives_strategics',
-                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.objetive.strategics', $section)));
+                            'route' => 'pequiven_line_strategic_view_objetives_strategics',
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.objetive.strategics', $section)));
                 $visualize->addChild($itemStrategicsObjetives);
             }
-            
+
             if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPHC')) {
                 $itemStrategicsIndicatorsCphc = $this->factory->createItem('results.visualize.indicator.cphc', array(
-                    'route' => 'pequiven_line_strategic_indicators_specific',
-                    'routeParameters' => array('complejo' => 1),
-                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cphc', $section)));
+                            'route' => 'pequiven_line_strategic_indicators_specific',
+                            'routeParameters' => array('complejo' => 1),
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cphc', $section)));
                 $visualize->addChild($itemStrategicsIndicatorsCphc);
             }
-            
+
             if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPAMC')) {
                 $itemStrategicsIndicatorsCpamc = $this->factory->createItem('results.visualize.indicator.cpamc', array(
-                    'route' => 'pequiven_line_strategic_indicators_specific',
-                    'routeParameters' => array('complejo' => 2),
-                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cpamc', $section)));
+                            'route' => 'pequiven_line_strategic_indicators_specific',
+                            'routeParameters' => array('complejo' => 2),
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cpamc', $section)));
                 $visualize->addChild($itemStrategicsIndicatorsCpamc);
             }
-            
+
             if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA')) {
                 $itemStrategicsIndicatorsCpjaa = $this->factory->createItem('results.visualize.indicator.cpjaa', array(
-                    'route' => 'pequiven_line_strategic_indicators_specific',
-                    'routeParameters' => array('complejo' => 3),
-                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cpjaa', $section)));
+                            'route' => 'pequiven_line_strategic_indicators_specific',
+                            'routeParameters' => array('complejo' => 3),
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cpjaa', $section)));
                 $visualize->addChild($itemStrategicsIndicatorsCpjaa);
             }
 
@@ -1917,6 +1921,104 @@ $user = $this->getUser();
     }
 
     /**
+     * CONSTRUYE EL MENU DE CASA-ABASTO
+     * @author Gilbert C. <glavrjk@gmail.com>
+     * @param ItemInterface $menu
+     * @param type $section
+     */
+    private function addMenuHouseSupply(ItemInterface $menu, $section) {
+        $user = $this->getUser();
+        $child = $this->factory->createItem('housesupply', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                            'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Casa - Abasto', $section)));
+
+        $child1 = $this->factory->createItem('housesupply.sells', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                                // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Ventas', $section)));
+
+        $child1
+                ->addChild('housesupply.sells.create', array(
+                    //'route' => 'pequiven_user_feestructure',
+                    'labelAttributes' => array('icon' => 'fa fa-calculator')
+                ))
+                ->setLabel($this->translate(sprintf('Facturación', $section)));
+
+        $child1
+                ->addChild('housesupply.sells.cancel', array(
+                    //'route' => 'pequiven_user_feestructure',
+                    'labelAttributes' => array('icon' => 'fa fa-times')
+                ))
+                ->setLabel($this->translate(sprintf('Devolución', $section)));
+        $child1
+                ->addChild('housesupply.sells.reports', array(
+                    //'route' => 'pequiven_user_feestructure',
+                    'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
+                ))
+                ->setLabel($this->translate(sprintf('Reportes', $section)));
+
+        $child2 = $this->factory->createItem('housesupply.order', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                                // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Pedidos', $section)));
+        $child2
+                ->addChild('housesupply.order.create', array(
+                        //'route' => 'pequiven_user_feestructure',
+                        //'labelAttributes' => array('icon' => 'fa fa-calculator')
+                ))
+                ->setLabel($this->translate(sprintf('Crear', $section)));
+        $child2
+                ->addChild('housesupply.order.cancel', array(
+                        //'route' => 'pequiven_user_feestructure',
+                        //'labelAttributes' => array('icon' => 'fa fa-calculator')
+                ))
+                ->setLabel($this->translate(sprintf('Cancelar', $section)));
+        $child2
+                ->addChild('housesupply.order.reports', array(
+                    //'route' => 'pequiven_user_feestructure',
+                    'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
+                ))
+                ->setLabel($this->translate(sprintf('Reportes', $section)));
+
+        $child3 = $this->factory->createItem('housesupply.inventory', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                                // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Inventario', $section)));
+        $child3
+                ->addChild('housesupply.inventory.charge', array(
+                        'route' => 'pequiven_housesupply_inventory_charge',
+                        //'labelAttributes' => array('icon' => 'fa fa-calculator')
+                ))
+                ->setLabel($this->translate(sprintf('Cargos', $section)));
+        $child3
+                ->addChild('housesupply.inventory.uncharge', array(
+                        //'route' => 'pequiven_user_feestructure',
+                        //'labelAttributes' => array('icon' => 'fa fa-calculator')
+                ))
+                ->setLabel($this->translate(sprintf('Descargos', $section)));
+        $child3
+                ->addChild('housesupply.inventory.reports', array(
+                    //'route' => 'pequiven_user_feestructure',
+                    'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
+                ))
+                ->setLabel($this->translate(sprintf('Reportes', $section)));
+
+        $child->addChild($child1);
+        $child->addChild($child2);
+        $child->addChild($child3);
+        $menu->addChild($child);
+    }
+
+    /**
      * CONSTRUYE EL MENU DE EMPLEADOS PARA LA ESTRUCTURA DE CARGOS
      * @param ItemInterface $menu
      * @param type $section
@@ -1958,13 +2060,13 @@ $user = $this->getUser();
                     'labelAttributes' => array('icon' => ''),
                 ))
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.modules.ventas', $section)));
-        
+
         $child->addChild('planning.visualize.modules.despachos', array(
                     'route' => 'pequiven_seip_modules_despacho',
                     'labelAttributes' => array('icon' => ''),
                 ))
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.modules.despachos', $section)));
-        
+
         $child->addChild('planning.visualize.modules.contrataciones', array(
                     'route' => 'pequiven_seip_modules_contrataciones',
                     'labelAttributes' => array('icon' => ''),

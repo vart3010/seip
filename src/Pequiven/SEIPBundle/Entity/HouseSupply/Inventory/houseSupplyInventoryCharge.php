@@ -43,20 +43,6 @@ class houseSupplyInventoryCharge {
 
     /**
      *
-     * @var integer
-     * @ORM\Column(name="nroDevol",type="integer",nullable=true)
-     */
-    private $nroDevol;
-
-    /**
-     * 
-     * @var integer
-     * @ORM\Column(name="idAffected",type="integer",nullable=true)
-     */
-    private $idAffected;
-
-    /**
-     *
      * @var float
      * @ORM\Column(name="totalCharge",type="float",nullable=false)
      */
@@ -116,18 +102,6 @@ class houseSupplyInventoryCharge {
         return $this->nroCharge;
     }
 
-    function getNroDevol() {
-        return $this->nroDevol;
-    }
-
-    function getIdAffected() {
-        return $this->idAffected;
-    }
-
-    function getDate() {
-        return $this->date;
-    }
-
     function getTotalCharge() {
         return $this->totalCharge;
     }
@@ -168,18 +142,6 @@ class houseSupplyInventoryCharge {
         $this->nroCharge = $nroCharge;
     }
 
-    function setNroDevol($nroDevol) {
-        $this->nroDevol = $nroDevol;
-    }
-
-    function setIdAffected($idAffected) {
-        $this->idAffected = $idAffected;
-    }
-
-    function setDate(datetime $date) {
-        $this->date = $date;
-    }
-
     function setTotalCharge($totalCharge) {
         $this->totalCharge = $totalCharge;
     }
@@ -207,5 +169,6 @@ class houseSupplyInventoryCharge {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
+
 
 }
