@@ -318,7 +318,9 @@ class PlantStopPlanning extends ModelBaseMaster
     {
         $days = array();
         foreach ($this->dayStops as $dayStop) {
-            $days[$dayStop->getNroDay()] = $dayStop;
+            if(!$dayStop->getOtherTime()){
+                $days[$dayStop->getNroDay()] = $dayStop;
+            }
         }
         return $days;
     }

@@ -271,6 +271,7 @@ class ProductReportController extends SEIPController {
                 if (count($productPlanningsNet[$productPlanningGross->getMonth()]->getRanges()) > 0) {
                     foreach ($productPlanningsNet[$productPlanningGross->getMonth()]->getRanges() as $range) {
                         if ($range->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_FIXED_VALUE) {
+                            $total = ($range->getValue() * $netProductionPercentage) / 100;
                             $range->setValue($total);
                         } elseif ($range->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_CAPACITY_FACTOR) {
                             $range->setValue($netProductionPercentage);
@@ -280,6 +281,7 @@ class ProductReportController extends SEIPController {
                     foreach ($productPlanningGross->getRanges() as $range) {
                         $cloneRange = clone $range;
                         if ($cloneRange->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_FIXED_VALUE) {
+                            $total = ($range->getValue() * $netProductionPercentage) / 100;
                             $cloneRange->setValue($total);
                         } elseif ($cloneRange->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_CAPACITY_FACTOR) {
                             $cloneRange->setValue($netProductionPercentage);
@@ -295,6 +297,7 @@ class ProductReportController extends SEIPController {
             }
         }
         $this->save($resource);
+        
 
 //Planificacion de productos
         $productPlannings = $resource->getProductPlannings();
