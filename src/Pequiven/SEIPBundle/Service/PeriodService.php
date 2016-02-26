@@ -200,7 +200,7 @@ class PeriodService extends ContainerAware {
         }
 
         $user = $this->getUser();
-        if ($user->getId() == 295 || $user->getId() == 110 || $user->getId() == 103 || $user->getId() == 106 || $user->getId() == 104 || $user->getId() == 4642 || $user->getId() == 120 || $user->getId() == 1798 || $user->getId() == 1668) {
+        if ($period->getName() == '2016' && ($user->getId() == 295 || $user->getId() == 110 || $user->getId() == 103 || $user->getId() == 106 || $user->getId() == 104 || $user->getId() == 4642 || $user->getId() == 120 || $user->getId() == 1798 || $user->getId() == 1668)) {
             $result = true;
         }
 
@@ -221,7 +221,7 @@ class PeriodService extends ContainerAware {
         }
 
         $user = $this->getUser();
-        if ($user->getId() == 1668 or $user->getId() == 1798) {
+        if ($period->getName() == '2016' && ($user->getId() == 1668 or $user->getId() == 1798)) {
             $result = true;
         }
 
