@@ -22,9 +22,8 @@
 								{% for type in types %}
 								<li class="big-menu grey-gradient with-right-arrow">
 									<span class="blue-gradient"><span class="list-count">0</span>{{ types[cont] }}</span>	
-									<ul class="message-menu">
-										<li id="messagesData">
-										{#{% for notification in notifications %}
+									<ul class="message-menu">										
+										{% for notification in notifications %}
 											{% if notification.type == cont %}
 											<li id="iMessage_{{ notification.id }}">
 												<span class="message-status">								
@@ -52,8 +51,7 @@
 												</a>
 											</li>
 											{% endif %}
-										{% endfor %}	#}
-										</li>
+										{% endfor %}											
 									</ul>
 								</li>
 								{% set cont = cont + 1 %}							
@@ -158,7 +156,7 @@
                 idMessage: id,                    
             };     
 
-			$.ajax({
+			{#$.ajax({
                     type: 'get',
                     url: '{{ path("seip_notification_favourite_message") }}',
                     data: data, 
@@ -174,7 +172,7 @@
             			$('#buttonToll').css('display', 'none');                       
                         document.getElementById("messageNone").innerHTML = '<i class="fa fa-check"></i> Notificación enviada a Importantes';
                     }
-            });
+            });#}
 		}   
 
 		function favouriteShow(){
