@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge;
+use Pequiven\MasterBundle\Entity\Complejo;
 
 /**
  * Depositos
@@ -91,6 +92,10 @@ class houseSupplyDeposit {
         return $this->description;
     }
 
+    function getComplejo() {
+        return $this->complejo;
+    }
+
     function getCreatedBy() {
         return $this->createdBy;
     }
@@ -123,6 +128,10 @@ class houseSupplyDeposit {
         $this->description = $description;
     }
 
+    function setComplejo(Complejo $complejo) {
+        $this->complejo = $complejo;
+    }
+
     function setCreatedBy(User $createdBy) {
         $this->createdBy = $createdBy;
     }
@@ -146,5 +155,7 @@ class houseSupplyDeposit {
     function setInventoryCharge(houseSupplyInventoryCharge $inventoryCharge) {
         $this->inventoryCharge = $inventoryCharge;
     }
+
+
 
 }
