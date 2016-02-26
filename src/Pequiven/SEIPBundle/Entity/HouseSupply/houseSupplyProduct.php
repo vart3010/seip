@@ -4,6 +4,9 @@ namespace Pequiven\SEIPBundle\Entity\HouseSupply;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\SEIPBundle\Entity\User;
+use Pequiven\SEIPBundle\Entity\HouseSupply\houseSupplyInventory; 
+use Pequiven\SEIPBundle\Entity\HouseSupply\houseSupplyInventoryChargeItems;
 
 /**
  * Productos
@@ -14,8 +17,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class houseSupplyProduct
-{
+class houseSupplyProduct {
+
     /**
      * @var integer
      *
@@ -24,11 +27,11 @@ class houseSupplyProduct
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      *
-     * @var ineteger
-     * @ORM\Column(name="code",type="integer",nullable=false)
+     * @var string
+     * @ORM\Column(name="code",type="string",nullable=false)
      */
     private $code;
 
@@ -48,8 +51,15 @@ class houseSupplyProduct
 
     /**
      *
-     * @var integer
-     * @ORM\Column(name="maxPerUser",type="integer",nullable=false)
+     * @var float
+     * @ORM\Column(name="$cost",type="float",nullable=false)
+     */
+    private $cost;
+
+    /**
+     *
+     * @var float
+     * @ORM\Column(name="maxPerUser",type="float",nullable=false)
      */
     private $maxPerUser;
 
@@ -60,7 +70,15 @@ class houseSupplyProduct
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\houseSupplyInventory",mappedBy="product",cascade={"persist","remove"})
      */
     protected $inventory;
-    
+
+    /**
+     * Carga de Items de Inventario
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\houseSupply\houseSupplyInventoryChargeItems
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\houseSupplyInventoryChargeItems",mappedBy="product",cascade={"persist","remove"})
+     */
+    protected $inventoryChargeItems;
+
     /**
      * Creado por
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -69,7 +87,7 @@ class houseSupplyProduct
      * @ORM\JoinColumn(nullable=false)
      */
     private $createdBy;
-    
+
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
@@ -88,206 +106,102 @@ class houseSupplyProduct
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-
-        $this->inventory = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
+    
+    function getId() {
         return $this->id;
     }
 
-    /**
-     * Set code
-     *
-     * @param string $code
-     * @return Observation
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
-
-        return $this;
-    }
-
-    /**
-     * Get code
-     *
-     * @return string 
-     */
-    public function getCode()
-    {
+    function getCode() {
         return $this->code;
     }
 
-    /**
-     * Set description
-     *
-     * @param string $description
-     * @return Observation
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string 
-     */
-    public function getDescription()
-    {
+    function getDescription() {
         return $this->description;
     }
 
-    /**
-     * Set price
-     *
-     * @param string $price
-     * @return Observation
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    /**
-     * Get price
-     *
-     * @return string 
-     */
-    public function getPrice()
-    {
+    function getPrice() {
         return $this->price;
     }
 
-    /**
-     * Set maxPerUser
-     *
-     * @param string $maxPerUser
-     * @return Observation
-     */
-    public function setMaxPerUser($maxPerUser)
-    {
-        $this->maxPerUser = $maxPerUser;
-
-        return $this;
+    function getCost() {
+        return $this->cost;
     }
 
-    /**
-     * Get maxPerUser
-     *
-     * @return string 
-     */
-    public function getMaxPerUser()
-    {
+    function getMaxPerUser() {
         return $this->maxPerUser;
     }
 
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     * @return Observation
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
+    function getInventory() {
+        return $this->inventory;
     }
 
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
+    function getInventoryChargeItems() {
+        return $this->inventoryChargeItems;
     }
 
-    /**
-     * Set createdBy
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $createdBy
-     * @return Observation
-     */
-    public function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get createdBy
-     *
-     * @return \Pequiven\SEIPBundle\Entity\User 
-     */
-    public function getCreatedBy()
-    {
+    function getCreatedBy() {
         return $this->createdBy;
     }
 
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return Chart
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
+    function getCreatedAt() {
+        return $this->createdAt;
     }
 
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime 
-     */
-    public function getUpdatedAt()
-    {
+    function getUpdatedAt() {
         return $this->updatedAt;
     }
 
-    /**
-     * Set deletedAt
-     *
-     * @param \DateTime $deletedAt
-     * @return Chart
-     */
-    public function setDeletedAt($deletedAt)
-    {
-        $this->deletedAt = $deletedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get deletedAt
-     *
-     * @return \DateTime 
-     */
-    public function getDeletedAt()
-    {
+    function getDeletedAt() {
         return $this->deletedAt;
     }
+
+    function setId($id) {
+        $this->id = $id;
+    }
+
+    function setCode($code) {
+        $this->code = $code;
+    }
+
+    function setDescription($description) {
+        $this->description = $description;
+    }
+
+    function setPrice($price) {
+        $this->price = $price;
+    }
+
+    function setCost($cost) {
+        $this->cost = $cost;
+    }
+
+    function setMaxPerUser($maxPerUser) {
+        $this->maxPerUser = $maxPerUser;
+    }
+
+    function setInventory(houseSupplyInventory $inventory) {
+        $this->inventory = $inventory;
+    }
+
+    function setInventoryChargeItems(houseSupplyInventoryChargeItems $inventoryChargeItems) {
+        $this->inventoryChargeItems = $inventoryChargeItems;
+    }
+
+    function setCreatedBy(User $createdBy) {
+        $this->createdBy = $createdBy;
+    }
+
+    function setCreatedAt($createdAt) {
+        $this->createdAt = $createdAt;
+    }
+
+    function setUpdatedAt($updatedAt) {
+        $this->updatedAt = $updatedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+    }
+
+
 }

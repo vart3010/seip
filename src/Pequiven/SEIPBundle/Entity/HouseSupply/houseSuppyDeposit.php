@@ -5,19 +5,18 @@ namespace Pequiven\SEIPBundle\Entity\HouseSupply;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
-use Pequiven\SEIPBundle\Entity\HouseSupply\houseSupplyDeposit;
-use Pequiven\SEIPBundle\Entity\HouseSupply\houseSupplyProduct;
+use Pequiven\SEIPBundle\Entity\HouseSupply\houseSupplyInventoryCharge;
 
 /**
- * Productos
+ * Depositos
  *
- * @author Máximo Sojo <maxsojo13@gmail.com>
+ * @author Gilbert C. <glavrjk@gmail.com>
  * 
- * @ORM\Table(name="seip_gsh_inventory")
+ * @ORM\Table(name="seip_gsh_deposit")
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class houseSupplyInventory {
+class houseSupplyDeposit {
 
     /**
      * @var integer
@@ -29,34 +28,11 @@ class houseSupplyInventory {
     private $id;
 
     /**
-     * Product
-     * @var houseSupplyProduct
-     * @ORM\ManyToOne(targetEntity="houseSupplyProduct", inversedBy="inventory")
-     * @ORM\JoinColumn(name="producto_id", referencedColumnName="id")
-     */
-    private $product;
-
-    /**
-     * 
-     * @var houseSupplyDeposit
-     * @ORM\ManyToOne(targetEntity="houseSupplyDeposit", inversedBy="inventory")
-     * @ORM\JoinColumn(name="deposit_id", referencedColumnName="id")
-     */
-    private $deposit;
-
-    /**
      *
-     * @var float
-     * @ORM\Column(name="available",type="float",nullable=false)
+     * @var string
+     * @ORM\Column(name="description",type="string",nullable=false)
      */
-    private $available;
-
-    /**
-     *
-     * @var datetime
-     * @ORM\Column(name="lastChargeDate",type="datetime",nullable=false)
-     */
-    private $lastChargeDate;
+    private $description;
 
     /**
      * Creado por
@@ -85,25 +61,29 @@ class houseSupplyInventory {
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+
+    /**
+     * Inventario
+     * 
+     * @var houseSupplyInventory
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\houseSupplyInventory",mappedBy="deposit",cascade={"persist","remove"})
+     */
+    protected $inventory;
+
+    /**
+     * Cargos de Inventario
+     * 
+     * @var houseSupplyInventoryCharge
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\houseSupplyInventoryCharge",mappedBy="deposit",cascade={"persist","remove"})
+     */
+    protected $inventoryCharge;
     
     function getId() {
         return $this->id;
     }
 
-    function getProduct() {
-        return $this->product;
-    }
-
-    function getDeposit() {
-        return $this->deposit;
-    }
-
-    function getAvailable() {
-        return $this->available;
-    }
-
-    function getLastChargeDate() {
-        return $this->lastChargeDate;
+    function getDescription() {
+        return $this->description;
     }
 
     function getCreatedBy() {
@@ -122,24 +102,20 @@ class houseSupplyInventory {
         return $this->deletedAt;
     }
 
+    function getInventory() {
+        return $this->inventory;
+    }
+
+    function getInventoryCharge() {
+        return $this->inventoryCharge;
+    }
+
     function setId($id) {
         $this->id = $id;
     }
 
-    function setProduct(houseSupplyProduct $product) {
-        $this->product = $product;
-    }
-
-    function setDeposit(houseSupplyDeposit $deposit) {
-        $this->deposit = $deposit;
-    }
-
-    function setAvailable($available) {
-        $this->available = $available;
-    }
-
-    function setLastChargeDate($lastChargeDate) {
-        $this->lastChargeDate = $lastChargeDate;
+    function setDescription($description) {
+        $this->description = $description;
     }
 
     function setCreatedBy(User $createdBy) {
@@ -156,6 +132,14 @@ class houseSupplyInventory {
 
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
+    }
+
+    function setInventory(houseSupplyInventory $inventory) {
+        $this->inventory = $inventory;
+    }
+
+    function setInventoryCharge(houseSupplyInventoryCharge $inventoryCharge) {
+        $this->inventoryCharge = $inventoryCharge;
     }
 
 
