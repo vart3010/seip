@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Pequiven\SEIPBundle\Controller\HouseSupply\Billing;
+namespace Pequiven\SEIPBundle\Controller\HouseSupply;
 
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
  * CONTROLADOR DE INVENTARIO DE CASA - ABASTO
  * @author Gilbert C. <glavrjk@gmail.com>
  */
-class HouseSupplyBillingController extends SEIPController {
+class HouseSupplyOrderController extends SEIPController {
 
     public function createAction(Request $request) {
         var_dump('hola');

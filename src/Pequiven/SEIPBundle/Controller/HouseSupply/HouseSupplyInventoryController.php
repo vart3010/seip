@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Pequiven\SEIPBundle\Controller\HouseSupply\Inventory;
+namespace Pequiven\SEIPBundle\Controller\HouseSupply;
 
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
