@@ -12,7 +12,7 @@ use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * CONTROLADOR DE INVENTARIO DE CASA - ABASTO
+ * CONTROLADOR DE PEDIDOS DE CASA - ABASTO
  * @author Gilbert C. <glavrjk@gmail.com>
  */
 class HouseSupplyOrderController extends SEIPController {
