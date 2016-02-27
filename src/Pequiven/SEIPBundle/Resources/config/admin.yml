@@ -730,3 +730,26 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.housesupply.product:
+        class: Pequiven\MasterBundle\Admin\HouseSupply\HouseSupplyProductAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Casa - Abaso" ,label_catalogue: "SonataHouseSupplyBundle", label: "Productos" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.housesupply.deposit:
+        class: Pequiven\MasterBundle\Admin\HouseSupply\HouseSupplyDepositAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Casa - Abaso" ,label_catalogue: "SonataHouseSupplyBundle", label: "Depósitos" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyDeposit
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
