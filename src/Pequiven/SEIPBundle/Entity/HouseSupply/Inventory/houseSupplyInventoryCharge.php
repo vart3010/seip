@@ -51,7 +51,7 @@ class houseSupplyInventoryCharge {
     /**
      *
      * @var string
-     * @ORM\Column(name="totalCharge",type="string",nullable=true)
+     * @ORM\Column(name="description",type="string",nullable=true)
      */
     private $description;
 
