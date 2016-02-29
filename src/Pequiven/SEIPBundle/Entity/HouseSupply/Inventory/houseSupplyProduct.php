@@ -30,7 +30,7 @@ class houseSupplyProduct {
     /**
      *
      * @var string
-     * @ORM\Column(name="code",type="string",nullable=false)
+     * @ORM\Column(name="code",type="string",nullable=true)
      */
     private $code;
 
