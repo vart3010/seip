@@ -37,7 +37,7 @@ class HouseSupplyProductAdmin extends Admin {
 
     protected function configureFormFields(FormMapper $form) {
         $form
-                ->add('id')
+                
                 ->add('code')
                 ->add('description')
                 ->add('price')
