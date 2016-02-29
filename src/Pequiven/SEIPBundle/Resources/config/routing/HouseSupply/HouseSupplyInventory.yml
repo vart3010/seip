@@ -1,5 +1,8 @@
 ## YAML Template.
 pequiven_housesupply_inventory_charge:
-    path: /Charge
+    path: /HouseSupply/Inventory/Charge
     defaults:
-        _controller: pequiven:controller:HouseSupply:HouseSupplyInventoryController:chargeAction
+        _controller: PequivenSEIPBundle:HouseSupply/HouseSupplyInventory:chargeAction
+    methods: [GET|POST]
+    options:
+        expose: true

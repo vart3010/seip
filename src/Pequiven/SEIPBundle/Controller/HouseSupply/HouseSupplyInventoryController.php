@@ -19,6 +19,7 @@ class HouseSupplyInventoryController extends SEIPController {
 
     public function createAction(Request $request) {
         var_dump('hola');
+        die();
     }
 
 }
