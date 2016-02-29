@@ -40,6 +40,15 @@
 </div>
 {% endmacro %}
 
+{% macro register(text) %}
+<div class="field-block button-height">
+    <button type="submit" class="button glossy mid-margin-right">
+        <span class="button-icon green-gradient"><span class="icon-tick"></span></span>
+        {{ text }}
+    </button>    
+</div>
+{% endmacro %}
+
 {% macro create_formModal(url) %}
 <div class="field-block button-height">
     <button type="submit" class="button glossy mid-margin-right">

@@ -19,7 +19,7 @@ class houseSupplyInventoryChargeType extends AbstractType {
                     'widget' => 'single_text',
                     'label' => 'Fecha de Asignación',
                     'required' => true,
-                    'attr' => array('class' => 'input input-large'),
+                    'attr' => array('class' => 'input input-xlarge'),
                     'required' => true,
                 ])
                 ->add('observations', 'textarea', array(
