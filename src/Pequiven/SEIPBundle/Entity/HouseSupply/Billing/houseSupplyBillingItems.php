@@ -28,6 +28,12 @@ class houseSupplyBillingItems {
     private $id;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(name="date", type="datetime", nullable=false)
+     */
+    private $date;
+
+    /**
      * 
      * @var houseSupplyBilling
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling", inversedBy="billingItems")
@@ -109,6 +115,10 @@ class houseSupplyBillingItems {
         return $this->id;
     }
 
+    function getDate() {
+        return $this->date;
+    }
+
     function getBill() {
         return $this->bill;
     }
@@ -157,6 +167,10 @@ class houseSupplyBillingItems {
         $this->id = $id;
     }
 
+    function setDate(\DateTime $date) {
+        $this->date = $date;
+    }
+
     function setBill(houseSupplyBilling $bill) {
         $this->bill = $bill;
     }
@@ -200,8 +214,6 @@ class houseSupplyBillingItems {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
-
-
 
 
 

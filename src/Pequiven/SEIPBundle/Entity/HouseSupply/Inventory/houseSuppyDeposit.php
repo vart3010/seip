@@ -16,6 +16,7 @@ use Pequiven\MasterBundle\Entity\Complejo;
  * @ORM\Table(name="seip_gsh_deposit")
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyDepositRepository")
  */
 class houseSupplyDeposit {
 

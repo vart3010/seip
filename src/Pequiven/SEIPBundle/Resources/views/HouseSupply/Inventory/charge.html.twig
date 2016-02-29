@@ -1,0 +1,76 @@
+{# empty Twig template #}
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            charge();
+            function charge() {
+                $('.select2').select2({
+                    allowClear: true
+                });
+
+
+                $(".date").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    dateFormat: "dd/mm/yy"
+                });
+            }
+        });
+    </script>  
+{% endblock javascript %}
+
+
+{% block body %}
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="">Inventario</a>
+            <span class="icon-forward"></span>
+            <span class="thin">Cargos de Productos</span>            
+        </h1>
+    </hgroup>
+    <br>
+    <form name="charge">
+        <div class="with-padding">
+            <div class="columns padding-5">            
+                <div class="new-row two-columns">                        
+                    <label class="label bold">Seleccione el Depósito</label>
+                </div>
+                <div class="four-columns">                            
+                    <select onchange="this.form.submit();" name="deposit" class="select2 input-xlarge form-control">
+                        {% for depo in deposits %}
+                            <option value="{{depo.id}}">{{depo.description}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="new-row two-columns">                        
+                    <label class="label bold">Fecha:</label>
+                </div>
+                <div class="four-columns">                            
+                    {{ form_widget(form.date) }}
+                    {{ form_errors(form.date) }}
+                </div>
+                <div class="new-row two-columns">                        
+                    <label class="label bold">Observaciones:</label>
+                </div>
+                <div class="four-columns">      
+                    {{ form_widget(form.observations) }}
+                    {{ form_errors(form.observations) }}
+                </div>
+
+                <div class="six-columns align-right" style="font-size: 50pt;">
+                    Nro. <span class="green">{{ newcharge }}</span>
+                </div>
+
+            </div>
+        </div>
+                 {{ form_rest(form) }}
+    </form>
+
+{% endblock %}
+

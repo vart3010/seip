@@ -30,6 +30,12 @@ class houseSupplyBilling {
     private $id;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(name="date", type="datetime", nullable=false)
+     */
+    private $date;
+
+    /**
      * 1. FACTURA / 2. DEVOLUCION / 3. PEDIDO / 4. DEVOLUCION DE PEDIDO
      * @var string
      * @ORM\Column(name="type",type="string",nullable=false)
@@ -161,6 +167,10 @@ class houseSupplyBilling {
         return $this->id;
     }
 
+    function getDate() {
+        return $this->date;
+    }
+
     function getType() {
         return $this->type;
     }
@@ -237,6 +247,10 @@ class houseSupplyBilling {
         $this->id = $id;
     }
 
+    function setDate(\DateTime $date) {
+        $this->date = $date;
+    }
+
     function setType($type) {
         $this->type = $type;
     }
@@ -308,5 +322,7 @@ class houseSupplyBilling {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
+
+
 
 }

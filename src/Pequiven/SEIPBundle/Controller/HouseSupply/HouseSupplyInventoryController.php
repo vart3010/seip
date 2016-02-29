@@ -10,6 +10,8 @@ namespace Pequiven\SEIPBundle\Controller\HouseSupply;
 
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge;
+use Pequiven\SEIPBundle\Form\HouseSupply\Inventory\houseSupplyInventoryChargeType;
 
 /**
  * CONTROLADOR DE INVENTARIO DE CASA - ABASTO
@@ -18,47 +20,25 @@ use Symfony\Component\HttpFoundation\Request;
 class HouseSupplyInventoryController extends SEIPController {
 
     public function chargeAction(Request $request) {
-        $idDepo = $request->get('idDepo');
-        $idDepo=2;
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->find($idDepo);
 
-        var_dump($entity);
-        die();
+        $idDepo = $request->get('deposit');
 
-        //INSTANCIACIÓN DE ENTIDADES
-        $MovementEmployee = new MovementEmployee();
 
-        //VERIFICO LA PERMISOLOGÍA DEL USUARIO SI PUEDE RETIRAR EMPLEADOS POST-MORTEM
-        $securityService = $this->getSecurityService();
-        if ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM"))) {
-            $post_mortem = true;
-        } else {
-            $post_mortem = false;
-        }
+        $newcharge = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindLastInvChargeId();
+        $lastcharge = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->findOneById(max($newcharge));
+        $deposits = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->findAll();
 
-        //FORMULARIOS DE ENTRADA Y SALIDA
-        $formassign = $this->createForm(new AssignMovType(), $MovementEmployee);
-        $formremove = $this->createForm(new RemoveMovType($id, $post_mortem, $type), $MovementEmployee);
+        $form = new houseSupplyInventoryChargeType();
 
-        //RESPONSABLES ASIGNADOS
-        $responsibles = $this->get('pequiven_seip.repository.user')->findQuerytoRemoveAssingedGoal($id, false);
+        $newcharge = str_pad((array_sum($newcharge)), 5, 0, STR_PAD_LEFT);
 
-        //MOVIMIENTOS REALIZADOS
-        $movements = $this->get('pequiven_seip.repository.arrangementprogram_movement')->FindMovementDetailsbyGoal($id);
-
-        //ARREGLO DE CAUSAS
-        $causes = \Pequiven\ArrangementProgramBundle\Model\MovementEmployee::getAllCauses();
-
-        return $this->render('PequivenArrangementProgramBundle:MovementEmployee:show.html.twig', array(
-                    'goal' => $entity,
-                    'user' => $this->getUser(),
-                    'assign' => $formassign->createView(),
-                    'remove' => $formremove->createView(),
-                    'responsibles' => $responsibles,
-                    'movements' => $movements,
-                    'causes' => $causes
+        return $this->render('PequivenSEIPBundle:HouseSupply\Inventory:charge.html.twig', array(
+                    'deposits' => $deposits,
+                    'newcharge' => $newcharge,
+                    'lastcharge' => $lastcharge,
+                    'form' => $form,
         ));
     }
 

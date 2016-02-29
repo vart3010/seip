@@ -13,8 +13,8 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeI
  *
  * @author Gilbert C. <glavrjk@gmail.com>
  * 
- * @ORM\Table(name="seip_gsh_inventory_charge")
- * @ORM\Entity()
+ * @ORM\Table(name="seip_gsh_inventory_charge") 
+ * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyInventoryChargeRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class houseSupplyInventoryCharge {
@@ -26,6 +26,12 @@ class houseSupplyInventoryCharge {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="date", type="datetime", nullable=false)
+     */
+    private $date;
 
     /**
      *
@@ -47,13 +53,13 @@ class houseSupplyInventoryCharge {
      * @ORM\Column(name="totalCharge",type="float",nullable=true)
      */
     private $totalCharge;
-    
+
     /**
      *
      * @var string
-     * @ORM\Column(name="description",type="string",nullable=true)
+     * @ORM\Column(name="description",type="text",nullable=true)
      */
-    private $description;
+    private $observations;
 
     /**
      * 
@@ -101,6 +107,10 @@ class houseSupplyInventoryCharge {
         return $this->id;
     }
 
+    function getDate() {
+        return $this->date;
+    }
+
     function getType() {
         return $this->type;
     }
@@ -113,8 +123,8 @@ class houseSupplyInventoryCharge {
         return $this->totalCharge;
     }
 
-    function getDescription() {
-        return $this->description;
+    function getObservations() {
+        return $this->observations;
     }
 
     function getDeposit() {
@@ -145,6 +155,10 @@ class houseSupplyInventoryCharge {
         $this->id = $id;
     }
 
+    function setDate(\DateTime $date) {
+        $this->date = $date;
+    }
+
     function setType($type) {
         $this->type = $type;
     }
@@ -157,8 +171,8 @@ class houseSupplyInventoryCharge {
         $this->totalCharge = $totalCharge;
     }
 
-    function setDescription($description) {
-        $this->description = $description;
+    function setObservations($observations) {
+        $this->observations = $observations;
     }
 
     function setDeposit(houseSupplyDeposit $deposit) {
@@ -184,7 +198,6 @@ class houseSupplyInventoryCharge {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
-
 
 
 
