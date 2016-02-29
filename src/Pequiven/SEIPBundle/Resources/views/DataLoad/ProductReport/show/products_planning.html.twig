@@ -1,5 +1,8 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
+
+
+
 <div class="block">
     <div class="block-title">
         <h3> {{ 'pequiven_seip.product_planning.product_planning'|trans }}&nbsp;{{ labelProductPlanning }}&nbsp;({{ productPlannings|length }})</h3>
@@ -10,16 +13,22 @@
         </div>
     </div>
 
-    
+
 
     <div class="with-padding">
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
                 <tr>
                     <th scope="col" width="30%">{{ 'Month'|trans }}</th>
-                    <th scope="col" width="15%" class="hide-on-mobile-portrait" align="right">{{ 'Total month'|trans }}</th>
-                    {#<th scope="col" width="15%" class="hide-on-mobile-portrait" align="right">{{ 'Total month'|trans }}</th>#}
-                    <th scope="col" width="30%" class="hide-on-tablet" align="right">{{ 'Daily production capacity'|trans }}</th>
+                    <th scope="col" colspan="{{ colspan }}" width="30%" class="hide-on-mobile-portrait" align="right">{{ 'Total month'|trans }}</th>
+                        {#{% if factor %}
+                        <th scope="col" width="15%" class="hide-on-mobile-portrait" align="right"></th>
+                        {% endif %}#}
+
+                    <th scope="col" colspan="{{ colspan }}" width="30%" class="hide-on-tablet" align="right">{{ 'Daily production capacity'|trans }}</th>
+                        {#{% if factor %}
+                        <th scope="col" width="15%" class="hide-on-mobile-portrait" align="right"></th>
+                        {% endif %}#}
                     <th scope="col" width="10%">&nbsp;</th>
                 </tr>
             </thead>
@@ -28,6 +37,8 @@
                 {% set totalMonth = 0 %}
                 {% set totalDailyProductionCapacity = 0 %}
                 {% set productUnit = product_report.product.productUnit %}
+                {% set totalFactorMonth = 0.0 %}
+                {% set  totalFactorDaily = 0.0 %}
                 {% for productPlanning in productPlannings %}
                     <tr>
                         <td>{{ loop.index }} - 
@@ -37,13 +48,24 @@
                             {{ productPlanning.totalMonth|myNumberFormat }}&nbsp;{{ productUnit }}
                             {% set totalMonth = totalMonth + productPlanning.totalMonth %}
                         </td>
-                        {#<td align="right">
-
-                        </td>#}
+                        {% if factor %}
+                            <td align="right">
+                                {% set factorMonth =  factorConversionService.calculateFormulaValueFromFactor(productPlanning.totalMonth,product_report) %}
+                                {{ factorMonth|myNumberFormat }} {{ factorConversionService.unitToFactorConversion(product_report) }}
+                                {% set totalFactorMonth = totalFactorMonth + factorMonth %}
+                            </td> 
+                        {% endif %}
                         <td align="right">
                             {{ productPlanning.dailyProductionCapacity|myNumberFormat }}&nbsp;{{ productUnit }}
                             {% set totalDailyProductionCapacity = totalDailyProductionCapacity + productPlanning.dailyProductionCapacity %}
                         </td>
+                        {% if factor %}
+                            <td align="right">
+                                {% set factorDaily = factorConversionService.calculateFormulaValueFromFactor(productPlanning.dailyProductionCapacity,product_report) %}
+                                {{ factorDaily|myNumberFormat }} {{ factorConversionService.unitToFactorConversion(product_report) }}
+                                {% set totalFactorDaily = totalFactorDaily + factorDaily %}
+                            </td> 
+                        {% endif %}
                         <td class="low-padding align-center">
                             {% if isAllowPlanningReport %}
                                 <a href="{{ path("pequiven_product_planning_update",{id: productPlanning.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
@@ -60,13 +82,20 @@
             </tbody>
             <tfoot>
                 <tr style="font-weight: bold;">
-                    <td scope="col" width="20%">{{ 'Totals'|trans }}</td>
-                    <td scope="col" width="20%" class="hide-on-mobile-portrait" align="right">{{ totalMonth|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                    <td scope="col" width="20%" class="hide-on-tablet">{#{{ totalDailyProductionCapacity|myNumberFormat }}&nbsp;{{ productUnit }}#}</td>
-                    <td scope="col" width="20%">&nbsp;</td>
+                    <td scope="col" width="30%">{{ 'Totals'|trans }}</td>
+                    <td scope="col" width="15%" class="hide-on-mobile-portrait" align="right">{{ totalMonth|myNumberFormat ~" "~ productUnit }}</td>
+                    {% if factor %}
+                        <td scope="col" width="15%" class="hide-on-tablet" align="right">{{ totalFactorMonth|myNumberFormat ~" "~ factorConversionService.unitToFactorConversion(product_report) }} </td>
+                    {% endif %}
+                    <td scope="col" width="15%" class="hide-on-tablet" align="right">{{ totalDailyProductionCapacity|myNumberFormat ~" "~ productUnit }}</td>
+                    {% if factor %}
+                        <td scope="col" width="15%" class="hide-on-tablet" align="right">{{ totalFactorDaily|myNumberFormat ~" "~ factorConversionService.unitToFactorConversion(product_report) }}</td>
+                    {% endif %}
+                    <td scope="col" width="10%">&nbsp;</td>
                 </tr>
             </tfoot>
         </table>
 
     </div>
+
 </div>

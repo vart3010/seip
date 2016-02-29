@@ -36,7 +36,7 @@ class ProductReportController extends SEIPController {
 
     public function showAction(Request $request) {
         $periodService = $this->getPeriodService();
-
+        $factorConversionService = $this->getFactorConversionService();
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
@@ -44,6 +44,7 @@ class ProductReportController extends SEIPController {
                 ->setData([
             $this->config->getResourceName() => $this->findOr404($request),
             'isAllowPlanningReport' => $periodService->isAllowPlanningReport(),
+            'factorConversionService' => $factorConversionService
                 ])
         ;
 
@@ -56,7 +57,7 @@ class ProductReportController extends SEIPController {
         $periodService = $this->getPeriodService();
         $labelsMonths = CommonObject::getLabelsMonths();
         $nameGroup = $productReport->getNameGroup();
-        
+
         /**
          * SE HACE LA SUMATORIA DE TODOS LOS PRODUCTOS DE ESE GRUPO DE PRODUCTOS
          * 
@@ -491,6 +492,16 @@ class ProductReportController extends SEIPController {
         ;
 
         return $this->handleView($view);
+    }
+    
+    
+
+    /**
+     * 
+     * @return type
+     */
+    protected function getFactorConversionService() {
+        return $this->container->get('pequiven_factorConversion.service.factorConversion');
     }
 
 }
