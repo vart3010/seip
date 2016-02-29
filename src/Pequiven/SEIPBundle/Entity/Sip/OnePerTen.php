@@ -95,7 +95,7 @@ class OnePerTen {
     private $voto = 0;
     
     /**
-     * Inscrito en el PSUV
+     * Inscrito en el PSUV (Militante)
      * psuv
      * @var integer
      *
@@ -278,6 +278,21 @@ class OnePerTen {
      * @ORM\Column(name="cne", type="integer", nullable=true)
      */
     private $cne;
+    
+    /** Fecha de Nacimiento de la Persona
+     * @var \DateTime
+     * @ORM\Column(name="bornDate", type="datetime",nullable=true)
+     */
+    private $bornDate;
+    
+    /**
+     * Edad para el 2002, con que firmó en la Lista Sumate en el 2003 o 2004
+     * sala
+     * @var integer
+     *
+     * @ORM\Column(name="ageSignatureSumate", type="integer", nullable=true)
+     */
+    private $ageSignatureSumate;
 
     public function __construct() {
         $this->ten = new \Doctrine\Common\Collections\ArrayCollection();
@@ -545,6 +560,21 @@ class OnePerTen {
     function setCne($cne) {
         $this->cne = $cne;
     }
+    
+    function getBornDate() {
+        return $this->bornDate;
+    }
 
+    function setBornDate(\DateTime $bornDate) {
+        $this->bornDate = $bornDate;
+    }
+
+    function getAgeSignatureSumate() {
+        return $this->ageSignatureSumate;
+    }
+
+    function setAgeSignatureSumate($ageSignatureSumate) {
+        $this->ageSignatureSumate = $ageSignatureSumate;
+    }
 
 }
