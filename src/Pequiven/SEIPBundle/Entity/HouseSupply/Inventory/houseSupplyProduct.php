@@ -51,7 +51,7 @@ class houseSupplyProduct {
     /**
      *
      * @var float
-     * @ORM\Column(name="$cost",type="float",nullable=true)
+     * @ORM\Column(name="cost",type="float",nullable=true)
      */
     private $cost;
 
