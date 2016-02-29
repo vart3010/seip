@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class HouseSupplyInventoryController extends SEIPController {
 
-    public function createAction(Request $request) {
+    public function chargeAction(Request $request) {
         var_dump('hola');
         die();
     }

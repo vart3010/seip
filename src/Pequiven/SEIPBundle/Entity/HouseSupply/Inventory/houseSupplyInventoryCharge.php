@@ -44,9 +44,16 @@ class houseSupplyInventoryCharge {
     /**
      *
      * @var float
-     * @ORM\Column(name="totalCharge",type="float",nullable=false)
+     * @ORM\Column(name="totalCharge",type="float",nullable=true)
      */
     private $totalCharge;
+    
+    /**
+     *
+     * @var string
+     * @ORM\Column(name="totalCharge",type="string",nullable=true)
+     */
+    private $description;
 
     /**
      * 
@@ -106,6 +113,10 @@ class houseSupplyInventoryCharge {
         return $this->totalCharge;
     }
 
+    function getDescription() {
+        return $this->description;
+    }
+
     function getDeposit() {
         return $this->deposit;
     }
@@ -146,6 +157,10 @@ class houseSupplyInventoryCharge {
         $this->totalCharge = $totalCharge;
     }
 
+    function setDescription($description) {
+        $this->description = $description;
+    }
+
     function setDeposit(houseSupplyDeposit $deposit) {
         $this->deposit = $deposit;
     }
@@ -169,6 +184,8 @@ class houseSupplyInventoryCharge {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
+
+
 
 
 }

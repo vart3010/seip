@@ -1995,14 +1995,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ->setLabel($this->translate(sprintf('Inventario', $section)));
         $child3
                 ->addChild('housesupply.inventory.charge', array(
-                        'route' => 'pequiven_housesupply_inventory_charge',
-                        //'labelAttributes' => array('icon' => 'fa fa-calculator')
+                    'route' => 'pequiven_housesupply_inventory_charge',
+                    'labelAttributes' => array('icon' => 'fa fa-arrow-up')
                 ))
                 ->setLabel($this->translate(sprintf('Cargos', $section)));
         $child3
                 ->addChild('housesupply.inventory.uncharge', array(
-                        //'route' => 'pequiven_user_feestructure',
-                        //'labelAttributes' => array('icon' => 'fa fa-calculator')
+                    //'route' => 'pequiven_user_feestructure',
+                    'labelAttributes' => array('icon' => 'fa fa-arrow-down')
                 ))
                 ->setLabel($this->translate(sprintf('Descargos', $section)));
         $child3

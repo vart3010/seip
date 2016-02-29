@@ -142,8 +142,8 @@ class houseSupplyProduct {
         return $this->inventoryChargeItems;
     }
 
-    function getHouseSupplyBillingItems() {
-        return $this->houseSupplyBillingItems;
+    function getBillingItems() {
+        return $this->billingItems;
     }
 
     function getCreatedBy() {
@@ -194,8 +194,8 @@ class houseSupplyProduct {
         $this->inventoryChargeItems = $inventoryChargeItems;
     }
 
-    function setHouseSupplyBillingItems(houseSupplyBillingItems $houseSupplyBillingItems) {
-        $this->houseSupplyBillingItems = $houseSupplyBillingItems;
+    function setBillingItems(houseSupplyBillingItems $billingItems) {
+        $this->billingItems = $billingItems;
     }
 
     function setCreatedBy(User $createdBy) {
@@ -213,7 +213,5 @@ class houseSupplyProduct {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
-
-
 
 }
