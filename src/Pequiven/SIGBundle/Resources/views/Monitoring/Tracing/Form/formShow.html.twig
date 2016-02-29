@@ -39,13 +39,13 @@
                     <td>Estatus</td>
                 </tr>
             </thead>
-            {% for dataMaintenance in standardization.maintenance %}
+            {% for dataAdvance in advance %}
             <tr>
-                <td width="40%">{{ dataMaintenance.analysis }}</td>
-                <td width="10%">{{ dataMaintenance.dateStart | date("d/m/Y") }}</td>
-                <td width="10%">{{ dataMaintenance.dateEnd | date("d/m/Y") }}</td>
-                <td width="10%" align="center">{{ dataMaintenance.advance }}%</td>
-                <td width="20%">{{ statusMaintanence[dataMaintenance.status - 1] }}</td>
+                <td width="40%">{{ dataAdvance.analysis }}</td>
+                <td width="10%">{{ dataAdvance.maintenance.dateStart | date("d/m/Y") }}</td>
+                <td width="10%">{{ dataAdvance.maintenance.dateEnd | date("d/m/Y") }}</td>
+                <td width="10%" align="center">{{ dataAdvance.advance }}%</td>
+                <td width="20%">{{ statusMaintanence[dataAdvance.maintenance.status - 1] }}</td>
             </tr>
             {% endfor %}
         </table>
