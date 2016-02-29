@@ -40,10 +40,10 @@
 </div>
 {% endmacro %}
 
-{% macro register(text) %}
+{% macro register(text,color) %}
 <div class="field-block button-height">
     <button type="submit" class="button glossy mid-margin-right">
-        <span class="button-icon green-gradient"><span class="icon-tick"></span></span>
+        <span class="button-icon {{color}}-gradient"><span class="icon-tick"></span></span>
         {{ text }}
     </button>    
 </div>

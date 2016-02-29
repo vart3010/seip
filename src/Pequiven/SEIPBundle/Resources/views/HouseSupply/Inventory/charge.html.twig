@@ -37,17 +37,27 @@
         <h1>
             <a href="">Inventario</a>
             <span class="icon-forward"></span>
-            <span class="thin">Cargos de Productos</span>            
+            {% if (type==1)%}
+                <span class="thin">Cargo de Productos</span>            
+            {% else %}
+                <span class="thin">Descargo de Productos</span>            
+            {% endif %}
         </h1>
     </hgroup>
     <br>
     <div class="columns">
         <div class="twelve-columns">
-            <form method="POST" action="{{ path("pequiven_housesupply_inventory_charge_create") }}">
+            <form method="POST" action="{{ path("pequiven_housesupply_inventory_charge_create",{'type': type}) }}">
                 <center>
                     <table width="90%" style="border: 2px black solid;">
                         <tr style="height: 30px;">
-                            <td colspan="2" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">Datos del Cargo</td>         
+                            <td colspan="2" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">
+                                {% if (type==1)%}
+                                    Datos del Cargo:                                    
+                                {% else %}
+                                    Datos del Descargo:                                    
+                                {% endif %}
+                            </td>         
                         </tr>
                         <tr>
                             <td width="60%">
@@ -80,8 +90,14 @@
                                     </tr>
                                 </table> 
                             </td>
-                            <td width="40%" style="background-color: #D8D8D8; font-size: 30pt; vertical-align: middle; text-align: center;">
-                                Cargo:<span class="red bold">{{ newcharge }}</span>                   
+                            <td width="40%" style="background-color: #D8D8D8; font-size: 30pt; vertical-align: middle; text-align: center;">                               
+                                {% if (type==1)%}
+                                    Cargo:
+                                    <span class="green bold">{{ newcharge }}</span>              
+                                {% else %}
+                                    Descargo:
+                                    <span class="red bold">{{ newcharge }}</span>              
+                                {% endif %}
                             </td>
                         </tr>
                     </table>
@@ -114,7 +130,11 @@
                     <br>
 
                     <div class="new-row twelve-columns" style="text-align: right;">
-                        {{ actions.register('Registrar Cargo') }}   
+                        {% if (type==1)%}
+                            {{ actions.register('Registrar Cargo','green') }}   
+                        {% else %}
+                            {{ actions.register('Registrar Descargo','red') }}           
+                        {% endif %}
                     </div>
                     {{ form_rest(form) }}
 
