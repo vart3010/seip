@@ -397,6 +397,9 @@ class OnePerTenController extends SEIPController {
             $idUser = $request->get("user");
         }
         
+        $profileItems = OnePerTen::getArrayOfProfile();
+//        var_dump($profileItems);die();
+        
         //Obtenemos el objeto usuario
         $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("id" => $idUser));
 

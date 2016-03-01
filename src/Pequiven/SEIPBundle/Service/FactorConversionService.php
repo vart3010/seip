@@ -70,28 +70,35 @@ class FactorConversionService {
 
         $data = array();
         $name = "";
+        
         $factorEnable = new \Pequiven\SEIPBundle\Entity\CEI\FactorConversionValue();
         $factors = $productReport->getFactorConversionValue();
         foreach ($factors as $factor) {
             if ($factor->getEnabled()) {
                 $factorEnable = $factor;
+                $formula = $factor->getFactorConversion()->getFormula();
             }
         }
+        
+        
         $$name = 0;
         $data['val'] = $valueProduction;
-        $data['factor'] = $factorEnable;
+        $data['factor'] = $factorEnable->getFactor();
 
         foreach ($data as $key => $value) {
             $name = $key;
             $$name = 0;
             if (isset($data[$name])) {
                 $$name = $data[$name];
+                //var_dump($data[$name]);
             }
         }
-
+        
+        
         $cardEquation = 0.0;
-        $cardEquation = $this->parseFormulaVars('val*factor/1000'); //'$val/$factor/1000';
-
+        //$cardEquation = $this->parseFormulaVars('(val*factor)/1000'); //'$val/$factor/1000';
+        $cardEquation = $this->parseFormulaVars($formula); //'$val/$factor/1000';
+        
 
         $result_equation = 0.0;
 
