@@ -1,10 +1,12 @@
-var index = 0;
-var table = "";
-var campo;
-var fieldRsJson;
+var index = 0; //INDICE DE ELEMENTOS DE LA TABLA
+var table = ""; //ID DE LA TABLA
+var campo;      //NOMBRE DE LOS CAMPOS EN FORMA DE ARRAY, QUE DEVOLVERA EL JSON
+var fieldRsJson; // CAMPO DONDE SE COLOCARA EL STRING EN JSON RESULTANTE
+var columsTotals; //INDICES DE LAS COLUMNAS QUE SE QUIERES SUMAR EMPEZANDO DESDE 0..1....N
+var campoClave; //CAMPO CLAVE PARA NO REPETIR REGISTROS AL MOMENTO DE AGREGAR REGISTROS
 
-var campoClave;
 var idsClaves = new Array();
+
 
 function setTable(obj) {
     table = obj;
@@ -20,6 +22,10 @@ function campoClave(clave) {
 
 function setNameCampos(arrayNames) {
     campo = arrayNames;
+}
+
+function setColumsTotals(index) {
+    columsTotals = index;
 }
 
 function delRowDefault() {
@@ -49,19 +55,20 @@ function addRow(data) {
     } else {
         alert("El producto ya se encuentra!");
     }
+    totals();
+    
 }
 
 function delRow(id, idProduct) {
-
-
     $("#" + table + " tbody").find("tr.id_" + id).remove();
-//    alert(idProduct);
+
     var allow = idsClaves.indexOf(idProduct);
 
     if (allow >= 0) {
         idsClaves[allow] = "";
     }
     getJson();
+    totals();
 }
 
 function getRows() {
@@ -69,12 +76,8 @@ function getRows() {
     $("#" + table + " tbody tr").each(function (index) {
         var fila = [];
         $(this).find("td").each(function (ind) {
-            //alert($(this).html());
-            //if(!$(this).attr("form-control")) { 
             var celda = $(this).attr("class");
             fila.push(celda);
-            //}
-
         });
         result.push(fila);
     });
@@ -104,4 +107,32 @@ function getJson() {
     console.log(obj);
     var jsonStr = JSON.stringify(obj);
     $("input" + fieldRsJson).val(jsonStr);
+}
+
+function totals(){
+    var totals = new Array();
+    var total=0;
+  for(var i=0;i<columsTotals.length;i++){
+        total = parseFloat(total) + parseFloat(getTotal(columsTotals[i]));
+        totals[i] = total;
+  }
+  alert(totals);
+  //return totals;
+}
+
+function getTotal(numField) {
+    var total = 0;
+    $("#" + table + " tbody tr").each(function (index) {
+        var cont=0;
+        $(this).find("td").each(function (ind) {
+            if(cont==numField) { 
+                var celda = $(this).attr("class");
+                total = parseFloat(total)+parseFloat(celda);
+            }
+            cont++;
+        });
+        
+    });
+    return total;
+    
 }
