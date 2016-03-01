@@ -12,12 +12,20 @@
 <div class="columns">
     <div class="new-row-mobile two-columns">
         <p class="inline-label">
-            <input type="text" class="form-control" id="cliente" placeholder="Cliente">
+            <!--<input type="text" class="form-control" id="cliente" placeholder="Cliente">-->
+            <select class="form-control" id="cliente">
+            	<option value="1" name="Victor">Victor</option>
+            	<option value="2" name="Max">Max</option>
+            </select>
         </p>
     </div>
     <div class="new-row-mobile two-columns">
         <p class="inline-label">
-            <input type="text" class="form-control" id="producto" placeholder="Producto">
+            <!--<input type="text" class="form-control" id="producto" placeholder="Producto">-->
+            <select class="form-control" id="producto">
+            	<option value="001" name="Harina">Harina</option>
+            	<option value="002" name="Pan">Pan</option>
+            </select>
         </p>
     </div>
     <div class="new-row-mobile two-columns">
@@ -50,60 +58,49 @@
 
 <input type="button" class="form-control" value="Get" id="getValues">
 
-
-
 {% endblock %}
 
 
 {% block javascripts %}
     {{ parent() }}
+       <script src="{{  asset('bundles/pequivenseip/tableGrid.js') }}"></script>
      <script type="text/javascript">
-     var index = 0;
-
-	    function delRowDefault(idTable) {
-     		$('#'+idTable+' tbody tr').each(function (i, row) {
-        		var clas = $(this).attr("class");
-        		//alert(clas);
-        		if(clas=="odd"){
-        			$(this).remove();
-        		}
-        	});
-	     }
-
-     	function addRow(obj,data){
-     		var fila = "<tr class='id_"+index+"'>"
-     		for(i=0;i<data.length;i++) {
-     			fila = fila + "<td>"+data[i]+"</td>";
-     		}
-     		fila = fila + "</tr>";
-
-     		obj.find("tbody").append(fila);
-     	}
-
-     	function delRow(id) {
-     		$("#table1 tbody").find("tr.id_"+id).remove();
-     	}
-
+     
+		 function setData(data) {
+			$.ajax({
+			  method: "POST",
+			  url: "{{ path('pequiven_housesupply_save_order') }}",
+			  data: data
+			})
+			.done(function() {
+		    	alert( "Data Saved:");
+			});
+		 }
         $(document).ready(function() {
             //$('#table1').DataTable();
+            setTable("table1");
+            var arrayNames = new Array("IdUser","idProducto","cantidad");
+            setNameCampos(arrayNames);
+            campoClave(1);
 
             $("#addItem").click(function(){
-            	var cliente = $("#cliente").val();
-            	var producto = $("#producto").val();
-            	var cantidad = $("#cantidad").val();
-            	var boton = "<input type='button' id='"+index+"'  onClick='delRow(this.id)' class='form-control delItem' value='Del'>";
-
-            	var data = [cliente,producto,cantidad,boton];
-            	delRowDefault("table1");
-            	addRow($('#table1'),data);
+            	var cliente = [$("#cliente").val(),$("#cliente").find('option:selected').attr("name")];
+            	var producto = [$("#producto").val(),$("#producto").find('option:selected').attr("name")];
+            	var cantidad = [$("#cantidad").val(),$("#cantidad").val()];
+            	var boton = ["","<input type='button' id='"+index+"'  onClick='delRow(this.id)' class='form-control delItem' value='Del'>"];
+            	var data = [cliente,producto,cantidad, boton];
+            	delRowDefault();
+            	addRow(data);
             	index=index+1;
+
+            	alert(idsClaves);
             });
 
             $("input#getValues").click(function(){
-            	var result = [];
-            	$("#table1 tbody tr").each(function( index ) {
-            		
-            	});
+            	var rows = getRows("table1");
+            	var obj = convertRows(rows);
+            	//console.log(obj);
+            	setData(obj);
             });
 
         } );

@@ -7,3 +7,9 @@ pequiven_housesupply_order_charge:
     requirements:
         _format: html|json|xml
     methods: [GET|POST]
+
+pequiven_housesupply_save_order:
+    path: /orders/save
+    defaults:
+        _controller: pequiven.controller.housesupply_order:saveOrderAction
+    

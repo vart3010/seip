@@ -26,4 +26,9 @@ class HouseSupplyOrderController extends SEIPController {
         return $this->render('PequivenSEIPBundle:HouseSupply:Order/show.html.twig');
     }
 
+    public function saveOrderAction(Request $request) {
+    	var_dump($request->get("datos"));
+    	die();
+    }
+
 }
