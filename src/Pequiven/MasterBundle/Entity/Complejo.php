@@ -88,6 +88,14 @@ class Complejo extends modelComplejo {
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure", mappedBy="complejo",cascade={"persist","remove"})
      */
     private $feeStructure;
+    
+    /**
+     * Cantidad de Miembros de los CET en el complejo
+     * @var integer
+     *
+     * @ORM\Column(name="numberMembersCET", type="integer", nullable=true)
+     */
+    private $numberMembersCET = 0;
 
     /**
      * Depositos
@@ -301,6 +309,14 @@ class Complejo extends modelComplejo {
 
     function setFeeStructure(\Pequiven\SEIPBundle\Entity\User\FeeStructure $feeStructure) {
         $this->feeStructure = $feeStructure;
+    }
+    
+    function getNumberMembersCET() {
+        return $this->numberMembersCET;
+    }
+
+    function setNumberMembersCET($numberMembersCET) {
+        $this->numberMembersCET = $numberMembersCET;
     }
 
 }
