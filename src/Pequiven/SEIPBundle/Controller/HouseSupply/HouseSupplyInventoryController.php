@@ -35,6 +35,13 @@ class HouseSupplyInventoryController extends SEIPController {
         //LISTA DE DEPOSITOS EXISTENTES
         $deposits = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->findAll();
 
+        //LISTA DE PRODUCTOS DISPONIBLES
+        if ($type == 1) {
+            $products = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyProduct')->findAll();
+        } else {
+            $products = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyProduct')->findAll();
+        }
+
         //FORMULARIO DE CARGA
         $form = $this->createForm(new houseSupplyInventoryChargeType());
 
@@ -44,6 +51,7 @@ class HouseSupplyInventoryController extends SEIPController {
                     'newcharge' => $newcharge,
                     'lastcharge' => $lastcharge,
                     'form' => $form->createView(),
+                    'products' => $products,
         ));
     }
 

@@ -4,6 +4,7 @@
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
 {% block javascript %}
+    {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function ()
         {
@@ -23,6 +24,50 @@
             }
         });
     </script>  
+    <script src="{{  asset('bundles/pequivenseip/tableGrid.js') }}"></script>
+    <script type="text/javascript">
+
+        function setData(data) {
+            $.ajax({
+                method: "POST",
+                url: "{{ path('pequiven_housesupply_save_order') }}",
+                data: data
+            })
+                    .done(function () {
+                        alert("Data Saved:");
+                    });
+        }
+        $(document).ready(function () {
+            //$('#table1').DataTable();
+            setTable("table1");
+            var arrayNames = new Array("idProducto", "cantidad","costo", "subtotal");
+            setNameCampos(arrayNames);
+            campoClave(1);
+
+            $("#addItem").click(function () {
+                var cantidad = [$("#cantidad").val(), $("#cantidad").val()];
+                var producto = [$("#producto").val(), $("#producto").find('option:selected').attr("name")];
+                var cantidad2 = [$("#costo").val(), $("#costo").val()];
+                var cantidad3 = [$("#subtotal").val(), $("#subtotal").val()];
+                var boton = ["", "<a href='' ><i class='fa fa-trash' id='" + index + "' onClick='delRow(this.id)' value='Del'></i></a>"];
+        {#var boton = ["", "<input type='button' id='" + index + "'  onClick='delRow(this.id)' class='form-control delItem' value='Del'>"];#}
+                    var data = [cantidad, producto, cantidad2, cantidad3, boton];
+                    delRowDefault();
+                    addRow(data);
+                    index = index + 1;
+
+        {# alert(idsClaves);#}
+                });
+
+                $("input#getValues").click(function () {
+                    var rows = getRows("table1");
+                    var obj = convertRows(rows);
+                    //console.log(obj);
+                    setData(obj);
+                });
+
+            });
+    </script>
 {% endblock javascript %}
 
 
@@ -31,6 +76,9 @@
         table#datos{
             border-collapse:separate;
             border-spacing: 0px 10px;
+        }
+        .fa-trash{
+            color: red;    
         }
     </style>
     <hgroup id="main-title" class="thin breadcrumb">
@@ -67,7 +115,7 @@
                                             Depósito:
                                         </td>
                                         <td>
-                                            <select onchange="this.form.submit();" name="deposit" class="select2 input-xlarge form-control">
+                                            <select name="deposit" class="select2 input-xlarge form-control">
                                                 {% for depo in deposits %}
                                                     <option value="{{depo.id}}">{{depo.description}}</option>
                                                 {% endfor %}
@@ -128,31 +176,61 @@
                         </tr>
                     </table>
                     <br>
-                    <table width="90%" style="border: 2px black solid;">
-                        <tr style="height: 30px;">
-                            <td width="50%" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">Productos</td>         
-                        </tr>
+                    <table width="90%">
                         <tr>
-                            <td width="50%">
-                                <table class="simple-table" width="60%">
-                                    <thead>
-                                        <tr>
-                                            <th class="header" width="10%">Cant</th>
-                                            <th class="header" width="50%">Description</th>
-                                            <th class="header text-right" width="20%">Costo</th>                                
-                                            <th class="header text-right" width="20%">Sub-Total</th>                                
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <td class="text-left">boo</td>
-                                    <td class="text-justify">boo</td>
-                                    <td class="text-right">boo</td>
-                                    <td class="text-right">boo</td>
-                                    </tbody>                    
+                            <td width="90%">
+                                <table width="90%" style="border: 2px black solid;">
+                                    <tr style="height: 30px;">
+                                        <td width="50%" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">Productos</td>         
+                                    </tr>
+                                    <tr>
+                                        <td width="50%">
+                                            <table id="table1" class="simple-table" width="60%">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="header" width="10%">Cant</th>
+                                                        <th class="header" width="50%">Producto</th>
+                                                        <th class="header text-right" width="15%">Costo</th>                                
+                                                        <th class="header text-right" width="20%">Sub-Total</th>
+                                                        <th class="header text-right" width="5%">-</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>                    
+                                            </table>
+                                        </td>
+                                    </tr>
                                 </table>
+                            </td>
+                            <td width="10%">
+                                <table style=" border-collapse:separate; border-spacing: 0px 10px;">
+                                    <tr>
+                                        <td colspan="2">
+                                            <select name="deposit" id="producto" class="select2 input-large form-control">                                
+                                                {% for prod in products %}
+                                                    <option value="{{prod.id}}" name="{{prod.description}}">{{prod.description}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>                                        
+                                    </tr> 
+                                    <tr>
+                                        <td width="50%" style="text-align: center;">
+                                            <input type="number" class="input-mini" id="cantidad" placeholder="Cantidad" min="1" max="5">
+                                        </td>
+                                        <td width="50%" style="text-align: center;">
+                                            <input type="button" class="form-control" value="Add" id="addItem">
+                                        </td>
+                                    </tr>
+
+                                </table>                               
                             </td>
                         </tr>
                     </table>
+
+
+                    <input type="button" class="form-control" value="Get" id="getValues">
+
                     <br>
 
                     <div class="new-row twelve-columns" style="text-align: right;">
