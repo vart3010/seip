@@ -427,6 +427,12 @@
             </call>
         </service>
         
+        <service id="pequiven_factorConversion.service.factorConversion" class="Pequiven\SEIPBundle\Service\FactorConversionService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
         <service id="pequiven.repository.plant_report" class="Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
@@ -458,11 +464,11 @@
         </service>
         
         <!--SERVICIOS DE DESPACHO-->
-         <service id="pequiven.repository.report_template_delivery" class="Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository">
+        <service id="pequiven.repository.report_template_delivery" class="Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery" />
         </service>
         
-         <service id="pequiven.repository.report_product_group" class="Pequiven\SEIPBundle\Repository\Delivery\ProductGroupDeliveryRepository">
+        <service id="pequiven.repository.report_product_group" class="Pequiven\SEIPBundle\Repository\Delivery\ProductGroupDeliveryRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery" />
         </service>
         
@@ -470,13 +476,21 @@
             <tag name="form.type" alias="pequiven_seipbundle_dataload_reporttemplatedelivery" />
         </service>
         
-         <service id="pequiven.form.product_group_delivery" class="Pequiven\SEIPBundle\Form\Delivery\ProductGroupDeliveryType">
+        <service id="pequiven.form.product_group_delivery" class="Pequiven\SEIPBundle\Form\Delivery\ProductGroupDeliveryType">
             <tag name="form.type" alias="pequiven_seipbundle_delivery_productgroup" />
         </service>
         
-         <service id="pequiven.form.product_report_delivery" class="Pequiven\SEIPBundle\Form\Delivery\ProductReportDeliveryType">
+        <service id="pequiven.form.product_report_delivery" class="Pequiven\SEIPBundle\Form\Delivery\ProductReportDeliveryType">
             <tag name="form.type" alias="pequiven_seipbundle_delivery_productreport" />
         </service>
+
+        <service id="seip.service.notification" class="Pequiven\SEIPBundle\Service\NotificationService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+        
         
     </services>
 </container>

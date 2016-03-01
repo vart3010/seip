@@ -187,8 +187,15 @@ class LineStrategicController extends SEIPController {
         
         $boxRender = $this->get('tecnocreaciones_box.render');
 
-        $answer = $request->get('r');
-        $host = $_SERVER["HTTP_HOST"];
+        $answer = $request->get('r');        
+
+        $id = $request->get('id');
+        if ($answer == 1) {
+            $id = $id + 1;
+            if ($id > 7) {
+                $id = 1;
+            }
+        }
 
         $dataArray =  array(
             $this->config->getResourceName() => $resource,
@@ -199,8 +206,7 @@ class LineStrategicController extends SEIPController {
             'resultService' => $resultService,
             'boxRender' => $boxRender,
             'answer'    => $answer,
-            'id'        => $request->get('id'),
-            'host'      => $host
+            'id'        => $id,            
         );
 
         $view = $this
