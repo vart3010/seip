@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeItems;
 use Pequiven\SEIPBundle\Form\HouseSupply\Inventory\houseSupplyInventoryChargeType;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct;
 
 /**
  * CONTROLADOR DE INVENTARIO DE CASA - ABASTO
@@ -63,27 +64,78 @@ class HouseSupplyInventoryController extends SEIPController {
 
         //OBTENGO EL TIPO DE MOVIMIENTO DE UNIDADES
         $type = $request->get('type');
+
+        //CALCULO EL NUEVO CORRELATIVO
+        $newnroobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeId($type);
+        $newnro = $newnroobj[0]['id'] + 1;
+
+        //OBTENGO EL DEPOSITO        
+        $deposit = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->findOneById($request->get('deposit'));
+
+        //OBTENGO LISTA DE PRODUCTOS
         $dataProduct = json_decode($request->get('dataProduct'));
 
+        $totalCharge = $totalCant = 0;
 
+        foreach ($dataProduct->datos as $prod) {
+            $totalCant = $totalCant + $prod->cantidad;
+            $totalCharge = $totalCharge + $prod->subtotal;
+        }
+
+        $em->getConnection()->beginTransaction();
+
+        //OBTENGO LOS VALORES DEL FORMULARIO
         $inventorycharge = new houseSupplyInventoryCharge();
         $form = $this->createForm(new houseSupplyInventoryChargeType(), $inventorycharge);
         $form->handleRequest($request);
-
-        $newnroobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeId($type);
-        $newnro = $newnroobj[0]['id'] + 1;
-        
-        $date = $request->get("HouseSupplyInventoryCharge")["date"];
+        $date = new \DateTime(str_replace("/", "-", ($request->get("HouseSupplyInventoryCharge")["date"])));
         $obs = $request->get("HouseSupplyInventoryCharge")["observations"];
-        
-        $deposit = $request->get('deposit');
-        
-        
-        
 
-        $inventorychargeitems = new houseSupplyInventoryChargeItems();
+        //CARGO LA OPERACION DE INVENTARIO EN LA BASE DE DATOS
+        $charge = new houseSupplyInventoryCharge();
+        $charge->setDate($date);
+        $charge->setObservations($obs);
+        $charge->setNroCharge($newnro);
+        $charge->setType($type);
+        $charge->setDeposit($deposit);
+        $charge->setTotalCharge($totalCharge);
+        $charge->setCreatedBy($this->getUser());
+        $em->persist($charge);
 
-        $em->getConnection()->beginTransaction();
+        //CARGO LOS ITEMS DE LA OPERACION DE INVENTARIO;
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+
+        //CARGO LOS ITEMS DEL CARGO DE INVENTARIO
+        $line = 0;
+        foreach ($dataProduct->datos as $prod) {
+
+            $line++;
+            $product = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyProduct')->findOneById($prod->producto);
+
+            $inventorychargeitems = new houseSupplyInventoryChargeItems();
+            $inventorychargeitems->setType($type);
+            $inventorychargeitems->setDate($date);
+            $inventorychargeitems->setInventoryCharge($charge);
+            $inventorychargeitems->setProduct($product);
+            $inventorychargeitems->setCant($prod->cantidad);
+            $inventorychargeitems->setLine($line);
+            $inventorychargeitems->setCost($prod->costo);
+            $inventorychargeitems->setTotalLine($prod->subtotal);
+            $inventorychargeitems->setCreatedBy($this->getUser());
+            $em->persist($inventorychargeitems);
+            $em->flush();
+            
+            $product->setCost($prod->costo);
+            $em->flush();
+            
+        }
+
 
 
 

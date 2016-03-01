@@ -28,6 +28,13 @@ class houseSupplyInventoryChargeItems {
     private $id;
 
     /**
+     *
+     * @var string
+     * @ORM\Column(name="type",type="integer",nullable=false)
+     */
+    private $type;
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
@@ -59,7 +66,7 @@ class houseSupplyInventoryChargeItems {
     /**
      *
      * @var integer
-     * @ORM\Column(name="price",type="integer",nullable=false)
+     * @ORM\Column(name="line",type="integer",nullable=false)
      */
     private $line;
 
@@ -105,6 +112,10 @@ class houseSupplyInventoryChargeItems {
 
     function getId() {
         return $this->id;
+    }
+
+    function getType() {
+        return $this->type;
     }
 
     function getDate() {
@@ -155,6 +166,10 @@ class houseSupplyInventoryChargeItems {
         $this->id = $id;
     }
 
+    function setType($type) {
+        $this->type = $type;
+    }
+
     function setDate(\DateTime $date) {
         $this->date = $date;
     }
@@ -198,7 +213,5 @@ class houseSupplyInventoryChargeItems {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
-
-
 
 }

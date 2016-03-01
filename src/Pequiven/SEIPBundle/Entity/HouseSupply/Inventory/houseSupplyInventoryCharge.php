@@ -16,6 +16,7 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeI
  * @ORM\Table(name="seip_gsh_inventory_charge") 
  * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyInventoryChargeRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\HasLifecycleCallbacks()
  */
 class houseSupplyInventoryCharge {
 
@@ -81,7 +82,7 @@ class houseSupplyInventoryCharge {
      * Creado por
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $createdBy;
@@ -184,11 +185,11 @@ class houseSupplyInventoryCharge {
     }
 
     function setCreatedBy(User $createdBy) {
-        $this->createdBy = $createdBy;
+        $this->createdBy = $createdBy;        
     }
 
     function setCreatedAt($createdAt) {
-        $this->createdAt = $createdAt;
+        $this->createdAt = $createdAt;        
     }
 
     function setUpdatedAt($updatedAt) {
@@ -198,7 +199,5 @@ class houseSupplyInventoryCharge {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
-
-
 
 }
