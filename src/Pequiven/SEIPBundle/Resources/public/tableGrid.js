@@ -39,7 +39,7 @@ function addRow(data){
 	}
 	fila = fila + "</tr>";
 
-    if(idsClaves.indexOf) {}
+    //if(idsClaves.indexOf) {}
 
 	$("#"+table).find("tbody").append(fila);
 }
