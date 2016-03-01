@@ -53,15 +53,15 @@
                         <tr style="height: 30px;">
                             <td colspan="2" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">
                                 {% if (type==1)%}
-                                    Datos del Cargo:                                    
+                                    Datos del Cargo                                  
                                 {% else %}
-                                    Datos del Descargo:                                    
+                                    Datos del Descargo                                   
                                 {% endif %}
                             </td>         
                         </tr>
                         <tr>
                             <td width="60%">
-                                <table id="datos" width="100%" class="simple-table">
+                                <table width="100%" class="simple-table" style="background-color: #FFFFFF; border: hidden;">
                                     <tr>
                                         <td class="header bold">
                                             Depósito:
@@ -90,14 +90,40 @@
                                     </tr>
                                 </table> 
                             </td>
-                            <td width="40%" style="background-color: #D8D8D8; font-size: 30pt; vertical-align: middle; text-align: center;">                               
-                                {% if (type==1)%}
-                                    Cargo:
-                                    <span class="green bold">{{ newcharge }}</span>              
-                                {% else %}
-                                    Descargo:
-                                    <span class="red bold">{{ newcharge }}</span>              
-                                {% endif %}
+                            <td width="40%" style="border: 2px black solid;">
+                                <table width="100%" class="simple-table">
+                                    <tr>
+                                        <td style="background-color: #D8D8D8; font-size: 30pt; vertical-align: middle; text-align: center; height: 55px;" colspan="2">                               
+                                            {% if (type==1)%}
+                                                Cargo:
+                                                <span class="green bold">{{ newcharge }}</span>              
+                                            {% else %}
+                                                Descargo:
+                                                <span class="red bold">{{ newcharge }}</span>              
+                                            {% endif %}
+                                        </td>                                        
+                                    </tr>
+                                    {% if (lastcharge) %}
+                                        <tr>
+                                            <td class="header bold">
+                                                {% if (type==1)%}                                                
+                                                    Último Cargo Realizado:      
+                                                {% else %}
+                                                    Último Descargo Realizado:      
+                                                {% endif %}                                           
+                                            </td>
+                                            <td>{{ lastcharge.getdate| date("d/m/Y") }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="header bold">Total:</td>
+                                            <td class="text-left">{{ lastcharge.totalCharge}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="header bold">Nro. Ítems:</td>
+                                            <td class="text-left">{{ lastcharge.getinventoryChargeItems|length }}</td>
+                                        </tr>
+                                    {% endif %}
+                                </table>
                             </td>
                         </tr>
                     </table>

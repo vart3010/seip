@@ -14,26 +14,19 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  */
 class HouseSupplyInventoryChargeRepository extends EntityRepository {
 
-    function FindLastInvChargeId() {
+    function FindNextInvChargeId($type) {
         $qb = $this->getQueryBuilder();
         $qb
-                ->select('MAX(InvCharge.nroCharge)+1 as Id')
+                ->select('MAX(InvCharge.nroCharge) as id')
+                ->andWhere('InvCharge.type= :type')
+                ->setParameter('type', $type)
         ;
-        // print($qb->getQuery()->getSQL());
+        
+        //print($qb->getQuery()->getSQL());        
 
         return $qb->getQuery()->getResult();
     }
-
-    function FindNextInvChargeId() {
-        $qb = $this->getQueryBuilder();
-        $qb
-                ->select('MAX(InvCharge.nroCharge)+1 as Id')
-        ;
-        // print($qb->getQuery()->getSQL());
-
-        return $qb->getQuery()->getResult();
-    }
-
+    
     function getAlias() {
         return 'InvCharge';
     }

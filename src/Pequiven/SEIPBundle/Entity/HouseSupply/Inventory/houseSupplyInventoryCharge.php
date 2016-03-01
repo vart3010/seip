@@ -36,7 +36,7 @@ class houseSupplyInventoryCharge {
     /**
      *
      * @var string
-     * @ORM\Column(name="type",type="string",nullable=false)
+     * @ORM\Column(name="type",type="integer",nullable=false)
      */
     private $type;
 

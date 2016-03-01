@@ -20,18 +20,23 @@ use Pequiven\SEIPBundle\Form\HouseSupply\Inventory\houseSupplyInventoryChargeTyp
 class HouseSupplyInventoryController extends SEIPController {
 
     public function chargeAction(Request $request) {
-
         $em = $this->getDoctrine()->getManager();
 
+        //OBTENGO EL TIPO DE MOVIMIENTO DE UNIDADES
         $type = $request->get('type');
 
-        $newcharge = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindLastInvChargeId();
-        $lastcharge = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->findOneById(max($newcharge));
+        //NUEVO NUMERO DE CARGO DE DEPOSITO
+        $newid = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeId($type);
+        $newcharge = str_pad((($newid[0]['id']) + 1), 5, 0, STR_PAD_LEFT);
+
+        //ULTIMA CARGA REALIZADA
+        $lastcharge = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->findOneById($newid[0]['id']);
+
+        //LISTA DE DEPOSITOS EXISTENTES
         $deposits = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->findAll();
 
+        //FORMULARIO DE CARGA
         $form = $this->createForm(new houseSupplyInventoryChargeType());
-
-        $newcharge = str_pad((array_sum($newcharge) + 1), 5, 0, STR_PAD_LEFT);
 
         return $this->render('PequivenSEIPBundle:HouseSupply\Inventory:charge.html.twig', array(
                     'type' => $type,
@@ -43,10 +48,11 @@ class HouseSupplyInventoryController extends SEIPController {
     }
 
     public function createAction(Request $request) {
-        var_dump($request);
-        die();
 
-        $this->showAction($request);
+        //OBTENGO EL TIPO DE MOVIMIENTO DE UNIDADES
+        $type = $request->get('type');
+
+        return $this->redirect($this->generateUrl("pequiven_housesupply_inventory_charge", array("type" => $type)));
     }
 
 }
