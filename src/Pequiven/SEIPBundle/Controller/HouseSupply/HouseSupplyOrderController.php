@@ -17,8 +17,13 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class HouseSupplyOrderController extends SEIPController {
 
-    public function createAction(Request $request) {
-        var_dump('hola');
+    public function indexAction(Request $request){
+    	var_dump("hola");
+    	die();
+    }
+
+    public function chargeAction(Request $request) {
+        return $this->render('PequivenSEIPBundle:HouseSupply:Order/show.html.twig');
     }
 
 }

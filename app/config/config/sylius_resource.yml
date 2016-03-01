@@ -606,5 +606,11 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\HouseSupplyInventoryCharge
                 controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyInventoryController
+        pequiven.housesupply_order:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:HouseSupply/Order
+            classes:
+                model: Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\HouseSupplyInventoryCharge
+                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyOrderController
                 
                    

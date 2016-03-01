@@ -1,0 +1,113 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("Pedidos"|trans({})),        
+        ('Vista'|trans({},'messages'))
+    )}}
+{% endblock %}
+
+{% block body %}
+
+<div class="columns">
+    <div class="new-row-mobile two-columns">
+        <p class="inline-label">
+            <input type="text" class="form-control" id="cliente" placeholder="Cliente">
+        </p>
+    </div>
+    <div class="new-row-mobile two-columns">
+        <p class="inline-label">
+            <input type="text" class="form-control" id="producto" placeholder="Producto">
+        </p>
+    </div>
+    <div class="new-row-mobile two-columns">
+        <p class="inline-label">
+            <input type="number" class="form-control" id="cantidad" placeholder="Cantidad">
+        </p>
+    </div>
+    <div class="new-row-mobile two-columns">
+        <p class="inline-label">
+            <input type="button" class="form-control" value="Add" id="addItem">
+        </p>
+    </div>
+</div>
+
+
+<table id="table1" class="table simple-table" cellspacing="0" width="100%">          
+    <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Eliminar</th>
+
+        </tr>
+    </thead>
+    <tbody>  
+    	
+    </tbody>
+</table>
+
+<input type="button" class="form-control" value="Get" id="getValues">
+
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+     <script type="text/javascript">
+     var index = 0;
+
+	    function delRowDefault(idTable) {
+     		$('#'+idTable+' tbody tr').each(function (i, row) {
+        		var clas = $(this).attr("class");
+        		//alert(clas);
+        		if(clas=="odd"){
+        			$(this).remove();
+        		}
+        	});
+	     }
+
+     	function addRow(obj,data){
+     		var fila = "<tr class='id_"+index+"'>"
+     		for(i=0;i<data.length;i++) {
+     			fila = fila + "<td>"+data[i]+"</td>";
+     		}
+     		fila = fila + "</tr>";
+
+     		obj.find("tbody").append(fila);
+     	}
+
+     	function delRow(id) {
+     		$("#table1 tbody").find("tr.id_"+id).remove();
+     	}
+
+        $(document).ready(function() {
+            //$('#table1').DataTable();
+
+            $("#addItem").click(function(){
+            	var cliente = $("#cliente").val();
+            	var producto = $("#producto").val();
+            	var cantidad = $("#cantidad").val();
+            	var boton = "<input type='button' id='"+index+"'  onClick='delRow(this.id)' class='form-control delItem' value='Del'>";
+
+            	var data = [cliente,producto,cantidad,boton];
+            	delRowDefault("table1");
+            	addRow($('#table1'),data);
+            	index=index+1;
+            });
+
+            $("input#getValues").click(function(){
+            	var result = [];
+            	$("#table1 tbody tr").each(function( index ) {
+            		
+            	});
+            });
+
+        } );
+    </script>
+
+    
+{% endblock %}

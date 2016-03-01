@@ -1970,7 +1970,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ->setLabel($this->translate(sprintf('Pedidos', $section)));
         $child2
                 ->addChild('housesupply.order.create', array(
-                        //'route' => 'pequiven_user_feestructure',
+                        'route' => 'pequiven_housesupply_order_charge',
                         //'labelAttributes' => array('icon' => 'fa fa-calculator')
                 ))
                 ->setLabel($this->translate(sprintf('Crear', $section)));
