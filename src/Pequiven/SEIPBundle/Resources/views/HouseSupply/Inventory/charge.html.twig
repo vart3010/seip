@@ -14,6 +14,9 @@
                     allowClear: true
                 });
 
+                $("#producto").select2({
+                    minimumInputLength: 3
+                });
 
                 $("#HouseSupplyInventoryCharge_date").datepicker({
                     defaultDate: "+1w",
@@ -27,46 +30,37 @@
     <script src="{{  asset('bundles/pequivenseip/tableGrid.js') }}"></script>
     <script type="text/javascript">
 
-        function setData(data) {
-            $.ajax({
-                method: "POST",
-                url: "{{ path('pequiven_housesupply_save_order') }}",
-                data: data
-            })
-                    .done(function () {
-                        alert("Data Saved:");
-                    });
-        }
+
         $(document).ready(function () {
-            //$('#table1').DataTable();
+            $("#dataProduct").val('{"datos":{}}');
             setTable("table1");
-            var arrayNames = new Array("idProducto", "cantidad","costo", "subtotal");
+            var arrayNames = new Array("idProducto", "cantidad", "costo", "subtotal");
             setNameCampos(arrayNames);
             campoClave(1);
+            setFieldRsJson("#dataProduct");
 
             $("#addItem").click(function () {
                 var cantidad = [$("#cantidad").val(), $("#cantidad").val()];
                 var producto = [$("#producto").val(), $("#producto").find('option:selected').attr("name")];
-                var cantidad2 = [$("#costo").val(), $("#costo").val()];
-                var cantidad3 = [$("#subtotal").val(), $("#subtotal").val()];
-                var boton = ["", "<a href='' ><i class='fa fa-trash' id='" + index + "' onClick='delRow(this.id)' value='Del'></i></a>"];
-        {#var boton = ["", "<input type='button' id='" + index + "'  onClick='delRow(this.id)' class='form-control delItem' value='Del'>"];#}
-                    var data = [cantidad, producto, cantidad2, cantidad3, boton];
+                var costo = [$("#costo").val(), $("#costo").val()];
+                var subtotal = [($("#costo").val() * $("#cantidad").val()), ($("#costo").val() * $("#cantidad").val())];
+        {# var boton = ["", "<a href='' ><i class='fa fa-trash' id='" + index + "' name='"+producto[0]+"'  onClick='delRow(this.id,this.name)' value='Del'></i></a>"];#}
+                    var boton = ["", "<a id='" + index + "' name='" + producto[0] + "' onClick='delRow(this.id,this.name)' class='button icon-trash delItem'></a>"];
+                    var data = [cantidad, producto, costo, subtotal, boton];
                     delRowDefault();
                     addRow(data);
                     index = index + 1;
-
-        {# alert(idsClaves);#}
+                    getJson();
+                    $("#cantidad").val('');
+                    $("#costo").val('');
                 });
 
-                $("input#getValues").click(function () {
-                    var rows = getRows("table1");
-                    var obj = convertRows(rows);
-                    //console.log(obj);
-                    setData(obj);
-                });
+        {# $("input#getValues").click(function () {
+                    
+             //setData(obj);
+         });#}
 
-            });
+             });
     </script>
 {% endblock javascript %}
 
@@ -206,8 +200,11 @@
                             <td width="10%">
                                 <table style=" border-collapse:separate; border-spacing: 0px 10px;">
                                     <tr>
+                                        <td style="background-color: #AA0000; color: #FFFFFF; font-size: 10pt; vertical-align: middle; text-align: center;" colspan="2">Producto</td>
+                                    </tr>
+                                    <tr>
                                         <td colspan="2">
-                                            <select name="deposit" id="producto" class="select2 input-large form-control">                                
+                                            <select name="producto" id="producto" class="select2 input-large form-control">                                
                                                 {% for prod in products %}
                                                     <option value="{{prod.id}}" name="{{prod.description}}">{{prod.description}}</option>
                                                 {% endfor %}
@@ -215,24 +212,28 @@
                                         </td>                                        
                                     </tr> 
                                     <tr>
+                                        <td style="background-color: #AA0000; color: #FFFFFF; font-size: 10pt; vertical-align: middle; text-align: center;">Cant</td>
+                                        <td style="background-color: #AA0000; color: #FFFFFF; font-size: 10pt; vertical-align: middle; text-align: center;">Costo</td>
+                                    </tr>
+                                    <tr>
                                         <td width="50%" style="text-align: center;">
-                                            <input type="number" class="input-mini" id="cantidad" placeholder="Cantidad" min="1" max="5">
+                                            <input type="number" class="input-mini" id="cantidad" placeholder="Cantidad">
                                         </td>
                                         <td width="50%" style="text-align: center;">
+                                            <input type="number" step="any" class="input-small" id="costo" placeholder="Costo">
+                                        </td>                                        
+                                    </tr>
+                                    <tr>
+                                        <td width="50%" style="text-align: center;" colspan="2">                                            
                                             <input type="button" class="form-control" value="Add" id="addItem">
                                         </td>
                                     </tr>
-
-                                </table>                               
+                                </table> 
+                                <input type="text" name="dataProduct" id="dataProduct">                                
                             </td>
                         </tr>
-                    </table>
-
-
-                    <input type="button" class="form-control" value="Get" id="getValues">
-
+                    </table>     
                     <br>
-
                     <div class="new-row twelve-columns" style="text-align: right;">
                         {% if (type==1)%}
                             {{ actions.register('Registrar Cargo','green') }}   
@@ -241,7 +242,6 @@
                         {% endif %}
                     </div>
                     {{ form_rest(form) }}
-
                 </center>
             </form>
         </div>

@@ -11,6 +11,7 @@ namespace Pequiven\SEIPBundle\Controller\HouseSupply;
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeItems;
 use Pequiven\SEIPBundle\Form\HouseSupply\Inventory\houseSupplyInventoryChargeType;
 
 /**
@@ -57,8 +58,29 @@ class HouseSupplyInventoryController extends SEIPController {
 
     public function createAction(Request $request) {
 
+        $em = $this->getDoctrine()->getManager();
+        $securityService = $this->getSecurityService();
+
         //OBTENGO EL TIPO DE MOVIMIENTO DE UNIDADES
         $type = $request->get('type');
+        $dataProduct = json_decode($request->get('dataProduct'));
+
+
+        $inventorycharge = new houseSupplyInventoryCharge();
+        $form = $this->createForm(new houseSupplyInventoryChargeType(), $inventorycharge);
+        $form->handleRequest($request);
+
+        $newnroobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeId($type);
+        $newnro = $newnroobj[0]['id'] + 1;
+        
+        
+
+        $inventorychargeitems = new houseSupplyInventoryChargeItems();
+
+        $em->getConnection()->beginTransaction();
+
+
+
 
         return $this->redirect($this->generateUrl("pequiven_housesupply_inventory_charge", array("type" => $type)));
     }

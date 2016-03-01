@@ -9,102 +9,102 @@
 
 {% block body %}
 
-<div class="columns">
-    <div class="new-row-mobile two-columns">
-        <p class="inline-label">
-            <!--<input type="text" class="form-control" id="cliente" placeholder="Cliente">-->
-            <select class="form-control" id="cliente">
-            	<option value="1" name="Victor">Victor</option>
-            	<option value="2" name="Max">Max</option>
-            </select>
-        </p>
+    <div class="columns">
+        <div class="new-row-mobile two-columns">
+            <p class="inline-label">
+                <!--<input type="text" class="form-control" id="cliente" placeholder="Cliente">-->
+                <select class="form-control" id="cliente">
+                    <option value="1" name="Victor">Victor</option>
+                    <option value="2" name="Max">Max</option>
+                </select>
+            </p>
+        </div>
+        <div class="new-row-mobile two-columns">
+            <p class="inline-label">
+                <!--<input type="text" class="form-control" id="producto" placeholder="Producto">-->
+                <select class="form-control" id="producto">
+                    <option value="001" name="Harina">Harina</option>
+                    <option value="002" name="Pan">Pan</option>
+                </select>
+            </p>
+        </div>
+        <div class="new-row-mobile two-columns">
+            <p class="inline-label">
+                <input type="number" class="form-control" id="cantidad" placeholder="Cantidad">
+            </p>
+        </div>
+        <div class="new-row-mobile two-columns">
+            <p class="inline-label">
+                <input type="button" class="form-control" value="Add" id="addItem">
+            </p>
+        </div>
     </div>
-    <div class="new-row-mobile two-columns">
-        <p class="inline-label">
-            <!--<input type="text" class="form-control" id="producto" placeholder="Producto">-->
-            <select class="form-control" id="producto">
-            	<option value="001" name="Harina">Harina</option>
-            	<option value="002" name="Pan">Pan</option>
-            </select>
-        </p>
-    </div>
-    <div class="new-row-mobile two-columns">
-        <p class="inline-label">
-            <input type="number" class="form-control" id="cantidad" placeholder="Cantidad">
-        </p>
-    </div>
-    <div class="new-row-mobile two-columns">
-        <p class="inline-label">
-            <input type="button" class="form-control" value="Add" id="addItem">
-        </p>
-    </div>
-</div>
 
 
-<table id="table1" class="table simple-table" cellspacing="0" width="100%">          
-    <thead>
-        <tr>
-            <th>Cliente</th>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Eliminar</th>
+    <table id="table1" class="table simple-table" cellspacing="0" width="100%">          
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Eliminar</th>
 
-        </tr>
-    </thead>
-    <tbody>  
-    	
-    </tbody>
-</table>
+            </tr>
+        </thead>
+        <tbody>  
 
-<input type="button" class="form-control" value="Get" id="getValues">
+        </tbody>
+    </table>
+
+    <input type="button" class="form-control" value="Get" id="getValues">
 
 {% endblock %}
 
 
 {% block javascripts %}
     {{ parent() }}
-       <script src="{{  asset('bundles/pequivenseip/tableGrid.js') }}"></script>
-     <script type="text/javascript">
-     
-		 function setData(data) {
-			$.ajax({
-			  method: "POST",
-			  url: "{{ path('pequiven_housesupply_save_order') }}",
-			  data: data
-			})
-			.done(function() {
-		    	alert( "Data Saved:");
-			});
-		 }
-        $(document).ready(function() {
+    <script src="{{  asset('bundles/pequivenseip/tableGrid.js') }}"></script>
+    <script type="text/javascript">
+
+        function setData(data) {
+            $.ajax({
+                method: "POST",
+                url: "{{ path('pequiven_housesupply_save_order') }}",
+                data: data
+            })
+                    .done(function () {
+                        alert("Data Saved:");
+                    });
+        }
+        $(document).ready(function () {
             //$('#table1').DataTable();
             setTable("table1");
-            var arrayNames = new Array("IdUser","idProducto","cantidad");
+            var arrayNames = new Array("IdUser", "idProducto", "cantidad");
             setNameCampos(arrayNames);
             campoClave(1);
 
-            $("#addItem").click(function(){
-            	var cliente = [$("#cliente").val(),$("#cliente").find('option:selected').attr("name")];
-            	var producto = [$("#producto").val(),$("#producto").find('option:selected').attr("name")];
-            	var cantidad = [$("#cantidad").val(),$("#cantidad").val()];
-            	var boton = ["","<input type='button' id='"+index+"' name='"+producto[0]+"' onClick='delRow(this.id,this.name)' class='form-control delItem' value='Del'>"];
-            	var data = [cliente,producto,cantidad, boton];
-            	delRowDefault();
-            	addRow(data);
-            	index=index+1;
+            $("#addItem").click(function () {
+                var cliente = [$("#cliente").val(), $("#cliente").find('option:selected').attr("name")];
+                var producto = [$("#producto").val(), $("#producto").find('option:selected').attr("name")];
+                var cantidad = [$("#cantidad").val(), $("#cantidad").val()];
+                var boton = ["", "<input type='button' id='" + index + "' name='" + producto[0] + "' onClick='delRow(this.id,this.name)' class='form-control delItem' value='Del'>"];
+                var data = [cliente, producto, cantidad, boton];
+                delRowDefault();
+                addRow(data);
+                index = index + 1;
 
-            	
+
             });
 
-            $("input#getValues").click(function(){
-            	var rows = getRows("table1");
-            	var obj = convertRows(rows);
-            	//console.log(obj);
-            	setData(obj);
+            $("input#getValues").click(function () {
+                var rows = getRows("table1");
+                var obj = convertRows(rows);
+                //console.log(obj);
+                setData(obj);
             });
 
-        } );
+        });
     </script>
 
-    
+
 {% endblock %}
