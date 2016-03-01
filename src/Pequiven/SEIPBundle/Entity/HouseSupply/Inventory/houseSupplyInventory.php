@@ -47,14 +47,14 @@ class houseSupplyInventory {
     /**
      *
      * @var float
-     * @ORM\Column(name="available",type="float",nullable=false)
+     * @ORM\Column(name="available",type="float",nullable=true)
      */
     private $available;
 
     /**
      *
      * @var datetime
-     * @ORM\Column(name="lastChargeDate",type="datetime",nullable=false)
+     * @ORM\Column(name="lastChargeDate",type="datetime",nullable=true)
      */
     private $lastChargeDate;
 

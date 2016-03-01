@@ -73,6 +73,12 @@ class HouseSupplyInventoryController extends SEIPController {
         $newnroobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeId($type);
         $newnro = $newnroobj[0]['id'] + 1;
         
+        $date = $request->get("HouseSupplyInventoryCharge")["date"];
+        $obs = $request->get("HouseSupplyInventoryCharge")["observations"];
+        
+        $deposit = $request->get('deposit');
+        
+        
         
 
         $inventorychargeitems = new houseSupplyInventoryChargeItems();
