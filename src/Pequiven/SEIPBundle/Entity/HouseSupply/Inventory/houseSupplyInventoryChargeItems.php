@@ -28,6 +28,12 @@ class houseSupplyInventoryChargeItems {
     private $id;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(name="date", type="datetime", nullable=false)
+     */
+    private $date;
+
+    /**
      * 
      * @var houseSupplyInventoryCharge
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge", inversedBy="inventoryChargeItems")
@@ -101,6 +107,10 @@ class houseSupplyInventoryChargeItems {
         return $this->id;
     }
 
+    function getDate() {
+        return $this->date;
+    }
+
     function getInventoryCharge() {
         return $this->inventoryCharge;
     }
@@ -145,6 +155,10 @@ class houseSupplyInventoryChargeItems {
         $this->id = $id;
     }
 
+    function setDate(\DateTime $date) {
+        $this->date = $date;
+    }
+
     function setInventoryCharge(houseSupplyInventoryCharge $inventoryCharge) {
         $this->inventoryCharge = $inventoryCharge;
     }
@@ -184,7 +198,6 @@ class houseSupplyInventoryChargeItems {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
-
 
 
 
