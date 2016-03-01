@@ -36,7 +36,7 @@ class ProductReportController extends SEIPController {
 
     public function showAction(Request $request) {
         $periodService = $this->getPeriodService();
-
+        $factorConversionService = $this->getFactorConversionService();
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
@@ -44,6 +44,7 @@ class ProductReportController extends SEIPController {
                 ->setData([
             $this->config->getResourceName() => $this->findOr404($request),
             'isAllowPlanningReport' => $periodService->isAllowPlanningReport(),
+            'factorConversionService' => $factorConversionService
                 ])
         ;
 
@@ -56,7 +57,7 @@ class ProductReportController extends SEIPController {
         $periodService = $this->getPeriodService();
         $labelsMonths = CommonObject::getLabelsMonths();
         $nameGroup = $productReport->getNameGroup();
-        
+
         /**
          * SE HACE LA SUMATORIA DE TODOS LOS PRODUCTOS DE ESE GRUPO DE PRODUCTOS
          * 
@@ -271,6 +272,7 @@ class ProductReportController extends SEIPController {
                 if (count($productPlanningsNet[$productPlanningGross->getMonth()]->getRanges()) > 0) {
                     foreach ($productPlanningsNet[$productPlanningGross->getMonth()]->getRanges() as $range) {
                         if ($range->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_FIXED_VALUE) {
+                            $total = ($range->getValue() * $netProductionPercentage) / 100;
                             $range->setValue($total);
                         } elseif ($range->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_CAPACITY_FACTOR) {
                             $range->setValue($netProductionPercentage);
@@ -280,6 +282,7 @@ class ProductReportController extends SEIPController {
                     foreach ($productPlanningGross->getRanges() as $range) {
                         $cloneRange = clone $range;
                         if ($cloneRange->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_FIXED_VALUE) {
+                            $total = ($range->getValue() * $netProductionPercentage) / 100;
                             $cloneRange->setValue($total);
                         } elseif ($cloneRange->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_CAPACITY_FACTOR) {
                             $cloneRange->setValue($netProductionPercentage);
@@ -295,6 +298,7 @@ class ProductReportController extends SEIPController {
             }
         }
         $this->save($resource);
+        
 
 //Planificacion de productos
         $productPlannings = $resource->getProductPlannings();
@@ -491,6 +495,16 @@ class ProductReportController extends SEIPController {
         ;
 
         return $this->handleView($view);
+    }
+    
+    
+
+    /**
+     * 
+     * @return type
+     */
+    protected function getFactorConversionService() {
+        return $this->container->get('pequiven_factorConversion.service.factorConversion');
     }
 
 }
