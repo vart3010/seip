@@ -412,6 +412,7 @@ class OnePerTenController extends SEIPController {
         $wasSupportAssemblyElections = 0;
 
         $members = array();
+        $efectividad = number_format(0, 2, ',', '.') . '%';
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $idUser));
         if (!is_null($onePerTen)) {
             
@@ -457,12 +458,14 @@ class OnePerTenController extends SEIPController {
         }
         
         //Obtenemos efectividad del 1x10 registrado en PQV
-        $contVotos = 0;
-        $totalMiembros = count($members);
-        foreach($members as $member){
-            $contVotos = $member['voto'] == "Sí" ? $contVotos+1 : $contVotos;
+        if(count($members) > 0){
+            $contVotos = 0;
+            $totalMiembros = count($members);
+            foreach($members as $member){
+                $contVotos = $member['voto'] == "Sí" ? $contVotos+1 : $contVotos;
+            }
+            $efectividad = number_format(($contVotos/$totalMiembros)*100, 2, ',', '.') . '%';
         }
-        $efectividad = number_format(($contVotos/$totalMiembros)*100, 2, ',', '.') . '%';
 
         $texts = array();
         $texts[-1] = 'Sin Información';
