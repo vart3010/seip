@@ -43,6 +43,13 @@ class houseSupplyInventoryCharge {
 
     /**
      *
+     * @var string
+     * @ORM\Column(name="sign",type="integer",nullable=false)
+     */
+    private $sign;
+
+    /**
+     *
      * @var integer
      * @ORM\Column(name="nroCharge",type="integer",nullable=true)
      */
@@ -116,6 +123,10 @@ class houseSupplyInventoryCharge {
         return $this->type;
     }
 
+    function getSign() {
+        return $this->sign;
+    }
+
     function getNroCharge() {
         return $this->nroCharge;
     }
@@ -164,6 +175,10 @@ class houseSupplyInventoryCharge {
         $this->type = $type;
     }
 
+    function setSign($sign) {
+        $this->sign = $sign;
+    }
+
     function setNroCharge($nroCharge) {
         $this->nroCharge = $nroCharge;
     }
@@ -185,11 +200,11 @@ class houseSupplyInventoryCharge {
     }
 
     function setCreatedBy(User $createdBy) {
-        $this->createdBy = $createdBy;        
+        $this->createdBy = $createdBy;
     }
 
     function setCreatedAt($createdAt) {
-        $this->createdAt = $createdAt;        
+        $this->createdAt = $createdAt;
     }
 
     function setUpdatedAt($updatedAt) {

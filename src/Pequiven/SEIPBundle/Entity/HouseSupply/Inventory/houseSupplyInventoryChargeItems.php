@@ -33,6 +33,13 @@ class houseSupplyInventoryChargeItems {
      * @ORM\Column(name="type",type="integer",nullable=false)
      */
     private $type;
+    
+    /**
+     *
+     * @var string
+     * @ORM\Column(name="sign",type="integer",nullable=false)
+     */
+    private $sign;
 
     /**
      * @var \DateTime
@@ -118,6 +125,10 @@ class houseSupplyInventoryChargeItems {
         return $this->type;
     }
 
+    function getSign() {
+        return $this->sign;
+    }
+
     function getDate() {
         return $this->date;
     }
@@ -170,6 +181,10 @@ class houseSupplyInventoryChargeItems {
         $this->type = $type;
     }
 
+    function setSign($sign) {
+        $this->sign = $sign;
+    }
+
     function setDate(\DateTime $date) {
         $this->date = $date;
     }
@@ -213,5 +228,7 @@ class houseSupplyInventoryChargeItems {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
+
+
 
 }
