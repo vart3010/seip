@@ -100,9 +100,17 @@
                         </div>
                         <div class="six-columns">
                             <label class="label">Círculo de Estudio y Trabajo: </label>
-                            {{ workStudyCircle.codigo }} {{ workStudyCircle.name }}
+                            {{ textWorkStudyCircle }}
                         </div>
                     </td>
+                    <td>
+                        <div class="six-columns">
+                            <label class="label">¿Es Coordinador de su CET?: </label>
+                            {{ isCoordinator }}
+                        </div>
+                    </td>
+                </tr>
+                {#<tr>
                     <td>
                         <div class="six-columns">
                             <label class="label">Localidad: </label>
@@ -117,15 +125,7 @@
                             {% endif %}
                         </div>
                     </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="six-columns">
-                            <label class="label">¿Es Coordinador de su CET?: </label>
-                            {{ isCoordinator }}
-                        </div>
-                    </td>
-                </tr>
+                </tr>#}
             </table>
         </td>
     </tr>
@@ -235,7 +235,7 @@
                         </div>
                         <div class="six-columns">
                             <label class="label">¿Fue CUTL, Apoyo en Sala Situacional ó Miembro CNE en las Elecciones Asamblea Nacional 2015?: </label>
-                            {{ isCutl }}
+                            {{ texts[wasSupportAssemblyElections] }}
                         </div>
                     </td>
                     <td>
