@@ -18,7 +18,7 @@ function setNameCampos(arrayNames) {
 }
 
 function delRowDefault() {
-		$('#'+table+' tbody tr').each(function (i, row) {
+    $('#'+table+' tbody tr').each(function (i, row) {
 		var clas = $(this).attr("class");
 		//alert(clas);
 		if(clas=="odd"){
@@ -27,25 +27,35 @@ function delRowDefault() {
 	});
  }
 
-function addRow(data){
+function addRow(data){    
     
+    var allow = idsClaves.indexOf(data[campoClave][0]);
+    if(allow<0) {
+    	var fila = "<tr class='id_"+index+"'>"
+    	for(i=0;i<data.length;i++) {
+            fila = fila + "<td class='"+data[i][0]+"'>"+data[i][1]+"</td>";
+            if(i==campoClave) { 
+               idsClaves.push(data[i][0]);
+            }
+    	}
+    	fila = fila + "</tr>";
 
-	var fila = "<tr class='id_"+index+"'>"
-	for(i=0;i<data.length;i++) {
-        fila = fila + "<td class='"+data[i][0]+"'>"+data[i][1]+"</td>";
-        if(i==campoClave) { 
-           idsClaves.push(data[i][0]);
-        }
-	}
-	fila = fila + "</tr>";
-
-    //if(idsClaves.indexOf) {}
-
-	$("#"+table).find("tbody").append(fila);
+    	$("#"+table).find("tbody").append(fila);
+    } else {
+        alert("El producto ya se encuentra!");
+    }
 }
 
-function delRow(id) {
+function delRow(id,idProduct) {
+   
+    
 	$("#"+table+" tbody").find("tr.id_"+id).remove();
+    
+    var allow = idsClaves.indexOf(idProduct);
+    
+    if(allow>=0) {
+        idsClaves[allow] ="";
+    }
 }
 
 function getRows() {

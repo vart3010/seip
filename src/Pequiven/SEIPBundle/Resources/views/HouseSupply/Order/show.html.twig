@@ -87,13 +87,13 @@
             	var cliente = [$("#cliente").val(),$("#cliente").find('option:selected').attr("name")];
             	var producto = [$("#producto").val(),$("#producto").find('option:selected').attr("name")];
             	var cantidad = [$("#cantidad").val(),$("#cantidad").val()];
-            	var boton = ["","<input type='button' id='"+index+"'  onClick='delRow(this.id)' class='form-control delItem' value='Del'>"];
+            	var boton = ["","<input type='button' id='"+index+"' name='"+producto[0]+"' onClick='delRow(this.id,this.name)' class='form-control delItem' value='Del'>"];
             	var data = [cliente,producto,cantidad, boton];
             	delRowDefault();
             	addRow(data);
             	index=index+1;
 
-            	alert(idsClaves);
+            	
             });
 
             $("input#getValues").click(function(){
