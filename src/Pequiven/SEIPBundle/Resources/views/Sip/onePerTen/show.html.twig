@@ -55,7 +55,7 @@
                     {{ user.indentification }}
                 </p>
             </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            {#<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Localidad</label>
                     {% if user.complejo != null %}
@@ -70,7 +70,7 @@
                         {{ user.gerencia.description }}
                     {% endif %}
                 </p>
-            </div>
+            </div>#}
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">¿Reportó Voto Elecciones Asamblea Nacional 2015?</label>
@@ -84,7 +84,7 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Círculo de Estudio y Trabajo</label>
-                    {{ workStudyCircle.codigo }} {{ workStudyCircle.name }}
+                    {{ textWorkStudyCircle }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -231,7 +231,7 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">¿Fue CUTL, Apoyo en Sala Situacional ó Miembro CNE en las Elecciones Asamblea Nacional 2015?</label>
-                    {{ isCutl }}
+                    {{ texts[wasSupportAssemblyElections] }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">

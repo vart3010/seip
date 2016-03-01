@@ -396,27 +396,38 @@ class OnePerTenController extends SEIPController {
         } else {
             $idUser = $request->get("user");
         }
+        
+        //Obtenemos el objeto usuario
         $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("id" => $idUser));
-        
-        $repositoryCutl = $this->get('pequiven.repository.cutl');
 
+        $isCoordinator = 'No Aplica';
+        $textWorkStudyCircle = 'No Aplica';
         $workStudyCircle = $user->getWorkStudyCircle();
-        
-        $isCoordinator = 'No';
-        if($workStudyCircle->getCoordinator()->getId() == $user->getId()){
-            $isCoordinator = 'Sí';
+        if(!is_null($workStudyCircle)){
+            $isCoordinator = $workStudyCircle->getCoordinator()->getId() == $user->getId() ? 'Sí' :'No';
+            $textWorkStudyCircle = $workStudyCircle->getCodigo().$workStudyCircle->getName();
         }
         
-        $cutl = $repositoryCutl->getCutlData($user->getIndentification());
-
-        $isCutl = 'No';
-        if(count($cutl) > 0){
-            $isCutl = 'Sí';
-        }
+        //Inicio de variable para saber si la persona trabajó como CUTL, Sala o CNE en las elecciones asamblea 2015
+        $wasSupportAssemblyElections = 0;
 
         $members = array();
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $idUser));
         if (!is_null($onePerTen)) {
+            
+            //Determinamos si fue CUTL en las elecciones asamblea 2015
+            if($onePerTen->getCutl() == 1){
+                $wasSupportAssemblyElections = 1;
+            }
+            //Determinamos si trabajó en la Sala Situacional en las elecciones asamblea 2015
+            if($onePerTen->getSala() == 1){
+                $wasSupportAssemblyElections = 1;
+            }
+            //Determinamos si trabajo como miembro del CNE en las elecciones asamblea 2015
+            if($onePerTen->getCne() == 1){
+                $wasSupportAssemblyElections = 1;
+            }
+            
             $onePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(array("one" => $onePerTen->getId()));
             if (count($onePerTenMembers) > 1) {
                 foreach ($onePerTenMembers as $member) {
@@ -468,8 +479,9 @@ class OnePerTenController extends SEIPController {
                     "form" => $formSearchOne->createView(),
                     "user" => $user,
                     "isCoordinator" => $isCoordinator,
+                    "textWorkStudyCircle" => $textWorkStudyCircle,
                     "onePerTen" => $onePerTen,
-                    "isCutl" => $isCutl,
+                    "wasSupportAssemblyElections" => $wasSupportAssemblyElections,
                     "workStudyCircle" => $workStudyCircle,
                     "texts" => $texts,
                     "members" => $members,
