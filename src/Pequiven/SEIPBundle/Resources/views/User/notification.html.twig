@@ -1,0 +1,184 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('Notificaciones'|trans)        
+    ) }}
+{% endblock %} 
+
+{% block body %}
+<br>	
+<div class="with-padding">			
+	<div class="content-panel margin-bottom">
+		<div class="panel-navigation silver-gradient">
+			<div class="panel-control"><a href class="button icon-undo" onclick="reload();">Actualizar</a></div>
+			<div class="panel-load-target scrollable" style="height:490px">
+				<div class="navigable">
+					<ul class="big-menu">
+						<li class="with-right-arrow">
+							<span class="blue-gradient"><span class="list-count">{{ app.user.notify }}</span><i class="fa fa-bell"></i>&nbsp;Recibidas</span>	
+								<ul class="big-menu menu_level_1">
+								{% set cont = 1 %}
+								{% for type in types %}
+								<li class="big-menu grey-gradient with-right-arrow">
+									<span class="blue-gradient"><span class="list-count">0</span>{{ types[cont] }}</span>	
+									<ul class="message-menu">										
+										{% for notification in notifications %}
+											{% if notification.type == cont %}
+											<li id="iMessage_{{ notification.id }}">
+												<span class="message-status">								
+													{% if notification.readNotification != true %}
+														{% set font = "fa-envelope" %}
+													{% else %}	
+														{% set font = "fa-envelope-o" %}
+													{% endif %}
+													<a href="javascript:void(0);" style="color:#ebd106;" id="" title="Mensaje sin leer">
+														<i class="fa {{ font }}" id="new-message_{{ notification.id }}"></i>
+														<i class="fa fa-envelope-o" id="out-message_{{ notification.id }}"  style='display:none;'></i>
+													</a>
+													{% if notification.status == 1 %}
+														{% set color = "#f80000" %}
+													{% elseif notification.status == 2 %}
+														{% set color = "#0083c6" %}									
+													{% elseif notification.status == 3 %}
+														{% set color = "#3bc600" %}									
+													{% endif %}									
+													<a href="javascript:void(0);" class="" style="color:{{color}};"><i class="fa fa-tag"></i></a>		
+												</span>
+												<a href title="Leer Notificación" id="title" onclick="showMessage({{ notification.id }});">
+													<strong class="blue">{{ notification.title }}</strong><br>	
+													<strong>{{ notification.createdAt | date("d/m/Y - H:i") }}</strong>							
+												</a>
+											</li>
+											{% endif %}
+										{% endfor %}											
+									</ul>
+								</li>
+								{% set cont = cont + 1 %}							
+								{% endfor %}
+							</ul>
+						</li>
+						<li class="big-menu grey-gradient with-right-arrow">
+							<span class="blue-gradient" onclick="favouriteShow();"><span class="list-count">0</span><i class="fa fa-flag"></i>&nbsp;Importantes</span>	
+								<ul class="message-menu">
+								</ul>
+						</li>
+						<li class="big-menu grey-gradient with-right-arrow">
+							<span class="blue-gradient"><span class="list-count">0</span><i class="fa fa-trash"></i>&nbsp;Papelera</span>	
+								<ul class="message-menu">
+								</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>		
+		<div class="panel-content linen">
+			<div class="panel-control align-right">	
+				<a href class="margin-left" id="loading" style='display:none;'><span class="loader big working"></span></a>
+			</div>
+			<div class="panel-load-target scrollable with-padding no-margin-top" style="height:450px;background-color:#b8b8b8;">				
+				<div class="large-box-shadow white-gradient with-border">
+					<div class="button-height with-mid-padding silver-gradient no-margin-top" id="buttonToll" style='display:none;'>
+						<a id="href"></a>
+						<span class="button-group children-tooltip" id="sectionButton"></span>
+					</div>
+					<div class="with-padding">
+						<p id="messageNone">Bienvenido a la Sección  de notificaciones del SEIP, Selecciones un mensaje.</p>	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+	<script type="text/javascript">
+		function reload(){
+			location.reload();
+		}
+	</script>
+
+	<script type="text/javascript">
+		function showMessage(id){			
+			var data = {
+                idMessage: id,                    
+            };            
+			$.ajax({
+                    type: 'get',
+                    url: '{{ path("seip_notification_view_message") }}',
+                    data: data,
+                    beforeSend:function(objeto){
+                            $('#loading').css({display:'block'});                            
+                    },
+                    complete:function(){
+                        $('#loading').css('display','none');                        
+                    },                    
+                    success: function (data) {                        
+                        $(location).attr('href', data["url"]);                                                
+                        $('#new-message_' + id).css('display','none');                        
+                        $('#out-message_' + id).css('display','block');
+                        $('#buttonToll').css('display', 'block');                        
+                        document.getElementById("messageNone").innerHTML = data['description'];
+                        //document.getElementById("messageNone").innerHTML = "<a href=\"{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}\">Ver</a>";
+                        var path = data['path'];
+                        console.log(path);
+                        document.getElementById("href").innerHTML = "<a href='{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}' class='button red-gradient float-right with-tooltip' title='Visualizar'>Visualizar</a>";
+                        document.getElementById("sectionButton").innerHTML = '<a href class="button" title="Eliminar" onclick="deleteMessage('+id+');"><span class="icon-trash"></span></a><a href class="button" title="Marcar como Importante" onclick="favouriteMessage('+id+');"><span class="icon-flag"></span></a>';                                                
+                    }
+            });
+		}   
+		function deleteMessage(id){			
+			var data = {
+                idMessage: id,                    
+            };             
+			$.ajax({
+                    type: 'get',
+                    url: '{{ path("seip_notification_delete_message") }}',
+                    data: data, 
+                    beforeSend:function(objeto){
+                            $('#loading').css({display:'block'});                            
+                    },
+                    complete:function(){
+                        $('#loading').css('display','none');                        
+                    },                    
+                    success: function (data) {                        
+                        $(location).attr('href', data["url"]);                                                
+                        $('#iMessage_' + id).css('display','none');  
+            			$('#buttonToll').css('display', 'none');                       
+                        document.getElementById("messageNone").innerHTML = '<i class="fa fa-check"></i> Notificación Eliminada Satisfactoriamente';
+                    }
+            });
+		} 
+
+		function favouriteMessage(id){			
+			var data = {
+                idMessage: id,                    
+            };     
+
+			{#$.ajax({
+                    type: 'get',
+                    url: '{{ path("seip_notification_favourite_message") }}',
+                    data: data, 
+                    beforeSend:function(objeto){
+                            $('#loading').css({display:'block'});                            
+                    },
+                    complete:function(){
+                        $('#loading').css('display','none');                        
+                    },                    
+                    success: function (data) {                        
+                        $(location).attr('href', data["url"]);                                                
+                        $('#iMessage_' + id).css('display','none');  
+            			$('#buttonToll').css('display', 'none');                       
+                        document.getElementById("messageNone").innerHTML = '<i class="fa fa-check"></i> Notificación enviada a Importantes';
+                    }
+            });#}
+		}   
+
+		function favouriteShow(){
+            document.getElementById("messagesData").innerHTML = '<span class="message-status"></span>';			
+			$('#loading').css('display','block');
+
+		}     
+    </script>	
+{% endblock %}

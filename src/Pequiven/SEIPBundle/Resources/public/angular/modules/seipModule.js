@@ -2446,6 +2446,240 @@ angular.module('seipModule.controllers', [])
                 $scope.templateOptions.setTemplate($scope.templates[0]);
             };
         })
+
+        .controller('MonitoringTracingSigController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
+
+            var isInit = false;
+            //Carga el formulario
+            $scope.loadTemplateTracing = function (resource) {
+                $scope.initFormTracing(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);                
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+
+            $scope.loadTemplateMaintenance = function (resource) {
+                $scope.initFormMaintenace(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);                
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+
+            $scope.loadTemplateMaintenanceShow = function (resource) {
+                $scope.initFormMaintenaceShow(resource);                
+                $scope.openModalAuto();                
+            };
+
+            //Removiendo 
+            $scope.removeStandardization = function (AnalysisTrend) {
+                $scope.openModalConfirm('¿Desea eliminar el registro?', function () {
+                    notificationBarService.getLoadStatus().loading();
+                    var url = Routing.generate("pequiven_sig_monitoring_delete", {id: $scope.dataMonitoring});
+                    $http({
+                        method: 'GET',
+                        url: url,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                    }).success(function (data) {
+                        return true;
+                    }).error(function (data, status, headers, config) {
+                        if (data.errors) {
+                            if (data.errors.errors) {
+                                $.each(data.errors.errors, function (index, value) {
+                                    notifyService.error(Translator.trans(value));
+                                });
+                            }
+                        }
+                        notificationBarService.getLoadStatus().done();
+                        return false;
+                    });
+                    $timeout(callAtTimeout, 1000);                    
+                });
+                function callAtTimeout() {
+                    location.reload();
+                }
+                
+            };
+
+            //Añadir
+            var addStandardization = function (save, successCallBack) {
+                var formConfig = angular.element('#form_tracing_add');
+                var formData = formConfig.serialize();
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_sig_monitoring_add', {id: $scope.id_managementSystem});                    
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    //$timeout(callAtTimeout, 3000);
+                    location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });                
+            };
+
+            //Añadir
+            var addMaintenance = function (save, successCallBack) {
+                var formConfig = angular.element('#form_maintenance_add');
+                var formData = formConfig.serialize();
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_sig_monitoring_maintenance', {id: $scope.id_standardization});                    
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    //$timeout(callAtTimeout, 3000);
+                    //location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });                
+            };
+            $scope.templateOptions.setVar('addStandardization', addStandardization);
+            var confirmCallBack = function () {
+                addStandardization(true, function (data) {                   
+                });
+                return true;
+            };
+
+            $scope.templateOptions.setVar('addMaintenance', addMaintenance);
+            var confirmCallBackMaintenace = function () {
+                addMaintenance(true, function (data) {                   
+                });
+                return true;
+            };
+
+             var confirmCallBackShow = function () {                
+                return true;
+            };
+            //Formulario Tracing
+            $scope.initFormTracing = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(750);
+                $scope.setWidth(800);
+
+                var parameters = {
+                    id: $scope.id_managementSystem,                    
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_sig_monitoring_add', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Tracing',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+            //Formulario Maintenance
+            $scope.initFormMaintenace = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(800); 
+                $scope.setWidth(800);
+                var parameters = {                                     
+                    id: $scope.id_standardization,
+                    _dc: numero
+                };                
+                var url = Routing.generate('pequiven_sig_monitoring_maintenance', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Mantenimiento',
+                        url: url,
+                        confirmCallBack: confirmCallBackMaintenace,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+            //Formulario Maintenance
+            $scope.initFormMaintenaceShow = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(700); 
+                $scope.setWidth(1000);
+                var parameters = {                                     
+                    id: $scope.id_standardization,
+                    _dc: numero
+                };                
+                var url = Routing.generate('pequiven_sig_monitoring_maintenance_show', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Ficha Detalles',
+                        url: url,
+                        confirmCallBack: confirmCallBackShow, 
+                        setTemplateLoad: true                       
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+        })
         //Fin controladores SIG
 
         //Controlador SIP Centro
@@ -4145,6 +4379,7 @@ angular.module('seipModule.controllers', [])
             };
             $scope.template = {
                 name: null,
+                setTemplateLoad: null,
                 url: null,
                 load: false,
                 confirmCallBack: null,
@@ -4185,6 +4420,11 @@ angular.module('seipModule.controllers', [])
             $scope.setHeight = function (h) {
                 $scope.height = h;
             };
+            
+            $scope.setWidth = function (w) {
+                $scope.width = w;                
+            };
+
             var modalOpen, modalConfirm;
             jQuery(document).ready(function () {
                 var angular = jQuery("#dialog-form");
@@ -4240,11 +4480,13 @@ angular.module('seipModule.controllers', [])
             };
             function openModal(callback) {
                 var height = $scope.height;
+                var width = $scope.width;
                 if ($scope.template.name) {
                     modalOpen.dialog("option", "title", sfTranslator.trans($scope.template.name));
                     modalOpen.dialog("option", "height", height);
+                    modalOpen.dialog("option", "width", width);
                 }
-
+                
                 if ($scope.template.modeEdit) {
                     $scope.template.modeEdit = false;
                     // setter
@@ -4269,6 +4511,23 @@ angular.module('seipModule.controllers', [])
                             }
                         }
                     ]);
+                } else if($scope.template.setTemplateLoad){
+                    // setter
+                    modalOpen.dialog("option", "buttons", [
+                        {text: "Aceptar", click: function () {
+                                if ($scope.template.confirmCallBack) {
+                                    if ($scope.template.confirmCallBack()) {
+                                        modalOpen.dialog("close");
+                                    }
+                                } else {
+                                    modalOpen.dialog("close");
+                                }
+                                $timeout(function () {
+                                    $scope.$apply();
+                                });
+                            }}
+                    ]);
+
                 } else {
                     // setter
                     modalOpen.dialog("option", "buttons", [
@@ -4303,7 +4562,7 @@ angular.module('seipModule.controllers', [])
                 }
                 notificationBarService.getLoadStatus().done();
             }
-
+            
             $scope.openModalConfirm = function (content, confirmCallBack, cancelCallBack) {
                 $scope.dialog.confirm.content = sfTranslator.trans(content);
                 // setter

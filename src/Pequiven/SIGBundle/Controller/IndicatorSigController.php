@@ -125,6 +125,13 @@ class IndicatorSigController extends ResourceController {
         $idIndicator = $request->get('id');
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador        
+        
+        //Validación para Visualizar informe de Evolución
+        if (!$indicator->getShowEvolutionView()) {
+            $this->get('session')->getFlashBag()->add('success', 'Indicador no Habilitado para Visualizar Informe de Evolución');
+            return $this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));         
+        }
+
         $indicatorBase = $indicator;
         //Seteo de Indicador a clonar
         if ($indicator->getParentCloning()) {
@@ -148,6 +155,7 @@ class IndicatorSigController extends ResourceController {
             $this->get('session')->getFlashBag()->add('error', "El mes consultado no es un mes valido!");
             $month = 01;
         }
+
         //Cargando el Archivo
         $uploadFile = $request->get("uploadFile"); //Recibiendo archivo
         //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
@@ -166,20 +174,21 @@ class IndicatorSigController extends ResourceController {
                 $this->redirect($this->generateUrl("pequiven_indicator_evolution", array("id" => $request->get("id"), "month" => $month)));
             }
         }
-        //Url export
-        $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export', array('id' => $indicatorBase->getId(), 'month' => $month, 'typeObj' => 1));
 
+        //Url export
+        $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export_chart', array('id' => $request->get("id"), 'month' => $month, 'typeObj' => 1));
+        
         //Carga de data de Indicador para armar grafica
         $response = new JsonResponse();
 
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
-
-        $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicatorBase,$urlExportFromChart, array('withVariablesRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+        
+        $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicatorBase,$urlExportFromChart,$month); //Obtenemos la data del gráfico de acuerdo al indicador
+        
         //Carga de los datos de la grafica de las Causas de Desviación
         $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month, $urlExportFromChart); //Obtenemos la data del grafico de las causas de desviación
-
+        
         $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $idIndicator, 'month' => $month));
-
         foreach ($results as $value) {
             $dataCa = $value->getValueOfCauses();
             $sumCause = $sumCause + $dataCa;
@@ -189,10 +198,8 @@ class IndicatorSigController extends ResourceController {
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('indicator' => $indicator, 'month' => $month, 'typeObject' => 1));
         //Carga del analisis de las causas
         $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator' => $indicator, 'month' => $month));
-        //Carga de la señalización de la tendencia de la grafica
-        
+        //Carga de la señalización de la tendencia de la grafica        
         $tendency = $indicator->getTendency()->getId();
-
         $font = array();
         switch ($tendency) {
             case 0:
@@ -554,6 +561,7 @@ class IndicatorSigController extends ResourceController {
      */
     public function exportChrat(Request $request)
     {          
+        if($request->isMethod('POST')){
           $exportRequestStream = $request->request->all();          
           $request->request->remove('charttype');
           $request->request->remove('stream');
@@ -565,9 +573,12 @@ class IndicatorSigController extends ResourceController {
           $request->request->remove('meta_height');
           $request->request->remove('parameters');
           $fusionchartService = $this->getFusionChartExportService();          
-          $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);                                    
+          $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);           
+        }        
 
-        return $fileSVG;
+        //return $fileSVG;
+        $this->exportAction($request);            
+
     }
 
     /**
@@ -580,15 +591,13 @@ class IndicatorSigController extends ResourceController {
         $em = $this->getDoctrine()->getManager();
         $routing = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/temp/*.png";
         
-        if($request->isMethod('POST')){
-          $fileSVG = $this->exportChrat($request);        
-        }        
-
+        //$fileSVG = $this->exportChrat($request);        
+        sleep(1);
         //Buscando los Archivos por Codigo
         $nameSVG = glob("$routing");
         $user = $this->getUser()->getId();//Id Usuario    
         $user = str_pad($user, 6,"0", STR_PAD_LEFT);
-
+        
         $cont = 0;
         $contImg = 1;
         foreach ($nameSVG as $value) {            
@@ -596,10 +605,12 @@ class IndicatorSigController extends ResourceController {
             if ($pos !== false) {                                 
                 if (strpos($nameSVG[$cont], "mscolumnline3d")) {                    
                     $chartEvolution = $nameSVG[$cont];                    
-                    $contImg ++;                    
+                    $contImg ++;
+                    //var_dump("1");
                 }
                 if (strpos($nameSVG[$cont], "stackedbar3d")) {
                     $chartCause = $nameSVG[$cont];                                        
+                    //var_dump("2");
                 }
             }
             $cont ++;
@@ -702,10 +713,9 @@ class IndicatorSigController extends ResourceController {
             );
 
         //Solo si existen las dos graficas
-        if (isset($chartEvolution) AND isset($chartCause)) {
-            $dataChart = 
+        //if (isset($chartEvolution) AND isset($chartCause)) {            
             $this->generatePdf($data);            
-        }
+        //}
     }
 
     public function generatePdf($data) {

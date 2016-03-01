@@ -343,6 +343,24 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuSig->addChild($arrangementProgram);
             $menu->addChild($menuSig);
         }
+        
+        if ($this->isGranted('ROLE_SEIP_SIG_MONITORING')) {
+            $child = $this->factory->createItem('sig.monitoring.add.main', $this->getSubLevelOptions(array(
+                                'route' => null,
+                                'labelAttributes' => array('icon' => '',),
+                            ))
+                    )
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.monitoring.title', $section)));
+
+            $child->addChild('sig.monitoring.vizualice.main', array(
+                        'route' => 'pequiven_sig_monitoring_list',
+                        'labelAttributes' => array('icon' => ''),
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.monitoring.list', $section)));
+
+            $menuSig->addChild($child);   
+        }    
+
     }
 
     /**

@@ -49,12 +49,9 @@ class ReportEvolutionController extends ResourceController
         $id = $request->get('idIndicator');
 
         $typeObject = $request->get('typeObj');
-        if ($typeObject == 1) {
-            
-            $result = $this->findIndicatorOr404($request);        
-            
-        }elseif($typeObject == 2){
-            
+        if ($typeObject == 1) {            
+            $result = $this->findIndicatorOr404($request);                    
+        }elseif($typeObject == 2){            
             $repository = $this->get('pequiven_seip.repository.arrangementprogram');
             $result = $repository->find($id); 
         }
@@ -68,7 +65,8 @@ class ReportEvolutionController extends ResourceController
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(
                 'indicator' => $result,
-                'form' => $form->createView(),
+                'form'      => $form->createView(),                
+                'period'        => $result->getPeriod()->getName()
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -87,7 +85,7 @@ class ReportEvolutionController extends ResourceController
 
         $typeObject = $request->get('typeObj');
         
-        $month = $request->get('evolutiontrend')['month'];//Carga de Mes pasado
+        $month = $request->get('set_data')['month'];//Carga de Mes pasado
         
         $user = $this->getUser();
         
@@ -121,7 +119,7 @@ class ReportEvolutionController extends ResourceController
             $em->persist($trend);
             $em->flush(); 
 
-            $this->get('session')->getFlashBag()->add('success', "Analisis de Tendencia Añadido Correctamente");                        
+            $this->get('session')->getFlashBag()->add('success', "Analisis de Tendencia Añadido Exitosamente");                        
         }     
     }
 
@@ -160,12 +158,10 @@ class ReportEvolutionController extends ResourceController
 
         $typeObject = $request->get('typeObj');//Tipo de objeto Indicador o PG
 
-        if ($typeObject == 1) {
-            
+        if ($typeObject == 1) {            
             $result = $this->findIndicatorOr404($request); 
 
-            foreach ($result->getObjetives() as $value) {
-                
+            foreach ($result->getObjetives() as $value) {                
                 $compData = $value->getComplejo();//Consultando si tiene complejo
                 $gerData = $value->getGerencia();//Si tiene gerencia
                 
@@ -189,8 +185,7 @@ class ReportEvolutionController extends ResourceController
                 //$gerencia = $value->getGerencia()->getAbbreviation();
             }
             
-        }elseif($typeObject == 2){
-            
+        }elseif($typeObject == 2){            
             $repository = $this->get('pequiven_seip.repository.arrangementprogram');
             $result = $repository->find($id); 
 
@@ -199,9 +194,7 @@ class ReportEvolutionController extends ResourceController
         }
         
         $user = $this->getUser();//Carga de usuario
-
         $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
-
         //$action = $data["cant"];
         $id = $result->getId();
 
@@ -229,6 +222,7 @@ class ReportEvolutionController extends ResourceController
                 'code'          => $codifigication,
                 'form_value'    => $form_value->createView(),
                 'form'          => $form->createView(),
+                'period'        => $result->getPeriod()->getName()
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -247,12 +241,9 @@ class ReportEvolutionController extends ResourceController
 
         $typeObject = $request->get('typeObj');
 
-        if ($typeObject == 1) {
-            
-            $result = $this->findIndicatorOr404($request);        
-            
-        }elseif($typeObject == 2){
-            
+        if ($typeObject == 1) {            
+            $result = $this->findIndicatorOr404($request);                    
+        }elseif($typeObject == 2){            
             $repository = $this->get('pequiven_seip.repository.arrangementprogram');
             $result = $repository->find($id); 
         }
@@ -277,7 +268,8 @@ class ReportEvolutionController extends ResourceController
                 'code'          => $codifigication,
                 'config'        => $config,
                 'form_value'    => $form_value->createView(),
-                'form'          => $form
+                'form'          => $form,
+                'period'        => $result->getPeriod()->getName()                
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -299,7 +291,7 @@ class ReportEvolutionController extends ResourceController
         
         $user = $this->getUser();
         
-        $monthSet = $request->get('actionResults')['month'];//recibiendo mes
+        $monthSet = $request->get('set_data')['month'];//recibiendo mes
 
         $causeAction = $request->get('actionResults')['evolutionCause'];//Recibiendo Causa
         
@@ -377,6 +369,7 @@ class ReportEvolutionController extends ResourceController
                     //$AcValue = 0;
                 }
             }
+            $this->get('session')->getFlashBag()->add('success', "Plan de Acción Cargado Exitosamente");            
     
     }
 
@@ -446,8 +439,8 @@ class ReportEvolutionController extends ResourceController
                 }
 
             }
-            //$this->get('session')->getFlashBag()->add('success', "Valores Cargados Correctamente");                        
         }
+            $this->get('session')->getFlashBag()->add('success', "Avance Cargado Exitosamente");                        
 
     }    
 
@@ -545,7 +538,7 @@ class ReportEvolutionController extends ResourceController
             $em->flush();  
 
         }  
-        $this->get('session')->getFlashBag()->add('success', "Verificación Cargada Correctamente");                                
+        $this->get('session')->getFlashBag()->add('success', "Verificación Cargada Exitosamente");                                
     }
 
     /**
@@ -566,7 +559,7 @@ class ReportEvolutionController extends ResourceController
             $em->remove($verification);
             $em->flush();        
             
-            $this->get('session')->getFlashBag()->add('success', "Verificación Eliminada Correctamente");                        
+            $this->get('session')->getFlashBag()->add('success', "Verificación Eliminada Exitosamente");                        
         }
 
     }
@@ -675,7 +668,7 @@ class ReportEvolutionController extends ResourceController
         $id = $request->get('idIndicator');
         $typeObject = $request->get('typeObj');
         $cont = 1; 
-        $posCause = 0;        
+        $posCause = 1;        
         
         //Mes Actual
         $monthActual = date("m");
@@ -699,6 +692,10 @@ class ReportEvolutionController extends ResourceController
                         $cont++; 
                     }
                     $action = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause));
+                }
+                if (!isset($action)) {
+                    $this->get('session')->getFlashBag()->add('error', "Plan de Acción no Cargado! Ha seleccionado un mes que no posee Causas Cargadas"); 
+                    die();                                           
                 }
                 $cantAction = count($action) + 1;
                 $cantAction = "0".''.$cantAction.''."-";                
@@ -734,6 +731,7 @@ class ReportEvolutionController extends ResourceController
             $cause = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('arrangementProgram' => $id));
             $complejo = "S/C";
             $gerencia = "S/G";
+            $cantAction = 0;
         }
 
         $monthSet = $monthSet.''."-";

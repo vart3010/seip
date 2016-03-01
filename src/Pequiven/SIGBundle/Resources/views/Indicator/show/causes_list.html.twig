@@ -4,7 +4,7 @@
 
         <div class="block-title">
             <h3 class="ng-binding">{{ 'sig.causes_desviation'|trans ({}, 'messages') }}</h3>
-            {% if sumCause < 100 and not indicator_sig.parentCloning %}        
+            {% if sumCause < 100 and not cloning %}        
                 <div class="button-group absolute-right compact">
                     <a class="button icon-list-add " href="" ng-click="loadTemplateCausesDesviation()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
                 </div>  
@@ -44,7 +44,7 @@
                                 {{ cause_data.createdBy.firstname }} {{ cause_data.createdBy.lastname }}
                                 <small class="tag">({{ cause_data.createdBy.username }})</small>
                             </td>
-                            {% if not indicator_sig.parentCloning %}
+                            {% if not cloning %}
                             <td class="align-right vertical-center">
                                 <div >
                                     <span class="select compact">
