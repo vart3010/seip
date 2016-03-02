@@ -56,7 +56,7 @@ function addRow(data) {
         alert("El producto ya se encuentra!");
     }
     totals();
-    
+
 }
 
 function delRow(id, idProduct) {
@@ -109,30 +109,30 @@ function getJson() {
     $("input" + fieldRsJson).val(jsonStr);
 }
 
-function totals(){
+function totals() {
     var totals = new Array();
-    var total=0;
-  for(var i=0;i<columsTotals.length;i++){
+    var total = 0;
+    for (var i = 0; i < columsTotals.length; i++) {
         total = parseFloat(total) + parseFloat(getTotal(columsTotals[i]));
         totals[i] = total;
-  }
-  alert(totals);
-  //return totals;
+    }
+    alert(totals);
+    //return totals;
 }
 
 function getTotal(numField) {
     var total = 0;
     $("#" + table + " tbody tr").each(function (index) {
-        var cont=0;
+        var cont = 0;
         $(this).find("td").each(function (ind) {
-            if(cont==numField) { 
+            if (cont == numField) {
                 var celda = $(this).attr("class");
-                total = parseFloat(total)+parseFloat(celda);
+                total = parseFloat(total) + parseFloat(celda);
             }
             cont++;
         });
-        
+
     });
     return total;
-    
+
 }
