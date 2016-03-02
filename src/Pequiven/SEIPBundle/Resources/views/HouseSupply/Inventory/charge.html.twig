@@ -40,6 +40,7 @@
             setFieldRsJson("#dataProduct");
             var ids = ["2","3"];
             setColumsTotals(ids);
+            setSelectorTotals("span#totales_");
 
             $("#addItem").click(function () {
                 var cantidad = [$("#cantidad").val(), $("#cantidad").val()];
@@ -235,6 +236,8 @@
                             </td>
                         </tr>
                     </table>     
+                        <span id="totales_2"></span>
+                        <span id="totales_3"></span>
                     <br>
                     <div class="new-row twelve-columns" style="text-align: right;">
                         {% if (type==1)%}

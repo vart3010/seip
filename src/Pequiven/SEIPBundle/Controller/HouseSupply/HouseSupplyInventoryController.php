@@ -147,7 +147,7 @@ class HouseSupplyInventoryController extends SEIPController {
             ;
             $inventory = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventory')->findOneBy($search);
 
-            $disponible = ($inventory->getAvailable()) + ($sign * $totalCharge);
+            $disponible = ($inventory->getAvailable()) + ($sign * $prod->cantidad);
             $inventory->setAvailable($disponible);
             $em->flush();
 
@@ -156,7 +156,12 @@ class HouseSupplyInventoryController extends SEIPController {
 
             //ACTUALIZO MAXIMO POR PERSONA
             $poblacion = $deposit->getComplejo()->getNumberMembersCET();
-            $product->setMaxPerUser(round($disponible / $poblacion));
+            if ($disponible < 0) {
+                $product->setMaxPerUser(0);
+            } else {
+                $product->setMaxPerUser(ceil($disponible / $poblacion));
+            }
+
             $em->flush();
         }
 

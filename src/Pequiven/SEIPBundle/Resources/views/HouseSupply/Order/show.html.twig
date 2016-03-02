@@ -47,6 +47,7 @@
             <th>Cliente</th>
             <th>Producto</th>
             <th>Cantidad</th>
+            <th>Cantidad2</th>
             <th>Eliminar</th>
 
         </tr>
@@ -55,6 +56,8 @@
     	
     </tbody>
 </table>
+<span id="totales_2"></span>
+<span id="totales_3"></span>
 
 <input type="button" class="form-control" value="Get" id="getValues">
 
@@ -79,18 +82,22 @@
         $(document).ready(function() {
             //$('#table1').DataTable();
             setTable("table1");
+
             var arrayNames = new Array("IdUser","idProducto","cantidad");
             setNameCampos(arrayNames);
             campoClave(1);
-            var ids = ["2"];
+            var ids = ["2","3"];
             setColumsTotals(ids);
+            setSelectorTotals("span#totales_");
+
             
             $("#addItem").click(function(){
             	var cliente = [$("#cliente").val(),$("#cliente").find('option:selected').attr("name")];
             	var producto = [$("#producto").val(),$("#producto").find('option:selected').attr("name")];
             	var cantidad = [$("#cantidad").val(),$("#cantidad").val()];
+            	var cantidad2 = [$("#cantidad").val(),$("#cantidad").val()];
             	var boton = ["","<input type='button' id='"+index+"' name='"+producto[0]+"' onClick='delRow(this.id,this.name)' class='form-control delItem' value='Del'>"];
-            	var data = [cliente,producto,cantidad, boton];
+            	var data = [cliente,producto,cantidad,cantidad2, boton];
             	delRowDefault();
             	addRow(data);
             	index=index+1;

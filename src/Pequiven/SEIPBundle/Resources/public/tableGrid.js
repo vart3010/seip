@@ -4,7 +4,7 @@ var campo;      //NOMBRE DE LOS CAMPOS EN FORMA DE ARRAY, QUE DEVOLVERA EL JSON
 var fieldRsJson; // CAMPO DONDE SE COLOCARA EL STRING EN JSON RESULTANTE
 var columsTotals; //INDICES DE LAS COLUMNAS QUE SE QUIERES SUMAR EMPEZANDO DESDE 0..1....N
 var campoClave; //CAMPO CLAVE PARA NO REPETIR REGISTROS AL MOMENTO DE AGREGAR REGISTROS
-
+var selectorTotals; //SELECTOR DE JQUERY PARA MOSTRAR LOS RESULTADOS DE LOS TOTALES
 var idsClaves = new Array();
 
 
@@ -14,6 +14,10 @@ function setTable(obj) {
 
 function setFieldRsJson(field) {
     fieldRsJson = field;
+}
+
+function setSelectorTotals(selector) {
+    selectorTotals=selector;
 }
 
 function campoClave(clave) {
@@ -111,13 +115,17 @@ function getJson() {
 
 function totals() {
     var totals = new Array();
-    var total = 0;
-    for (var i = 0; i < columsTotals.length; i++) {
+    
+  for(var i=0;i<columsTotals.length;i++){
+        var total=0;
         total = parseFloat(total) + parseFloat(getTotal(columsTotals[i]));
-        totals[i] = total;
-    }
-    alert(totals);
-    //return totals;
+        //totals[i] = total;
+        totals.push(total);
+  }
+  //alert(totals);
+  for(var i=0;i<columsTotals.length;i++){
+     $(selectorTotals+columsTotals[i]).html(totals[i]);
+  }
 }
 
 function getTotal(numField) {
