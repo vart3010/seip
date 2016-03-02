@@ -6,7 +6,8 @@ var columsTotals; //INDICES DE LAS COLUMNAS QUE SE QUIERES SUMAR EMPEZANDO DESDE
 var campoClave; //CAMPO CLAVE PARA NO REPETIR REGISTROS AL MOMENTO DE AGREGAR REGISTROS
 var selectorTotals; //SELECTOR DE JQUERY PARA MOSTRAR LOS RESULTADOS DE LOS TOTALES
 var idsClaves = new Array();
-
+var colsRight = new Array();
+;
 
 function setTable(obj) {
     table = obj;
@@ -32,6 +33,10 @@ function setColumsTotals(index) {
     columsTotals = index;
 }
 
+function setColsRight(cols) {
+    colsRight = cols;
+}
+
 function delRowDefault() {
     $('#' + table + ' tbody tr').each(function (i, row) {
         var clas = $(this).attr("class");
@@ -48,7 +53,13 @@ function addRow(data) {
     if (allow < 0) {
         var fila = "<tr class='id_" + index + "'>";
         for (i = 0; i < data.length; i++) {
-            fila = fila + "<td class='" + data[i][0] + "'>" + data[i][1] + "</td>";
+            var clase = colsRight.indexOf(i);
+
+            if (clase >= 0) {
+                fila = fila + "<td class='" + data[i][0] + " gridTd'>" + data[i][1] + "</td>";
+            } else {
+                fila = fila + "<td class='" + data[i][0] + "'>" + data[i][1] + "</td>";
+            }
             if (i == campoClave) {
                 idsClaves.push(data[i][0]);
             }
@@ -155,5 +166,5 @@ function getCantRows() {
 }
 
 function moneyFormat(valor) {
-    return valor.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+    return valor.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1.');
 }

@@ -47,7 +47,7 @@
         }
 
         $(document).ready(function () {
-            
+
             $("#dataProduct").val('{"datos":{}}');
             setTable("table1");
             var arrayNames = new Array("cantidad", "producto", "costo", "subtotal");
@@ -57,6 +57,8 @@
             var ids = ["2", "3"];
             setColumsTotals(ids);
             setSelectorTotals("span#totales_");
+            var right = new Array(2, 3);
+            setColsRight(right);
             validaButton();
 
             $("#addItem").click(function () {
@@ -64,27 +66,27 @@
                 var producto = [$("#producto").val(), $("#producto").find('option:selected').attr("name")];
                 var costo = [$("#costo").val(), $("#costo").val()];
                 var subtotal = [($("#costo").val() * $("#cantidad").val()), ($("#costo").val() * $("#cantidad").val())];
-                {#var selectProduct = $("select#producto:selected").val();
-                alert(selectProduct);#}
-                
-                if (cantidad[0] !="" && costo[0] !="") {
-                    var boton = ["", "<a id='" + index + "' name='" + producto[0] + "' onClick='delRow(this.id,this.name)' class='button icon-trash delItem'></a>"];
-                    var data = [cantidad, producto, costo, subtotal, boton];
-                    delRowDefault();
-                    addRow(data);
-                    index = index + 1;
-                    getJson();
-                    $("#cantidad").val('');
-                    $("#costo").val('');
+        {#var selectProduct = $("select#producto:selected").val();
+        alert(selectProduct);#}
 
-                    validaButton();
-                } else {
-                    alert("Debe llenar los campos");
-                }
+                    if (cantidad[0] != "" && costo[0] != "") {
+                        var boton = ["", "<a id='" + index + "' name='" + producto[0] + "' onClick='delRow(this.id,this.name)' class='button icon-trash delItem'></a>"];
+                        var data = [cantidad, producto, costo, subtotal, boton];
+                        delRowDefault();
+                        addRow(data);
+                        index = index + 1;
+                        getJson();
+                        $("#cantidad").val('');
+                        $("#costo").val('');
+
+                        validaButton();
+                    } else {
+                        alert("Debe llenar los campos");
+                    }
 
 
+                });
             });
-        });
     </script>
 {% endblock javascript %}
 
@@ -97,6 +99,9 @@
         }
         .fa-trash{
             color: red;    
+        }
+        table#table1 tbody tr td.gridTd {
+            text-align: right;
         }
     </style>
     <hgroup id="main-title" class="thin breadcrumb">
@@ -256,7 +261,7 @@
                                         <tr>
                                             <td colspan="3">
                                                 <select name="producto" id="producto" class="select2 input-large form-control">     
-                                                    
+
                                                     {% for prod in products %}
                                                         <option value="{{prod.id}}" name="{{prod.description}}">{{prod.description}}</option>
                                                     {% endfor %}
