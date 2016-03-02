@@ -2512,9 +2512,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     }
                 }
             }
-
+            var_dump($goals);
+            die();
             foreach ($goals as $key => $goal) {
+
+
                 $goalDetails = $goal->getGoalDetails();
+
                 $summary = $goalDetails->getSummary();
 
                 $planDateStart = $goal->getStartDate();
@@ -2666,6 +2670,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     'tipo' => $status,
                 );
             }
+            die();
 
             $referenceType = \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL;
             foreach ($allArrangementPrograms as $arrangementProgram) {

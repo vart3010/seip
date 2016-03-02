@@ -31,7 +31,7 @@ class HouseSupplyProductAdmin extends Admin {
                 ->add('description')
                 ->add('price')
                 ->add('cost')
-                ->add('maxPerUser')
+                
         ;
     }
 
@@ -42,7 +42,7 @@ class HouseSupplyProductAdmin extends Admin {
                 ->add('description')
                 ->add('price')
                 ->add('cost')
-                ->add('maxPerUser')
+                
         ;
     }
 
@@ -53,7 +53,7 @@ class HouseSupplyProductAdmin extends Admin {
                 ->add('description')
                 ->add('price')
                 ->add('cost')
-                ->add('maxPerUser')
+                
         ;
     }
 
@@ -64,7 +64,7 @@ class HouseSupplyProductAdmin extends Admin {
                 ->add('description')
                 ->add('price')
                 ->add('cost')
-                ->add('maxPerUser')
+                
 
         ;
     }
