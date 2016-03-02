@@ -386,6 +386,7 @@ class OnePerTenController extends SEIPController {
 
     public function searchMembersAction(Request $request) {
         $em = $this->getDoctrine()->getEntityManager();
+        $onePerTenService = $this->getOnePerTenService();
         if ($request->get("user") == NULL) {
             if (!isset($request->get("onePerTen_search")["user"])) {
                 $user = $this->getUser();
@@ -415,6 +416,12 @@ class OnePerTenController extends SEIPController {
         $efectividad = number_format(0, 2, ',', '.') . '%';
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $idUser));
         if (!is_null($onePerTen)) {
+            
+            $profileItems = OnePerTen::getArrayOfProfile();
+            $profileItemsAvailables = $onePerTenService->obtainProfileItemsAvailables($onePerTen);
+//            var_dump($profileItems);
+//            var_dump($profileItemsAvailables);
+//            die();
             
             //Determinamos si fue CUTL en las elecciones asamblea 2015
             if($onePerTen->getCutl() == 1){
@@ -638,6 +645,14 @@ class OnePerTenController extends SEIPController {
 
     protected function getCneService() {
         return $this->container->get('seip.service.apiCne');
+    }
+    
+    /**
+    * @return \Pequiven\SEIPBundle\Service\Sip\OnePerTenService
+    */
+    protected function getOnePerTenService()
+    {
+        return $this->get('seip.service.onePerTen');
     }
 
 }

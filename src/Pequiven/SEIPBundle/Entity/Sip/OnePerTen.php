@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\SEIPBundle\Model\Sip\OnePerTen as modelOnePerTen;
 
 /**
  * OnePerTen
@@ -15,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
-class OnePerTen {
+class OnePerTen extends modelOnePerTen {
 
     /**
      * @var integer
@@ -204,12 +205,12 @@ class OnePerTen {
     
     /**
      * 
-     * miembroOnePerTen
+     * firmaCompromiso
      * @var integer
      *
-     * @ORM\Column(name="miembroOnePerTen", type="integer", nullable=true)
+     * @ORM\Column(name="firmaCompromiso", type="integer", nullable=true)
      */
-    private $miembroOnePerTen;
+    private $firmaCompromiso;
     
     /**
      * militante (Que es parte del PSUV)
@@ -489,12 +490,12 @@ class OnePerTen {
         $this->ubch = $ubch;
     }
     
-    function getMiembroOnePerTen() {
-        return $this->miembroOnePerTen;
+    function getFirmaCompromiso() {
+        return $this->firmaCompromiso;
     }
 
-    function setMiembroOnePerTen($miembroOnePerTen) {
-        $this->miembroOnePerTen = $miembroOnePerTen;
+    function setFirmaCompromiso($firmaCompromiso) {
+        $this->firmaCompromiso = $firmaCompromiso;
     }
        
     function getMilitante() {
