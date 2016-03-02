@@ -186,6 +186,7 @@ abstract class OnePerTen  {
         
         //Resultados Globales
         $profileItems[self::TYPE_GLOBAL]['result'] = 0.0;
+        $profileItems[self::TYPE_GLOBAL]['class'] = 'red-bg';
         $profileItems[self::TYPE_GLOBAL]['profileValue'] = 0;
         
         return $profileItems;

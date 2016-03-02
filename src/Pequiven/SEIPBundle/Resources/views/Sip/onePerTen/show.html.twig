@@ -93,8 +93,8 @@
                     {{ isCoordinator }}
                 </p>
             </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
+            <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile {{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['class'] }}">
+                <p class="inline-label bold">
                     <label class="label">Resultado Perfil Político</label>
                     {{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['profileValue'] }}
                 </p>

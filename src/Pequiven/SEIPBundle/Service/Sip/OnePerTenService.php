@@ -326,16 +326,20 @@ class OnePerTenService {
     
     public function evaluateProfileResult($profileItemsWithResult = array()){
         
-        if($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] > 80){
+        if($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] >= 95){
             $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue'] = 1;
-        } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] <= 80 && $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] > 60){
+        } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] < 95 && $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] >= 85){
             $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue'] = 2;
-        } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] <= 60 && $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] > 40){
+            $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['class'] = 'anthracite-bg';
+        } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] < 85 && $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] >= 70){
             $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue'] = 3;
-        } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] <= 40 && $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] > 20){
+            $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['class'] = 'grey-bg';
+        } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] < 70 && $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] >= 50){
             $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue'] = 4;
-        } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] <= 20){
+            $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['class'] = 'orange-bg';
+        } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] < 50){
             $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue'] = 5;
+            $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['class'] = 'blue-bg';
         }
         
         return $profileItemsWithResult;

@@ -736,7 +736,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         }
 
         $textoVoto = 'NO';
-        if ($object->getVoto() == 1) {
+        if ($object->getVasamblea6() == 1) {
             $textoVoto = 'SI';
         }
 
