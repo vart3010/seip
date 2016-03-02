@@ -10,10 +10,8 @@ namespace Pequiven\SEIPBundle\Controller\HouseSupply;
 
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
-use Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling;
-use Pequiven\SEIPBundle\Repository\HouseSupply\Billing\HouseSupplyBillingRepository;
-use Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems;
 use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems;
 
 /**
  * CONTROLADOR DE PEDIDOS DE CASA - ABASTO
@@ -35,47 +33,47 @@ class HouseSupplyOrderController extends SEIPController {
         $permiso = 1;
 
         if ($permiso == 1) {
-
-            //NUEVO NUMERO DE ORDEN
-            $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Billing\HouseSupplyBilling')->FindNextOrderNro($type);
-            $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
-
-            $search = array(
-                'nroBill' => $neworderNro[0]['nro'],
-                'type' => $type
-            );
-
-            //ULTIMA CARGA REALIZADA
-            $lastorder = $em->getRepository('PequivenSEIPBundle:HouseSupply\Billing\HouseSupplyBilling')->findOneBy($search);
-
-            //LISTA DE USUARIOS DISPONIBLES $this->get('pequiven_seip.repository.user')->
-
-            foreach ($this->getUser()->getWorkStudyCircle() as $phase) {
-                if($phase->getphase() = 1) {
-                    
-                }
-            }
-
-
-
-
-            $workstudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($wsc);
-
-            //LISTA DE PRODUCTOS DISPONIBLES            
-            $products = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyProduct')->findAll();
-
-            //FORMULARIO DE CARGA
-            //$form = $this->createForm(new houseSupplyInventoryChargeType());
+//
+//            //NUEVO NUMERO DE ORDEN
+//            $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Billing\HouseSupplyBilling')->FindNextOrderNro($type);
+//            $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
+//
+//            $search = array(
+//                'nroBill' => $neworderNro[0]['nro'],
+//                'type' => $type
+//            );
+//
+//            //ULTIMA CARGA REALIZADA
+//            $lastorder = $em->getRepository('PequivenSEIPBundle:HouseSupply\Billing\HouseSupplyBilling')->findOneBy($search);
+//
+//            //LISTA DE USUARIOS DISPONIBLES $this->get('pequiven_seip.repository.user')->
+//
+//            foreach ($this->getUser()->getWorkStudyCircle() as $phase) {
+//                if($phase->getphase() = 1) {
+//                    
+//                }
+//            }
+//
+//
+//
+//
+//            $workstudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($wsc);
+//
+//            //LISTA DE PRODUCTOS DISPONIBLES            
+//            $products = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyProduct')->findAll();
+//
+//            //FORMULARIO DE CARGA
+//            //$form = $this->createForm(new houseSupplyInventoryChargeType());
         }
-
-//        return $this->render('PequivenSEIPBundle:HouseSupply\Order:charge.html.twig', array(
-//                    'type' => $type,
-//                    'deposits' => $deposits,
-//                    'newcharge' => $neworder,
-//                    'lastcharge' => $lastorder,
-//                    'form' => $form->createView(),
-//                    'products' => $products,
-//        ));
+//
+////        return $this->render('PequivenSEIPBundle:HouseSupply\Order:charge.html.twig', array(
+////                    'type' => $type,
+////                    'deposits' => $deposits,
+////                    'newcharge' => $neworder,
+////                    'lastcharge' => $lastorder,
+////                    'form' => $form->createView(),
+////                    'products' => $products,
+////        ));
     }
 
     public function saveOrderAction(Request $request) {
