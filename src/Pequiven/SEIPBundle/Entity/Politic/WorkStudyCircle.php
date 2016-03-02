@@ -195,12 +195,12 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
     protected $childrens;
 
     /**
-     * Facturas en HouseSupply
+     * Ordenes en HouseSupply
      * 
      * @var houseSupplyBilling
-     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling",mappedBy="workStudyCircle",cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder",mappedBy="workStudyCircle",cascade={"persist","remove"})
      */
-    protected $houseSupplyBilling;
+    protected $houseSupplyOrder;
 
     /**
      * Constructor

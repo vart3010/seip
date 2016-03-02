@@ -201,7 +201,7 @@
                                         <td style="vertical-align: middle;">Total:</td>
                                         <td style="vertical-align: middle; text-align: right;">
                                             <span style="color: #002a80; font-size: 40pt; text-align: right; width: 100%; font-weight: bold;" id="totales_3">
-
+                                                0
                                             </span>
                                         </td>
                                     </tr>   
@@ -209,7 +209,7 @@
                                         <td style="vertical-align: middle;">Cant. <br> Productos</td>
                                         <td style="vertical-align: middle; text-align: right;">
                                             <span style="color: #002a80; font-size: 25pt; text-align: right; width: 100%;" id="totales_2">
-
+                                                0
                                             </span>
                                         </td>
                                     </tr>
@@ -219,34 +219,32 @@
                         </tr>  
                         <tr>
                             <td width="20%">
-                                <table style=" border-collapse:separate; border-spacing: 0px 10px;" width="100%">
-                                    <tr>
-                                        <td style="background-color: #AA0000; color: #FFFFFF; font-size: 10pt; vertical-align: middle; text-align: center;" colspan="3">
-                                            Agregar
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3">
-                                            <select name="producto" id="producto" class="select2 input-large form-control">                                
-                                                {% for prod in products %}
-                                                    <option value="{{prod.id}}" name="{{prod.description}}">{{prod.description}}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </td>                                        
-                                    </tr>                                     
-                                    <tr>
-                                        <td width="20%" style="text-align: center;">
-                                            <input type="number" class="input-mini" id="cantidad" placeholder="Cantidad">
-                                        </td>
-                                        <td width="60%" style="text-align: center;">
-                                            <input type="number" step="any" class="input-small" id="costo" placeholder="Costo">
-                                        </td>                                        
-                                        <td width="20%" style="text-align: center;">                                            
-                                            <input type="button" class="form-control" value="Add" id="addItem">
-                                        </td>
-                                    </tr>                                    
-                                </table> 
-                                <input type="text" hidden name="dataProduct" id="dataProduct">                                
+                                <fieldset class="fieldset">
+                                    <legend class="legend"><b>Agregar Producto</b></legend>
+                                    <table style="border-collapse:separate; border-spacing: 0px 10px;" width="100%">                                        
+                                        <tr>
+                                            <td colspan="3">
+                                                <select name="producto" id="producto" class="select2 input-large form-control">                                
+                                                    {% for prod in products %}
+                                                        <option value="{{prod.id}}" name="{{prod.description}}">{{prod.description}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>                                        
+                                        </tr>                                     
+                                        <tr>
+                                            <td width="20%" style="text-align: center;">
+                                                <input type="number" class="input-mini" id="cantidad" placeholder="Cantidad">
+                                            </td>
+                                            <td width="60%" style="text-align: center;">
+                                                <input type="number" step="any" class="input-small" id="costo" placeholder="Costo">
+                                            </td>                                        
+                                            <td width="20%" style="text-align: center;">                                            
+                                                <input type="button" class="form-control" value="Add" id="addItem">
+                                            </td>
+                                        </tr>                                    
+                                    </table> 
+                                    <input type="text" hidden name="dataProduct" id="dataProduct">        
+                                </fieldset>
                             </td>
                         </tr>
                     </table>

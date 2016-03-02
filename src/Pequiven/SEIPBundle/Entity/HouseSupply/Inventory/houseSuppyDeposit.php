@@ -44,11 +44,7 @@ class houseSupplyDeposit {
     private $complejo;
 
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="createdAt", type="datetime")
-     */
-    private $createdAt;
+  
 
     /**
      * @Gedmo\Timestampable(on="update")
@@ -89,11 +85,7 @@ class houseSupplyDeposit {
         return $this->complejo;
     }
 
-    
-
-    function getCreatedAt() {
-        return $this->createdAt;
-    }
+   
 
     function getUpdatedAt() {
         return $this->updatedAt;
@@ -124,11 +116,6 @@ class houseSupplyDeposit {
     }
 
   
-
-    function setCreatedAt($createdAt) {
-        $this->createdAt = $createdAt;
-    }
-
     function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
     }

@@ -78,7 +78,12 @@ class HouseSupplyInventoryController extends SEIPController {
 
         //CALCULO EL NUEVO CORRELATIVO
         $newnroobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeNro($type);
-        $newnro = $newnroobj[0]['id'] + 1;
+        
+        if ($newnroobj[0]['nro']) {
+            $newnro = $newnroobj[0]['id'] + 1;
+        } else {
+            $newnro = 1;
+        }
 
         //OBTENGO EL DEPOSITO        
         $deposit = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->findOneById($request->get('deposit'));
@@ -150,8 +155,8 @@ class HouseSupplyInventoryController extends SEIPController {
                 'deposit' => $deposit->getId()
                     )
             ;
-            $inventory = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventory')->findOneBy($search);
 
+            $inventory = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventory')->findOneBy($search);
             $disponible = ($inventory->getAvailable()) + ($sign * $prod->cantidad);
             $inventory->setAvailable($disponible);
             $em->flush();
@@ -159,14 +164,17 @@ class HouseSupplyInventoryController extends SEIPController {
             //ACTUALIZO EL COSTO DEL PRODUCTO
             $product->setCost($prod->costo);
 
-            //ACTUALIZO MAXIMO POR PERSONA
-            $poblacion = $deposit->getComplejo()->getNumberMembersCET();
-            if ($disponible < 0) {
-                $product->setMaxPerUser(0);
-            } else {
-                $product->setMaxPerUser(ceil($disponible / $poblacion));
-            }
+            //ACTUALIZO MAXIMO POR PERSONA EN LA INSTANCIA DEL PRODUCTO
+            $instance = $product->getInstance();
+            $dispInst = ($instance->getAvailable()) + ($sign * $prod->cantidad);
 
+            $poblacion = $deposit->getComplejo()->getNumberMembersCET();
+
+            if ($dispInst < 0) {
+                $instance->setMaxPerUser(0);
+            } else {
+                $instance->setMaxPerUser(floor($dispInst / $poblacion));
+            }
             $em->flush();
         }
 

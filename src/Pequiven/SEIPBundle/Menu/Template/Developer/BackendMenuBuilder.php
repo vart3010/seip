@@ -343,7 +343,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuSig->addChild($arrangementProgram);
             $menu->addChild($menuSig);
         }
-        
+
         if ($this->isGranted('ROLE_SEIP_SIG_MONITORING')) {
             $child = $this->factory->createItem('sig.monitoring.add.main', $this->getSubLevelOptions(array(
                                 'route' => null,
@@ -358,9 +358,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.monitoring.list', $section)));
 
-            $menuSig->addChild($child);   
-        }    
-
+            $menuSig->addChild($child);
+        }
     }
 
     /**
@@ -1988,7 +1987,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ->setLabel($this->translate(sprintf('Pedidos', $section)));
         $child2
                 ->addChild('housesupply.order.create', array(
-                        'route' => 'pequiven_housesupply_order_charge',
+                    'route' => 'pequiven_housesupply_order_charge',
+                    'routeParameters' => array('type' => 3),
                         //'labelAttributes' => array('icon' => 'fa fa-calculator')
                 ))
                 ->setLabel($this->translate(sprintf('Crear', $section)));

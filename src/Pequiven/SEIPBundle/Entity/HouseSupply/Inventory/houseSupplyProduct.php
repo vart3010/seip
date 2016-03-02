@@ -30,6 +30,14 @@ class houseSupplyProduct {
     private $id;
 
     /**
+     * 
+     * @var houseSupplyProduct
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductInstance", inversedBy="product")
+     * @ORM\JoinColumn(name="instance_id", referencedColumnName="id")
+     */
+    private $instance;
+
+    /**
      *
      * @var string
      * @ORM\Column(name="code",type="string",nullable=true)
@@ -60,9 +68,9 @@ class houseSupplyProduct {
     /**
      *
      * @var float
-     * @ORM\Column(name="maxPerUser",type="float",nullable=false)
+     * @ORM\Column(name="maxPerUserForce",type="float",nullable=true)
      */
-    private $maxPerUser;
+    private $maxPerUserForce = null;
 
     /**
      * Inventario
@@ -86,7 +94,13 @@ class houseSupplyProduct {
      */
     protected $billingItems;
 
-    
+    /**
+     * @var houseSupplyOrderItems
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems",mappedBy="product",cascade={"persist"}))
+     */
+    protected $orderItems;
+
+   
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -109,6 +123,10 @@ class houseSupplyProduct {
         return $this->id;
     }
 
+    function getInstance() {
+        return $this->instance;
+    }
+
     function getCode() {
         return $this->code;
     }
@@ -125,8 +143,8 @@ class houseSupplyProduct {
         return $this->cost;
     }
 
-    function getMaxPerUser() {
-        return $this->maxPerUser;
+    function getMaxPerUserForce() {
+        return $this->maxPerUserForce;
     }
 
     function getInventory() {
@@ -141,8 +159,11 @@ class houseSupplyProduct {
         return $this->billingItems;
     }
 
-   
+    function getOrderItems() {
+        return $this->orderItems;
+    }
 
+    
     function getCreatedAt() {
         return $this->createdAt;
     }
@@ -157,6 +178,10 @@ class houseSupplyProduct {
 
     function setId($id) {
         $this->id = $id;
+    }
+
+    function setInstance(houseSupplyProduct $instance) {
+        $this->instance = $instance;
     }
 
     function setCode($code) {
@@ -175,8 +200,8 @@ class houseSupplyProduct {
         $this->cost = $cost;
     }
 
-    function setMaxPerUser($maxPerUser) {
-        $this->maxPerUser = $maxPerUser;
+    function setMaxPerUserForce($maxPerUserForce) {
+        $this->maxPerUserForce = $maxPerUserForce;
     }
 
     function setInventory(houseSupplyInventory $inventory) {
@@ -191,7 +216,12 @@ class houseSupplyProduct {
         $this->billingItems = $billingItems;
     }
 
+    function setOrderItems(houseSupplyOrderItems $orderItems) {
+        $this->orderItems = $orderItems;
+    }
 
+    
+    
    
     function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
