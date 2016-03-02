@@ -28,11 +28,16 @@ class HouseSupplyInventoryController extends SEIPController {
         $type = $request->get('type');
 
         //NUEVO NUMERO DE CARGO DE DEPOSITO
-        $newid = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeId($type);
-        $newcharge = str_pad((($newid[0]['id']) + 1), 5, 0, STR_PAD_LEFT);
+        $newchargeNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeNro($type);
+        $newcharge = str_pad((($newchargeNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
+
+        $search = array(
+            'nroCharge' => $newchargeNro[0]['nro'],
+            'type' => $type
+        );
 
         //ULTIMA CARGA REALIZADA
-        $lastcharge = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->findOneById($newid[0]['id']);
+        $lastcharge = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->findOneBy($search);
 
         //LISTA DE DEPOSITOS EXISTENTES
         $deposits = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->findAll();
@@ -72,7 +77,7 @@ class HouseSupplyInventoryController extends SEIPController {
         }
 
         //CALCULO EL NUEVO CORRELATIVO
-        $newnroobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeId($type);
+        $newnroobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeNro($type);
         $newnro = $newnroobj[0]['id'] + 1;
 
         //OBTENGO EL DEPOSITO        
