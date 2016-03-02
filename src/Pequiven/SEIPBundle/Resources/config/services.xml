@@ -427,6 +427,12 @@
             </call>
         </service>
         
+        <service id="seip.service.onePerTen" class="Pequiven\SEIPBundle\Service\Sip\OnePerTenService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
         <service id="pequiven_factorConversion.service.factorConversion" class="Pequiven\SEIPBundle\Service\FactorConversionService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

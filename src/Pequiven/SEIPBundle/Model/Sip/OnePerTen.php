@@ -80,6 +80,9 @@ abstract class OnePerTen  {
         //Firma Compromiso Revolucionario
         $profileItems[self::TYPE_COMPROMISO][self::FIRMA_COMPROMISO]['enabled'] = false;
         $profileItems[self::TYPE_COMPROMISO][self::FIRMA_COMPROMISO]['weight'] = 150;
+        //Misceláneos
+        $profileItems[self::TYPE_COMPROMISO]['total'] = 0;
+        $profileItems[self::TYPE_COMPROMISO]['totalWeight'] = 0;
         
         // SECCIÓN PARTICIPACIÓN ELECCIONES
         //Presidenciales 2012 (7 OCTUBRE)
@@ -97,6 +100,9 @@ abstract class OnePerTen  {
         //Parlamentarias 2015 (6 DICIEMBRE)
         $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_PARLAMENTARIAS_2015]['enabled'] = false;
         $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_PARLAMENTARIAS_2015]['weight'] = 40;
+        //Misceláneos
+        $profileItems[self::TYPE_ELECCIONES]['total'] = 0;
+        $profileItems[self::TYPE_ELECCIONES]['totalWeight'] = 0;
         
         return $profileItems;
     }

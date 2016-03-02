@@ -205,12 +205,12 @@ class OnePerTen extends modelOnePerTen {
     
     /**
      * 
-     * miembroOnePerTen
+     * firmaCompromiso
      * @var integer
      *
-     * @ORM\Column(name="miembroOnePerTen", type="integer", nullable=true)
+     * @ORM\Column(name="firmaCompromiso", type="integer", nullable=true)
      */
-    private $miembroOnePerTen;
+    private $firmaCompromiso;
     
     /**
      * militante (Que es parte del PSUV)
@@ -490,12 +490,12 @@ class OnePerTen extends modelOnePerTen {
         $this->ubch = $ubch;
     }
     
-    function getMiembroOnePerTen() {
-        return $this->miembroOnePerTen;
+    function getFirmaCompromiso() {
+        return $this->firmaCompromiso;
     }
 
-    function setMiembroOnePerTen($miembroOnePerTen) {
-        $this->miembroOnePerTen = $miembroOnePerTen;
+    function setFirmaCompromiso($firmaCompromiso) {
+        $this->firmaCompromiso = $firmaCompromiso;
     }
        
     function getMilitante() {
