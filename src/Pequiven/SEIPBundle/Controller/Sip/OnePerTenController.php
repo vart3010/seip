@@ -413,15 +413,9 @@ class OnePerTenController extends SEIPController {
         $wasSupportAssemblyElections = 0;
 
         $members = array();
-        $efectividad = number_format(0, 2, ',', '.') . '%';
+
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $idUser));
         if (!is_null($onePerTen)) {
-            
-            $profileItems = OnePerTen::getArrayOfProfile();
-            $profileItemsAvailables = $onePerTenService->obtainProfileItemsAvailables($onePerTen);
-//            var_dump($profileItems);
-//            var_dump($profileItemsAvailables);
-//            die();
             
             //Determinamos si fue CUTL en las elecciones asamblea 2015
             if($onePerTen->getCutl() == 1){
@@ -465,13 +459,17 @@ class OnePerTenController extends SEIPController {
         }
         
         //Obtenemos efectividad del 1x10 registrado en PQV
-        if(count($members) > 0){
-            $contVotos = 0;
-            $totalMiembros = count($members);
-            foreach($members as $member){
-                $contVotos = $member['voto'] == "Sí" ? $contVotos+1 : $contVotos;
-            }
-            $efectividad = number_format(($contVotos/$totalMiembros)*100, 2, ',', '.') . '%';
+        $efectividad = $onePerTenService->obtainEfficiencyOnePerTen($members);
+        
+        if(!is_null($onePerTen)){
+            $profileItemsAvailables = $onePerTenService->obtainProfileItemsAvailables($onePerTen);
+            $profileItemsWithWeight = $onePerTenService->obtainProfileItemsWithWeight($onePerTen, $profileItemsAvailables);
+            $profileItemsWithResult = $onePerTenService->obtainProfileItemsWithResult($onePerTen,$profileItemsWithWeight,$members);
+//            var_dump($profileItems);
+//            var_dump($profileItemsAvailables);
+//            var_dump($profileItemsWithWeight);
+//            var_dump($profileItemsWithResult);
+//            die();
         }
 
         $texts = array();
@@ -496,6 +494,7 @@ class OnePerTenController extends SEIPController {
                     "texts" => $texts,
                     "members" => $members,
                     "efectividad" => $efectividad,
+                    "profileItemsWithResult" => $profileItemsWithResult,
                     "isAllowToAddAnalisis" => $isAllowToAddAnalisis,
         ));
     }
@@ -550,13 +549,14 @@ class OnePerTenController extends SEIPController {
 
     public function exportAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-
+//var_dump('epa');die();
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->getOnePerTen($request->get("idOne"));
         $members = $onePerTen[0]->getTen();
         $one = $onePerTen[0]->getUser();
         $voto = $onePerTen[0]->getVoto();
         $object = $onePerTen[0];
         
+        $onePerTenService = $this->getOnePerTenService();
         
         $isCoordinator = 'No Aplica';
         $textWorkStudyCircle = 'No Aplica';
@@ -584,16 +584,30 @@ class OnePerTenController extends SEIPController {
             }
         }
         
-        $efectividad = number_format(0, 2, ',', '.') . '%';
-        if(count($members) > 0){
-            //Obtenemos efectividad del 1x10 registrado en PQV
-            $contVotos = 0;
-            $totalMiembros = count($members);
-            foreach($members as $member){
-                $contVotos = $member->getVasamblea6() == 1 ? $contVotos+1 : $contVotos;
-            }
-            $efectividad = number_format(($contVotos/$totalMiembros)*100, 2, ',', '.') . '%';
-        }
+//        $efectividad = number_format(0, 2, ',', '.') . '%';
+//        if(count($members) > 0){
+//            //Obtenemos efectividad del 1x10 registrado en PQV
+//            $contVotos = 0;
+//            $totalMiembros = count($members);
+//            foreach($members as $member){
+//                $contVotos = $member->getVasamblea6() == 1 ? $contVotos+1 : $contVotos;
+//            }
+//            $efectividad = number_format(($contVotos/$totalMiembros)*100, 2, ',', '.') . '%';
+//        }
+        //Obtenemos efectividad del 1x10 registrado en PQV
+        $efectividad = $onePerTenService->obtainEfficiencyOnePerTen($members,'class');
+        $profileItemsWithResult = array();
+        
+//        if(!is_null($onePerTen[0])){
+            $profileItemsAvailables = $onePerTenService->obtainProfileItemsAvailables($onePerTen[0]);
+            $profileItemsWithWeight = $onePerTenService->obtainProfileItemsWithWeight($onePerTen[0], $profileItemsAvailables);
+            $profileItemsWithResult = $onePerTenService->obtainProfileItemsWithResult($onePerTen[0],$profileItemsWithWeight,$members,'class');
+//            var_dump($profileItems);
+//            var_dump($profileItemsAvailables);
+//            var_dump($profileItemsWithWeight);
+//            var_dump($profileItemsWithResult);
+//            die();
+//        }
 
         $pdf = new \Pequiven\SEIPBundle\Model\PDF\SipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->setPrintLineFooter(false);
@@ -635,6 +649,7 @@ class OnePerTenController extends SEIPController {
             "textWorkStudyCircle" => $textWorkStudyCircle,
             "members" => $members,
             "efectividad" => $efectividad,
+            "profileItemsWithResult" => $profileItemsWithResult,
         );
         $html = $this->renderView('PequivenSEIPBundle:Sip:onePerTen/reportList.html.twig', $data);
 
