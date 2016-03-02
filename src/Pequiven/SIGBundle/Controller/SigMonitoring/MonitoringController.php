@@ -278,6 +278,12 @@ class MonitoringController extends ResourceController
             ]
             
         ];
+
+        $leyens = [
+            1 => "ABIERTA NO VENCIDA",
+            2 => "CERRADA",
+            3 => "ABIERTA VENCIDA"
+        ];
         
         $path = $this->get('kernel')->locateResource('@PequivenSIGBundle/Resources/skeleton/base-sig-se.xls');
         $now = new \DateTime();
@@ -371,6 +377,8 @@ class MonitoringController extends ResourceController
                 $activeSheet->setCellValue('N'.$row, $dateEnd->format('d-m-Y'));//Seteamos
                 $activeSheet->setCellValue('O'.$row, $dataAdvance."%");//Seteamos
                 
+                $activeSheet->setCellValue('P'.$row, $leyens[$valueMaintenance->getStatus()]);//Seteamos
+                $activeSheet->getStyle(sprintf('P%s:P%s',$row,$row))->applyFromArray($styleFont);                                                           
                 $activeSheet->getStyle(sprintf('P%s:P%s',$row, $row))->applyFromArray($styleArray[$valueMaintenance->getStatus()]);
 
                 //$activeSheet->setCellValue('Q'.$row, $valueMaintenance->getStatus());//Seteamos
