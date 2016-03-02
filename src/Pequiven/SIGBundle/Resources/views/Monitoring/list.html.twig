@@ -20,7 +20,7 @@
                     <tbody>
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
                             <td data-title="'Sistemas de la Calidad'" sortable="'description'" filter="{'description' : 'text'}">
-                                - <a href="{$ result.id $}">{$ result.ref+result.description $} </a>
+                                - <a href="show/{$ result.id $}">{$ result.ref+result.description $} </a>
                             </td>                            
                         </tr>
                     </tbody>

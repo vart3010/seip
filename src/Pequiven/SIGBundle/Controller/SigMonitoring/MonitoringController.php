@@ -80,6 +80,8 @@ class MonitoringController extends ResourceController
 
     public function showAction(Request $request){
         
+        $this->autoVerificationAction($request);
+
         $id = $request->get('id');
 
         $em = $this->getDoctrine()->getManager();                        
@@ -108,9 +110,9 @@ class MonitoringController extends ResourceController
         ];
 
         $statusMaintanence = [
-            0 => "Abierta No Vencia",
-            1 => "Cerrada",
-            2 => "Abierta Vencida"            
+            1 => "Abierta No Vencia",
+            2 => "Cerrada",
+            3 => "Abierta Vencida"            
         ];
 
     	return $this->render('PequivenSIGBundle:Monitoring:show.html.twig', array(
@@ -198,6 +200,32 @@ class MonitoringController extends ResourceController
             die();
         }  
 
+    }
+
+    public function autoVerificationAction(Request $request){        
+        $em = $this->getDoctrine()->getManager();
+        
+        $id = $request->get('id');
+
+        $managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id);         
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('managementSystem' => $id));
+        foreach ($standardization as $valueMaintenance) {
+            foreach ($valueMaintenance->getMaintenance() as $value) {
+                if ($value->getStatus() == 1) {
+                    $dateEnd = $value->getDateEnd();
+                    $dateEnd->setTimestamp((int)$dateEnd->format('U'));
+                    $fecha_actual = strtotime(date("d-m-Y"));
+                    $fecha_entrada = strtotime($dateEnd->format('d-m-Y'));                    
+                    if($fecha_actual > $fecha_entrada){
+                        //echo "La fecha entrada ya ha pasado";                        
+                        $value->setStatus(3);
+                        $em->flush();
+                    }                    
+                }
+            }
+        }
+        return $this->redirect($this->generateUrl("pequiven_sig_monitoring_show", array("id" => $id)));         
+        die();        
     }
 
     public function exportAction(Request $request){

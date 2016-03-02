@@ -50,7 +50,7 @@ pequiven_sig_monitoring_list:
     options:
         expose: true
 pequiven_sig_monitoring_show:
-    path: /sig/monitoring/{id}
+    path: /sig/monitoring/list/show/{id}
     defaults:
         _controller: pequiven.controller.monitoring_sig:showAction
         _format: html    
@@ -107,6 +107,12 @@ pequiven_sig_monitoring_maintenance_show:
     methods: [GET|POST]
     options:
         expose: true
+pequiven_sig_monitoring_auto_verification:
+    path: /sig/verification/auto/{id}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:autoVerificationAction
+        _format: html    
+    methods: [GET|POST]
 #Seguimiento a Carga de informes de evolución
 pequiven_indicator_evolution_load:
     path: /indicator/sig/load
