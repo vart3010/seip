@@ -40,7 +40,8 @@
                         {% endif %}
                     {% endfor %}
                     <tr>
-                        <td align="right" colspan="4" class="bold">Total</td>
+                        <td align="right" colspan="3" class="bold">Total</td>
+                        <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_COMPROMISO')]['totalWeight'] }}</td>
                         <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_COMPROMISO')]['totalResult'] }}</td>
                     </tr>
                     {% for i in 1..5 %}
@@ -55,7 +56,8 @@
                         {% endif %}
                     {% endfor %}
                     <tr>
-                        <td align="right" colspan="4" class="bold">Total</td>
+                        <td align="right" colspan="3" class="bold">Total</td>
+                        <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ELECCIONES')]['totalWeight'] }}</td>
                         <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ELECCIONES')]['totalResult'] }}</td>
                     </tr>
                     <tr></tr>
