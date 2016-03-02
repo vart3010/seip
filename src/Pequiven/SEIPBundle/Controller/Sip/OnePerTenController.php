@@ -413,15 +413,9 @@ class OnePerTenController extends SEIPController {
         $wasSupportAssemblyElections = 0;
 
         $members = array();
-        $efectividad = number_format(0, 2, ',', '.') . '%';
+
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $idUser));
         if (!is_null($onePerTen)) {
-            
-            $profileItems = OnePerTen::getArrayOfProfile();
-            $profileItemsAvailables = $onePerTenService->obtainProfileItemsAvailables($onePerTen);
-//            var_dump($profileItems);
-//            var_dump($profileItemsAvailables);
-//            die();
             
             //Determinamos si fue CUTL en las elecciones asamblea 2015
             if($onePerTen->getCutl() == 1){
@@ -465,13 +459,17 @@ class OnePerTenController extends SEIPController {
         }
         
         //Obtenemos efectividad del 1x10 registrado en PQV
-        if(count($members) > 0){
-            $contVotos = 0;
-            $totalMiembros = count($members);
-            foreach($members as $member){
-                $contVotos = $member['voto'] == "Sí" ? $contVotos+1 : $contVotos;
-            }
-            $efectividad = number_format(($contVotos/$totalMiembros)*100, 2, ',', '.') . '%';
+        $efectividad = $onePerTenService->obtainEfficiencyOnePerTen($members);
+        
+        if(!is_null($onePerTen)){
+            $profileItemsAvailables = $onePerTenService->obtainProfileItemsAvailables($onePerTen);
+            $profileItemsWithWeight = $onePerTenService->obtainProfileItemsWithWeight($onePerTen, $profileItemsAvailables);
+            $profileItemsWithResult = $onePerTenService->obtainProfileItemsWithResult($onePerTen,$profileItemsWithWeight,$members);
+//            var_dump($profileItems);
+//            var_dump($profileItemsAvailables);
+//            var_dump($profileItemsWithWeight);
+//            var_dump($profileItemsWithResult);
+//            die();
         }
 
         $texts = array();
@@ -496,6 +494,7 @@ class OnePerTenController extends SEIPController {
                     "texts" => $texts,
                     "members" => $members,
                     "efectividad" => $efectividad,
+                    "profileItemsWithResult" => $profileItemsWithResult,
                     "isAllowToAddAnalisis" => $isAllowToAddAnalisis,
         ));
     }

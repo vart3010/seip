@@ -294,6 +294,13 @@ class OnePerTen extends modelOnePerTen {
      * @ORM\Column(name="ageSignatureSumate", type="integer", nullable=true)
      */
     private $ageSignatureSumate;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="workEfficiencyAssemblyElections", type="float", nullable=true)
+     */
+    private $workEfficiencyAssemblyElections = 0;
 
     public function __construct() {
         $this->ten = new \Doctrine\Common\Collections\ArrayCollection();
@@ -576,6 +583,14 @@ class OnePerTen extends modelOnePerTen {
 
     function setAgeSignatureSumate($ageSignatureSumate) {
         $this->ageSignatureSumate = $ageSignatureSumate;
+    }
+    
+    function getWorkEfficiencyAssemblyElections() {
+        return $this->workEfficiencyAssemblyElections;
+    }
+
+    function setWorkEfficiencyAssemblyElections($workEfficiencyAssemblyElections) {
+        $this->workEfficiencyAssemblyElections = $workEfficiencyAssemblyElections;
     }
 
 }
