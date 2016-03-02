@@ -24,6 +24,14 @@
                         {{ labelsTypeNc[standardization.type - 1].description }}
                 </p>
             </div>
+            <div class="six-columns six-columns-tablet twelve-columns-mobile">            
+                {% if dataAdvance %}
+                    <p class="inline-label">
+                        <label class="label">Avance Cargado</label>
+                            {{ dataAdvance }}%
+                    </p>
+                {% endif %}
+            </div>
         </div>    
 </fieldset>
 <form method="POST" id="form_maintenance_add">

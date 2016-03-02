@@ -83,7 +83,7 @@ class MonitoringController extends ResourceController
         $id = $request->get('id');
 
         $em = $this->getDoctrine()->getManager();                        
-
+        $dataAdvance = 0;
     	$managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id); 
         
         $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('managementSystem' => $id));
@@ -119,7 +119,7 @@ class MonitoringController extends ResourceController
             'detection'         => $labelsDetection,
             'labelsTypeNc'      => $labelsTypeNc,
             'status'            => $status,
-            'statusMaintanence' => $statusMaintanence
+            'statusMaintanence' => $statusMaintanence            
             ));
     }
 
@@ -358,17 +358,24 @@ class MonitoringController extends ResourceController
 
                 $dateEnd = $valueMaintenance->getDateEnd();
                 $dateEnd->setTimestamp((int)$dateEnd->format('U'));
-
-                $activeSheet->setCellValue('L'.$row, $valueMaintenance->getAnalysis());//Seteamos
+                
+                $advance = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance")->findBy(array('maintenance' => $valueMaintenance->getId())); 
+                foreach ($advance as $valueAdvance) {
+                    $dataAnalsys = $valueAdvance->getAnalysis();
+                    $dataAdvance = $valueAdvance->getAdvance();
+                    $dataObservations = $valueAdvance->getObservations();                    
+                }
+                
+                $activeSheet->setCellValue('L'.$row, $dataAnalsys);//Seteamos el analisis
                 $activeSheet->setCellValue('M'.$row, $dateStart->format('d-m-Y'));//Seteamos
                 $activeSheet->setCellValue('N'.$row, $dateEnd->format('d-m-Y'));//Seteamos
-                $activeSheet->setCellValue('O'.$row, $valueMaintenance->getAdvance()."%");//Seteamos
+                $activeSheet->setCellValue('O'.$row, $dataAdvance."%");//Seteamos
                 
                 $activeSheet->getStyle(sprintf('P%s:P%s',$row, $row))->applyFromArray($styleArray[$valueMaintenance->getStatus()]);
 
                 //$activeSheet->setCellValue('Q'.$row, $valueMaintenance->getStatus());//Seteamos
                 //$activeSheet->setCellValue('R'.$row, $valueMaintenance->getStatus());//Seteamos
-                $activeSheet->setCellValue('S'.$row, $valueMaintenance->getObservations());//Seteamos
+                $activeSheet->setCellValue('S'.$row, $dataObservations);//Seteamos
             }
             $row++;                                
             $contResult++; 
