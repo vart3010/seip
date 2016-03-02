@@ -63,6 +63,16 @@ function addRow(data) {
 
 }
 
+function delRowAction(id, idProduct) {
+    $("#" + table + " tbody").find("tr.id_" + id).remove();
+
+    var allow = idsClaves.indexOf(idProduct);
+
+    if (allow >= 0) {
+        idsClaves[allow] = "";
+    }
+}
+
 
 
 function getRows() {
@@ -114,7 +124,7 @@ function totals() {
     }
     //alert(totals);
     for (var i = 0; i < columsTotals.length; i++) {
-        $(selectorTotals + columsTotals[i]).html(totals[i]);
+        $(selectorTotals + columsTotals[i]).html(moneyFormat(totals[i]));
     }
 }
 
@@ -142,4 +152,8 @@ function getCantRows() {
     });
 
     return cont;
+}
+
+function moneyFormat(valor) {
+    return valor.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 }
