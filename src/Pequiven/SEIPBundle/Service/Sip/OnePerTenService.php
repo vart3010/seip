@@ -182,7 +182,7 @@ class OnePerTenService {
         return $profileItemsAvailables;
     }
     
-    public function obtainProfileItemsWithResult(OnePerTen $onePerTen,$profileItemsWithWeight = array(), $members = array()){
+    public function obtainProfileItemsWithResult(OnePerTen $onePerTen,$profileItemsWithWeight = array(), $members, $type = 'array'){
         $profileItemsWithResult = $profileItemsWithWeight;
         
         //Determinamos los Valores Porcentuales para los Items Disponibles del tipo compromiso para Evaluar a la persona
@@ -244,7 +244,7 @@ class OnePerTenService {
         }
         if($profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::PATRULLA_PQV]['enabled']){
             if(count($members) > 0){
-                $efectividad = (float)$this->obtainEfficiencyOnePerTen($members);
+                $efectividad = (float)$this->obtainEfficiencyOnePerTen($members,$type);
                 $profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::PATRULLA_PQV]['resultWithPercentage'] = round(($profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::PATRULLA_PQV]['percentageValue']*$efectividad)/100,2);
                 $profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::PATRULLA_PQV]['text'] = 'Sí';
             }
@@ -341,14 +341,18 @@ class OnePerTenService {
         return $profileItemsWithResult;
     }
     
-    public function obtainEfficiencyOnePerTen($members = array()){
+    public function obtainEfficiencyOnePerTen($members, $type='array'){
         
         $efectividad = number_format(0, 2, ',', '.') . '%';
         if(count($members) > 0){
             $contVotos = 0;
             $totalMiembros = count($members);
             foreach($members as $member){
-                $contVotos = $member['voto'] == "Sí" ? $contVotos+1 : $contVotos;
+                if($type == 'array'){
+                    $contVotos = $member['voto'] == "Sí" ? $contVotos+1 : $contVotos;
+                } elseif ($type == 'class'){
+                    $contVotos = $member->getVasamblea6() == "Sí" ? $contVotos+1 : $contVotos;
+                }
             }
             $efectividad = number_format(($contVotos/$totalMiembros)*100, 2, ',', '.') . '%';
         }

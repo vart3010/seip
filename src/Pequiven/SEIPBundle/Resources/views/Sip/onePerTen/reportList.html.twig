@@ -108,6 +108,10 @@
                             <label class="label">¿Es Coordinador de su CET?: </label>
                             {{ isCoordinator }}
                         </div>
+                        <div class="six-columns">
+                            <label class="label">Resultado Perfil Político </label>
+                            {{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['profileValue'] }}
+                        </div>
                     </td>
                 </tr>
                 {#<tr>
