@@ -7,6 +7,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventory;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeItems;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Productos
@@ -14,8 +16,7 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeI
  * @author Máximo Sojo
  * 
  * @ORM\Table(name="seip_gsh_product")
- * @ORM\Entity()
- * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyProductRepository")
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyProductRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class houseSupplyProduct {
@@ -85,14 +86,7 @@ class houseSupplyProduct {
      */
     protected $billingItems;
 
-    /**
-     * Creado por
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $createdBy;
+    
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -147,9 +141,7 @@ class houseSupplyProduct {
         return $this->billingItems;
     }
 
-    function getCreatedBy() {
-        return $this->createdBy;
-    }
+   
 
     function getCreatedAt() {
         return $this->createdAt;
@@ -199,10 +191,8 @@ class houseSupplyProduct {
         $this->billingItems = $billingItems;
     }
 
-    function setCreatedBy(User $createdBy) {
-        $this->createdBy = $createdBy;
-    }
 
+   
     function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
     }

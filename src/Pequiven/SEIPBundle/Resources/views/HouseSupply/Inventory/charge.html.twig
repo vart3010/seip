@@ -47,22 +47,16 @@
                 var producto = [$("#producto").val(), $("#producto").find('option:selected').attr("name")];
                 var costo = [$("#costo").val(), $("#costo").val()];
                 var subtotal = [($("#costo").val() * $("#cantidad").val()), ($("#costo").val() * $("#cantidad").val())];
-        {# var boton = ["", "<a href='' ><i class='fa fa-trash' id='" + index + "' name='"+producto[0]+"'  onClick='delRow(this.id,this.name)' value='Del'></i></a>"];#}
-                    var boton = ["", "<a id='" + index + "' name='" + producto[0] + "' onClick='delRow(this.id,this.name)' class='button icon-trash delItem'></a>"];
-                    var data = [cantidad, producto, costo, subtotal, boton];
-                    delRowDefault();
-                    addRow(data);
-                    index = index + 1;
-                    getJson();
-                    $("#cantidad").val('');
-                    $("#costo").val('');
+        
+                var boton = ["", "<a id='" + index + "' name='" + producto[0] + "' onClick='delRow(this.id,this.name)' class='button icon-trash delItem'></a>"];
+                var data = [cantidad, producto, costo, subtotal, boton];
+                delRowDefault();
+                addRow(data);
+                index = index + 1;
+                getJson();
+                $("#cantidad").val('');
+                $("#costo").val('');
                 });
-
-        {# $("input#getValues").click(function () {
-                    
-             //setData(obj);
-         });#}
-
              });
     </script>
 {% endblock javascript %}

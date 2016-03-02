@@ -43,14 +43,6 @@ class houseSupplyDeposit {
      */
     private $complejo;
 
-    /**
-     * Creado por
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $createdBy;
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -97,9 +89,7 @@ class houseSupplyDeposit {
         return $this->complejo;
     }
 
-    function getCreatedBy() {
-        return $this->createdBy;
-    }
+    
 
     function getCreatedAt() {
         return $this->createdAt;
@@ -133,9 +123,7 @@ class houseSupplyDeposit {
         $this->complejo = $complejo;
     }
 
-    function setCreatedBy(User $createdBy) {
-        $this->createdBy = $createdBy;
-    }
+  
 
     function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
