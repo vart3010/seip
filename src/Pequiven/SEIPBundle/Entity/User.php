@@ -255,18 +255,22 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     protected $movementFeeStructure;
 
     /**
+     * @var Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems",mappedBy="client",cascade={"persist"}))
+     */
+    protected $houseSupplyOrderItems;
+
+    /**
+     * @var Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling",mappedBy="client",cascade={"persist"}))
+     */
+    protected $houseSupplyBilling;
+
+    /**
      * @var Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems",mappedBy="client",cascade={"persist"}))
      */
     protected $houseSupplyBillingItems;
-
-    /**
-     * Facturas en HouseSupply
-     * 
-     * @var houseSupplyBilling
-     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling",mappedBy="client",cascade={"persist","remove"})
-     */
-    protected $houseSupplyBilling;
 
     /**
      * Trimestre que esta permitido notificar en el Módulo de Operaciones/Producción
@@ -307,7 +311,6 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         $this->evolutionAction = new \Doctrine\Common\Collections\ArrayCollection();
         $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
         $this->notification = new ArrayCollection();
-
     }
 
     /**

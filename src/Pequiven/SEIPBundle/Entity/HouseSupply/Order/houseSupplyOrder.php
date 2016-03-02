@@ -1,26 +1,25 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Entity\HouseSupply\Billing;
+namespace Pequiven\SEIPBundle\Entity\HouseSupply\Order;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
+use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling;
-use Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems;
-use Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyPayments;
-use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder;
 
 /**
- * Facturas
+ * Ordenes
  *
  * @author Gilbert C. <glavrjk@gmail.com>
  * 
- * @ORM\Table(name="seip_gsh_billing")
+ * @ORM\Table(name="seip_gsh_order")
  * @ORM\Entity()
- * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Billing\HouseSupplyBillingRepository")
+ * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Order\HouseSupplyOrderRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class houseSupplyBilling {
+class houseSupplyOrder {
 
     /**
      *
@@ -37,7 +36,7 @@ class houseSupplyBilling {
     private $date;
 
     /**
-     * 1. FACTURA / 2. DEVOLUCION
+     * 1. PEDIDO / 2. DEVOLUCION DE PEDIDO
      * @var string
      * @ORM\Column(name="type",type="string",nullable=false)
      */
@@ -52,25 +51,18 @@ class houseSupplyBilling {
 
     /**
      * 
-     * @var houseSupplyOrder
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder", inversedBy="bills")
-     * @ORM\JoinColumn(name="order_id", referencedColumnName="id", nullable=false)
+     * @var WorkStudyCircle
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", inversedBy="houseSupplyOrder")
+     * @ORM\JoinColumn(name="workstudycircle_id", referencedColumnName="id")
      */
-    private $order;
-
-    /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User", inversedBy="houseSupplyBilling")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
-    private $client;
+    private $workStudyCircle;
 
     /**
      *
      * @var integer
-     * @ORM\Column(name="nroBill",type="integer",nullable=true)
+     * @ORM\Column(name="nroOrder",type="integer",nullable=true)
      */
-    private $nroBill;
+    private $nroOrder;
 
     /**
      *
@@ -80,7 +72,7 @@ class houseSupplyBilling {
     private $nroDevol;
 
     /**
-     *
+     * 
      * @var integer
      * @ORM\Column(name="idAffected",type="integer",nullable=true)
      */
@@ -103,30 +95,21 @@ class houseSupplyBilling {
     /**
      *
      * @var float
-     * @ORM\Column(name="totalBill",type="float",nullable=false)
+     * @ORM\Column(name="totalOrder",type="float",nullable=false)
      */
-    private $totalBill;
+    private $totalOrder;
 
     /**
-     *
-     * @var float
-     * @ORM\Column(name="totalPaid",type="float",nullable=false)
+     * @var houseSupplyOrderItems
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems",mappedBy="order",cascade={"persist"}))
      */
-    private $totalPaid;
+    protected $orderItems;
 
     /**
-     * Pagos en HouseSupply
-     * 
-     * @var houseSupplyPayments
-     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyPayments",mappedBy="bill",cascade={"persist","remove"})
+     * @var houseSupplyBilling
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling",mappedBy="order",cascade={"persist"}))
      */
-    protected $payments;
-
-    /**
-     * @var houseSupplyBillingItems
-     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems",mappedBy="bill",cascade={"persist"}))
-     */
-    protected $billingItems;
+    protected $bills;
 
     /**
      * Creado por
@@ -170,16 +153,12 @@ class houseSupplyBilling {
         return $this->sign;
     }
 
-    function getOrder() {
-        return $this->order;
+    function getWorkStudyCircle() {
+        return $this->workStudyCircle;
     }
 
-    function getClient() {
-        return $this->client;
-    }
-
-    function getNroBill() {
-        return $this->nroBill;
+    function getNroOrder() {
+        return $this->nroOrder;
     }
 
     function getNroDevol() {
@@ -198,20 +177,16 @@ class houseSupplyBilling {
         return $this->tax;
     }
 
-    function getTotalBill() {
-        return $this->totalBill;
+    function getTotalOrder() {
+        return $this->totalOrder;
     }
 
-    function getTotalPaid() {
-        return $this->totalPaid;
+    function getOrderItems() {
+        return $this->orderItems;
     }
 
-    function getPayments() {
-        return $this->payments;
-    }
-
-    function getBillingItems() {
-        return $this->billingItems;
+    function getBills() {
+        return $this->bills;
     }
 
     function getCreatedBy() {
@@ -246,16 +221,12 @@ class houseSupplyBilling {
         $this->sign = $sign;
     }
 
-    function setOrder(houseSupplyOrder $order) {
-        $this->order = $order;
+    function setWorkStudyCircle(WorkStudyCircle $workStudyCircle) {
+        $this->workStudyCircle = $workStudyCircle;
     }
 
-    function setClient(User $client) {
-        $this->client = $client;
-    }
-
-    function setNroBill($nroBill) {
-        $this->nroBill = $nroBill;
+    function setNroOrder($nroOrder) {
+        $this->nroOrder = $nroOrder;
     }
 
     function setNroDevol($nroDevol) {
@@ -274,20 +245,16 @@ class houseSupplyBilling {
         $this->tax = $tax;
     }
 
-    function setTotalBill($totalBill) {
-        $this->totalBill = $totalBill;
+    function setTotalOrder($totalOrder) {
+        $this->totalOrder = $totalOrder;
     }
 
-    function setTotalPaid($totalPaid) {
-        $this->totalPaid = $totalPaid;
+    function setOrderItems(houseSupplyOrderItems $orderItems) {
+        $this->orderItems = $orderItems;
     }
 
-    function setPayments(houseSupplyPayments $payments) {
-        $this->payments = $payments;
-    }
-
-    function setBillingItems(houseSupplyBillingItems $billingItems) {
-        $this->billingItems = $billingItems;
+    function setBills(houseSupplyBilling $bills) {
+        $this->bills = $bills;
     }
 
     function setCreatedBy(User $createdBy) {
@@ -305,5 +272,7 @@ class houseSupplyBilling {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
+
+
 
 }

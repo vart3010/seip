@@ -8,18 +8,19 @@ use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventory;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct;
 
 /**
- * Productos
+ * Instancias de Productos
  *
- * @author Máximo Sojo
+ * @author Gilbert C. <glavrjk@gmail.com>
  * 
- * @ORM\Table(name="seip_gsh_product")
+ * @ORM\Table(name="seip_gsh_product_instance")
  * @ORM\Entity()
- * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyProductRepository")
+ * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyProductInstanceRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class houseSupplyProduct {
+class houseSupplyProductInstance {
 
     /**
      *
@@ -28,14 +29,6 @@ class houseSupplyProduct {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * 
-     * @var houseSupplyProduct
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductInstance", inversedBy="product")
-     * @ORM\JoinColumn(name="instance", referencedColumnName="id")
-     */
-    private $instance;
 
     /**
      *
@@ -54,51 +47,17 @@ class houseSupplyProduct {
     /**
      *
      * @var float
-     * @ORM\Column(name="price",type="float",nullable=false)
-     */
-    private $price;
-
-    /**
-     *
-     * @var float
-     * @ORM\Column(name="cost",type="float",nullable=true)
-     */
-    private $cost;
-
-    /**
-     *
-     * @var float
      * @ORM\Column(name="maxPerUser",type="float",nullable=false)
      */
     private $maxPerUser;
 
     /**
-     * Inventario
+     * Productos en Instancia
      * 
-     * @var houseSupplyInventory
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\Inventory\houseSupplyInventory",mappedBy="product",cascade={"persist","remove"})
+     * @var houseSupplyProduct
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct",mappedBy="instance",cascade={"persist","remove"})
      */
-    protected $inventory;
-
-    /**
-     * Carga de Items de Inventario
-     * 
-     * @var houseSupplyInventoryChargeItems
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\Inventory\houseSupplyInventoryChargeItems",mappedBy="product",cascade={"persist","remove"})
-     */
-    protected $inventoryChargeItems;
-
-    /**
-     * @var houseSupplyBillingItems
-     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems",mappedBy="product",cascade={"persist"}))
-     */
-    protected $billingItems;
-
-    /**
-     * @var houseSupplyOrderItems
-     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems",mappedBy="product",cascade={"persist"}))
-     */
-    protected $orderItems;
+    protected $product;
 
     /**
      * Creado por
@@ -138,32 +97,12 @@ class houseSupplyProduct {
         return $this->description;
     }
 
-    function getPrice() {
-        return $this->price;
-    }
-
-    function getCost() {
-        return $this->cost;
-    }
-
     function getMaxPerUser() {
         return $this->maxPerUser;
     }
 
-    function getInventory() {
-        return $this->inventory;
-    }
-
-    function getInventoryChargeItems() {
-        return $this->inventoryChargeItems;
-    }
-
-    function getBillingItems() {
-        return $this->billingItems;
-    }
-
-    function getOrderItems() {
-        return $this->orderItems;
+    function getProduct() {
+        return $this->product;
     }
 
     function getCreatedBy() {
@@ -194,32 +133,12 @@ class houseSupplyProduct {
         $this->description = $description;
     }
 
-    function setPrice($price) {
-        $this->price = $price;
-    }
-
-    function setCost($cost) {
-        $this->cost = $cost;
-    }
-
     function setMaxPerUser($maxPerUser) {
         $this->maxPerUser = $maxPerUser;
     }
 
-    function setInventory(houseSupplyInventory $inventory) {
-        $this->inventory = $inventory;
-    }
-
-    function setInventoryChargeItems(houseSupplyInventoryChargeItems $inventoryChargeItems) {
-        $this->inventoryChargeItems = $inventoryChargeItems;
-    }
-
-    function setBillingItems(houseSupplyBillingItems $billingItems) {
-        $this->billingItems = $billingItems;
-    }
-
-    function setOrderItems(houseSupplyOrderItems $orderItems) {
-        $this->orderItems = $orderItems;
+    function setProduct(houseSupplyProduct $product) {
+        $this->product = $product;
     }
 
     function setCreatedBy(User $createdBy) {
