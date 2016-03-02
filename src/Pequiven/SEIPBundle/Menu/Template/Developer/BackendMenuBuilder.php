@@ -348,11 +348,19 @@ $user = $this->getUser();
                     )
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.monitoring.title', $section)));
 
-            $child->addChild('sig.monitoring.vizualice.main', array(
+            $child->addChild('sig.monitoring.vizualice.list-managementSystem', array(
                         'route' => 'pequiven_sig_monitoring_list',
+                        'routeParameters' => array('type' => 1 ),
                         'labelAttributes' => array('icon' => ''),
                     ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.monitoring.list', $section)));
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.monitoring.list_managementSystem', $section)));
+
+            $child->addChild('sig.monitoring.vizualice.list-gerencias', array(
+                        'route' => 'pequiven_sig_monitoring_list',
+                        'routeParameters' => array('type' => 2 ),                        
+                        'labelAttributes' => array('icon' => ''),
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.monitoring.list_gerencias', $section)));
 
             $menuSig->addChild($child);   
         }    

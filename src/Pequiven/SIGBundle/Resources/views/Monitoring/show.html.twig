@@ -5,7 +5,7 @@
 
 {% block before_body %}
     {{ contentHeader(
-        {(path('pequiven_sig_monitoring_list')):('monitoring.title'|trans)},        
+        {(path('pequiven_sig_monitoring_list', {'type': 1})):('monitoring.title'|trans)},        
         ('pequiven_indicator.show'|trans)
     ) }}
 {% endblock %} 

@@ -40,7 +40,7 @@ pequiven_sig_gerenciafirst_export:
         expose: true
 #listado de sistemas de la calidad para lista de seguimiento
 pequiven_sig_monitoring_list:
-    path: /sig/monitoring/list.{_format}
+    path: /sig/monitoring/list/{type}.{_format}
     defaults:
         _controller: pequiven.controller.monitoring_sig:listAction
         _format: html

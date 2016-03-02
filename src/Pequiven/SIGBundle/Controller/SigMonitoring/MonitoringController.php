@@ -52,7 +52,8 @@ class MonitoringController extends ResourceController
             );
         }
         $routeParameters = array(
-            '_format' => 'json'            
+            '_format' => 'json' ,
+            'type'    => 1           
         );
         $apiDataUrl = $this->generateUrl('pequiven_sig_monitoring_list', $routeParameters);        
         

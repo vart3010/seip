@@ -154,7 +154,8 @@ app:
                                 for_notifying: Por notificar
                         monitoring:
                             title: Seguimiento y Eficacia
-                            list: Lista
+                            list_managementSystem: Lista Sistemas de la Calidad
+                            list_gerencias: Lista Gerencias Normalizadas
                     results:
                         main: Resultados
                         visualize:
