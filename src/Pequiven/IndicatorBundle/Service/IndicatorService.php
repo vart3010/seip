@@ -4182,6 +4182,7 @@ class IndicatorService implements ContainerAwareInterface {
         $obj = $this->getObjIndicator($indicator);
         //Paso de Valores Validos
         $resultNumbers = $this->getIndicatorHasResultValid($indicator);
+        
         //Llamado de frecuencia de Notificacion del Indicador
         $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
         //Número de indicadores asociados
@@ -4246,7 +4247,7 @@ class IndicatorService implements ContainerAwareInterface {
             
             if ($indicator->getPeriod()->getId() == 3) {
                 if ($indicatorPeriod15->getindicatorLastPeriod() === null) {
-                    $dataAnt["value"] = 0; //Pasando data a Data2014 si no tiene ralacion                    
+                    $dataAnt["value"] = 0; //Pasando data a Data2015 si no tiene ralacion
                 }else{
                     $value = round($indicatorPeriod15->getindicatorLastPeriod()->getResultReal());
                     $dataAnt["value"] = $value; //Pasando data a Data2014                

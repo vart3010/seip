@@ -118,4 +118,8 @@ pequiven_indicator_evolution_load:
     path: /indicator/sig/load
     defaults: 
         _controller: pequiven.controller.indicator_sig:loadAction
+pequiven_indicator_evolution_load_url:
+    path: /indicator/sig/load-url
+    defaults: 
+        _controller: pequiven.controller.indicator_sig:getUrlEvolutionAction
 
