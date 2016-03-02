@@ -12,6 +12,7 @@
         </div>
 
         <div class="with-padding">
+        {% if cause %}
             {% set colspan = 5 %}
             <table class="simple-table responsive-table tables-extras" id="sorting-example2">
                 <thead>
@@ -61,7 +62,11 @@
                     </tbody>
                 {% endfor %}
             </table>
-
+        {% else %}
+        <div class="new-row twelve-columns empty_row" align="center">
+            <br>No hay Carga                          
+        {% endif %}           
+        </div>
         </div>
     </div>
 </div>
