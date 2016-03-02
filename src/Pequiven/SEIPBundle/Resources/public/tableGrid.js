@@ -17,7 +17,7 @@ function setFieldRsJson(field) {
 }
 
 function setSelectorTotals(selector) {
-    selectorTotals=selector;
+    selectorTotals = selector;
 }
 
 function campoClave(clave) {
@@ -63,17 +63,7 @@ function addRow(data) {
 
 }
 
-function delRow(id, idProduct) {
-    $("#" + table + " tbody").find("tr.id_" + id).remove();
 
-    var allow = idsClaves.indexOf(idProduct);
-
-    if (allow >= 0) {
-        idsClaves[allow] = "";
-    }
-    getJson();
-    totals();
-}
 
 function getRows() {
     var result = [];
@@ -115,17 +105,17 @@ function getJson() {
 
 function totals() {
     var totals = new Array();
-    
-  for(var i=0;i<columsTotals.length;i++){
-        var total=0;
+
+    for (var i = 0; i < columsTotals.length; i++) {
+        var total = 0;
         total = parseFloat(total) + parseFloat(getTotal(columsTotals[i]));
         //totals[i] = total;
         totals.push(total);
-  }
-  //alert(totals);
-  for(var i=0;i<columsTotals.length;i++){
-     $(selectorTotals+columsTotals[i]).html(totals[i]);
-  }
+    }
+    //alert(totals);
+    for (var i = 0; i < columsTotals.length; i++) {
+        $(selectorTotals + columsTotals[i]).html(totals[i]);
+    }
 }
 
 function getTotal(numField) {
@@ -143,4 +133,13 @@ function getTotal(numField) {
     });
     return total;
 
+}
+
+function getCantRows() {
+    var cont = 0;
+    $("#" + table + " tbody tr").each(function (index) {
+        cont++;
+    });
+
+    return cont;
 }
