@@ -16,7 +16,7 @@ use Pequiven\SIGBundle\Entity\Tracing\Standardization;
 /**
  * Controlador Seguimiento y Eficacia (Mantenimiento)
  *
- * @author Maximo Sojo <maxsojo13@gmail.com>
+ * @author Maximo Sojo <maximosojo@atechnologies.com.ve> 
  */
 class MaintenanceController extends ResourceController
 {

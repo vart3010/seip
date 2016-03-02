@@ -13,7 +13,7 @@ use Pequiven\SIGBundle\Form\Tracing\StandardizationType;
 /**
  * Controlador Seguimiento y Eficacia
  *
- * @author Maximo Sojo <maxsojo13@gmail.com>
+ * @author Maximo Sojo <maximosojo@atechnologies.com.ve>
  */
 class MonitoringController extends ResourceController
 {
@@ -25,7 +25,6 @@ class MonitoringController extends ResourceController
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         
-        //$repository = $this->getRepository();        
         $repository = $this->container->get('pequiven.repository.sig_management_system'); 
         
         if ($this->config->isPaginated()) {
