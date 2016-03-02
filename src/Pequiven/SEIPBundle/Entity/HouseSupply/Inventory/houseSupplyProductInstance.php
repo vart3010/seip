@@ -47,6 +47,13 @@ class houseSupplyProductInstance {
     /**
      *
      * @var float
+     * @ORM\Column(name="available",type="float",nullable=true)
+     */
+    private $available = 0;
+
+    /**
+     *
+     * @var float
      * @ORM\Column(name="maxPerUser",type="float",nullable=false)
      */
     private $maxPerUser;
@@ -97,6 +104,10 @@ class houseSupplyProductInstance {
         return $this->description;
     }
 
+    function getAvailable() {
+        return $this->available;
+    }
+
     function getMaxPerUser() {
         return $this->maxPerUser;
     }
@@ -131,6 +142,10 @@ class houseSupplyProductInstance {
 
     function setDescription($description) {
         $this->description = $description;
+    }
+
+    function setAvailable($available) {
+        $this->available = $available;
     }
 
     function setMaxPerUser($maxPerUser) {

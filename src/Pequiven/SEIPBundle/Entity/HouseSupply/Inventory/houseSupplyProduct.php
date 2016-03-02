@@ -33,7 +33,7 @@ class houseSupplyProduct {
      * 
      * @var houseSupplyProduct
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductInstance", inversedBy="product")
-     * @ORM\JoinColumn(name="instance", referencedColumnName="id")
+     * @ORM\JoinColumn(name="instance_id", referencedColumnName="id")
      */
     private $instance;
 
@@ -68,9 +68,9 @@ class houseSupplyProduct {
     /**
      *
      * @var float
-     * @ORM\Column(name="maxPerUser",type="float",nullable=false)
+     * @ORM\Column(name="maxPerUserForce",type="float",nullable=true)
      */
-    private $maxPerUser;
+    private $maxPerUserForce = null;
 
     /**
      * Inventario
@@ -130,6 +130,10 @@ class houseSupplyProduct {
         return $this->id;
     }
 
+    function getInstance() {
+        return $this->instance;
+    }
+
     function getCode() {
         return $this->code;
     }
@@ -146,8 +150,8 @@ class houseSupplyProduct {
         return $this->cost;
     }
 
-    function getMaxPerUser() {
-        return $this->maxPerUser;
+    function getMaxPerUserForce() {
+        return $this->maxPerUserForce;
     }
 
     function getInventory() {
@@ -186,6 +190,10 @@ class houseSupplyProduct {
         $this->id = $id;
     }
 
+    function setInstance(houseSupplyProduct $instance) {
+        $this->instance = $instance;
+    }
+
     function setCode($code) {
         $this->code = $code;
     }
@@ -202,8 +210,8 @@ class houseSupplyProduct {
         $this->cost = $cost;
     }
 
-    function setMaxPerUser($maxPerUser) {
-        $this->maxPerUser = $maxPerUser;
+    function setMaxPerUserForce($maxPerUserForce) {
+        $this->maxPerUserForce = $maxPerUserForce;
     }
 
     function setInventory(houseSupplyInventory $inventory) {

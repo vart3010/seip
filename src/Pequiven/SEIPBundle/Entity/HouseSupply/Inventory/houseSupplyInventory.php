@@ -49,7 +49,7 @@ class houseSupplyInventory {
      * @var float
      * @ORM\Column(name="available",type="float",nullable=true)
      */
-    private $available;
+    private $available = 0;
 
     /**
      *
@@ -83,7 +83,7 @@ class houseSupplyInventory {
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
+
     function getId() {
         return $this->id;
     }
@@ -155,7 +155,5 @@ class houseSupplyInventory {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
-
-
 
 }
