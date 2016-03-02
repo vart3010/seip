@@ -1987,7 +1987,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ->setLabel($this->translate(sprintf('Pedidos', $section)));
         $child2
                 ->addChild('housesupply.order.create', array(
-                    'route' => 'pequiven_housesupply_order_charge',
+                    //'route' => 'pequiven_housesupply_order_charge',
                     'routeParameters' => array('type' => 3),
                         //'labelAttributes' => array('icon' => 'fa fa-calculator')
                 ))
@@ -2013,15 +2013,15 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ->setLabel($this->translate(sprintf('Inventario', $section)));
         $child3
                 ->addChild('housesupply.inventory.charge', array(
-                    'route' => 'pequiven_housesupply_inventory_charge',
-                    'routeParameters' => array('type' => 1),
+               //     'route' => 'pequiven_housesupply_inventory_charge',
+                //    'routeParameters' => array('type' => 1),
                     'labelAttributes' => array('icon' => 'fa fa-arrow-up')
                 ))
                 ->setLabel($this->translate(sprintf('Cargos', $section)));
         $child3
                 ->addChild('housesupply.inventory.uncharge', array(
-                    'route' => 'pequiven_housesupply_inventory_charge',
-                    'routeParameters' => array('type' => 2),
+                //    'route' => 'pequiven_housesupply_inventory_charge',
+                //    'routeParameters' => array('type' => 2),
                     'labelAttributes' => array('icon' => 'fa fa-arrow-down')
                 ))
                 ->setLabel($this->translate(sprintf('Descargos', $section)));

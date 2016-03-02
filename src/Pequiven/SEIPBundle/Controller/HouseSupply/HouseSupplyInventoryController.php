@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeItems;
 use Pequiven\SEIPBundle\Form\HouseSupply\Inventory\houseSupplyInventoryChargeType;
-use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct;
 
 /**
  * CONTROLADOR DE INVENTARIO DE CASA - ABASTO
