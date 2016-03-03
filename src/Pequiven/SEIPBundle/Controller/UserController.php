@@ -41,6 +41,93 @@ class UserController extends baseController {
     }
 
     /**
+     *
+     *
+     */
+    public function notificationAction(){
+        $securityContext = $this->container->get('security.context');        
+        $em = $this->getDoctrine()->getManager();  
+
+        $types = [
+            1 => "Objetivos",
+            2 => "Programas",
+            3 => "Indicadores",
+            4 => "Seguimiento y Eficacia",
+            5 => "Producción",
+            6 => "Informes de Evolución",
+        ];
+
+        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('user' => $securityContext->getToken()->getUser()), array('createdAt' => 'DESC'));
+
+        return $this->render('PequivenSEIPBundle:User:notification.html.twig', array('notifications' => $notification, 'types' => $types));
+    }
+    
+    /**
+     *
+     *
+     */
+    public function getNotificationAction(Request $request){
+        $response = new JsonResponse();        
+        
+        $em = $this->getDoctrine()->getManager();   
+
+        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->find($request->get('idMessage'));
+        
+        if ($notification->getReadNotification() != true) {
+            $this->getNotificationService()->findMessageUser();        
+            $this->getNotificationService()->findReadNotification($request->get('idMessage'));            
+        }
+        
+        $data = [
+            'description' => $notification->getDescription(),
+            'path'        => $notification->getPath()
+        ];
+
+        $response->setData($data);
+
+        return $response;        
+    }
+
+    /**
+     *
+     *
+     */
+    public function delNotificationAction(Request $request){
+        $response = new JsonResponse();        
+        
+        $em = $this->getDoctrine()->getManager();   
+
+        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->find($request->get('idMessage'));
+        
+        $em->remove($notification);
+        $em->flush();
+        
+        $response->setData($notification->getDescription());
+
+        return $response;        
+    }
+
+     /**
+     *
+     *
+     */
+    public function NotificationFavouriteAction(Request $request){
+        $response = new JsonResponse();        
+        
+        $em = $this->getDoctrine()->getManager();   
+
+        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->find($request->get('idMessage'));
+        
+        $notification->setTypeMessage(2);
+        
+        $em->flush();
+        
+        $response->setData($notification->getDescription());
+
+        return $response;        
+    }
+
+    /**
      * Función que devuelve el paginador con los objetivos operativos
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -309,6 +396,14 @@ class UserController extends baseController {
      */
     protected function getSecurityService() {
         return $this->container->get('seip.service.security');
+    }
+
+    /**
+     *  Notification
+     *
+     */
+    protected function getNotificationService() {        
+        return $this->container->get('seip.service.notification');        
     }
 
 }

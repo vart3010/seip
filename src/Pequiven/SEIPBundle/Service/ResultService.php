@@ -802,7 +802,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if (!$arrangementRange) {
             throw new \LogicException(sprintf('El indicador "%s(%s)" no tiene un rango de gestión definido.', $indicator->getRef(), $indicator->getId()));
         }
-
+        
+        //Validamos que no existe error en el rango del Indicador para que pueda ser recalculado sin problemas
         $error = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendenty);
         $result = 0;
         if ($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX) {
@@ -813,24 +814,27 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($error == null) {
                 if ($indicator->hasNotification()) {
                     if ($this->calculateRangeGood($indicator, $tendenty)) {//Rango Verde R*100% (Máximo 100)
-                        if ($result > 100) {
+                            $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_GOOD);
+//                        if ($result > 100) {
                             $result = 100;
-                        }
+//                        }
                     } else if ($this->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_MIDDLE);
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
                         $value = $result;
                         $varMulti = 10 * $result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($value, $varDiv, 2);
                     } else if ($this->calculateRangeBad($indicator, $tendenty)) {//Rango Rojo R*0%
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_BAD);
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
                         $value = $result;
                         $varMulti = 20 * $result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($value, $varDiv, 2);
-                        if ($result < 0) {
-                            $result = 0;
-                        }
+//                        if ($result < 0) {
+//                            $result = 0;
+//                        }
                     }
                 } else {
                     $result = 0;
@@ -840,27 +844,33 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }
         } else if ($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN) {//Decreciente
             $result = $indicator->getResult();
-            $resultValue = $indicator->getResult();
+//            $resultValue = $indicator->getResult();
             $indicator->setResultReal($result);
+//            var_dump($result);var_dump($indicator->getId());die();
 
             if ($error == null) {
                 if ($indicator->hasNotification()) {
                     if ($this->calculateRangeGood($indicator, $tendenty)) {//Rango Verde R*100% (Máximo 100)
-                        if ($result > 100) {
-                            $result = 100;
-                        }
-                        $result = 100 - $result;
-                        if ($result > 100) {
-                            $result = 100;
-                        }
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_GOOD);
+//                        if ($result > 100) {
+//                            $result = 100;
+//                        }
+//                        $result = 100 - $result;
+//                        if ($result > 100) {
+//                            $result = 100;
+//                        }
+                        $result = 100;
                     } else if ($this->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
-                        $result = 100 - $result;
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_MIDDLE);
+                        $result = $this->recalculateResultByRange($indicator, $tendenty);
                         $varMulti = 10 * $result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($result, $varDiv, 2);
 //                        $result = $result/2;
                     } else if ($this->calculateRangeBad($indicator, $tendenty)) {//Rango Rojo R*0%
-                        $result = 100 - $result;
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_BAD);
+                        $result = $this->recalculateResultByRange($indicator, $tendenty);
+//                        var_dump($result);die();
                         $varMulti = 20 * $result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($result, $varDiv, 2);
@@ -882,24 +892,27 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($error == null) {
                 if ($indicator->hasNotification()) {
                     if ($this->calculateRangeGood($indicator, $tendenty)) {//Rango Verde R*100% (Máximo 100)
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_GOOD);
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
-                        if ($result > 100) {
-                            $result = 100;
-                        }
+//                        if ($result > 100) {
+//                            $result = 100;
+//                        }
                     } else if ($this->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_MIDDLE);
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
                         $varMulti = 10 * $result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($result, $varDiv, 2);
 //                        $result = $result / 2;
                     } else if ($this->calculateRangeBad($indicator, $tendenty)) {//Rango Rojo R*0%
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_BAD);
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
                         $varMulti = 20 * $result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($result, $varDiv, 2);
-                        if ($result < 0) {
-                            $result = 0;
-                        }
+//                        if ($result < 0) {
+//                            $result = 0;
+//                        }
 //                        $result = 0;
                     }
                 } else {
@@ -918,7 +931,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if ($result == 0) {
             $amountPenalty = 0;
         }
-        $indicator->setResult($result - $amountPenalty);
+        
+        $resultComplete = $result - $amountPenalty;
+        $resultComplete = $resultComplete > 100 ? 100: ($resultComplete < 0 ? 0:$resultComplete);
+        
+//        $indicator->setResult($result - $amountPenalty);
+        $indicator->setResult($resultComplete);
 
         $em->persist($indicator);
         $em->persist($details);
@@ -969,48 +987,82 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 
         if ($tendency->getRef() == Tendency::TENDENCY_EST) {
             $varToCatch = bcadd($arrangementRange->getRankTopMixedBottom(), $arrangementRange->getRankTopMixedTop(), 2) / 2;
-
+            if($varToCatch == 0){
+                $varToCatch = $varToCatch + 1;
+                $result = $result + 1;
+            }
             if ($result > $varToCatch) {
-                $varSum = bcadd($varToCatch, $varToCatch, 2);
-                $varResult = bcadd($result, 0, 2);
-
-                if ($varSum < $varResult) {
-                    $varMinus = bcsub($varResult, $varSum, 2);
-                } else {
-                    $varMinus = bcsub($varSum, $varResult, 2);
-                }
-
-                if ($varToCatch >= -1 && $varToCatch <= 1) {
-                    $varMulti = $varMinus;
-                    $varToCatch = 1;
-                } else {
-                    $varMulti = $varMinus * 100;
-                }
-
+                $varMulti = $result * 100;
                 $result = bcdiv($varMulti, $varToCatch, 2);
+                
+//                $varSum = bcadd($varToCatch, $varToCatch, 2);
+//                $varResult = bcadd($result, 0, 2);
+//
+//                if ($varSum < $varResult) {
+//                    $varMinus = bcsub($varResult, $varSum, 2);
+//                } else {
+//                    $varMinus = bcsub($varSum, $varResult, 2);
+//                }
+//
+//                if ($varToCatch >= -1 && $varToCatch <= 1) {
+//                    $varMulti = $varMinus;
+//                    $varToCatch = 1;
+//                } else {
+//                    $varMulti = $varMinus * 100;
+//                }
+//
+//                $result = bcdiv($varMulti, $varToCatch, 2);
             } else {
-                $varResult = bcadd($result, 0, 2);
-                $varMinus = bcsub($varToCatch, $varResult, 2);
-                if ($varToCatch >= -1 && $varToCatch <= 1) {
-                    $varMulti = $varMinus;
-                    $varToCatch = 1;
-                } else {
-                    $varMulti = $varMinus * 100;
-                }
-                $varDiv = bcdiv($varMulti, $varToCatch, 2);
-
-
-                $result = bcsub(100, $varDiv, 2);
+                $varMulti = $varToCatch * 100;
+                $result = bcdiv($varMulti, $result, 2);
+//                $varResult = bcadd($result, 0, 2);
+//                $varMinus = bcsub($varToCatch, $varResult, 2);
+//                if ($varToCatch >= -1 && $varToCatch <= 1) {
+//                    $varMulti = $varMinus;
+//                    $varToCatch = 1;
+//                } else {
+//                    $varMulti = $varMinus * 100;
+//                }
+//                $varDiv = bcdiv($varMulti, $varToCatch, 2);
+//
+//
+//                $result = bcsub(100, $varDiv, 2);
             }
         } else if ($tendency->getRef() == Tendency::TENDENCY_MAX) {
             if ($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]) {
                 $varToCatch = $arrangementRange->getRankTopBasic();
+                if($varToCatch == 0){
+                    $varToCatch = $varToCatch + 1;
+                    $result = $result + 1;
+                }
                 $varMulti = $result * 100;
                 $result = bcdiv($varMulti, $varToCatch, 2);
             } elseif ($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_MIXED]) {
                 $varToCatch = $arrangementRange->getRankTopMixedTop();
+                if($varToCatch == 0){
+                    $varToCatch = $varToCatch + 1;
+                    $result = $result + 1;
+                }
                 $varMulti = $result * 100;
                 $result = bcdiv($varMulti, $varToCatch, 2);
+            }
+        } elseif ($tendency->getRef() == Tendency::TENDENCY_MIN){
+            if ($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]) {
+                $varToCatch = $arrangementRange->getRankBottomBasic();
+                if($varToCatch == 0){
+                    $varToCatch = $varToCatch + 1;
+                    $result = $result + 1;
+                }
+                $varMulti = $varToCatch * 100;
+                $result = bcdiv($varMulti, $result, 2);
+            } elseif ($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]) {
+                $varToCatch = $arrangementRange->getRankBottomMixedTop();
+                if($varToCatch == 0){
+                    $varToCatch = $varToCatch + 1;
+                    $result = $result + 1;
+                }
+                $varMulti = $varToCatch * 100;
+                $result = bcdiv($varMulti, $result, 2);
             }
         }
 
@@ -1483,39 +1535,41 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         foreach ($childrens as $child) {
             $i = 0;
 
-            foreach ($child->getValuesIndicator() as $valueIndicator) {
+            if(!$child->getIgnoredByParentResult()){
+                foreach ($child->getValuesIndicator() as $valueIndicator) {
 
-                $plan = $real = 0.0;
-                $formulaParameters = $valueIndicator->getFormulaParameters();
+                    $plan = $real = 0.0;
+                    $formulaParameters = $valueIndicator->getFormulaParameters();
 
-                if ($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
-                    $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
-                    $variableToRealValueName = $formula->getVariableToRealValue()->getName();
-                    if (!isset($resultsItems[$i])) {
-                        $resultsItems[$i] = array($variableToPlanValueName => 0.0, $variableToRealValueName => 0.0);
-                    }
-                    if (isset($formulaParameters[$variableToPlanValueName])) {
-                        $plan = $formulaParameters[$variableToPlanValueName];
-                    }
-                    if (isset($formulaParameters[$variableToRealValueName])) {
-                        $real = $formulaParameters[$variableToRealValueName];
-                    }
+                    if ($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
+                        $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
+                        $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+                        if (!isset($resultsItems[$i])) {
+                            $resultsItems[$i] = array($variableToPlanValueName => 0.0, $variableToRealValueName => 0.0);
+                        }
+                        if (isset($formulaParameters[$variableToPlanValueName])) {
+                            $plan = $formulaParameters[$variableToPlanValueName];
+                        }
+                        if (isset($formulaParameters[$variableToRealValueName])) {
+                            $real = $formulaParameters[$variableToRealValueName];
+                        }
 
-                    $resultsItems[$i][$variableToPlanValueName] = $resultsItems[$i][$variableToPlanValueName] + $plan;
-                    $resultsItems[$i][$variableToRealValueName] = $resultsItems[$i][$variableToRealValueName] + $real;
-                } elseif ($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ) {
-                    if (!isset($resultsItems[$i])) {
-                        $resultsItems[$i] = array(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN => 0.0, Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL => 0.0);
-                    }
-                    $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
-                    $plan = $result[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
-                    $real = $result[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                        $resultsItems[$i][$variableToPlanValueName] = $resultsItems[$i][$variableToPlanValueName] + $plan;
+                        $resultsItems[$i][$variableToRealValueName] = $resultsItems[$i][$variableToRealValueName] + $real;
+                    } elseif ($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ) {
+                        if (!isset($resultsItems[$i])) {
+                            $resultsItems[$i] = array(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN => 0.0, Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL => 0.0);
+                        }
+                        $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
+                        $plan = $result[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                        $real = $result[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
 
-                    $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] + $plan;
-                    $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] + $real;
-                }
-                $i++;
-            }//fin for each
+                        $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] + $plan;
+                        $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] + $real;
+                    }
+                    $i++;
+                }//fin for each
+            }
         }//fin for each childrens
 
         $details = $indicator->getDetails();

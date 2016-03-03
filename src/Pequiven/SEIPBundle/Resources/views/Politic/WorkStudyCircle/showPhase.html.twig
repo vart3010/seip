@@ -269,26 +269,37 @@
     {% set routeExportWorkStudyCircle = path('pequiven_work_study_circle_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
     {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EXPORT_REPORT"])) %}
         <div class="align-right">
+            {% if (workStudyCircle.phase==1)%}
+                {% set routeConfigApoyo = path('pequiven_work_study_circle_export_BackRestpdf',{idWorkStudyCircle:workStudyCircle.id}) %}
+                {{ buttons.generic(
+                    (routeConfigApoyo),
+                    ('workStudyCircle.export.exportBackRest'|trans({})),
+                    'icon-download'
+                 ) 
+                }}
+                &nbsp;        
+            {% endif %}
+            {% set routeConfig = path('pequiven_work_study_circle_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
             {{ buttons.generic(
-                    (routeExportWorkStudyCircle),
+                    (routeConfig),
                     ('workStudyCircle.export.exportPdf'|trans({})),
                     'icon-download'
                  ) 
             }}
             &nbsp;        
-            {% set routeExportProposals = path('pequiven_proposal_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
+            {% set routeConfig3 = path('pequiven_proposal_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
 
             {{ buttons.generic(
-                    (routeExportProposals),
+                    (routeConfig3),
                     ('workStudyCircle.proposals.exportpdf'|trans({})),
                     'icon-download'
                  ) 
             }}
             &nbsp;        
-            {% set routeExportMeetings = path('pequiven_all_meetings_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
+            {% set routeConfig2 = path('pequiven_all_meetings_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
 
             {{ buttons.generic(
-                    (routeExportMeetings),
+                    (routeConfig2),
                     ('workStudyCircle.meetings.exportpdf'|trans({})),
                     'icon-download'
                  ) 

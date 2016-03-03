@@ -1,0 +1,4 @@
+## YAML Template.
+---
+complejo:
+    dashboardIndicator: Indicadores %complejo%

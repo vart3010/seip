@@ -47,7 +47,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
      */
     public function createSidebarMenu(Request $request) {
         $seipConfiguration = $this->getSeipConfiguration();
-
+$user = $this->getUser();
         $menu = $this->factory->createItem('root', array(
             'childrenAttributes' => array(
                 'class' => 'big-menu',
@@ -108,11 +108,16 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
 
         //Menú Sistema de Informacion Politica
-        if ($this->isGranted('ROLE_SEIP_SIP_*')) {
+        if ($this->isGranted('ROLE_SEIP_SIP_*') && $user->getId() != 5942) {
             $this->addMenuSip($menu, $section);
         }
+
+        //Modulos en Construcción        
+        $this->addMenuModules($menu, $section);
+
         //Menú Administración
-        if ($this->securityContext->isGranted(array('ROLE_SONATA_ADMIN'))) {
+        
+        if ($this->securityContext->isGranted(array('ROLE_SONATA_ADMIN')) && $user->getId() != 5942) {
             $menu->addChild('admin', array(
                 'route' => 'sonata_admin_dashboard',
                 'labelAttributes' => array('icon' => 'icon-card'),
@@ -334,6 +339,32 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuSig->addChild($arrangementProgram);
             $menu->addChild($menuSig);
         }
+        
+        if ($this->isGranted('ROLE_SEIP_SIG_MONITORING')) {
+            $child = $this->factory->createItem('sig.monitoring.add.main', $this->getSubLevelOptions(array(
+                                'route' => null,
+                                'labelAttributes' => array('icon' => '',),
+                            ))
+                    )
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.monitoring.title', $section)));
+
+            $child->addChild('sig.monitoring.vizualice.list-managementSystem', array(
+                        'route' => 'pequiven_sig_monitoring_list',
+                        'routeParameters' => array('type' => 1 ),
+                        'labelAttributes' => array('icon' => ''),
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.monitoring.list_managementSystem', $section)));
+
+            $child->addChild('sig.monitoring.vizualice.list-gerencias', array(
+                        'route' => 'pequiven_sig_monitoring_list',
+                        'routeParameters' => array('type' => 2 ),                        
+                        'labelAttributes' => array('icon' => ''),
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.monitoring.list_gerencias', $section)));
+
+            $menuSig->addChild($child);   
+        }    
+
     }
 
     /**
@@ -547,6 +578,12 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.user.item_user_list', $section)));
             }
+
+            $visualize->addChild('planning.visualize.user.list.user.items', array(
+                        'route' => 'pequiven_indicator_evolution_load',
+                        'labelAttributes' => array('icon' => 'fa fa-bar-chart')
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.evolution', $section)));            
 
 
             //Fin sub Ver - menu objetivos
@@ -882,7 +919,23 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $visualize->addChild($itemStrategicsObjetives);
             }
             
-            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA') && $this->getPeriodService()->getPeriodActive()->getName() == '2015') {
+            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPHC')) {
+                $itemStrategicsIndicatorsCphc = $this->factory->createItem('results.visualize.indicator.cphc', array(
+                    'route' => 'pequiven_line_strategic_indicators_specific',
+                    'routeParameters' => array('complejo' => 1),
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cphc', $section)));
+                $visualize->addChild($itemStrategicsIndicatorsCphc);
+            }
+            
+            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPAMC')) {
+                $itemStrategicsIndicatorsCpamc = $this->factory->createItem('results.visualize.indicator.cpamc', array(
+                    'route' => 'pequiven_line_strategic_indicators_specific',
+                    'routeParameters' => array('complejo' => 2),
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cpamc', $section)));
+                $visualize->addChild($itemStrategicsIndicatorsCpamc);
+            }
+            
+            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA')) {
                 $itemStrategicsIndicatorsCpjaa = $this->factory->createItem('results.visualize.indicator.cpjaa', array(
                     'route' => 'pequiven_line_strategic_indicators_specific',
                     'routeParameters' => array('complejo' => 3),
@@ -1670,7 +1723,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.main', $section)));
 
 
-        if ($this->isGranted(array('ROLE_SEIP_SIP_SEACH_EMPLOYEES')) && ($user->getId() == 112 || $user->getId() == 22 || $user->getId() == 1668 || $user->getId() == 70 || $user->getId() == 1640)) {
+        if ($this->isGranted(array('ROLE_SEIP_SIP_SEACH_EMPLOYEES')) && ($user->getId() == 112 || $user->getId() == 22 || $user->getId() == 1668 || $user->getId() == 70 || $user->getId() == 1640 || $user->getId() == 96)) {
             $menuSip->addChild('sip.list_pqv', array(
                 'route' => 'pequiven_onePerTen_list',
                 'labelAttributes' => array('icon' => 'fa fa-table',)
@@ -1908,6 +1961,47 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     'labelAttributes' => array('icon' => 'fa fa-sitemap'),
                 ))
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.users.feeStructure', $section)));
+
+        $menu->addChild($child);
+    }
+
+    /**
+     * Modulos en Construcción
+     * @param ItemInterface $menu
+     * @param type $section
+     */
+    private function addMenuModules(ItemInterface $menu, $section) {
+
+        $child = $this->factory->createItem('Modulos en Construcción', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                            'labelAttributes' => array('icon' => 'fa fa-exclamation-triangle',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Modulos en Construcción', $section)));
+
+        $child->addChild('planning.visualize.modules.ventas', array(
+                    'route' => 'pequiven_seip_modules_ventas',
+                    'labelAttributes' => array('icon' => ''),
+                ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.modules.ventas', $section)));
+        
+        $child->addChild('planning.visualize.modules.despachos', array(
+                    'route' => 'pequiven_seip_modules_despacho',
+                    'labelAttributes' => array('icon' => ''),
+                ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.modules.despachos', $section)));
+        
+        $child->addChild('planning.visualize.modules.contrataciones', array(
+                    'route' => 'pequiven_seip_modules_contrataciones',
+                    'labelAttributes' => array('icon' => ''),
+                ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.modules.contrataciones', $section)));
+
+        $child->addChild('planning.visualize.modules.proyectos', array(
+                    'route' => 'pequiven_seip_modules_proyectos',
+                    'labelAttributes' => array('icon' => ''),
+                ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.modules.proyectos', $section)));
 
         $menu->addChild($child);
     }

@@ -42,7 +42,7 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
         $this->SetTextColor(0, 0, 0);
         // Title
         $text = '<table width="100%" cellpadding="2">'
-                . '<tr bgcolor="#C00000">'
+                . '<tr bgcolor="#B00000">'
                 . '<td width="12%" height="65px" style="text-align: center;">'
                 . '<img src="' . $logopqv . '" width="45px" height="60px">'
                 . '</td>'

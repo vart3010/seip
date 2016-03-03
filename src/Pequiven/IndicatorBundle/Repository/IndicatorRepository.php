@@ -432,19 +432,22 @@ class IndicatorRepository extends EntityRepository
     }
     
     
-    
+    /*
+     * Query que retorna los indicadores que se les debe recalcular el resultado
+     */
     public function findQueryWithResultNull(\Pequiven\SEIPBundle\Entity\Period $period)
     {
         $qb = $this->getQueryBuilder();
         $qb
             ->addSelect('i_o')
-            ->leftJoin('i.objetives', 'i_o')
+//            ->leftJoin('i.objetives', 'i_o')
             ->innerJoin('i.indicatorLevel', 'i_il')
             ->andWhere('i.period = :period')
             ->andWhere($qb->expr()->isNull('i.lastDateCalculateResult'))
             ->orderBy('i_il.level','DESC')
             ->setParameter('period', $period)
             ;
+//        print_r($qb->getQuery()->getSQL());die();
         return $qb;
     }
     
@@ -592,6 +595,22 @@ class IndicatorRepository extends EntityRepository
 //        }
         
         parent::applySorting($queryBuilder, $sorting);
+    }
+
+    public function findQueryIndicatorValid($period, $level)
+    {   
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+            ->select('i')
+            ->andWhere('i.period = :period')
+            ->andWhere('i.indicatorLevel = :level')                        
+            ->andWhere('i.showEvolutionView = :show')                        
+            ->setParameter('period', $period)
+            ->setParameter('level', $level)
+            ->setParameter('show', 1)
+            ;
+        
+        return $queryBuilder->getQuery()->getResult();
     }
     
     protected function getAlias() {

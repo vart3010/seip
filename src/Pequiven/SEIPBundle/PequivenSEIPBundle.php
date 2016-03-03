@@ -7,6 +7,6 @@ use Pequiven\CoreBundle\PequivenCoreBundle;
 
 class PequivenSEIPBundle extends Bundle
 {
-    const VERSION = 'v1.53';
-    const VERSION_DATE = '18-01-2016 09:15am';
+    const VERSION = '1.54';
+    const VERSION_DATE = 'Desde el 11-02-2016 10:30am';
 }

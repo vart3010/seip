@@ -129,6 +129,7 @@ app:
                             Matrices de objetivos
                     sig:
                         main: Sistema Integrado de Gestión
+                        evolution: Carga Informe de Evolución
                         objective:
                             main: Objetivos
                             visualize: Visualizar
@@ -151,6 +152,10 @@ app:
                                 for_reviewing: Por revisar
                                 for_approving: Por aprobar
                                 for_notifying: Por notificar
+                        monitoring:
+                            title: Seguimiento y Eficacia
+                            list_managementSystem: Lista Sistemas de la Calidad
+                            list_gerencias: Lista Gerencias Normalizadas
                     results:
                         main: Resultados
                         visualize:
@@ -158,6 +163,8 @@ app:
                             strategics: Estratégicos
                             indicator:
                                 strategics: Indicadores Estratégicos
+                                cphc: Indicadores CPHC
+                                cpamc: Indicadores CPAMC
                                 cpjaa: Indicadores CPJAA
                             objetive:
                                 strategics: Objetivos Estratégicos
@@ -273,5 +280,9 @@ app:
                         voto_zulia: Zulia
                         voto_anzoategui: Anzoátegui
                         mesa: Mesas Activas
-
+                    modules:
+                        ventas: Ventas
+                        despachos: Despachos
+                        contrataciones: Contrataciones
+                        proyectos: Proyectos
                             

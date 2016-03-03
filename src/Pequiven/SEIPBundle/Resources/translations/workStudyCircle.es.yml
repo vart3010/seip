@@ -42,6 +42,7 @@ workStudyCircle:
     list: Lista
     export:
         exportPdf: Exportar Inf. Círculo
+        exportBackRest: Exportar Documento
         
     proposals:
         title: Propuestas
@@ -75,3 +76,6 @@ workStudyCircle:
         download: Descargar
         file: Archivo
         category: Categoria
+flashes:
+     messages:
+        deleteMember: %user% fue eliminado correctamente del CET

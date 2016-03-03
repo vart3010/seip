@@ -64,12 +64,16 @@ class LineStrategicController extends SEIPController {
      */
     public function viewOnlyIndicatorSpecificAction(Request $request){
         $boxRender = $this->get('tecnocreaciones_box.render');
+        $idComplejo = $request->get('complejo');
+        
+        $labelsSummary = \Pequiven\MasterBundle\Entity\Complejo::getLabelsSummary();
         
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('viewByIndicatorSpecific.html'))
                 ->setData(array(
-                    'boxRender' => $boxRender
+                    'boxRender' => $boxRender,
+                    'summaryComplejo' => $labelsSummary[$idComplejo]
                 ))
                 ;
         
@@ -182,7 +186,17 @@ class LineStrategicController extends SEIPController {
         $resultService = $this->getResultService();
         
         $boxRender = $this->get('tecnocreaciones_box.render');
-        
+
+        $answer = $request->get('r');        
+
+        $id = $request->get('id');
+        if ($answer == 1) {
+            $id = $id + 1;
+            if ($id > 7) {
+                $id = 1;
+            }
+        }
+
         $dataArray =  array(
             $this->config->getResourceName() => $resource,
             'object' => $objetives,
@@ -190,9 +204,11 @@ class LineStrategicController extends SEIPController {
             'heightChart' => $heightChart,
             'data' => $data,
             'resultService' => $resultService,
-            'boxRender' => $boxRender
+            'boxRender' => $boxRender,
+            'answer'    => $answer,
+            'id'        => $id,            
         );
-        
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))

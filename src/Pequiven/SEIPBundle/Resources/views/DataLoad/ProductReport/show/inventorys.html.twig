@@ -1,5 +1,5 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
-                
+
 <div class="block">
     <div class="block-title">
         <h3> {{ 'pequiven_seip.product_report.inventory.inventorys'|trans }}&nbsp;({{ product_report.inventorys|length }})</h3>
@@ -13,8 +13,8 @@
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
                 <tr>
-                    <th scope="col" width="35%">{{ 'Month'|trans }}</th>
-                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'pequiven_seip.total'|trans }}</th>
+                    <th scope="col" width="40%">{{ 'Month'|trans }}</th>
+                    <td align="right" colspan="{{ colspan }}" scope="col" width="20%" class="hide-on-mobile-portrait">{{ 'pequiven_seip.total'|trans }}</td>
                     <th scope="col" width="10%">&nbsp;</th>
                 </tr>
             </thead>
@@ -26,9 +26,16 @@
                         <td>{{ loop.index }} - 
                             {{ inventory|trans }}
                         </td>
-                        <th scope="row">
+                        <td scope="row" align="right" style="font-weight: bold;">
                             {{ inventory.getTotalInventory|myNumberFormat }}&nbsp;{{ productUnit }}
-                        </th>
+                        </td>
+                        <td scope="row" align="right" style="font-weight: bold;" >
+                            {% if factor %}
+                                 {% set factorInventory = factorConversionService.calculateFormulaValueFromFactor(inventory.getTotalInventory,product_report) %}
+                                {{ factorInventory|myNumberFormat }} {{ factorConversionService.unitToFactorConversion(product_report) }}
+                                
+                            {% endif %}
+                        </td>
                         <td class="low-padding align-center">
                             {% if isAllowPlanningReport %}
                                 <a href="{{ path("pequiven_inventory_update",{id: inventory.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
@@ -44,6 +51,6 @@
                 {% endfor %}
             </tbody>
         </table>
-        
+
     </div>
 </div>
