@@ -34,9 +34,9 @@
         function validaButton() {
             var cantRows = getCantRows();
             if (cantRows > 0) {
-                $("button#buttonSubmit").show();
+                $("button#buttonSubmit").attr("disabled", false);
             } else {
-                $("button#buttonSubmit").hide();
+                $("button#buttonSubmit").attr("disabled", true);
             }
         }
 
@@ -130,7 +130,7 @@
         <div class="twelve-columns">
             <form method="POST" action="{{ path("pequiven_housesupply_inventory_charge_create",{'type': type}) }}">
                 <center>
-                    <table width="90%" style="border: 2px black solid;">
+                    <table width="95%" style="border: 2px black solid;">
                         <tr style="height: 30px;">
                             <td colspan="2" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">
                                 {% if (type==1)%}
@@ -209,7 +209,7 @@
                         </tr>
                     </table>
                     <br>
-                    <table width="90%">                     
+                    <table width="95%">                     
                         <tr>
                             <td width="70%" rowspan="2">
                                 <table width="95%" style="border: 2px black solid;">
@@ -242,10 +242,10 @@
                                     <tr>
                                         <td width="25%" style="vertical-align: middle; font-weight: bold;">Total:</td>
                                         <td width="75%" style="vertical-align: middle; text-align: right;">
-                                            <span style="color: #002a80; font-size: 35pt; text-align: right; width: 100%; font-weight: bold;">
-
+                                            <span style="color: #002a80; font-size: 30pt; text-align: right; width: 100%; font-weight: bold;">
+                                                Bs. 
                                             </span>
-                                            <span style="color: #002a80; font-size: 35pt; text-align: right; width: 100%; font-weight: bold;" id="totales_3">
+                                            <span style="color: #002a80; font-size: 30pt; text-align: right; width: 100%; font-weight: bold;" id="totales_3">
                                                 0,00
                                             </span>
                                         </td>
@@ -253,7 +253,7 @@
                                     <tr>
                                         <td width="25%" style="vertical-align: middle; font-weight: bold;">Cant. <br> Productos</td>
                                         <td width="75%" style="vertical-align: middle; text-align: right;">
-                                            <span style="color: #002a80; font-size: 35pt; text-align: right; width: 100%;" id="totales_2">
+                                            <span style="color: #002a80; font-size: 30pt; text-align: right; width: 100%;" id="totales_2">
                                                 0
                                             </span>
                                         </td>

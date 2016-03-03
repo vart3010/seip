@@ -173,7 +173,7 @@ function moneyFormat(valor, limit) {
     }
     var numberFormat = $.number(valor, limit, ',', '.');
 
-    return moneda+" "+numberFormat;
+    return numberFormat;
 }
 
 
