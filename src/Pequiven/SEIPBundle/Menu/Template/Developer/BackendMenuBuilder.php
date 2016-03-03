@@ -339,6 +339,32 @@ $user = $this->getUser();
             $menuSig->addChild($arrangementProgram);
             $menu->addChild($menuSig);
         }
+        
+        if ($this->isGranted('ROLE_SEIP_SIG_MONITORING')) {
+            $child = $this->factory->createItem('sig.monitoring.add.main', $this->getSubLevelOptions(array(
+                                'route' => null,
+                                'labelAttributes' => array('icon' => '',),
+                            ))
+                    )
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.monitoring.title', $section)));
+
+            $child->addChild('sig.monitoring.vizualice.list-managementSystem', array(
+                        'route' => 'pequiven_sig_monitoring_list',
+                        'routeParameters' => array('type' => 1 ),
+                        'labelAttributes' => array('icon' => ''),
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.monitoring.list_managementSystem', $section)));
+
+            $child->addChild('sig.monitoring.vizualice.list-gerencias', array(
+                        'route' => 'pequiven_sig_monitoring_list',
+                        'routeParameters' => array('type' => 2 ),                        
+                        'labelAttributes' => array('icon' => ''),
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.monitoring.list_gerencias', $section)));
+
+            $menuSig->addChild($child);   
+        }    
+
     }
 
     /**

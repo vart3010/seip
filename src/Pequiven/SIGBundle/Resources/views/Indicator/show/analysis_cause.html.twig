@@ -3,7 +3,7 @@
     <div ng-controller="IndicatorSigEvolutionCauseController"> 
         <div class="block-title">
         <h3 class="ng-binding">{{ 'sig.analysis_causes'|trans ({}, 'messages') }}</h3>
-        {% if analysis and not indicator_sig.parentCloning %}
+        {% if analysis and not cloning %}
             {% for data in analysis %}
                 {% set dataAnalysis = data.id %}
                 <div class="button-group absolute-right compact">
@@ -12,10 +12,8 @@
                 </div>  
                 {# form carga de archivo #}
                 <div ng-controller="ToolsController">
-                    <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path(route,{id: id, month:month, cause:dataAnalysis, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">
-                    
+                    <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path(route,{id: id, month:month, cause:dataAnalysis, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">                    
                        <input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ idCause $}" type="file">
-                             
                        <input type="hidden" name="valueCauseId" id="field_{$ idCause $}" value="">
                     </form>
                 </div> 
@@ -28,13 +26,14 @@
                     </div>
                 {% endif %}
             {% endfor %}
-        {% elseif not indicator_sig.parentCloning %}
+        {% elseif not cloning %}
             <div class="button-group absolute-right compact">
                 <a class="button icon-list-add " href="" ng-click="loadTemplateCausesAnalysis()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
             </div>
         {% endif %}
     </div>
     <div class="with-padding">
+    {% if analysis %}
         {% set colspan = 5 %}
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
@@ -50,7 +49,7 @@
                     <td align="justify">
                         {{ data.description }}
                     </td>
-                    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DELETE_CAUSE_ANALYSIS') and not indicator_sig.parentCloning %}  
+                    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DELETE_CAUSE_ANALYSIS') and not cloning %}  
                         <th class="align-right vertical-center">                          
                             <span class="select compact">
                             <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
@@ -65,7 +64,10 @@
             </tbody>        
         {% endfor %}
         </table>
-                
+    {% else %}
+        <div class="new-row twelve-columns empty_row" align="center">
+            <br>No hay Carga.
+    {% endif %}           
     </div>
 </div>
 </div>
