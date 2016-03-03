@@ -304,7 +304,6 @@ class MonitoringController extends ResourceController
             'font' => [
                 'bold' => true
             ]
-            
         ];
 
         $leyens = [
