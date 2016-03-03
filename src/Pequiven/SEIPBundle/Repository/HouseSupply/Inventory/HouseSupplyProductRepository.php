@@ -14,6 +14,20 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  */
 class HouseSupplyProductRepository extends EntityRepository {
 
+    function getAvailableProduct() {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin('HSprod.instance', 'inst')
+                ->andWhere('inst.maxPerUser> :max')
+                ->setParameter('max', 0)
+        ;
+
+//        print($qb->getQuery()->getSQL());
+//        die();
+
+        return $qb->getQuery()->getResult();
+    }
+
     function getAlias() {
         return 'HSprod';
     }

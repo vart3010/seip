@@ -56,7 +56,7 @@ class houseSupplyProductInstance {
      * @var float
      * @ORM\Column(name="maxPerUser",type="float",nullable=false)
      */
-    private $maxPerUser;
+    private $maxPerUser = 0;
 
     /**
      * Productos en Instancia

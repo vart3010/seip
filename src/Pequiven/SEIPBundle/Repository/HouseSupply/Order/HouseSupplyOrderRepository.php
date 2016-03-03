@@ -18,18 +18,16 @@ class HouseSupplyOrderRepository extends EntityRepository {
 
         $qb = $this->getQueryBuilder();
         $qb
-                ->select('MAX(Order.nroOrder) as nro')
-                ->andWhere('Bill.type= :type')
+                ->select('MAX(HSOrder.nroOrder) as nro')
+                ->andWhere('HSOrder.type= :type')
                 ->setParameter('type', $type)
         ;
 
-        //print($qb->getQuery()->getSQL());        
-
-        return $qb->getQuery()->getResult();
+        //return $qb->getQuery()->getResult();
     }
 
     function getAlias() {
-        return 'Order';
+        return 'HSOrder';
     }
 
 }

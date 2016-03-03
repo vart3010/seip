@@ -22,7 +22,8 @@ class HouseSupplyInventoryChargeRepository extends EntityRepository {
                 ->setParameter('type', $type)
         ;
         
-        //print($qb->getQuery()->getSQL());        
+//        print($qb->getQuery()->getSQL());        
+//        die();
 
         return $qb->getQuery()->getResult();
     }

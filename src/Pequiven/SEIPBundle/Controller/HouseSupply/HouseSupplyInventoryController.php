@@ -77,9 +77,9 @@ class HouseSupplyInventoryController extends SEIPController {
 
         //CALCULO EL NUEVO CORRELATIVO
         $newnroobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeNro($type);
-        
+
         if ($newnroobj[0]['nro']) {
-            $newnro = $newnroobj[0]['id'] + 1;
+            $newnro = $newnroobj[0]['nro'] + 1;
         } else {
             $newnro = 1;
         }
