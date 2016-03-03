@@ -5,6 +5,7 @@
 
 {% block javascript %}
     {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/jQuery-Mask-Plugin-master/jquery.mask.min.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function ()
         {
@@ -47,6 +48,7 @@
         }
 
         $(document).ready(function () {
+            $("input#costo").mask('000.000.000.000.000,00', {reverse: true});
 
             $("#dataProduct").val('{"datos":{}}');
             setTable("table1");
@@ -61,32 +63,40 @@
             setColsRight(right);
             validaButton();
 
+
+
             $("#addItem").click(function () {
                 var cantidad = [$("#cantidad").val(), $("#cantidad").val()];
                 var producto = [$("#producto").val(), $("#producto").find('option:selected').attr("name")];
                 var costo = [$("#costo").val(), $("#costo").val()];
-                var subtotal = [($("#costo").val() * $("#cantidad").val()), ($("#costo").val() * $("#cantidad").val())];
-        {#var selectProduct = $("select#producto:selected").val();
-        alert(selectProduct);#}
 
-                    if (cantidad[0] != "" && costo[0] != "") {
-                        var boton = ["", "<a id='" + index + "' name='" + producto[0] + "' onClick='delRow(this.id,this.name)' class='button icon-trash delItem'></a>"];
-                        var data = [cantidad, producto, costo, subtotal, boton];
-                        delRowDefault();
-                        addRow(data);
-                        index = index + 1;
-                        getJson();
-                        $("#cantidad").val('');
-                        $("#costo").val('');
+                $("input#costo").unmask();
+                var costoCalculo = $("#costo").val();
+                $("input#costo").mask('000.000.000.000.000,00', {reverse: true});
 
-                        validaButton();
-                    } else {
-                        alert("Debe llenar los campos");
-                    }
+                var subtotal = [(costoCalculo * $("#cantidad").val()), (costoCalculo * $("#cantidad").val())];
 
 
-                });
+                if (cantidad[0] != "" && costo[0] != "") {
+                    var boton = ["", "<a id='" + index + "' name='" + producto[0] + "' onClick='delRow(this.id,this.name)' class='button icon-trash delItem'></a>"];
+                    var data = [cantidad, producto, costo, subtotal, boton];
+                    delRowDefault();
+                    addRow(data);
+                    index = index + 1;
+                    getJson();
+                    $("#cantidad").val('');
+                    $("#costo").val('');
+
+                    validaButton();
+                } else {
+                    alert("Debe llenar los campos");
+                }
+
+
+
+
             });
+        });
     </script>
 {% endblock javascript %}
 
@@ -233,7 +243,7 @@
                                         <td width="25%" style="vertical-align: middle; font-weight: bold;">Total:</td>
                                         <td width="75%" style="vertical-align: middle; text-align: right;">
                                             <span style="color: #002a80; font-size: 35pt; text-align: right; width: 100%; font-weight: bold;">
-                                                Bs. 
+
                                             </span>
                                             <span style="color: #002a80; font-size: 35pt; text-align: right; width: 100%; font-weight: bold;" id="totales_3">
                                                 0,00
@@ -270,13 +280,13 @@
                                         </tr>                                     
                                         <tr>
                                             <td width="20%" style="text-align: center;">
-                                                <input type="number" class="input-small" id="cantidad" placeholder="Cantidad" min="0">
+                                                <input type="number" class="input-small" id="cantidad" placeholder="Cantidad" min="1" max="1000">
                                             </td>
                                             <td width="60%" style="text-align: center;">
-                                                <input type="number" step="any" class="input-small" id="costo" placeholder="Costo" min="0">
+                                                <input type="text"  class="input-small" id="costo" placeholder="Costo" >
                                             </td>                                        
-                                            <td width="20%" style="text-align: center;">                                            
-                                                <input type="button" class="form-control" value="Add" id="addItem">
+                                            <td width="20%" style="text-align: left;">                                            
+                                                <i class="fa fa-plus" id="addItem" style="font-size: 20px; cursor: pointer;"></i>
                                             </td>
                                         </tr>                                    
                                     </table> 
