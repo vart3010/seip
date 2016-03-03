@@ -7,7 +7,7 @@ var campoClave; //CAMPO CLAVE PARA NO REPETIR REGISTROS AL MOMENTO DE AGREGAR RE
 var selectorTotals; //SELECTOR DE JQUERY PARA MOSTRAR LOS RESULTADOS DE LOS TOTALES
 var idsClaves = new Array();
 var colsRight = new Array();
-;
+var moneda = "Bs. ";
 
 function setTable(obj) {
     table = obj;
@@ -56,7 +56,7 @@ function addRow(data) {
             var clase = colsRight.indexOf(i);
 
             if (clase >= 0) {
-                fila = fila + "<td class='" + data[i][0] + " gridTd'>" + data[i][1] + "</td>";
+                fila = fila + "<td class='" + data[i][0] + " gridTd'>" + moneyFormat(data[i][1]) + "</td>";
             } else {
                 fila = fila + "<td class='" + data[i][0] + "'>" + data[i][1] + "</td>";
             }
@@ -135,7 +135,7 @@ function totals() {
     }
     //alert(totals);
     for (var i = 0; i < columsTotals.length; i++) {
-        $(selectorTotals + columsTotals[i]).html(moneyFormat(totals[i]));
+        $(selectorTotals + columsTotals[i]).html(moneyFormat(totals[i],2));
     }
 }
 
@@ -165,6 +165,15 @@ function getCantRows() {
     return cont;
 }
 
-function moneyFormat(valor) {
-    return valor.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1.');
+function moneyFormat(valor, limit) {
+//    return valor.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1.');
+
+    if (limit == undefined) {
+        var limit = 2;
+    }
+    var numberFormat = $.number(valor, limit, ',', '.');
+
+    return moneda+" "+numberFormat;
 }
+
+
