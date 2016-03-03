@@ -98,12 +98,10 @@ pequiven_user_notification_data:
     path: /user/notification
     defaults:
         _controller: pequiven_seip.controller.user:notificationAction 
-
 seip_notification_view_message:
     path: /user/get-message
     defaults:
         _controller: pequiven_seip.controller.user:getNotificationAction
-
 seip_notification_delete_message:
     path: /user/delete-message
     defaults:
@@ -112,5 +110,10 @@ seip_notification_favourite_message:
     path: /user/favourite-message
     defaults:
         _controller: pequiven_seip.controller.user:NotificationFavouriteAction   
+seip_notification_view_messages_data:
+    path: /user/get-message-data
+    defaults:
+        _controller: pequiven_seip.controller.user:getNotifyDataAction
+    methods: [GET]
     
 

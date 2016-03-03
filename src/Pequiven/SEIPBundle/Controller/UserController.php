@@ -127,6 +127,20 @@ class UserController extends baseController {
         return $response;        
     }
 
+    public function getNotifyDataAction(Request $request){
+        $response = new JsonResponse();   
+        
+        $data = [
+            'notify' => 0,
+            'fav'    => 1,
+            'trash'  => 0
+        ];
+
+        $response->setData($data);
+
+        return $response;        
+    }
+
     /**
      * Función que devuelve el paginador con los objetivos operativos
      * @param \Symfony\Component\HttpFoundation\Request $request

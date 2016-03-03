@@ -1,13 +1,49 @@
-function reload(){
-    location.reload();
+var url;
+
+$("#reload").click(function(){
+    //getData();
+    /*$.ajax({
+        url: "",
+        context: document.body,
+        success: function(s,x){
+            $(this).html(s);
+        }
+    });*/
+    $('#notifyAll').load();
+});
+
+function setNotifications(data){ 
+    var trash = data['trash'];
+    console.log(trash);
+    /*$('#notifyAll').text(data['notify']);
+    $('#notifyFav').text(data['fav']);
+    $('#notifyTrash').text(data['trash']);*/
+    //alert($("#notify").text());
+    //getData();
 }
 
-$(document).ready(function() {
-    $('#notifyAll').text("0");
-	$('#notifyFav').text("0");
-	$('#notifyTrash').text("0");
-	//alert($("#notify").text());
-});
+
+function getData(url){
+    var data = {
+        id: 1,                    
+    }; 
+
+    $.ajax({
+            type: 'get',
+            url: url,
+            data: data,                              
+            beforeSend:function(){
+                $('#loading').css({display:'block'});                            
+            },
+            complete:function(){
+                $('#loading').css('display','none');                        
+            },
+            success: function (data) {                        
+                //console.log(data);
+                setNotifications(data);
+            }
+    });
+}
 
 function showMessage(id){			
 	var data = {
@@ -17,7 +53,7 @@ function showMessage(id){
             type: 'get',
             url: '{{ path("seip_notification_view_message") }}',
             data: data,
-            beforeSend:function(objeto){
+            beforeSend:function(){
                     $('#loading').css({display:'block'});                            
             },
             complete:function(){
@@ -46,7 +82,7 @@ function deleteMessage(id){
             type: 'get',
             url: '{{ path("seip_notification_delete_message") }}',
             data: data, 
-            beforeSend:function(objeto){
+            beforeSend:function(){
                     $('#loading').css({display:'block'});                            
             },
             complete:function(){
@@ -70,7 +106,7 @@ function favouriteMessage(id){
             type: 'get',
             url: '{{ path("seip_notification_favourite_message") }}',
             data: data, 
-            beforeSend:function(objeto){
+            beforeSend:function(){
                     $('#loading').css({display:'block'});                            
             },
             complete:function(){

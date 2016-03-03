@@ -11,7 +11,7 @@
 <div class="with-padding">			
 	<div class="content-panel margin-bottom">
 		<div class="panel-navigation silver-gradient">
-			<div class="panel-control"><a href class="button icon-undo" onclick="reload();">Actualizar</a></div>
+			<div class="panel-control"><a href class="button icon-undo" id="reload">Actualizar</a></div>
 			<div class="panel-load-target scrollable" style="height:490px">
 				<div class="navigable">
 					<ul class="big-menu">
@@ -100,5 +100,12 @@
 {% endblock %}
 
 {% block javascript %}		
-    <script src="{{  asset('bundles/pequivenseip/notify.js') }}"></script>    
+    <script src="{{  asset('bundles/pequivenseip/notify.js') }}"></script> 
+  <script type="text/javascript">
+  $(document).ready(function() {
+  		var url = "{{ path("seip_notification_view_messages_data") }}";
+  		getData(url);
+  		setNotifications();
+  });
+  </script>   
 {% endblock %}
