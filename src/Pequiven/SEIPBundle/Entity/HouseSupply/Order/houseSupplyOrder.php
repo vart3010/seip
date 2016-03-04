@@ -60,6 +60,13 @@ class houseSupplyOrder {
     /**
      *
      * @var integer
+     * @ORM\Column(name="cycle",type="integer",nullable=false)
+     */
+    private $cycle;
+
+    /**
+     *
+     * @var integer
      * @ORM\Column(name="nroOrder",type="integer",nullable=true)
      */
     private $nroOrder;
@@ -157,6 +164,10 @@ class houseSupplyOrder {
         return $this->workStudyCircle;
     }
 
+    function getCycle() {
+        return $this->cycle;
+    }
+
     function getNroOrder() {
         return $this->nroOrder;
     }
@@ -225,6 +236,10 @@ class houseSupplyOrder {
         $this->workStudyCircle = $workStudyCircle;
     }
 
+    function setCycle($cycle) {
+        $this->cycle = $cycle;
+    }
+
     function setNroOrder($nroOrder) {
         $this->nroOrder = $nroOrder;
     }
@@ -272,7 +287,5 @@ class houseSupplyOrder {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
-
-
 
 }
