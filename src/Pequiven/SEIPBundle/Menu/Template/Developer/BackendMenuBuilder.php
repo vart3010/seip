@@ -107,10 +107,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $this->addMenuUsuarios($menu, $section);
         }
 
-        // MENU CASA - ABASTO
-        //     if ($this->isGranted('ROLE_SEIP_HOUSE_SUPPLY_*')) {
-        $this->addMenuHouseSupply($menu, $section);
-        //    }
         //Menú Sistema de Informacion Politica
         if ($this->isGranted('ROLE_SEIP_SIP_*') && $user->getId() != 5942) {
             $this->addMenuSip($menu, $section);
@@ -1364,6 +1360,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.main', $section)));
 
+        // MENU CASA - ABASTO
+        //     if ($this->isGranted('ROLE_SEIP_HOUSE_SUPPLY_*')) {
+        $this->addMenuHouseSupply($menuWorkStudyCircles, $section);
+        //    }
+
         if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_CREATE')) && $this->getPeriodService()->isAllowLoadWorkStudyCircle()) {
 
             $workStudyCirclesRegister = $this->factory->createItem('work_study_circles.register', $this->getSubLevelOptions(array(
@@ -1701,6 +1702,112 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
     }
 
     /**
+     * CONSTRUYE EL MENU DE CASA-ABASTO
+     * @author Gilbert C. <glavrjk@gmail.com>
+     * @param ItemInterface $menu
+     * @param type $section
+     */
+    private function addMenuHouseSupply(ItemInterface $menu, $section) {
+        $user = $this->getUser();
+        $child = $this->factory->createItem('housesupply', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                            'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Casa - Abasto', $section)));
+
+        $child1 = $this->factory->createItem('housesupply.sells', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                                // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Ventas', $section)));
+
+        $child1
+                ->addChild('housesupply.sells.create', array(
+                    //'route' => 'pequiven_user_feestructure',
+                    'labelAttributes' => array('icon' => 'fa fa-calculator')
+                ))
+                ->setLabel($this->translate(sprintf('Facturación', $section)));
+
+        $child1
+                ->addChild('housesupply.sells.cancel', array(
+                    //'route' => 'pequiven_user_feestructure',
+                    'labelAttributes' => array('icon' => 'fa fa-times')
+                ))
+                ->setLabel($this->translate(sprintf('Devolución', $section)));
+        $child1
+                ->addChild('housesupply.sells.reports', array(
+                    //'route' => 'pequiven_user_feestructure',
+                    'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
+                ))
+                ->setLabel($this->translate(sprintf('Reportes', $section)));
+
+        $child2 = $this->factory->createItem('housesupply.order', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                                // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Pedidos', $section)));
+        $child2
+                ->addChild('housesupply.order.create', array(
+                    'route' => 'pequiven_housesupply_order_charge',
+                        //'labelAttributes' => array('icon' => 'fa fa-calculator')
+                ))
+                ->setLabel($this->translate(sprintf('Crear', $section)));
+        $child2
+                ->addChild('housesupply.order.cancel', array(
+                        //'route' => 'pequiven_user_feestructure',
+                        //'labelAttributes' => array('icon' => 'fa fa-calculator')
+                ))
+                ->setLabel($this->translate(sprintf('Cancelar', $section)));
+        $child2
+                ->addChild('housesupply.order.view', array(
+                        //'route' => 'pequiven_user_feestructure',
+                        //'labelAttributes' => array('icon' => 'fa fa-calculator')
+                ))
+                ->setLabel($this->translate(sprintf('Visualizar', $section)));
+        $child2
+                ->addChild('housesupply.order.reports', array(
+                    //'route' => 'pequiven_user_feestructure',
+                    'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
+                ))
+                ->setLabel($this->translate(sprintf('Reportes', $section)));
+
+        $child3 = $this->factory->createItem('housesupply.inventory', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                                // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Inventario', $section)));
+        $child3
+                ->addChild('housesupply.inventory.charge', array(
+                    'route' => 'pequiven_housesupply_inventory_charge',
+                    'routeParameters' => array('type' => 1),
+                    'labelAttributes' => array('icon' => 'fa fa-arrow-up')
+                ))
+                ->setLabel($this->translate(sprintf('Cargos', $section)));
+        $child3
+                ->addChild('housesupply.inventory.uncharge', array(
+                    'route' => 'pequiven_housesupply_inventory_charge',
+                    'routeParameters' => array('type' => 2),
+                    'labelAttributes' => array('icon' => 'fa fa-arrow-down')
+                ))
+                ->setLabel($this->translate(sprintf('Descargos', $section)));
+        $child3
+                ->addChild('housesupply.inventory.reports', array(
+                    //'route' => 'pequiven_user_feestructure',
+                    'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
+                ))
+                ->setLabel($this->translate(sprintf('Reportes', $section)));
+
+        $child->addChild($child1);
+        $child->addChild($child2);
+        $child->addChild($child3);
+        $menu->addChild($child);
+    }
+
+    /**
      * 
      * Menu se SIP
      * 
@@ -1935,106 +2042,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
 
         $menu->addChild($menuSip);
-    }
-
-    /**
-     * CONSTRUYE EL MENU DE CASA-ABASTO
-     * @author Gilbert C. <glavrjk@gmail.com>
-     * @param ItemInterface $menu
-     * @param type $section
-     */
-    private function addMenuHouseSupply(ItemInterface $menu, $section) {
-        $user = $this->getUser();
-        $child = $this->factory->createItem('housesupply', $this->getSubLevelOptions(array(
-                            'uri' => null,
-                            'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
-                        ))
-                )
-                ->setLabel($this->translate(sprintf('Casa - Abasto', $section)));
-
-        $child1 = $this->factory->createItem('housesupply.sells', $this->getSubLevelOptions(array(
-                            'uri' => null,
-                                // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
-                        ))
-                )
-                ->setLabel($this->translate(sprintf('Ventas', $section)));
-
-        $child1
-                ->addChild('housesupply.sells.create', array(
-                    //'route' => 'pequiven_user_feestructure',
-                    'labelAttributes' => array('icon' => 'fa fa-calculator')
-                ))
-                ->setLabel($this->translate(sprintf('Facturación', $section)));
-
-        $child1
-                ->addChild('housesupply.sells.cancel', array(
-                    //'route' => 'pequiven_user_feestructure',
-                    'labelAttributes' => array('icon' => 'fa fa-times')
-                ))
-                ->setLabel($this->translate(sprintf('Devolución', $section)));
-        $child1
-                ->addChild('housesupply.sells.reports', array(
-                    //'route' => 'pequiven_user_feestructure',
-                    'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
-                ))
-                ->setLabel($this->translate(sprintf('Reportes', $section)));
-
-        $child2 = $this->factory->createItem('housesupply.order', $this->getSubLevelOptions(array(
-                            'uri' => null,
-                                // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
-                        ))
-                )
-                ->setLabel($this->translate(sprintf('Pedidos', $section)));
-        $child2
-                ->addChild('housesupply.order.create', array(
-                    'route' => 'pequiven_housesupply_order_charge',
-                        //'labelAttributes' => array('icon' => 'fa fa-calculator')
-                ))
-                ->setLabel($this->translate(sprintf('Crear', $section)));
-        $child2
-                ->addChild('housesupply.order.cancel', array(
-                        //'route' => 'pequiven_user_feestructure',
-                        //'labelAttributes' => array('icon' => 'fa fa-calculator')
-                ))
-                ->setLabel($this->translate(sprintf('Cancelar', $section)));
-        $child2
-                ->addChild('housesupply.order.reports', array(
-                    //'route' => 'pequiven_user_feestructure',
-                    'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
-                ))
-                ->setLabel($this->translate(sprintf('Reportes', $section)));
-
-        $child3 = $this->factory->createItem('housesupply.inventory', $this->getSubLevelOptions(array(
-                            'uri' => null,
-                                // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
-                        ))
-                )
-                ->setLabel($this->translate(sprintf('Inventario', $section)));
-        $child3
-                ->addChild('housesupply.inventory.charge', array(
-                    'route' => 'pequiven_housesupply_inventory_charge',
-                    'routeParameters' => array('type' => 1),
-                    'labelAttributes' => array('icon' => 'fa fa-arrow-up')
-                ))
-                ->setLabel($this->translate(sprintf('Cargos', $section)));
-        $child3
-                ->addChild('housesupply.inventory.uncharge', array(
-                    'route' => 'pequiven_housesupply_inventory_charge',
-                    'routeParameters' => array('type' => 2),
-                    'labelAttributes' => array('icon' => 'fa fa-arrow-down')
-                ))
-                ->setLabel($this->translate(sprintf('Descargos', $section)));
-        $child3
-                ->addChild('housesupply.inventory.reports', array(
-                    //'route' => 'pequiven_user_feestructure',
-                    'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
-                ))
-                ->setLabel($this->translate(sprintf('Reportes', $section)));
-
-        $child->addChild($child1);
-        $child->addChild($child2);
-        $child->addChild($child3);
-        $menu->addChild($child);
     }
 
     /**

@@ -39,7 +39,7 @@ class HouseSupplyOrderController extends SEIPController {
         $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($searchwsc);
 
         if ($permiso == 1) {
-            
+
             //NUEVO NUMERO DE PEDIDO
             $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
             $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
@@ -60,6 +60,7 @@ class HouseSupplyOrderController extends SEIPController {
                         'neworder' => $neworder,
                         'lastorder' => $lastorder,
                         'products' => $products,
+                        'wsc' => $wsc,
             ));
         }
     }

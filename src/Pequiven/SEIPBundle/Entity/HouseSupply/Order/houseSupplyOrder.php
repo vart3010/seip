@@ -81,21 +81,21 @@ class houseSupplyOrder {
     /**
      * BASE IMPONIBLE. MONTO SIN IVA
      * @var float
-     * @ORM\Column(name="taxable",type="float",nullable=false)
+     * @ORM\Column(name="taxable",type="float",nullable=true)
      */
     private $taxable;
 
     /**
      * MONTO DEL IVA
      * @var float
-     * @ORM\Column(name="tax",type="float",nullable=false)
+     * @ORM\Column(name="tax",type="float",nullable=true)
      */
     private $tax;
 
     /**
      *
      * @var float
-     * @ORM\Column(name="totalOrder",type="float",nullable=false)
+     * @ORM\Column(name="totalOrder",type="float",nullable=true)
      */
     private $totalOrder;
 
