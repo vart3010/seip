@@ -4210,7 +4210,7 @@ class IndicatorService implements ContainerAwareInterface {
         $labelAntper = "2014";
         $labelAnt2015 = "2015";
         $labelProm   = $medition;
-        $labelobj    = "Objetivo 2015";
+        $labelobj    = "Objetivo ".$indicator->getPeriod()->getName();
 
         //Carga de datos del label principal Periodo-2015
         $labelAnt["label"] = $labelAntper; //Label del 2014
