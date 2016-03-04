@@ -1,5 +1,7 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
 
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
 {% block before_body %}
     {{ contentHeader(
         ('Notificaciones'|trans)        
@@ -23,7 +25,10 @@
 								{% set cont = 1 %}
 								{% for type in types %}
 								<li class="big-menu grey-gradient with-right-arrow">
-									<span class="blue-gradient"><span class="list-count">0</span>{{ types[cont] }}</span>	
+									<span class="blue-gradient">
+										<span class="list-count" id="{{ types[cont] }}"></span>
+										{{ types[cont]|trans({},'messages') }}
+									</span>	
 									<ul class="message-menu">										
 										{% for notification in notifications %}
 											{% if notification.type == cont %}
@@ -103,9 +108,13 @@
     <script src="{{  asset('bundles/pequivenseip/notify.js') }}"></script> 
   <script type="text/javascript">
   $(document).ready(function() {
-  		var url = "{{ path("seip_notification_view_messages_data") }}";
-  		getData(url);
-  		setNotifications();
+  		var urlData = "{{ path("seip_notification_view_messages_data") }}";
+  		var urlMessage = "{{ path("seip_notification_view_message") }}";
+  		var urlMessageDelete = "{{ path("seip_notification_delete_message") }}";
+
+  		getData(urlData);
+  		getUrlMessage(urlMessage);
+  		//setNotifications();
   });
   </script>   
 {% endblock %}

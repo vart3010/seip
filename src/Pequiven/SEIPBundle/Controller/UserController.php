@@ -49,12 +49,12 @@ class UserController extends baseController {
         $em = $this->getDoctrine()->getManager();  
 
         $types = [
-            1 => "Objetivos",
-            2 => "Programas",
-            3 => "Indicadores",
-            4 => "Seguimiento y Eficacia",
-            5 => "Producción",
-            6 => "Informes de Evolución",
+            1 => "objetives",
+            2 => "programt",
+            3 => "indicators",
+            4 => "standardization",
+            5 => "production",
+            6 => "evolution",
         ];
 
         $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('user' => $securityContext->getToken()->getUser()), array('createdAt' => 'DESC'));
@@ -128,12 +128,48 @@ class UserController extends baseController {
     }
 
     public function getNotifyDataAction(Request $request){
+        $em = $this->getDoctrine()->getManager();   
+        $securityContext = $this->container->get('security.context');
+
         $response = new JsonResponse();   
+        $notify = $fav = $trash = 0;
+        $objetives = $programt = $indicators = $standardization = $production = $evolution = 0;
+
+        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('user' => $securityContext->getToken()->getUser()));
         
+        foreach ($notification as $valueNotify) {
+            if ($valueNotify->getTypeMessage() == 1) {
+                $notify = $notify + 1;
+            }elseif($valueNotify->getTypeMessage() == 2){
+                $fav = $fav + 1;
+            }
+
+            if ($valueNotify->getType() == 1) {
+                $objetives = $objetives + 1;
+            }elseif ($valueNotify->getType() == 2) {
+                $programt = $programt + 1;
+            }elseif ($valueNotify->getType() == 3) {
+                $indicators = $indicators + 1;
+            }elseif ($valueNotify->getType() == 4) {
+                $standardization = $standardization + 1;
+            }elseif ($valueNotify->getType() == 5) {
+                $production = $production + 1;
+            }elseif ($valueNotify->getType() == 6) {
+                $evolution = $evolution + 1;
+            }
+            
+        }
+
         $data = [
-            'notify' => 0,
-            'fav'    => 1,
-            'trash'  => 0
+            'notify' => $notify,
+            'fav'    => $fav,
+            'trash'  => $trash,
+            'objetives' => $objetives,
+            'programt'  => $programt,
+            'indicators'=> $indicators,
+            'standardization' => $standardization,
+            'production'=> $production,
+            'evolution' => $evolution
         ];
 
         $response->setData($data);

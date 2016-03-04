@@ -1,4 +1,5 @@
 var url;
+var urlMessage;
 
 $("#reload").click(function(){
     //getData();
@@ -12,16 +13,26 @@ $("#reload").click(function(){
     $('#notifyAll').load();
 });
 
-function setNotifications(data){ 
-    var trash = data['trash'];
-    console.log(trash);
-    /*$('#notifyAll').text(data['notify']);
-    $('#notifyFav').text(data['fav']);
-    $('#notifyTrash').text(data['trash']);*/
-    //alert($("#notify").text());
-    //getData();
+function setNotifications(dataNotify){     
+    $('#notifyAll').text(dataNotify['notify']);
+    $('#notifyFav').text(dataNotify['fav']);
+    $('#notifyTrash').text(dataNotify['trash']);
+
+    $('#objetives').text(dataNotify['objetives']);            
+    $('#programt').text(dataNotify['programt']);            
+    $('#indicators').text(dataNotify['indicators']);            
+    $('#standardization').text(dataNotify['standardization']);            
+    $('#production').text(dataNotify['production']);            
+    $('#evolution').text(dataNotify['evolution']);            
 }
 
+function getUrlMessage(urlGetMessage){
+    urlMessage = urlGetMessage;
+}
+
+function getUrlMessageDelete(urlGetMessageDelete){
+    urlMessagedelete = urlGetMessageDelete;
+}
 
 function getData(url){
     var data = {
@@ -38,20 +49,19 @@ function getData(url){
             complete:function(){
                 $('#loading').css('display','none');                        
             },
-            success: function (data) {                        
-                //console.log(data);
+            success: function (data) {                                                        
                 setNotifications(data);
             }
     });
 }
 
-function showMessage(id){			
+function showMessage(id){  
 	var data = {
         idMessage: id,                    
     };            
 	$.ajax({
             type: 'get',
-            url: '{{ path("seip_notification_view_message") }}',
+            url: urlMessage,
             data: data,
             beforeSend:function(){
                     $('#loading').css({display:'block'});                            
@@ -80,7 +90,7 @@ function deleteMessage(id){
     };             
 	$.ajax({
             type: 'get',
-            url: '{{ path("seip_notification_delete_message") }}',
+            url: urlMessageDelete,
             data: data, 
             beforeSend:function(){
                     $('#loading').css({display:'block'});                            
