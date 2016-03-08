@@ -71,6 +71,18 @@
 								</span><i class="fa fa-flag"></i>&nbsp;Importantes
 								</span>
 								<ul class="message-menu">
+									<li id="iMessage_">
+										<span class="message-status">
+											<a href="javascript:void(0);" style="color:#ebd106;" id="" title="Mensaje sin leer">
+												<i class="fa fa-envelope-o" id="new-message_"></i>									
+											</a>				
+											<a href="javascript:void(0);" class="" style="color:#3bc600;"><i class="fa fa-tag"></i></a>		
+										</span>
+											<a href title="Leer Notificación" id="title" onclick="">
+												<strong class="blue">Importantes</strong><br>	
+												<strong>12/02/2015</strong>							
+											</a>
+									</li>
 								</ul>
 						</li>
 						<li class="big-menu grey-gradient with-right-arrow">
@@ -110,13 +122,13 @@
   $(document).ready(function() {
   		var urlData = "{{ path("seip_notification_view_messages_data") }}";
   		var urlMessage = "{{ path("seip_notification_view_message") }}";
-  		var urlMessageDelete = "{{ path("seip_notification_delete_message") }}";
   		var urlFav = "{{ path("seip_notification_favourite_message") }}";
+  		var urlMessageDelete = "{{ path("seip_notification_delete_message") }}";
 
-  		getData(urlData);
+  		setUrlData(urlData);
   		setUrlMessage(urlMessage);
-  		setUrlMessageDelete(urlMessageDelete);
   		setUrlMessageFav(urlFav);
+  		setUrlMessageDelete(urlMessageDelete);
   		//setNotifications();
   });
   </script>   
