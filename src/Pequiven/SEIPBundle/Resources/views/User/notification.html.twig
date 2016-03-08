@@ -111,9 +111,12 @@
   		var urlData = "{{ path("seip_notification_view_messages_data") }}";
   		var urlMessage = "{{ path("seip_notification_view_message") }}";
   		var urlMessageDelete = "{{ path("seip_notification_delete_message") }}";
+  		var urlFav = "{{ path("seip_notification_favourite_message") }}";
 
   		getData(urlData);
-  		getUrlMessage(urlMessage);
+  		setUrlMessage(urlMessage);
+  		setUrlMessageDelete(urlMessageDelete);
+  		setUrlMessageFav(urlFav);
   		//setNotifications();
   });
   </script>   

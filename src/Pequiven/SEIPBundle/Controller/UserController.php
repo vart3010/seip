@@ -99,7 +99,9 @@ class UserController extends baseController {
 
         $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->find($request->get('idMessage'));
         
-        $em->remove($notification);
+        //$em->remove($notification);
+        $notification->setTypeMessage(3);
+
         $em->flush();
         
         $response->setData($notification->getDescription());
@@ -142,20 +144,24 @@ class UserController extends baseController {
                 $notify = $notify + 1;
             }elseif($valueNotify->getTypeMessage() == 2){
                 $fav = $fav + 1;
+            }elseif ($valueNotify->getTypeMessage() == 3) {
+                $trash = $trash + 1;
             }
-
-            if ($valueNotify->getType() == 1) {
-                $objetives = $objetives + 1;
-            }elseif ($valueNotify->getType() == 2) {
-                $programt = $programt + 1;
-            }elseif ($valueNotify->getType() == 3) {
-                $indicators = $indicators + 1;
-            }elseif ($valueNotify->getType() == 4) {
-                $standardization = $standardization + 1;
-            }elseif ($valueNotify->getType() == 5) {
-                $production = $production + 1;
-            }elseif ($valueNotify->getType() == 6) {
-                $evolution = $evolution + 1;
+            
+            if ($valueNotify->getTypeMessage() != 2 and $valueNotify->getTypeMessage() != 3) {                
+                if ($valueNotify->getType() == 1) {
+                    $objetives = $objetives + 1;
+                }elseif ($valueNotify->getType() == 2) {
+                    $programt = $programt + 1;
+                }elseif ($valueNotify->getType() == 3) {
+                    $indicators = $indicators + 1;
+                }elseif ($valueNotify->getType() == 4) {
+                    $standardization = $standardization + 1;
+                }elseif ($valueNotify->getType() == 5) {
+                    $production = $production + 1;
+                }elseif ($valueNotify->getType() == 6) {
+                    $evolution = $evolution + 1;
+                }
             }
             
         }

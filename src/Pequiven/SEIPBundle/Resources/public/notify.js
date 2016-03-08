@@ -1,7 +1,10 @@
-var url;
+var urlData;
 var urlMessage;
+var urlMessageDelete;
+var urlFavMessage;
 
 $("#reload").click(function(){
+    console.log('reload');
     //getData();
     /*$.ajax({
         url: "",
@@ -26,22 +29,26 @@ function setNotifications(dataNotify){
     $('#evolution').text(dataNotify['evolution']);            
 }
 
-function getUrlMessage(urlGetMessage){
+function setUrlMessage(urlGetMessage){
     urlMessage = urlGetMessage;
 }
 
-function getUrlMessageDelete(urlGetMessageDelete){
-    urlMessagedelete = urlGetMessageDelete;
+function setUrlMessageDelete(urlGetMessageDelete){
+    urlMessageDelete = urlGetMessageDelete;
 }
 
-function getData(url){
+function setUrlMessageFav(urlFav){
+    urlFavMessage = urlFav;
+}
+
+function getData(urlData){
     var data = {
         id: 1,                    
     }; 
 
     $.ajax({
             type: 'get',
-            url: url,
+            url: urlData,
             data: data,                              
             beforeSend:function(){
                 $('#loading').css({display:'block'});                            
@@ -56,15 +63,15 @@ function getData(url){
 }
 
 function showMessage(id){  
-	var data = {
+    var data = {
         idMessage: id,                    
     };            
-	$.ajax({
+    $.ajax({
             type: 'get',
             url: urlMessage,
             data: data,
             beforeSend:function(){
-                    $('#loading').css({display:'block'});                            
+                $('#loading').css({display:'block'});                            
             },
             complete:function(){
                 $('#loading').css('display','none');                        
@@ -84,16 +91,17 @@ function showMessage(id){
     });
 }   
 
-function deleteMessage(id){			
-	var data = {
+function deleteMessage(id){         
+    
+    var data = {
         idMessage: id,                    
     };             
-	$.ajax({
+    $.ajax({
             type: 'get',
             url: urlMessageDelete,
             data: data, 
             beforeSend:function(){
-                    $('#loading').css({display:'block'});                            
+                $('#loading').css({display:'block'});                            
             },
             complete:function(){
                 $('#loading').css('display','none');                        
@@ -101,20 +109,20 @@ function deleteMessage(id){
             success: function (data) {                        
                 $(location).attr('href', data["url"]);                                                
                 $('#iMessage_' + id).css('display','none');  
-    			$('#buttonToll').css('display', 'none');                       
+                $('#buttonToll').css('display', 'none');                       
                 document.getElementById("messageNone").innerHTML = '<i class="fa fa-check"></i> Notificación Eliminada Satisfactoriamente';
             }
     });
 } 
 
-function favouriteMessage(id){			
-	var data = {
+function favouriteMessage(id){          
+    var data = {
         idMessage: id,                    
     };     
 
-	/*$.ajax({
+    $.ajax({
             type: 'get',
-            url: '{{ path("seip_notification_favourite_message") }}',
+            url: urlFavMessage,
             data: data, 
             beforeSend:function(){
                     $('#loading').css({display:'block'});                            
@@ -128,7 +136,7 @@ function favouriteMessage(id){
     			$('#buttonToll').css('display', 'none');                       
                 document.getElementById("messageNone").innerHTML = '<i class="fa fa-check"></i> Notificación enviada a Importantes';
             }
-    });*/
+    });
 }   
 
 $("#notify").click(function(){
