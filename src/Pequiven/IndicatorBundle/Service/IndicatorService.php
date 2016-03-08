@@ -1974,6 +1974,16 @@ class IndicatorService implements ContainerAwareInterface {
                 }
                 $arrayVariables['medition'][] = $valueIndicator->getValueOfIndicator();
             }
+        } elseif (isset($options['viewVariablesSimpleAverageByFrequencyNotification']) && array_key_exists('viewVariablesSimpleAverageByFrequencyNotification', $options)) {
+            unset($options['viewVariablesSimpleAverageByFrequencyNotification']);
+            $arrayVariables['descriptionReal'] = $indicator->getShowByRealValue();
+            $arrayVariables['descriptionPlan'] = $indicator->getShowByPlanValue();
+            foreach ($valuesIndicator as $valueIndicator) {
+                $valuesFromDashboardEquation = $this->calculateFormulaValueFromDashboardEquation($formula, $valueIndicator->getFormulaParameters());
+                $arrayVariables['valueReal'][] = $valuesFromDashboardEquation['dashboardEquationReal'];
+                $arrayVariables['valuePlan'][] = $valuesFromDashboardEquation['dashboardEquationPlan'];
+                $arrayVariables['medition'][] = $valueIndicator->getValueOfIndicator();
+            }
         } elseif (isset($options['viewVariablesMarkedReal']) && array_key_exists('viewVariablesMarkedReal', $options)) {
             unset($options['viewVariablesMarkedReal']);
             $variables = $formula->getVariables();
@@ -3033,6 +3043,8 @@ class IndicatorService implements ContainerAwareInterface {
                 $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanFromEquationByFrequencyNotification' => true));
             } elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
                 $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
+            } elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE) {
+                $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesSimpleAverageByFrequencyNotification' => true));
             }
 
             $dataSetReal["seriesname"] = $arrayVariables['descriptionReal'];

@@ -18,6 +18,16 @@
         {{ form_errors(form.aliquot) }}
     </div>
     <div class="field-block button-height">
+        {{ form_label(form.typeOfPlanning) }}
+        {{ form_widget(form.typeOfPlanning) }}
+        {{ form_errors(form.typeOfPlanning) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.typeOfAliquot) }}
+        {{ form_widget(form.typeOfAliquot) }}
+        {{ form_errors(form.typeOfAliquot) }}
+    </div>
+    <div class="field-block button-height">
         {{ form_label(form.enabled) }}
         {{ form_widget(form.enabled) }}
         {{ form_errors(form.enabled) }}
