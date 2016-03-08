@@ -173,6 +173,7 @@ class HouseSupplyInventoryController extends SEIPController {
                 $instance->setMaxPerUser(0);
             } else {
                 $instance->setMaxPerUser(floor($dispInst / $poblacion));
+                $instance->setAvailable($dispInst);
             }
             $em->flush();
         }
