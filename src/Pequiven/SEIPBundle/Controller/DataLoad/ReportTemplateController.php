@@ -1602,13 +1602,14 @@ class ReportTemplateController extends SEIPController {
             ;
             $view->setData($data);
         } else {
-
+//            $byrange
             $productsReport = new \Doctrine\Common\Collections\ArrayCollection();
             $consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
             $rawMaterialConsumptionPlannings = new \Doctrine\Common\Collections\ArrayCollection();
 
             $productsReportByIdProduct = $consumerPlanningServicesByIdService = $rawMaterialConsumptionPlanningsById = array();
             foreach ($plantReports as $plantReport) {
+
 
                 if (!in_array($plantReport->getReportTemplate()->getName(), $plants)) {
                     $plants[] = $plantReport->getReportTemplate()->getName();
@@ -1708,9 +1709,22 @@ class ReportTemplateController extends SEIPController {
             $observations = array();
             $arrayIdProducts = array();
 
+            $groupsProducts = array();
+
 
             foreach ($productsReport as $productReport) {
-//PRODUCCTION DAY
+                //PRODUCCTION DAY
+                $g = $productReport->getChildrensGroup();
+
+                $isGroup = $productReport->getPlantReport()->getPlant()->getPermitGroupProduct();
+                $group = $productReport->getPlantReport()->getPlant()->getName();
+//                 if ($productReport->getIsGroup()) {
+//                    $productReportChildrens = $productReport->getChildrensGroup();
+//                 }
+                if (in_array($group, $groupsProducts)) {
+                    $groupsProducts[] = $group;
+                }
+
                 $summaryDay = $productReport->getSummaryDay($dateReport, $typeReport);
 
                 $dayPlan+=$summaryDay["plan"];
@@ -1722,7 +1736,7 @@ class ReportTemplateController extends SEIPController {
                     $var = $summaryDay["plan"] - $summaryDay["real"];
                 }
 
-//ME TRAIGO LAS OBSERVACIONES 
+                //ME TRAIGO LAS OBSERVACIONES 
                 $observations[] = array(
                     "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
                     "obs" => $summaryDay["observation"]
@@ -1733,13 +1747,29 @@ class ReportTemplateController extends SEIPController {
                 } else {
                     $ejecutionDay = 0;
                 }
+                
+                $group = null;
+                if($productReport->getParent()!=null) {
+                    $group = $productReport->getParent()->getId();
+                }
+
                 $summaryProducction["day"][] = array(
+                    "idProduct" => $productReport->getProduct()->getId(),
+                    "idPlant" => $productReport->getPlantReport()->getPlant()->getId(),
+                    "group" => $group,
                     "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
                     "plan" => number_format($summaryDay["plan"], 2, ',', '.'),
                     "real" => number_format($summaryDay["real"], 2, ',', '.'),
                     "ejecution" => number_format($ejecutionDay, 2, ',', '.'),
                     "var" => number_format($var, 2, ',', '.')
                 );
+
+
+
+
+
+
+
 
 
 //PRODUCCTION MONTH
@@ -1838,8 +1868,11 @@ class ReportTemplateController extends SEIPController {
                     }
                 }
             }
-            //var_dump($arrayRawMaterial);die();
-
+            //var_dump($groupsProduct);die();
+            var_dump($summaryProducction);
+            var_dump("<br><br>");
+            var_dump($groupsProducts);
+            die();
 
 
             $cont = 0;
