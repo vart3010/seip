@@ -1752,6 +1752,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         $child2
                 ->addChild('housesupply.order.create', array(
                     'route' => 'pequiven_housesupply_order_charge',
+                    'routeParameters' => array('typemember' => 0),
                         //'labelAttributes' => array('icon' => 'fa fa-calculator')
                 ))
                 ->setLabel($this->translate(sprintf('Crear', $section)));

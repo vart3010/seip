@@ -96,14 +96,9 @@
                         <td width="40%" style="border: 2px black solid;">
                             <table width="100%" class="simple-table">
                                 <tr>
-                                    <td style="background-color: #D8D8D8; font-size: 30pt; vertical-align: middle; text-align: center; height: 55px;" colspan="2">                               
-                                        {% if (type==1)%}
-                                            Orden:
-                                            <span class="green bold">{{ neworder }}</span>              
-                                        {% else %}
-                                            Descargo:
-                                            <span class="red bold">{{ neworder }}</span>              
-                                        {% endif %}
+                                    <td style="background-color: #D8D8D8; font-size: 30pt; vertical-align: middle; text-align: center; height: 55px;" colspan="2">                                                           
+                                        Orden:
+                                        <span class="green bold">{{ neworder }}</span>              
                                     </td>                                        
                                 </tr>
                                 {# {% if (lastorder) %}
@@ -130,14 +125,20 @@
                 <br>
                 <table width="95%">                     
                     <tr>
-                        <td width="70%" rowspan="2">
+                        <td width="65%" rowspan="2">
                             <br>
-                            <form method="POST" action="{{ path("pequiven_housesupply_order_charge",{'type': type}) }}">                           
-                                <select onchange="this.form.submit();" name="member" id="member" class="select2 input-xxlarge form-control">     
-                                    <option value="0" selected>Seleccione Miembro del Círculo</option>
-                                    <option value="{{memberobj.getid}}" id="{{memberobj.getid}}" selected>{{memberobj.getfullname}}</option>
+                            <form method="POST" action="{{ path("pequiven_housesupply_order_charge",{'type': type, 'typemember': 1 }) }}">                           
+                                <select onchange="this.form.submit();" name="member" id="member" class="select2 input-xxlarge form-control">    
+
+                                    {% if(memberobj)%}
+                                        <option value="{{memberobj.getid}}" id="{{memberobj.getid}}" selected>{{memberobj.getfullname}}</option>
+                                        <option value="0" id="0">GENERAL</option>
+                                    {% else %}
+                                        <option value="0" id="0" selected>GENERAL</option>
+                                    {% endif %}
+
                                     {% for user in wsc.getmembers %}
-                                        {% if user.getid!= memberobj.getid %}
+                                        {% if ((memberobj==null) or (user.getid!= memberobj.getid))%}
                                             <option value="{{user.getid}}" id="{{user.getid}}" >{{user.getfullname}}</option>
                                         {% endif %}
                                     {% endfor %}
@@ -164,6 +165,7 @@
                                             <tbody>
                                                 {% set linea=1 %}
                                                 {% set iva=0 %}
+                                                {% set cant=0 %}
                                                 {% set total=0 %}
                                                 {% if(items) %}
                                                     {% for list in items %}
@@ -177,6 +179,7 @@
                                                         </tr>
                                                     </form>
                                                     {% set linea=linea+1 %}
+                                                    {% set cant=cant+list.cant %}
                                                     {% set iva=iva+list.totalLineTaxes %}
                                                     {% set total=total+list.totalLine %}                                                    
                                                 {% endfor %}
@@ -215,7 +218,7 @@
                                 </tr>
                             </table>
                         </td>
-                        <td width="30%" style="text-align: left;">  
+                        <td width="35%" style="text-align: left;">  
                             <br>
                             <table width="100%" height="100px;">
                                 <tr>
@@ -225,7 +228,7 @@
                                             Bs. 
                                         </span>
                                         <span style="color: #002a80; font-size: 30pt; text-align: right; width: 100%; font-weight: bold;" id="totales_3">
-                                            0,00
+                                            {{ (total + iva)| number_format(2, ',', '.') }}
                                         </span>
                                     </td>
                                 </tr>                                      
@@ -233,7 +236,7 @@
                                     <td width="25%" style="vertical-align: middle; font-weight: bold;">Cant. <br> Productos</td>
                                     <td width="75%" style="vertical-align: middle; text-align: right;">
                                         <span style="color: #002a80; font-size: 30pt; text-align: right; width: 100%;" id="totales_2">
-                                            0
+                                            {{ cant }}
                                         </span>
                                     </td>
                                 </tr>
@@ -242,41 +245,51 @@
                     </tr>  
                     <tr>
                         <td width="20%">
-                            <br><br><br>
-                            <fieldset class="fieldset">
-                                <legend class="legend"><b>Agregar Producto</b></legend>
-                                <form method="POST" action="{{ path("pequiven_housesupply_order_charge_add") }}">  
-                                    <table style="border-collapse:separate; border-spacing: 0px 5px;" width="100%">                                        
-                                        <tr>
-                                            <td colspan="3">
-                                                <select  name="producto" id="producto" class="select2 input-xlarge form-control" required="true">     
-                                                    <option value="0" selected>Seleccione</option>
-                                                    {% for inv in inventory %}
-                                                        {% if ((inv.available<inv.product.instance.MaxPerUser)or(inv.product.instance.MaxPerUser<=1))%}
-                                                            <option value="{{inv.product.id}}" id="{{inv.product.description}}" disabled="disabled" name="product">{{inv.product.description}}</option>
-                                                        {% else %}
-                                                            <option value="{{inv.product.id}}" id="{{inv.product.description}}" name="product">{{inv.product.description}}</option>                                                        
-                                                        {% endif %}                                                        
-                                                    {% endfor %}
-                                                </select>
-                                            </td>                                        
-                                        </tr>                                     
-                                        <tr>
-                                            <td width="20%" style="text-align: center;" required="true">
-                                                <input type="number" class="input-small" id="cantidad" name="cantidad" placeholder="Cantidad" min="1">
-                                            </td>                                                                                  
-                                            <td width="20%" style="text-align: left;">     
-                                                <button type="submit" class="button glossy mid-margin-right">
-                                                    <span class="button-icon green-gradient"><span class="icon-plus"></span></span>                                                       
-                                                </button>  
-                                            </td>
-                                        </tr>                                           
-                                    </table> 
-                                    <input type="text" name="datauser" id="datauser" value="{{member}}">        
-                                    <input type="text" name="linea" id="linea" value="{{linea}}">        
-                                    <input type="text" name="wsc" id="wsc" value="{{wsc.id}}">        
-                                </form>                                
-                            </fieldset>
+                            {% if(memberobj)%}  
+                                <br><br><br>
+                                <fieldset class="fieldset">
+                                    <legend class="legend"><b>Agregar Producto</b></legend>
+                                    <form method="POST" action="{{ path("pequiven_housesupply_order_charge_add") }}">  
+                                        <table style="border-collapse:separate; border-spacing: 0px 5px;" width="100%">                                        
+                                            <tr>
+                                                <td colspan="3">
+                                                    <select  name="producto" id="producto" class="select2 input-xlarge form-control" required="true">     
+                                                        <option value="0" selected>Seleccione</option>
+                                                        {% for inv in inventory %}
+                                                            {% if ((inv.available<inv.product.instance.MaxPerUser)or(inv.product.instance.MaxPerUser<=1))%}
+                                                                <option value="{{inv.product.id}}" id="{{inv.product.description}}" disabled="disabled" name="product">{{inv.product.description}}</option>
+                                                            {% else %}
+                                                                <option value="{{inv.product.id}}" id="{{inv.product.description}}" name="product">{{inv.product.description}}</option>                                                        
+                                                            {% endif %}                                                        
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>                                        
+                                            </tr>                                     
+                                            <tr>
+                                                <td width="20%" style="text-align: center;" required="true">
+                                                    <input type="number" class="input-small" id="cantidad" name="cantidad" placeholder="Cantidad" min="1">
+                                                </td>                                                                                  
+                                                <td width="20%" style="text-align: left;"> 
+                                                    {% if(memberobj)%}    
+                                                        <button type="submit" class="button glossy mid-margin-right">
+                                                            <span class="button-icon green-gradient"><span class="icon-plus"></span></span>                                                       
+                                                        </button>  
+                                                    {%else%}
+                                                        &nbsp;
+                                                    {%endif%}
+                                                </td>
+                                            </tr>                                           
+                                        </table> 
+
+                                        <input type="text" name="datauser" hidden id="datauser" value="{{memberobj.getid}}">     
+
+                                        <input type="text" name="linea" hidden id="linea" value="{{linea}}">        
+                                        <input type="text" name="wsc" hidden id="wsc" value="{{wsc.id}}">        
+                                    </form>                                
+                                </fieldset>
+                            {%else%}
+                                &nbsp;
+                            {%endif%}
                         </td>
                     </tr>
                 </table>

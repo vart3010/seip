@@ -52,20 +52,23 @@ class HouseSupplyOrderController extends SEIPController {
         $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
         $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
 
-        if ($request->get('member')) {
+        if (($request->get('member')) && ($request->get('member') != 0)) {
             $member = $em->getRepository('PequivenSEIPBundle:User')->findOneById($request->get('member'));
             $searchitemsbymember = array(
                 'client' => $member,
                 'type' => 3,
+                'workStudyCircle' => $wsc,
             );
             $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
-            $member_ant = $member->getId();
         } else {
-            $member_ant = 0;
-            $searchitemsbymember = array(
-                'type' => 3,
-            );
-            $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
+            if (($request->get('typemember') == 0) || ($request->get('member') == 0)) {
+                $member = null;
+                $searchitemsbymember = array(
+                    'type' => 3,
+                    'workStudyCircle' => $wsc,
+                );
+                $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
+            }
         }
 
         return $this->render('PequivenSEIPBundle:HouseSupply\Order:create.html.twig', array(
@@ -74,7 +77,6 @@ class HouseSupplyOrderController extends SEIPController {
                     'inventory' => $inventory,
                     'wsc' => $wsc,
                     'items' => $items,
-                    'member' => $member_ant,
                     'memberobj' => $member,
         ));
     }
@@ -128,7 +130,7 @@ class HouseSupplyOrderController extends SEIPController {
         }
 
 
-        return $this->redirect($this->generateUrl("pequiven_housesupply_order_charge", array("member" => $client)));
+        return $this->redirect($this->generateUrl("pequiven_housesupply_order_charge", array("member" => $client, 'typemember' => 1)));
     }
 
     public function saveOrderAction(Request $request) {

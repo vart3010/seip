@@ -1,6 +1,6 @@
 ## YAML Template.
 pequiven_housesupply_order_charge:
-    path: /orders/create/
+    path: /orders/create/{typemember}
     defaults:
         _controller: pequiven.controller.housesupply_order:chargeAction
         _format: html
