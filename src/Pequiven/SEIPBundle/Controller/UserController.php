@@ -183,6 +183,37 @@ class UserController extends baseController {
         return $response;        
     }
 
+    public function getMessagesDataAction(Request $request){
+        $response = new JsonResponse();        
+        
+        $description = [];
+
+        $em = $this->getDoctrine()->getManager();   
+
+        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('typeMessage' => $request->get('type')));
+        
+        foreach ($notification as $valueNotification) {
+            $description[$valueNotification->getId()] = $valueNotification->getDescription();
+            $title[$valueNotification->getId()] = $valueNotification->getTitle();
+            
+            $dateCreated = $valueNotification->getCreatedAt();
+            $dateCreated->setTimestamp((int)$dateCreated->format('U'));            
+            $fechaCreated = $dateCreated->format('d-m-Y'); 
+
+            $date[$valueNotification->getId()] = $fechaCreated;
+        }
+
+        $data = [
+            'description' => $description,
+            'title'       => $title,
+            'date'        => $date
+        ];
+
+        $response->setData($data);
+
+        return $response;  
+    }
+
     /**
      * Función que devuelve el paginador con los objetivos operativos
      * @param \Symfony\Component\HttpFoundation\Request $request

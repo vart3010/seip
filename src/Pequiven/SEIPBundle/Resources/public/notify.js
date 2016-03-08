@@ -1,20 +1,15 @@
 var urlData;
+
 var urlMessage;
+
 var urlMessageDelete;
+
 var urlFavMessage;
 
-$("#reload").click(function(){
-    //console.log('reload');
-    getData(urlData);
-    //getData();
-    /*$.ajax({
-        url: "",
-        context: document.body,
-        success: function(s,x){
-            $(this).html(s);
-        }
-    });*/
-    //$('#notifyAll').load();
+var urlMessages;
+
+$("#reload").click(function(){    
+    getData(urlData);    
 });
 
 function setNotifications(dataNotify){     
@@ -45,6 +40,10 @@ function setUrlMessageDelete(urlGetMessageDelete){
 
 function setUrlMessageFav(urlFav){
     urlFavMessage = urlFav;
+}
+
+function setUrlMessagesData(urlMessagesData){
+    urlMessages = urlMessagesData;
 }
 
 function getData(urlData){    
@@ -96,8 +95,7 @@ function showMessage(id){
     });
 }   
 
-function deleteMessage(id){         
-    
+function deleteMessage(id){    
     var data = {
         idMessage: id,                    
     };             
@@ -125,7 +123,6 @@ function favouriteMessage(id){
     var data = {
         idMessage: id,                    
     };     
-
     $.ajax({
             type: 'get',
             url: urlFavMessage,
@@ -146,16 +143,52 @@ function favouriteMessage(id){
     });
 }   
 
+function getMessagesData(type, tag){    
+    var data = {
+        type: type,                    
+    };     
+
+    $.post(urlMessages, data, function(){
+        createMessages();
+    });
+
+    /*$.ajax({
+            type: 'get',
+            url: urlMessages,
+            data: data, 
+            /*beforeSend:function(){
+                    $('#loading').css({display:'block'});                            
+            },
+            complete:function(){
+                //$('#loading').css('display','none');                        
+            },                    
+            success: function (data) {                                                        
+                createMessages();
+            }
+    });  */
+}
+
+function createMessages(){
+    var myArray = [];    
+    //var arraylength = myArray.length;
+    for (var i=0; i<5; i++) {        
+        myArray.push('<li id="iMessage_'+ i +'"><span class="message-status"><a href="javascript:void(0);" style="color:#ebd106;" id="" title="Mensaje sin leer"><i class="fa fa-envelope-o" id="new-message_"></i></a><a href="javascript:void(0);" class="" style="color:#3bc600;"><i class="fa fa-tag"></i></a></span><a href title="Leer Notificación" id="title" onclick=""><strong class="blue">Importantes</strong><br><strong>12/02/2015</strong></a></li>');
+    }
+    $('#favMessage').html(myArray);
+    console.log(myArray);
+}
+
 $("#notify").click(function(){
     console.log('Notify'); 
 }); 
 
 $("#fav").click(function(){
-    //console.log('Favoritos');
+    getMessagesData(2,"#favMessage");
+    //createMessages(2,"#favMessage");
     $('#messageNone').text('Sección importantes, selecciones un mensaje.');
 });	
 
 $("#trash").click(function(){
-    //console.log('Trash');
+    getMessagesData(3,"#favMessage");
     $('#messageNone').text('Sección eliminados, selecciones un mensaje.');    
 }); 
