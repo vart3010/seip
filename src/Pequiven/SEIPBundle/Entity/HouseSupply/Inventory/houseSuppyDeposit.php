@@ -43,9 +43,6 @@ class houseSupplyDeposit {
      */
     private $complejo;
 
-
-  
-
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
@@ -85,8 +82,6 @@ class houseSupplyDeposit {
         return $this->complejo;
     }
 
-   
-
     function getUpdatedAt() {
         return $this->updatedAt;
     }
@@ -115,7 +110,6 @@ class houseSupplyDeposit {
         $this->complejo = $complejo;
     }
 
-  
     function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
     }
@@ -131,6 +125,5 @@ class houseSupplyDeposit {
     function setInventoryCharge(houseSupplyInventoryCharge $inventoryCharge) {
         $this->inventoryCharge = $inventoryCharge;
     }
-
 
 }

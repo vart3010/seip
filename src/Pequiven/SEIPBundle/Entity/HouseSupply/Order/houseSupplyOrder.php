@@ -8,6 +8,7 @@ use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyCycle;
 
 /**
  * Ordenes
@@ -58,9 +59,10 @@ class houseSupplyOrder {
     private $workStudyCircle;
 
     /**
-     *
-     * @var integer
-     * @ORM\Column(name="cycle",type="integer",nullable=false)
+     * 
+     * @var houseSupplyCycle
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyCycle", inversedBy="houseSupplyOrder")
+     * @ORM\JoinColumn(name="cycle_id", referencedColumnName="id")
      */
     private $cycle;
 
@@ -236,7 +238,7 @@ class houseSupplyOrder {
         $this->workStudyCircle = $workStudyCircle;
     }
 
-    function setCycle($cycle) {
+    function setCycle(houseSupplyCycle $cycle) {
         $this->cycle = $cycle;
     }
 

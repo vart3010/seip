@@ -99,6 +99,13 @@ class houseSupplyBillingItems {
     private $totalLine;
 
     /**
+     *
+     * @var float
+     * @ORM\Column(name="totalLineTaxes",type="float",nullable=true)
+     */
+    private $totalLineTaxes;
+
+    /**
      * 
      * @var houseSupplyProduct
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct", inversedBy="billingItems")
@@ -176,6 +183,10 @@ class houseSupplyBillingItems {
         return $this->totalLine;
     }
 
+    function getTotalLineTaxes() {
+        return $this->totalLineTaxes;
+    }
+
     function getProduct() {
         return $this->product;
     }
@@ -238,6 +249,10 @@ class houseSupplyBillingItems {
 
     function setTotalLine($totalLine) {
         $this->totalLine = $totalLine;
+    }
+
+    function setTotalLineTaxes($totalLineTaxes) {
+        $this->totalLineTaxes = $totalLineTaxes;
     }
 
     function setProduct(houseSupplyProduct $product) {

@@ -7,6 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder;
+use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle;
 
 /**
  * Items de Factura
@@ -28,7 +29,7 @@ class houseSupplyOrderItems {
     private $id;
 
     /**
-     * 1. PEDIDO / 2. DEVOLUCION DE PEDIDO
+     * 1. PEDIDO / 2. DEVOLUCION DE PEDIDO / 3. EN ESPERA
      * @var string
      * @ORM\Column(name="type",type="string",nullable=false)
      */
@@ -64,6 +65,14 @@ class houseSupplyOrderItems {
     private $client;
 
     /**
+     * 
+     * @var WorkStudyCircle
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", inversedBy="houseSupplyOrderItems")
+     * @ORM\JoinColumn(name="workstudycircle_id", referencedColumnName="id")
+     */
+    private $workStudyCircle;
+
+    /**
      *
      * @var float
      * @ORM\Column(name="cant",type="float",nullable=false)
@@ -97,6 +106,13 @@ class houseSupplyOrderItems {
      * @ORM\Column(name="totalLine",type="float",nullable=true)
      */
     private $totalLine;
+
+    /**
+     *
+     * @var float
+     * @ORM\Column(name="totalLineTaxes",type="float",nullable=true)
+     */
+    private $totalLineTaxes;
 
     /**
      * 
@@ -156,6 +172,10 @@ class houseSupplyOrderItems {
         return $this->client;
     }
 
+    function getWorkStudyCircle() {
+        return $this->workStudyCircle;
+    }
+
     function getCant() {
         return $this->cant;
     }
@@ -174,6 +194,10 @@ class houseSupplyOrderItems {
 
     function getTotalLine() {
         return $this->totalLine;
+    }
+
+    function getTotalLineTaxes() {
+        return $this->totalLineTaxes;
     }
 
     function getProduct() {
@@ -220,6 +244,10 @@ class houseSupplyOrderItems {
         $this->client = $client;
     }
 
+    function setWorkStudyCircle(WorkStudyCircle $workStudyCircle) {
+        $this->workStudyCircle = $workStudyCircle;
+    }
+
     function setCant($cant) {
         $this->cant = $cant;
     }
@@ -238,6 +266,10 @@ class houseSupplyOrderItems {
 
     function setTotalLine($totalLine) {
         $this->totalLine = $totalLine;
+    }
+
+    function setTotalLineTaxes($totalLineTaxes) {
+        $this->totalLineTaxes = $totalLineTaxes;
     }
 
     function setProduct(houseSupplyProduct $product) {
@@ -259,5 +291,7 @@ class houseSupplyOrderItems {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
+
+
 
 }

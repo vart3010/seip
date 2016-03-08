@@ -7,6 +7,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventory;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeItems;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -66,6 +68,13 @@ class houseSupplyProduct {
     private $cost;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="exento", type="boolean")
+     */
+    private $exento = false;
+
+    /**
      *
      * @var float
      * @ORM\Column(name="maxPerUserForce",type="float",nullable=true)
@@ -99,8 +108,6 @@ class houseSupplyProduct {
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems",mappedBy="product",cascade={"persist"}))
      */
     protected $orderItems;
-
-   
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -143,6 +150,10 @@ class houseSupplyProduct {
         return $this->cost;
     }
 
+    function getExento() {
+        return $this->exento;
+    }
+
     function getMaxPerUserForce() {
         return $this->maxPerUserForce;
     }
@@ -163,7 +174,6 @@ class houseSupplyProduct {
         return $this->orderItems;
     }
 
-    
     function getCreatedAt() {
         return $this->createdAt;
     }
@@ -200,6 +210,10 @@ class houseSupplyProduct {
         $this->cost = $cost;
     }
 
+    function setExento($exento) {
+        $this->exento = $exento;
+    }
+
     function setMaxPerUserForce($maxPerUserForce) {
         $this->maxPerUserForce = $maxPerUserForce;
     }
@@ -220,9 +234,6 @@ class houseSupplyProduct {
         $this->orderItems = $orderItems;
     }
 
-    
-    
-   
     function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
     }

@@ -37,44 +37,98 @@ class HouseSupplyOrderController extends SEIPController {
 
         $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($searchwsc);
 
+        $deposit = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->findOneById(2);
+
+        $searchInventory = array(
+            'deposit' => $deposit,
+        );
+
+        $inventory = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventory')->findBy($searchInventory);
+
         //SI SE VA A CREAR EL PEDIDO
         $crear = 1;
 
-        if ($crear == 1) {
+        //NUEVO NUMERO DE PEDIDO
+        $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
+        $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
 
-            //NUEVO NUMERO DE PEDIDO
-            $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
-            $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
-
-            return $this->render('PequivenSEIPBundle:HouseSupply\Order:create.html.twig', array(
-                        'type' => $type,
-                        'neworder' => $neworder,
-                        'products' => $products,
-                        'wsc' => $wsc,
-            ));
-        }
-
-        // SI VOY A AÑADIR ITEMS AL PEDIDO
-        else {
-
-            $search = array(
-                'workStudyCircle' => $wsc,
-                'type' => $type,
+        if ($request->get('member')) {
+            $member = $em->getRepository('PequivenSEIPBundle:User')->findOneById($request->get('member'));
+            $searchitemsbymember = array(
+                'client' => $member,
+                'type' => 3,
             );
-
-            //ULTIMO PEDIDO REALIZADO
-            $neworder = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findOneBy($search);
-
-            //LISTA DE PRODUCTOS DISPONIBLES
-            $products = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyProduct')->getAvailableProduct();
-
-            return $this->render('PequivenSEIPBundle:HouseSupply\Order:create.html.twig', array(
-                        'type' => $type,
-                        'neworder' => $neworder,
-                        'products' => $products,
-                        'wsc' => $wsc,
-            ));
+            $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
+            $member_ant = $member->getId();
+        } else {
+            $member_ant = 0;
+            $searchitemsbymember = array(
+                'type' => 3,
+            );
+            $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
         }
+
+        return $this->render('PequivenSEIPBundle:HouseSupply\Order:create.html.twig', array(
+                    'type' => $type,
+                    'neworder' => $neworder,
+                    'inventory' => $inventory,
+                    'wsc' => $wsc,
+                    'items' => $items,
+                    'member' => $member_ant,
+                    'memberobj' => $member,
+        ));
+    }
+
+    public function addAction(Request $request) {
+
+        $iva = 0.12;
+
+        $em = $this->getDoctrine()->getManager();
+
+        $client = $request->get('datauser');
+        $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneById($wsc = $request->get('wsc'));
+
+        $clientobj = $em->getRepository('PequivenSEIPBundle:User')->findOneById($client);
+
+        $cant = $request->get('cantidad');
+        $product = $request->get('producto');
+        $productobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyProduct')->findOneById($product);
+        $line = $request->get('linea');
+        $date = new \DateTime(str_replace("/", "-", (time())));
+
+        $em->getConnection()->beginTransaction();
+
+        $order = new houseSupplyOrderItems();
+        $order->setDate($date);
+        $order->setType(3);
+        $order->setSign(1);
+        $order->setClient($clientobj);
+        $order->setCant($cant);
+        $order->setLine($line);
+        $order->setProduct($productobj);
+        $order->setCost($productobj->getCost() * $cant);
+        $order->setTotalLine($productobj->getPrice() * $cant);
+        $order->setPrice($productobj->getPrice());
+        $order->setWorkStudyCircle($wsc);
+        $order->setCreatedBy($this->getUser());
+
+        if ($productobj->getExento() == 1) {
+            $order->setTotalLineTaxes(0);
+        } else {
+            $order->setTotalLineTaxes($productobj->getPrice() * $cant * $iva);
+        }
+
+        $em->persist($order);
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+
+
+        return $this->redirect($this->generateUrl("pequiven_housesupply_order_charge", array("member" => $client)));
     }
 
     public function saveOrderAction(Request $request) {
