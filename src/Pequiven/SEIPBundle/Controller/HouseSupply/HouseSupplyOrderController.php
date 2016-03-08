@@ -37,7 +37,8 @@ class HouseSupplyOrderController extends SEIPController {
 
         $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($searchwsc);
 
-        $deposit = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->findOneById(2);
+        $dep = array('complejo' => $wsc->getComplejo()->getId());
+        $deposit = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->findOneBy($dep);
 
         $searchInventory = array(
             'deposit' => $deposit,
