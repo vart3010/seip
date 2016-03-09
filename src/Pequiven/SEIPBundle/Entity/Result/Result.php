@@ -118,6 +118,8 @@ class Result extends ModelResult implements ResultItemInterface,PeriodItemInterf
      */
     private $deletedAt;
     
+    private $descriptionText = '';
+    
     /**
      * Constructor
      */
@@ -366,6 +368,11 @@ class Result extends ModelResult implements ResultItemInterface,PeriodItemInterf
     
     public function __toString() {
         return $this->getDescription() ? $this->getDescription() : '-';
+    }
+    
+    public function getDescriptionText() {
+        $this->descriptionText = $this->getPeriod()->getDescription().' '.$this->getDescription();
+        return $this->descriptionText;
     }
     
     public function getResult() {
