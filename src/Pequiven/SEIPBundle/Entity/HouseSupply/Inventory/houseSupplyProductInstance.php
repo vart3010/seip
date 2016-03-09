@@ -59,6 +59,13 @@ class houseSupplyProductInstance {
     private $maxPerUser = 0;
 
     /**
+     *
+     * @var float
+     * @ORM\Column(name="maxPerUserForce",type="float",nullable=true)
+     */
+    private $maxPerUserForce = null;
+
+    /**
      * Productos en Instancia
      * 
      * @var houseSupplyProduct
@@ -112,6 +119,10 @@ class houseSupplyProductInstance {
         return $this->maxPerUser;
     }
 
+    function getMaxPerUserForce() {
+        return $this->maxPerUserForce;
+    }
+
     function getProduct() {
         return $this->product;
     }
@@ -150,6 +161,10 @@ class houseSupplyProductInstance {
 
     function setMaxPerUser($maxPerUser) {
         $this->maxPerUser = $maxPerUser;
+    }
+
+    function setMaxPerUserForce($maxPerUserForce) {
+        $this->maxPerUserForce = $maxPerUserForce;
     }
 
     function setProduct(houseSupplyProduct $product) {

@@ -134,6 +134,15 @@ class HouseSupplyOrderController extends SEIPController {
         return $this->redirect($this->generateUrl("pequiven_housesupply_order_charge", array("member" => $client, 'typemember' => 1)));
     }
 
+    public function deleteAction(Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+        $id = $request->get('id');
+        $item = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findOneById($id);
+
+        return $this->redirect($this->generateUrl("pequiven_housesupply_order_charge", array("member" => 0, 'typemember' => 1)));
+    }
+
     public function saveOrderAction(Request $request) {
         var_dump($request->get("datos"));
         die();

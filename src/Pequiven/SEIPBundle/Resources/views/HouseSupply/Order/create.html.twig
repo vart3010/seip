@@ -64,7 +64,7 @@
                                 <tr>
                                     <td width="40%" class="header bold">Fecha:</td>
                                     <td width="60%">
-
+                                        {{ "now"|date("d/m/Y") }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -168,30 +168,28 @@
                                                 {% set cant=0 %}
                                                 {% set total=0 %}
                                                 {% if(items) %}
-                                                    {% for list in items %}
-                                                    <form method="POST" action="{{ path("pequiven_housesupply_inventory_charge_create",{'type': type}) }}">                                                    
+                                                    {% for list in items %}                                                    
                                                         <tr>
                                                             <td width="10%">{{ list.cant }}</td>
                                                             <td width="50%">{{ list.product.description }}</td>
                                                             <td class="text-right" width="15%">{{ list.product.price| number_format(2, ',', '.') }}</td>                                
                                                             <td class="text-right" width="20%">{{ (list.product.price*list.cant)| number_format(2, ',', '.') }}</td>
-                                                            <td class="text-right" width="5%">-</td>
-                                                        </tr>
-                                                    </form>
-                                                    {% set linea=linea+1 %}
-                                                    {% set cant=cant+list.cant %}
-                                                    {% set iva=iva+list.totalLineTaxes %}
-                                                    {% set total=total+list.totalLine %}                                                    
-                                                {% endfor %}
-                                            {%else%}                                                
-                                                <tr>
-                                                    <td width="10%">-</td>
-                                                    <td width="55%">-</td>
-                                                    <td class="text-right" width="15%">-</td>                                
-                                                    <td class="text-right" width="15%">-</td>
-                                                    <td class="text-right" width="5%">-</td>
-                                                </tr>
-                                            {%endif%}
+                                                            <td class="text-right" width="5%"><a href="{{ path("pequiven_housesupply_inventory_charge_delete",{'id': list.id}) }}"><i class="fa fa-trash"></i></a> </td>
+                                                        </tr>                                                    
+                                                        {% set linea=linea+1 %}
+                                                        {% set cant=cant+list.cant %}
+                                                        {% set iva=iva+list.totalLineTaxes %}
+                                                        {% set total=total+list.totalLine %}                                                    
+                                                    {% endfor %}
+                                                {%else%}                                                
+                                                    <tr>
+                                                        <td width="10%">-</td>
+                                                        <td width="55%">-</td>
+                                                        <td class="text-right" width="15%">-</td>                                
+                                                        <td class="text-right" width="15%">-</td>
+                                                        <td class="text-right" width="5%">-</td>
+                                                    </tr>
+                                                {%endif%}
                                             </tbody> 
                                             <tfoot>
                                                 <tr>
@@ -256,7 +254,7 @@
                                                     <select  name="producto" id="producto" class="select2 input-xlarge form-control" required="true">     
                                                         <option value="0" selected>Seleccione</option>
                                                         {% for inv in inventory %}
-                                                            {% if ((inv.available<inv.product.instance.MaxPerUser)or(inv.product.instance.MaxPerUser<=1))%}
+                                                            {% if (((inv.available<inv.product.instance.MaxPerUser)or(inv.product.instance.MaxPerUser<=1))and(inv.product.instance.MaxPerUserForce==null))%}
                                                                 <option value="{{inv.product.id}}" id="{{inv.product.description}}" disabled="disabled" name="product">{{inv.product.description}}</option>
                                                             {% else %}
                                                                 <option value="{{inv.product.id}}" id="{{inv.product.description}}" name="product">{{inv.product.description}}</option>                                                        

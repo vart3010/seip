@@ -9,7 +9,7 @@ pequiven_housesupply_order_charge:
     methods: [GET|POST]
     
 pequiven_housesupply_order_charge_add:
-    path: /orders/create/add/
+    path: /orders/addItem/
     defaults:
         _controller: pequiven.controller.housesupply_order:addAction
         _format: html
@@ -17,10 +17,10 @@ pequiven_housesupply_order_charge_add:
         _format: html|json|xml
     methods: [GET|POST]
     
-pequiven_housesupply_order_charge_remove:
-    path: /orders/create/remove/
+pequiven_housesupply_inventory_charge_delete:
+    path: /orders/deleteItem/{id}
     defaults:
-        _controller: pequiven.controller.housesupply_order:removeAction
+        _controller: pequiven.controller.housesupply_order:deleteAction
         _format: html
     requirements:
         _format: html|json|xml
