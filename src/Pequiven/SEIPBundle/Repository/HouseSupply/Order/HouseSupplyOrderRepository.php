@@ -26,6 +26,16 @@ class HouseSupplyOrderRepository extends EntityRepository {
         //return $qb->getQuery()->getResult();
     }
 
+    function DeleteItemOrder($id) {
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'DELETE FROM seip_gsh_order_items WHERE id="' . $id . '"';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+    }
+
     function getAlias() {
         return 'HSOrder';
     }

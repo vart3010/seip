@@ -614,7 +614,7 @@ sylius_resource:
                 repository: Pequiven\SEIPBundle\Repository\Delivery\ProductReportDeliveryRepository
                 
         #CASA-ABASTO
-        pequiven.housesupply_inventory_charge:
+        pequiven.housesupply_inventory:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:HouseSupply/Inventory
             classes:

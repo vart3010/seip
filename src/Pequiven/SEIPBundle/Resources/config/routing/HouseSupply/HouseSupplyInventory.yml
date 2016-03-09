@@ -2,7 +2,7 @@
 pequiven_housesupply_inventory_charge:
     path: /{type}/
     defaults:
-        _controller: pequiven.controller.housesupply_inventory_charge:chargeAction
+        _controller: pequiven.controller.housesupply_inventory:chargeAction
         _format: html
     requirements:
         _format: html|json|xml
@@ -11,7 +11,7 @@ pequiven_housesupply_inventory_charge:
 pequiven_housesupply_inventory_charge_create:
     path: /Charge/Create
     defaults:
-        _controller: pequiven.controller.housesupply_inventory_charge:CreateAction
+        _controller: pequiven.controller.housesupply_inventory:CreateAction
         _format: html
     requirements:
         _format: html|json|xml

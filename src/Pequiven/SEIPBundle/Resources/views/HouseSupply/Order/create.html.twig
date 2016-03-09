@@ -24,7 +24,7 @@
             });
         }
 
-    </script>
+    </script>    
 {% endblock javascript %}
 
 
@@ -131,9 +131,11 @@
                                 <select onchange="this.form.submit();" name="member" id="member" class="select2 input-xxlarge form-control">    
 
                                     {% if(memberobj)%}
+                                        {% set miembro= memberobj.id %}
                                         <option value="{{memberobj.getid}}" id="{{memberobj.getid}}" selected>{{memberobj.getfullname}}</option>
                                         <option value="0" id="0">GENERAL</option>
                                     {% else %}
+                                        {% set miembro= 0 %}
                                         <option value="0" id="0" selected>GENERAL</option>
                                     {% endif %}
 
@@ -170,11 +172,11 @@
                                                 {% if(items) %}
                                                     {% for list in items %}                                                    
                                                         <tr>
-                                                            <td width="10%">{{ list.cant }}</td>
+                                                            <td class="text-center" width="10%">{{ list.cant }}</td>
                                                             <td width="50%">{{ list.product.description }}</td>
                                                             <td class="text-right" width="15%">{{ list.product.price| number_format(2, ',', '.') }}</td>                                
-                                                            <td class="text-right" width="20%">{{ (list.product.price*list.cant)| number_format(2, ',', '.') }}</td>
-                                                            <td class="text-right" width="5%"><a href="{{ path("pequiven_housesupply_inventory_charge_delete",{'id': list.id}) }}"><i class="fa fa-trash"></i></a> </td>
+                                                            <td class="text-right" width="20%">{{ (list.product.price*list.cant)| number_format(2, ',', '.') }}</td>                                                            
+                                                            <td class="text-right" width="5%"><a href="{{ path("pequiven_housesupply_inventory_charge_delete",{'id': list.id, 'member': miembro}) }}"><i class="fa fa-trash"></i></a> </td>
                                                         </tr>                                                    
                                                         {% set linea=linea+1 %}
                                                         {% set cant=cant+list.cant %}
@@ -242,13 +244,13 @@
                         </td>
                     </tr>  
                     <tr>
-                        <td width="20%">
+                        <td>
                             {% if(memberobj)%}  
                                 <br><br><br>
                                 <fieldset class="fieldset">
                                     <legend class="legend"><b>Agregar Producto</b></legend>
                                     <form method="POST" action="{{ path("pequiven_housesupply_order_charge_add") }}">  
-                                        <table style="border-collapse:separate; border-spacing: 0px 5px;" width="100%">                                        
+                                        <table style="border-collapse:separate; border-spacing: 0px 5px;" width="60%">                                        
                                             <tr>
                                                 <td colspan="3">
                                                     <select  name="producto" id="producto" class="select2 input-xlarge form-control" required="true">     
@@ -257,7 +259,7 @@
                                                             {% if (((inv.available<inv.product.instance.MaxPerUser)or(inv.product.instance.MaxPerUser<=1))and(inv.product.instance.MaxPerUserForce==null))%}
                                                                 <option value="{{inv.product.id}}" id="{{inv.product.description}}" disabled="disabled" name="product">{{inv.product.description}}</option>
                                                             {% else %}
-                                                                <option value="{{inv.product.id}}" id="{{inv.product.description}}" name="product">{{inv.product.description}}</option>                                                        
+                                                                <option value="{{inv.product.id}}" id="{{inv.product.description}}" name="product">{{inv.product.description}} - Disp: {{ inv.available }}</option>                                                        
                                                             {% endif %}                                                        
                                                         {% endfor %}
                                                     </select>
@@ -267,10 +269,10 @@
                                                 <td width="20%" style="text-align: center;" required="true">
                                                     <input type="number" class="input-small" id="cantidad" name="cantidad" placeholder="Cantidad" min="1">
                                                 </td>                                                                                  
-                                                <td width="20%" style="text-align: left;"> 
+                                                <td width="20%" style="text-align: center;"> 
                                                     {% if(memberobj)%}    
-                                                        <button type="submit" class="button glossy mid-margin-right">
-                                                            <span class="button-icon green-gradient"><span class="icon-plus"></span></span>                                                       
+                                                        <button type="submit" class="button green-gradient">                                                            
+                                                                <span class="icon-plus bold"></span>        
                                                         </button>  
                                                     {%else%}
                                                         &nbsp;

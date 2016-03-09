@@ -1753,15 +1753,9 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ->addChild('housesupply.order.create', array(
                     'route' => 'pequiven_housesupply_order_charge',
                     'routeParameters' => array('typemember' => 0),
-                        //'labelAttributes' => array('icon' => 'fa fa-calculator')
+                    'labelAttributes' => array('icon' => 'fa fa-shopping-cart')
                 ))
-                ->setLabel($this->translate(sprintf('Crear', $section)));
-        $child2
-                ->addChild('housesupply.order.cancel', array(
-                        //'route' => 'pequiven_user_feestructure',
-                        //'labelAttributes' => array('icon' => 'fa fa-calculator')
-                ))
-                ->setLabel($this->translate(sprintf('Cancelar', $section)));
+                ->setLabel($this->translate(sprintf('Crear', $section)));        
         $child2
                 ->addChild('housesupply.order.view', array(
                         //'route' => 'pequiven_user_feestructure',
@@ -1795,6 +1789,12 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     'labelAttributes' => array('icon' => 'fa fa-arrow-down')
                 ))
                 ->setLabel($this->translate(sprintf('Descargos', $section)));
+        $child3
+                ->addChild('housesupply.inventory.product', array(
+                    //'route' => 'pequiven_user_feestructure',
+                    'labelAttributes' => array('icon' => 'fa fa-shopping-basket')
+                ))
+                ->setLabel($this->translate(sprintf('Productos', $section)));
         $child3
                 ->addChild('housesupply.inventory.reports', array(
                     //'route' => 'pequiven_user_feestructure',
