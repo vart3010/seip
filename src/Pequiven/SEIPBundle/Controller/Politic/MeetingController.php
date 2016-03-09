@@ -529,7 +529,6 @@ class MeetingController extends SEIPController {
         $phase = $request->get('phase');
 
         $criteria['phase'] = $phase;
-        $criteria['createdAt'] = $this->getPeriodService()->getPeriodActive()->getName();;
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
