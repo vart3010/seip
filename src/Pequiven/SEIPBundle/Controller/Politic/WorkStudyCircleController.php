@@ -426,7 +426,7 @@ class WorkStudyCircleController extends SEIPController {
         $circle = $this->get('pequiven.repository.work_study_circle')->findAll(); //Carga los Criculos
 
         $criteria['phase'] = $phase;
-        $criteria['period'] = $this->getPeriodService()->getPeriodActive()->getId();
+        //$criteria['period'] = $this->getPeriodService()->getPeriodActive()->getId();
 
 
         if ($this->config->isPaginated()) {
