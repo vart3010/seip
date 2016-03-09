@@ -38,7 +38,7 @@ class MeetingRepository extends SeipEntityRepository {
 
         if (($createdAt = $criteria->remove('createdAt'))) {
             $queryBuilder
-                    ->andWhere('SUBSTRING(mtg.createdAt, 1, 4) =:createdAt')
+                    ->andWhere('SUBSTRING(mtg.date, 1, 4) =:createdAt')
                     ->setParameter('createdAt', $createdAt)
             ;
         }
