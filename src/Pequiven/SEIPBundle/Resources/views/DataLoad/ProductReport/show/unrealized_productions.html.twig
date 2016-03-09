@@ -22,7 +22,7 @@
             </thead>
             {% set colspan = 6 %}
             {% set totals = product_report.getTotalToDayUnrealizedProductions %}
-            
+
             {% set productUnit = product_report.product.productUnit %}
             {% set unitToConvert =  factorConversionService.unitToFactorConversion(product_report) %}
             <tbody>
@@ -60,15 +60,20 @@
                 <tr style="font-weight: bold;">
                     <th scope="col" width="35%">{{ 'Total month before'|trans }}</th>
                     <td align="right" scope="col" width="10%" class="hide-on-mobile-portrait">{{ totals['tr_b']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                    {% set factorUnrealizedProductionTotalAnterior = factorConversionService.calculateFormulaValueFromFactor(totals['tr_b'],product_report) %}
-                    <td align="right" scope="col" width="10%" class="hide-on-mobile-portrait">{{ factorUnrealizedProductionTotalAnterior|myNumberFormat ~" "~ unitToConvert }}</td>
+                    {% if (factor) %}
+                        {% set factorUnrealizedProductionTotalAnterior = factorConversionService.calculateFormulaValueFromFactor(totals['tr_b'],product_report) %}
+                        <td align="right" scope="col" width="10%" class="hide-on-mobile-portrait">{{ factorUnrealizedProductionTotalAnterior|myNumberFormat ~" "~ unitToConvert }}</td>
+                    {% endif %}
+
                     <th scope="col" width="10%">&nbsp;</th>
                 </tr>
                 <tr style="font-weight: bold;">
                     <th scope="col" width="35%">{{ 'Total accumulated'|trans }}</th>
                     <td align="right" scope="col" width="10%" class="hide-on-mobile-portrait">{{ totals['tr']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                    {% set factorUnrealizedProductionTotal = factorConversionService.calculateFormulaValueFromFactor(totals['tr'],product_report) %}
-                    <td align="right" scope="col" width="10%" class="hide-on-mobile-portrait">{{ factorUnrealizedProductionTotal|myNumberFormat ~" "~ unitToConvert }}</td>
+                    {% if (factor) %}    
+                        {% set factorUnrealizedProductionTotal = factorConversionService.calculateFormulaValueFromFactor(totals['tr'],product_report) %}
+                        <td align="right" scope="col" width="10%" class="hide-on-mobile-portrait">{{ factorUnrealizedProductionTotal|myNumberFormat ~" "~ unitToConvert }}</td>
+                    {% endif %}
                     <th scope="col" width="10%">&nbsp;</th>
                 </tr>
             </tfoot>
