@@ -12,7 +12,7 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class MeetingRepository extends SeipEntityRepository {
 
-	/**
+    /**
      * Crea un paginador para las reuniones
      * 
      * @param array $criteria
@@ -26,30 +26,37 @@ class MeetingRepository extends SeipEntityRepository {
 
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        
+
         $queryBuilder->innerJoin('mtg.workStudyCircle', 'wsc');
-        
+
         if (($phase = $criteria->remove('phase'))) {
             $queryBuilder
                     ->andWhere('wsc.phase = :phase')
                     ->setParameter('phase', $phase)
-                ;
+            ;
         }
-        
+
+        if (($createdAt = $criteria->remove('createdAt'))) {
+            $queryBuilder
+                    ->andWhere('SUBSTRING(mtg.createdAt, 1, 4) =:createdAt')
+                    ->setParameter('createdAt', $createdAt)
+            ;
+        }
+
         //Filtro Localidad
-        if(($complejo =  $criteria->remove('complejo')) !== null){
+        if (($complejo = $criteria->remove('complejo')) !== null) {
             $queryBuilder
                     ->andWhere('wsc.complejo = :complejo')
                     ->setParameter('complejo', $complejo)
-                    ;
+            ;
         }
-        
+
         if (($gerencia = $criteria->remove('firstLineManagement'))) {
             $queryBuilder
                     ->innerJoin('wsc.gerencias', 'g')
                     ->andWhere('g.id = :gerencia')
                     ->setParameter('gerencia', $gerencia)
-                ;
+            ;
         }
 
         if (($gerenciaSecond = $criteria->remove('secondLineManagement'))) {
@@ -57,16 +64,16 @@ class MeetingRepository extends SeipEntityRepository {
                     ->innerJoin('wsc.gerenciaSeconds', 'gs')
                     ->andWhere('gs.id = :gerenciaSecond')
                     ->setParameter('gerenciaSecond', $gerenciaSecond)
-                ;
+            ;
         }
-        
+
         if (($workStudyCircle = $criteria->remove('workStudyCircle'))) {
             $queryBuilder
                     ->andWhere('wsc.id = :workStudyCircle')
                     ->setParameter('workStudyCircle', $workStudyCircle)
-                ;
+            ;
         }
-        
+
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
 
@@ -76,19 +83,19 @@ class MeetingRepository extends SeipEntityRepository {
      *
      */
     function findQueryMeetingsComplejo($complejo) {
-        
+
         $qb = $this->getQueryBuilder();
         $qb
                 ->innerJoin('mtg.workStudyCircle', 'wsc')
                 ->andWhere('wsc.complejo = :complejo')
                 ->setParameter('complejo', $complejo)
         ;
-        
+
         return $qb->getQuery()->getResult();
     }
 
     protected function getAlias() {
         return 'mtg';
     }
-    
+
 }
