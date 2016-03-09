@@ -31,6 +31,11 @@ class OnePerTenType extends AbstractType {
                     'empty_value' => 'Seleccione...',
                     'required' => false
                 ))
+            ->add('analisis', 'textarea', array(
+                'label' => 'Análisis',
+                'label_attr' => array('class' => 'label'),
+                'attr' => array('class' => 'input input-large'),
+                'required' => false))
         ;
     }
 

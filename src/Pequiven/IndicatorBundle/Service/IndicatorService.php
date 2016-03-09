@@ -1974,6 +1974,16 @@ class IndicatorService implements ContainerAwareInterface {
                 }
                 $arrayVariables['medition'][] = $valueIndicator->getValueOfIndicator();
             }
+        } elseif (isset($options['viewVariablesSimpleAverageByFrequencyNotification']) && array_key_exists('viewVariablesSimpleAverageByFrequencyNotification', $options)) {
+            unset($options['viewVariablesSimpleAverageByFrequencyNotification']);
+            $arrayVariables['descriptionReal'] = $indicator->getShowByRealValue();
+            $arrayVariables['descriptionPlan'] = $indicator->getShowByPlanValue();
+            foreach ($valuesIndicator as $valueIndicator) {
+                $valuesFromDashboardEquation = $this->calculateFormulaValueFromDashboardEquation($formula, $valueIndicator->getFormulaParameters());
+                $arrayVariables['valueReal'][] = $valuesFromDashboardEquation['dashboardEquationReal'];
+                $arrayVariables['valuePlan'][] = $valuesFromDashboardEquation['dashboardEquationPlan'];
+                $arrayVariables['medition'][] = $valueIndicator->getValueOfIndicator();
+            }
         } elseif (isset($options['viewVariablesMarkedReal']) && array_key_exists('viewVariablesMarkedReal', $options)) {
             unset($options['viewVariablesMarkedReal']);
             $variables = $formula->getVariables();
@@ -3033,6 +3043,8 @@ class IndicatorService implements ContainerAwareInterface {
                 $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanFromEquationByFrequencyNotification' => true));
             } elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
                 $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
+            } elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE) {
+                $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesSimpleAverageByFrequencyNotification' => true));
             }
 
             $dataSetReal["seriesname"] = $arrayVariables['descriptionReal'];
@@ -4137,8 +4149,8 @@ class IndicatorService implements ContainerAwareInterface {
      * @param Indicator $indicator
      * @return type
      */
-    public function getDataChartOfIndicatorEvolution(Indicator $indicator, $urlExportFromChart) {
-
+    public function getDataChartOfIndicatorEvolution(Indicator $indicator, $urlExportFromChart, $month) {
+        
         $period = $indicator->getPeriod()->getDescription();
         
         $em = $this->getDoctrine();        
@@ -4178,17 +4190,15 @@ class IndicatorService implements ContainerAwareInterface {
         $dataTendency = 0;
         //Lamado de promedio
         $prom = $this->getPromdIndicator($indicator);
-        //$prom = $indicator->getResultReal(); //Carga del resultado real cargado del indicador        
-
         //Lamado obj 2015
         $obj = $this->getObjIndicator($indicator);
         //Paso de Valores Validos
         $resultNumbers = $this->getIndicatorHasResultValid($indicator);
+        
         //Llamado de frecuencia de Notificacion del Indicador
         $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
-
         //Número de indicadores asociados
-        $totalNumValues = count($indicator->getValuesIndicator());
+        $totalNumValues = count($indicator->getValuesIndicator());        
         if ($totalNumValues >= 3) {
             $dataTendency =  $this->IndicatorCalculateTendency($indicator);
         }            
@@ -4212,7 +4222,7 @@ class IndicatorService implements ContainerAwareInterface {
         $labelAntper = "2014";
         $labelAnt2015 = "2015";
         $labelProm   = $medition;
-        $labelobj    = "Objetivo 2015";
+        $labelobj    = "Objetivo ".$indicator->getPeriod()->getName();
 
         //Carga de datos del label principal Periodo-2015
         $labelAnt["label"] = $labelAntper; //Label del 2014
@@ -4228,12 +4238,10 @@ class IndicatorService implements ContainerAwareInterface {
             $contMonth = 1;
             foreach ($indicatorValues as $indicatorValue) {
                 $formulaParameters = $indicatorValue->getFormulaParameters();                
-                if ($resultNumbers >= $contMonth) {                    
-                    //if ($labelsFrequencyNotificationArray === 0) {                     
-                        $label["label"] = $labelsFrequencyNotificationArray[$contMonth];                        
-                    //}                    
-                    $contCant = $contMonth; //Contando la Cantidad de valores
-                    $category[] = $label;
+                if ($resultNumbers >= $contMonth) {                                        
+                        $label["label"] = $labelsFrequencyNotificationArray[$contMonth];                                            
+                        $contCant = $contMonth; //Contando la Cantidad de valores
+                        $category[] = $label;
                 }
                 $contMonth++;
             }
@@ -4248,11 +4256,10 @@ class IndicatorService implements ContainerAwareInterface {
             //Data 2014            
             $acumLast = $cant = $promLast = 0;
             $indicatorlast = $indicator->getindicatorLastPeriod();
-
             
             if ($indicator->getPeriod()->getId() == 3) {
                 if ($indicatorPeriod15->getindicatorLastPeriod() === null) {
-                    $dataAnt["value"] = 0; //Pasando data a Data2014 si no tiene ralacion                    
+                    $dataAnt["value"] = 0; //Pasando data a Data2015 si no tiene ralacion
                 }else{
                     $value = round($indicatorPeriod15->getindicatorLastPeriod()->getResultReal());
                     $dataAnt["value"] = $value; //Pasando data a Data2014                
@@ -4281,8 +4288,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $dataSetTend["data"][] = array('value' => '');
                 $dataSetReal["data"][] = array('value' => '');
                 $dataSetLine["data"][] = array('value' => ''); //Valor vacio para saltar 2015
-            }
-            
+            }            
             //Pasando espacios vacios para desarrollo de la gráfica
             $dataSetTend["data"][] = array('value' => '');
             $dataSetReal["data"][] = array('value' => '');

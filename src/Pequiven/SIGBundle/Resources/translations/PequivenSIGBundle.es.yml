@@ -12,6 +12,7 @@ pequiven_indicator:
     contributionToTheObjective: Aporte al Objetivo
     add: Añadir
     list: Lista
+    show: Ver
     strategic: Estratégico
     tactic: Táctico
     operative: Operativo
@@ -286,3 +287,5 @@ arrangementprogram:
      location: Localidad
      tactical_objective: Objetivo Tactico
      operational_objective: Objetivo Operativo
+monitoring:
+     title: Seguimiento y Eficacia de las Acciones

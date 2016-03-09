@@ -583,6 +583,26 @@ class WorkStudyCircleService implements ContainerAwareInterface {
     }
     
     /**
+     * Función que devuelve si se pueden añadir miembros a un CET
+     * @param WorkStudyCircle $workStudyCircle
+     * @return boolean
+     */
+    public function isAllowToDeleteMembers(WorkStudyCircle $workStudyCircle){
+        $valid = false;
+        $user = $this->getUser();
+        
+        if($workStudyCircle->getPhase() == WorkStudyCircle::PHASE_ONE){
+            if($workStudyCircle->getCoordinator()->getId() == $user->getId()){
+                $valid = true;
+            }
+        } else{
+            $valid = false;
+        }
+        
+        return $valid;
+    }
+    
+    /**
      * Función que devuelve si se puede añadir una reunión a un CET
      * @param WorkStudyCircle $workStudyCircle
      * @return boolean

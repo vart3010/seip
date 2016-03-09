@@ -137,6 +137,10 @@ abstract class Indicator implements IndicatorInterface {
     const TYPE_OF_COMPANY_AFFILIATED_MIXTA = 3;
     
     const TYPE_OBJECT = 'indicator';
+    
+    const RESULT_RANGE_GOOD = 1;
+    const RESULT_RANGE_MIDDLE = 2;
+    const RESULT_RANGE_BAD = 3;
 
     /**
      * @var integer
@@ -144,6 +148,13 @@ abstract class Indicator implements IndicatorInterface {
      * @ORM\Column(name="typeOfCalculation", type="integer", nullable=false)
      */
     protected $typeOfCalculation = self::TYPE_CALCULATION_FORMULA_MANUALLY;
+    
+    /**
+     * @var integer
+     * 
+     * @ORM\Column(name="typeOfRangeFromResult", type="integer", nullable=false)
+     */
+    protected $typeOfRangeFromResult = self::RESULT_RANGE_GOOD;
 
     /**
      * IndicatorLevel
@@ -405,6 +416,22 @@ abstract class Indicator implements IndicatorInterface {
     }
     
     /**
+     * @return integer
+     */
+    function getTypeOfRangeFromResult() {
+        return $this->typeOfRangeFromResult;
+    }
+
+    /**
+     * @param integer $typeOfRangeFromResult
+     * @return Indicator
+     */
+    function setTypeOfRangeFromResult($typeOfRangeFromResult) {
+        $this->typeOfRangeFromResult = $typeOfRangeFromResult;
+    }
+
+        
+    /**
      * Retorna las secciones de tipo de resultado del indicador
      * 
      * @staticvar array $typesOfResultSection
@@ -438,5 +465,7 @@ abstract class Indicator implements IndicatorInterface {
             self::TYPE_OF_COMPANY_AFFILIATED_MIXTA => 'pequiven_master.company.type.affiliated_mixta',
         );
     }
+    
+    
     
 }

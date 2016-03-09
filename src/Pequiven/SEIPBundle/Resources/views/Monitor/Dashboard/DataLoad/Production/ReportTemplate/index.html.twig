@@ -46,9 +46,11 @@
                     textCancel : "No"
                 };
                 $.modal.confirm('Desea realizar una vista dinamica?', function(){            
-                    document.location.href="http://{{ host }}/data-load/dashboard/production/reportTemplate/" + {{ reportTemplate.id }} + "/1?r=1";
+                    //document.location.href="http://{{ host }}/data-load/dashboard/production/reportTemplate/" + {{ reportTemplate.id }} + "/1?r=1";
+                    document.location.href="{{ path('pequiven_data_load_dashboard_production_report_template', {'reportTemplateId': reportTemplate.id, 'typeView':typeView }) }}?r=1";
                 }, function(){                
-                    document.location.href="http://{{host}}/data-load/dashboard/production/reportTemplate/" + {{ reportTemplate.id }} + "/1?r=0";
+                    //document.location.href="http://{{host}}/data-load/dashboard/production/reportTemplate/" + {{ reportTemplate.id }} + "/1?r=0";
+                    document.location.href="{{ path('pequiven_data_load_dashboard_production_report_template', {'reportTemplateId': reportTemplate.id, 'typeView':typeView }) }}?r=0";
                 }, options);
             });
         </script>    

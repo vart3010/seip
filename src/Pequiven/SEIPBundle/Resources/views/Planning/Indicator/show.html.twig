@@ -144,7 +144,7 @@
                 {% endif %}
 
                 <!-- Valor Plan -->
-                {% if indicator.isShowPlanValue == true %}
+                {% if indicator.isShowPlanValue == true  and indicator.formula.typeOfCalculation != constant('Pequiven\\MasterBundle\\Entity\\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE') %}
                     <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                         <p class="inline-label">
                             <label class="label">
@@ -281,7 +281,7 @@
                     <ul class="fa-ul">
                         {% for managementSystem in indicator.managementSystems %}
                             <li>{{ managementSystem.description }}</li>
-                            {% endfor %}
+                        {% endfor %}
                     </ul>
                 </div>
             {% endif %}

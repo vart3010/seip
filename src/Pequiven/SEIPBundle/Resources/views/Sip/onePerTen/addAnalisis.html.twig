@@ -1,0 +1,37 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% trans_default_domain 'workStudyCircle' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("workStudyCircle.title"|trans ),
+        ("workStudyCircle.members.add"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+    {#    {{ dump(workStudyCircle) }}#}
+    <form method="POST" action="{{ path("pequiven_onePerTen_add_analisis",{idOnePerTen:idOnePerTen}) }}">
+        <fieldset class="fieldset">
+            <legend class="legend" >Añadir Análisis</legend>
+            <div class="columns">
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        {{ form_widget(form.analisis) }}
+                    </p>
+                </div>
+            </div>
+        </fieldset>
+        {{ actions.create() }}
+    </form>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+        });
+    </script>
+{% endblock javascript %}
