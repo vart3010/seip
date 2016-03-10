@@ -206,6 +206,11 @@
             
             {# Bloque para cargar archivos javascript adicionales despues del core #}
             {% block javascripts '' %}
+                {#<script type="text/javascript">
+                    {% if app.user.notify %}                                        
+                        Tinycon.setBubble({{ app.user.notify }});
+                    {% endif %}
+                </script>#}
         {# Bloque para escribir javascript #}    
         {% block javascript '' %}
         <script>

@@ -134,16 +134,18 @@ class WorkStudyCircleController extends SEIPController {
 
             $user = $em->getRepository('PequivenSEIPBundle:User')->findOneBy(array('id' => $member));
 
-            if(isset($options['typeCoordinator'])){
+            if (isset($options['typeCoordinator'])) {
                 if ($options['typeCoordinator'] == WorkStudyCircle::TYPE_COORDINATOR) {
                     $workStudyCircle->setCoordinator($user);
                 } elseif ($options['typeCoordinator'] == WorkStudyCircle::TYPE_COORDINATOR_DISCUSSION) {
                     $workStudyCircle->setCoordinatorDiscussion($user);
                 }
                 $em->persist($workStudyCircle);
-            } else{
+            } else {
                 $user->setWorkStudyCircle($workStudyCircle);
+                $workStudyCircle->addMembers($user);
                 $em->persist($user);
+                $em->persist($workStudyCircle);
             }
         }
 
@@ -202,6 +204,7 @@ class WorkStudyCircleController extends SEIPController {
         $isALlowToEdit = $workStudyCircleService->isAllowToEdit($workStudyCircle);
         $isAllowToAddMembers = $workStudyCircleService->isAllowToAddMembers($workStudyCircle);
         $isAllowToEditMembers = $workStudyCircleService->isAllowToEditMembers($workStudyCircle);
+        $isAllowToDeleteMembers = $workStudyCircleService->isAllowToDeleteMembers($workStudyCircle);
         $isAllowToAddMeetings = $workStudyCircleService->isAllowToAddMeetings($workStudyCircle);
         $isAllowToAddProposals = $workStudyCircleService->isAllowToAddProposals($workStudyCircle);
         $isAllowToEditProposals = $workStudyCircleService->isAllowToEditProposals($workStudyCircle);
@@ -215,9 +218,11 @@ class WorkStudyCircleController extends SEIPController {
                     'isAllowToEdit' => $isALlowToEdit,
                     'isAllowToAddMembers' => $isAllowToAddMembers,
                     'isAllowToEditMembers' => $isAllowToEditMembers,
+                    'isAllowToDeleteMembers' => $isAllowToDeleteMembers,
                     'isAllowToAddMeetings' => $isAllowToAddMeetings,
                     'isAllowToAddProposals' => $isAllowToAddProposals,
                     'isAllowToEditProposals' => $isAllowToEditProposals,
+                    'periodService' => $this->getPeriodService()
         ));
     }
 
@@ -421,6 +426,8 @@ class WorkStudyCircleController extends SEIPController {
         $circle = $this->get('pequiven.repository.work_study_circle')->findAll(); //Carga los Criculos
 
         $criteria['phase'] = $phase;
+        //$criteria['period'] = $this->getPeriodService()->getPeriodActive()->getId();
+
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
@@ -577,6 +584,41 @@ class WorkStudyCircleController extends SEIPController {
         $html = $this->renderView($template, $data);
         $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->Output(utf8_decode($title) . '.pdf', 'D');
+    }
+
+    /**
+     * Elimina un miembro del Círculo
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function deleteMemberAction(Request $request) {
+        $idUser = $request->get('idUser');
+
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+        $repository = $this->getRepositoryById('user');
+        $user = $repository->find($idUser);
+
+        $idWorkStudyCircle = $user->getWorkStudyCircle()->getId();
+        $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $idWorkStudyCircle));
+        $user->setWorkStudyCircle();
+        $workStudyCircle->removeMembers($user);
+
+        $em->persist($user);
+        $em->persist($workStudyCircle);
+
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+
+        $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteMember', array('%user%' => $user->getOnlyFullNameUser()), 'workStudyCircle'));
+
+        return true;
     }
 
     protected function getSecurityService() {

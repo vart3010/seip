@@ -125,36 +125,35 @@
                     </div>                                 
                 </div>
             </div>
-		</div>    
-		{% set cont = cont + 1 %}                  
-		{% endfor %}
+        </div>    
+        {% set cont = cont + 1 %}                  
+        {% endfor %}
 {% else %} 
     <div class="new-row twelve-columns empty_row" align="center">                                 
         <br>Debe seleccionar un mes
     </div>
 {% endif %}
 </fieldset>
-
 {#<fieldset class="fieldset">
     <legend class="legend">Estadistica General&nbsp;</legend>
-    <div class="columns">        	
+    <div class="columns">           
         <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-        	{% for i in 1..4 %}
-        	<p class="inline-label">  
-        		<span class="label">
-        			{# <i class="fa fa-bar-chart fa-lg"></i> #}
-        	{#	</span>
-    			{{ data.dataGeneral[i] }}<br>
+            {% for i in 1..4 %}
+            <p class="inline-label">  
+                <span class="label">
+                    {# <i class="fa fa-bar-chart fa-lg"></i> #}
+            {#  </span>
+                {{ data.dataGeneral[i] }}<br>
             </p>
-			{% endfor %}              	
-    	</div>
+            {% endfor %}                
+        </div>
     </div>
 </fieldset>#}
 
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}	
+    {{ parent() }}  
     <!-- Additional styles -->
     
     <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/progress-slider3860.css?v=1') }}">
@@ -232,11 +231,22 @@
     </script>
     <script type="text/javascript">
         function month(){
-            var value = document.getElementById('month').value;
-            if (value > 0) {
-                //document.location.href="http://localhost/seip/web/app_dev.php/indicator/sig/load?m="+value;                
-                document.location.href="http://{{ data['host'] }}/indicator/sig/load?m="+value;
-            };                        
+            var value = $('#month').val();
+            
+            data = {
+                url   : 'pequiven_indicator_evolution_load',
+                value : value
+            };
+
+            $.ajax({
+              type: "POST",
+              url: "{{ path('pequiven_indicator_evolution_load_url') }}",
+              data: data, 
+                success: function (data) {              
+                    document.location.href = data['dataUrl'];
+                    //location.reload();
+                }
+            });
         }
         function view(){
             document.getElementById("month").selected = "02";            

@@ -38,6 +38,26 @@ class ConsumerPlanningServiceType extends SeipAbstractForm
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "input"),
             ))
+            ->add('typeOfPlanning', 'choice', array(
+                'label' => 'Tipo de Planificación',
+                'required' => true,
+                'choices' => \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService::getTypesOfPlanning(),
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => 'select2 input-large form-control',
+                    'style' => 'width: 300px')
+                    )
+            )
+            ->add('typeOfAliquot', 'choice', array(
+                'label' => 'Tipo de Alícuota',
+                'required' => true,
+                'choices' => \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService::getTypesOfAliquot(),
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => 'select2 input-large form-control',
+                    'style' => 'width: 300px')
+                    )
+            )
             ->add('enabled',null,array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "switch medium mid-margin-right","data-text-on"=>"Si","data-text-off"=>"No"),

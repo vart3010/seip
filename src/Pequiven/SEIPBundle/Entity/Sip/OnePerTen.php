@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\SEIPBundle\Model\Sip\OnePerTen as modelOnePerTen;
 
 /**
  * OnePerTen
@@ -15,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
-class OnePerTen {
+class OnePerTen extends modelOnePerTen {
 
     /**
      * @var integer
@@ -72,6 +73,7 @@ class OnePerTen {
     private $deletedAt;
     
     /**
+     * Análisis político de la persona
      * @var string
      *
      * @ORM\Column(name="analisis", type="text", nullable=true)
@@ -79,12 +81,13 @@ class OnePerTen {
     private $analisis;
 
     /**
-     * fecha voto
+     * Fecha en la que reportó el voto por mensaje o llamada en las elecciones de la asamblea 2015
      * @ORM\Column(name="fechaVoto", type="datetime", nullable=true)
      */
     private $fechaVoto;
     
     /**
+     * Reporte del voto por mensaje o llamada en las elecciones de la asamblea 2015
      * voto
      * @var integer
      *
@@ -93,6 +96,7 @@ class OnePerTen {
     private $voto = 0;
     
     /**
+     * Inscrito en el PSUV (Militante)
      * psuv
      * @var integer
      *
@@ -101,6 +105,7 @@ class OnePerTen {
     private $psuv;
     
     /**
+     * Votó en las internas del PSUV rumbo a las elecciones asamblea 2015
      * intPsuv
      * @var integer
      *
@@ -109,6 +114,7 @@ class OnePerTen {
     private $intPsuv;
     
     /**
+     * Votó en las internas de la MUD rumbo a las elecciones asamblea 2015
      * intOpo
      * @var integer
      *
@@ -117,6 +123,7 @@ class OnePerTen {
     private $intOpo;
     
     /**
+     * ¿La persona se reubicó para las elecciones asamblea 2015?
      * reubicado
      * @var integer
      *
@@ -125,6 +132,7 @@ class OnePerTen {
     private $reubicado;
     
     /**
+     * Firma del decreto Esperanza
      * esperanza
      * @var integer
      *
@@ -133,6 +141,7 @@ class OnePerTen {
     private $esperanza;
     
     /**
+     * Votó en las elecciones presidenciales 2012
      * vpresidencial1
      * @var integer
      *
@@ -141,6 +150,7 @@ class OnePerTen {
     private $vpresidencial1;
     
     /**
+     * Votó en las elecciones regionales 2012
      * vregionales
      * @var integer
      *
@@ -149,6 +159,7 @@ class OnePerTen {
     private $vregionales;
     
     /**
+     * Votó en las elecciones presidenciales 2013
      * vpresidencial2
      * @var integer
      *
@@ -157,6 +168,7 @@ class OnePerTen {
     private $vpresidencial2;
     
     /**
+     * Votó en las elecciones municipales 2013
      * vmunicipales
      * @var integer
      *
@@ -165,6 +177,7 @@ class OnePerTen {
     private $vmunicipales;
     
     /**
+     * Firmó en la Lista Sumate 2002
      * fref
      * @var integer
      *
@@ -173,6 +186,7 @@ class OnePerTen {
     private $fref;
     
     /**
+     * ¿Es vanguardia PSUV?
      * vanguardia
      * @var integer
      *
@@ -181,6 +195,7 @@ class OnePerTen {
     private $vanguardia;
     
     /**
+     * ¿Es miembro de alguna UBCH?
      * ubch
      * @var integer
      *
@@ -189,15 +204,16 @@ class OnePerTen {
     private $ubch;
     
     /**
-     * miembroOnePerTen
+     * 
+     * firmaCompromiso
      * @var integer
      *
-     * @ORM\Column(name="miembroOnePerTen", type="integer", nullable=true)
+     * @ORM\Column(name="firmaCompromiso", type="integer", nullable=true)
      */
-    private $miembroOnePerTen;
+    private $firmaCompromiso;
     
     /**
-     * militante
+     * militante (Que es parte del PSUV)
      * @var integer
      *
      * @ORM\Column(name="militante", type="integer", nullable=true)
@@ -211,6 +227,7 @@ class OnePerTen {
     private $ten;
     
     /**
+     * Votó en las elecciones asamblea 2015
      * vasamblea6
      * @var integer
      *
@@ -219,6 +236,7 @@ class OnePerTen {
     private $vasamblea6;
     
     /**
+     * Realizó 1x10 en el PSUV
      * onePerTenPsuv
      * @var integer
      *
@@ -227,12 +245,71 @@ class OnePerTen {
     private $onePerTenPsuv;
     
     /**
+     * Fue Miembro de algún 1x10 en el PSUV
      * memberOnePerTenPsuv
      * @var integer
      *
      * @ORM\Column(name="memberOnePerTenPsuv", type="integer", nullable=true)
      */
     private $memberOnePerTenPsuv;
+    
+    /**
+     * Fue CUTL en las elecciones asamblea 2015
+     * cutl
+     * @var integer
+     *
+     * @ORM\Column(name="cutl", type="integer", nullable=true)
+     */
+    private $cutl;
+    
+    /**
+     * Fue Trabajador de Sala Situacional en las elecciones asamblea 2015
+     * sala
+     * @var integer
+     *
+     * @ORM\Column(name="sala", type="integer", nullable=true)
+     */
+    private $sala;
+    
+    /**
+     * Fue Trabajador por el CNE en las elecciones asamblea 2015
+     * cne
+     * @var integer
+     *
+     * @ORM\Column(name="cne", type="integer", nullable=true)
+     */
+    private $cne;
+    
+    /** Fecha de Nacimiento de la Persona
+     * @var \DateTime
+     * @ORM\Column(name="bornDate", type="datetime",nullable=true)
+     */
+    private $bornDate;
+    
+    /**
+     * Edad para el 2002, con que firmó en la Lista Sumate en el 2003 o 2004
+     * ageSignatureSumate
+     * @var integer
+     *
+     * @ORM\Column(name="ageSignatureSumate", type="integer", nullable=true)
+     */
+    private $ageSignatureSumate;
+    
+    /**
+     * @var float
+     * workEfficiencyAssemblyElections
+     * @ORM\Column(name="workEfficiencyAssemblyElections", type="float", nullable=true)
+     */
+    private $workEfficiencyAssemblyElections = 0;
+    
+    /**
+     * En caso de que el trabajador tenga un status por defecto
+     * markedStatus
+     * @var integer
+     *
+     * @ORM\Column(name="markedStatus", type="integer", nullable=true)
+     */
+    private $markedStatus = 0;
 
     public function __construct() {
         $this->ten = new \Doctrine\Common\Collections\ArrayCollection();
@@ -429,12 +506,12 @@ class OnePerTen {
         $this->ubch = $ubch;
     }
     
-    function getMiembroOnePerTen() {
-        return $this->miembroOnePerTen;
+    function getFirmaCompromiso() {
+        return $this->firmaCompromiso;
     }
 
-    function setMiembroOnePerTen($miembroOnePerTen) {
-        $this->miembroOnePerTen = $miembroOnePerTen;
+    function setFirmaCompromiso($firmaCompromiso) {
+        $this->firmaCompromiso = $firmaCompromiso;
     }
        
     function getMilitante() {
@@ -476,7 +553,61 @@ class OnePerTen {
     function setAnalisis($analisis) {
         $this->analisis = $analisis;
     }
+    
+    function getCutl() {
+        return $this->cutl;
+    }
 
+    function setCutl($cutl) {
+        $this->cutl = $cutl;
+    }
 
+    function getSala() {
+        return $this->sala;
+    }
+
+    function getCne() {
+        return $this->cne;
+    }
+
+    function setSala($sala) {
+        $this->sala = $sala;
+    }
+
+    function setCne($cne) {
+        $this->cne = $cne;
+    }
+    
+    function getBornDate() {
+        return $this->bornDate;
+    }
+
+    function setBornDate(\DateTime $bornDate) {
+        $this->bornDate = $bornDate;
+    }
+
+    function getAgeSignatureSumate() {
+        return $this->ageSignatureSumate;
+    }
+
+    function setAgeSignatureSumate($ageSignatureSumate) {
+        $this->ageSignatureSumate = $ageSignatureSumate;
+    }
+    
+    function getWorkEfficiencyAssemblyElections() {
+        return $this->workEfficiencyAssemblyElections;
+    }
+
+    function setWorkEfficiencyAssemblyElections($workEfficiencyAssemblyElections) {
+        $this->workEfficiencyAssemblyElections = $workEfficiencyAssemblyElections;
+    }
+    
+    function getMarkedStatus() {
+        return $this->markedStatus;
+    }
+
+    function setMarkedStatus($markedStatus) {
+        $this->markedStatus = $markedStatus;
+    }
 
 }

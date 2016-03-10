@@ -719,6 +719,17 @@ class ArrangementProgramRepository extends EntityRepository {
         return $result;
     }
 
+    function getArrangementByStandardization(Period $period) {
+        
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+                ->andWhere('ap.period = :per')
+                ->setParameter('per', $period)                
+        ;
+        
+        return $queryBuilder;
+    }
+
     protected function getAlias() {
         return 'ap';
     }

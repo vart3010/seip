@@ -441,7 +441,7 @@
                 });
                 jQuery("#dateNotification").datepicker( "option", "minDate", startDate );
                 jQuery("#dateNotification").datepicker( "option", "maxDate", endDate );
-            {% elseif (is_granted("ROLE_SEIP_OPERATION_LOAD_QUARTER")) and yearPeriodSelected == '2015' %}
+            {% elseif (is_granted("ROLE_SEIP_OPERATION_LOAD_QUARTER")) and yearPeriodSelected == '2016' %}
                 //var startDate = '03/10/2015';
                 var startDateQuarter = '{{ startDateQuarter }}';
                 var endDateQuarter = '{{ endDateQuarter }}';

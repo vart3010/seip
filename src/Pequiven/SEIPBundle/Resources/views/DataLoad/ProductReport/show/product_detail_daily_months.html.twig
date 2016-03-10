@@ -4,6 +4,8 @@
 
 {% set message = ("pequiven_seip.product_report.question.delete"|trans) %}
 
+{% set unitFactor =  factorConversionService.unitToFactorConversion(product_report) %}
+
 <div class="block">
     <div class="block-title">
         <h3> {{ 'pequiven_seip.product_report.product_detail_daily_months'|trans }}&nbsp;({{ product_report.productDetailDailyMonths|length }})</h3>
@@ -16,79 +18,226 @@
     {% set typeProductionGross = "&nbsp;("~("pequiven_seip.gross"|trans)~")" %}
     {% set typeProductionNet = "&nbsp;("~("pequiven_seip.net"|trans)~")" %}
     {% set productUnit = product_report.product.productUnit %}
-    <div class="with-padding">
-        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
-            <thead>
-                <tr>
-                    <th scope="col" width="10%">{{ 'Month'|trans }}</th>
-                    <td scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip"  align="right" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ 'pequiven_seip.headers.totalPlan'|trans }}{{ typeProductionGross|raw }}</td>
-                    <td scope="col" width="10%" class="hide-on-tablet with-tooltip"  align="right" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ 'pequiven_seip.headers.totalReal'|trans }}{{ typeProductionGross|raw }}</td>
-                    <td scope="col" width="10%" class="hide-on-tablet with-tooltip"  align="right" title="{{ 'pequiven_seip.percentage'|trans }}">{{ 'pequiven_seip.headers.percentage'|trans }}{{ typeProductionGross|raw }}</td>
-                    <td scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip"  align="right" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ 'pequiven_seip.headers.totalPlan'|trans }}{{ typeProductionNet|raw }}</td>
-                    <td scope="col" width="10%" class="hide-on-tablet with-tooltip" align="right"  title="{{ 'pequiven_seip.totalReal'|trans }}">{{ 'pequiven_seip.headers.totalReal'|trans }}{{ typeProductionNet|raw }}</td>
-                    <td scope="col" width="10%" class="hide-on-tablet with-tooltip"  align="right" title="{{ 'pequiven_seip.percentage'|trans }}">{{ 'pequiven_seip.headers.percentage'|trans }}{{ typeProductionNet|raw }}</td>
-                    <th scope="col" width="10%">&nbsp;</th>
-                </tr>
-            </thead>
-            {% set colspan = 9 %}
-            <tbody>
-                {% set totalDetails = product_report.getTotalToDay %}
-                {% for productDetailDailyMonth in product_report.getProductDetailDailyMonthsSortByMonth %}
-                    {% set tableIdRow = "row-productDetailDailyMonth-"~productDetailDailyMonth.id %}
-                    <tr id="{{ tableIdRow }}">
-                        <th scope="row">
-                            {{ loop.index }} - 
-                            {{ generateLink(productDetailDailyMonth) }}
-                        </th>
-                        <td align="right">{{ productDetailDailyMonth.totalGrossPlan|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                        <td align="right">{{ productDetailDailyMonth.totalGrossReal|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                        <td align="right">{{ productDetailDailyMonth.grossPercentage|myNumberFormat }}&nbsp;%</td>
-                        <td align="right">{{ productDetailDailyMonth.totalNetPlan|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                        <td align="right">{{ productDetailDailyMonth.totalNetReal|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                        <td align="right">{{ productDetailDailyMonth.netPercentage|myNumberFormat }}&nbsp;%</td>
-                        <td class="low-padding align-center">
-                            <p class="button-height">
-                                <span class="button-group">
-                                    {% if isAllowPlanningReport %}
-                                        <a href="{{ path("pequiven_product_detail_daily_month_update",{id: productDetailDailyMonth.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
-                                        {% set deleteUrl = path("pequiven_product_detail_daily_month_delete",{id: productDetailDailyMonth.id}) %}
-                                        {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
-                                    {% endif %}
-                                </span>
-                            </p>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr >
-                        <td colspan="{{ colspan }}" class="empty_row">
-                            {{ "empty.product_detail_daily_months"|trans }}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr style="font-weight: bold;">
-                    <th scope="col" width="10%">{{ 'Total month before'|trans }}</th>
-                    <td scope="col" align="right" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totalDetails['tp_gross_b']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                    <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totalDetails['tr_gross_b']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                    <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalDetails['percentage_gross_b']|myNumberFormat }}%</td>
-                    <td scope="col" align="right" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totalDetails['tp_net_b']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                    <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totalDetails['tr_net_b']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                    <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalDetails['percentage_net_b']|myNumberFormat }}%</td>
-                    <th scope="col" width="10%">&nbsp;</th>
-                </tr>
-                <tr style="font-weight: bold;">
-                    <th scope="col" width="10%">{{ 'Total accumulated'|trans }}</th>
-                    <td scope="col" align="right" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totalDetails['tp_gross']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                    <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totalDetails['tr_gross']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                    <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalDetails['percentage_gross']|myNumberFormat }}%</td>
-                    <td scope="col" align="right" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totalDetails['tp_net']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                    <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totalDetails['tr_net']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
-                    <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalDetails['percentage_net']|myNumberFormat }}%</td>
-                    <th scope="col" width="10%">&nbsp;</th>
-                </tr>
-            </tfoot>
-        </table>
-        
+
+    <br>
+
+    <div id="add-tabs"  class="standard-tabs margin-bottom tabs-active" style="height: 30px;">
+
+        <ul class="tabs">
+            <li class="active"><a href="#tab-1">{{ productUnit }}</a></li>
+                {% if(factor) %}
+                <li><a href="#tab-2">{{ unitFactor  }}</a></li>
+                {% endif %}
+        </ul>
+
+        <div class="tabs-content" style="min-height: 29px;"><span class="tabs-back with-left-arrow top-bevel-on-light dark-text-bevel">Back</span>
+
+            <div class="with-padding tab-active" id="tab-1">
+                <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                    <thead>
+                        <tr>
+                            <th scope="col" width="10%">{{ 'Month'|trans }}</th>
+                            <td scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip"  align="right" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ 'pequiven_seip.headers.totalPlan'|trans }}{{ typeProductionGross|raw }}</td>
+                            <td scope="col" width="10%" class="hide-on-tablet with-tooltip"  align="right" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ 'pequiven_seip.headers.totalReal'|trans }}{{ typeProductionGross|raw }}</td>
+                            <td scope="col" width="10%" class="hide-on-tablet with-tooltip"  align="right" title="{{ 'pequiven_seip.percentage'|trans }}">{{ 'pequiven_seip.headers.percentage'|trans }}{{ typeProductionGross|raw }}</td>
+                            <td scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip"  align="right" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ 'pequiven_seip.headers.totalPlan'|trans }}{{ typeProductionNet|raw }}</td>
+                            <td scope="col" width="10%" class="hide-on-tablet with-tooltip" align="right"  title="{{ 'pequiven_seip.totalReal'|trans }}">{{ 'pequiven_seip.headers.totalReal'|trans }}{{ typeProductionNet|raw }}</td>
+                            <td scope="col" width="10%" class="hide-on-tablet with-tooltip"  align="right" title="{{ 'pequiven_seip.percentage'|trans }}">{{ 'pequiven_seip.headers.percentage'|trans }}{{ typeProductionNet|raw }}</td>
+                            <th scope="col" width="10%">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    {% set colspan = 9 %}
+                    <tbody>
+                        {% set totalDetails = product_report.getTotalToDay %}
+                        {% for productDetailDailyMonth in product_report.getProductDetailDailyMonthsSortByMonth %}
+                            {% set tableIdRow = "row-productDetailDailyMonth-"~productDetailDailyMonth.id %}
+                            <tr id="{{ tableIdRow }}">
+                                <th scope="row">
+                                    {{ loop.index }} - 
+                                    {{ generateLink(productDetailDailyMonth) }}
+                                </th>
+                                <td align="right">{{ productDetailDailyMonth.totalGrossPlan|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                                <td align="right">{{ productDetailDailyMonth.totalGrossReal|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                                <td align="right">{{ productDetailDailyMonth.grossPercentage|myNumberFormat }}&nbsp;%</td>
+                                <td align="right">{{ productDetailDailyMonth.totalNetPlan|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                                <td align="right">{{ productDetailDailyMonth.totalNetReal|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                                <td align="right">{{ productDetailDailyMonth.netPercentage|myNumberFormat }}&nbsp;%</td>
+                                <td class="low-padding align-center">
+                                    <p class="button-height">
+                                        <span class="button-group">
+                                            {% if isAllowPlanningReport %}
+                                                <a href="{{ path("pequiven_product_detail_daily_month_update",{id: productDetailDailyMonth.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                                                {% set deleteUrl = path("pequiven_product_detail_daily_month_delete",{id: productDetailDailyMonth.id}) %}
+                                                {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                            {% endif %}
+                                        </span>
+                                    </p>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr >
+                                <td colspan="{{ colspan }}" class="empty_row">
+                                    {{ "empty.product_detail_daily_months"|trans }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr style="font-weight: bold;">
+                            <th scope="col" width="10%">{{ 'Total month before'|trans }}</th>
+                            <td scope="col" align="right" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totalDetails['tp_gross_b']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                            <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totalDetails['tr_gross_b']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                            <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalDetails['percentage_gross_b']|myNumberFormat }}%</td>
+                            <td scope="col" align="right" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totalDetails['tp_net_b']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                            <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totalDetails['tr_net_b']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                            <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalDetails['percentage_net_b']|myNumberFormat }}%</td>
+                            <th scope="col" width="10%">&nbsp;</th>
+                        </tr>
+                        <tr style="font-weight: bold;">
+                            <th scope="col" width="10%">{{ 'Total accumulated'|trans }}</th>
+                            <td scope="col" align="right" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totalDetails['tp_gross']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                            <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totalDetails['tr_gross']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                            <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalDetails['percentage_gross']|myNumberFormat }}%</td>
+                            <td scope="col" align="right" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totalDetails['tp_net']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                            <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totalDetails['tr_net']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                            <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalDetails['percentage_net']|myNumberFormat }}%</td>
+                            <th scope="col" width="10%">&nbsp;</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            {% if(factor) %}
+                <div class="with-padding" id="tab-2" style="display: none;">
+
+                    <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="10%">{{ 'Month'|trans }}</th>
+                                <td scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip"  align="right" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ 'pequiven_seip.headers.totalPlan'|trans }}{{ typeProductionGross|raw }}</td>
+                                <td scope="col" width="10%" class="hide-on-tablet with-tooltip"  align="right" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ 'pequiven_seip.headers.totalReal'|trans }}{{ typeProductionGross|raw }}</td>
+                                <td scope="col" width="10%" class="hide-on-tablet with-tooltip"  align="right" title="{{ 'pequiven_seip.percentage'|trans }}">{{ 'pequiven_seip.headers.percentage'|trans }}{{ typeProductionGross|raw }}</td>
+                                <td scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip"  align="right" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ 'pequiven_seip.headers.totalPlan'|trans }}{{ typeProductionNet|raw }}</td>
+                                <td scope="col" width="10%" class="hide-on-tablet with-tooltip" align="right"  title="{{ 'pequiven_seip.totalReal'|trans }}">{{ 'pequiven_seip.headers.totalReal'|trans }}{{ typeProductionNet|raw }}</td>
+                                <td scope="col" width="10%" class="hide-on-tablet with-tooltip"  align="right" title="{{ 'pequiven_seip.percentage'|trans }}">{{ 'pequiven_seip.headers.percentage'|trans }}{{ typeProductionNet|raw }}</td>
+                                <th scope="col" width="10%">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        {% set colspan = 9 %}
+
+                        <tbody>
+                            {% set totalDetails = product_report.getTotalToDay %}
+                            {% for productDetailDailyMonth in product_report.getProductDetailDailyMonthsSortByMonth %}
+                                {% set tableIdRow = "row-productDetailDailyMonth-"~productDetailDailyMonth.id %}
+                                <tr id="{{ tableIdRow }}">
+                                    <th scope="row">
+                                        {{ loop.index }} - 
+                                        {{ generateLink(productDetailDailyMonth) }}
+                                    </th>
+                                    <td align="right">
+                                        {#                                    {{ productDetailDailyMonth.totalGrossPlan|myNumberFormat }}&nbsp;{{ productUnit }}#}
+                                        {% set factorMonth =  factorConversionService.calculateFormulaValueFromFactor(productDetailDailyMonth.totalGrossPlan,product_report) %}
+                                        {{ factorMonth|myNumberFormat ~ unitFactor }} 
+                                    </td>
+                                    <td align="right">
+                                        {#                                    {{ productDetailDailyMonth.totalGrossReal|myNumberFormat }}&nbsp;{{ productUnit }}#}
+                                        {% set factorMonth =  factorConversionService.calculateFormulaValueFromFactor(productDetailDailyMonth.totalGrossReal,product_report) %}
+                                        {{ factorMonth|myNumberFormat ~ unitFactor }} 
+                                    </td>
+                                    <td align="right">
+                                        {{ productDetailDailyMonth.grossPercentage|myNumberFormat }}&nbsp;%
+                                    </td>
+                                    <td align="right">
+                                        {#                                    {{ productDetailDailyMonth.totalNetPlan|myNumberFormat }}&nbsp;{{ productUnit }}#}
+                                        {% set factorMonth =  factorConversionService.calculateFormulaValueFromFactor(productDetailDailyMonth.totalNetPlan,product_report) %}
+                                        {{ factorMonth|myNumberFormat ~ unitFactor }} 
+                                    </td>
+                                    <td align="right">
+                                        {#                                    {{ productDetailDailyMonth.totalNetReal|myNumberFormat }}&nbsp;{{ productUnit }}#}
+                                        {% set factorMonth =  factorConversionService.calculateFormulaValueFromFactor(productDetailDailyMonth.totalNetReal,product_report) %}
+                                        {{ factorMonth|myNumberFormat ~ unitFactor }} 
+                                    </td>
+                                    <td align="right">{{ productDetailDailyMonth.netPercentage|myNumberFormat }}&nbsp;%</td>
+                                    <td class="low-padding align-center">
+                                        <p class="button-height">
+                                            <span class="button-group">
+                                                {% if isAllowPlanningReport %}
+                                                    <a href="{{ path("pequiven_product_detail_daily_month_update",{id: productDetailDailyMonth.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                                                    {% set deleteUrl = path("pequiven_product_detail_daily_month_delete",{id: productDetailDailyMonth.id}) %}
+                                                    {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                                {% endif %}
+                                            </span>
+                                        </p>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr >
+                                    <td colspan="{{ colspan }}" class="empty_row">
+                                        {{ "empty.product_detail_daily_months"|trans }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr style="font-weight: bold;">
+                                <th scope="col" width="10%">{{ 'Total month before'|trans }}</th>
+                                <td scope="col" align="right" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">
+                                    {#                                {{ totalDetails['tp_gross_b']|myNumberFormat }}&nbsp;{{ productUnit }}#}
+                                    {% set factorTotal=  factorConversionService.calculateFormulaValueFromFactor(totalDetails['tp_gross_b'],product_report) %}
+                                    {{ factorTotal|myNumberFormat ~ unitFactor }} 
+                                </td>
+                                <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">
+                                    {#                                {{ totalDetails['tr_gross_b']|myNumberFormat }}&nbsp;{{ productUnit }}#}
+                                    {% set factorTotal=  factorConversionService.calculateFormulaValueFromFactor(totalDetails['tr_gross_b'],product_report) %}
+                                    {{ factorTotal|myNumberFormat ~ unitFactor }} 
+                                </td>
+                                <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalDetails['percentage_gross_b']|myNumberFormat }}%</td>
+                                <td scope="col" align="right" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">
+                                    {#                                {{ totalDetails['tp_net_b']|myNumberFormat }}&nbsp;{{ productUnit }}#}
+                                    {% set factorTotal=  factorConversionService.calculateFormulaValueFromFactor(totalDetails['tp_net_b'],product_report) %}
+                                    {{ factorTotal|myNumberFormat ~ unitFactor }} 
+                                </td>
+                                <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">
+                                    {#                                {{ totalDetails['tr_net_b']|myNumberFormat }}&nbsp;{{ productUnit }}#}
+                                    {% set factorTotal=  factorConversionService.calculateFormulaValueFromFactor(totalDetails['tr_net_b'],product_report) %}
+                                    {{ factorTotal|myNumberFormat ~ unitFactor }} 
+                                </td>
+                                <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalDetails['percentage_net_b']|myNumberFormat }}%</td>
+                                <th scope="col" width="10%">&nbsp;</th>
+                            </tr>
+                            <tr style="font-weight: bold;">
+                                <th scope="col" width="10%">{{ 'Total accumulated'|trans }}</th>
+                                <td scope="col" align="right" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">
+                                    {#                                {{ totalDetails['tp_gross']|myNumberFormat }}&nbsp;{{ productUnit }}#}
+                                    {% set factorTotal=  factorConversionService.calculateFormulaValueFromFactor(totalDetails['tp_gross'],product_report) %}
+                                    {{ factorTotal|myNumberFormat ~ unitFactor }} 
+                                </td>
+                                <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">
+                                    {#                                {{ totalDetails['tr_gross']|myNumberFormat }}&nbsp;{{ productUnit }}#}
+                                    {% set factorTotal=  factorConversionService.calculateFormulaValueFromFactor(totalDetails['tr_gross'],product_report) %}
+                                    {{ factorTotal|myNumberFormat ~ unitFactor }} 
+                                </td>
+                                <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalDetails['percentage_gross']|myNumberFormat }}%</td>
+                                <td scope="col" align="right" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">
+                                    {#                                {{ totalDetails['tp_net']|myNumberFormat }}&nbsp;{{ productUnit }}#}
+                                    {% set factorTotal=  factorConversionService.calculateFormulaValueFromFactor(totalDetails['tp_net'],product_report) %}
+                                    {{ factorTotal|myNumberFormat ~ unitFactor }} 
+                                </td>
+                                <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">
+                                    {#                                {{ totalDetails['tr_net']|myNumberFormat }}&nbsp;{{ productUnit }}#}
+                                    {% set factorTotal=  factorConversionService.calculateFormulaValueFromFactor(totalDetails['tr_net'],product_report) %}
+                                    {{ factorTotal|myNumberFormat ~ unitFactor }} 
+                                </td>
+                                <td scope="col" align="right" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalDetails['percentage_net']|myNumberFormat }}%</td>
+                                <th scope="col" width="10%">&nbsp;</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            {% endif%}
+        </div>
+
     </div>
+
+
 </div>

@@ -29,6 +29,9 @@
 {% endblock %} 
 
 {% block body %}
+{% if typeObject == 1 %}
+    {% set cloning = indicator_sig.parentCloning %}
+{% endif %}
 <div class="" ng-init="urlValueLastIndicatorForm='{{ path('pequiven_indicator_last_period_form',{'idIndicator':indicator_sig.id }) }}'">
     <div class="block_id" ng-init="id_indicator='{{ indicator_sig.id }}'"></div>
         <div class="block_id" ng-init="typeObj='{{ typeObject }}'"></div>    
@@ -41,8 +44,7 @@
                 {% set period = "2014" %}
             {% elseif indicator_sig.period.id == 3 %}
                 {% set period = "2015" %}
-            {% endif %}
-            
+            {% endif %}            
             {% if indicator_sig.indicatorlastPeriod and indicator_sig.period.id == 2 %}
                 <div class="block block-title">
                     <h3>El Indicador tiene relación con el indicador del {{ period }}</h3>
@@ -57,8 +59,7 @@
                         <a class="button icon-list-add " href="" ng-click="loadTemplateIndicatorlastPeriod()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
                     </div>
                 </div>
-           {% endif %}
-            {# fin Button formulario relacion lastperiod #}
+           {% endif %}            
         </div>
     </div>
     {% endif %}
@@ -122,9 +123,7 @@
                 {{ font["text"]}}
                 <i class="fa fa-{{ font["icon"] }} fa-2x position"> &nbsp;</i>
             </div>
-            <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
-                <!-- This div will hold the chart generated in the footer -->
-            </div>                                
+            <div class="nine-columns twelve-columns-mobile" id="chartContainerResult"></div>                                
             <input id='exportpng' type='hidden' value='Exportar Informe' />
             {# Configuracion de medicion del indicador #}
             {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CONFIG') %}                
@@ -144,12 +143,10 @@
     {% endif %}
 <div class="columns with-padding">
     <h4 align="center">Causas de Desviación</h4>                
-        <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode()}},'{{ urlExportFromChart }}')" style="width: 95%; height:55%;" align="center">
-            <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
-                <!-- This div will hold the chart generated in the footer -->
-            </div>
-            <input id='export_causespng' type='hidden' value='Exportar Informe' />
-        </div>
+    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode()}},'{{ urlExportFromChart }}')" style="width: 95%; height:55%;" align="center">
+        <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs"></div>
+        <input id='export_causespng' type='hidden' value='Exportar Informe' />
+    </div>
 </div> 
 <br>        
 {# Fin de Graficos #}
@@ -278,7 +275,8 @@
             var button = document.getElementById("exportpng");
             if (button){
                button.click();   
-               window.setTimeout(downloadCause,10);               
+               window.setTimeout(downloadCause,1000);
+               //downloadCause();               
             }            
         }
         //Carga de Evento de Descarga de Grafica de Causas del Indicador

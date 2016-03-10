@@ -1,7 +1,5 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
-
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
-
 {% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
 
 {% block javascripts_base %}
@@ -19,6 +17,9 @@
 {% endblock %} 
 
 {% block body %}
+{% if typeObject == 2 %}
+    {% set cloning = null %}
+{% endif %}
 <div class="block_id" ng-init="id_indicator='{{ ArrangementProgram.id }}'"></div>
 <div class="block_id" ng-init="typeObj='{{ typeObject }}'"></div>
 
@@ -76,12 +77,9 @@
                         </p>
                 </div>
             {% endif %}            
-        </div>
-        
+        </div>        
         {% include 'PequivenSIGBundle:Template:base_month.html.twig' %} 
-
     </fieldset>
-
         {# Graficos #}
         <div class="columns with-padding"> 
             <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 82%;" align="center">                
@@ -99,15 +97,12 @@
         {% endif %}
 
         <div class="columns with-padding">         
-                <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 82%; height:55%;" align="center">
-                        <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
-                            <!-- This div will hold the chart generated in the footer -->
-                        </div>
-                </div>
+            <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 82%; height:55%;" align="center">
+                <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs"></div>
+            </div>
         </div> 
         <br>        
         {# Fin de Graficos #}
-
         {# Analisis de Causas #}
         {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CAUSE') %}    
             <br /><br />

@@ -75,25 +75,17 @@
                     textCancel : "No"
                 };
                 $.modal.confirm('Desea realizar una vista dinamica?', function(){                               
-                    document.location.href="http://{{ host }}/line-strategic/" + {{ id }} + "?r=1";
-                    {#document.location.href="http://localhost/seip/web/app_dev.php/line-strategic/" + {{ id }} + "?r=1";#}
+                    document.location.href="{{ path('pequiven_line_strategic_show', {'id': id }) }}?r=1";                    
                 }, function(){                
-                    document.location.href="http://{{ host }}/line-strategic/" + {{ id }} + "?r=0";                    
-                    {#document.location.href="http://localhost/seip/web/app_dev.php/line-strategic/" + {{ id }} + "?r=0";                    #}
+                    document.location.href="{{ path('pequiven_line_strategic_show', {'id': id }) }}?r=0";                                        
                 }, options);
             });
         </script>    
    {% endif %}
 
    {% if answer == 1 %}
-        <script type="text/javascript">         
-            
-            var id = {{ id }} + 1; 
-            if (id > 7) {
-                id = 1;
-            };
-            {#var page = "http://localhost/seip/web/app_dev.php/line-strategic/" + id + "?r=" + {{ answer }}#}
-            var page = "http://{{ host }}/line-strategic/" + id + "?r=" + {{ answer }}
+        <script type="text/javascript">                     
+            var page = "{{ path('pequiven_line_strategic_show', {'id': id }) }}?r=" + {{ answer }}
                 function redireccionar(){
                     location.href= page
                 } 
