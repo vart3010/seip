@@ -263,14 +263,6 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     protected $quarterToLoadOperationProduction = 0;
 
     /**
-<<<<<<< HEAD
-     * Metas Individuales
-     * 
-     * @var \Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd
-     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd",mappedBy="user",cascade={"persist","remove"})
-     */
-    protected $goalDetailsInd;
-=======
      * @ORM\Column(name="notify",type="integer",nullable=true)
      */
     private $notify;
@@ -281,7 +273,14 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\Notification", mappedBy="user") 
      */
     private $notification;
->>>>>>> ca4141a4c002e05c5ecc257f2b7eedd7ee8aeac3
+
+    /**
+     * Metas Individuales
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd",mappedBy="user",cascade={"persist","remove"})
+     */
+    protected $goalDetailsInd;
 
     /**
      * Constructor
@@ -302,10 +301,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         $this->evolutionAction = new \Doctrine\Common\Collections\ArrayCollection();
         $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
         $this->notification = new \Doctrine\Common\Collections\ArrayCollection();
-
     }
-    
-    
 
     /**
      * Get id
