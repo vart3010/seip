@@ -1444,30 +1444,28 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             $periodActive = $this->getPeriodService()->getPeriodActive();
 
-            if ($periodActive->getName() == "2016") {
-                //FASE 1
-                $reportsPhaseOne = $this->factory->createItem('work_study_circles.reports.phase_one', $this->getSubLevelOptions(array(
-                                    "route" => "",
-                                    'labelAttributes' => array('icon' => 'fa fa-table',),
-                                ))
-                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.reports.phase_one', $section)));
+            //FASE 1
+            $reportsPhaseOne = $this->factory->createItem('work_study_circles.reports.phase_one', $this->getSubLevelOptions(array(
+                                "route" => "",
+                                'labelAttributes' => array('icon' => 'fa fa-table',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.reports.phase_one', $section)));
 
-                $reportsPhaseOneList = $this->factory->createItem('work_study_circles.list', $this->getSubLevelOptions(array(
-                                    'route' => 'pequiven_work_study_circle_list',
-                                    'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE),
-                                ))
-                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
-                $reportsPhaseOne->addChild($reportsPhaseOneList);
+            $reportsPhaseOneList = $this->factory->createItem('work_study_circles.list', $this->getSubLevelOptions(array(
+                                'route' => 'pequiven_work_study_circle_list',
+                                'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
+            $reportsPhaseOne->addChild($reportsPhaseOneList);
 
-                $reportsPhaseOneGeneral = $this->factory->createItem('work_study_circles.general', $this->getSubLevelOptions(array(
-                                    'route' => 'pequiven_work_study_circle_general',
-                                    'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE),
-                                ))
-                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.general', $section)));
-                $reportsPhaseOne->addChild($reportsPhaseOneGeneral);
+            $reportsPhaseOneGeneral = $this->factory->createItem('work_study_circles.general', $this->getSubLevelOptions(array(
+                                'route' => 'pequiven_work_study_circle_general',
+                                'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.general', $section)));
+            $reportsPhaseOne->addChild($reportsPhaseOneGeneral);
 
-                $workStudyCirclesReports->addChild($reportsPhaseOne);
-            }
+            $workStudyCirclesReports->addChild($reportsPhaseOne);
 
             if ($periodActive->getName() == "2015") {
                 //FASE 2
@@ -1532,30 +1530,28 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             $periodActive = $this->getPeriodService()->getPeriodActive();
 
-            if ($periodActive->getName() == "2016") {
-                //FASE 1
-                $meetingsPhaseOne = $this->factory->createItem('work_study_circles.meeting.phase_one', $this->getSubLevelOptions(array(
-                                    "route" => "",
-                                    'labelAttributes' => array('icon' => 'fa fa-table',),
-                                ))
-                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.phase_one', $section)));
+            //FASE 1
+            $meetingsPhaseOne = $this->factory->createItem('work_study_circles.meeting.phase_one', $this->getSubLevelOptions(array(
+                                "route" => "",
+                                'labelAttributes' => array('icon' => 'fa fa-table',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.phase_one', $section)));
 
-                $meetingsPhaseOneList = $this->factory->createItem('work_study_circles.list', $this->getSubLevelOptions(array(
-                                    'route' => 'pequiven_meeting_list',
-                                    'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE),
-                                ))
-                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
-                $meetingsPhaseOne->addChild($meetingsPhaseOneList);
+            $meetingsPhaseOneList = $this->factory->createItem('work_study_circles.list', $this->getSubLevelOptions(array(
+                                'route' => 'pequiven_meeting_list',
+                                'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
+            $meetingsPhaseOne->addChild($meetingsPhaseOneList);
 
-                $meetingsPhaseOneGeneral = $this->factory->createItem('work_study_circles.general', $this->getSubLevelOptions(array(
-                                    'route' => 'pequiven_meeting_view',
-                                    'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE),
-                                ))
-                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.general', $section)));
-                $meetingsPhaseOne->addChild($meetingsPhaseOneGeneral);
+            $meetingsPhaseOneGeneral = $this->factory->createItem('work_study_circles.general', $this->getSubLevelOptions(array(
+                                'route' => 'pequiven_meeting_view',
+                                'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.general', $section)));
+            $meetingsPhaseOne->addChild($meetingsPhaseOneGeneral);
 
-                $workStudyCirclesMeeting->addChild($meetingsPhaseOne);
-            }
+            $workStudyCirclesMeeting->addChild($meetingsPhaseOne);
 
             if ($periodActive->getName() == "2015") {
                 //FASE 2
