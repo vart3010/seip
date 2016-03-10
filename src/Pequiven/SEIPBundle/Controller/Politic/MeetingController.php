@@ -529,7 +529,7 @@ class MeetingController extends SEIPController {
         $phase = $request->get('phase');
 
         $criteria['phase'] = $phase;
-        $criteria['createdAt'] = $this->getPeriodService()->getPeriodActive()->getName();;
+        $criteria['createdAt'] = $this->getPeriodService()->getPeriodActive()->getName();
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
@@ -586,11 +586,11 @@ class MeetingController extends SEIPController {
         //$phase = $request->get('phase');
 
         $workService = $this->getWorkStudyCircleService();
+        $period = $this->getSecurityService()->getPeriodService()->getPeriodActive()->getName();
 
-        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findAll();
+        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findMeetingsbyPeriod($period);
 
-
-        $dataChart = $workService->getDataChartOfMeetingsData($meeting); //Paso de data        
+        $dataChart = $workService->getDataChartOfMeetingsData($period); //Paso de data        
 
         return $this->render('PequivenSEIPBundle:Politic:Meeting\view.html.twig', array(
                     'data' => $dataChart

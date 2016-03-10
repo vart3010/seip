@@ -82,13 +82,26 @@ class MeetingRepository extends SeipEntityRepository {
      *
      *
      */
-    function findQueryMeetingsComplejo($complejo) {
+    function findQueryMeetingsComplejo($complejo, $period) {
 
         $qb = $this->getQueryBuilder();
         $qb
                 ->innerJoin('mtg.workStudyCircle', 'wsc')
                 ->andWhere('wsc.complejo = :complejo')
+                ->andWhere('SUBSTRING(mtg.date, 1, 4) = :period')
                 ->setParameter('complejo', $complejo)
+                ->setParameter('period', $period)
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+    function findMeetingsbyPeriod($period) {
+
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->andWhere('SUBSTRING(mtg.date, 1, 4) = :period')
+                ->setParameter('period', $period)
         ;
 
         return $qb->getQuery()->getResult();
