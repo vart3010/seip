@@ -1,7 +1,6 @@
 {% trans_default_domain 'PequivenSIGBundle' %}
 <div class="block">
     <div ng-controller="IndicatorSigEvolutionController"> 
-
         <div class="block-title">
             <h3 class="ng-binding">{{ 'sig.causes_desviation'|trans ({}, 'messages') }}</h3>
             {% if sumCause < 100 and not cloning %}        
@@ -10,7 +9,6 @@
                 </div>  
             {% endif %}        
         </div>
-
         <div class="with-padding">
         {% if cause %}
             {% set colspan = 5 %}
@@ -65,8 +63,8 @@
         {% else %}
         <div class="new-row twelve-columns empty_row" align="center">
             <br>No hay Carga.
-        {% endif %}           
         </div>
+        {% endif %}           
         </div>
     </div>
 </div>

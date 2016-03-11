@@ -1014,7 +1014,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //                $result = bcdiv($varMulti, $varToCatch, 2);
             } else {
                 $varMulti = $varToCatch * 100;
-                $result = bcdiv($varMulti, $result, 2);
+                $result = bcdiv($result, $varMulti, 2);
 //                $varResult = bcadd($result, 0, 2);
 //                $varMinus = bcsub($varToCatch, $varResult, 2);
 //                if ($varToCatch >= -1 && $varToCatch <= 1) {

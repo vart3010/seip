@@ -74,8 +74,8 @@
         <!-- Additional styles -->
         {% block stylesheets_base '' %}
             {% stylesheets output='compiled/seip_main_developer.css' filter='uglifycss' 
-                '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/css/main.css'
-                '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/css/gobierno-vzla.css'
+                '@PequivenSEIPBundle/Resources/public/login/fonts/main.css'
+                '@PequivenSEIPBundle/Resources/public/login/fonts/gobierno-vzla.css'
                 'bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/modal3860.css'
                 'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/notificationBarModule/notificationBarModule.css'
                 'bundles/pequivenseip/login/fonts/header.css'
@@ -144,7 +144,7 @@
         <section ng-cloak ng-controller="MainContentController" role="main" id="main" class="block main-frontend">
             <noscript class="message black-gradient simpler">Your browser does not support JavaScript! Some features won't work as expected...</noscript>
             {% include 'PequivenSEIPBundle:Block:headerGestion.html.twig' %}
-            <div  class="content-container" style="min-height: 675px;">
+            <div  class="content-container" style="min-height: 700px;">
                 {% block before_body '' %}
                 {% block body %}
                     {% block mainTitle %}

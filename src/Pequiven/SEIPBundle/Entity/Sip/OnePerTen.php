@@ -273,7 +273,7 @@ class OnePerTen extends modelOnePerTen {
     
     /**
      * Fue Trabajador por el CNE en las elecciones asamblea 2015
-     * sala
+     * cne
      * @var integer
      *
      * @ORM\Column(name="cne", type="integer", nullable=true)
@@ -288,7 +288,7 @@ class OnePerTen extends modelOnePerTen {
     
     /**
      * Edad para el 2002, con que firmó en la Lista Sumate en el 2003 o 2004
-     * sala
+     * ageSignatureSumate
      * @var integer
      *
      * @ORM\Column(name="ageSignatureSumate", type="integer", nullable=true)
@@ -297,10 +297,19 @@ class OnePerTen extends modelOnePerTen {
     
     /**
      * @var float
-     * 
+     * workEfficiencyAssemblyElections
      * @ORM\Column(name="workEfficiencyAssemblyElections", type="float", nullable=true)
      */
     private $workEfficiencyAssemblyElections = 0;
+    
+    /**
+     * En caso de que el trabajador tenga un status por defecto
+     * markedStatus
+     * @var integer
+     *
+     * @ORM\Column(name="markedStatus", type="integer", nullable=true)
+     */
+    private $markedStatus = 0;
 
     public function __construct() {
         $this->ten = new \Doctrine\Common\Collections\ArrayCollection();
@@ -591,6 +600,14 @@ class OnePerTen extends modelOnePerTen {
 
     function setWorkEfficiencyAssemblyElections($workEfficiencyAssemblyElections) {
         $this->workEfficiencyAssemblyElections = $workEfficiencyAssemblyElections;
+    }
+    
+    function getMarkedStatus() {
+        return $this->markedStatus;
+    }
+
+    function setMarkedStatus($markedStatus) {
+        $this->markedStatus = $markedStatus;
     }
 
 }
