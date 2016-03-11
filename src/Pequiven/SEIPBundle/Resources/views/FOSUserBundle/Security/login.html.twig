@@ -11,8 +11,8 @@
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/login3860.css?v=1') }}">
 
     {% stylesheets  output='compiled/login.css'filter='cssrewrite'
-            '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/css/login.css'
-            '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/css/gobierno-vzla.css'
+            '@PequivenSEIPBundle/Resources/public/login/fonts/login.css'
+            '@PequivenSEIPBundle/Resources/public/login/fonts/gobierno-vzla.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -27,8 +27,8 @@
 {% block content %}
     <div class="block main-container">
         {% include 'PequivenSEIPBundle:Block:header.html.twig' %}
-        <br><br><br><br><br><br><br><br><br><br>
-        <div id="login-container">            
+        <br><br><br><br><br><br><br><br>
+        <div id="login-container" style="min-height: 375px;">            
             <div id="form-wrapper">
                 <div id="form-block" class="scratch-metal">
                     <div id="form-viewport">
@@ -61,7 +61,7 @@
 
                         </form>
 
-                        <form method="post" action="#" id="form-register" class="input-wrapper red-gradient glossy" title="{{ 'pequiven_seip.registration'|trans }}">
+                        <form method="post" action="#" id="form-register" class="input-wrapper blue-gradient glossy" title="{{ 'pequiven_seip.registration'|trans }}">
 
                             <p class="message">
                                 {{ 'pequiven_seip.message_register'|trans }}:

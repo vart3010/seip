@@ -1,0 +1,71 @@
+/*
+This file is part of the TecnoCreaciones package.
+
+(c) www.tecnocreaciones.com.ve
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+*/
+/* 
+    Created on : 26/03/2014, 09:29:13 AM
+    Author     : Carlos Mendoza <inhack20@tecnocreaciones.com>
+*/
+
+.vzla-header{
+    height: 54px;
+    margin-top: 10px;
+}
+
+.vzla-header-column-2{
+    border-left:2px solid rgb(82, 82, 82);
+     padding-left: 10px;
+     padding-top: 22px;
+     margin-left: -14px;
+}
+
+.vzla-bold {
+    color: rgb(82, 82, 82);
+    font-weight: bold;
+}
+
+.hr-line-vzla-red{
+    background-color: #f42a41;
+    border: 2px solid #f42a41;
+}
+
+#main {
+    z-index: 0;
+}
+
+#footer {
+    position: relative;
+    clear: both; 
+    text-align: center;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.login_locale_chooser {
+    float: right;
+    margin-right: 10px;
+}
+.login_locale_chooser  li {
+    display: inline;
+    text-transform: capitalize;
+}
+.login_locale_chooser li + li:before{
+    content: " | ";
+    padding: 0 3px;
+}
+
+@media screen and (max-width:768px){
+    .hide-768 {
+        display: none;
+    }
+}
+
+@media screen and (max-width:480px){
+    .main-container {
+        width: 100%;
+    }
+}

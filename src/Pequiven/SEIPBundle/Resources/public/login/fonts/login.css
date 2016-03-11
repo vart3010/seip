@@ -1,0 +1,13 @@
+.main-container {
+    margin: 10px auto;
+    text-align: center;
+    width: 90%;
+}
+#login-container {
+    width: 400px;
+    margin: 10px auto;
+}
+
+#form-wrapper {
+    min-width: 350px;
+}
