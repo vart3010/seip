@@ -60,7 +60,7 @@ pequiven_seip:
     enable_auto_login: Habilitar inicio de sesión automático
     send_instructions: Enviarme las instrucciones
     register: Registrar
-    message_register: ¿Nuevo usuario? Yay! Háganos saber un poquito acerca de usted antes de empezar
+    message_register: ¿Nuevo Usuario? Por Favor Complete el Siguiente Formulario
     your_name: Su nombre
     registration: Registro
     clear_sorting: Borrar selección
