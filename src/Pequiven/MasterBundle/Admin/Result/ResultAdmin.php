@@ -43,12 +43,16 @@ class ResultAdmin extends Admin implements \Symfony\Component\DependencyInjectio
                 'choices' => \Pequiven\SEIPBundle\Model\Result\Result::getTypeCalculations(),
                 'translation_domain' => 'PequivenSEIPBundle'
             ))
-            ->add('objetive')
+            ->add('objetive','sonata_type_model_autocomplete',array(
+                'property' => array('ref','description'),
+                'required' => false,
+            ))
             ->add('parent','entity',array(
                 'class' => 'Pequiven\SEIPBundle\Entity\Result\Result',
                 'query_builder' => function(\Pequiven\SEIPBundle\Repository\Result\ResultRepository $repository){
                     return $repository->getQueryOfValidParents();
                 },
+                'property' => 'descriptionText',
                 'required' => false,
             ))
             ;
@@ -59,7 +63,9 @@ class ResultAdmin extends Admin implements \Symfony\Component\DependencyInjectio
             ->add('description')
             ->add('typeResult')
             ->add('typeCalculation')
-            ->add('objetive')
+            ->add('objetive','doctrine_orm_model_autocomplete',array(),null,array(
+                'property' => array('ref','description')
+            ))
             ->add('period')
             ;
     }
@@ -91,6 +97,15 @@ class ResultAdmin extends Admin implements \Symfony\Component\DependencyInjectio
 
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
+    }
+    
+    public function toString($object) 
+    {
+        $toString = '-';
+        if($object->getId() > 0){
+            $toString = $object->getPeriod()->getDescription().' - '.$object->getDescription();
+        }
+        return \Pequiven\SEIPBundle\Service\ToolService::truncate($toString,array('limit' => 50));
     }
     
     /**
