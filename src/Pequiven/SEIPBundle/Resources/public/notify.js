@@ -148,35 +148,73 @@ function getMessagesData(type, tag){
         type: type,                    
     };     
 
-    $.post(urlMessages, data, function(){
-        createMessages();
-    });
+    /*$.post(urlMessages, data, function(){        
+        createMessages(type, tag);
+    });*/
 
-    /*$.ajax({
+    $.ajax({
             type: 'get',
             url: urlMessages,
             data: data, 
             /*beforeSend:function(){
-                    $('#loading').css({display:'block'});                            
-            },
+                $('#loading').css({display:'block'});                            
+            },*/
             complete:function(){
-                //$('#loading').css('display','none');                        
+                $('#loading').css('display','none');
             },                    
-            success: function (data) {                                                        
-                createMessages();
+            success: function (data) {
+                createMessages(type, tag, data);                    
             }
-    });  */
+    }); 
 }
 
-function createMessages(){
+function createMessages(type, tag, data){
     var myArray = [];    
-    //var arraylength = myArray.length;
-    for (var i=0; i<5; i++) {        
-        myArray.push('<li id="iMessage_'+ i +'"><span class="message-status"><a href="javascript:void(0);" style="color:#ebd106;" id="" title="Mensaje sin leer"><i class="fa fa-envelope-o" id="new-message_"></i></a><a href="javascript:void(0);" class="" style="color:#3bc600;"><i class="fa fa-tag"></i></a></span><a href title="Leer Notificación" id="title" onclick=""><strong class="blue">Importantes</strong><br><strong>12/02/2015</strong></a></li>');
+    var arraylength = data.length;
+
+    for (var i=0; i<data['cont']; i++) {
+        var id = data['id'][i];        
+        myArray.push('<li id="iMessage_'+ data['id'][i] +'"  onclick="showMessage('+id+');"><span class="message-status"><a href="javascript:void(0);" style="color:#ebd106;" id="" title="Mensaje sin leer"><i class="fa fa-envelope-o" id="new-message_"></i></a><a href="javascript:void(0);" class="" style="color:#3bc600;"><i class="fa fa-tag"></i></a></span><a href title="Leer Notificación" id="title" onclick=""><strong class="blue">'+data['title'][id]+'</strong><br><strong>'+data['date'][id]+'</strong></a></li>');
     }
-    $('#favMessage').html(myArray);
-    console.log(myArray);
+        if (type == 1) {
+            $(tag+"_tag").html(myArray);
+        }else{
+            $(tag).html(myArray);                
+        };        
+    /*setTimeout(function(){ 
+        alert('hoa');                               
+    }, 3000);*/
 }
+
+$("#objetives_data").click(function(){
+    getMessagesData(1,"#objetives");
+    $('#messageNone').text('Selecciones un mensaje.');
+}); 
+
+$("#programt_data").click(function(){
+    getMessagesData(1,"#programt");
+    $('#messageNone').text('Selecciones un mensaje.');
+}); 
+
+$("#indicators_data").click(function(){
+    getMessagesData(1,"#indicators");
+    $('#messageNone').text('Selecciones un mensaje.');
+}); 
+
+$("#standardization_data").click(function(){
+    getMessagesData(1,"#standardization");
+    $('#messageNone').text('Selecciones un mensaje.');
+}); 
+
+$("#production_data").click(function(){
+    getMessagesData(1,"#production");
+    $('#messageNone').text('Selecciones un mensaje.');
+}); 
+
+$("#evolution_data").click(function(){
+    getMessagesData(1,"#evolution");
+    $('#messageNone').text('Selecciones un mensaje.');
+}); 
 
 $("#notify").click(function(){
     console.log('Notify'); 
@@ -189,6 +227,7 @@ $("#fav").click(function(){
 });	
 
 $("#trash").click(function(){
-    getMessagesData(3,"#favMessage");
+    getMessagesData(3,"#trashMessage");
+    //createMessages(3,"#trashMessage");    
     $('#messageNone').text('Sección eliminados, selecciones un mensaje.');    
 }); 

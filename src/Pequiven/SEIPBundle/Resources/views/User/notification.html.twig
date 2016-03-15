@@ -25,41 +25,11 @@
 								{% set cont = 1 %}
 								{% for type in types %}
 								<li class="big-menu grey-gradient with-right-arrow">
-									<span class="blue-gradient">
+									<span class="blue-gradient" id="{{ types[cont] }}_data">
 										<span class="list-count" id="{{ types[cont] }}"></span>
 										{{ types[cont]|trans({},'messages') }}
 									</span>	
-									<ul class="message-menu">										
-										{% for notification in notifications %}
-											{% if notification.type == cont %}
-											<li id="iMessage_{{ notification.id }}">
-												<span class="message-status">								
-													{% if notification.readNotification != true %}
-														{% set font = "fa-envelope" %}
-													{% else %}	
-														{% set font = "fa-envelope-o" %}
-													{% endif %}
-													<a href="javascript:void(0);" style="color:#ebd106;" id="" title="Mensaje sin leer">
-														<i class="fa {{ font }}" id="new-message_{{ notification.id }}"></i>
-														<i class="fa fa-envelope-o" id="out-message_{{ notification.id }}"  style='display:none;'></i>
-													</a>
-													{% if notification.status == 1 %}
-														{% set color = "#f80000" %}
-													{% elseif notification.status == 2 %}
-														{% set color = "#0083c6" %}									
-													{% elseif notification.status == 3 %}
-														{% set color = "#3bc600" %}									
-													{% endif %}									
-													<a href="javascript:void(0);" class="" style="color:{{color}};"><i class="fa fa-tag"></i></a>		
-												</span>
-												<a href title="Leer Notificación" id="title" onclick="showMessage({{ notification.id }});">
-													<strong class="blue">{{ notification.title }}</strong><br>	
-													<strong>{{ notification.createdAt | date("d/m/Y - H:i") }}</strong>							
-												</a>
-											</li>
-											{% endif %}
-										{% endfor %}											
-									</ul>
+									<ul class="message-menu" id="{{ types[cont] }}_tag"></ul>
 								</li>
 								{% set cont = cont + 1 %}							
 								{% endfor %}
@@ -76,7 +46,7 @@
 							<span class="blue-gradient" id="trash">
 								<span class="list-count" id="notifyTrash">									
 								</span><i class="fa fa-trash"></i>&nbsp;Papelera</span>	
-								<ul class="message-menu"></ul>
+								<ul class="message-menu" id="trashMessage"></ul>
 						</li>
 					</ul>
 				</div>

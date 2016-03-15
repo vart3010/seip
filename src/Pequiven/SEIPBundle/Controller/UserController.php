@@ -201,12 +201,15 @@ class UserController extends baseController {
             $fechaCreated = $dateCreated->format('d-m-Y'); 
 
             $date[$valueNotification->getId()] = $fechaCreated;
+            $ids[] = $valueNotification->getId();
         }
 
         $data = [
             'description' => $description,
             'title'       => $title,
-            'date'        => $date
+            'date'        => $date,
+            'id'          => $ids,
+            'cont'        => count($ids)
         ];
 
         $response->setData($data);
