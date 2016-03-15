@@ -186,12 +186,17 @@ class UserController extends baseController {
     public function getMessagesDataAction(Request $request){
         $response = new JsonResponse();        
         
-        $description = [];
+        $description = $data = [];
 
         $em = $this->getDoctrine()->getManager();   
-
-        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('typeMessage' => $request->get('type')));
         
+        if ($request->get('typeData') == 0) {
+            $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('typeMessage' => $request->get('type')));            
+        }else {
+            $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('type' => $request->get('typeData'), 'typeMessage' => $request->get('type')));                        
+        }
+        if ($notification) {
+            
         foreach ($notification as $valueNotification) {
             $description[$valueNotification->getId()] = $valueNotification->getDescription();
             $title[$valueNotification->getId()] = $valueNotification->getTitle();
@@ -211,6 +216,7 @@ class UserController extends baseController {
             'id'          => $ids,
             'cont'        => count($ids)
         ];
+        }
 
         $response->setData($data);
 
