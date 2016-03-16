@@ -49,7 +49,7 @@
                 </div>#}
                 <div class="field-block button-height" >
                     <label class="label">Responsables</label>
-                    <select class="select2 input-large form-control" id="actionResults_responsible" name="actionResults[responsible]" style='width: 270px'></select>
+                    <input type="text" id="actionResults_responsible" name="actionResults[responsible]" style='width: 270px'>
                 </div>
             {{ form_rest(form) }}
                 <div class="field-block button-height" >
@@ -88,7 +88,7 @@
                     return "Por favor, introduzca 3 o más caracteres";
                 },
                 formatSelectionTooBig: function (limit) {
-                    return 'Maximo de responsables seleccionado';
+                    return 'Máximo de responsables seleccionado';
                 },
             ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
                 url: urlResponsibles,
