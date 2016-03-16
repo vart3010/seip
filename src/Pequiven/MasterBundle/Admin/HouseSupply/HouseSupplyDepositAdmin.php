@@ -50,7 +50,7 @@ class HouseSupplyDepositAdmin extends Admin {
 
     protected function configureListFields(ListMapper $list) {
         $list
-                ->add('id')
+                ->addIdentifier('id')
                 ->add('description')
                 ->add('complejo')
 

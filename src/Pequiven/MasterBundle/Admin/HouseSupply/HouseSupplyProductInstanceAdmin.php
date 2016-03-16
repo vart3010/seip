@@ -59,7 +59,7 @@ class HouseSupplyProductInstanceAdmin extends Admin {
 
     protected function configureListFields(ListMapper $list) {
         $list
-                ->add('id')
+                ->addIdentifier('id')
                 ->add('code')
                 ->add('description')
                 ->add('available')
