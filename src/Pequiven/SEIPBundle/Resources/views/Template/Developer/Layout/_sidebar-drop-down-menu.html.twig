@@ -47,9 +47,21 @@
 
         <!-- By default, this section is made for 4 icons, see the doc to learn how to change this, in "basic markup explained" -->
         <ul id="access" class="children-tooltip">
-            <!--<li><a href title="Messages"><span class="icon-inbox"></span><span class="count">2</span></a></li>
-            <li><a href title="Calendar"><span class="icon-calendar"></span></a></li> -->
-            <li><a href="{{ path('fos_user_profile_show') }}" title="{{ 'pequiven_seip.profile.profile'|trans }}"><span class="icon-user"></span></a></li>
+            <li>
+                <a href="{{ path('pequiven_user_notification_data') }}" title="Messages">
+                    <span class="icon-inbox"></span>
+                    {# Notificaciones #}
+                    {% if app.user.notify %}
+                        <span class="count">{{ app.user.notify }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            <!--<li><a href title="Calendar"><span class="icon-calendar"></span></a></li>-->
+            <li>
+                <a href="{{ path('fos_user_profile_show') }}" title="{{ 'pequiven_seip.profile.profile'|trans }}">
+                    <span class="icon-user"></span>                    
+                </a>
+            </li>
             {% if is_granted('ROLE_WORKER_PLANNING') %}
                 <li><a href="{{ path('tecnocreaciones_box_index') }}" title="{{ 'pequiven_seip.profile.config'|trans }}"><span class="fa fa-wrench"></span></a></li>
             {% endif %}

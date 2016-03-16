@@ -152,6 +152,10 @@ app:
                                 for_reviewing: Por revisar
                                 for_approving: Por aprobar
                                 for_notifying: Por notificar
+                        monitoring:
+                            title: Seguimiento y Eficacia
+                            list_managementSystem: Lista Sistemas de la Calidad
+                            list_gerencias: Lista Gerencias Normalizadas
                     results:
                         main: Resultados
                         visualize:

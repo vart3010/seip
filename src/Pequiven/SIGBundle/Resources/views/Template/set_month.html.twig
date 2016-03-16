@@ -1,0 +1,28 @@
+{# Configuración de meses #}
+{% if period == "2015" %}
+    {% set monthInit = 9 %} 
+    {% set monthFinish = 12 %} 
+{% else %}
+    {% set monthInit = 1 %} 
+    {% set monthFinish = "now"|date("m") %} 
+{% endif %}
+
+{% set month =  "now"|date("m") %}
+{% set year =  "now"|date("Y") %}    
+
+{% set dataMonths = { 01 :"Enero", 02 : "Febrero", 03 :"Marzo", 04 : "Abril", 05 : "Mayo", 06 : "Junio", 07 :"Julio", 08 : "Agosto", 09 : "Septiembre", 10 : "Octubre", 11 : "Noviembre", 12 : "Diciembre" } %}
+
+ <div class="field-block button-height" >
+    <label class="label">Mes de Carga: </label>
+    <select id="set_data_month"  name="set_data[month]" class="select2 input-large form-control">
+        <option value="">Seleccione...</option>
+        {% for i in monthInit..monthFinish %}
+            <option value="{{i}}">{{ dataMonths[i] }}</option> 
+        {% endfor %}       
+    </select>
+    <span class="info-spot">
+        <span class="icon-info-round"></span>
+        <span class="info-bubble">Selecciona el mes a cargar</span>
+    </span>
+    <br/>
+</div>
