@@ -8,6 +8,8 @@
     <script src="{{  asset('bundles/pequivenseip/jQuery-Mask-Plugin-master/jquery.mask.min.js') }}"></script>   
     <script type="text/javascript">
         $(document).ready(function () {
+            var maxPerson = $("select#producto option:selected" ).attr("data");
+              $("input#cantidad").attr("max",maxPerson);
             charge();
 
             $("select#producto").change(function () {
@@ -16,6 +18,8 @@
                 $("input#cantidad").attr("max", maxPerson);
                 
             });
+
+            
 
         });
 
@@ -264,7 +268,7 @@
                                                             {% if (((inv.available<inv.product.instance.MaxPerUser)or(inv.product.instance.MaxPerUser<=1))and(inv.product.instance.MaxPerUserForce==null))%}
                                                                 <option value="{{inv.product.id}}" data="{{ inv.product.instance.MaxPerUser }}" id="{{inv.product.description}}" disabled="disabled" name="product">{{inv.product.description}}</option>
                                                             {% else %}
-                                                                <option value="{{inv.product.id}}" data="{{ inv.product.instance.MaxPerUser }}"  id="{{inv.product.description}}" name="product">{{inv.product.description}} - Disp: {{ inv.available }}</option>                                                        
+                                                                <option value="{{inv.product.id}}" data="{{ inv.product.instance.MaxPerUser }}"  id="{{inv.product.description}}" name="product">{{inv.product.description}} - Disp: {{ inv.product.instance.MaxPerUser }}</option>                                                        
                                                             {% endif %}                                                        
                                                         {% endfor %}
                                                     </select>
@@ -276,7 +280,7 @@
                                                 </td>                                                                                  
                                                 <td width="20%" style="text-align: center;"> 
                                                     {% if(memberobj)%}    
-                                                        <button type="submit" class="button green-gradient">                                                            
+                                                        <button id="addSubmit" type="submit" class="button green-gradient">                                                
                                                             Agregar      
                                                         </button>  
                                                     {%else%}
