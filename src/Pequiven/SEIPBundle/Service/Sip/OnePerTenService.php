@@ -20,6 +20,7 @@ class OnePerTenService {
     
     public function obtainProfileItemsAvailables(OnePerTen $onePerTen){
         $profileItems = OnePerTen::getArrayOfProfile();
+        $wasSupportAssemblyElections = false;
         
         //Determinamos los Items Disponibles del tipo compromiso para Evaluar a la persona
         if($onePerTen->getFref() != -1){
@@ -380,6 +381,77 @@ class OnePerTenService {
         }
         
         return $efectividad;
+    }
+    
+    
+    public function obtainWhichSupportAssemblyElections(OnePerTen $onePerTen){
+        $supportAssemblyElections = array();
+        $supportAssemblyElections['cutl']['evaluate'] = false;
+        $supportAssemblyElections['sala']['evaluate'] = false;
+        $supportAssemblyElections['cne']['evaluate'] = false;
+        $supportAssemblyElections['cutl']['show'] = false;
+        $supportAssemblyElections['sala']['show'] = false;
+        $supportAssemblyElections['cne']['show'] = false;
+        $supportAssemblyElections['cutl']['zero'] = false;
+        $supportAssemblyElections['sala']['zero'] = false;
+        $supportAssemblyElections['cne']['zero'] = false;
+        $next = true;
+        $evaluateNext = true;
+        
+        if($onePerTen->getCutl() != -1){
+            $supportAssemblyElections['cutl']['show'] = true;
+            if($onePerTen->getCutl() == 1){
+                $supportAssemblyElections['cutl']['evaluate'] = true;
+                $next = false;
+            } else{
+                $supportAssemblyElections['cutl']['zero'] = true;
+            }
+        }
+        
+        if($onePerTen->getSala() != -1){
+            $supportAssemblyElections['sala']['show'] = true;
+            if($onePerTen->getSala() == 1){
+                if($next == true){
+                    $supportAssemblyElections['sala']['evaluate'] = true;
+                    $next = false;
+                }
+            } else{
+                $supportAssemblyElections['sala']['zero'] = true;
+            }
+        }
+        
+        if($onePerTen->getCne() != -1){
+            $supportAssemblyElections['cne']['show'] = true;
+            if($onePerTen->getCne() == 1){
+                if($next == true){
+                    $supportAssemblyElections['cne']['evaluate'] = true;
+                    $next = false;
+                }
+            } else{
+                $supportAssemblyElections['cne']['zero'] = true;
+            }
+        }
+        
+        if($supportAssemblyElections['cutl']['evaluate'] == false && $supportAssemblyElections['sala']['evaluate'] == false && $supportAssemblyElections['cne']['evaluate'] == false){
+            if($supportAssemblyElections['cutl']['zero'] = true){
+                $supportAssemblyElections['cutl']['evaluate'] == true;
+                $evaluateNext = false;
+            }
+            if($evaluateNext == true){
+                if($supportAssemblyElections['sala']['zero'] == true){
+                    $supportAssemblyElections['sala']['evaluate'] = true;
+                    $evaluateNext = false;
+                }
+            }
+            
+            if($evaluateNext == true){
+                if($supportAssemblyElections['cne']['zero'] == true){
+                    $supportAssemblyElections['cne']['evaluate'] = true;
+                }
+            }
+        }
+        
+        return $supportAssemblyElections;
     }
 
     public function getDoctrine() {
