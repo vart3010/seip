@@ -45,43 +45,48 @@ class HouseSupplyOrderController extends SEIPController {
         $grupo = 1;
         $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle($grupo, new \DateTime((date("Y-m-d h:m:s"))));
 
-        $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('cycle' => $cycle));
+        if ($cycle != null) {
+            $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('cycle' => $cycle[0]->getId(), 'workStudyCircle' => $wsc->getId()));
 
-        if ((count($order) == 0) || isNull($order)) {
-            //NUEVO NUMERO DE PEDIDO
-            $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
+            if ((count($order) == 0) || ($order == null)) {
+                //NUEVO NUMERO DE PEDIDO
+                $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
 
-            $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
+                $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
 
-            if (($request->get('member')) && ($request->get('member') != 0)) {
-                $member = $em->getRepository('PequivenSEIPBundle:User')->findOneById($request->get('member'));
-                $searchitemsbymember = array(
-                    'client' => $member,
-                    'type' => 3,
-                    'workStudyCircle' => $wsc,
-                );
-                $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
-            } else {
-                if (($request->get('typemember') == 0) || ($request->get('member') == 0)) {
-                    $member = null;
+                if (($request->get('member')) && ($request->get('member') != 0)) {
+                    $member = $em->getRepository('PequivenSEIPBundle:User')->findOneById($request->get('member'));
                     $searchitemsbymember = array(
+                        'client' => $member,
                         'type' => 3,
                         'workStudyCircle' => $wsc,
                     );
                     $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
+                } else {
+                    if (($request->get('typemember') == 0) || ($request->get('member') == 0)) {
+                        $member = null;
+                        $searchitemsbymember = array(
+                            'type' => 3,
+                            'workStudyCircle' => $wsc,
+                        );
+                        $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
+                    }
                 }
-            }
 
-            return $this->render('PequivenSEIPBundle:HouseSupply\Order:create.html.twig', array(
-                        'type' => $type,
-                        'neworder' => $neworder,
-                        'inventory' => $inventory,
-                        'wsc' => $wsc,
-                        'items' => $items,
-                        'memberobj' => $member,
-            ));
+                return $this->render('PequivenSEIPBundle:HouseSupply\Order:create.html.twig', array(
+                            'type' => $type,
+                            'neworder' => $neworder,
+                            'inventory' => $inventory,
+                            'wsc' => $wsc,
+                            'items' => $items,
+                            'memberobj' => $member,
+                ));
+            } else {
+                $this->get('session')->getFlashBag()->add('error', "Su Círculo de Estudio Ya Realizó un Pedido para este Mes");
+                $this->showAction($request);
+            }
         } else {
-            $this->get('session')->getFlashBag()->add('error', "Su Círculo de Estudio Ya Realizó un Pedido para este Mes");
+            $this->get('session')->getFlashBag()->add('error', "Su Grupo de Círculo de Estudio No Tiene Asignado un Periodo para Realizar Pedidos");
             $this->showAction($request);
         }
     }
