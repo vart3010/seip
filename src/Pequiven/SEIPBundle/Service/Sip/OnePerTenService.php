@@ -240,8 +240,9 @@ class OnePerTenService {
         //Determinamos los valores a mostrar para los Items Disponibles del tipo Compromiso para Evaluar a la persona
         if($profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::LISTA_SUMATE]['enabled']){
             if($onePerTen->getFref() == 1){
-                $profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::LISTA_SUMATE]['resultWithPercentage'] = $profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::LISTA_SUMATE]['percentageValue'];
                 $profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::LISTA_SUMATE]['text'] = 'Sí';
+            } else{
+                $profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::LISTA_SUMATE]['resultWithPercentage'] = $profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::LISTA_SUMATE]['percentageValue'];
             }
             $profileItemsWithResult[OnePerTen::TYPE_COMPROMISO]['totalResult'] = $profileItemsWithResult[OnePerTen::TYPE_COMPROMISO]['totalResult'] + $profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::LISTA_SUMATE]['resultWithPercentage'];
         }
