@@ -40,10 +40,13 @@ class HouseSupplyOrderController extends SEIPController {
 
         $inventory = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventory')->findBy($searchInventory);
 
-        //SI SE VA A CREAR EL PEDIDO
-        $crear = 1;
+        //VALIDO SI EN EL CICLO TIENE PEDIDOS REALIZADOS
+        //CICLO DE ORDENES        
+        $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle($ciclo, new \DateTime((date("Y-m-d h:m:s"))));
 
-        if ($crear == 1) {
+        $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('cycle' => $cycle));
+
+        if ((count($order) == 0) || isNull($order)) {
             //NUEVO NUMERO DE PEDIDO
             $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
 
@@ -93,9 +96,6 @@ class HouseSupplyOrderController extends SEIPController {
         );
 
         $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($searchwsc);
-
-        //SI SE VA A CREAR EL PEDIDO
-        $crear = 1;
 
         //NUEVO NUMERO DE PEDIDO
         $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
