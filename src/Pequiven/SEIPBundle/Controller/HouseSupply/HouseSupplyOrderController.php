@@ -41,8 +41,9 @@ class HouseSupplyOrderController extends SEIPController {
         $inventory = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventory')->findBy($searchInventory);
 
         //VALIDO SI EN EL CICLO TIENE PEDIDOS REALIZADOS
-        //CICLO DE ORDENES        
-        $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle($ciclo, new \DateTime((date("Y-m-d h:m:s"))));
+        //CICLO DE ORDENES    
+        $grupo = 1;
+        $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle($grupo, new \DateTime((date("Y-m-d h:m:s"))));
 
         $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('cycle' => $cycle));
 
@@ -192,8 +193,8 @@ class HouseSupplyOrderController extends SEIPController {
         //$neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
         //
         //CICLO DE ORDENES
-        $ciclo = 1;
-        $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle($ciclo, new \DateTime((date("Y-m-d h:m:s"))));
+        $grupo = 1;
+        $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle($grupo, new \DateTime((date("Y-m-d h:m:s"))));
 
         $searchItems = array(
             'workStudyCircle' => $wsc,
