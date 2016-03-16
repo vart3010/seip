@@ -11,9 +11,10 @@
             charge();
 
             $("select#producto").change(function () {
-                var val = $(this).val();
-                $("input#cantidad").attr("max", 100);
-
+                 $("input#cantidad").val("");
+                var maxPerson = $("select#producto option:selected" ).attr("data");
+                $("input#cantidad").attr("max", maxPerson);
+                
             });
 
         });
@@ -257,13 +258,13 @@
                                         <table style="border-collapse:separate; border-spacing: 0px 5px;" width="60%">                                        
                                             <tr>
                                                 <td colspan="3">
-                                                    <select  name="producto" id="producto" class="select2 input-xlarge form-control" required="true">     
-                                                        <option value="0" selected>Seleccione</option>
+                                                    <select  name="producto" id="producto" class=" select2 input-xlarge form-control" required="true">     
+                                                        <option value="0" data="0" selected>Seleccione</option>
                                                         {% for inv in inventory %}
                                                             {% if (((inv.available<inv.product.instance.MaxPerUser)or(inv.product.instance.MaxPerUser<=1))and(inv.product.instance.MaxPerUserForce==null))%}
-                                                                <option value="{{inv.product.id}}" id="{{inv.product.description}}" disabled="disabled" name="product">{{inv.product.description}}</option>
+                                                                <option value="{{inv.product.id}}" data="{{ inv.product.instance.MaxPerUser }}" id="{{inv.product.description}}" disabled="disabled" name="product">{{inv.product.description}}</option>
                                                             {% else %}
-                                                                <option value="{{inv.product.id}}" id="{{inv.product.description}}" name="product">{{inv.product.description}} - Disp: {{ inv.available }}</option>                                                        
+                                                                <option value="{{inv.product.id}}" data="{{ inv.product.instance.MaxPerUser }}"  id="{{inv.product.description}}" name="product">{{inv.product.description}} - Disp: {{ inv.available }}</option>                                                        
                                                             {% endif %}                                                        
                                                         {% endfor %}
                                                     </select>
@@ -276,7 +277,7 @@
                                                 <td width="20%" style="text-align: center;"> 
                                                     {% if(memberobj)%}    
                                                         <button type="submit" class="button green-gradient">                                                            
-                                                            <span class="icon-plus bold"></span>        
+                                                            Agregar      
                                                         </button>  
                                                     {%else%}
                                                         &nbsp;
