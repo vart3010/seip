@@ -49,50 +49,79 @@ class HouseSupplyOrderController extends SEIPController {
         //SI SE VA A CREAR EL PEDIDO
         $crear = 1;
 
-        //NUEVO NUMERO DE PEDIDO
-        $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
-        $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
+        if ($crear == 1) {
+            //NUEVO NUMERO DE PEDIDO
+            $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
+            $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
 
-        if (($request->get('member')) && ($request->get('member') != 0)) {
-            $member = $em->getRepository('PequivenSEIPBundle:User')->findOneById($request->get('member'));
-            $searchitemsbymember = array(
-                'client' => $member,
-                'type' => 3,
-                'workStudyCircle' => $wsc,
-            );
-            $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
-        } else {
-            if (($request->get('typemember') == 0) || ($request->get('member') == 0)) {
-                $member = null;
+            if (($request->get('member')) && ($request->get('member') != 0)) {
+                $member = $em->getRepository('PequivenSEIPBundle:User')->findOneById($request->get('member'));
                 $searchitemsbymember = array(
+                    'client' => $member,
                     'type' => 3,
                     'workStudyCircle' => $wsc,
                 );
                 $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
+            } else {
+                if (($request->get('typemember') == 0) || ($request->get('member') == 0)) {
+                    $member = null;
+                    $searchitemsbymember = array(
+                        'type' => 3,
+                        'workStudyCircle' => $wsc,
+                    );
+                    $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
+                }
             }
-        }
 
-        return $this->render('PequivenSEIPBundle:HouseSupply\Order:create.html.twig', array(
+            return $this->render('PequivenSEIPBundle:HouseSupply\Order:create.html.twig', array(
+                        'type' => $type,
+                        'neworder' => $neworder,
+                        'inventory' => $inventory,
+                        'wsc' => $wsc,
+                        'items' => $items,
+                        'memberobj' => $member,
+            ));
+        } else {
+            $this->get('session')->getFlashBag()->add('error', "Su Círculo de Estudio Ya Realizó un Pedido para este Mes");
+            return $this->render('PequivenSEIPBundle:HouseSupply\Order:show.html.twig');
+        }
+    }
+
+    public function totalAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $type = 1;
+
+        $searchwsc = array(
+            'coordinator' => $user,
+            'phase' => 1,
+        );
+
+        $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($searchwsc);
+
+        //SI SE VA A CREAR EL PEDIDO
+        $crear = 1;
+
+        //NUEVO NUMERO DE PEDIDO
+        $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
+        $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
+        $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->totalOrder($wsc->getid());
+
+        return $this->render('PequivenSEIPBundle:HouseSupply\Order:total.html.twig', array(
                     'type' => $type,
                     'neworder' => $neworder,
-                    'inventory' => $inventory,
                     'wsc' => $wsc,
-                    'items' => $items,
-                    'memberobj' => $member,
+                    'items' => $items
         ));
     }
 
     public function addItemAction(Request $request) {
 
         $iva = 0.12;
-
         $em = $this->getDoctrine()->getManager();
-
         $client = $request->get('datauser');
         $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneById($wsc = $request->get('wsc'));
-
         $clientobj = $em->getRepository('PequivenSEIPBundle:User')->findOneById($client);
-
         $cant = $request->get('cantidad');
         $product = $request->get('producto');
         $productobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyProduct')->findOneById($product);
@@ -147,9 +176,56 @@ class HouseSupplyOrderController extends SEIPController {
         return $this->redirect($this->generateUrl("pequiven_housesupply_order_charge", array("member" => $member, 'typemember' => 1)));
     }
 
-    public function saveOrderAction(Request $request) {
-        var_dump($request->get("datos"));
-        die();
+    public function registerAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $type = 1;
+        $date = new \DateTime(str_replace("/", "-", (time())));
+
+        if ($type == 1) {
+            $signo = 1;
+        } else {
+            $signo = -1;
+        }
+
+        $searchwsc = array(
+            'coordinator' => $user,
+            'phase' => 1,
+        );
+
+        $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($searchwsc);
+
+        //NUEVO NUMERO DE PEDIDO
+        $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
+        //$neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
+        //
+        //CICLO DE ORDENES
+        $ciclo = 1;
+        $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FinCycle($ciclo, $date);
+
+        $searchItems = array(
+            'workStudyCircle' => $wsc,
+            'type' => 3,
+        );
+
+        //TRAIGO LOS DOCUMENTOS EN ESPERA
+        $waitingItems = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchItems);
+
+        $em->getConnection()->beginTransaction();
+
+        //COMIENZO A LLENAR EL ENCABEZADO DE LA ORDEN
+        $order = new houseSupplyOrder();
+        $order->setDate($date);
+        $order->setType($type);
+        $order->setSign($signo);
+        $order->setworkStudyCircle($wsc);
+        $order->setCycle($cycle);
+
+
+        foreach ($waitingItems as $items) {
+            $items->setType($type);
+            $items->setDate($date);
+        }
     }
 
 }

@@ -36,6 +36,30 @@ class HouseSupplyOrderRepository extends EntityRepository {
         $stmt->execute();
     }
 
+    function totalOrder($wsc) {
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT '
+                . ' prod.description AS product,'
+                . ' SUM(item.cant) AS cant,'
+                . ' SUM(item.totalLine) totalLine,'
+                . ' SUM(item.totalLinetaxes) AS TotalLinetaxes'
+                . ' FROM'
+                . ' seip_gsh_order_items AS item'
+                . ' INNER JOIN'
+                . ' seip_gsh_product AS prod ON (item.product_id = prod.id)'
+                . ' WHERE'
+                . ' workStudyCircle_id = ' . $wsc . ' AND type = 3'
+                . ' GROUP BY item.workStudyCircle_id, item.product_id';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     function getAlias() {
         return 'HSOrder';
     }

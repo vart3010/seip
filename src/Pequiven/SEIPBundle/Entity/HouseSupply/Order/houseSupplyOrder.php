@@ -37,6 +37,12 @@ class houseSupplyOrder {
     private $date;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(name="dateBilling", type="datetime", nullable=true)
+     */
+    private $dateBilling;
+
+    /**
      * 1. PEDIDO / 2. DEVOLUCION DE PEDIDO
      * @var string
      * @ORM\Column(name="type",type="string",nullable=false)
@@ -154,6 +160,10 @@ class houseSupplyOrder {
         return $this->date;
     }
 
+    function getDateBilling() {
+        return $this->dateBilling;
+    }
+
     function getType() {
         return $this->type;
     }
@@ -224,6 +234,10 @@ class houseSupplyOrder {
 
     function setDate(\DateTime $date) {
         $this->date = $date;
+    }
+
+    function setDateBilling(\DateTime $dateBilling) {
+        $this->dateBilling = $dateBilling;
     }
 
     function setType($type) {

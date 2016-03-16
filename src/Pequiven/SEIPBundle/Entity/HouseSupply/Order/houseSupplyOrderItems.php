@@ -14,7 +14,7 @@ use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle;
  *
  * @author Gilbert C. <glavrjk@gmail.com>
  * 
- * @ORM\Table(name="seip_gsh_order_items")
+ * @ORM\Table(name="seip_gsh_order_items") 
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */

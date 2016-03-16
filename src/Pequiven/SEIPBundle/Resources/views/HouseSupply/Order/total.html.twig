@@ -5,30 +5,7 @@
 
 {% block javascript %}
     {{ parent() }}
-    <script src="{{  asset('bundles/pequivenseip/jQuery-Mask-Plugin-master/jquery.mask.min.js') }}"></script>   
-    <script type="text/javascript">
-        $(document).ready(function () {
-            charge();
-
-            $("select#producto").change(function () {
-                var val = $(this).val();
-                $("input#cantidad").attr("max", 100);
-
-            });
-
-        });
-
-        function charge() {
-            $('.select2').select2({
-                allowClear: true
-            });
-        }
-
-        function cargar(URL) {
-            myWindow = window.open(URL, "myWindow", "left=300px, top=250px, width=1200px, height=800px, Scrollbars=YES, Resizable=NO, Directories=NO, Location=NO, Menubar=NO, Status=NO, Toolbar=NO");   // Opens a new window
-        }
-
-    </script>    
+    <script src="{{  asset('bundles/pequivenseip/jQuery-Mask-Plugin-master/jquery.mask.min.js') }}"></script>      
 {% endblock javascript %}
 
 
@@ -49,7 +26,7 @@
         <h1>
             <a href="">Ordenes de Pedidos</a>
             <span class="icon-forward"></span>            
-            <span class="thin">Crear</span>                        
+            <span class="thin">Totalizar</span>                        
         </h1>
     </hgroup>
     <br>
@@ -130,27 +107,7 @@
                 <table width="95%">                     
                     <tr>
                         <td width="65%" rowspan="2">
-                            <br>
-                            <form method="POST" action="{{ path("pequiven_housesupply_order_charge",{'type': type, 'typemember': 1 }) }}">                           
-                                <select onchange="this.form.submit();" name="member" id="member" class="select2 input-xxlarge form-control">    
-
-                                    {% if(memberobj)%}
-                                        {% set miembro= memberobj.id %}
-                                        <option value="{{memberobj.getid}}" id="{{memberobj.getid}}" selected>{{memberobj.getfullname}}</option>
-                                        <option value="0" id="0">GENERAL</option>
-                                    {% else %}
-                                        {% set miembro= 0 %}
-                                        <option value="0" id="0" selected>GENERAL</option>
-                                    {% endif %}
-
-                                    {% for user in wsc.getmembers %}
-                                        {% if ((memberobj==null) or (user.getid!= memberobj.getid))%}
-                                            <option value="{{user.getid}}" id="{{user.getid}}" >{{user.getfullname}}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                            </form>
-                            <br><br>
+                            <br>                            
                             <table width="95%" style="border: 2px black solid;">
                                 <tr style="height: 30px;">
                                     <td width="100%" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">Productos</td>         
@@ -162,10 +119,10 @@
                                                 <tr>
 
                                                     <th class="header" width="10%">Cant</th>
-                                                    <th class="header" width="50%">Producto</th>
+                                                    <th class="header" width="55%">Producto</th>
                                                     <th class="header text-center" width="15%">Precio</th>                                
                                                     <th class="header text-right" width="20%">Sub-Total</th>
-                                                    <th class="header text-right" width="5%">-</th>
+
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -176,24 +133,22 @@
                                                 {% if(items) %}
                                                     {% for list in items %}                                                    
                                                         <tr>
-                                                            <td class="text-center" width="10%">{{ list.cant }}</td>
-                                                            <td width="50%">{{ list.product.description }}</td>
-                                                            <td class="text-right" width="15%">{{ list.product.price| number_format(2, ',', '.') }}</td>                                
-                                                            <td class="text-right" width="20%">{{ (list.product.price*list.cant)| number_format(2, ',', '.') }}</td>                                                            
-                                                            <td class="text-right" width="5%"><a href="{{ path("pequiven_housesupply_order_charge_delete",{'id': list.id, 'member': miembro}) }}"><i class="fa fa-trash"></i></a> </td>
+                                                            <td class="text-center" width="10%">{{ list["cant"] }}</td>
+                                                            <td width="55%">{{ list["product"] }}</td>
+                                                            <td class="text-right" width="15%">{{ (list["totalLine"]/list["cant"])| number_format(2, ',', '.') }}</td>                                
+                                                            <td class="text-right" width="20%">{{ list["totalLine"]| number_format(2, ',', '.') }}</td>                                                                                                                        
                                                         </tr>                                                    
                                                         {% set linea=linea+1 %}
-                                                        {% set cant=cant+list.cant %}
-                                                        {% set iva=iva+list.totalLineTaxes %}
-                                                        {% set total=total+list.totalLine %}                                                    
+                                                        {% set cant=cant+list["cant"] %}
+                                                        {% set iva=iva+list["TotalLinetaxes"] %}
+                                                        {% set total=total+list["totalLine"] %}                                                    
                                                     {% endfor %}
                                                 {%else%}                                                
                                                     <tr>
                                                         <td width="10%">-</td>
                                                         <td width="55%">-</td>
                                                         <td class="text-right" width="15%">-</td>                                
-                                                        <td class="text-right" width="15%">-</td>
-                                                        <td class="text-right" width="5%">-</td>
+                                                        <td class="text-right" width="15%">-</td>                                                        
                                                     </tr>
                                                 {%endif%}
                                             </tbody> 
@@ -248,61 +203,17 @@
                         </td>
                     </tr>  
                     <tr>
-                        <td>
-                            {% if(memberobj)%}  
-                                <br><br><br>
-                                <fieldset class="fieldset">
-                                    <legend class="legend"><b>Agregar Producto</b></legend>
-                                    <form method="POST" action="{{ path("pequiven_housesupply_order_charge_add") }}">  
-                                        <table style="border-collapse:separate; border-spacing: 0px 5px;" width="60%">                                        
-                                            <tr>
-                                                <td colspan="3">
-                                                    <select  name="producto" id="producto" class="select2 input-xlarge form-control" required="true">     
-                                                        <option value="0" selected>Seleccione</option>
-                                                        {% for inv in inventory %}
-                                                            {% if (((inv.available<inv.product.instance.MaxPerUser)or(inv.product.instance.MaxPerUser<=1))and(inv.product.instance.MaxPerUserForce==null))%}
-                                                                <option value="{{inv.product.id}}" id="{{inv.product.description}}" disabled="disabled" name="product">{{inv.product.description}}</option>
-                                                            {% else %}
-                                                                <option value="{{inv.product.id}}" id="{{inv.product.description}}" name="product">{{inv.product.description}} - Disp: {{ inv.available }}</option>                                                        
-                                                            {% endif %}                                                        
-                                                        {% endfor %}
-                                                    </select>
-                                                </td>                                        
-                                            </tr>                                     
-                                            <tr>
-                                                <td width="20%" style="text-align: center;" required="true">
-                                                    <input type="number" class="input-small" id="cantidad" name="cantidad" placeholder="Cantidad" min="1">
-                                                </td>                                                                                  
-                                                <td width="20%" style="text-align: center;"> 
-                                                    {% if(memberobj)%}    
-                                                        <button type="submit" class="button green-gradient">                                                            
-                                                            <span class="icon-plus bold"></span>        
-                                                        </button>  
-                                                    {%else%}
-                                                        &nbsp;
-                                                    {%endif%}
-                                                </td>
-                                            </tr>                                           
-                                        </table> 
+                        <td>                            
+                            <br><br><br>
 
-                                        <input type="text" name="datauser" hidden id="datauser" value="{{memberobj.getid}}">     
-
-                                        <input type="text" name="linea" hidden id="linea" value="{{linea}}">        
-                                        <input type="text" name="wsc" hidden id="wsc" value="{{wsc.id}}">        
-                                    </form>                                
-                                </fieldset>
-                            {%else%}
-                                &nbsp;
-                            {%endif%}
                         </td>
                     </tr>
                 </table>
                 <br>
-                <div class="new-row twelve-columns" style="text-align: right;">                     
-                    <button type="submit" onclick="cargar('{{ path("pequiven_housesupply_order_charge_total") }}');" class="button glossy mid-margin-right">
-                        <span class="button-icon green-gradient"><span class="icon-tick"></span></span>
-                        Totalizar Orden
-                    </button>                                                
+                <div class="new-row twelve-columns" style="text-align: right;">  
+                    <form method="POST" action="{{ path("pequiven_housesupply_order_register",{'type': type, 'typemember': 1 }) }}">                           
+                        {{ actions.register('Registrar Pedido','green','buttonSubmit') }}   
+                    </form>
                 </div>        
             </center>            
         </div>

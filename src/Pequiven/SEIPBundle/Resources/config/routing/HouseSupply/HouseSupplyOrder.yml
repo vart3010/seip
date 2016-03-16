@@ -8,6 +8,15 @@ pequiven_housesupply_order_charge:
         _format: html|json|xml
     methods: [GET|POST]
     
+pequiven_housesupply_order_register:
+    path: /orders/register/
+    defaults:
+        _controller: pequiven.controller.housesupply_order:registerAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
 pequiven_housesupply_order_charge_add:
     path: /orders/addItem/
     defaults:
@@ -17,10 +26,19 @@ pequiven_housesupply_order_charge_add:
         _format: html|json|xml
     methods: [GET|POST]
     
-pequiven_housesupply_inventory_charge_delete:
+pequiven_housesupply_order_charge_delete:
     path: /orders/deleteItem/{id}
     defaults:
         _controller: pequiven.controller.housesupply_order:deleteItemAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
+pequiven_housesupply_order_charge_total:
+    path: /orders/total/
+    defaults:
+        _controller: pequiven.controller.housesupply_order:totalAction
         _format: html
     requirements:
         _format: html|json|xml
