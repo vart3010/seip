@@ -69,8 +69,12 @@ class houseSupplyDeposit {
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge",mappedBy="deposit",cascade={"persist","remove"})
      */
     protected $inventoryCharge;
+    
+    public function __toString() {
+        return $this->getDescription();
+    }
 
-    function getId() {
+        function getId() {
         return $this->id;
     }
 
