@@ -8,86 +8,120 @@
 
 {% block body %}
 {% trans_default_domain 'PequivenIndicatorBundle' %}
-    
-    <!--<div ng-controller="TableFormatController">    
-      <div ng-controller="IndicatorSigEvolutionController">
-     	<div ng-controller="EvolutionIndicatorFilters"> -->
-
-        {% if code %}
-           <input type="hidden" id="complejo" value="{{ code.complejo }}">
-           <input type="hidden" id="gerencia" value="{{ code.gerencia }}">
-           <input type="hidden" id="cant" value="{{ code.cant }}">
-        {% endif %}
-    
         <form method="POST" id="{{ config["id"] }}">
             <fieldset class="fieldset fields-list" open="">
                 <legend class="legend">{{ 'sig.action_plan'|trans ({}, 'messages') }}</legend>
             
-            {% if form %}
-            
-                {% include 'PequivenSIGBundle:Template:set_month.html.twig' %} 
-                
+            {% if form %}            
+                {% include 'PequivenSIGBundle:Template:set_month.html.twig' %}                 
             {% endif %}
 
-            {% set indicator = indicator.id %}
-
-                    {# fin carga select #}
-                    <!-- Ref -->
+            {% set indicator = indicator.id %}                        
             {% if form %}
-            {{ form_errors(form) }}         
+            {{ form_errors(form) }}  
+                <div class="field-block button-height" >
+                    {{ form_label(form.action) }}
+                    {{ form_widget(form.action) }}
+                </div>
 
+                <div class="field-block button-height" >
+                    {{ form_label(form.indicatorAction) }}
+                    {{ form_widget(form.indicatorAction) }}
+                </div>
 
-                    <div class="field-block button-height" >
-                        {{ form_label(form.action) }}
-                        {{ form_widget(form.action) }}
-                    </div>
+                <div class="field-block button-height" >
+                    {{ form_label(form.dateStart) }}
+                    {{ form_widget(form.dateStart) }}
+                </div>
 
-                    <div class="field-block button-height" >
-                        {{ form_label(form.indicatorAction) }}
-                        {{ form_widget(form.indicatorAction) }}
-                    </div>
+                <div class="field-block button-height" >
+                    {{ form_label(form.dateEnd) }}
+                    {{ form_widget(form.dateEnd) }}
+                </div>
 
-                    <div class="field-block button-height" >
-                        {{ form_label(form.dateStart) }}
-                        {{ form_widget(form.dateStart) }}
-                    </div>
-
-                    <div class="field-block button-height" >
-                        {{ form_label(form.dateEnd) }}
-                        {{ form_widget(form.dateEnd) }}
-                    </div>
-
-                    <div class="field-block button-height" >
-                        {{ form_label(form.evolutionCause) }}
-                        {{ form_widget(form.evolutionCause) }}
-                    </div>
-                    <div class="field-block button-height" >
-                        {{ form_label(form.responsible) }}
-                        {{ form_widget(form.responsible) }}
-                    </div>
+                <div class="field-block button-height" >
+                    {{ form_label(form.evolutionCause) }}
+                    {{ form_widget(form.evolutionCause) }}
+                </div>
+                {#<div class="field-block button-height" >
+                    {{ form_label(form.responsible) }}
+                    {{ form_widget(form.responsible) }}
+                </div>#}
+                <div class="field-block button-height" >
+                    <label class="label">Responsables</label>
+                    <div id="div_goal_responsibles" style='width: 270px'></div>
+                </div>
             {{ form_rest(form) }}
-                    <div class="field-block button-height" >
-                    </div>                    
+                <div class="field-block button-height" >
+                </div>                    
             {% endif %}    
             {{ form_errors(form_value) }}                     
-                    <div class="field-block button-height" >                    
-                        {{ form_label(form_value.advance) }}                        
-                        {{ form_widget(form_value.advance) }}
-                    </div>
-
-                    <div class="field-block button-height" >                    
-                        {{ form_label(form_value.observations) }}                        
-                        {{ form_widget(form_value.observations) }}
-                    </div>
-                    {# <div class="field-block button-height" > #}
-                        {# {{ form_label(form.ref) }} #}
-                    {# </div> #}
+                <div class="field-block button-height" >                    
+                    {{ form_label(form_value.advance) }}                        
+                    {{ form_widget(form_value.advance) }}
+                </div>
+                <div class="field-block button-height" >                    
+                    {{ form_label(form_value.observations) }}                        
+                    {{ form_widget(form_value.observations) }}
+                </div>
             {{ form_rest(form_value) }}
-
-            </div>
-
-            
+            </div>            
             </form>       
         </fieldset>
     </details> 
+    <script type="text/javascript">
+    $(document).ready(function() {
+        setUrlResponsibles();
+    });
+
+    function setUrlResponsibles(data) {
+        var urlResponsibles = Routing.generate("pequiven_responsibles_to_plan"); 
+        var onlyOne=false;       
+        if (data == undefined) {
+            data = [];
+        }
+        $("#div_goal_responsibles").select2({
+            minimumInputLength: 3,
+            maximumSelectionLength: 2,
+            maximumSelectionSize: 2,
+            multiple: true,      
+                formatInputTooShort: function () {
+                    return "Por favor, introduzca 3 o más caracteres";
+                },
+                formatSelectionTooBig: function (limit) {
+                    return 'Maximo de responsables seleccionado';
+                },
+            ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
+                url: urlResponsibles,
+                dataType: 'json',
+                quietMillis: 250,
+                data: function (term, page) {
+                    return {
+                        query: term, // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.                    
+                    return {results: data};
+                },
+                cache: true
+            },
+            initSelection: function (element, callback) {
+            },
+            formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
+            formatSelection: responsiblesFormatResult, // omitted for brevity, see the source of this page
+            escapeMarkup: function (m) {
+                return m;
+            } // we do not want to escape markup since we are displaying html in results
+        });
+
+        if (data != undefined) {
+            var preselected = [];
+            $.each(data, function (index, value) {
+                preselected.push(value.id);
+            });
+            $('#div_goal_responsibles').select2('data', data);
+            $('#div_goal_responsibles').select2('val', preselected);
+        }
+    };
+</script>
 {% endblock %}

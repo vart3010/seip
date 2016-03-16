@@ -272,3 +272,14 @@ pequiven_indicator_clonig_data_evolution:
     methods: [GET|POST]
     options:
         expose: true
+#Responsibles to plan
+pequiven_responsibles_to_plan:
+    path: /responsibles-to-plan.{_format}
+    defaults:
+        _controller: pequiven.controller.sig_trend_report_evolution:getResponsiblesToPlanAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [GET|POST]
+    options:
+        expose: true
