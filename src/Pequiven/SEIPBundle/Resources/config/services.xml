@@ -231,6 +231,10 @@
         <service id="pequiven_seip.box.linestrategic.icons_indicator_by_line_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsByLineBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        <!-- Mostrar los indicadores de acuerdo a una linea estrategica y un complejo -->
+        <service id="pequiven_seip.box.linestrategic.icons_indicator_by_line_and_complejo" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsByLineBoxAndComplejo">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
         <!-- Box con la base del dashboard de un indicador -->
         <service id="pequiven_seip_box_indicators_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsDashboardBox">
             <tag name="tecnocreaciones_box.box" />
@@ -249,6 +253,15 @@
             <tag name="tecnocreaciones_box.box" />
         </service>
         
+        <!-- Resultados Estrategicos de acuerdo al Complejo Seleccionado -->
+        <service id="pequiven_seip_box_result_by_complejo" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IconsBoxByComplejo">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        
+        <!-- Resultado estategicos de acuerdo al complejo seleccionado (iconos) -->
+        <service id="pequiven_seip_box_result_by_complejo_iconos" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IconsNavBarBoxByComplejo">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
         
         <service id="pequiven_seip_box_user_summary_items" class="Pequiven\SEIPBundle\Model\Box\UserSummary\UserSummaryItemsBox">
             <tag name="tecnocreaciones_box.box" />

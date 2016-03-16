@@ -7,6 +7,11 @@ and open the template in the editor.
     Created on : 27/02/2015, 10:04:11 AM
     Author     : matias
 */
+.contentLine{
+    width: 65%;
+    margin: 0% 20%;
+}
+
 .icon-strategic{//Tamaño de los íconos de las líneas estratégica en el dashboard de resultados estratégicos
     width: 120px;
     height: 120px;

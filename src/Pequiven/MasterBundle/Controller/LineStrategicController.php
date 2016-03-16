@@ -38,19 +38,23 @@ class LineStrategicController extends SEIPController {
         return $this->handleView($view);
     }
     
-    /**
-     * Retorna el Tablero con los indicadores estratégicos definidos en el SEIP
+/**
+     * Retorna el Tablero con los indicadores estratégicos definidos en el SEIP De acuerdo al Complejo Seleccionado
      * @param Request $request
      * @return type
      */
-    public function viewOnlyIndicatorAction(Request $request){
+    
+    public function viewDashboarComplejoAction(Request $request){
         $boxRender = $this->get('tecnocreaciones_box.render');
+        $idComplejo = $request->get('complejo');
+        $labelsSummary = \Pequiven\MasterBundle\Entity\Complejo::getLabelsSummary();
         
         $view = $this
                 ->view()
-                ->setTemplate($this->config->getTemplate('viewByIndicator.html'))
+                ->setTemplate($this->config->getTemplate('Dashboard/viewDashboardComplejo.html'))
                 ->setData(array(
-                    'boxRender' => $boxRender
+                    'boxRender' => $boxRender,
+                    'summaryComplejo' => $labelsSummary[$idComplejo]
                 ))
                 ;
         
@@ -80,7 +84,48 @@ class LineStrategicController extends SEIPController {
         return $this->handleView($view);
     }
     
-    public function showAction(Request $request) {
+    /**
+     * Retorna el Tablero con los indicadores estratégicos definidos en el SEIP
+     * @param Request $request
+     * @return type
+     */
+    public function viewOnlyIndicatorAction(Request $request){
+        $boxRender = $this->get('tecnocreaciones_box.render');
+        
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('viewByIndicator.html'))
+                ->setData(array(
+                    'boxRender' => $boxRender
+                ))
+                ;
+        
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Retorna los semaforos de acuerdo al complejo seleccionado
+     * @param Request $request
+     * @return type
+     */
+    
+    public function showResultsByComplejoAction(Request $request){
+        $resource = $this->findOr404($request);
+        $boxRender = $this->get('tecnocreaciones_box.render');
+        
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('Dashboard/viewResultsByComplejo.html'))
+                ->setData(array(
+                    'boxRender' => $boxRender,
+                    $this->config->getResourceName() => $resource
+                ));
+        
+        return $this->handleView($view);
+    }
+    
+    /*****/
+    public function showAction(Request $request){
         
         $resource = $this->findOr404($request);
         
