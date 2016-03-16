@@ -99,6 +99,10 @@ class houseSupplyProductInstance {
      */
     private $deletedAt;
 
+    public function __toString() {
+        return $this->getDescription();
+    }
+
     function getId() {
         return $this->id;
     }

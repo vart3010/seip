@@ -14,7 +14,7 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct;
  * @author Máximo Sojo <maxsojo13@gmail.com>
  * 
  * @ORM\Table(name="seip_gsh_inventory")
- * @ORM\Entity()
+ * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyInventoryRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class houseSupplyInventory {

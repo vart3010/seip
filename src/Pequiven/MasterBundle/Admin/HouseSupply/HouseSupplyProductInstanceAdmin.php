@@ -18,58 +18,53 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
- * Administracion de Productos de HouseSupply
+ * Administracion de Inventario
  *
  * @author Gilbert <glavrjk@gmail.com>
  */
-class HouseSupplyProductAdmin extends Admin {
+class HouseSupplyProductInstanceAdmin extends Admin {
 
     protected function configureShowFields(ShowMapper $show) {
         $show
-                ->add('id')
-                ->add('instance')
+                ->add('id')                
                 ->add('code')
                 ->add('description')
-                ->add('price')
-                ->add('cost')
-                
+                ->add('available')
+                ->add('maxPerUser')
+                ->add('maxPerUserForce')
         ;
     }
 
     protected function configureFormFields(FormMapper $form) {
         $form
-                
+                ->add('id')
                 ->add('code')
-                ->add('instance')
                 ->add('description')
-                ->add('price')
-                ->add('cost')
-                
+                ->add('available')
+                ->add('maxPerUser')
+                ->add('maxPerUserForce')
         ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
                 ->add('id')
-                ->add('instance')
                 ->add('code')
                 ->add('description')
-                ->add('price')
-                ->add('cost')
-                
+                ->add('available')
+                ->add('maxPerUser')
+                ->add('maxPerUserForce')
         ;
     }
 
     protected function configureListFields(ListMapper $list) {
         $list
                 ->add('id')
-                ->add('instance')
                 ->add('code')
                 ->add('description')
-                ->add('price')
-                ->add('cost')
-                
-
+                ->add('available')
+                ->add('maxPerUser')
+                ->add('maxPerUserForce')
         ;
     }
 

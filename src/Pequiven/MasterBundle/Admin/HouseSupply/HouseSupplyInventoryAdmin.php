@@ -18,58 +18,45 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
- * Administracion de Productos de HouseSupply
+ * Administracion de Inventario
  *
  * @author Gilbert <glavrjk@gmail.com>
  */
-class HouseSupplyProductAdmin extends Admin {
+class HouseSupplyInventoryAdmin extends Admin {
 
     protected function configureShowFields(ShowMapper $show) {
         $show
                 ->add('id')
-                ->add('instance')
-                ->add('code')
-                ->add('description')
-                ->add('price')
-                ->add('cost')
-                
+                ->add('product')
+                ->add('deposit')
+                ->add('available')
         ;
     }
 
     protected function configureFormFields(FormMapper $form) {
         $form
-                
-                ->add('code')
-                ->add('instance')
-                ->add('description')
-                ->add('price')
-                ->add('cost')
-                
+                ->add('id')
+                ->add('product')
+                ->add('deposit')
+                ->add('available')
         ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
                 ->add('id')
-                ->add('instance')
-                ->add('code')
-                ->add('description')
-                ->add('price')
-                ->add('cost')
-                
+                ->add('product')
+                ->add('deposit')
+                ->add('available')
         ;
     }
 
     protected function configureListFields(ListMapper $list) {
         $list
                 ->add('id')
-                ->add('instance')
-                ->add('code')
-                ->add('description')
-                ->add('price')
-                ->add('cost')
-                
-
+                ->add('product')
+                ->add('deposit')
+                ->add('available')
         ;
     }
 
