@@ -23,7 +23,7 @@ class HouseSupplyOrderRepository extends EntityRepository {
                 ->setParameter('type', $type)
         ;
 
-        //return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     function DeleteItemOrder($id) {
@@ -35,8 +35,9 @@ class HouseSupplyOrderRepository extends EntityRepository {
         $stmt = $db->prepare($sql);
         $stmt->execute();
     }
+        
 
-    function totalOrder($wsc) {
+    function TotalOrder($wsc) {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 

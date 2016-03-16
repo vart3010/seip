@@ -298,11 +298,13 @@
                     </tr>
                 </table>
                 <br>
-                <div class="new-row twelve-columns" style="text-align: right;">                     
-                    <button type="submit" onclick="cargar('{{ path("pequiven_housesupply_order_charge_total") }}');" class="button glossy mid-margin-right">
-                        <span class="button-icon green-gradient"><span class="icon-tick"></span></span>
-                        Totalizar Orden
-                    </button>                                                
+                <div class="new-row twelve-columns" style="text-align: right;">  
+                    {% if (memberobj is null)%}
+                        <button type="submit" onclick="cargar('{{ path("pequiven_housesupply_order_charge_total") }}');" class="button glossy mid-margin-right">
+                            <span class="button-icon green-gradient"><span class="icon-tick"></span></span>
+                            Totalizar Orden
+                        </button>    
+                    {% endif %}
                 </div>        
             </center>            
         </div>

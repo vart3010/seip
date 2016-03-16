@@ -12,8 +12,7 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder;
  *
  * @author Gilbert C. <glavrjk@gmail.com>
  * 
- * @ORM\Table(name="seip_gsh_cycle")
- * @ORM\Entity()
+ * @ORM\Table(name="seip_gsh_cycle") 
  * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Order\HouseSupplyCycleRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
