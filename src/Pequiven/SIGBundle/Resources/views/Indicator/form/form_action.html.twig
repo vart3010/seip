@@ -49,7 +49,7 @@
                 </div>#}
                 <div class="field-block button-height" >
                     <label class="label">Responsables</label>
-                    <div id="div_goal_responsibles" style='width: 270px'></div>
+                    <select class="select2 input-large form-control" id="actionResults_responsible" name="actionResults[responsible]" style='width: 270px'></select>
                 </div>
             {{ form_rest(form) }}
                 <div class="field-block button-height" >
@@ -76,11 +76,10 @@
 
     function setUrlResponsibles(data) {
         var urlResponsibles = Routing.generate("pequiven_responsibles_to_plan"); 
-        var onlyOne=false;       
         if (data == undefined) {
             data = [];
         }
-        $("#div_goal_responsibles").select2({
+        $("#actionResults_responsible").select2({
             minimumInputLength: 3,
             maximumSelectionLength: 2,
             maximumSelectionSize: 2,
@@ -119,8 +118,8 @@
             $.each(data, function (index, value) {
                 preselected.push(value.id);
             });
-            $('#div_goal_responsibles').select2('data', data);
-            $('#div_goal_responsibles').select2('val', preselected);
+            $('#actionResults_responsible').select2('data', data);
+            $('#actionResults_responsible').select2('val', preselected);
         }
     };
 </script>

@@ -245,8 +245,9 @@ class ReportEvolutionController extends ResourceController
      */
     public function addAction(Request $request)
     {   
-        //$month = date("m");//Carga del mes de Creación de la causa "Automatico"  
-        
+        var_dump($request->get('actionResults'));
+        die();
+        //$month = date("m");//Carga del mes de Creación de la causa "Automatico"          
         $em = $this->getDoctrine()->getManager();
 
         $id = $this->getRequest()->get('idIndicator');
