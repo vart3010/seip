@@ -10,7 +10,7 @@ pequiven_report_template_index:
 pequiven_report_template_vizualice:
     path: /vizualice.{_format}
     defaults:
-        _controller: pequiven.controller.report_template:vizualiceAction
+        _controller: pequiven.controller.report_template:reportAction
         _format: html
     requirements:
         _format: json|html

@@ -157,7 +157,7 @@
     {% if byRange %}
         {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_by_range.html.twig' %}
     {% else %}
-        {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_normal.html.twig' %}
+        {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:reportVizualiceProducts.html.twig' %}
     {% endif %}
 </div>
 
@@ -192,10 +192,6 @@
                     validateSelectsOnLoad($("#form_plantReport"));
             {% endif %}
         {% endif %}
-
-
-
-
 
                 $("#form_reportTemplate").change(function () {
                     validateSelectsOnChange($(this), $("#form_plantReport"));
