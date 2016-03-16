@@ -179,7 +179,7 @@ abstract class OnePerTen  {
         $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_PRESIDENCIALES_2012]['showInList'] = false;
         //Regionales 2012 (16 DICIEMBRE)
         $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_REGIONALES_2012]['enabled'] = false;
-        $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_REGIONALES_2012]['weight'] = 10;
+        $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_REGIONALES_2012]['weight'] = 30;
         $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_REGIONALES_2012]['percentageValue'] = 0.0;
         $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_REGIONALES_2012]['resultWithPercentage'] = 0.0;
         $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_REGIONALES_2012]['text'] = 'No';
@@ -187,7 +187,7 @@ abstract class OnePerTen  {
         $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_REGIONALES_2012]['showInList'] = false;
         //Presidenciales 2013 (14 ABRIL)
         $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_PRESIDENCIALES_2013]['enabled'] = false;
-        $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_PRESIDENCIALES_2013]['weight'] = 30;
+        $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_PRESIDENCIALES_2013]['weight'] = 10;
         $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_PRESIDENCIALES_2013]['percentageValue'] = 0.0;
         $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_PRESIDENCIALES_2013]['resultWithPercentage'] = 0.0;
         $profileItems[self::TYPE_ELECCIONES][self::ELECCIONES_PRESIDENCIALES_2013]['text'] = 'No';
