@@ -464,7 +464,7 @@ class OnePerTenController extends SEIPController {
         if(!is_null($onePerTen)){
             $profileItemsAvailables = $onePerTenService->obtainProfileItemsAvailables($onePerTen);
             $profileItemsWithWeight = $onePerTenService->obtainProfileItemsWithWeight($onePerTen, $profileItemsAvailables);
-            $profileItemsWithResult = $onePerTenService->obtainProfileItemsWithResult($onePerTen,$profileItemsWithWeight,$members);
+            $profileItemsWithResult = $onePerTenService->obtainProfileItemsWithResult($onePerTen, $profileItemsWithWeight,$members);
 //            var_dump($profileItems);
 //            var_dump($profileItemsAvailables);
 //            var_dump($profileItemsWithWeight);
