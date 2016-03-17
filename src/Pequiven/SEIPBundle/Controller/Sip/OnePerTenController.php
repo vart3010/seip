@@ -618,7 +618,7 @@ class OnePerTenController extends SEIPController {
 // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('SEIP');
-        $pdf->setTitle('Reporte de 1x10');
+        $pdf->setTitle('Perfil Político');
         $pdf->SetSubject('1x10 SEIP');
         $pdf->SetKeywords('PDF, SEIP, Resultados');
 
