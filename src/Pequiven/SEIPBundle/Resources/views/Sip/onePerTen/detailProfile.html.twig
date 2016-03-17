@@ -61,6 +61,23 @@
                         <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ELECCIONES')]['totalResult'] }}</td>
                     </tr>
                     <tr></tr>
+                    {% for i in 1..1 %}
+                        {% if profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ADICIONALES')][i]['showInList'] == true %}
+                            <tr>
+                                <td align="left">Adicionales</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ADICIONALES')][i]['textShow'] }}</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ADICIONALES')][i]['text'] }}</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ADICIONALES')][i]['weight'] }}</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ADICIONALES')][i]['resultWithPercentage'] }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    <tr>
+                        <td align="right" colspan="3" class="bold">Total</td>
+                        <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ADICIONALES')]['totalWeight'] }}</td>
+                        <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ADICIONALES')]['totalResult'] }}</td>
+                    </tr>
+                    <tr></tr>
                     <tr>
                         <td align="right" colspan="4" class="bold">Total</td>
                         <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['result'] }}</td>

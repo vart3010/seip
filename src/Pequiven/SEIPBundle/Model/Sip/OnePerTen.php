@@ -214,7 +214,7 @@ abstract class OnePerTen  {
         $profileItems[self::TYPE_ELECCIONES]['totalWeight'] = 0;
         $profileItems[self::TYPE_ELECCIONES]['valueByPercentageValue'] = 0.0;
         $profileItems[self::TYPE_ELECCIONES]['totalResult'] = 0.0;
-        $profileItems[self::TYPE_ELECCIONES]['weightGlobal'] = 15.0;
+        $profileItems[self::TYPE_ELECCIONES]['weightGlobal'] = 5.0;
         $profileItems[self::TYPE_ELECCIONES]['activeToEvaluate'] = 1;
         
         //SECCIÓN ADICIONALES
@@ -232,7 +232,7 @@ abstract class OnePerTen  {
         $profileItems[self::TYPE_ADICIONALES]['valueByPercentageValue'] = 0.0;
         $profileItems[self::TYPE_ADICIONALES]['totalResult'] = 0.0;
         $profileItems[self::TYPE_ADICIONALES]['weightGlobal'] = 10.0;
-        $profileItems[self::TYPE_ADICIONALES]['activeToEvaluate'] = 0;
+        $profileItems[self::TYPE_ADICIONALES]['activeToEvaluate'] = 1;
         
         //Resultados Globales
         $profileItems[self::TYPE_GLOBAL]['result'] = 0.0;
