@@ -1583,7 +1583,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    //$timeout(callAtTimeout, 3000);
+                    $timeout(callAtTimeout, 3000);
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1762,6 +1762,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormAction = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
+                $scope.setHeight(350);
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,

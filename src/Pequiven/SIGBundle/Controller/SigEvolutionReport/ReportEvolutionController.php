@@ -245,8 +245,6 @@ class ReportEvolutionController extends ResourceController
      */
     public function addAction(Request $request)
     {   
-        var_dump($request->get('actionResults'));
-        die();
         //$month = date("m");//Carga del mes de Creación de la causa "Automatico"          
         $em = $this->getDoctrine()->getManager();
 
@@ -278,53 +276,60 @@ class ReportEvolutionController extends ResourceController
         
         $count = 0; $data = (int)$dStart;
             
-            $em->getConnection()->beginTransaction();
-            $action = new EvolutionAction();
-            $form  = $this->createForm(new EvolutionActionType($id, $typeObject), $action);
-            
-            $catnRes = count($responsible);
-            $contaRes = 0;            
-            
-            $action->setRef($ref);//referencia
-            $action->setCreatedBy($user);
-            $action->setEvolutionCause($causeResult);
-            $action->setMonth($data);//Carga de Mes(var month)
-            $action->setTypeObject($typeObject);//Tipo de Objeto
-            
-            $form->handleRequest($request);
+        $em->getConnection()->beginTransaction();
+        $action = new EvolutionAction();
+        $form  = $this->createForm(new EvolutionActionType($id, $typeObject), $action);
+        
+        $form->handleRequest($request);
+        
+        $contaRes = 0;   
+        //Recibiendo responsables
+        $reponsibles = explode(",", $responsible);         
+        $catnRes = count($reponsibles);
+        //Añadiendo responsables
+        for ($i=0; $i < $catnRes; $i++) { 
+            $user = $this->get('pequiven_seip.repository.user')->find($reponsibles[$i]);
+            $action->addResponsible($user);            
+        }
+        
+        $action->setRef($ref);//referencia
+        $action->setCreatedBy($user);
+        $action->setEvolutionCause($causeResult);
+        $action->setMonth($data);//Carga de Mes(var month)
+        $action->setTypeObject($typeObject);//Tipo de Objeto        
 
-            if ($form->isSubmitted()) {                
-                $em->persist($action);
-                $em->flush();                
-                
-                try {
+        //if ($form->isSubmitted()) {                
+        $em->persist($action);
+        $em->flush();                
+        
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+        throw $e;
+        }
+        //} 
+
+        $idAction = $action->getId();               
+        if ($idAction) {
+            for ($i=$dStart; $i <= $dEnd; $i++) {                 
+                    $action = $this->get('pequiven.repository.sig_action_indicator')->find($idAction);
+                    $relactionValue = new EvolutionActionValue();
+                    $relactionValue->setAdvance($AcValue);
+                    $relactionValue->setObservations($AcObservation);
+                    $relactionValue->setMonth($data);
+                    $relactionValue->setActionValue($action);
+
+                    $em->persist($relactionValue);
                     $em->flush();
-                    $em->getConnection()->commit();
-                } catch (Exception $e) {
-                    $em->getConnection()->rollback();
-                throw $e;
-                }
-            } 
-    
-            $idAction = $action->getId();               
-            if ($idAction) {
-                for ($i=$dStart; $i <= $dEnd; $i++) {                 
-                        $action = $this->get('pequiven.repository.sig_action_indicator')->find($idAction);
-                        $relactionValue = new EvolutionActionValue();
-                        $relactionValue->setAdvance($AcValue);
-                        $relactionValue->setObservations($AcObservation);
-                        $relactionValue->setMonth($data);
-                        $relactionValue->setActionValue($action);
 
-                        $em->persist($relactionValue);
-                        $em->flush();
-
-                    $count = $count + 1;
-                    $data = $dStart + $count;
-                    $AcObservation = null;                    
-                }
+                $count = $count + 1;
+                $data = $dStart + $count;
+                $AcObservation = null;                    
             }
-            $this->get('session')->getFlashBag()->add('success', "Plan de Acción Cargado Exitosamente");            
+        }
+        $this->get('session')->getFlashBag()->add('success', "Plan de Acción Cargado Exitosamente");            
     
     }
 
