@@ -614,6 +614,10 @@ class WorkStudyCircleService implements ContainerAwareInterface {
         } else {
             $valid = false;
         }
+        
+        if($this->getSecurityContext()->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_DELETE_USERS'))){
+            $valid = true;
+        }
 
         return $valid;
     }
