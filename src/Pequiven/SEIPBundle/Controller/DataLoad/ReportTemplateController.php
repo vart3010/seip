@@ -1274,7 +1274,28 @@ class ReportTemplateController extends SEIPController {
             $yearRealAcumualated = 0.0;
 
             $summaryProducction = array();
-            $summaryProducctionTotals = array();
+            $summaryProducctionTotals = array(
+                "day" => array(
+                    "ppto" => 0.0,
+                    "real" => 0.0,
+                    "ejec" => 0.0,
+                    "var" => 0.0
+                ),
+                "month" => array(
+                    "ppto" => 0.0,
+                    "pptoAcumulado" => 0.0,
+                    "realAcumulado" => 0.0,
+                    "ejec" => 0.0,
+                    "var" => 0.0
+                ),
+                "year" => array(
+                    "ppto" => 0.0,
+                    "pptoAcumulado" => 0.0,
+                    "realAcumulado" => 0.0,
+                    "ejec" => 0.0,
+                    "var" => 0.0
+                )
+            );
 
             $observations = array();
             $arrayIdProducts = array();
@@ -1284,10 +1305,20 @@ class ReportTemplateController extends SEIPController {
             //CONSUMO DE MATERIA PRIMA
             $arrayProdServices = array();
             $arrayConsumerServices = array();
+            $arrayRawMaterialTotals = array();
 
-
-
-
+            if ($showDay) {
+                $arrayRawMaterialTotals["plan"] = 0.0;
+                $arrayRawMaterialTotals["real"] = 0.0;
+            }
+            if ($showMonth) {
+                $arrayRawMaterialTotals["plan_month"] = 0.0;
+                $arrayRawMaterialTotals["real_month"] = 0.0;
+            }
+            if ($showYear) {
+                $arrayRawMaterialTotals["plan_year"] = 0.0;
+                $arrayRawMaterialTotals["real_year"] = 0.0;
+            }
 
             //CONSUME SERVICES
 //            $totalConsumerServices = array();
@@ -1325,7 +1356,6 @@ class ReportTemplateController extends SEIPController {
                 foreach ($reportTemplates as $reportTemplate) {
                     //var_dump($reportTemplate->getShortName());
                     foreach ($reportTemplate->getPlantReports() as $plantReport) {
-
                         //PRODUCTS REPORTS
                         foreach ($plantReport->getProductsReport() as $productReport) {
                             //var_dump($productReport->getProduct()->getId());
@@ -1368,6 +1398,11 @@ class ReportTemplateController extends SEIPController {
                                 "ejecution" => number_format($ejecutionDay, 2, ',', '.'),
                                 "var" => number_format($var, 2, ',', '.')
                             );
+                            //TOTALES SECCION DIA
+                            $summaryProducctionTotals["day"]["ppto"] +=$summaryDay["plan"];
+                            $summaryProducctionTotals["day"]["real"] +=$summaryDay["real"];
+                            $summaryProducctionTotals["day"]["ejec"] +=$ejecutionDay;
+                            $summaryProducctionTotals["day"]["var"] +=$var;
 
 
 
@@ -1399,6 +1434,12 @@ class ReportTemplateController extends SEIPController {
                                 "ejecution" => number_format($ejecutionMonth, 2, ',', '.'),
                                 "var" => number_format($varMonth, 2, ',', '.')
                             );
+                            //TOTALES SECCION MES
+                            $summaryProducctionTotals["month"]["ppto"] +=$summaryMonth["plan_month"];
+                            $summaryProducctionTotals["month"]["pptoAcumulado"] +=$summaryMonth["plan_acumulated"];
+                            $summaryProducctionTotals["month"]["realAcumulado"] +=$summaryMonth["real_acumulated"];
+                            $summaryProducctionTotals["month"]["ejec"] +=$ejecutionMonth;
+                            $summaryProducctionTotals["month"]["var"] +=$varMonth;
 
 
 //PRODUCCTION YEAR
@@ -1421,8 +1462,6 @@ class ReportTemplateController extends SEIPController {
                                 $ejecutionYear = 0;
                             }
 
-
-
                             $summaryProducction["year"][] = array(
                                 "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
                                 "plan_year" => number_format($summaryYear["plan_year"], 2, ',', '.'),
@@ -1432,6 +1471,14 @@ class ReportTemplateController extends SEIPController {
                                 "var" => number_format($varYear, 2, ',', '.')
                             );
 
+                            //TOTALES SECCION AÑO
+                            $summaryProducctionTotals["year"]["ppto"] +=$summaryYear["plan_year"];
+                            $summaryProducctionTotals["year"]["pptoAcumulado"] +=$summaryYear["plan_acumulated"];
+                            $summaryProducctionTotals["year"]["realAcumulado"] +=$summaryYear["real_acumulated"];
+                            $summaryProducctionTotals["year"]["ejec"] +=$ejecutionYear;
+                            $summaryProducctionTotals["year"]["var"] +=$varYear;
+
+                            $cont = 0;
 
                             //RAW MATERIAL 
                             foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
@@ -1439,38 +1486,53 @@ class ReportTemplateController extends SEIPController {
                                     $rawMaterialResult = $rawMaterial->getSummary($dateReport);
                                     $idProduct = $rawMaterial->getProduct()->getId();
 
+
                                     if (!in_array($idProduct, $arrayIdProducts)) {
                                         $arrayIdProducts[] = $idProduct;
                                         //$n = $rawMaterial->getProductReport()->getPlantReport()->getPlant();
                                         $arrayRawMaterial[] = array(
                                             "id" => $rawMaterial->getProduct()->getId(),
-                                            "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
+                                            "productName" => $rawMaterial->getProduct()->getId() . "-->" . $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
                                             //"productName" => $n,
-                                            "plan" => $rawMaterialResult["total_day_plan"],
-                                            "real" => $rawMaterialResult["total_day"],
-                                            "plan_month" => $rawMaterialResult["total_month_plan"],
-                                            "real_month" => $rawMaterialResult["total_month"],
-                                            "plan_year" => $rawMaterialResult["total_year_plan"],
-                                            "real_year" => $rawMaterialResult["total_year"]
+                                            "plan" => number_format($rawMaterialResult["total_day_plan"], 2, ",", "."),
+                                            "real" => number_format($rawMaterialResult["total_day"], 2, ",", "."),
+                                            "plan_month" => number_format($rawMaterialResult["total_month_plan"], 2, ",", "."),
+                                            "real_month" => number_format($rawMaterialResult["total_month"], 2, ",", "."),
+                                            "plan_year" => number_format($rawMaterialResult["total_year_plan"], 2, ",", "."),
+                                            "real_year" => number_format($rawMaterialResult["total_year"], 2, ",", ".")
                                         );
                                     } else {
                                         $indice = array_search($idProduct, $arrayIdProducts);
 
                                         //var_dump($rawMaterial->getProduct()->getName() . " | nuevo: " . $arrayRawMaterial[$indice]["real_year"] . "- suma: " . $rawMaterialResult["total_year"]);
-                                        $planRm = $arrayRawMaterial[$indice]["plan"] + $rawMaterialResult["total_day_plan"];
-                                        $realRm = $arrayRawMaterial[$indice]["real"] + $rawMaterialResult["total_day"];
-                                        $planRmMonth = $arrayRawMaterial[$indice]["plan_month"] + $rawMaterialResult["total_month_plan"];
-                                        $realRmMonth = $arrayRawMaterial[$indice]["real_month"] + $rawMaterialResult["total_month"];
-                                        $planRmYear = $arrayRawMaterial[$indice]["plan_year"] + $rawMaterialResult["total_year_plan"];
-                                        $realRmYear = $arrayRawMaterial[$indice]["real_year"] + $rawMaterialResult["total_year"];
+                                        $arrayRawMaterial[$indice]["plan"] = $arrayRawMaterial[$indice]["plan"] + $rawMaterialResult["total_day_plan"];
+                                        $arrayRawMaterial[$indice]["real"] = $arrayRawMaterial[$indice]["real"] + $rawMaterialResult["total_day"];
+                                        $arrayRawMaterial[$indice]["plan_month"] = $arrayRawMaterial[$indice]["plan_month"] + $rawMaterialResult["total_month_plan"];
+                                        $arrayRawMaterial[$indice]["real_month"] = $arrayRawMaterial[$indice]["real_month"] + $rawMaterialResult["total_month"];
+                                        $arrayRawMaterial[$indice]["plan_year"] = $arrayRawMaterial[$indice]["plan_year"] + $rawMaterialResult["total_year_plan"];
+                                        $arrayRawMaterial[$indice]["real_year"] = $arrayRawMaterial[$indice]["real_year"] + $rawMaterialResult["total_year"];
 
-                                        $arrayRawMaterial[$indice]["plan"] = number_format($planRm["plan"], 2, ",", ".");
-                                        $arrayRawMaterial[$indice]["real"] = number_format($realRm["plan"], 2, ",", ".");
-                                        $arrayRawMaterial[$indice]["plan_month"] = number_format($planRmMonth["plan"], 2, ",", ".");
-                                        $arrayRawMaterial[$indice]["real_month"] = number_format($realRmMonth["plan"], 2, ",", ".");
-                                        $arrayRawMaterial[$indice]["plan_year"] = number_format($planRmYear["plan"], 2, ",", ".");
-                                        $arrayRawMaterial[$indice]["real_year"] = number_format($realRmYear["plan"], 2, ",", ".");
+//                                        $arrayRawMaterial[$indice]["plan"] = number_format($planRm["plan"], 2, ",", ".");
+//                                        $arrayRawMaterial[$indice]["real"] = number_format($realRm["plan"], 2, ",", ".");
+//                                        $arrayRawMaterial[$indice]["plan_month"] = number_format($planRmMonth["plan"], 2, ",", ".");
+//                                        $arrayRawMaterial[$indice]["real_month"] = number_format($realRmMonth["plan"], 2, ",", ".");
+//                                        $arrayRawMaterial[$indice]["plan_year"] = number_format($planRmYear["plan"], 2, ",", ".");
+//                                        $arrayRawMaterial[$indice]["real_year"] = number_format($realRmYear["plan"], 2, ",", ".");
                                     }
+
+                                    if ($showDay) {
+                                        $arrayRawMaterialTotals["plan"] += $rawMaterialResult["total_day_plan"];
+                                        $arrayRawMaterialTotals["real"] += $rawMaterialResult["total_day"];
+                                    }
+                                    if ($showMonth) {
+                                        $arrayRawMaterialTotals["plan_month"] += $rawMaterialResult["total_month_plan"];
+                                        $arrayRawMaterialTotals["real_month"] += $rawMaterialResult["total_month"];
+                                    }
+                                    if ($showYear) {
+                                        $arrayRawMaterialTotals["plan_year"] += $rawMaterialResult["total_year_plan"];
+                                        $arrayRawMaterialTotals["real_year"] += $rawMaterialResult["total_year"];
+                                    }
+                                    $cont++;
                                 }
                             }//RAW MATERIAL
                         } //PRODUCT REPORT
@@ -1563,15 +1625,26 @@ class ReportTemplateController extends SEIPController {
 
 
 
-
+                $keyPrimary = array_keys($arrayRawMaterial);
+                foreach ($keyPrimary as $kp) {
+                    $keySecond = array_keys($arrayRawMaterial[$kp]);
+                    foreach ($keySecond as $ks) {
+                        if (gettype($arrayRawMaterial[$kp][$ks]) != "string") {
+                            //echo($arrayRawMaterial[$kp][$ks] . "\n");
+                            $arrayRawMaterial[$kp][$ks] = number_format($arrayRawMaterial[$kp][$ks], 2, ",", ".");
+                        }
+                    }
+                }
+                
 
                 $data = array(
                     'productsReport' => "",
                     'dateReport' => $dateReport,
-                    //'production' => $arrayProduction,
-                    //'totalProduction' => $arrayProductionTotals,
+                    'production' => $summaryProducction,
+                    'totalProduction' => $summaryProducctionTotals,
+                    'observations' => $observations,
                     'rawMaterials' => $arrayRawMaterial,
-                    //'totalRawMaterial' => $arrayRawMaterialTotals,
+                    'totalRawMaterial' => $arrayRawMaterialTotals,
                     'consumerServices' => $arrayConsumerServices,
                     'unrealizedProductions' => $arrayUnrealizedProduction,
                     'inventorys' => $arrayInventory,
@@ -1607,15 +1680,33 @@ class ReportTemplateController extends SEIPController {
                         ->setTemplate($this->config->getTemplate('reportVisualize.html'))
                 ;
                 $view->setData($data);
-                
+
                 return $this->handleView($view);
             } else {
                 var_dump("asd");
                 die();
             }
-
-            
         } //FIN DE FORM-SUBMIT
+
+
+        $data = array(
+            'productsReport' => "",
+            'form' => $form->createView(),
+            "securityService" => $this->getSecurityService(),
+            "byRange" => false,
+            "startDatePeriod" => $startDatePeriod,
+            "endDatePeriod" => $endDatePeriod,
+            'production' => "",
+        );
+
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('reportVisualize.html'))
+        ;
+        $view->setData($data);
+
+        return $this->handleView($view);
     }
 
     /**

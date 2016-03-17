@@ -89,7 +89,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for productDay in producction["day"] %} 
+                        {% for productDay in production["day"] %} 
                             <tr>
                                 <th scope="col" width="40%">{{ productDay.nameProduct|upper}}</th>
                                 <td scope="col" width="15%" class="text-right">{{ productDay.plan}}</td>                                    
@@ -102,12 +102,8 @@
                     <tfoot>
                         <tr>
                             <th class="header">TOTALES</th>
-                                {% for totals in totalProducction["day"] %}    
-                                <th scope="col" width="15%" class="header" style="text-align: right;">{{ totals }}</th>
-                                    {#<th scope="col" style="width: 7%" class="header">{{ totalsDay.plan_total }}</th>
-                                    <th scope="col" style="width: 7%" class=" header">{{ totalsDay.real_total }}</th>
-                                    <th scope="col" style="width: 7%" class=" header">{{ totalsDay.ejectution_total }}%</th>
-                                    <th scope="col" width="15%" class=" header">{{ totalsDay.var }}</th>#}
+                                {% for totals in totalProduction["day"] %}    
+                                <th scope="col" width="15%" class="header" style="text-align: right;">{{ totals|myNumberFormat }}</th>
                                 {% endfor %}
                         </tr>
                     </tfoot>
@@ -132,7 +128,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for productDay in producction["month"] %} 
+                        {% for productDay in production["month"] %} 
                             <tr>
                                 <th scope="col" width="25%" class="header">{{ productDay.nameProduct|upper }}</th>
                                 <td scope="col" width="15%" class="text-right">{{ productDay.plan_month}}</td>
@@ -146,12 +142,8 @@
                     <tfoot>
                         <tr>
                             <th class="header">TOTALES</th>
-                                {% for  totals in totalProducction["month"] %}    
-                                <th scope="col" width="15%" class="header" style="text-align: right;">{{ totals }}</th>
-                                    {#<th scope="col" style="width: 7%" class="header">{{ totalsDay.plan_total }}</th>
-                                    <th scope="col" style="width: 7%" class=" header">{{ totalsDay.real_total }}</th>
-                                    <th scope="col" style="width: 7%" class=" header">{{ totalsDay.ejectution_total }}%</th>
-                                    <th scope="col" width="15%" class=" header">{{ totalsDay.var }}</th>#}
+                                {% for  totals in totalProduction["month"] %}    
+                                <th scope="col" width="15%" class="header" style="text-align: right;">{{ totals|myNumberFormat }}</th>
                                 {% endfor %}
                         </tr>
                     </tfoot>
@@ -177,7 +169,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for productDay in producction["year"] %} 
+                        {% for productDay in production["year"] %} 
                             <tr>
                                 <th scope="col" width="25%" class="header">{{ productDay.nameProduct|upper}}</th>
                                 <td scope="col" width="15%" class="text-right">{{ productDay.plan_year}}</td>
@@ -191,8 +183,8 @@
                     <tfoot>
                         <tr>
                             <th class="header">TOTALES</th>
-                                {% for  totals in totalProducction["year"] %}    
-                                <th scope="col" width="15%" class="header" style="text-align: right;">{{ totals }}</th>
+                                {% for  totals in totalProduction["year"] %}    
+                                <th scope="col" width="15%" class="header" style="text-align: right;">{{ totals|myNumberFormat }}</th>
                                 {% endfor %}
                         </tr>
                     </tfoot>
@@ -210,6 +202,8 @@
         </div>
     </div>
 {% endif %}
+
+
 
 {% if showRawMaterial %}
     <div class="columns">
@@ -268,6 +262,14 @@
                         </tr>
                     {% endfor %}
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th class="header">TOTALES</th>
+                            {% for  totals in totalRawMaterial %}    
+                            <th scope="col" width="15%" class="header" style="text-align: right;">{{ totals|myNumberFormat }}</th>
+                            {% endfor %}
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>     
@@ -331,12 +333,12 @@
                     {% endfor %}
                 </tbody>
                 <tfoot>
-                   {# <tr>
-                        <th width="22%" class="header">TOTALES</th>
-                            {% for totalConsumerService in totalConsumerServices  %}
-                            <th scope="col" width="15%" class="header" style="text-align: right;">{{ totalConsumerService|myNumberFormat }}</th>
-                            {% endfor %}
-                    </tr>#}
+                    {# <tr>
+                         <th width="22%" class="header">TOTALES</th>
+                             {% for totalConsumerService in totalConsumerServices  %}
+                             <th scope="col" width="15%" class="header" style="text-align: right;">{{ totalConsumerService|myNumberFormat }}</th>
+                             {% endfor %}
+                     </tr>#}
                 </tfoot>
             </table>
         </div>
