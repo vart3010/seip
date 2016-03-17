@@ -1,6 +1,6 @@
 ## YAML Template.
 pequiven_housesupply_order_charge:
-    path: /orders/create/{typemember}
+    path: /create/{typemember}
     defaults:
         _controller: pequiven.controller.housesupply_order:chargeAction
         _format: html
@@ -9,7 +9,7 @@ pequiven_housesupply_order_charge:
     methods: [GET|POST]
     
 pequiven_housesupply_order_register:
-    path: /orders/register/
+    path: /register/
     defaults:
         _controller: pequiven.controller.housesupply_order:registerAction
         _format: html
@@ -18,7 +18,7 @@ pequiven_housesupply_order_register:
     methods: [GET|POST]
     
 pequiven_housesupply_order_charge_add:
-    path: /orders/addItem/
+    path: /addItem/
     defaults:
         _controller: pequiven.controller.housesupply_order:addItemAction
         _format: html
@@ -27,7 +27,7 @@ pequiven_housesupply_order_charge_add:
     methods: [GET|POST]
     
 pequiven_housesupply_order_charge_delete:
-    path: /orders/deleteItem/{id}
+    path: /deleteItem/{id}
     defaults:
         _controller: pequiven.controller.housesupply_order:deleteItemAction
         _format: html
@@ -36,7 +36,7 @@ pequiven_housesupply_order_charge_delete:
     methods: [GET|POST]
     
 pequiven_housesupply_order_charge_total:
-    path: /orders/total/
+    path: /total/
     defaults:
         _controller: pequiven.controller.housesupply_order:totalAction
         _format: html
@@ -45,7 +45,7 @@ pequiven_housesupply_order_charge_total:
     methods: [GET|POST]
 
 pequiven_housesupply_save_order:
-    path: /orders/save
+    path: /save
     defaults:
         _controller: pequiven.controller.housesupply_order:saveOrderAction
     

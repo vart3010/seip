@@ -81,19 +81,20 @@ pequiven_politic_assistance:
     resource: "@PequivenSEIPBundle/Resources/config/routing/politic/assistance.yml"
     prefix:   /assistance
     
+# CASA - ABASTO    
 pequiven_houseSupply_Inventory:
     resource: "@PequivenSEIPBundle/Resources/config/routing/HouseSupply/HouseSupplyInventory.yml"
     prefix:   /HouseSupply/Inventory
     
 pequiven_houseSupply_Billing:
     resource: "@PequivenSEIPBundle/Resources/config/routing/HouseSupply/HouseSupplyBilling.yml"
-    prefix:   /HouseSupply/Sell
+    prefix:   /HouseSupply/Billing
     
 pequiven_houseSupply_Order:
     resource: "@PequivenSEIPBundle/Resources/config/routing/HouseSupply/HouseSupplyOrder.yml"
     prefix:   /HouseSupply/Order
 
-###SISTEMA DE INFORMACION POLIICA
+###SISTEMA DE INFORMACION POLITICA
 pequiven_sip:
     resource: "@PequivenSEIPBundle/Resources/config/routing/sip/sip.yml"
     prefix:   /sip

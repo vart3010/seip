@@ -613,7 +613,7 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Delivery\ProductReportDeliveryController
                 repository: Pequiven\SEIPBundle\Repository\Delivery\ProductReportDeliveryRepository
                 
-        #CASA-ABASTO
+        # CASA-ABASTO
         pequiven.housesupply_inventory:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:HouseSupply/Inventory
@@ -624,6 +624,12 @@ sylius_resource:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:HouseSupply/Order
             classes:
-                model: Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\HouseSupplyInventoryCharge
-                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyOrderController        
+                model: Pequiven\SEIPBundle\Entity\HouseSupply\Order\HouseSupplyOrder
+                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyOrderController                  
+        pequiven.housesupply_billing:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:HouseSupply/Billing
+            classes:
+                model: Pequiven\SEIPBundle\Entity\HouseSupply\Billing\HouseSupplyBilling
+                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyBillingController   
                    

@@ -33,6 +33,23 @@ class HouseSupplyCycleRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
 
+    function FindCycleBilling($date) {
+
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->andWhere('HSCycle.dateBeginOrder <= :date')
+                ->andWhere('HSCycle.dateEndOrder >= :date')
+                ->setParameter('date', $date)
+        ;
+
+//        var_dump($qb->getQuery()->getResult());
+//        var_dump($date);
+//        print($qb->getQuery()->getSQL());
+//        die();
+
+        return $qb->getQuery()->getResult();
+    }
+
     function getAlias() {
         return 'HSCycle';
     }
