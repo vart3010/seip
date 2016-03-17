@@ -742,6 +742,17 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
+    sonata.admin.housesupply.productinstance:
+        class: Pequiven\MasterBundle\Admin\HouseSupply\HouseSupplyProductInstanceAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Casa - Abaso" ,label_catalogue: "SonataHouseSupplyBundle", label: "Categorías de Productos" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductInstance
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+    
     sonata.admin.housesupply.deposit:
         class: Pequiven\MasterBundle\Admin\HouseSupply\HouseSupplyDepositAdmin
         tags:
@@ -764,13 +775,13 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
-    sonata.admin.housesupply.productinstance:
-        class: Pequiven\MasterBundle\Admin\HouseSupply\HouseSupplyProductInstanceAdmin
+    sonata.admin.housesupply.cycle:
+        class: Pequiven\MasterBundle\Admin\HouseSupply\HouseSupplyCycleAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Casa - Abaso" ,label_catalogue: "SonataHouseSupplyBundle", label: "Categorías de Productos" }
+            - { name: sonata.admin, manager_type: orm, group: "Casa - Abaso" ,label_catalogue: "SonataHouseSupplyBundle", label: "Ciclos de Pedidos" }
         arguments:
             - ~
-            - Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductInstance
+            - Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyCycle
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
