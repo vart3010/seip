@@ -197,21 +197,21 @@ angular.module('seipModule.controllers', [])
             $scope.getClassForMeter = function (percentaje, numMeter) {
                 var className = '';
                 if (numMeter == 1) {
-                    if (percentaje > 0 && percentaje <= 30) {
+                    if (percentaje > 0 && percentaje <= 50) {
                         className = 'red-gradient';
-                    } else if (percentaje > 30 && percentaje < 70) {
+                    } else if (percentaje > 50 && percentaje <= 80) {
                         className = 'orange-gradient';
-                    } else if (percentaje >= 70) {
+                    } else if (percentaje > 80) {
                         className = 'green-gradient';
                     }
                 } else if (numMeter == 2) {
-                    if (percentaje > 30 && percentaje < 70) {
+                    if (percentaje > 50 && percentaje <= 80) {
                         className = 'orange-gradient';
-                    } else if (percentaje >= 70) {
+                    } else if (percentaje > 80) {
                         className = 'green-gradient';
                     }
                 } else if (numMeter == 3) {
-                    if (percentaje >= 70) {
+                    if (percentaje > 80) {
                         className = 'green-gradient';
                     }
                 }
