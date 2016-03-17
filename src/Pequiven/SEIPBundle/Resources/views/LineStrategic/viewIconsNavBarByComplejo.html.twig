@@ -1,0 +1,25 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<div class="row-fluid">
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="container">
+                <div class="span9" style="margin-left: 0;">
+                    <ul class="nav">
+                        {% for t in tree %}
+                            {% set lineStrategic = t['parent'] %}
+                                <li {% if lineStrategic.id == idLineStrategic %} class="linestrategic-active" {% endif %} style="display: table-cell; float: none;">
+                                   <a href="{{ path('pequiven_line_strategic_view_results_by_complejo',{idComplejo:idComplejo, id:lineStrategic.id}) }}" data-toggle="tab">
+                                        <span title="{{ lineStrategic.description }}">
+                                            <img style="padding: 20px;" class="snapshot-box-icon-header" src="{{ asset(iconsLineStrategic[lineStrategic.level]) }}">
+                                        </span>
+                                   </a>
+                                </li>
+                        {% endfor %}
+                    </ul>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

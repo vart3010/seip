@@ -1451,7 +1451,6 @@ angular.module('seipModule.controllers', [])
         })
         //Controladores SIG
         .controller('IndicatorSigEvolutionController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
-
             $scope.urlCausesEvolutionForm = null;
             $scope.indicator = null;
             var isInit = false;
@@ -1461,8 +1460,7 @@ angular.module('seipModule.controllers', [])
                 $scope.initFormTrend(resource);
                 if (isInit == false) {
                     isInit = true;
-                }
-                //$scope.setHeight(350);                
+                }                           
 
                 $scope.templateOptions.setParameterCallBack(resource);
 
@@ -1478,9 +1476,7 @@ angular.module('seipModule.controllers', [])
                 $scope.initFormActionAdd(resource);
                 if (isInit == false) {
                     isInit = true;
-                }
-                //$scope.setHeight(350);                
-
+                }                
                 $scope.templateOptions.setParameterCallBack(resource);
 
                 if (resource) {
@@ -1496,7 +1492,6 @@ angular.module('seipModule.controllers', [])
                 if (isInit == false) {
                     isInit = true;
                 }
-
                 $scope.templateOptions.setParameterCallBack(resource);
 
                 if (resource) {
@@ -1767,6 +1762,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormAction = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
+                $scope.setHeight(350);
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,

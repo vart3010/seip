@@ -1,16 +1,15 @@
-var url;
+var urlData;
+
 var urlMessage;
 
-$("#reload").click(function(){
-    //getData();
-    /*$.ajax({
-        url: "",
-        context: document.body,
-        success: function(s,x){
-            $(this).html(s);
-        }
-    });*/
-    $('#notifyAll').load();
+var urlMessageDelete;
+
+var urlFavMessage;
+
+var urlMessages;
+
+$("#reload").click(function(){    
+    getData(urlData);    
 });
 
 function setNotifications(dataNotify){     
@@ -26,22 +25,35 @@ function setNotifications(dataNotify){
     $('#evolution').text(dataNotify['evolution']);            
 }
 
-function getUrlMessage(urlGetMessage){
+function setUrlData(urlGetData){
+    urlData = urlGetData;
+    getData(urlData);
+}
+
+function setUrlMessage(urlGetMessage){
     urlMessage = urlGetMessage;
 }
 
-function getUrlMessageDelete(urlGetMessageDelete){
-    urlMessagedelete = urlGetMessageDelete;
+function setUrlMessageDelete(urlGetMessageDelete){
+    urlMessageDelete = urlGetMessageDelete;
 }
 
-function getData(url){
+function setUrlMessageFav(urlFav){
+    urlFavMessage = urlFav;
+}
+
+function setUrlMessagesData(urlMessagesData){
+    urlMessages = urlMessagesData;
+}
+
+function getData(urlData){    
     var data = {
         id: 1,                    
     }; 
 
     $.ajax({
             type: 'get',
-            url: url,
+            url: urlData,
             data: data,                              
             beforeSend:function(){
                 $('#loading').css({display:'block'});                            
@@ -56,15 +68,15 @@ function getData(url){
 }
 
 function showMessage(id){  
-	var data = {
+    var data = {
         idMessage: id,                    
     };            
-	$.ajax({
+    $.ajax({
             type: 'get',
             url: urlMessage,
             data: data,
             beforeSend:function(){
-                    $('#loading').css({display:'block'});                            
+                $('#loading').css({display:'block'});                            
             },
             complete:function(){
                 $('#loading').css('display','none');                        
@@ -74,26 +86,25 @@ function showMessage(id){
                 $('#new-message_' + id).css('display','none');                        
                 $('#out-message_' + id).css('display','block');
                 $('#buttonToll').css('display', 'block');                        
-                document.getElementById("messageNone").innerHTML = data['description'];
+                $('#messageNone').html(data['description']);
                 //document.getElementById("messageNone").innerHTML = "<a href=\"{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}\">Ver</a>";
-                var path = data['path'];
-                //console.log(path);
-                document.getElementById("href").innerHTML = "<a href='{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}' class='button red-gradient float-right with-tooltip' title='Visualizar'>Visualizar</a>";
-                document.getElementById("sectionButton").innerHTML = '<a href class="button" title="Eliminar" onclick="deleteMessage('+id+');"><span class="icon-trash"></span></a><a href class="button" title="Marcar como Importante" onclick="favouriteMessage('+id+');"><span class="icon-flag"></span></a>';                                                
+                var path = data['path'];                
+                $('#href').html("<a href='{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}' class='button red-gradient float-right with-tooltip' title='Visualizar'>Visualizar</a>");
+                $('#sectionButton').html('<a href class="button" title="Eliminar" onclick="deleteMessage('+id+');"><span class="icon-trash"></span></a><a href class="button" title="Marcar como Importante" onclick="favouriteMessage('+id+');"><span class="icon-flag"></span></a>');
             }
     });
 }   
 
-function deleteMessage(id){			
-	var data = {
+function deleteMessage(id){    
+    var data = {
         idMessage: id,                    
     };             
-	$.ajax({
+    $.ajax({
             type: 'get',
             url: urlMessageDelete,
             data: data, 
             beforeSend:function(){
-                    $('#loading').css({display:'block'});                            
+                $('#loading').css({display:'block'});                            
             },
             complete:function(){
                 $('#loading').css('display','none');                        
@@ -101,20 +112,20 @@ function deleteMessage(id){
             success: function (data) {                        
                 $(location).attr('href', data["url"]);                                                
                 $('#iMessage_' + id).css('display','none');  
-    			$('#buttonToll').css('display', 'none');                       
-                document.getElementById("messageNone").innerHTML = '<i class="fa fa-check"></i> Notificación Eliminada Satisfactoriamente';
+                $('#buttonToll').css('display', 'none');                       
+                $('#messageNone').html('<i class="fa fa-check"></i> Notificación Eliminada Satisfactoriamente');
+                getData(urlData);
             }
     });
 } 
 
-function favouriteMessage(id){			
-	var data = {
+function favouriteMessage(id){          
+    var data = {
         idMessage: id,                    
     };     
-
-	/*$.ajax({
+    $.ajax({
             type: 'get',
-            url: '{{ path("seip_notification_favourite_message") }}',
+            url: urlFavMessage,
             data: data, 
             beforeSend:function(){
                     $('#loading').css({display:'block'});                            
@@ -126,19 +137,98 @@ function favouriteMessage(id){
                 $(location).attr('href', data["url"]);                                                
                 $('#iMessage_' + id).css('display','none');  
     			$('#buttonToll').css('display', 'none');                       
-                document.getElementById("messageNone").innerHTML = '<i class="fa fa-check"></i> Notificación enviada a Importantes';
+                $('#messageNone').html('<i class="fa fa-check"></i> Notificación enviada a Importantes');
+                getData(urlData);
             }
-    });*/
+    });
 }   
 
-$("#notify").click(function(){
-    console.log('Notify');
+function getMessagesData(type, tag, typeData){    
+    var data = {
+        type: type, 
+        typeData: typeData                   
+    };     
+
+    /*$.post(urlMessages, data, function(){        
+        createMessages(type, tag);
+    });*/
+
+    $.ajax({
+            type: 'get',
+            url: urlMessages,
+            data: data, 
+            beforeSend:function(){
+                $('#loading').css({display:'block'});                            
+            },
+            complete:function(){
+                $('#loading').css('display','none');
+            },                    
+            success: function (data) {
+                createMessages(type, tag, typeData, data);                    
+            }
+    }); 
+}
+
+function createMessages(type, tag, typeData, data){
+    var myArray = [];    
+    var arraylength = data.length;
+    
+    for (var i=0; i<data['cont']; i++) {
+        var id = data['id'][i];        
+        myArray.push('<li id="iMessage_'+ data['id'][i] +'"  onclick="showMessage('+id+');"><span class="message-status"><a href="javascript:void(0);" style="color:#ebd106;" id="" title="Mensaje sin leer"><i class="fa fa-envelope-o" id="new-message_"></i></a><a href="javascript:void(0);" class="" style="color:#3bc600;"><i class="fa fa-tag"></i></a></span><a href title="Leer Notificación" id="title" onclick=""><strong class="blue">'+data['title'][id]+'</strong><br><strong>'+data['date'][id]+'</strong></a></li>');
+    }
+        if (type == 1) {
+            $(tag+"_tag").html(myArray);
+        }else{
+            $(tag).html(myArray);                
+        };        
+    /*setTimeout(function(){ 
+        alert('hoa');                               
+    }, 3000);*/
+}
+
+$("#objetives_data").click(function(){
+    getMessagesData(1,"#objetives", 1);
+    $('#messageNone').text('Selecciones un mensaje.');
 }); 
 
+$("#programt_data").click(function(){
+    getMessagesData(1,"#programt", 2);
+    $('#messageNone').text('Selecciones un mensaje.');
+}); 
+
+$("#indicators_data").click(function(){
+    getMessagesData(1,"#indicators", 3);
+    $('#messageNone').text('Selecciones un mensaje.');
+}); 
+
+$("#standardization_data").click(function(){
+    getMessagesData(1,"#standardization", 4);
+    $('#messageNone').text('Selecciones un mensaje.');
+}); 
+
+$("#production_data").click(function(){
+    getMessagesData(1,"#production", 5);
+    $('#messageNone').text('Selecciones un mensaje.');
+}); 
+
+$("#evolution_data").click(function(){
+    getMessagesData(1,"#evolution", 6);
+    $('#messageNone').text('Selecciones un mensaje.');
+}); 
+
+/*$("#notify").click(function(){
+    console.log('Notify'); 
+}); */
+
 $("#fav").click(function(){
-    console.log('Favoritos');
+    getMessagesData(2,"#favMessage", 0);
+    //createMessages(2,"#favMessage");
+    $('#messageNone').text('Sección importantes, selecciones un mensaje.');
 });	
 
 $("#trash").click(function(){
-    console.log('Trash');
+    getMessagesData(3,"#trashMessage", 0);
+    //createMessages(3,"#trashMessage");    
+    $('#messageNone').text('Sección eliminados, selecciones un mensaje.');    
 }); 
