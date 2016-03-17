@@ -184,6 +184,10 @@ class UserController extends baseController {
     }
 
     public function getMessagesDataAction(Request $request){
+        
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser()->getId();
+
         $response = new JsonResponse();        
         
         $description = $data = [];
@@ -191,21 +195,24 @@ class UserController extends baseController {
         $em = $this->getDoctrine()->getManager();   
         
         if ($request->get('typeData') == 0) {
-            $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('typeMessage' => $request->get('type')));            
+            $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('typeMessage' => $request->get('type'), 'user' => $user));            
         }else {
-            $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('type' => $request->get('typeData'), 'typeMessage' => $request->get('type')));                        
+            $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('type' => $request->get('typeData'), 'typeMessage' => $request->get('type'), 'user' => $user));                        
         }
         if ($notification) {
             
-        foreach ($notification as $valueNotification) {
-            $description[$valueNotification->getId()] = $valueNotification->getDescription();
-            $title[$valueNotification->getId()] = $valueNotification->getTitle();
+        foreach ($notification as $valueNotification) {            
+            $id = $valueNotification->getId();
+            $description[$id] = $valueNotification->getDescription();
+            $title[$id] = $valueNotification->getTitle();
             
             $dateCreated = $valueNotification->getCreatedAt();
             $dateCreated->setTimestamp((int)$dateCreated->format('U'));            
             $fechaCreated = $dateCreated->format('d-m-Y'); 
 
-            $date[$valueNotification->getId()] = $fechaCreated;
+            $date[$id] = $fechaCreated;
+            $read[$id] = $valueNotification->getReadNotification();
+            $status[$id] = $valueNotification->getStatus();
             $ids[] = $valueNotification->getId();
         }
 
@@ -214,6 +221,8 @@ class UserController extends baseController {
             'title'       => $title,
             'date'        => $date,
             'id'          => $ids,
+            'read'        => $read,
+            'status'      => $status,
             'cont'        => count($ids)
         ];
         }

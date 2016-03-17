@@ -245,7 +245,8 @@ class ReportEvolutionController extends ResourceController
      */
     public function addAction(Request $request)
     {   
-        //$month = date("m");//Carga del mes de Creación de la causa "Automatico"          
+        //$month = date("m");//Carga del mes de Creación de la causa "Automatico"
+        $indicator = $this->findIndicatorOr404($request);           
         $em = $this->getDoctrine()->getManager();
 
         $id = $this->getRequest()->get('idIndicator');
@@ -289,6 +290,7 @@ class ReportEvolutionController extends ResourceController
         //Añadiendo responsables
         for ($i=0; $i < $catnRes; $i++) { 
             $user = $this->get('pequiven_seip.repository.user')->find($reponsibles[$i]);
+            $notification = $this->getNotificationService()->setDataNotification("Informe de Evolución", "Ha sido asignado como responsable a un Plan de Acción en el Informe de Evolucion del Indicador ". $indicator->getRef() ." con fecha de incio: ".$dateStart." y fecha de cierre: ".$dateEnd.", el cual presenta un avance de inicio de ".$AcValue."%.", 6 , 1, "-", $user);                        
             $action->addResponsible($user);            
         }
         
@@ -730,5 +732,13 @@ class ReportEvolutionController extends ResourceController
     protected function getIndicatorService() {
         return $this->container->get('pequiven_indicator.service.inidicator');
     } 
+
+    /**
+     *  Notification
+     *
+     */
+    protected function getNotificationService() {        
+        return $this->container->get('seip.service.notification');        
+    }
    
 }

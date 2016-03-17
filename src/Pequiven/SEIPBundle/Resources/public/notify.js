@@ -174,17 +174,29 @@ function createMessages(type, tag, typeData, data){
     var arraylength = data.length;
     
     for (var i=0; i<data['cont']; i++) {
-        var id = data['id'][i];        
-        myArray.push('<li id="iMessage_'+ data['id'][i] +'"  onclick="showMessage('+id+');"><span class="message-status"><a href="javascript:void(0);" style="color:#ebd106;" id="" title="Mensaje sin leer"><i class="fa fa-envelope-o" id="new-message_"></i></a><a href="javascript:void(0);" class="" style="color:#3bc600;"><i class="fa fa-tag"></i></a></span><a href title="Leer Notificación" id="title" onclick=""><strong class="blue">'+data['title'][id]+'</strong><br><strong>'+data['date'][id]+'</strong></a></li>');
+        var id = data['id'][i]; 
+        
+        if (data['read'][id] == true) {
+            var font = "fa-envelope-o";
+        }else{
+            var font = "fa-envelope";            
+        };  
+
+        if (data['status'][id] == 1) {
+            var color = "ff0000";
+        }else if(data['status'][id] == 2){
+            var color = "3bc600";            
+        }else if(data['status'][id] == 3){
+            var color = "00d518";            
+        };
+
+        myArray.push('<li id="iMessage_'+ data['id'][i] +'"  onclick="showMessage('+id+');"><span class="message-status"><a href="javascript:void(0);" style="color:#ebd106;" id="" title="Mensaje sin leer"><i class="fa '+font+'" id="new-message_"></i></a><a href="javascript:void(0);" class="" style="color:#'+color+';"><i class="fa fa-tag"></i></a></span><a href title="Leer Notificación" id="title" onclick=""><strong class="blue">'+data['title'][id]+'</strong><br><strong>'+data['date'][id]+'</strong></a></li>');
     }
         if (type == 1) {
             $(tag+"_tag").html(myArray);
         }else{
             $(tag).html(myArray);                
-        };        
-    /*setTimeout(function(){ 
-        alert('hoa');                               
-    }, 3000);*/
+        };     
 }
 
 $("#objetives_data").click(function(){
