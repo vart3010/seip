@@ -130,9 +130,9 @@
                     {% else %}
                         {% set advances = pg.result %}
                         {% set advancesClass = 'resultred' %}
-                        {% if advances >= 50 and advances < 100 %}
+                        {% if advances > 50 and advances <= 80 %}
                             {% set advancesClass = 'resultyellow' %}
-                        {% elseif advances >= 100 %}
+                        {% elseif advances > 80 %}
                             {% set advancesClass = 'resultgreen' %}
                         {% endif %}
                     {% endif %}
@@ -155,7 +155,7 @@
                                     <br>
                                     {% for obs in pg.observaciones %}
                                         {% if obs.type== 'I' %}
-                                            - Ingresado desde el desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
+                                            - Ingresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
                                         {% endif %}
                                         {% if obs.type== 'O' %}
                                             - Egresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
@@ -227,10 +227,10 @@
                         {% set advancesClass = "resultgrey"%}
                     {% else %}
                         {% set advancesClass = "resultred"%}
-                        {% if(porc>=50 and porc<100) %}
-                            {% set advancesClass = "resultyellow"%}
-                        {% elseif (porc>=100)  %}
-                            {% set advancesClass = "resultgreen"%}
+                        {% if advances > 50 and advances <= 80 %}
+                            {% set advancesClass = 'resultyellow' %}
+                        {% elseif advances > 80 %}
+                            {% set advancesClass = 'resultgreen' %}
                         {% endif %}
                     {% endif %}
                     <tr style="height: 30px">
@@ -251,7 +251,7 @@
                                     <br>                                    
                                     {% for obs in goal.observaciones %}
                                         {% if obs.type== 'I' %}
-                                            - Ingresado desde el desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
+                                            - Ingresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
                                         {% endif %}
                                         {% if obs.type== 'O' %}
                                             - Egresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
@@ -323,9 +323,9 @@
                     {% for objetivesOE in userItems.data.evaluation.results.objetives["OE"] %}
                         {% set advances = objetivesOE.result %}
                         {% set advancesClass = 'resultred' %}
-                        {% if advances >= 50 and advances < 100 %}
+                        {% if advances > 50 and advances <= 80 %}
                             {% set advancesClass = 'resultyellow' %}
-                        {% elseif advances >= 100 %}
+                        {% elseif advances > 80 %}
                             {% set advancesClass = 'resultgreen' %}
                         {% endif %}
                         <tr style="height: 50px;">
@@ -358,9 +358,9 @@
                     {% for objetivesOT in userItems.data.evaluation.results.objetives["OT"] %}
                         {% set advances = objetivesOT.result %}
                         {% set advancesClass = 'resultred' %}
-                        {% if advances >= 50 and advances < 100 %}
+                       {% if advances > 50 and advances <= 80 %}
                             {% set advancesClass = 'resultyellow' %}
-                        {% elseif advances >= 100 %}
+                        {% elseif advances > 80 %}
                             {% set advancesClass = 'resultgreen' %}
                         {% endif %}
                         <tr style="height: 50px;">
@@ -392,9 +392,9 @@
                     {% for objetivesOO in userItems.data.evaluation.results.objetives["OO"] %}
                         {% set advances = objetivesOO.result %}
                         {% set advancesClass = 'resultred' %}
-                        {% if advances >= 50 and advances < 100 %}
+                        {% if advances > 50 and advances <= 80 %}
                             {% set advancesClass = 'resultyellow' %}
-                        {% elseif advances >= 100 %}
+                        {% elseif advances > 80 %}
                             {% set advancesClass = 'resultgreen' %}
                         {% endif %}
                         <tr style="height: 50px;">

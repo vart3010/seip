@@ -174,8 +174,8 @@ class MonitoringController extends ResourceController
 
             $standardization->setStatus(1);        
             $em->flush();            
-            
-            $notification = $this->getNotificationService()->setDataNotification('Estandarizacion', "La data de estandarizacion ha sido cargada puede verificar. ", 4 , 1, "'pequiven_sig_monitoring_show',{'id': ". $id ." }");            
+            $user = $securityContext->getToken()->getUser()->getId();
+            $notification = $this->getNotificationService()->setDataNotification('Estandarizacion', "La data de estandarizacion ha sido cargada puede verificar. ", 4 , 1, "'pequiven_sig_monitoring_show',{'id': ". $id ." }", $user);            
             
             $this->get('session')->getFlashBag()->add('success', "Notificación Enviada Exitosamente");
         }else{

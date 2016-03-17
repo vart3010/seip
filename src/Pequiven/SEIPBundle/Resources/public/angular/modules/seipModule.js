@@ -197,21 +197,21 @@ angular.module('seipModule.controllers', [])
             $scope.getClassForMeter = function (percentaje, numMeter) {
                 var className = '';
                 if (numMeter == 1) {
-                    if (percentaje > 0 && percentaje <= 30) {
+                    if (percentaje > 0 && percentaje <= 50) {
                         className = 'red-gradient';
-                    } else if (percentaje > 30 && percentaje < 70) {
+                    } else if (percentaje > 50 && percentaje <= 80) {
                         className = 'orange-gradient';
-                    } else if (percentaje >= 70) {
+                    } else if (percentaje > 80) {
                         className = 'green-gradient';
                     }
                 } else if (numMeter == 2) {
-                    if (percentaje > 30 && percentaje < 70) {
+                    if (percentaje > 50 && percentaje <= 80) {
                         className = 'orange-gradient';
-                    } else if (percentaje >= 70) {
+                    } else if (percentaje > 80) {
                         className = 'green-gradient';
                     }
                 } else if (numMeter == 3) {
-                    if (percentaje >= 70) {
+                    if (percentaje > 80) {
                         className = 'green-gradient';
                     }
                 }
@@ -1451,7 +1451,6 @@ angular.module('seipModule.controllers', [])
         })
         //Controladores SIG
         .controller('IndicatorSigEvolutionController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
-
             $scope.urlCausesEvolutionForm = null;
             $scope.indicator = null;
             var isInit = false;
@@ -1461,8 +1460,7 @@ angular.module('seipModule.controllers', [])
                 $scope.initFormTrend(resource);
                 if (isInit == false) {
                     isInit = true;
-                }
-                //$scope.setHeight(350);                
+                }                           
 
                 $scope.templateOptions.setParameterCallBack(resource);
 
@@ -1478,9 +1476,7 @@ angular.module('seipModule.controllers', [])
                 $scope.initFormActionAdd(resource);
                 if (isInit == false) {
                     isInit = true;
-                }
-                //$scope.setHeight(350);                
-
+                }                
                 $scope.templateOptions.setParameterCallBack(resource);
 
                 if (resource) {
@@ -1496,7 +1492,6 @@ angular.module('seipModule.controllers', [])
                 if (isInit == false) {
                     isInit = true;
                 }
-
                 $scope.templateOptions.setParameterCallBack(resource);
 
                 if (resource) {
@@ -1767,6 +1762,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormAction = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
+                $scope.setHeight(350);
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
