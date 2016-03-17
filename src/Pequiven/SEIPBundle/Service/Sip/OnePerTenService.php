@@ -472,7 +472,7 @@ class OnePerTenService {
                 if($type == 'array'){
                     $contVotos = $member['voto'] == "Sí" ? $contVotos+1 : $contVotos;
                 } elseif ($type == 'class'){
-                    $contVotos = $member->getVasamblea6() == "Sí" ? $contVotos+1 : $contVotos;
+                    $contVotos = $member->getVasamblea6() == 1 ? $contVotos+1 : $contVotos;
                 }
             }
             $efectividad = number_format(($contVotos/$totalMiembros)*100, 2, ',', '.') . '%';
