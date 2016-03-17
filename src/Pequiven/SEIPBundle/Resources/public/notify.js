@@ -8,6 +8,8 @@ var urlFavMessage;
 
 var urlMessages;
 
+var notify;
+
 $("#reload").click(function(){    
     getData(urlData);    
 });
@@ -22,7 +24,13 @@ function setNotifications(dataNotify){
     $('#indicators').text(dataNotify['indicators']);            
     $('#standardization').text(dataNotify['standardization']);            
     $('#production').text(dataNotify['production']);            
-    $('#evolution').text(dataNotify['evolution']);            
+    $('#evolution').text(dataNotify['evolution']);           
+
+    if (dataNotify['notifyUser'] > 0) {
+        $('#userNotify').show().text(dataNotify['notifyUser']);
+    }else{
+        $('#userNotify').hide();        
+    };
 }
 
 function setUrlData(urlGetData){
@@ -91,6 +99,7 @@ function showMessage(id){
                 var path = data['path'];                
                 $('#href').html("<a href='{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}' class='button red-gradient float-right with-tooltip' title='Visualizar'>Visualizar</a>");
                 $('#sectionButton').html('<a href class="button" title="Eliminar" onclick="deleteMessage('+id+');"><span class="icon-trash"></span></a><a href class="button" title="Marcar como Importante" onclick="favouriteMessage('+id+');"><span class="icon-flag"></span></a>');
+                getData(urlData);                
             }
     });
 }   

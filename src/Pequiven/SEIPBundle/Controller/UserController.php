@@ -132,12 +132,14 @@ class UserController extends baseController {
     public function getNotifyDataAction(Request $request){
         $em = $this->getDoctrine()->getManager();   
         $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();        
+        $notifyUser = $user->getNotify();
 
         $response = new JsonResponse();   
         $notify = $fav = $trash = 0;
         $objetives = $programt = $indicators = $standardization = $production = $evolution = 0;
 
-        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('user' => $securityContext->getToken()->getUser()));
+        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('user' => $user));
         
         foreach ($notification as $valueNotify) {
             if ($valueNotify->getTypeMessage() == 1) {
@@ -167,15 +169,16 @@ class UserController extends baseController {
         }
 
         $data = [
-            'notify' => $notify,
-            'fav'    => $fav,
-            'trash'  => $trash,
-            'objetives' => $objetives,
-            'programt'  => $programt,
-            'indicators'=> $indicators,
+            'notify'          => $notify,
+            'fav'             => $fav,
+            'trash'           => $trash,
+            'objetives'       => $objetives,
+            'programt'        => $programt,
+            'indicators'      => $indicators,
             'standardization' => $standardization,
-            'production'=> $production,
-            'evolution' => $evolution
+            'production'      => $production,
+            'evolution'       => $evolution,
+            'notifyUser'          => $notifyUser
         ];
 
         $response->setData($data);
