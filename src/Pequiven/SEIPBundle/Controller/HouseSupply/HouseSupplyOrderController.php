@@ -79,8 +79,6 @@ class HouseSupplyOrderController extends SEIPController {
                     $idProductItems[] = $item->getProduct()->getId();
                 }
                 
-                
-
                 return $this->render('PequivenSEIPBundle:HouseSupply\Order:create.html.twig', array(
                             'type' => $type,
                             'neworder' => $neworder,
@@ -285,6 +283,7 @@ class HouseSupplyOrderController extends SEIPController {
     }
 
     public function showAction(Request $request) {
+        var_dump("Ya tiene una orden registrada");die();
         return $this->render('PequivenSEIPBundle:HouseSupply\Order:show.html.twig');
     }
 

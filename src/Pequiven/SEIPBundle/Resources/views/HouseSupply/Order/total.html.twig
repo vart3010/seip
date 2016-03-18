@@ -1,11 +1,35 @@
 {# empty Twig template #}
-{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% extends 'PequivenSEIPBundle:Template:Developer/layoutWithoutMenu.html.twig' %}
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
 {% block javascript %}
     {{ parent() }}
     <script src="{{  asset('bundles/pequivenseip/jQuery-Mask-Plugin-master/jquery.mask.min.js') }}"></script>      
+    <script type="text/javascript">
+    
+
+    $(document).ready(function(){
+        $("#buttonSubmit").click(function(event){
+            
+            var url = '{{ path("pequiven_housesupply_order_register") }}';
+            var type = {{ type }};
+            console.log(url);
+            console.log(type);
+
+            
+
+            $.post(url,{'type': type,'typemember': 1},function(){
+                
+                window.opener.location.reload(); 
+                window.close();    
+            });
+            
+            event.preventDefault();
+        });
+    });
+
+    </script>
 {% endblock javascript %}
 
 
@@ -21,16 +45,16 @@
         table#table1 tbody tr td.gridTd {
             text-align: right;
         }
+        html,body {
+            background-color: #fff;
+            height: 100%;
+            background: #fff;
+        }
+        
     </style>
-    <hgroup id="main-title" class="thin breadcrumb">
-        <h1>
-            <a href="">Ordenes de Pedidos</a>
-            <span class="icon-forward"></span>            
-            <span class="thin">Totalizar</span>                        
-        </h1>
-    </hgroup>
-    <br>
-    <div class="columns">
+
+    
+    <div class="columns" style="margin-top: 35px;">
         <div class="twelve-columns">            
             <center>
                 <table width="95%" style="border: 2px black solid;">
@@ -211,9 +235,9 @@
                 </table>
                 <br>
                 <div class="new-row twelve-columns" style="text-align: right;">  
-                    <form method="POST" action="{{ path("pequiven_housesupply_order_register",{'type': type, 'typemember': 1 }) }}">                           
+                     <form method="POST" id="formProcesar" action="{{ path("pequiven_housesupply_order_register",{'type': type, 'typemember': 1 }) }}"></form>
                         {{ actions.register('Registrar Pedido','green','buttonSubmit') }}   
-                    </form>
+                    
                 </div>        
             </center>            
         </div>
