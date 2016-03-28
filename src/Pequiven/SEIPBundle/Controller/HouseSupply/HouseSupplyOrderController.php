@@ -199,7 +199,7 @@ class HouseSupplyOrderController extends SEIPController {
         //
         //CICLO DE ORDENES
         $grupo = 1;
-        $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle($grupo, new \DateTime((date("Y-m-d h:m:s"))));
+        $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle(new \DateTime((date("Y-m-d h:m:s"))), $grupo);
 
         $searchItems = array(
             'workStudyCircle' => $wsc,

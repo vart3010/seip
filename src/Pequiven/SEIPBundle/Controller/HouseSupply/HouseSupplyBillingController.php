@@ -23,11 +23,16 @@ class HouseSupplyBillingController extends SEIPController {
         $user = $this->getUser();
         $type = 1;
 
-        $fechaOrder = strtotime('-1 week', strtotime(date("Y-m-d h:m:s")));
-        $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycleBilling(new \DateTime($fechaOrder));
+        $fechaOrder = new \DateTime();
+        $fechaOrder->sub(new \DateInterval('P7D'));
+//         var_dump($fechaOrder->format('Y-m-d h:m:s'));
+//        die();
+//        
+        $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycleBilling($fechaOrder->format('Y-m-d h:m:s'));
+
 
         if (!empty($cycle)) {
-            $orders = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('cycle' => $cycle[0]->getId()));
+            $orders = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('cycle' => $cycle[0]->getId(), 'invoiced' => false));
         } else {
             $orders = null;
         }
@@ -35,24 +40,20 @@ class HouseSupplyBillingController extends SEIPController {
         //NUEVO NUMERO DE PEDIDO
         $newbillNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Billing\HouseSupplyBilling')->FindNextBillNro($type);
         $newbill = str_pad((($newbillNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
+//        $items = null;
+        $orderobj = null;
 
         if (($request->get('order')) && ($request->get('order') != 0)) {
             $id = $request->get('order');
             $orderobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findOneById($id);
-            $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->TotalOrder($orderobj->getWorkStudyCircle()->getId(), 1, $id);
-        } else {
-            if (($request->get('typemember') == 0) || ($request->get('member') == 0)) {
-                $orderobj = null;
-                $items = null;
-                $client = null;
-            }
+//            $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->TotalOrder($orderobj->getWorkStudyCircle()->getId(), 1, $id);            
         }
 
         return $this->render('PequivenSEIPBundle:HouseSupply\Billing:create.html.twig', array(
                     'type' => $type,
                     'newbill' => $newbill,
                     'orders' => $orders,
-                    'client' => $client,
+//                    'items' => $items,
                     'orderobj' => $orderobj,
         ));
     }

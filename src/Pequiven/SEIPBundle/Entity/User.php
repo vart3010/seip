@@ -1096,5 +1096,15 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     public function getNotify() {
         return $this->notify;
     }
+    
+    function getIdentification() {
+        return $this->identification;
+    }
+
+    function setIdentification($identification) {
+        $this->identification = $identification;
+    }
+
+
 
 }

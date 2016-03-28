@@ -72,7 +72,7 @@
                                         {{ "now"|date("d/m/Y") }}
                                     </td>
                                 </tr>
-                                {% if (client) %}
+                                {% if (orderobj) %}
                                     <tr>
                                         <td width="40%" class="header bold">Localidad:</td>
                                         <td width="60%">
@@ -118,21 +118,24 @@
                     <tr>
                         <td width="65%" rowspan="2">
                             <br>
-                            <form method="POST" action="{{ path("pequiven_housesupply_order_charge",{'type': type, 'typemember': 1 }) }}">                           
-                                <select onchange="this.form.submit();" name="member" id="order" class="select2 input-xxlarge form-control">    
-                                    {% if(orderobj)%}
-                                        {% set order= orderobj.id %}
-                                        <option value="{{orderobj.getid}}" id="{{orderobj.getid}}" selected>{{orderobj.getworkStudyCircle.getDescription}}-{{orderobj.getdate}}</option>                                        
-                                    {% else %}
-                                        {% set miembro= 0 %}
-                                        <option value="0" id="0" selected>Aún No se han Registrado Pedidos</option>
-                                    {% endif %}
-
-                                    {% for orden in orders %}
-                                        {% if ((orderobj==null))%}
-                                            <option value="{{orden.getid}}" id="{{orden.getid}}" >{{orderobj.getworkStudyCircle.getDescription}}-{{orderobj.getdate}}</option>
+                            <form method="POST" action="{{ path("pequiven_housesupply_billing_charge") }}">                           
+                                <select onchange="this.form.submit();" name="order" id="order" class="select2 input-xxlarge form-control">    
+                                    {% if(orders)%}
+                                        {% if(orderobj)%}                                            
+                                            <option value="{{orderobj.getid}}" id="{{orderobj.getid}}" selected>{{ orderobj.getCreatedBy.getIdentification }} / {{orderobj.getCreatedBy.getFullName}} / {{orderobj.getworkStudyCircle.getCodigo}}</option>                                        
+                                        {% else %}
+                                            {% set miembro= 0 %}
+                                            <option value="0" id="0" selected>Seleccione</option>
                                         {% endif %}
-                                    {% endfor %}
+
+                                        {% for orden in orders %}
+                                            {% if ((orderobj==null))%}
+                                                <option value="{{orden.getid}}" id="{{orden.getid}}" >{{ orden.getCreatedBy.getIdentification }} / {{orden.getCreatedBy.getFullName}} / {{orden.getworkStudyCircle.getCodigo}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {%else%}
+                                        <option value="0" id="0" selected>Aún no se Cargado Pedidos para el Ciclo Actual</option>
+                                    {%endif%}
                                 </select>
                             </form>
                             <br><br>
@@ -145,12 +148,10 @@
                                         <table id="table1" class="simple-table" width="100%">
                                             <thead>
                                                 <tr>
-
                                                     <th class="header" width="10%">Cant</th>
                                                     <th class="header" width="50%">Producto</th>
-                                                    <th class="header text-center" width="15%">Precio</th>                                
-                                                    <th class="header text-right" width="20%">Sub-Total</th>
-                                                    <th class="header text-right" width="5%">-</th>
+                                                    <th class="header text-center" width="20%">Precio</th>                                
+                                                    <th class="header text-right" width="20%">Sub-Total</th>                                                    
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -159,13 +160,12 @@
                                                 {% set cant=0 %}
                                                 {% set total=0 %}
                                                 {% if(orderobj) %}
-                                                    {% for list in orderobj.gethouseSupplyOrderItems %}                                                    
+                                                    {% for list in orderobj.getOrderItems %}                                                    
                                                         <tr>
                                                             <td class="text-center" width="10%">{{ list.cant }}</td>
                                                             <td width="50%">{{ list.product.description }}</td>
-                                                            <td class="text-right" width="15%">{{ list.product.price| number_format(2, ',', '.') }}</td>                                
-                                                            <td class="text-right" width="20%">{{ (list.product.price*list.cant)| number_format(2, ',', '.') }}</td>                                                            
-                                                            <td class="text-right" width="5%"><a href="{{ path("pequiven_housesupply_order_charge_delete",{'id': list.id, 'member': miembro}) }}"><i class="fa fa-trash"></i></a> </td>
+                                                            <td class="text-right" width="20%">{{ list.product.price| number_format(2, ',', '.') }}</td>                                
+                                                            <td class="text-right" width="20%">{{ (list.product.price*list.cant)| number_format(2, ',', '.') }}</td> 
                                                         </tr>                                                    
                                                         {% set linea=linea+1 %}
                                                         {% set cant=cant+list.cant %}
@@ -175,10 +175,9 @@
                                                 {%else%}                                                
                                                     <tr>
                                                         <td width="10%">-</td>
-                                                        <td width="55%">-</td>
-                                                        <td class="text-right" width="15%">-</td>                                
-                                                        <td class="text-right" width="15%">-</td>
-                                                        <td class="text-right" width="5%">-</td>
+                                                        <td width="50%">-</td>
+                                                        <td class="text-right" width="20%">-</td>                                
+                                                        <td class="text-right" width="20%">-</td>                                                        
                                                     </tr>
                                                 {%endif%}
                                             </tbody> 
@@ -191,7 +190,7 @@
                                                 </tr>                                    
                                                 <tr>
                                                     <td colspan="2">&nbsp;</td>
-                                                    <td class="text-right" style="background-color: #AA0000; font-weight: bold; color: #FFFFFF;">I.V.A. 12%</td>
+                                                    <td class="text-right" style="background-color: #AA0000; font-weight: bold; color: #FFFFFF;">I.V.A.</td>
                                                     <td width="15%" class="text-right">{{ iva| number_format(2, ',', '.') }}</td>
                                                     <td width="5%">&nbsp;</td>
                                                 </tr>
@@ -224,7 +223,7 @@
                                 <tr>
                                     <td width="25%" style="vertical-align: middle; font-weight: bold;">Cancelado: </td>
                                     <td width="75%" style="vertical-align: middle; text-align: right;">
-                                       <span style="color: #002a80; font-size: 30pt; text-align: right; width: 100%; font-weight: bold;">
+                                        <span style="color: #002a80; font-size: 30pt; text-align: right; width: 100%; font-weight: bold;">
                                             Bs. 
                                         </span>
                                     </td>

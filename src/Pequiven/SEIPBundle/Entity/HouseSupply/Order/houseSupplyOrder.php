@@ -50,6 +50,13 @@ class houseSupplyOrder {
     private $type;
 
     /**
+     * FACTURADO?
+     * @var string
+     * @ORM\Column(name="invoiced",type="boolean",nullable=false)
+     */
+    private $invoiced = false;
+
+    /**
      *
      * @var integer
      * @ORM\Column(name="sign",type="integer",nullable=false)
@@ -168,6 +175,10 @@ class houseSupplyOrder {
         return $this->type;
     }
 
+    function getInvoiced() {
+        return $this->invoiced;
+    }
+
     function getSign() {
         return $this->sign;
     }
@@ -242,6 +253,10 @@ class houseSupplyOrder {
 
     function setType($type) {
         $this->type = $type;
+    }
+
+    function setInvoiced($invoiced) {
+        $this->invoiced = $invoiced;
     }
 
     function setSign($sign) {

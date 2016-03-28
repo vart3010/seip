@@ -53,7 +53,9 @@ class HouseSupplyOrderRepository extends EntityRepository {
                 . ' workStudyCircle_id = ' . $wsc . ' AND type = ' . $type;
 
         if ($id != null) {
-            $sql2 = 'AND order_id=' . $id;
+            $sql2 = ' AND order_id=' . $id;
+        } else {
+            $sql2 = '';
         }
 
         $sql3 = ' GROUP BY item.workStudyCircle_id, item.product_id';
