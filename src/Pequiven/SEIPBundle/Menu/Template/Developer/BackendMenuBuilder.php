@@ -315,22 +315,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                     'uri' => null,
                                     'labelAttributes' => array('icon' => 'icon-book',),
                                 ))
-                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.main', $section)));
-
-                if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_TACTIC')) {
-                    $subchild
-                            ->addChild('sig.arrangement_program.add.tactic', array(
-                                'route' => 'pequiven_arrangementprogram_create',
-                                'routeParameters' => array('type' => \Pequiven \ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG),
-                            ))
-                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.add.tactic', $section)));
-                }
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.main', $section)));                
+                
                 if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE')) {
-                    $subchild->addChild('sig.arrangement_program.add.operative', array(
+                    $subchild->addChild('sig.arrangement_program.add.find', array(
                                 'route' => 'pequiven_arrangementprogram_create',
                                 'routeParameters' => array('type' => \Pequiven \ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG),
                             ))
-                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.add.operative', $section)));
+                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.add.find', $section)));
                 }
 
                 $arrangementProgram->addChild($subchild);

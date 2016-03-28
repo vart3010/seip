@@ -10,11 +10,18 @@
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
 {% block body -%}
+
+{% if entity.categoryArrangementProgram == "Hallazgo en el sig" %}   
+  {% set title = entity.categoryArrangementProgram %}
+{% else %}
+  {% set title = entity.getTypeLabel|trans %}
+{% endif %}
+
     <hgroup id="main-title" class="thin breadcrumb">
         <h1>
             <a href="{{ path('pequiven_seip_arrangementprogram_index') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
             <span class="icon-forward"></span>
-            <span class="thin">{{ entity.getTypeLabel|trans }}</span>
+            <span class="thin">{{ title }}</span>
             <span class="icon-forward"></span>
             <span class="thin">{{ 'pequiven.add'|trans({},'messages') }}</span>
         </h1>
