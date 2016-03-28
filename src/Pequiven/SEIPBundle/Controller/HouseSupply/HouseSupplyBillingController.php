@@ -35,28 +35,18 @@ class HouseSupplyBillingController extends SEIPController {
         //NUEVO NUMERO DE PEDIDO
         $newbillNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Billing\HouseSupplyBilling')->FindNextBillNro($type);
         $newbill = str_pad((($newbillNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
-        
-        $client=null;
-        $orderobj=null;
 
-//        if (($request->get('member')) && ($request->get('member') != 0)) {
-//            $member = $em->getRepository('PequivenSEIPBundle:User')->findOneById($request->get('member'));
-//            $searchitemsbymember = array(
-//                'client' => $member,
-//                'type' => 3,
-//                'workStudyCircle' => $wsc,
-//            );
-//            $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
-//        } else {
-//            if (($request->get('typemember') == 0) || ($request->get('member') == 0)) {
-//                $member = null;
-//                $searchitemsbymember = array(
-//                    'type' => 3,
-//                    'workStudyCircle' => $wsc,
-//                );
-//                $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
-//            }
-//        }
+        if (($request->get('order')) && ($request->get('order') != 0)) {
+            $id = $request->get('order');
+            $orderobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findOneById($id);
+            $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->TotalOrder($orderobj->getWorkStudyCircle()->getId(), 1, $id);
+        } else {
+            if (($request->get('typemember') == 0) || ($request->get('member') == 0)) {
+                $orderobj = null;
+                $items = null;
+                $client = null;
+            }
+        }
 
         return $this->render('PequivenSEIPBundle:HouseSupply\Billing:create.html.twig', array(
                     'type' => $type,

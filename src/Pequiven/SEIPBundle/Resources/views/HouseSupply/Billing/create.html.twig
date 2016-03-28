@@ -119,8 +119,7 @@
                         <td width="65%" rowspan="2">
                             <br>
                             <form method="POST" action="{{ path("pequiven_housesupply_order_charge",{'type': type, 'typemember': 1 }) }}">                           
-                                <select onchange="this.form.submit();" name="member" id="member" class="select2 input-xxlarge form-control">    
-
+                                <select onchange="this.form.submit();" name="member" id="order" class="select2 input-xxlarge form-control">    
                                     {% if(orderobj)%}
                                         {% set order= orderobj.id %}
                                         <option value="{{orderobj.getid}}" id="{{orderobj.getid}}" selected>{{orderobj.getworkStudyCircle.getDescription}}-{{orderobj.getdate}}</option>                                        
