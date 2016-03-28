@@ -238,22 +238,84 @@
                                 </tr>
                             </table>                                
                         </td>
-                    </tr>  
+                    </tr>                     
                     <tr>
                         <td>
-                            &nbsp;
+                            <br><br><br>
+                            <fieldset class="fieldset">
+                                <legend class="legend"><b>Pagos</b></legend>
+                                <table style="border-collapse:separate; border-spacing: 0px 5px;" width="100%">                                        
+                                    <tr>
+                                        <td rowspan="3" width="50%">
+                                            <input type="radio" name="method" value="female" class="radio"> Tarjeta de Débito<br>                                            
+                                            <input type="radio" name="method" value="female" class="radio"> Tarjeta de Crédito<br>                                            
+                                            <input type="radio" name="method" value="male" class="radio"> Transferencia<br>
+                                        </td>                                        
+                                    </tr>                                     
+                                    <tr>
+                                        <td style="text-align: center;">
+                                            <input type="number" class="input-small" id="numero" placeholder="numero">
+                                        </td>                                        
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center;">
+                                            <input type="number"  class="input-small" id="monto" placeholder="monto" >
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center; vertical-align: middle;">
+                                            <a class="button green-gradient" href="javascript:void(0)" id="addItem">Agregar</a>
+                                        </td>                                                                                                                      
+                                    </tr>
+                                </table>                                 
+                            </fieldset>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table width="95%" style="border: 2px black solid;">
+                                <tr style="height: 30px;">
+                                    <td width="100%" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">Pagos</td>         
+                                </tr>
+                                <tr>
+                                    <td width="100%">
+                                        <table id="table1" class="simple-table" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th class="header" width="50%">Forma</th>
+                                                    <th class="header" width="25%">Número</th>
+                                                    <th class="header text-center" width="25%">Monto</th>                                
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody> 
+                                            <tfoot>
+                                                <tr>
+                                                    <th class="header" width="50%">&nbsp;</th>
+                                                    <th class="header" width="25%">&nbsp;</th>
+                                                    <th class="header text-center" width="25%">Monto</th>       
+                                                </tr>                                                                                    
+                                            </tfoot>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <br>
+                            <div class="new-row twelve-columns" style="text-align: right;">  
+
+                                <button type="submit" onclick="cargar('{{ path("pequiven_housesupply_order_charge_total") }}');" class="button glossy mid-margin-right">
+                                    <span class="button-icon green-gradient"><span class="icon-tick"></span></span>
+                                    Registrar Factura
+                                </button>    
+
+                            </div> 
                         </td>
                     </tr>
                 </table>
-                <br>
-                <div class="new-row twelve-columns" style="text-align: right;">  
-
-                    <button type="submit" onclick="cargar('{{ path("pequiven_housesupply_order_charge_total") }}');" class="button glossy mid-margin-right">
-                        <span class="button-icon green-gradient"><span class="icon-tick"></span></span>
-                        Totalizar Orden
-                    </button>    
-
-                </div>        
             </center>            
         </div>
     </div>
