@@ -7,15 +7,22 @@ and open the template in the editor.
     Created on : 27/02/2015, 10:04:11 AM
     Author     : matias
 */
+.contentLine{
+    width: 65%;
+    margin: 0% 20%;
+}
+
 .icon-strategic{//Tamaño de los íconos de las líneas estratégica en el dashboard de resultados estratégicos
     width: 120px;
     height: 120px;
 }
-.title-icon-strategic{//Título de los íconos de las líneas estratégicas en el dashboard de resultados estratégicos
+.title-icon-strategic{
+/*    Título de los íconos de las líneas estratégicas en el dashboard de resultados estratégicos*/
     /*margin-top: -10px;*/
     text-align: center;
 }
-.centrar_imagen{//Centrado de imagen en un div
+.centrar_imagen{
+/*    Centrado de imagen en un div*/
     display: block;
     text-align: center;
 }
@@ -24,7 +31,8 @@ and open the template in the editor.
     padding: 0;
     display: block;
 }
-.snapShotHeader {//Clase para renderizar el header del box de los indicadores estratégicos
+.snapShotHeader {
+/*    Clase para renderizar el header del box de los indicadores estratégicos*/
     font-size: 14px;
     color: #666;
     padding-bottom: 10px;
@@ -32,33 +40,39 @@ and open the template in the editor.
     display: block;
     float: top;
 }
-.snapshot-box-icon {//Clase para renderizar la imagen en los boxes de los indicadores
+.snapshot-box-icon {
+/*    Clase para renderizar la imagen en los boxes de los indicadores*/
     height: 26px;
     width: 26px;
     float: right;
     display: block;
     margin: -10px 10px 0 0;
 }
-.snapshot-box-icon-left {//Clase para renderizar la imagen en los boxes de los indicadores
+.snapshot-box-icon-left {
+/*    Clase para renderizar la imagen en los boxes de los indicadores*/
     height: 20px;
     width: 20px;
     float: left;
     display: block;
     margin: -4px 10px 0 0;
 }
-.range-good-bg {//Fondo para el rango bueno
+.range-good-bg {
+/*    Fondo para el rango bueno*/
     background: rgba(88,181,63,0.25);
 }
-.range-middle-bg {//Fondo para el rango medio
+.range-middle-bg {
+/*    Fondo para el rango medio*/
     background: rgba(202,202,73,0.25);
 }
-.range-bad-bg {//Fondo para el rango malo
+.range-bad-bg {
+/*    Fondo para el rango malo*/
     background: rgba(213,190,183,0.25);
 }
 .borderLineStrategicBottom{
     border-bottom: solid;
 }
-.snapshot-box-icon-header {//Clase para renderizar la imagen en los boxes de los indicadores
+.snapshot-box-icon-header {
+/*    Clase para renderizar la imagen en los boxes de los indicadores*/
     height: 40px;
     width: 40px;
     display: block;

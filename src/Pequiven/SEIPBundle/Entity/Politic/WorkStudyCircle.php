@@ -193,6 +193,14 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle",mappedBy="parent",cascade={"persist"}))
      */
     protected $childrens;
+    
+    /**
+     * @var integer
+     * 
+     * @ORM\Column(name="houseSupplyGroup", type="integer", nullable=true)
+     */
+
+    private $houseSupplyGroup = 0;
 
     /**
      * Ordenes en HouseSupply
@@ -684,6 +692,14 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
         }
 
         return $members;
+    }
+    
+    public function getHouseSupplyGroup() {
+        return $this->houseSupplyGroup;
+    }
+
+    public function setHouseSupplyGroup($houseSupplyGroup) {
+        $this->houseSupplyGroup = $houseSupplyGroup;
     }
 
 }

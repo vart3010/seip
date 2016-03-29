@@ -1,0 +1,89 @@
+<details class="details margin-bottom" {#open=""#}>
+    <summary role="button" aria-expanded="true">
+        Detalles
+    </summary>
+
+     <div class="with-padding"> 
+            <h3>Detalle Perfil</h3>
+            <div style="height:500px;width:auto;overflow:auto;">
+            <table class="table responsive-table" id="sorting-example2">
+                <thead>
+                    <tr>
+                        <th scope="col" width="25%" class="header" align="left">
+                            Tipo
+                        </th>
+                        <th scope="col" width="45%" class="header" align="left">
+                            Punto
+                        </th>
+                        <th scope="col" width="10%" class="header" align="left">
+                            Valor
+                        </th>
+                        <th scope="col" width="15%" class="header" align="left">
+                            Peso
+                        </th>
+                        <th scope="col" width="15%" class="header" align="left">
+                            Resultado
+                        </th>
+                    </tr>
+                </thead>  
+                
+                <tbody align="center">
+                    {% for i in 1..14 %}
+                        {% if profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_COMPROMISO')][i]['showInList'] == true %}
+                            <tr>
+                                <td align="left">Compromiso</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_COMPROMISO')][i]['textShow'] }}</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_COMPROMISO')][i]['text'] }}</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_COMPROMISO')][i]['weight'] }}</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_COMPROMISO')][i]['resultWithPercentage'] }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    <tr>
+                        <td align="right" colspan="3" class="bold">Total</td>
+                        <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_COMPROMISO')]['totalWeight'] }}</td>
+                        <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_COMPROMISO')]['totalResult'] }}</td>
+                    </tr>
+                    {% for i in 1..5 %}
+                        {% if profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ELECCIONES')][i]['showInList'] == true %}
+                            <tr>
+                                <td align="left">Elecciones</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ELECCIONES')][i]['textShow'] }}</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ELECCIONES')][i]['text'] }}</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ELECCIONES')][i]['weight'] }}</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ELECCIONES')][i]['resultWithPercentage'] }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    <tr>
+                        <td align="right" colspan="3" class="bold">Total</td>
+                        <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ELECCIONES')]['totalWeight'] }}</td>
+                        <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ELECCIONES')]['totalResult'] }}</td>
+                    </tr>
+                    <tr></tr>
+                    {% for i in 1..1 %}
+                        {% if profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ADICIONALES')][i]['showInList'] == true %}
+                            <tr>
+                                <td align="left">Adicionales</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ADICIONALES')][i]['textShow'] }}</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ADICIONALES')][i]['text'] }}</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ADICIONALES')][i]['weight'] }}</td>
+                                <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ADICIONALES')][i]['resultWithPercentage'] }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    <tr>
+                        <td align="right" colspan="3" class="bold">Total</td>
+                        <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ADICIONALES')]['totalWeight'] }}</td>
+                        <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_ADICIONALES')]['totalResult'] }}</td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td align="right" colspan="4" class="bold">Total</td>
+                        <td align="left">{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['result'] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+</details>

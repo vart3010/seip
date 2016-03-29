@@ -1,17 +1,14 @@
-{% trans_default_domain 'PequivenSIGBundle' %}
-    
+{% trans_default_domain 'PequivenSIGBundle' %}    
+
 <div class="block">
-<div class="block_id" ng-init="month='{{ month }}'">
-
-<div ng-controller="IndicatorSigEvolutionVerificationController"> 
-
-    <div class="block-title">
-        <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.verification_of_the_effectiveness'|trans ({}, 'messages') }}</h3> 
-        {# añadir plan de acción #}
-        <div class="button-group absolute-right compact">
-                <a class="button icon-list-add " href="" ng-click="loadTemplateVerification()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
-        </div>       
-    </div>
+    <div class="block_id" ng-init="month='{{ month }}'">
+        <div ng-controller="IndicatorSigEvolutionVerificationController"> 
+            <div class="block-title">
+                <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.verification_of_the_effectiveness'|trans ({}, 'messages') }}</h3>
+                <div class="button-group absolute-right compact">
+                        <a class="button icon-list-add " href="" ng-click="loadTemplateVerification()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+                </div>       
+            </div>
     <div class="with-padding">
         {% set colspan = 5 %}
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
@@ -42,17 +39,16 @@
                     <td>{{ ver_data.createdAt | date("d/m/Y") }}</td>
                     <td>{{ ver_data.actionPlan.ref }}</td>
                     <td>{{ ver_data.typeVerification.description }}</td>
-                        <td class="align-right vertical-center">
-                            <span class="select compact">
-                                <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
-                                <span class="select-arrow"></span>
-                                <span class="drop-down">
-                                    <a href ng-click="removeVerificationEvolution(verf='{{ ver_data.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
-                                </span>
+                    <td class="align-right vertical-center">
+                        <span class="select compact">
+                            <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                            <span class="select-arrow"></span>
+                            <span class="drop-down">
+                            <a href ng-click="removeVerificationEvolution(verf='{{ ver_data.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
                             </span>
-                        </td>
-                </tr>
-                    
+                        </span>
+                    </td>
+                </tr>                    
                 <tr ng-if="indicator.featuresIndicator.length == 0">
                     <td colspan="{{ colspan }}" class="empty_row">
                         {{ "empty.features_indicator"|trans({},'PequivenSEIPBundle') }}
@@ -61,8 +57,6 @@
             </tbody>
     {% endfor %}
         </table>
-    
-    
             </div> 
         </div>
     </div>

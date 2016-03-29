@@ -40,7 +40,7 @@ pequiven_sig_gerenciafirst_export:
         expose: true
 #listado de sistemas de la calidad para lista de seguimiento
 pequiven_sig_monitoring_list:
-    path: /sig/monitoring/list.{_format}
+    path: /sig/monitoring/list/{type}.{_format}
     defaults:
         _controller: pequiven.controller.monitoring_sig:listAction
         _format: html
@@ -50,7 +50,7 @@ pequiven_sig_monitoring_list:
     options:
         expose: true
 pequiven_sig_monitoring_show:
-    path: /sig/monitoring/{id}
+    path: /sig/monitoring/list/show/{id}
     defaults:
         _controller: pequiven.controller.monitoring_sig:showAction
         _format: html    
@@ -107,9 +107,19 @@ pequiven_sig_monitoring_maintenance_show:
     methods: [GET|POST]
     options:
         expose: true
+pequiven_sig_monitoring_auto_verification:
+    path: /sig/verification/auto/{id}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:autoVerificationAction
+        _format: html    
+    methods: [GET|POST]
 #Seguimiento a Carga de informes de evolución
 pequiven_indicator_evolution_load:
     path: /indicator/sig/load
     defaults: 
         _controller: pequiven.controller.indicator_sig:loadAction
+pequiven_indicator_evolution_load_url:
+    path: /indicator/sig/load-url
+    defaults: 
+        _controller: pequiven.controller.indicator_sig:getUrlEvolutionAction
 

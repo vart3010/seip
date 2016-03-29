@@ -1,7 +1,6 @@
 {% trans_default_domain 'PequivenSIGBundle' %}
 
 <div ng-controller="IndicatorSigEvolutionController"> 
-
     <div class="block">
         <div class="block-title">
             <h3 class="ng-binding">{{ 'sig.trend_analysis'|trans ({}, 'messages') }}</h3>
@@ -16,10 +15,9 @@
                     <a class="button icon-list-add " href="" ng-click="loadTemplateAnalysisTrend()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
                 </div>
             {% endif %}
-
         </div>
-
         <div class="with-padding">
+            {% if trend %}
             {% set colspan = 5 %}
             <table class="simple-table responsive-table tables-extras" id="sorting-example2">
                 <thead>
@@ -49,7 +47,12 @@
                     </tr>
                 </tbody>
             {% endfor %}
-            </table>                    
+            </table> 
+        {% else %}
+        <div class="new-row twelve-columns empty_row" align="center">
+            <br>No hay Carga.
+        </div>
+        {% endif %}
         </div>
     </div>
 </div>

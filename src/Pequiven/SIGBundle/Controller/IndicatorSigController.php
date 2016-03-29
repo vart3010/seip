@@ -914,6 +914,31 @@ class IndicatorSigController extends ResourceController {
     }
 
     /**
+     *
+     *
+     */
+    public function getUrlEvolutionAction(Request $request){
+        $response = new JsonResponse();        
+        
+        $routeParameters = [
+            'route' =>  $request->get('url'),
+            'value' =>  $request->get('value')
+        ];
+
+        $DataUrl = $this->generateUrl($routeParameters['route'], array('m' => $routeParameters['value']));
+        
+        $DataUrl = "http://".$_SERVER["HTTP_HOST"].$DataUrl;
+
+        $data = [
+            'dataUrl' => $DataUrl,            
+        ];
+
+        $response->setData($data);
+
+        return $response;        
+    }
+
+    /**
      * 
      * @return \Pequiven\SEIPBundle\Service\SecurityService
      */

@@ -53,15 +53,13 @@ class EvolutionActionType extends AbstractType
                     'label' => 'Causa del Plan',
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
-                        'class' => "input-large select2",
-                        //'onclick' => 'cargaData()',
-                        'style' => 'width: 270px',
-                        //'multiple' => 'multiple'
+                        'class' => "input-large select2",                        
+                        'style' => 'width: 270px',                        
                     ),
                     'empty_value' => 'Seleccione...',
                     'required' => true,
                 ))
-            ->add('responsible', null, array(
+            /*->add('responsible', null, array(
                     'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $repository) {
                         return $repository->findQueryUsersByCriteria();
                     },                               
@@ -74,7 +72,7 @@ class EvolutionActionType extends AbstractType
                     ),
                     'empty_value' => 'Seleccione...',
                     'required' => true,
-                ))
+                ))*/
         ;
     }
     
