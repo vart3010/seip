@@ -27,10 +27,10 @@ class HouseSupplyCycleRepository extends EntityRepository {
                     ->setParameter('group', $group);
         }
 
-//        var_dump($qb->getQuery()->getResult());
-//        var_dump($date);
-//        print($qb->getQuery()->getSQL());
-//        die();
+        //var_dump($qb->getQuery()->getResult());
+        //var_dump($date);
+        //print($qb->getQuery()->getSQL());
+        //die();
 
         return $qb->getQuery()->getResult();
     }

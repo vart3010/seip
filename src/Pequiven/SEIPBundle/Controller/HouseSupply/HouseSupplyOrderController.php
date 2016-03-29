@@ -42,8 +42,8 @@ class HouseSupplyOrderController extends SEIPController {
 
         //VALIDO SI EN EL CICLO TIENE PEDIDOS REALIZADOS
         //CICLO DE ORDENES    
-        $grupo = 1;
-        $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle($grupo, new \DateTime((date("Y-m-d h:m:s"))));
+        $grupo = $wsc->getHouseSupplyGroup();
+        $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle(new \DateTime((date("Y-m-d h:m:s"))), $grupo);
 
         if ($cycle != null) {
             $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('cycle' => $cycle[0]->getId(), 'workStudyCircle' => $wsc->getId()));
@@ -83,11 +83,12 @@ class HouseSupplyOrderController extends SEIPController {
                 ));
             } else {
                 $this->get('session')->getFlashBag()->add('error', "Su Círculo de Estudio Ya Realizó un Pedido para este Mes");
-                $this->showAction($request);
+
+                return $this->redirect($this->generateUrl("pequiven_housesupply_order_show", array("id" => $order[0]->getId())));
             }
         } else {
             $this->get('session')->getFlashBag()->add('error', "Su Grupo de Círculo de Estudio No Tiene Asignado un Periodo para Realizar Pedidos");
-            $this->showAction($request);
+            return $this->redirect($this->generateUrl("pequiven_housesupply_order_show", array("id" => 0)));
         }
     }
 
@@ -198,7 +199,8 @@ class HouseSupplyOrderController extends SEIPController {
         //$neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
         //
         //CICLO DE ORDENES
-        $grupo = 1;
+        $grupo = $grupo = $wsc->getHouseSupplyGroup();
+        ;
         $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle(new \DateTime((date("Y-m-d h:m:s"))), $grupo);
 
         $searchItems = array(
@@ -272,11 +274,17 @@ class HouseSupplyOrderController extends SEIPController {
         }
 
         $this->get('session')->getFlashBag()->add('success', "Pedido Registrado Exitosamente");
-        $this->showAction($request);
+        return $this->redirect($this->generateUrl("pequiven_housesupply_order_show", array("id" => $order->getId())));
     }
 
     public function showAction(Request $request) {
-        return $this->render('PequivenSEIPBundle:HouseSupply\Order:show.html.twig');
+
+        $em = $this->getDoctrine()->getManager();
+        $id = $request->get('id');
+        $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findOneById($id);
+        return $this->render('PequivenSEIPBundle:HouseSupply\Order:show.html.twig', array(
+                    'order' => $order
+        ));
     }
 
 }

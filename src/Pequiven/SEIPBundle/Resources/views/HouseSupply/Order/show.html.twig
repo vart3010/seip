@@ -1,119 +1,180 @@
+{# empty Twig template #}
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
-
-{% block before_body %}
-    {{ contentHeader(
-        ("Pedidos"|trans({})),        
-        ('Vista'|trans({},'messages'))
-    )}}
-{% endblock %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
 {% block body %}
+    <style>
+        table#datos{
+            border-collapse:separate;
+            border-spacing: 0px 10px;
+        }
+        .fa-trash{
+            color: red;    
+        }
+        table#table1 tbody tr td.gridTd {
+            text-align: right;
+        }
+    </style>
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="">Ordenes de Pedidos</a>
+            <span class="icon-forward"></span>            
+            <span class="thin">Visualizar</span>                        
+        </h1>
+    </hgroup>
+    <br>
+    <div class="columns">
+        <div class="twelve-columns">            
+            <center>
+                <table width="95%" style="border: 2px black solid;">
+                    <tr style="height: 30px;">
+                        <td colspan="2" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">                                
+                            Datos del Pedido                                                                  
+                        </td>         
+                    </tr>
+                    <tr>
+                        <td width="60%">
+                            <table width="100%" class="simple-table" style="background-color: #FFFFFF; border: hidden;">                                    
+                                <tr>
+                                    <td width="30%" class="header bold">Fecha:</td>
+                                    <td width="70%">
+                                        {{ order.getDate|date("d/m/Y") }} 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="30%" class="header bold">Localidad:</td>
+                                    <td width="70%">
+                                        {{ order.getWorkStudyCircle.getComplejo.getdescription }} 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="30%" class="header bold">Código C.E.T.:</td>
+                                    <td width="70%">
+                                        {{ order.getWorkStudyCircle.codigo }} 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="30%" class="header bold">Nombre C.E.T.:</td>
+                                    <td width="70%">
+                                        {{ order.getWorkStudyCircle.name }} 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="30%" class="header bold">Coordinador:</td>
+                                    <td width="70%">
+                                        {{ order.getWorkStudyCircle.getcoordinator.getfullname }} 
+                                    </td>
+                                </tr>
+                            </table> 
+                        </td>
+                        <td width="40%" style="border: 2px black solid;">
+                            <table width="100%" class="simple-table">
+                                <tr style="height: 95px;">
+                                    <td style="background-color: #D8D8D8; font-size: 30pt; vertical-align: middle; text-align: center; height: 55px;" colspan="2">                                                           
+                                        Orden:
+                                        <span class="green bold">{{ "%05d" | format(order.nroOrder) }}</span>              
+                                    </td>                                        
+                                </tr>
+                                <tr>
+                                    <td class="header bold">
+                                        Fecha de Retiro:                                  
+                                    </td>
+                                    <td>boo</td>
+                                </tr>
+                                <tr>
+                                    <td class="header bold">
+                                        Hora de Retiro:                                  
+                                    </td>
+                                    <td>boo</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
 
-<div class="columns">
-    <div class="new-row-mobile two-columns">
-        <p class="inline-label">
-            <!--<input type="text" class="form-control" id="cliente" placeholder="Cliente">-->
-            <select class="form-control" id="cliente">
-            	<option value="1" name="Victor">Victor</option>
-            	<option value="2" name="Max">Max</option>
-            </select>
-        </p>
+                <br>
+                <table width="95%">                     
+                    <tr>
+                        <td width="100%" rowspan="2">                        
+
+                            <table width="100%" style="border: 2px black solid;">
+                                <tr style="height: 30px;">
+                                    <td width="100%" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">Productos</td>         
+                                </tr>
+                                <tr>
+                                    <td width="100%">
+                                        <table id="table1" class="simple-table" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th class="header" width="20%">Miembro</th>
+                                                    <th class="header text-center" width="10%">Cant</th>
+                                                    <th class="header" width="50%">Producto</th>
+                                                    <th class="header text-center" width="10%">Precio</th>                                
+                                                    <th class="header text-right" width="10%">Sub-Total</th>                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% set linea=1 %}
+                                                {% set iva=0 %}
+                                                {% set cant=0 %}
+                                                {% set total=0 %}
+                                                {% if (order) %}
+                                                    {% for list in order.getOrderItems %}                                                    
+                                                        <tr>
+                                                            <td width="20%">{{ list.getClient.getFullName|ucwords }}</td>
+                                                            <td class="text-center" width="10%"> {{ list.cant }} </td>
+                                                            <td width="50%">{{ list.product.description }}</td>
+                                                            <td class="text-right" width="10%">{{ list.product.price| number_format(2, ',', '.') }}</td>                                
+                                                            <td class="text-right" width="10%">{{ (list.product.price*list.cant)| number_format(2, ',', '.') }}</td>                                                                                                                        
+                                                        </tr>                                                    
+                                                        {% set linea=linea+1 %}
+                                                        {% set cant=cant+list.cant %}
+                                                        {% set iva=iva+list.totalLineTaxes %}
+                                                        {% set total=total+list.totalLine %}                                                    
+                                                    {% endfor %}   
+                                                {% endif %}
+                                            </tbody> 
+                                            <tfoot>
+                                                <tr>                                                    
+                                                    <td colspan="3">&nbsp;</td>
+                                                    <td class="text-right" style="background-color: #AA0000; font-weight: bold; color: #FFFFFF;">Sub-Total</td>
+                                                    <td width="15%" class="text-right">{# {{ total| number_format(2, ',', '.') }} #}</td>                                                    
+                                                </tr>                                    
+                                                <tr>
+                                                    <td colspan="3">&nbsp;</td>
+                                                    <td class="text-right" style="background-color: #AA0000; font-weight: bold; color: #FFFFFF;">I.V.A. 12%</td>
+                                                    <td width="15%" class="text-right">{# {{ iva| number_format(2, ',', '.') }} #}</td>                                                    
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">&nbsp;</td>
+                                                    <td class="text-right" style="background-color: #AA0000; font-weight: bold; color: #FFFFFF;">Total</td>
+                                                    <td width="15%" class="text-right" >{# {{ (total + iva)| number_format(2, ',', '.') }} #}</td>                                                    
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>                       
+                    </tr>  
+                    <tr>
+                        <td>
+
+                            &nbsp;
+
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <div class="new-row twelve-columns" style="text-align: right;">  
+                    <button type="submit" onclick="cargar(' {{ path("pequiven_housesupply_order_charge_total") }} ');" class="button glossy mid-margin-right">
+                        <span class="button-icon green-gradient"><span class="icon-tick"></span></span>
+                        Imprimir Orden
+                    </button>    
+                </div>       
+            </center>            
+        </div>
     </div>
-    <div class="new-row-mobile two-columns">
-        <p class="inline-label">
-            <!--<input type="text" class="form-control" id="producto" placeholder="Producto">-->
-            <select class="form-control" id="producto">
-            	<option value="001" name="Harina">Harina</option>
-            	<option value="002" name="Pan">Pan</option>
-            </select>
-        </p>
-    </div>
-    <div class="new-row-mobile two-columns">
-        <p class="inline-label">
-            <input type="number" class="form-control" id="cantidad" placeholder="Cantidad">
-        </p>
-    </div>
-    <div class="new-row-mobile two-columns">
-        <p class="inline-label">
-            <input type="button" class="form-control" value="Add" id="addItem">
-        </p>
-    </div>
-</div>
-
-
-<table id="table1" class="table simple-table" cellspacing="0" width="100%">          
-    <thead>
-        <tr>
-            <th>Cliente</th>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Cantidad2</th>
-            <th>Eliminar</th>
-
-        </tr>
-    </thead>
-    <tbody>  
-    	
-    </tbody>
-</table>
-<span id="totales_2"></span>
-<span id="totales_3"></span>
-
-<input type="button" class="form-control" value="Get" id="getValues">
-
 {% endblock %}
 
-
-{% block javascripts %}
-    {{ parent() }}
-       <script src="{{  asset('bundles/pequivenseip/tableGrid.js') }}"></script>
-     <script type="text/javascript">
-     
-		 function setData(data) {
-			$.ajax({
-			  method: "POST",
-			  url: "{{ path('pequiven_housesupply_save_order') }}",
-			  data: data
-			})
-			.done(function() {
-		    	alert( "Data Saved:");
-			});
-		 }
-        $(document).ready(function() {
-            //$('#table1').DataTable();
-            setTable("table1");
-
-            var arrayNames = new Array("IdUser","idProducto","cantidad");
-            setNameCampos(arrayNames);
-            campoClave(1);
-            var ids = ["2","3"];
-            setColumsTotals(ids);
-            setSelectorTotals("span#totales_");
-
-            
-            $("#addItem").click(function(){
-            	var cliente = [$("#cliente").val(),$("#cliente").find('option:selected').attr("name")];
-            	var producto = [$("#producto").val(),$("#producto").find('option:selected').attr("name")];
-            	var cantidad = [$("#cantidad").val(),$("#cantidad").val()];
-            	var cantidad2 = [$("#cantidad").val(),$("#cantidad").val()];
-            	var boton = ["","<input type='button' id='"+index+"' name='"+producto[0]+"' onClick='delRow(this.id,this.name)' class='form-control delItem' value='Del'>"];
-            	var data = [cliente,producto,cantidad,cantidad2, boton];
-            	delRowDefault();
-            	addRow(data);
-            	index=index+1;
-            	
-
-            });
-
-            $("input#getValues").click(function(){
-            	var rows = getRows("table1");
-            	var obj = convertRows(rows);
-            	//console.log(obj);
-            	setData(obj);
-            });
-
-        } );
-    </script>
-
-    
-{% endblock %}

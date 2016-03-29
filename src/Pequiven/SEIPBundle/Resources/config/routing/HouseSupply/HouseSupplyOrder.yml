@@ -8,6 +8,15 @@ pequiven_housesupply_order_charge:
         _format: html|json|xml
     methods: [GET|POST]
     
+pequiven_housesupply_order_show:
+    path: /show/{id}
+    defaults:
+        _controller: pequiven.controller.housesupply_order:showAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
 pequiven_housesupply_order_register:
     path: /register/
     defaults:
