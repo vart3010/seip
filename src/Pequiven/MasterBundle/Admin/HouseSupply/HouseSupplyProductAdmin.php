@@ -37,14 +37,12 @@ class HouseSupplyProductAdmin extends Admin {
     }
 
     protected function configureFormFields(FormMapper $form) {
-        $form
-                
+        $form                
                 ->add('code')
                 ->add('instance')
                 ->add('description')
                 ->add('price')
-                ->add('cost')
-                
+                ->add('cost')                
         ;
     }
 
@@ -55,8 +53,7 @@ class HouseSupplyProductAdmin extends Admin {
                 ->add('code')
                 ->add('description')
                 ->add('price')
-                ->add('cost')
-                
+                ->add('cost')                
         ;
     }
 
@@ -68,8 +65,6 @@ class HouseSupplyProductAdmin extends Admin {
                 ->add('description')
                 ->add('price')
                 ->add('cost')
-                
-
         ;
     }
 

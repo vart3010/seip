@@ -113,7 +113,7 @@ class HouseSupplyOrderController extends SEIPController {
         //NUEVO NUMERO DE PEDIDO
         $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
         $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
-        $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->TotalOrder($wsc->getid());
+        $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->TotalOrder($wsc->getid(), 3);
 
         return $this->render('PequivenSEIPBundle:HouseSupply\Order:total.html.twig', array(
                     'type' => $type,
@@ -206,7 +206,7 @@ class HouseSupplyOrderController extends SEIPController {
         //
         //CICLO DE ORDENES
         $grupo = 1;
-        $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle($grupo, new \DateTime((date("Y-m-d h:m:s"))));
+        $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle(new \DateTime((date("Y-m-d h:m:s"))), $grupo);
 
         $searchItems = array(
             'workStudyCircle' => $wsc,

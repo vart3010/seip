@@ -35,13 +35,12 @@ class HouseSupplyOrderRepository extends EntityRepository {
         $stmt = $db->prepare($sql);
         $stmt->execute();
     }
-        
 
-    function TotalOrder($wsc) {
+    function TotalOrder($wsc, $type, $id = null) {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
-        $sql = 'SELECT '
+        $sql1 = 'SELECT '
                 . ' prod.description AS product,'
                 . ' SUM(item.cant) AS cant,'
                 . ' SUM(item.totalLine) totalLine,'
@@ -51,8 +50,17 @@ class HouseSupplyOrderRepository extends EntityRepository {
                 . ' INNER JOIN'
                 . ' seip_gsh_product AS prod ON (item.product_id = prod.id)'
                 . ' WHERE'
-                . ' workStudyCircle_id = ' . $wsc . ' AND type = 3'
-                . ' GROUP BY item.workStudyCircle_id, item.product_id';
+                . ' workStudyCircle_id = ' . $wsc . ' AND type = ' . $type;
+
+        if ($id != null) {
+            $sql2 = ' AND order_id=' . $id;
+        } else {
+            $sql2 = '';
+        }
+
+        $sql3 = ' GROUP BY item.workStudyCircle_id, item.product_id';
+
+        $sql = $sql1 . $sql2 . $sql3;
 
         $stmt = $db->prepare($sql);
         $stmt->execute();

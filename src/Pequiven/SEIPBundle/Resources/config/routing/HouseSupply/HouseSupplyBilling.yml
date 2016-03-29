@@ -1,2 +1,9 @@
 ## YAML Template.
-
+pequiven_housesupply_billing_charge:
+    path: /charge/
+    defaults:
+        _controller: pequiven.controller.housesupply_billing:chargeAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]

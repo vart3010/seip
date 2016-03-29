@@ -14,7 +14,7 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  */
 class HouseSupplyBillingRepository extends EntityRepository {
 
-    function FindNextOrderNro($type) {
+    function FindNextBillNro($type) {
 
         $qb = $this->getQueryBuilder();
         $qb

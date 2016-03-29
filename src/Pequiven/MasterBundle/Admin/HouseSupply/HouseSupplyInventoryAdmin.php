@@ -34,8 +34,7 @@ class HouseSupplyInventoryAdmin extends Admin {
     }
 
     protected function configureFormFields(FormMapper $form) {
-        $form
-                ->add('id')
+        $form               
                 ->add('product')
                 ->add('deposit')
                 ->add('available')

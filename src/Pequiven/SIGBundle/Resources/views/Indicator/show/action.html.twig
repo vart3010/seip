@@ -11,6 +11,7 @@
             {% endif %}
         </div>
         <div class="with-padding">
+        {% if dataAction["values"] %}
             {% set colspan = 5 %}
             <table class="simple-table responsive-table tables-extras" id="sorting-example2">
                 <thead>
@@ -108,6 +109,11 @@
                 {% endfor %}
             </table> 
             <div class="" ng-init="count='{{ count }}'"></div>
+        {% else %}
+        <div class="new-row twelve-columns empty_row" align="center">
+            <br>No hay Carga.                        
+        </div>
+        {% endif %}           
         </div>
     </div>
 </div>

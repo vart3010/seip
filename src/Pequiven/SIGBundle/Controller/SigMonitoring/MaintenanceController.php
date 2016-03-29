@@ -16,7 +16,7 @@ use Pequiven\SIGBundle\Entity\Tracing\Standardization;
 /**
  * Controlador Seguimiento y Eficacia (Mantenimiento)
  *
- * @author Maximo Sojo <maxsojo13@gmail.com>
+ * @author Maximo Sojo <maximosojo@atechnologies.com.ve> 
  */
 class MaintenanceController extends ResourceController
 {
@@ -24,7 +24,8 @@ class MaintenanceController extends ResourceController
         $em = $this->getDoctrine()->getManager();                        
         
         $id = $request->get('id');  
-        $valueCharge = $advance = 0;
+        $valueCharge = $advance = $dataAdvance = 0;
+        $valid = 100;
 
         $period = $this->getPeriodService()->getPeriodActive();
 
@@ -32,14 +33,18 @@ class MaintenanceController extends ResourceController
         
         foreach ($standardization->getMaintenance() as $valueMaintenance) {            
             $idMaintenance = $valueMaintenance->getId();            
-            $advance = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance")->findBy(array('maintenance' => $idMaintenance));                                        
+            $advance = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance")->findBy(array('maintenance' => $idMaintenance)); 
+            foreach ($advance as $value) {
+                $dataAdvance = $value->getAdvance();
+                $valid = $dataAdvance - $valid;
+            }
         }
-
+        
         $maintenance = new maintenance();
         $maintenanceAdvance = new maintenanceAdvance();
 
         $form  = $this->createForm(new MaintenanceType($period), $maintenance);
-        $formAdvance  = $this->createForm(new MaintenanceAdvanceType($period), $maintenanceAdvance);
+        $formAdvance  = $this->createForm(new MaintenanceAdvanceType($valid), $maintenanceAdvance);
 
         if ($advance) {
             $valueCharge = 1;
@@ -47,16 +52,26 @@ class MaintenanceController extends ResourceController
         
         if ($request->isMethod('POST')) {            
             $form->handleRequest($request);             
+            $advance = $request->get('sig_maintenance_advance')['advance'];
+
             if ($valueCharge == 0 ) {
                 $maintenance->addStandardization($standardization);            
                 $em->persist($maintenance);            
                 $em->flush();                
                 $idMaintenance = $maintenance->getId();
+            }else{
+                $advance = $advance + $dataAdvance;                
             }
-            
+
             $maintenanceData = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Maintenance")->findOneById($idMaintenance);                        
+            
+            if ($advance == 100) {
+                $maintenanceData->setStatus(2);                                                     
+                $em->flush();   
+            }
+
             $maintenanceAdvance->setMaintenance($maintenanceData);
-            $maintenanceAdvance->setAdvance($request->get('sig_maintenance_advance')['advance']);
+            $maintenanceAdvance->setAdvance($advance);
             $maintenanceAdvance->setAnalysis($request->get('sig_maintenance_advance')['analysis']);
             $maintenanceAdvance->setObservations($request->get('sig_maintenance_advance')['observations']);
 
@@ -94,7 +109,8 @@ class MaintenanceController extends ResourceController
                 'standardization'     => $standardization,
                 'labelsDetection'     => $labelsDetection,
                 'labelsTypeNc'        => $labelsTypeNc,
-                'valueCharge'         => $valueCharge
+                'valueCharge'         => $valueCharge,
+                'dataAdvance'         => $dataAdvance
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -105,12 +121,12 @@ class MaintenanceController extends ResourceController
         $em = $this->getDoctrine()->getManager(); 
         $id = $request->get('id');  
         $period = $this->getPeriodService()->getPeriodActive();
-        
+        $idMaintenance = 0;
+
         $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($id);
         foreach ($standardization->getMaintenance() as  $value) {
             $idMaintenance = $value->getId();
         }
-
         
         $advance = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance")->findBy(array('maintenance' => $idMaintenance));                                        
         

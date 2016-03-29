@@ -5,7 +5,7 @@
 
 {% block before_body %}
     {{ contentHeader(
-        {(path('pequiven_sig_monitoring_list')):('monitoring.title'|trans)},        
+        {(path('pequiven_sig_monitoring_list', {'type': 1})):('monitoring.title'|trans)},        
         ('pequiven_indicator.show'|trans)
     ) }}
 {% endblock %} 
@@ -25,7 +25,7 @@
         </div>                
     </div>                        
 </fieldset>	
-
+{#<a href="{{ path('pequiven_sig_monitoring_auto_verification',{'id': data.id})}}">Auto Verification</a>#}
 {% include 'PequivenSIGBundle:Monitoring:Tracing/show.html.twig' %}                         
 
 <p class="button-height align-right">          
@@ -37,8 +37,8 @@
 {% block stylesheets %}
     {{ parent() }}  
     <!-- dataTable -->
-    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/dataTable/dataTable-ext.css') }}">
-    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/dataTable/dataTables.bootstrap.min.css') }}">
+    {# <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/dataTable/dataTable-ext.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/dataTable/dataTables.bootstrap.min.css') }}"> #}
     
 {% endblock %}
 
@@ -52,12 +52,12 @@
     </script>
 
     <!-- datatable -->
-    <script src="{{  asset('bundles/pequivenseip/dataTable/dataTables.bootstrap.min.js') }}"></script>
-    <script src="{{  asset('bundles/pequivenseip/dataTable/jquery.dataTables.min.js') }}"></script>
+    {#<script src="{{  asset('bundles/pequivenseip/dataTable/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/dataTable/jquery.dataTables.min.js') }}"></script>#}
 
-    <script type="text/javascript">
+    {#<script type="text/javascript">
         $(document).ready(function() {
             $('#table_data').DataTable();            
         } );
-    </script>
+    </script>#}
 {% endblock %}

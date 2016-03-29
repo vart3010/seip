@@ -14,14 +14,33 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  */
 class HouseSupplyCycleRepository extends EntityRepository {
 
-    function FindCycle($group, $date) {
+    function FindCycle($date, $group = null) {
 
         $qb = $this->getQueryBuilder();
         $qb
-                ->andWhere('HSCycle.workStudyCircleGroup= :group')
                 ->andWhere('HSCycle.dateBeginOrder <= :date')
                 ->andWhere('HSCycle.dateEndOrder >= :date')
-                ->setParameter('group', $group)
+                ->setParameter('date', $date);
+        if ($group != null) {
+            $qb
+                    ->andWhere('HSCycle.workStudyCircleGroup= :group')
+                    ->setParameter('group', $group);
+        }
+
+//        var_dump($qb->getQuery()->getResult());
+//        var_dump($date);
+//        print($qb->getQuery()->getSQL());
+//        die();
+
+        return $qb->getQuery()->getResult();
+    }
+
+    function FindCycleBilling($date) {
+
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->andWhere('HSCycle.dateBeginOrder <= :date')
+                ->andWhere('HSCycle.dateEndOrder >= :date')
                 ->setParameter('date', $date)
         ;
 

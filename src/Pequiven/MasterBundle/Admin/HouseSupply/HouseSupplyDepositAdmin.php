@@ -33,8 +33,7 @@ class HouseSupplyDepositAdmin extends Admin {
     }
 
     protected function configureFormFields(FormMapper $form) {
-        $form
-                
+        $form                
                 ->add('description')
                 ->add('complejo')
         ;
