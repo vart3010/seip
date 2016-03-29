@@ -16,6 +16,8 @@ class MaintenanceAdvanceType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {   
+        $valid = $this->valid;
+
         $builder
             ->add('analysis', 'textarea', array(
                 'label' => 'Analisis',
@@ -24,7 +26,10 @@ class MaintenanceAdvanceType extends AbstractType
             ->add('advance', 'text', array(
                 'label' => 'Avance',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-xlarge ' )))                         
+                'attr'=> array(
+                    'class'=> 'input input-xlarge ',
+                    'maxlength' => 3 
+                )))                         
             ->add('observations', 'textarea', array(
                 'label' => 'Observación',
                 'label_attr' => array('class' => 'label'),
@@ -53,5 +58,11 @@ class MaintenanceAdvanceType extends AbstractType
     {
         return 'sig_maintenance_advance';
     }
+
+    protected $valid;
     
+    public function __construct ($valid)
+    {
+        $this->valid = $valid;               
+    }
 }

@@ -51,9 +51,8 @@
                 <a href="{{ path('pequiven_user_notification_data') }}" title="Messages">
                     <span class="icon-inbox"></span>
                     {# Notificaciones #}
-                    {% if app.user.notify %}
-                        <span class="count">{{ app.user.notify }}</span>
-                    {% endif %}
+                    {# {{ app.user.notify }} #}                    
+                    <span class="count" id="userNotify" style='display:none;'></span>
                 </a>
             </li>
             <!--<li><a href title="Calendar"><span class="icon-calendar"></span></a></li>-->

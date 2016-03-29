@@ -70,7 +70,6 @@
     {% if answer == null  %}
         <script type="text/javascript">        
             $(document).ready(function openConfirm(){
-                //var id = {{ id }};
                 options = {
                   textConfirm : "Si",
                     textCancel : "No"
@@ -86,12 +85,6 @@
 
    {% if answer == 1 %}
         <script type="text/javascript">                     
-            /*var id = {{ id }} + 1;             
-            
-            if (id > 7) {
-                var id = 1;
-            };          */  
-
             var page = "{{ path('pequiven_line_strategic_show', {'id': id }) }}?r=" + {{ answer }}
                 function redireccionar(){
                     location.href= page

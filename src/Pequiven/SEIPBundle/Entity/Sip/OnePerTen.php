@@ -205,12 +205,12 @@ class OnePerTen extends modelOnePerTen {
     
     /**
      * 
-     * miembroOnePerTen
+     * firmaCompromiso
      * @var integer
      *
-     * @ORM\Column(name="miembroOnePerTen", type="integer", nullable=true)
+     * @ORM\Column(name="firmaCompromiso", type="integer", nullable=true)
      */
-    private $miembroOnePerTen;
+    private $firmaCompromiso;
     
     /**
      * militante (Que es parte del PSUV)
@@ -273,7 +273,7 @@ class OnePerTen extends modelOnePerTen {
     
     /**
      * Fue Trabajador por el CNE en las elecciones asamblea 2015
-     * sala
+     * cne
      * @var integer
      *
      * @ORM\Column(name="cne", type="integer", nullable=true)
@@ -288,12 +288,28 @@ class OnePerTen extends modelOnePerTen {
     
     /**
      * Edad para el 2002, con que firmó en la Lista Sumate en el 2003 o 2004
-     * sala
+     * ageSignatureSumate
      * @var integer
      *
      * @ORM\Column(name="ageSignatureSumate", type="integer", nullable=true)
      */
     private $ageSignatureSumate;
+    
+    /**
+     * @var float
+     * workEfficiencyAssemblyElections
+     * @ORM\Column(name="workEfficiencyAssemblyElections", type="float", nullable=true)
+     */
+    private $workEfficiencyAssemblyElections = 0;
+    
+    /**
+     * En caso de que el trabajador tenga un status por defecto
+     * markedStatus
+     * @var integer
+     *
+     * @ORM\Column(name="markedStatus", type="integer", nullable=true)
+     */
+    private $markedStatus = 0;
 
     public function __construct() {
         $this->ten = new \Doctrine\Common\Collections\ArrayCollection();
@@ -490,12 +506,12 @@ class OnePerTen extends modelOnePerTen {
         $this->ubch = $ubch;
     }
     
-    function getMiembroOnePerTen() {
-        return $this->miembroOnePerTen;
+    function getFirmaCompromiso() {
+        return $this->firmaCompromiso;
     }
 
-    function setMiembroOnePerTen($miembroOnePerTen) {
-        $this->miembroOnePerTen = $miembroOnePerTen;
+    function setFirmaCompromiso($firmaCompromiso) {
+        $this->firmaCompromiso = $firmaCompromiso;
     }
        
     function getMilitante() {
@@ -576,6 +592,22 @@ class OnePerTen extends modelOnePerTen {
 
     function setAgeSignatureSumate($ageSignatureSumate) {
         $this->ageSignatureSumate = $ageSignatureSumate;
+    }
+    
+    function getWorkEfficiencyAssemblyElections() {
+        return $this->workEfficiencyAssemblyElections;
+    }
+
+    function setWorkEfficiencyAssemblyElections($workEfficiencyAssemblyElections) {
+        $this->workEfficiencyAssemblyElections = $workEfficiencyAssemblyElections;
+    }
+    
+    function getMarkedStatus() {
+        return $this->markedStatus;
+    }
+
+    function setMarkedStatus($markedStatus) {
+        $this->markedStatus = $markedStatus;
     }
 
 }

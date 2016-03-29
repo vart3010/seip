@@ -93,9 +93,15 @@
                     {{ isCoordinator }}
                 </p>
             </div>
+            <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile {{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['class'] }}" align="center">
+                <h1>Perfil Político:
+                    {{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['profileValue'] }}</h1>
+            </div>
         </div>
     </fieldset>
                 
+    <br /><br />
+    {% include 'PequivenSEIPBundle:Sip:onePerTen/detailProfile.html.twig' %}
     <br /><br />
     {% include 'PequivenSEIPBundle:Sip:onePerTen/analisis.html.twig' %}
     <br /><br />
