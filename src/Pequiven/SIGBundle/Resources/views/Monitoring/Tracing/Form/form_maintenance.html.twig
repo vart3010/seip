@@ -30,6 +30,7 @@
                         <label class="label">Avance Cargado</label>
                             {{ dataAdvance }}%
                     </p>
+                    <p id="max" style="display:none">{{ dataAdvance }}</p>
                 {% endif %}
             </div>
         </div>    
@@ -83,5 +84,23 @@
                     maxDate: "31/12/" + {{ period_valid }},
             });
     {% endif %}
+
+    $('input#sig_maintenance_advance_advance').keyup(function openConfirm() {        
+        var valueCharge = $("#max").text();                
+        var max = 100 - valueCharge;
+
+        if ($("#sig_maintenance_advance_advance").val() > max) {
+            $.modal.alert('Valor ingresado mayor a avance valido para carga ' + max, {
+                buttons: {
+                    'Aceptar': {
+                        classes:    'huge blue-gradient glossy full-width',
+                        click:      function(win) { win.closeModal(); 
+                            $("#sig_maintenance_advance_advance").val("")
+                        }
+                    }
+                }
+            });            
+        };
+    });    
 </script> 
 {% endblock %}
