@@ -86,9 +86,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var urlNotifyData = "{{ path("seip_notification_get_data_notify") }}";                    
-        var data = {
-            id: 1
-        };
+        var data = 0;
         $.ajax({
                 type: 'get',
                 url: urlNotifyData,

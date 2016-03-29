@@ -2625,7 +2625,7 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_sig_monitoring_add', parameters);
                 $scope.templates = [
                     {
-                        name: 'Tracing',
+                        name: 'Estandarización',
                         url: url,
                         confirmCallBack: confirmCallBack,
                     }
