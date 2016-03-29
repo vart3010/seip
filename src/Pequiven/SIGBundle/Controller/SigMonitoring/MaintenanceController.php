@@ -53,9 +53,10 @@ class MaintenanceController extends ResourceController
         if ($request->isMethod('POST')) {            
             $form->handleRequest($request);             
             $advance = $request->get('sig_maintenance_advance')['advance'];
-
+            
             if ($valueCharge == 0 ) {
                 $maintenance->addStandardization($standardization);            
+                $maintenance->setAnalysis($request->get('sig_maintenance')['analysis']);
                 $em->persist($maintenance);            
                 $em->flush();                
                 $idMaintenance = $maintenance->getId();
@@ -72,7 +73,6 @@ class MaintenanceController extends ResourceController
 
             $maintenanceAdvance->setMaintenance($maintenanceData);
             $maintenanceAdvance->setAdvance($advance);
-            $maintenanceAdvance->setAnalysis($request->get('sig_maintenance_advance')['analysis']);
             $maintenanceAdvance->setObservations($request->get('sig_maintenance_advance')['observations']);
 
             $em->persist($maintenanceAdvance);            

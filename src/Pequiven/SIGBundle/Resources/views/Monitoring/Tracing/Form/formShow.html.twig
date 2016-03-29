@@ -41,7 +41,7 @@
             </thead>
             {% for dataAdvance in advance %}
             <tr>
-                <td width="40%">{{ dataAdvance.analysis }}</td>
+                <td width="40%">{{ dataAdvance.maintenance.analysis }}</td>
                 <td width="10%">{{ dataAdvance.maintenance.dateStart | date("d/m/Y") }}</td>
                 <td width="10%">{{ dataAdvance.maintenance.dateEnd | date("d/m/Y") }}</td>
                 <td width="10%" align="center">{{ dataAdvance.advance }}%</td>

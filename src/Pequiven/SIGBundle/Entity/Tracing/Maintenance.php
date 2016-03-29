@@ -90,6 +90,13 @@ class Maintenance
     private $standardization;
 
     /**
+     * analysis
+     * @var text
+     * @ORM\Column(name="analysis",type="text", nullable=true)
+     */
+    private $analysis;
+
+    /**
      * Constructor
      */
     public function __construct(){
@@ -296,6 +303,31 @@ class Maintenance
      */
     public function getStandardization() {
         return $this->standardization;
+    }
+
+    
+
+    /**
+     * Set analysis
+     *
+     * @param string $analysis
+     * @return analysis
+     */
+    public function setAnalysis($analysis)
+    {
+        $this->analysis = $analysis;
+
+        return $this;
+    }
+
+    /**
+     * Get analysis
+     *
+     * @return string 
+     */
+    public function getAnalysis()
+    {
+        return $this->analysis;
     }
     
 }

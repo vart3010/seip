@@ -395,7 +395,7 @@ class MonitoringController extends ResourceController
                 
                 $advance = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance")->findBy(array('maintenance' => $valueMaintenance->getId())); 
                 foreach ($advance as $valueAdvance) {
-                    $dataAnalsys = $valueAdvance->getAnalysis();
+                    $dataAnalsys = $valueMaintenance->getAnalysis();
                     $dataAdvance = $valueAdvance->getAdvance();
                     $dataObservations = $valueAdvance->getObservations();                    
                 }
