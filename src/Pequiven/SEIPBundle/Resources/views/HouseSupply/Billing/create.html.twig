@@ -206,9 +206,8 @@
                                 </tr>
                             </table>
                         </td>
-                        <td width="35%" style="text-align: left;">  
-                            <br>
-                            <table width="100%" height="100px;">
+                        <td width="35%" style="text-align: left;">                              
+                            <table width="100%" height="100px;" style="border-collapse: separate;  border-spacing:  0px 25px;">
                                 <tr>
                                     <td width="25%" style="vertical-align: middle; font-weight: bold;">Total:</td>
                                     <td width="75%" style="vertical-align: middle; text-align: right;">
@@ -223,16 +222,16 @@
                                 <tr>
                                     <td width="25%" style="vertical-align: middle; font-weight: bold;">Cancelado: </td>
                                     <td width="75%" style="vertical-align: middle; text-align: right;">
-                                        <span style="color: #002a80; font-size: 30pt; text-align: right; width: 100%; font-weight: bold;">
-                                            Bs. 
+                                        <span style="color: #04B404; font-size: 30pt; text-align: right; width: 100%; font-weight: bold;">
+                                            Bs. 0,00
                                         </span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td width="25%" style="vertical-align: middle; font-weight: bold;">Falta: </td>
                                     <td width="75%" style="vertical-align: middle; text-align: right;">
-                                        <span style="color: #002a80; font-size: 30pt; text-align: right; width: 100%; font-weight: bold;">
-                                            Bs. 
+                                        <span style="color: #DF0101; font-size: 30pt; text-align: right; width: 100%; font-weight: bold;">
+                                            Bs. 0,00
                                         </span>
                                     </td>
                                 </tr>
@@ -240,11 +239,11 @@
                         </td>
                     </tr>                     
                     <tr>
-                        <td>
-                            <br><br><br>
+                        <td rowspan="2">
+                            <br><br>
                             <fieldset class="fieldset">
                                 <legend class="legend"><b>Pagos</b></legend>
-                                <table style="border-collapse:separate; border-spacing: 0px 5px;" width="100%">                                        
+                                <table width="100%">                                        
                                     <tr>
                                         <td rowspan="3" width="50%">
                                             <input type="radio" name="method" value="female" class="radio"> Tarjeta de Débito<br>                                            
@@ -254,21 +253,31 @@
                                     </tr>                                     
                                     <tr>
                                         <td style="text-align: center;">
-                                            <input type="number" class="input-small" id="numero" placeholder="numero">
+                                            <input type="number" class="input-medium" id="numero" placeholder="Numero de Bauche">
                                         </td>                                        
                                     </tr>
                                     <tr>
                                         <td style="text-align: center;">
-                                            <input type="number"  class="input-small" id="monto" placeholder="monto" >
+                                            <input type="number"  class="input-small" id="monto" placeholder="Monto" >
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="text-align: center; vertical-align: middle;">
+                                            <br>
                                             <a class="button green-gradient" href="javascript:void(0)" id="addItem">Agregar</a>
                                         </td>                                                                                                                      
                                     </tr>
                                 </table>                                 
                             </fieldset>
+                            <br>
+                            <div class="new-row twelve-columns" style="text-align: right;">  
+
+                                <button type="submit" onclick="cargar('{{ path("pequiven_housesupply_order_charge_total") }}');" class="button glossy mid-margin-right">
+                                    <span class="button-icon green-gradient"><span class="icon-tick"></span></span>
+                                    Registrar Factura
+                                </button>    
+
+                            </div> 
                         </td>
                     </tr>
                     <tr>
@@ -302,18 +311,7 @@
                                     </td>
                                 </tr>
                             </table>
-                        </td>
-                        <td>
-                            <br>
-                            <div class="new-row twelve-columns" style="text-align: right;">  
-
-                                <button type="submit" onclick="cargar('{{ path("pequiven_housesupply_order_charge_total") }}');" class="button glossy mid-margin-right">
-                                    <span class="button-icon green-gradient"><span class="icon-tick"></span></span>
-                                    Registrar Factura
-                                </button>    
-
-                            </div> 
-                        </td>
+                        </td>                       
                     </tr>
                 </table>
             </center>            
