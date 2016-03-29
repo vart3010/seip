@@ -7,7 +7,16 @@
     {{ parent() }}
     <script src="{{  asset('bundles/pequivenseip/jQuery-Mask-Plugin-master/jquery.mask.min.js') }}"></script>   
     <script type="text/javascript">
+
+    function refresh(){
+        alert("holas");
+    }
+
+
         $(document).ready(function () {
+            var idsProductsItems = {{ idsProductsItems }};
+            //var idsProductsItems = [1,2,3];
+
             var maxPerson = $("select#producto option:selected" ).attr("data");
               $("input#cantidad").attr("max",maxPerson);
             charge();
@@ -19,7 +28,15 @@
                 
             });
 
-            
+            $("button#addSubmit").click(function(event){                
+                var idProduct = parseInt($("select#producto").val());  
+                var comp = jQuery.inArray(idProduct, idsProductsItems);
+                
+                if(comp >= 0) {
+                    alert("Este producto ya se encuentra agregado.");
+                    event.preventDefault();
+                }
+            });           
 
         });
 
@@ -36,8 +53,8 @@
     </script>    
 {% endblock javascript %}
 
-
 {% block body %}
+
     <style>
         table#datos{
             border-collapse:separate;
@@ -63,7 +80,7 @@
             <center>
                 <table width="95%" style="border: 2px black solid;">
                     <tr style="height: 30px;">
-                        <td colspan="2" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">                                
+                        <td colspan="2" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle; padding-left:8px;">                                
                             Datos del Pedido                                                                  
                         </td>         
                     </tr>
@@ -105,7 +122,7 @@
                         <td width="40%" style="border: 2px black solid;">
                             <table width="100%" class="simple-table">
                                 <tr>
-                                    <td style="background-color: #D8D8D8; font-size: 30pt; vertical-align: middle; text-align: center; height: 55px;" colspan="2">                                                           
+                                    <td style="background-color: #D8D8D8; font-size: 30pt; vertical-align: middle; text-align: center; height: 55px; " colspan="2">                                                           
                                         Orden:
                                         <span class="green bold">{{ neworder }}</span>              
                                     </td>                                        
@@ -158,7 +175,7 @@
                             <br><br>
                             <table width="95%" style="border: 2px black solid;">
                                 <tr style="height: 30px;">
-                                    <td width="100%" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">Productos</td>         
+                                    <td width="100%" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle; padding-left:8px;">Productos</td>         
                                 </tr>
                                 <tr>
                                     <td width="100%">

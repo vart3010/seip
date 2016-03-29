@@ -72,7 +72,13 @@ class HouseSupplyOrderController extends SEIPController {
                         $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
                     }
                 }
-
+                
+                $idProductItems = array();
+                foreach ($items as $item) {
+                    //var_dump($item->getProduct()->getDescription());
+                    $idProductItems[] = $item->getProduct()->getId();
+                }
+                
                 return $this->render('PequivenSEIPBundle:HouseSupply\Order:create.html.twig', array(
                             'type' => $type,
                             'neworder' => $neworder,
@@ -80,6 +86,7 @@ class HouseSupplyOrderController extends SEIPController {
                             'wsc' => $wsc,
                             'items' => $items,
                             'memberobj' => $member,
+                            'idsProductsItems'=>json_encode($idProductItems)
                 ));
             } else {
                 $this->get('session')->getFlashBag()->add('error', "Su Círculo de Estudio Ya Realizó un Pedido para este Mes");
