@@ -67,34 +67,34 @@
                         <td width="60%">
                             <table width="100%" class="simple-table" style="background-color: #FFFFFF; border: hidden;">                                    
                                 <tr>
-                                    <td width="40%" class="header bold">Fecha:</td>
-                                    <td width="60%">
+                                    <td width="30%" class="header bold">Fecha:</td>
+                                    <td width="70%">
                                         {{ "now"|date("d/m/Y") }}
                                     </td>
                                 </tr>
                                 {% if (orderobj) %}
                                     <tr>
-                                        <td width="40%" class="header bold">Localidad:</td>
-                                        <td width="60%">
-
+                                        <td width="30%" class="header bold">C.I.:</td>
+                                        <td width="70%">
+                                            {{ orderobj.getCreatedBy.getIdentification|number_format(0,',','.') }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="40%" class="header bold">Código C.E.T.:</td>
-                                        <td width="60%">
-
+                                        <td width="30%" class="header bold">Nombre y Apellido:</td>
+                                        <td width="70%">
+                                            {{ orderobj.getCreatedBy.getFullName }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="40%" class="header bold">Nombre C.E.T.:</td>
-                                        <td width="60%">
-
+                                        <td width="30%" class="header bold">Dirección:</td>
+                                        <td width="70%">
+                                            {{ orderobj.getCreatedBy.getDirection }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="40%" class="header bold">Coordinador:</td>
-                                        <td width="60%">
-
+                                        <td width="30%" class="header bold">Teléfono:</td>
+                                        <td width="70%">
+                                            {{ orderobj.getCreatedBy.getCellphone }}
                                         </td>
                                     </tr>
                                 {% endif %}
