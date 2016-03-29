@@ -2482,6 +2482,11 @@ angular.module('seipModule.controllers', [])
                 $scope.openModalAuto();                
             };
 
+            $scope.loadNotify = function (resource) {
+                $scope.initFormNotify(resource);                
+                $scope.openModalAuto();                
+            };
+
             //Removiendo 
             $scope.removeStandardization = function (AnalysisTrend) {
                 $scope.openModalConfirm('¿Desea eliminar el registro?', function () {
@@ -2591,6 +2596,46 @@ angular.module('seipModule.controllers', [])
                     return false;
                 });                
             };
+
+            //Añadir
+            var addNotify = function (save, successCallBack) {
+                var formConfig = angular.element('#form_notify_add');
+                var formData = formConfig.serialize();
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_sig_monitoring_notification', {id: $scope.dataNotify});                    
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();                    
+                    location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });                
+            };
+
             $scope.templateOptions.setVar('addStandardization', addStandardization);
             var confirmCallBack = function () {
                 addStandardization(true, function (data) {                   
@@ -2601,6 +2646,13 @@ angular.module('seipModule.controllers', [])
             $scope.templateOptions.setVar('addMaintenance', addMaintenance);
             var confirmCallBackMaintenace = function () {
                 addMaintenance(true, function (data) {                   
+                });
+                return true;
+            };
+            
+            $scope.templateOptions.setVar('addNotify', addNotify);            
+            var confirmCallBackNotify = function () {
+                addNotify(true, function (data) {                   
                 });
                 return true;
             };
@@ -2671,6 +2723,29 @@ angular.module('seipModule.controllers', [])
                         url: url,
                         confirmCallBack: confirmCallBackShow, 
                         setTemplateLoad: true                       
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+            $scope.initFormNotify = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(300);
+                $scope.setWidth(800);
+                var parameters = {
+                    id: $scope.dataNotify,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_sig_monitoring_notification', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Notificación de Usuario',
+                        url: url,
+                        confirmCallBack: confirmCallBackNotify,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
