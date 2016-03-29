@@ -1,23 +1,24 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Entity\HouseSupply\Billing;
+namespace Pequiven\SEIPBundle\Entity\HouseSupply\Order;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct;
-use Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder;
+use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle;
 
 /**
  * Items de Factura
  *
  * @author Gilbert C. <glavrjk@gmail.com>
  * 
- * @ORM\Table(name="seip_gsh_billing_items")
+ * @ORM\Table(name="seip_gsh_order_items") 
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class houseSupplyBillingItems {
+class houseSupplyOrderItems {
 
     /**
      *
@@ -28,13 +29,7 @@ class houseSupplyBillingItems {
     private $id;
 
     /**
-     * @var \DateTime
-     * @ORM\Column(name="date", type="datetime", nullable=false)
-     */
-    private $date;
-
-    /**
-     * 1. FACTURA / 2. DEVOLUCION
+     * 1. PEDIDO / 2. DEVOLUCION DE PEDIDO / 3. EN ESPERA
      * @var string
      * @ORM\Column(name="type",type="string",nullable=false)
      */
@@ -48,27 +43,34 @@ class houseSupplyBillingItems {
     private $sign;
 
     /**
-     * 
-     * @var houseSupplyBilling
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling", inversedBy="billingItems")
-     * @ORM\JoinColumn(name="bill_id", referencedColumnName="id", nullable=true)
+     * @var \DateTime
+     * @ORM\Column(name="date", type="datetime", nullable=false)
      */
-    private $bill;
+    private $date;
+
+    /**
+     * 
+     * @var houseSupplyOrder
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder", inversedBy="orderItems")
+     * @ORM\JoinColumn(name="order_id", referencedColumnName="id", nullable=true)
+     */
+    private $order;
 
     /**
      * 
      * @var User
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User", inversedBy="houseSupplyBillingItems")
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User", inversedBy="houseSupplyOrderItems")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $client;
 
     /**
-     *
-     * @var integer
-     * @ORM\Column(name="line",type="integer",nullable=false)
+     * 
+     * @var WorkStudyCircle
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", inversedBy="houseSupplyOrderItems")
+     * @ORM\JoinColumn(name="workstudycircle_id", referencedColumnName="id")
      */
-    private $line;
+    private $workStudyCircle;
 
     /**
      *
@@ -76,6 +78,13 @@ class houseSupplyBillingItems {
      * @ORM\Column(name="cant",type="float",nullable=false)
      */
     private $cant;
+
+    /**
+     *
+     * @var integer
+     * @ORM\Column(name="line",type="integer",nullable=false)
+     */
+    private $line;
 
     /**
      *
@@ -108,7 +117,7 @@ class houseSupplyBillingItems {
     /**
      * 
      * @var houseSupplyProduct
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct", inversedBy="billingItems")
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct", inversedBy="orderItems")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;
@@ -143,10 +152,6 @@ class houseSupplyBillingItems {
         return $this->id;
     }
 
-    function getDate() {
-        return $this->date;
-    }
-
     function getType() {
         return $this->type;
     }
@@ -155,20 +160,28 @@ class houseSupplyBillingItems {
         return $this->sign;
     }
 
-    function getBill() {
-        return $this->bill;
+    function getDate() {
+        return $this->date;
+    }
+
+    function getOrder() {
+        return $this->order;
     }
 
     function getClient() {
         return $this->client;
     }
 
-    function getLine() {
-        return $this->line;
+    function getWorkStudyCircle() {
+        return $this->workStudyCircle;
     }
 
     function getCant() {
         return $this->cant;
+    }
+
+    function getLine() {
+        return $this->line;
     }
 
     function getCost() {
@@ -211,10 +224,6 @@ class houseSupplyBillingItems {
         $this->id = $id;
     }
 
-    function setDate(\DateTime $date) {
-        $this->date = $date;
-    }
-
     function setType($type) {
         $this->type = $type;
     }
@@ -223,20 +232,28 @@ class houseSupplyBillingItems {
         $this->sign = $sign;
     }
 
-    function setBill(houseSupplyBilling $bill) {
-        $this->bill = $bill;
+    function setDate(\DateTime $date) {
+        $this->date = $date;
+    }
+
+    function setOrder(houseSupplyOrder $order) {
+        $this->order = $order;
     }
 
     function setClient(User $client) {
         $this->client = $client;
     }
 
-    function setLine($line) {
-        $this->line = $line;
+    function setWorkStudyCircle(WorkStudyCircle $workStudyCircle) {
+        $this->workStudyCircle = $workStudyCircle;
     }
 
     function setCant($cant) {
         $this->cant = $cant;
+    }
+
+    function setLine($line) {
+        $this->line = $line;
     }
 
     function setCost($cost) {
@@ -274,5 +291,7 @@ class houseSupplyBillingItems {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
+
+
 
 }

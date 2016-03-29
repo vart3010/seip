@@ -27,45 +27,44 @@ class HouseSupplyProductAdmin extends Admin {
     protected function configureShowFields(ShowMapper $show) {
         $show
                 ->add('id')
+                ->add('instance')
                 ->add('code')
                 ->add('description')
                 ->add('price')
                 ->add('cost')
-                ->add('maxPerUser')
+                
         ;
     }
 
     protected function configureFormFields(FormMapper $form) {
-        $form
-                
+        $form                
                 ->add('code')
+                ->add('instance')
                 ->add('description')
                 ->add('price')
-                ->add('cost')
-                ->add('maxPerUser')
+                ->add('cost')                
         ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
                 ->add('id')
+                ->add('instance')
                 ->add('code')
                 ->add('description')
                 ->add('price')
-                ->add('cost')
-                ->add('maxPerUser')
+                ->add('cost')                
         ;
     }
 
     protected function configureListFields(ListMapper $list) {
         $list
-                ->add('id')
+                ->addIdentifier('id')
+                ->add('instance')
                 ->add('code')
                 ->add('description')
                 ->add('price')
                 ->add('cost')
-                ->add('maxPerUser')
-
         ;
     }
 

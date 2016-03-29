@@ -742,6 +742,17 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
+    sonata.admin.housesupply.productinstance:
+        class: Pequiven\MasterBundle\Admin\HouseSupply\HouseSupplyProductInstanceAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Casa - Abaso" ,label_catalogue: "SonataHouseSupplyBundle", label: "Categorías de Productos" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductInstance
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+    
     sonata.admin.housesupply.deposit:
         class: Pequiven\MasterBundle\Admin\HouseSupply\HouseSupplyDepositAdmin
         tags:
@@ -749,6 +760,28 @@ services:
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyDeposit
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.housesupply.inventory:
+        class: Pequiven\MasterBundle\Admin\HouseSupply\HouseSupplyInventoryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Casa - Abaso" ,label_catalogue: "SonataHouseSupplyBundle", label: "Inventario" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\HouseSupplyInventory
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.housesupply.cycle:
+        class: Pequiven\MasterBundle\Admin\HouseSupply\HouseSupplyCycleAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Casa - Abaso" ,label_catalogue: "SonataHouseSupplyBundle", label: "Ciclos de Pedidos" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyCycle
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]

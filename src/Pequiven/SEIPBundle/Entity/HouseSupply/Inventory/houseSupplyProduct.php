@@ -7,6 +7,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventory;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeItems;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Productos
@@ -14,8 +18,7 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeI
  * @author Máximo Sojo
  * 
  * @ORM\Table(name="seip_gsh_product")
- * @ORM\Entity()
- * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyProductRepository")
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyProductRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class houseSupplyProduct {
@@ -27,6 +30,14 @@ class houseSupplyProduct {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * 
+     * @var houseSupplyProduct
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductInstance", inversedBy="product")
+     * @ORM\JoinColumn(name="instance_id", referencedColumnName="id")
+     */
+    private $instance;
 
     /**
      *
@@ -57,11 +68,18 @@ class houseSupplyProduct {
     private $cost;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="exento", type="boolean")
+     */
+    private $exento = false;
+
+    /**
      *
      * @var float
-     * @ORM\Column(name="maxPerUser",type="float",nullable=false)
+     * @ORM\Column(name="maxPerUserForce",type="float",nullable=true)
      */
-    private $maxPerUser;
+    private $maxPerUserForce = null;
 
     /**
      * Inventario
@@ -86,13 +104,10 @@ class houseSupplyProduct {
     protected $billingItems;
 
     /**
-     * Creado por
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @var houseSupplyOrderItems
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems",mappedBy="product",cascade={"persist"}))
      */
-    private $createdBy;
+    protected $orderItems;
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -111,8 +126,16 @@ class houseSupplyProduct {
      */
     private $deletedAt;
 
+    public function __toString() {
+        return $this->getDescription();
+    }
+
     function getId() {
         return $this->id;
+    }
+
+    function getInstance() {
+        return $this->instance;
     }
 
     function getCode() {
@@ -131,8 +154,12 @@ class houseSupplyProduct {
         return $this->cost;
     }
 
-    function getMaxPerUser() {
-        return $this->maxPerUser;
+    function getExento() {
+        return $this->exento;
+    }
+
+    function getMaxPerUserForce() {
+        return $this->maxPerUserForce;
     }
 
     function getInventory() {
@@ -147,8 +174,8 @@ class houseSupplyProduct {
         return $this->billingItems;
     }
 
-    function getCreatedBy() {
-        return $this->createdBy;
+    function getOrderItems() {
+        return $this->orderItems;
     }
 
     function getCreatedAt() {
@@ -167,6 +194,10 @@ class houseSupplyProduct {
         $this->id = $id;
     }
 
+    function setInstance(houseSupplyProduct $instance) {
+        $this->instance = $instance;
+    }
+
     function setCode($code) {
         $this->code = $code;
     }
@@ -183,8 +214,12 @@ class houseSupplyProduct {
         $this->cost = $cost;
     }
 
-    function setMaxPerUser($maxPerUser) {
-        $this->maxPerUser = $maxPerUser;
+    function setExento($exento) {
+        $this->exento = $exento;
+    }
+
+    function setMaxPerUserForce($maxPerUserForce) {
+        $this->maxPerUserForce = $maxPerUserForce;
     }
 
     function setInventory(houseSupplyInventory $inventory) {
@@ -199,8 +234,8 @@ class houseSupplyProduct {
         $this->billingItems = $billingItems;
     }
 
-    function setCreatedBy(User $createdBy) {
-        $this->createdBy = $createdBy;
+    function setOrderItems(houseSupplyOrderItems $orderItems) {
+        $this->orderItems = $orderItems;
     }
 
     function setCreatedAt($createdAt) {

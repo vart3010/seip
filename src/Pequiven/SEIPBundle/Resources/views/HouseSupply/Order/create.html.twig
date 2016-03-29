@@ -1,0 +1,318 @@
+{# empty Twig template #}
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/jQuery-Mask-Plugin-master/jquery.mask.min.js') }}"></script>   
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var maxPerson = $("select#producto option:selected" ).attr("data");
+              $("input#cantidad").attr("max",maxPerson);
+            charge();
+
+            $("select#producto").change(function () {
+                 $("input#cantidad").val("");
+                var maxPerson = $("select#producto option:selected" ).attr("data");
+                $("input#cantidad").attr("max", maxPerson);
+                
+            });
+
+            
+
+        });
+
+        function charge() {
+            $('.select2').select2({
+                allowClear: true
+            });
+        }
+
+        function cargar(URL) {
+            myWindow = window.open(URL, "myWindow", "left=300px, top=250px, width=1200px, height=800px, Scrollbars=YES, Resizable=NO, Directories=NO, Location=NO, Menubar=NO, Status=NO, Toolbar=NO");   // Opens a new window
+        }
+
+    </script>    
+{% endblock javascript %}
+
+
+{% block body %}
+    <style>
+        table#datos{
+            border-collapse:separate;
+            border-spacing: 0px 10px;
+        }
+        .fa-trash{
+            color: red;    
+        }
+        table#table1 tbody tr td.gridTd {
+            text-align: right;
+        }
+    </style>
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="">Ordenes de Pedidos</a>
+            <span class="icon-forward"></span>            
+            <span class="thin">Crear</span>                        
+        </h1>
+    </hgroup>
+    <br>
+    <div class="columns">
+        <div class="twelve-columns">            
+            <center>
+                <table width="95%" style="border: 2px black solid;">
+                    <tr style="height: 30px;">
+                        <td colspan="2" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">                                
+                            Datos del Pedido                                                                  
+                        </td>         
+                    </tr>
+                    <tr>
+                        <td width="60%">
+                            <table width="100%" class="simple-table" style="background-color: #FFFFFF; border: hidden;">                                    
+                                <tr>
+                                    <td width="40%" class="header bold">Fecha:</td>
+                                    <td width="60%">
+                                        {{ "now"|date("d/m/Y") }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="40%" class="header bold">Localidad:</td>
+                                    <td width="60%">
+                                        {{ wsc.getComplejo.getdescription }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="40%" class="header bold">Código C.E.T.:</td>
+                                    <td width="60%">
+                                        {{ wsc.codigo }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="40%" class="header bold">Nombre C.E.T.:</td>
+                                    <td width="60%">
+                                        {{ wsc.name }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="40%" class="header bold">Coordinador:</td>
+                                    <td width="60%">
+                                        {{ wsc.getcoordinator.getfullname }}
+                                    </td>
+                                </tr>
+                            </table> 
+                        </td>
+                        <td width="40%" style="border: 2px black solid;">
+                            <table width="100%" class="simple-table">
+                                <tr>
+                                    <td style="background-color: #D8D8D8; font-size: 30pt; vertical-align: middle; text-align: center; height: 55px;" colspan="2">                                                           
+                                        Orden:
+                                        <span class="green bold">{{ neworder }}</span>              
+                                    </td>                                        
+                                </tr>
+                                {# {% if (lastorder) %}
+                                     <tr>
+                                         <td class="header bold">
+                                             Última Orden Realizada                                        
+                                         </td>
+                                         <td>{{ lastorder.getdate| date("d/m/Y") }}</td>
+                                     </tr>
+                                     <tr>
+                                         <td class="header bold">Total:</td>
+                                         <td class="text-left">{{ lastorder.totalCharge}}</td>
+                                     </tr>
+                                     <tr>
+                                         <td class="header bold">Nro. Ítems:</td>
+                                         <td class="text-left">{{ lastorder.getOrderItems|length }}</td>
+                                     </tr>
+                                 {% endif %}#}
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+                <br>
+                <table width="95%">                     
+                    <tr>
+                        <td width="65%" rowspan="2">
+                            <br>
+                            <form method="POST" action="{{ path("pequiven_housesupply_order_charge",{'type': type, 'typemember': 1 }) }}">                           
+                                <select onchange="this.form.submit();" name="member" id="member" class="select2 input-xxlarge form-control">    
+
+                                    {% if(memberobj)%}
+                                        {% set miembro= memberobj.id %}
+                                        <option value="{{memberobj.getid}}" id="{{memberobj.getid}}" selected>{{memberobj.getfullname}}</option>
+                                        <option value="0" id="0">GENERAL</option>
+                                    {% else %}
+                                        {% set miembro= 0 %}
+                                        <option value="0" id="0" selected>GENERAL</option>
+                                    {% endif %}
+
+                                    {% for user in wsc.getmembers %}
+                                        {% if ((memberobj==null) or (user.getid!= memberobj.getid))%}
+                                            <option value="{{user.getid}}" id="{{user.getid}}" >{{user.getfullname}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </form>
+                            <br><br>
+                            <table width="95%" style="border: 2px black solid;">
+                                <tr style="height: 30px;">
+                                    <td width="100%" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">Productos</td>         
+                                </tr>
+                                <tr>
+                                    <td width="100%">
+                                        <table id="table1" class="simple-table" width="100%">
+                                            <thead>
+                                                <tr>
+
+                                                    <th class="header" width="10%">Cant</th>
+                                                    <th class="header" width="50%">Producto</th>
+                                                    <th class="header text-center" width="15%">Precio</th>                                
+                                                    <th class="header text-right" width="20%">Sub-Total</th>
+                                                    <th class="header text-right" width="5%">-</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% set linea=1 %}
+                                                {% set iva=0 %}
+                                                {% set cant=0 %}
+                                                {% set total=0 %}
+                                                {% if(items) %}
+                                                    {% for list in items %}                                                    
+                                                        <tr>
+                                                            <td class="text-center" width="10%">{{ list.cant }}</td>
+                                                            <td width="50%">{{ list.product.description }}</td>
+                                                            <td class="text-right" width="15%">{{ list.product.price| number_format(2, ',', '.') }}</td>                                
+                                                            <td class="text-right" width="20%">{{ (list.product.price*list.cant)| number_format(2, ',', '.') }}</td>                                                            
+                                                            <td class="text-right" width="5%"><a href="{{ path("pequiven_housesupply_order_charge_delete",{'id': list.id, 'member': miembro}) }}"><i class="fa fa-trash"></i></a> </td>
+                                                        </tr>                                                    
+                                                        {% set linea=linea+1 %}
+                                                        {% set cant=cant+list.cant %}
+                                                        {% set iva=iva+list.totalLineTaxes %}
+                                                        {% set total=total+list.totalLine %}                                                    
+                                                    {% endfor %}
+                                                {%else%}                                                
+                                                    <tr>
+                                                        <td width="10%">-</td>
+                                                        <td width="55%">-</td>
+                                                        <td class="text-right" width="15%">-</td>                                
+                                                        <td class="text-right" width="15%">-</td>
+                                                        <td class="text-right" width="5%">-</td>
+                                                    </tr>
+                                                {%endif%}
+                                            </tbody> 
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="2">&nbsp;</td>
+                                                    <td class="text-right" style="background-color: #AA0000; font-weight: bold; color: #FFFFFF;">Sub-Total</td>
+                                                    <td width="15%" class="text-right">{{ total| number_format(2, ',', '.') }}</td>
+                                                    <td width="5%">&nbsp;</td>
+                                                </tr>                                    
+                                                <tr>
+                                                    <td colspan="2">&nbsp;</td>
+                                                    <td class="text-right" style="background-color: #AA0000; font-weight: bold; color: #FFFFFF;">I.V.A. 12%</td>
+                                                    <td width="15%" class="text-right">{{ iva| number_format(2, ',', '.') }}</td>
+                                                    <td width="5%">&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">&nbsp;</td>
+                                                    <td class="text-right" style="background-color: #AA0000; font-weight: bold; color: #FFFFFF;">Total</td>
+                                                    <td width="15%" class="text-right" >{{ (total + iva)| number_format(2, ',', '.') }}</td>
+                                                    <td width="5%">&nbsp;</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="35%" style="text-align: left;">  
+                            <br>
+                            <table width="100%" height="100px;">
+                                <tr>
+                                    <td width="25%" style="vertical-align: middle; font-weight: bold;">Total:</td>
+                                    <td width="75%" style="vertical-align: middle; text-align: right;">
+                                        <span style="color: #002a80; font-size: 30pt; text-align: right; width: 100%; font-weight: bold;">
+                                            Bs. 
+                                        </span>
+                                        <span style="color: #002a80; font-size: 30pt; text-align: right; width: 100%; font-weight: bold;" id="totales_3">
+                                            {{ (total + iva)| number_format(2, ',', '.') }}
+                                        </span>
+                                    </td>
+                                </tr>                                      
+                                <tr>
+                                    <td width="25%" style="vertical-align: middle; font-weight: bold;">Cant. <br> Productos</td>
+                                    <td width="75%" style="vertical-align: middle; text-align: right;">
+                                        <span style="color: #002a80; font-size: 30pt; text-align: right; width: 100%;" id="totales_2">
+                                            {{ cant }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>                                
+                        </td>
+                    </tr>  
+                    <tr>
+                        <td>
+                            {% if(memberobj)%}  
+                                <br><br><br>
+                                <fieldset class="fieldset">
+                                    <legend class="legend"><b>Agregar Producto</b></legend>
+                                    <form method="POST" action="{{ path("pequiven_housesupply_order_charge_add") }}">  
+                                        <table style="border-collapse:separate; border-spacing: 0px 5px;" width="60%">                                        
+                                            <tr>
+                                                <td colspan="3">
+                                                    <select  name="producto" id="producto" class=" select2 input-xlarge form-control" required="true">     
+                                                        <option value="0" data="0" selected>Seleccione</option>
+                                                        {% for inv in inventory %}
+                                                            {% if (((inv.available<inv.product.instance.MaxPerUser)or(inv.product.instance.MaxPerUser<=1))and(inv.product.instance.MaxPerUserForce==null))%}
+                                                                <option value="{{inv.product.id}}" data="{{ inv.product.instance.MaxPerUser }}" id="{{inv.product.description}}" disabled="disabled" name="product">{{inv.product.description}}</option>
+                                                            {% else %}
+                                                                <option value="{{inv.product.id}}" data="{{ inv.product.instance.MaxPerUser }}"  id="{{inv.product.description}}" name="product">{{inv.product.description}} - Disp: {{ inv.product.instance.MaxPerUser }}</option>                                                        
+                                                            {% endif %}                                                        
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>                                        
+                                            </tr>                                     
+                                            <tr>
+                                                <td width="20%" style="text-align: center;" required="true">
+                                                    <input type="number" class="input-small" id="cantidad" name="cantidad" placeholder="Cantidad" min="1">
+                                                </td>                                                                                  
+                                                <td width="20%" style="text-align: center;"> 
+                                                    {% if(memberobj)%}    
+                                                        <button id="addSubmit" type="submit" class="button green-gradient">                                                
+                                                            Agregar      
+                                                        </button>  
+                                                    {%else%}
+                                                        &nbsp;
+                                                    {%endif%}
+                                                </td>
+                                            </tr>                                           
+                                        </table> 
+
+                                        <input type="text" name="datauser" hidden id="datauser" value="{{memberobj.getid}}">     
+
+                                        <input type="text" name="linea" hidden id="linea" value="{{linea}}">        
+                                        <input type="text" name="wsc" hidden id="wsc" value="{{wsc.id}}">        
+                                    </form>                                
+                                </fieldset>
+                            {%else%}
+                                &nbsp;
+                            {%endif%}
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <div class="new-row twelve-columns" style="text-align: right;">  
+                    {% if (memberobj is null)%}
+                        <button type="submit" onclick="cargar('{{ path("pequiven_housesupply_order_charge_total") }}');" class="button glossy mid-margin-right">
+                            <span class="button-icon green-gradient"><span class="icon-tick"></span></span>
+                            Totalizar Orden
+                        </button>    
+                    {% endif %}
+                </div>        
+            </center>            
+        </div>
+    </div>
+{% endblock %}
+

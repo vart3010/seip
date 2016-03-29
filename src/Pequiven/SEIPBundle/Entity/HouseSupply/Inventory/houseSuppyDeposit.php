@@ -44,21 +44,6 @@ class houseSupplyDeposit {
     private $complejo;
 
     /**
-     * Creado por
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $createdBy;
-
-    /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="createdAt", type="datetime")
-     */
-    private $createdAt;
-
-    /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
      */
@@ -84,8 +69,12 @@ class houseSupplyDeposit {
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge",mappedBy="deposit",cascade={"persist","remove"})
      */
     protected $inventoryCharge;
+    
+    public function __toString() {
+        return $this->getDescription();
+    }
 
-    function getId() {
+        function getId() {
         return $this->id;
     }
 
@@ -95,14 +84,6 @@ class houseSupplyDeposit {
 
     function getComplejo() {
         return $this->complejo;
-    }
-
-    function getCreatedBy() {
-        return $this->createdBy;
-    }
-
-    function getCreatedAt() {
-        return $this->createdAt;
     }
 
     function getUpdatedAt() {
@@ -133,14 +114,6 @@ class houseSupplyDeposit {
         $this->complejo = $complejo;
     }
 
-    function setCreatedBy(User $createdBy) {
-        $this->createdBy = $createdBy;
-    }
-
-    function setCreatedAt($createdAt) {
-        $this->createdAt = $createdAt;
-    }
-
     function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
     }
@@ -156,6 +129,5 @@ class houseSupplyDeposit {
     function setInventoryCharge(houseSupplyInventoryCharge $inventoryCharge) {
         $this->inventoryCharge = $inventoryCharge;
     }
-
 
 }

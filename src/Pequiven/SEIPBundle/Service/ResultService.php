@@ -802,7 +802,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if (!$arrangementRange) {
             throw new \LogicException(sprintf('El indicador "%s(%s)" no tiene un rango de gestión definido.', $indicator->getRef(), $indicator->getId()));
         }
-        
+
         //Validamos que no existe error en el rango del Indicador para que pueda ser recalculado sin problemas
         $error = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendenty);
         $result = 0;
@@ -814,9 +814,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($error == null) {
                 if ($indicator->hasNotification()) {
                     if ($this->calculateRangeGood($indicator, $tendenty)) {//Rango Verde R*100% (Máximo 100)
-                            $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_GOOD);
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_GOOD);
 //                        if ($result > 100) {
-                            $result = 100;
+                        $result = 100;
 //                        }
                     } else if ($this->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
                         $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_MIDDLE);
@@ -931,10 +931,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if ($result == 0) {
             $amountPenalty = 0;
         }
-        
+
         $resultComplete = $result - $amountPenalty;
-        $resultComplete = $resultComplete > 100 ? 100: ($resultComplete < 0 ? 0:$resultComplete);
-        
+        $resultComplete = $resultComplete > 100 ? 100 : ($resultComplete < 0 ? 0 : $resultComplete);
+
 //        $indicator->setResult($result - $amountPenalty);
         $indicator->setResult($resultComplete);
 
@@ -1046,10 +1046,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $varMulti = $result * 100;
                 $result = bcdiv($varMulti, $varToCatch, 2);
             }
-        } elseif ($tendency->getRef() == Tendency::TENDENCY_MIN){
+        } elseif ($tendency->getRef() == Tendency::TENDENCY_MIN) {
             if ($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]) {
                 $varToCatch = $arrangementRange->getRankBottomBasic();
-                if($varToCatch == 0){
+                if ($varToCatch == 0) {
                     $varToCatch = $varToCatch + 1;
                     $result = $result + 1;
                 }
@@ -1057,7 +1057,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $result = bcdiv($varMulti, $result, 2);
             } elseif ($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]) {
                 $varToCatch = $arrangementRange->getRankBottomMixedTop();
-                if($varToCatch == 0){
+                if ($varToCatch == 0) {
                     $varToCatch = $varToCatch + 1;
                     $result = $result + 1;
                 }
@@ -1535,7 +1535,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         foreach ($childrens as $child) {
             $i = 0;
 
-            if(!$child->getIgnoredByParentResult()){
+            if (!$child->getIgnoredByParentResult()) {
                 foreach ($child->getValuesIndicator() as $valueIndicator) {
 
                     $plan = $real = 0.0;
@@ -2272,9 +2272,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             //PROGRAMAS EN LOS CUALES YA NO SE ENCUENTRA ASIGNADO
             $arrangementprogramPast = $arrangementProgramRepository->getDivestedIdAPbyUser($idUser, $period->getid());
             foreach ($arrangementprogramPast as $ap) {
-                $arrangementProgramsObjects[$ap["id_affected"]]= $em->getRepository('Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram')->find($ap["id_affected"]);               
-            }            
-            
+                $arrangementProgramsObjects[$ap["id_affected"]] = $em->getRepository('Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram')->find($ap["id_affected"]);
+            }
+
             ToolService::getObjetiveFromPrograms($arrangementProgramsForObjetives, $objetives);
 
             foreach ($arrangementProgramsObjects as $key => $arrangementProgram) {
@@ -2530,7 +2530,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }
 
             foreach ($goals as $key => $goal) {
+
+
                 $goalDetails = $goal->getGoalDetails();
+
                 $summary = $goalDetails->getSummary();
 
                 $planDateStart = $goal->getStartDate();
@@ -2681,7 +2684,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     'observaciones' => $movements,
                     'tipo' => $status,
                 );
-            }
+            }            
 
             $referenceType = \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL;
             foreach ($allArrangementPrograms as $arrangementProgram) {

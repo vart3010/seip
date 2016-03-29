@@ -6,7 +6,8 @@ var columsTotals; //INDICES DE LAS COLUMNAS QUE SE QUIERES SUMAR EMPEZANDO DESDE
 var campoClave; //CAMPO CLAVE PARA NO REPETIR REGISTROS AL MOMENTO DE AGREGAR REGISTROS
 var selectorTotals; //SELECTOR DE JQUERY PARA MOSTRAR LOS RESULTADOS DE LOS TOTALES
 var idsClaves = new Array();
-
+var colsRight = new Array();
+var moneda = "Bs. ";
 
 function setTable(obj) {
     table = obj;
@@ -17,7 +18,7 @@ function setFieldRsJson(field) {
 }
 
 function setSelectorTotals(selector) {
-    selectorTotals=selector;
+    selectorTotals = selector;
 }
 
 function campoClave(clave) {
@@ -30,6 +31,10 @@ function setNameCampos(arrayNames) {
 
 function setColumsTotals(index) {
     columsTotals = index;
+}
+
+function setColsRight(cols) {
+    colsRight = cols;
 }
 
 function delRowDefault() {
@@ -48,7 +53,13 @@ function addRow(data) {
     if (allow < 0) {
         var fila = "<tr class='id_" + index + "'>";
         for (i = 0; i < data.length; i++) {
-            fila = fila + "<td class='" + data[i][0] + "'>" + data[i][1] + "</td>";
+            var clase = colsRight.indexOf(i);
+
+            if (clase >= 0) {
+                fila = fila + "<td class='" + data[i][0] + " gridTd'>" + moneyFormat(data[i][1]) + "</td>";
+            } else {
+                fila = fila + "<td class='" + data[i][0] + "'>" + data[i][1] + "</td>";
+            }
             if (i == campoClave) {
                 idsClaves.push(data[i][0]);
             }
@@ -60,10 +71,10 @@ function addRow(data) {
         alert("El producto ya se encuentra!");
     }
     totals();
-    
+
 }
 
-function delRow(id, idProduct) {
+function delRowAction(id, idProduct) {
     $("#" + table + " tbody").find("tr.id_" + id).remove();
 
     var allow = idsClaves.indexOf(idProduct);
@@ -71,9 +82,9 @@ function delRow(id, idProduct) {
     if (allow >= 0) {
         idsClaves[allow] = "";
     }
-    getJson();
-    totals();
 }
+
+
 
 function getRows() {
     var result = [];
@@ -113,34 +124,56 @@ function getJson() {
     $("input" + fieldRsJson).val(jsonStr);
 }
 
-function totals(){
+function totals() {
     var totals = new Array();
-    
-  for(var i=0;i<columsTotals.length;i++){
-        var total=0;
+
+    for (var i = 0; i < columsTotals.length; i++) {
+        var total = 0;
         total = parseFloat(total) + parseFloat(getTotal(columsTotals[i]));
         //totals[i] = total;
         totals.push(total);
-  }
-  //alert(totals);
-  for(var i=0;i<columsTotals.length;i++){
-     $(selectorTotals+columsTotals[i]).html(totals[i]);
-  }
+    }
+    //alert(totals);
+    for (var i = 0; i < columsTotals.length; i++) {
+        $(selectorTotals + columsTotals[i]).html(moneyFormat(totals[i],2));
+    }
 }
 
 function getTotal(numField) {
     var total = 0;
     $("#" + table + " tbody tr").each(function (index) {
-        var cont=0;
+        var cont = 0;
         $(this).find("td").each(function (ind) {
-            if(cont==numField) { 
+            if (cont == numField) {
                 var celda = $(this).attr("class");
-                total = parseFloat(total)+parseFloat(celda);
+                total = parseFloat(total) + parseFloat(celda);
             }
             cont++;
         });
-        
+
     });
     return total;
-    
+
 }
+
+function getCantRows() {
+    var cont = 0;
+    $("#" + table + " tbody tr").each(function (index) {
+        cont++;
+    });
+
+    return cont;
+}
+
+function moneyFormat(valor, limit) {
+//    return valor.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1.');
+
+    if (limit == undefined) {
+        var limit = 2;
+    }
+    var numberFormat = $.number(valor, limit, ',', '.');
+
+    return numberFormat;
+}
+
+

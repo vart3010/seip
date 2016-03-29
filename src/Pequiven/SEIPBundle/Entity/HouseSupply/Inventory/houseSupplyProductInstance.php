@@ -5,22 +5,24 @@ namespace Pequiven\SEIPBundle\Entity\HouseSupply\Inventory;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
-use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyDeposit;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventory;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeItems;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct;
 
 /**
- * Productos
+ * Instancias de Productos
  *
- * @author Máximo Sojo <maxsojo13@gmail.com>
+ * @author Gilbert C. <glavrjk@gmail.com>
  * 
- * @ORM\Table(name="seip_gsh_inventory")
- * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyInventoryRepository")
+ * @ORM\Table(name="seip_gsh_product_instance")
+ * @ORM\Entity()
+ * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyProductInstanceRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class houseSupplyInventory {
+class houseSupplyProductInstance {
 
     /**
-     * @var integer
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -29,20 +31,18 @@ class houseSupplyInventory {
     private $id;
 
     /**
-     * Product
-     * @var houseSupplyProduct
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct", inversedBy="inventory")
-     * @ORM\JoinColumn(name="producto_id", referencedColumnName="id")
+     *
+     * @var string
+     * @ORM\Column(name="code",type="string",nullable=true)
      */
-    private $product;
+    private $code;
 
     /**
-     * 
-     * @var houseSupplyDeposit
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyDeposit", inversedBy="inventory")
-     * @ORM\JoinColumn(name="deposit_id", referencedColumnName="id")
+     *
+     * @var string
+     * @ORM\Column(name="description",type="string",nullable=false)
      */
-    private $deposit;
+    private $description;
 
     /**
      *
@@ -53,10 +53,25 @@ class houseSupplyInventory {
 
     /**
      *
-     * @var datetime
-     * @ORM\Column(name="lastChargeDate",type="datetime",nullable=true)
+     * @var float
+     * @ORM\Column(name="maxPerUser",type="float",nullable=false)
      */
-    private $lastChargeDate;
+    private $maxPerUser = 0;
+
+    /**
+     *
+     * @var float
+     * @ORM\Column(name="maxPerUserForce",type="float",nullable=true)
+     */
+    private $maxPerUserForce = null;
+
+    /**
+     * Productos en Instancia
+     * 
+     * @var houseSupplyProduct
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct",mappedBy="instance",cascade={"persist","remove"})
+     */
+    protected $product;
 
     /**
      * Creado por
@@ -84,24 +99,36 @@ class houseSupplyInventory {
      */
     private $deletedAt;
 
+    public function __toString() {
+        return $this->getDescription();
+    }
+
     function getId() {
         return $this->id;
     }
 
-    function getProduct() {
-        return $this->product;
+    function getCode() {
+        return $this->code;
     }
 
-    function getDeposit() {
-        return $this->deposit;
+    function getDescription() {
+        return $this->description;
     }
 
     function getAvailable() {
         return $this->available;
     }
 
-    function getLastChargeDate() {
-        return $this->lastChargeDate;
+    function getMaxPerUser() {
+        return $this->maxPerUser;
+    }
+
+    function getMaxPerUserForce() {
+        return $this->maxPerUserForce;
+    }
+
+    function getProduct() {
+        return $this->product;
     }
 
     function getCreatedBy() {
@@ -124,20 +151,28 @@ class houseSupplyInventory {
         $this->id = $id;
     }
 
-    function setProduct(houseSupplyProduct $product) {
-        $this->product = $product;
+    function setCode($code) {
+        $this->code = $code;
     }
 
-    function setDeposit(houseSupplyDeposit $deposit) {
-        $this->deposit = $deposit;
+    function setDescription($description) {
+        $this->description = $description;
     }
 
     function setAvailable($available) {
         $this->available = $available;
     }
 
-    function setLastChargeDate($lastChargeDate) {
-        $this->lastChargeDate = $lastChargeDate;
+    function setMaxPerUser($maxPerUser) {
+        $this->maxPerUser = $maxPerUser;
+    }
+
+    function setMaxPerUserForce($maxPerUserForce) {
+        $this->maxPerUserForce = $maxPerUserForce;
+    }
+
+    function setProduct(houseSupplyProduct $product) {
+        $this->product = $product;
     }
 
     function setCreatedBy(User $createdBy) {

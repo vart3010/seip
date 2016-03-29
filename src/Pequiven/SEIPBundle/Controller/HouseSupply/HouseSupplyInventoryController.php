@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeItems;
 use Pequiven\SEIPBundle\Form\HouseSupply\Inventory\houseSupplyInventoryChargeType;
-use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct;
 
 /**
  * CONTROLADOR DE INVENTARIO DE CASA - ABASTO
@@ -28,11 +27,16 @@ class HouseSupplyInventoryController extends SEIPController {
         $type = $request->get('type');
 
         //NUEVO NUMERO DE CARGO DE DEPOSITO
-        $newid = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeId($type);
-        $newcharge = str_pad((($newid[0]['id']) + 1), 5, 0, STR_PAD_LEFT);
+        $newchargeNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeNro($type);
+        $newcharge = str_pad((($newchargeNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
+
+        $search = array(
+            'nroCharge' => $newchargeNro[0]['nro'],
+            'type' => $type
+        );
 
         //ULTIMA CARGA REALIZADA
-        $lastcharge = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->findOneById($newid[0]['id']);
+        $lastcharge = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->findOneBy($search);
 
         //LISTA DE DEPOSITOS EXISTENTES
         $deposits = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->findAll();
@@ -65,9 +69,20 @@ class HouseSupplyInventoryController extends SEIPController {
         //OBTENGO EL TIPO DE MOVIMIENTO DE UNIDADES
         $type = $request->get('type');
 
+        if ($type == 1) {
+            $sign = 1;
+        } else {
+            $sign = -1;
+        }
+
         //CALCULO EL NUEVO CORRELATIVO
-        $newnroobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeId($type);
-        $newnro = $newnroobj[0]['id'] + 1;
+        $newnroobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeNro($type);
+
+        if ($newnroobj[0]['nro']) {
+            $newnro = $newnroobj[0]['nro'] + 1;
+        } else {
+            $newnro = 1;
+        }
 
         //OBTENGO EL DEPOSITO        
         $deposit = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->findOneById($request->get('deposit'));
@@ -97,6 +112,7 @@ class HouseSupplyInventoryController extends SEIPController {
         $charge->setObservations($obs);
         $charge->setNroCharge($newnro);
         $charge->setType($type);
+        $charge->setSign($sign);
         $charge->setDeposit($deposit);
         $charge->setTotalCharge($totalCharge);
         $charge->setCreatedBy($this->getUser());
@@ -120,6 +136,7 @@ class HouseSupplyInventoryController extends SEIPController {
 
             $inventorychargeitems = new houseSupplyInventoryChargeItems();
             $inventorychargeitems->setType($type);
+            $inventorychargeitems->setSign($sign);
             $inventorychargeitems->setDate($date);
             $inventorychargeitems->setInventoryCharge($charge);
             $inventorychargeitems->setProduct($product);
@@ -130,15 +147,35 @@ class HouseSupplyInventoryController extends SEIPController {
             $inventorychargeitems->setCreatedBy($this->getUser());
             $em->persist($inventorychargeitems);
             $em->flush();
-            
-            $product->setCost($prod->costo);
+
+            //ACTUALIZO LAS EXISTENCIAS EN INVENTARIO            
+            $search = array(
+                'product' => $product->getId(),
+                'deposit' => $deposit->getId()
+                    )
+            ;
+
+            $inventory = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventory')->findOneBy($search);
+            $disponible = ($inventory->getAvailable()) + ($sign * $prod->cantidad);
+            $inventory->setAvailable($disponible);
             $em->flush();
-            
+
+            //ACTUALIZO EL COSTO DEL PRODUCTO
+            $product->setCost($prod->costo);
+
+            //ACTUALIZO MAXIMO POR PERSONA EN LA INSTANCIA DEL PRODUCTO
+            $instance = $product->getInstance();
+            $dispInst = (($instance->getAvailable()) + ($sign * $prod->cantidad));
+            $poblacion = $deposit->getComplejo()->getNumberMembersCET();
+
+            if ($dispInst <= 0) {
+                $instance->setMaxPerUser(0);
+            } else {
+                $instance->setMaxPerUser(floor($dispInst / $poblacion));
+                $instance->setAvailable($dispInst);
+            }
+            $em->flush();
         }
-
-
-
-
 
         return $this->redirect($this->generateUrl("pequiven_housesupply_inventory_charge", array("type" => $type)));
     }

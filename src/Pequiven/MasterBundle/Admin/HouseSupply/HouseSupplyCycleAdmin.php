@@ -18,41 +18,45 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
- * Administracion de Productos de HouseSupply
+ * Administracion de Ciclos de Órdenes de Pedido HouseSupply
  *
  * @author Gilbert <glavrjk@gmail.com>
  */
-class HouseSupplyDepositAdmin extends Admin {
+class HouseSupplyCycleAdmin extends Admin {
 
     protected function configureShowFields(ShowMapper $show) {
         $show
                 ->add('id')
-                ->add('description')
-                ->add('complejo')
+                ->add('dateBeginOrder')
+                ->add('dateEndOrder')
+                ->add('workStudyCircleGroup')
         ;
     }
 
     protected function configureFormFields(FormMapper $form) {
         $form                
-                ->add('description')
-                ->add('complejo')
+                ->add('dateBeginOrder')
+                ->add('dateEndOrder')
+                ->add('workStudyCircleGroup')
+
         ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
                 ->add('id')
-                ->add('description')
-                ->add('complejo')
+                ->add('dateBeginOrder')
+                ->add('dateEndOrder')
+                ->add('workStudyCircleGroup')
         ;
     }
 
     protected function configureListFields(ListMapper $list) {
         $list
                 ->addIdentifier('id')
-                ->add('description')
-                ->add('complejo')
-
+                ->add('dateBeginOrder')
+                ->add('dateEndOrder')
+                ->add('workStudyCircleGroup')
         ;
     }
 
