@@ -170,8 +170,6 @@ class MonitoringController extends ResourceController
             $id = $request->get('id');
             
             $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($id);            
-            $standardization->setStatus(1);
-            $em->flush();
 
             $responsible = $request->get('actionResults')['responsible'];
             $responsibles = explode(",", $responsible);       
@@ -180,7 +178,11 @@ class MonitoringController extends ResourceController
             for ($i=0; $i < $catnRes; $i++) { 
                 $user = $this->get('pequiven_seip.repository.user')->find($responsibles[$i]);
                 $notification = $this->getNotificationService()->setDataNotification("Estandarizacion", "Ha sido asignado como responsable la data de estandarizacion ha sido cargada puede verificar.", 4 , 1, "-", $user);                                        
+                $standardization->addResponsible($user);
             }            
+            
+            $standardization->setStatus(1);
+            $em->flush();
 
             $this->get('session')->getFlashBag()->add('success', "Notificación Enviada Exitosamente");
         }

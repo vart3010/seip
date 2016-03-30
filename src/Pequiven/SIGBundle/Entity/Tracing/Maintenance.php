@@ -101,7 +101,7 @@ class Maintenance
      */
     public function __construct(){
         $this->standardization = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->advance = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->advance = new \Doctrine\Common\Collections\ArrayCollection();        
     }
     
     /**
@@ -328,6 +328,6 @@ class Maintenance
     public function getAnalysis()
     {
         return $this->analysis;
-    }
+    }    
     
 }
