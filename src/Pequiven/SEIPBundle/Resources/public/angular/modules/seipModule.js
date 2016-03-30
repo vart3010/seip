@@ -1792,6 +1792,7 @@ angular.module('seipModule.controllers', [])
                 var parameters = {
                     idIndicator: $scope.id_indicator,
                     typeObj: $scope.typeObj,
+                    month: $scope.month,
                     _dc: numero
                 };
                 if (resource) {

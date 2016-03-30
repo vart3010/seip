@@ -124,11 +124,17 @@ class ReportEvolutionCausesController extends ResourceController
         
         if ($typeObj == 1) {
             $result = $this->findIndicatorOr404($request);                    
+            $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $id, 'month' => $request->get('month')));
         }elseif ($typeObj == 2) {
             $repository = $this->get('pequiven_seip.repository.arrangementprogram');
             $result = $repository->find($id); 
+            $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('arrangementProgram' => $id, 'month' => $request->get('month')));
+        }        
+        $sumCause = 0;
+        foreach ($causes as $valueCauses) {
+            $sumCause = $sumCause + $valueCauses->getValueOfCauses();            
         }
-        
+
         $cause = new EvolutionCause();
         $form  = $this->createForm(new EvolutionCauseType(), $cause);
         $view = $this
@@ -138,8 +144,9 @@ class ReportEvolutionCausesController extends ResourceController
             ->setData(array(
                 'form'           => $form->createView(),
                 'indicator'      => $result,
-                'id' => $id,
-                'period'        => $result->getPeriod()->getName()                
+                'id'             => $id,
+                'period'         => $result->getPeriod()->getName(),
+                'sumCause'       => $sumCause
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));

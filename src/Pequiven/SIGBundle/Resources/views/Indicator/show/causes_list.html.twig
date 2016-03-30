@@ -5,7 +5,7 @@
             <h3 class="ng-binding">{{ 'sig.causes_desviation'|trans ({}, 'messages') }}</h3>
             {% if sumCause < 100 and not cloning %}        
                 <div class="button-group absolute-right compact">
-                    <a class="button icon-list-add " href="" ng-click="loadTemplateCausesDesviation()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+                    <a class="button icon-list-add " href="" ng-click="loadTemplateCausesDesviation(month='{{ month }}')" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
                 </div>  
             {% endif %}        
         </div>

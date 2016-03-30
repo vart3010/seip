@@ -93,31 +93,6 @@ class EvolutionCausesController extends ResourceController
     }
 
     /**
-     * Busca las Causas del indicador para filtrarlas para el plan de acción
-     * @param type $param
-     */
-    function getCausesEvolutionAction(\Symfony\Component\HttpFoundation\Request $request) {
-        
-        $idIndicator = $request->get('idIndicator');
-        var_dump($idIndicator);
-        die();
-        //$idIndicator = $request->get('id');
-        $results = $this->get('pequiven.repository.sig_causes_indicator')->findByindicator($idIndicator);
-        var_dump(count($results));
-        die();
-        //$user = $this->getUser();
-        $criteria = $request->get('filter',$this->config->getCriteria());
-        $repository = $this->get('pequiven.repository.managementsystem_sig');
-        $results = $repository->findAll();
-        //var_dump(count($results));
-        //die();
-        $view = $this->view();
-        $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id','api_list','description'));
-        return $this->handleView($view);
-    }
-
-    /**
      * Busca el indicador o retorna un 404
      * @param Request $request
      * @return \Pequiven\IndicatorBundle\Entity\Indicator
