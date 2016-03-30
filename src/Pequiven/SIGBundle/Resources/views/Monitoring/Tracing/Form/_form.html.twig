@@ -26,7 +26,7 @@
                 <label class="label">Tratamiento</label>                
                 <input type="checkbox" name="analysis" id="analysis" value="1" class="checkbox mid-margin-left"> <label for="checkbox-2" class="">Análisis Causa Raíz</label>
                 
-                <input type="checkbox" name="arrangementProgram" id="arrangementProgram" value="1" class="checkbox mid-margin-left" onchange="showPg();">                 
+                <input type="checkbox" name="arrangementProgram" id="arrangementProgram" value="1" class="checkbox mid-margin-left">
                 <label for="checkbox-2" class="">Programa de Gestión</label>
             </div>    
     </fieldset>
@@ -41,8 +41,24 @@
 
 </form>    
 <script type="text/javascript">
-    function showPg(){
-        document.getElementById('loadPg').style.display = 'block';                        
-    }    
+    $('input#arrangementProgram').change(function() {        
+        if($(this).is(":checked")) {
+            $('#loadPg').show();                    
+        }else{
+            $('#loadPg').hide();        
+        }
+    }); 
+         
+    $(document).ready(function () {
+        $("#sig_standardization_detection").select2({    
+        });
+
+        $("#sig_standardization_type").select2({    
+        });
+
+        $("#sig_standardization_arrangementProgram").select2({
+            //minimumInputLength: 3,
+        });
+    });   
 </script>
 {% endblock %}

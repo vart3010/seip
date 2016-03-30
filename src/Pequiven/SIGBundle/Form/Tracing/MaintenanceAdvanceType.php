@@ -18,11 +18,7 @@ class MaintenanceAdvanceType extends AbstractType
     {   
         $valid = $this->valid;
 
-        $builder
-            ->add('analysis', 'textarea', array(
-                'label' => 'Analisis',
-                'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-xlarge ' )))              
+        $builder            
             ->add('advance', 'text', array(
                 'label' => 'Avance',
                 'label_attr' => array('class' => 'label'),

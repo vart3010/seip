@@ -30,7 +30,12 @@ class MaintenanceType extends AbstractType
                 'format' => 'd/M/y',
                 'widget' => 'single_text',
                 'attr' => array('class' => 'input input-large')  
-                ))             
+                ))
+            
+            ->add('analysis', 'textarea', array(
+                'label' => 'Analisis',
+                'label_attr' => array('class' => 'label'),
+                'attr'=> array('class'=> 'input input-xlarge ' )))               
         ;
     }
     

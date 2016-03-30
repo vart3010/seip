@@ -163,26 +163,36 @@ class MonitoringController extends ResourceController
     }
 
     public function notificationAction(Request $request){
+        $securityContext = $this->container->get('security.context');
+        $em = $this->getDoctrine()->getManager();
         
-        $em = $this->getDoctrine()->getManager();                        
-                    
-        $id = $request->get('id');
-
-        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($id);
-        
-        if($standardization){ 
-
-            $standardization->setStatus(1);        
-            $em->flush();            
+        if ($request->isMethod('POST')) {  
+            $id = $request->get('id');
             
-            $notification = $this->getNotificationService()->setDataNotification('Estandarizacion', "La data de estandarizacion ha sido cargada puede verificar. ", 4 , 1, "'pequiven_sig_monitoring_show',{'id': ". $id ." }");            
+            $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($id);            
+
+            $responsible = $request->get('actionResults')['responsible'];
+            $responsibles = explode(",", $responsible);       
+            $catnRes = count($responsibles);
+
+            for ($i=0; $i < $catnRes; $i++) { 
+                $user = $this->get('pequiven_seip.repository.user')->find($responsibles[$i]);
+                $notification = $this->getNotificationService()->setDataNotification("Estandarizacion", "Ha sido asignado como responsable la data de estandarizacion ha sido cargada puede verificar.", 4 , 1, "-", $user);                                        
+                $standardization->addResponsible($user);
+            }            
             
+            $standardization->setStatus(1);
+            $em->flush();
+
             $this->get('session')->getFlashBag()->add('success', "Notificación Enviada Exitosamente");
-        }else{
-            $this->get('session')->getFlashBag()->add('success', "Notificación no procesada");            
-        }            
-        return $this->redirect($this->generateUrl("pequiven_sig_monitoring_show", array("id" => $request->get('idManagement'))));         
-        die();        
+        }
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('Tracing/Form/formNotify.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())            
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
     }
 
     public function deleteAction(Request $request){
@@ -394,7 +404,7 @@ class MonitoringController extends ResourceController
                 
                 $advance = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance")->findBy(array('maintenance' => $valueMaintenance->getId())); 
                 foreach ($advance as $valueAdvance) {
-                    $dataAnalsys = $valueAdvance->getAnalysis();
+                    $dataAnalsys = $valueMaintenance->getAnalysis();
                     $dataAdvance = $valueAdvance->getAdvance();
                     $dataObservations = $valueAdvance->getObservations();                    
                 }

@@ -724,7 +724,9 @@ class ArrangementProgramRepository extends EntityRepository {
         $queryBuilder = $this->getQueryBuilder();
         $queryBuilder
                 ->andWhere('ap.period = :per')
+                ->andWhere('ap.categoryArrangementProgram = :cat')
                 ->setParameter('per', $period)                
+                ->setParameter('cat', 1)                
         ;
         
         return $queryBuilder;

@@ -51,9 +51,8 @@
                 <a href="{{ path('pequiven_user_notification_data') }}" title="Messages">
                     <span class="icon-inbox"></span>
                     {# Notificaciones #}
-                    {% if app.user.notify %}
-                        <span class="count">{{ app.user.notify }}</span>
-                    {% endif %}
+                    {# {{ app.user.notify }} #}                    
+                    <span class="count" id="userNotify" style='display:none;'></span>
                 </a>
             </li>
             <!--<li><a href title="Calendar"><span class="icon-calendar"></span></a></li>-->
@@ -84,3 +83,21 @@
     </div>
     <!-- End content wrapper -->
 </section>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var urlNotifyData = "{{ path("seip_notification_get_data_notify") }}";                    
+        var data = 0;
+        $.ajax({
+                type: 'get',
+                url: urlNotifyData,
+                data: data,                                              
+                success: function (data) {                                                                            
+                    if (data['notifyUser'] > 0) {
+                        $('#userNotify').show().text(data['notifyUser']);
+                    }else{
+                        $('#userNotify').hide();        
+                    };
+                }
+        });            
+    });
+</script>
