@@ -18,19 +18,28 @@ use Pequiven\SIGBundle\Form\Tracing\StandardizationType;
 class MonitoringController extends ResourceController
 {
     public function listAction(Request $request)
-    {
+    {   
+        $type = $request->get('type');
+
+        if ($type == 1) {
+            $queryRepository = "createPaginatorManagementSystems";            
+            $repository = $this->container->get('pequiven.repository.sig_management_system'); 
+            $title = "Sistemas de la Calidad";
+        }elseif($type == 2) {
+            $queryRepository = "createPaginatorNormalizedGerency";            
+            $repository = $this->container->get('pequiven.repository.gerenciafirst'); 
+            $title = "Gerencias Normalizadas";
+        }
+        
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         
-        $repository = $this->container->get('pequiven.repository.sig_management_system'); 
-        
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
-                $repository,
-                'createPaginatorManagementSystems',
+                $repository,$queryRepository,
                 array($criteria, $sorting)
             );
             
@@ -52,7 +61,7 @@ class MonitoringController extends ResourceController
         }
         $routeParameters = array(
             '_format' => 'json' ,
-            'type'    => 1           
+            'type'    => $type
         );
         $apiDataUrl = $this->generateUrl('pequiven_sig_monitoring_list', $routeParameters);        
         
@@ -67,12 +76,13 @@ class MonitoringController extends ResourceController
         if($request->get('_format') == 'html'){
         	$data = array(
                 'apiDataUrl' => $apiDataUrl,
-                $this->config->getPluralResourceName() => $resources,                
-            );            
+                $this->config->getPluralResourceName() => $resources,
+                'title'      => $title,
+                'type'       => $type
+            );             
             $view->setData($data);
         }else{
             $formatData = $request->get('_formatData','default');
-
             $view->setData($resources->toArray('',array(),$formatData));
         }
         return $this->handleView($view); 
