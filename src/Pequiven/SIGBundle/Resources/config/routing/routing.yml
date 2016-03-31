@@ -50,7 +50,7 @@ pequiven_sig_monitoring_list:
     options:
         expose: true
 pequiven_sig_monitoring_show:
-    path: /sig/monitoring/list/show/{id}
+    path: /sig/monitoring/list/show/{type}/{id}
     defaults:
         _controller: pequiven.controller.monitoring_sig:showAction
         _format: html    

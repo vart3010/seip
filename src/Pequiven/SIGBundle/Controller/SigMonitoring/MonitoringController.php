@@ -92,11 +92,16 @@ class MonitoringController extends ResourceController
         
         $this->autoVerificationAction($request);
 
-        $id = $request->get('id');
+        $id = $request->get('id');        
+        $type = $request->get('type');
 
         $em = $this->getDoctrine()->getManager();                        
         $dataAdvance = 0;
-    	$managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id); 
+        if ($type == 1){
+            $result = $this->container->get('pequiven.repository.sig_management_system')->find($id);                  
+        }elseif ($type == 2) {
+            $result = $this->container->get('pequiven.repository.gerenciafirst')->find($id);             
+        }
         
         $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('managementSystem' => $id));
         
@@ -126,12 +131,13 @@ class MonitoringController extends ResourceController
         ];
 
     	return $this->render('PequivenSIGBundle:Monitoring:show.html.twig', array(
-            'data'              => $managemensystems,
+            'data'              => $result,
             'standardization'   => $standardization,
             'detection'         => $labelsDetection,
             'labelsTypeNc'      => $labelsTypeNc,
             'status'            => $status,
-            'statusMaintanence' => $statusMaintanence            
+            'statusMaintanence' => $statusMaintanence,
+            'type'              => $type
             ));
     }
 
@@ -226,6 +232,7 @@ class MonitoringController extends ResourceController
         $em = $this->getDoctrine()->getManager();
         
         $id = $request->get('id');
+        $type = $request->get('type');
 
         $managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id);         
         $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('managementSystem' => $id));
@@ -244,7 +251,7 @@ class MonitoringController extends ResourceController
                 }
             }
         }
-        return $this->redirect($this->generateUrl("pequiven_sig_monitoring_show", array("id" => $id)));         
+        return $this->redirect($this->generateUrl("pequiven_sig_monitoring_show", array('id' => $id, 'type' => $type)));         
         die();        
     }
 
