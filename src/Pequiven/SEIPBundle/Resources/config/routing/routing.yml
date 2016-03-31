@@ -120,5 +120,10 @@ seip_notification_view_messages_return_data:
     defaults:
         _controller: pequiven_seip.controller.user:getMessagesDataAction
     methods: [GET|POST]
+seip_notification_get_data_notify:
+    path: /user/get-notify
+    defaults:
+        _controller: pequiven_seip.controller.user:getNotificationUserAction
+    methods: [GET]
     
 

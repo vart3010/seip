@@ -109,12 +109,22 @@ class Standardization extends model
      * 
      */
     private $maintenance;
+
+    /**
+     * Responsables
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User",inversedBy="maintenanceResponsibles", cascade={"persist","remove"})     
+     * @ORM\JoinTable(name="ManagementSystem_Monitoring_Maintenance_responsibles")    
+     */
+    private $responsible;
     
     /**
      * Constructor
      */
     public function __construct(){
-        $this->maintenance = new \Doctrine\Common\Collections\ArrayCollection();        
+        $this->maintenance = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->responsible = new \Doctrine\Common\Collections\ArrayCollection();         
     }
     
     /**
@@ -408,6 +418,36 @@ class Standardization extends model
      */
     public function getMaintenance() {
         return $this->maintenance;
+    }
+
+    /**
+     * Add responsible
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $responsible
+     * @return Indicator
+     */
+    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsible) {
+        $this->responsible[] = $responsible;
+
+        return $this;
+    }
+
+    /**
+     * Remove responsible
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $responsible
+     */
+    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsible) {
+        $this->responsible->removeElement($responsible);
+    }
+
+    /**
+     * Get responsible
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResponsible() {
+        return $this->responsible;
     }
     
 }

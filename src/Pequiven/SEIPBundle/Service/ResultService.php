@@ -2314,6 +2314,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 foreach ($movements as $mov) {
                     $valores[$idarray] = $mov->getRealAdvance();
                     $planeado[$idarray] = $mov->getplanned();
+                    $realResult[$idarray]=$mov->getRealAdvance()+$mov->getPenalty();
                     $tipos[$idarray] = $mov->getType();
                     $idarray++;
                 }
@@ -2324,7 +2325,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     //NO SE TOMA EN CUENTA PARA EVALUACIONES CUANDO.
                     //SI EL EMPLEADO AL FINAL SALE DEL PROGRAMA DE GESTION DE PLAN 0%
                     //SI EL EMPLEADO AL PRINCIPIO ENTRA CON UN PROGRAMA DE GESTION DE REAL 100%
-                    if ((($tipos[count($tipos) - 1] == 'O') && ($planeado[count($tipos) - 1] == 0)) || ((reset($tipos) == 'I') && (reset($valores) == 100))) {
+                    if ((($tipos[count($tipos) - 1] == 'O') && ($planeado[count($tipos) - 1] == 0)) || ((reset($tipos) == 'I') && (reset($realResult) >= 100))) {
                         $eval = "N/A";
                         $aporte = 0;
                         $aportePlan = 0;
@@ -2565,6 +2566,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 foreach ($movements as $mov) {
                     $valores[$idarray] = $mov->getRealAdvance();
                     $planeado[$idarray] = $mov->getplanned();
+                    $realResult[$idarray]=$mov->getRealAdvance()+$mov->getPentalty();
                     $tipos[$idarray] = $mov->getType();
                     $idarray++;
                 }
@@ -2575,7 +2577,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     //NO SE TOMA EN CUENTA PARA EVALUACIONES CUANDO.
                     //SI EL EMPLEADO AL FINAL SALE DE LA META DE PLAN 0%
                     //SI EL EMPLEADO AL PRINCIPIO ENTRA CON UNA META DE REAL 100%
-                    if ((($tipos[count($tipos) - 1] == 'O') && ($planeado[count($tipos) - 1] == 0)) || ((reset($tipos) == 'I') && (reset($valores) == 100))) {
+                    if ((($tipos[count($tipos) - 1] == 'O') && ($planeado[count($tipos) - 1] == 0)) || ((reset($tipos) == 'I') && (reset($realResult) >= 100))) {
                         $eval = "N/A";
                         $aporte = 0;
                         $aportePlan = 0;

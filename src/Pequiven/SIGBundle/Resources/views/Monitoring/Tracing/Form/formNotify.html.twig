@@ -1,0 +1,64 @@
+<form method="POST" id="form_notify_add">
+	<fieldset class="fieldset ">
+	        <legend class="legend">Notificación de Usuario</legend>
+	            <div class="field-block button-height" > 
+	                <label class="label">Usuarios:</label>  
+	                <input type="text" id="actionResults_responsible" name="actionResults[responsible]" class="select2 input-large form-control" style='width: 270px'>
+	            </div>
+	</fieldset>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        setUrlResponsibles();        
+    });
+
+    function setUrlResponsibles(data) {
+        var urlResponsibles = Routing.generate("pequiven_responsibles_to_plan"); 
+        if (data == undefined) {
+            data = [];
+        }
+        $("#actionResults_responsible").select2({
+            minimumInputLength: 3,
+            maximumSelectionLength: 2,
+            maximumSelectionSize: 2,
+            multiple: true,      
+                formatInputTooShort: function () {
+                    return "Por favor, introduzca 3 o más caracteres";
+                },
+                formatSelectionTooBig: function (limit) {
+                    return 'Máximo de responsables seleccionado';
+                },
+            ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
+                url: urlResponsibles,
+                dataType: 'json',
+                quietMillis: 250,
+                data: function (term, page) {
+                    return {
+                        query: term, // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.                    
+                    return {results: data};
+                },
+                cache: true
+            },
+            initSelection: function (element, callback) {
+            },
+            formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
+            formatSelection: responsiblesFormatResult, // omitted for brevity, see the source of this page
+            escapeMarkup: function (m) {
+                return m;
+            } // we do not want to escape markup since we are displaying html in results
+        });
+
+        if (data != undefined) {
+            var preselected = [];
+            $.each(data, function (index, value) {
+                preselected.push(value.id);
+            });
+            $('#actionResults_responsible').select2('data', data);
+            $('#actionResults_responsible').select2('val', preselected);
+        }
+    };
+</script>

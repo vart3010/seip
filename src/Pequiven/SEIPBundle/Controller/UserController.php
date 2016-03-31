@@ -178,12 +178,30 @@ class UserController extends baseController {
             'standardization' => $standardization,
             'production'      => $production,
             'evolution'       => $evolution,
-            'notifyUser'          => $notifyUser
+            'notifyUser'      => $notifyUser
         ];
 
         $response->setData($data);
 
         return $response;        
+    }
+
+    public function getNotificationUserAction(Request $request){
+        $em = $this->getDoctrine()->getManager();   
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();        
+        
+        $notifyUser = $user->getNotify();
+
+        $response = new JsonResponse();   
+        
+        $data = [
+            'notifyUser'      => $notifyUser
+        ];
+
+        $response->setData($data);
+
+        return $response; 
     }
 
     public function getMessagesDataAction(Request $request){
@@ -202,32 +220,32 @@ class UserController extends baseController {
         }else {
             $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('type' => $request->get('typeData'), 'typeMessage' => $request->get('type'), 'user' => $user));                        
         }
-        if ($notification) {
-            
-        foreach ($notification as $valueNotification) {            
-            $id = $valueNotification->getId();
-            $description[$id] = $valueNotification->getDescription();
-            $title[$id] = $valueNotification->getTitle();
-            
-            $dateCreated = $valueNotification->getCreatedAt();
-            $dateCreated->setTimestamp((int)$dateCreated->format('U'));            
-            $fechaCreated = $dateCreated->format('d-m-Y'); 
 
-            $date[$id] = $fechaCreated;
-            $read[$id] = $valueNotification->getReadNotification();
-            $status[$id] = $valueNotification->getStatus();
-            $ids[] = $valueNotification->getId();
-        }
+        if ($notification) {            
+            foreach ($notification as $valueNotification) {            
+                $id = $valueNotification->getId();
+                $description[$id] = $valueNotification->getDescription();
+                $title[$id] = $valueNotification->getTitle();
+                
+                $dateCreated = $valueNotification->getCreatedAt();
+                $dateCreated->setTimestamp((int)$dateCreated->format('U'));            
+                $fechaCreated = $dateCreated->format('d-m-Y'); 
 
-        $data = [
-            'description' => $description,
-            'title'       => $title,
-            'date'        => $date,
-            'id'          => $ids,
-            'read'        => $read,
-            'status'      => $status,
-            'cont'        => count($ids)
-        ];
+                $date[$id] = $fechaCreated;
+                $read[$id] = $valueNotification->getReadNotification();
+                $status[$id] = $valueNotification->getStatus();
+                $ids[] = $valueNotification->getId();
+            }
+
+            $data = [
+                'description' => $description,
+                'title'       => $title,
+                'date'        => $date,
+                'id'          => $ids,
+                'read'        => $read,
+                'status'      => $status,
+                'cont'        => count($ids)
+            ];
         }
 
         $response->setData($data);
