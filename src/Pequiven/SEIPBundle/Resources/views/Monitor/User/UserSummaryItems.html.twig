@@ -58,10 +58,10 @@
                                             <small>
                                                 {% for obs in pg.observaciones %}
                                                     {% if obs.type== 'I' %}
-                                                        Ingresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
+                                                        Ingresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}% , <b>Real Notificado: </b>{{ (obs.realAdvance+obs.pentalty) |number_format(2,',','.') }}%.
                                                     {% endif %}
                                                     {% if obs.type== 'O' %}
-                                                        Egresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
+                                                        Egresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}% , <b>Real Notificado: </b>{{ (obs.realAdvance+obs.pentalty) |number_format(2,',','.') }}%.
                                                     {% endif %}
                                                     <br>
                                                 {%endfor%}
@@ -161,10 +161,10 @@
                                                 <small>
                                                     {% for obs in goal.observaciones %}
                                                         {% if obs.type== 'I' %}
-                                                            Ingresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
+                                                            Ingresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}% , <b>Real Notificado: </b>{{ (obs.realAdvance+obs.pentalty) |number_format(2,',','.') }}%.
                                                         {% endif %}
                                                         {% if obs.type== 'O' %}
-                                                            Egresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
+                                                            Egresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}% , <b>Real Notificado: </b>{{ (obs.realAdvance+obs.pentalty) |number_format(2,',','.') }}%.
                                                         {% endif %}
                                                         <br>
                                                     {%endfor%}
