@@ -10,7 +10,7 @@
                     <div style='width: 100%; text-align: center;'>
                         <a target="_blank" href="{{ path('pequiven_indicator_show',{id:indicator.id}) }}">
                             <span title="{{ indicator.description }}">
-                                <p><b>{{ indicator.summary }}</b></p>
+                                <p>{% if indicatorService.isIndicatorHasParents(indicator) != true %}<i class="fa fa-industry"></i>&nbsp;-&nbsp;{% endif %}<b>{{ indicator.summary }}</b></p>
                             </span>
                         </a>
                     </div>
