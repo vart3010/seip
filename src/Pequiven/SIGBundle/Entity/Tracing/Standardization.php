@@ -119,6 +119,13 @@ class Standardization extends model
      */
     private $responsible;
     
+     /**
+     * type
+     * @var integer
+     * @ORM\Column(name="typeObject",type="integer")
+     */
+    private $typeObject;
+
     /**
      * Constructor
      */
@@ -450,4 +457,27 @@ class Standardization extends model
         return $this->responsible;
     }
     
+    /**
+     * Set typeObject
+     *
+     * @param string $typeObject
+     * @return 
+     */
+    public function setTypeObject($typeObject)
+    {
+        $this->typeObject = $typeObject;
+
+        return $this;
+    }
+
+    /**
+     * Get typeObject
+     *
+     * @return string 
+     */
+    public function getTypeObject()
+    {
+        return $this->typeObject;
+    }
+
 }
