@@ -2314,7 +2314,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 foreach ($movements as $mov) {
                     $valores[$idarray] = $mov->getRealAdvance();
                     $planeado[$idarray] = $mov->getplanned();
-                    $realResult[$idarray]=$mov->getRealAdvance()+$mov->getPenalty();
+                    $realResult[$idarray]=$mov->getRealAdvance()+$mov->getPentalty();
                     $tipos[$idarray] = $mov->getType();
                     $idarray++;
                 }
