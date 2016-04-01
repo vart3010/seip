@@ -96,11 +96,11 @@ class Standardization extends model
     private $deletedAt;
 
     /**
-     * Sistemas de la Calidad
-     * @var \Pequiven\SIGBundle\Entity\ManagementSystem
-     * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem")
+     * type
+     * @var integer
+     * @ORM\Column(name="relationObject",type="integer")
      */
-    protected $managementSystem;
+    protected $relationObject;
 
     /**
      * Mantenimiento
@@ -374,29 +374,6 @@ class Standardization extends model
         return $this->enabled;
     }
 
-     /**
-     * Set managementSystem
-     *
-     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem
-     * @return ManagementSystem
-     */
-    public function setManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem = null)
-    {
-        $this->managementSystem = $managementSystem;
-
-        return $this;
-    }
-
-    /**
-     * Get managementSystem
-     *
-     * @return \Pequiven\SIGBundle\Entity\ManagementSystem 
-     */
-    public function getManagementSystem()
-    {
-        return $this->managementSystem;
-    }
-
     /**
      * Add maintenance
      *
@@ -478,6 +455,29 @@ class Standardization extends model
     public function getTypeObject()
     {
         return $this->typeObject;
+    }
+
+    /**
+     * Set relationObject
+     *
+     * @param string $relationObject
+     * @return 
+     */
+    public function setRelationObject($relationObject)
+    {
+        $this->relationObject = $relationObject;
+
+        return $this;
+    }
+
+    /**
+     * Get relationObject
+     *
+     * @return string 
+     */
+    public function getRelationObject()
+    {
+        return $this->relationObject;
     }
 
 }

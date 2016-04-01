@@ -90,7 +90,7 @@ class MonitoringController extends ResourceController
 
     public function showAction(Request $request){
         
-        $this->autoVerificationAction($request);
+        $this->autoVerificationAction($request);        
 
         $id = $request->get('id');        
         $type = $request->get('type');
@@ -102,8 +102,7 @@ class MonitoringController extends ResourceController
         }elseif ($type == 2) {
             $result = $this->container->get('pequiven.repository.gerenciafirst')->find($id);             
         }
-        
-        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('managementSystem' => $id));
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('relationObject' => $id, 'typeObject' => $type));
         
         foreach (Standardization::getDetectionArray() as $key => $value) {
                 $labelsDetection[] = array(
@@ -145,20 +144,18 @@ class MonitoringController extends ResourceController
         
         $id = $request->get('id');  
         $period = $this->getPeriodService()->getPeriodActive();
-
         $standardization = new standardization();
         $form  = $this->createForm(new StandardizationType($period), $standardization);
         
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
-            $managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id); 
+        if ($request->isMethod('POST')) {        
+            $form->handleRequest($request);            
             $em = $this->getDoctrine()->getManager();                        
 
             if ($request->get('analysis')) {
                 $standardization->setAnalysis(1);
             }
-
-            $standardization->setManagementSystem($managemensystems);
+            $standardization->setTypeObject($request->get('type'));
+            $standardization->setRelationObject($id);
             $em->persist($standardization);            
             $em->flush();
 
@@ -235,7 +232,7 @@ class MonitoringController extends ResourceController
         $type = $request->get('type');
 
         $managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id);         
-        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('managementSystem' => $id));
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('relationObject' => $id));
         foreach ($standardization as $valueMaintenance) {
             foreach ($valueMaintenance->getMaintenance() as $value) {
                 if ($value->getStatus() == 1) {
@@ -260,11 +257,12 @@ class MonitoringController extends ResourceController
         $em = $this->getDoctrine()->getManager();
 
         $id = $request->get('id');
+
         $managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id); 
         
         $resource = $this->findOr404($request);
         
-        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('managementSystem' => $id));
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('relationObject' => $id, 'typeObject' => $request->get('type')));
         
         //Formato para todo el documento
         $styleArrayBordersContent = array(

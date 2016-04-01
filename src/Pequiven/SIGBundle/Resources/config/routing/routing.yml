@@ -56,7 +56,7 @@ pequiven_sig_monitoring_show:
         _format: html    
     methods: [GET]
 pequiven_sig_monitoring_export:
-    path: /sig/export/{id}
+    path: /sig/export/{type}/{id}
     defaults:
         _controller: pequiven.controller.monitoring_sig:exportAction
         _format: html    

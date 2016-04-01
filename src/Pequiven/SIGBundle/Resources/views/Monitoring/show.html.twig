@@ -19,6 +19,8 @@
 {% endif %}
 
 <div class="block_id" ng-init="id_managementSystem='{{ data.id }}'"></div>
+<div ng-init="type='{{ type }}'"></div>
+
 <fieldset class="fieldset">
     <legend class="legend">{{ data }}&nbsp;</legend>
     <div class="columns">        
@@ -35,7 +37,7 @@
 
 <p class="button-height align-right">          
     <div style="text-align: right; margin-left:15px;">
-        {{ buttons.generic_ext_sv(path('pequiven_sig_monitoring_export', { 'id': data.id }),('Descargar'|trans({},'messages'))) }}
+        {{ buttons.generic_ext_sv(path('pequiven_sig_monitoring_export', { 'id': data.id, 'type':type }),('Descargar'|trans({},'messages'))) }}
     </div>
 </p>
 {% endblock %}
