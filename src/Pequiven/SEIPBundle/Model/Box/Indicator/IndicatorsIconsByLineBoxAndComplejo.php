@@ -69,7 +69,8 @@ class IndicatorsIconsByLineBoxAndComplejo extends GenericBox
             'tree' => $tree,
             'data' => $data,
             'style' => $style,
-            'idComplejo' => $idComplejo
+            'idComplejo' => $idComplejo,
+            'indicatorService' => $indicatorService,
         );
     }
     
