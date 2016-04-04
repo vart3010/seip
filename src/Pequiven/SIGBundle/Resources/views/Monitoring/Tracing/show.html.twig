@@ -31,8 +31,8 @@
                                         </td>
                                         <td width="8%">{{ dataStandardization.code }}</td>
                                         <td width="15%">
-                                            {% if dataStandardization.analysis %}                                                
-                                                <a href="{{ asset('php-export-handler/temp/') }}{{dataStandardization.file}}" target="_blank" title="Programa de Gestión" download="{{dataStandardization.file}}"><i class="fa fa-file-text"></i>&nbsp;Análisis Causa Raíz</a> 
+                                            {% if dataStandardization.analysis %}
+                                                <a href="{{ path('pequiven_sig_monitoring_show_download', {'id':dataStandardization.id})}}" target="_blank" title="Programa de Gestión" download="{{dataStandardization.file}}"><i class="fa fa-file-text"></i>&nbsp;Análisis Causa Raíz</a> 
                                                 <br>
                                             {% endif %}
                                             {% if dataStandardization.arrangementProgram %}                                            
