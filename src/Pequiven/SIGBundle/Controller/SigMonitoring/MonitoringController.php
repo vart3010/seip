@@ -147,12 +147,13 @@ class MonitoringController extends ResourceController
         $standardization = new standardization();
         $form  = $this->createForm(new StandardizationType($period), $standardization);
         
-        if ($request->isMethod('POST')) {        
+        if ($request->isMethod('POST')) {            
             $form->handleRequest($request);            
             $em = $this->getDoctrine()->getManager();                        
 
             if ($request->get('analysis')) {
                 $standardization->setAnalysis(1);
+                $standardization->setFile($request->get('fileName'));
             }
             $standardization->setTypeObject($request->get('type'));
             $standardization->setRelationObject($id);
@@ -501,6 +502,34 @@ class MonitoringController extends ResourceController
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
         exit;
+    }
+
+    public function uploadAction(Request $request){
+        $response = new JsonResponse();    
+        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') 
+        {   
+            $nameFile = sha1(date('d-m-Y : h:m:s'));
+            foreach ($request->files as $file) {
+                $file->move($this->container->getParameter("kernel.root_dir") . '/../web/php-export-handler/temp/', $nameFile);
+                $fileUploaded = $file->isValid();                
+            }            
+
+            sleep(3);            
+            $response->setData($nameFile);
+            return $response;            
+        }else{
+            throw new Exception("Error Processing Request", 1);   
+        }
+    }
+
+    public function downloadAction(Request $request){
+        $em = $this->getDoctrine()->getManager();                        
+
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($request->get('id'));
+        
+        echo $this->container->getParameter("kernel.root_dir") . '/../web/php-export-handler/temp/'.$standardization->getFile();
+        die();
+
     }
 
     /**

@@ -127,6 +127,13 @@ class Standardization extends model
     private $typeObject;
 
     /**
+     * File
+     * @var string
+     * @ORM\Column(name="file",type="string",length=150, nullable=true)
+     */
+    private $file;
+
+    /**
      * Constructor
      */
     public function __construct(){
@@ -478,6 +485,29 @@ class Standardization extends model
     public function getRelationObject()
     {
         return $this->relationObject;
+    }
+
+    /**
+     * Set file
+     *
+     * @param string $file
+     * @return 
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    /**
+     * Get file
+     *
+     * @return string 
+     */
+    public function getFile()
+    {
+        return $this->file;
     }
 
 }
