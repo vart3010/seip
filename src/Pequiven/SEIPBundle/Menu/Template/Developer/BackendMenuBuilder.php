@@ -348,7 +348,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.monitoring.list_managementSystem', $section)));
 
             $child->addChild('sig.monitoring.vizualice.list-gerencias', array(
-                        'route' => '',
+                        'route' => 'pequiven_sig_monitoring_list',
                         'routeParameters' => array('type' => 2),
                         'labelAttributes' => array('icon' => ''),
                     ))

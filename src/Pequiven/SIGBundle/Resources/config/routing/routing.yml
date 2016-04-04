@@ -50,13 +50,25 @@ pequiven_sig_monitoring_list:
     options:
         expose: true
 pequiven_sig_monitoring_show:
-    path: /sig/monitoring/list/show/{id}
+    path: /sig/monitoring/list/show/{type}/{id}
     defaults:
         _controller: pequiven.controller.monitoring_sig:showAction
         _format: html    
     methods: [GET]
+pequiven_sig_monitoring_show_upload:
+    path: /sig/monitoring/list/show/{type}/upload
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:uploadAction
+        _format: html    
+    methods: [GET|POST]
+pequiven_sig_monitoring_show_download:
+    path: /sig/monitoring/download/{id}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:downloadAction
+        _format: html    
+    methods: [GET|POST]
 pequiven_sig_monitoring_export:
-    path: /sig/export/{id}
+    path: /sig/export/{type}/{id}
     defaults:
         _controller: pequiven.controller.monitoring_sig:exportAction
         _format: html    
