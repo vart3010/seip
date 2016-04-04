@@ -18,7 +18,7 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  * Dias de paradas
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
- * @ORM\Table(name="seip_report_product_report_day_stop")
+ * @ORM\Table(name="seip_report_plant_report_day_stop")
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks()
  */

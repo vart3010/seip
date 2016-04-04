@@ -54,6 +54,17 @@ pequiven_work_study_circle_add_others_members:
     options:
         expose: true
         
+pequiven_work_study_circle_delete_member:
+    path: /{idUser}/deleteMember.{_format}
+    defaults:
+        _controller: pequiven.controller.work_study_circle:deleteMemberAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+        
 pequiven_work_study_circle_add_coordinator:
     path: /{idWorkStudyCircle}/addCoordinator.{_format}
     defaults:

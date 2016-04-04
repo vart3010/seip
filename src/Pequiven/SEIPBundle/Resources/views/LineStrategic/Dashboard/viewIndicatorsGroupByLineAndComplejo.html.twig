@@ -1,0 +1,26 @@
+<!-- Widgets de los Indicadores Estratégicos de acuerdo a una Línea Estratégica seleccionada -->
+{% trans_default_domain 'PequivenSEIPBundle' %}
+{% set classColor = 'red-gradient' %}
+<div style=' display: table; width: 100%' >
+{% for t in tree %}
+    {% set lineStrategic = t['parent'] %}
+        {% for indicator in t['child'] %}
+            {% if indicator.notshowIndicatorNoEvaluateInPeriod != true %}
+                <div class="three-columns six-c ablet twelve-columns-mobile new-row-mobile" style="display: inline-block;" ng-controller="DashboardController" ng-init="renderWidgetIndicatorStrategic('{{ indicator.ref }}',{{ data[lineStrategic.ref][indicator.ref]|json_encode() }},'100%','150px')" >
+                    <div style='width: 100%; text-align: center;'>
+                        <a target="_blank" href="{{ path('pequiven_indicator_show',{id:indicator.id}) }}">
+                            <span title="{{ indicator.description }}">
+                                <p>{% if indicatorService.isIndicatorHasParents(indicator) != true %}<i class="fa fa-industry"></i>&nbsp;-&nbsp;{% endif %}<b>{{ indicator.summary }}</b></p>
+                            </span>
+                        </a>
+                    </div>
+
+                    <div style='margin-top: 20px;'>
+                        <span id="{{ indicator.ref }}"></span>
+                    </div>
+                </div>
+                    
+            {% endif %}
+        {% endfor %}
+{% endfor %}
+</div>

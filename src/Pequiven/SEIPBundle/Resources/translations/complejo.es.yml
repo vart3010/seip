@@ -1,0 +1,8 @@
+## YAML Template.
+---
+complejo:
+    dashboardIndicator: Indicadores %complejo%
+    
+##Listado de líneas estrategicas de acuerdo al complejo
+resultsComplejo:
+        strategicLines: Resultados estratégicos %complejo%

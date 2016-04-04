@@ -237,7 +237,6 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     private $evolutionAction;
 
     /**
-
      * @var Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee
      * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee", mappedBy="User")
      * */
@@ -264,6 +263,27 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     protected $quarterToLoadOperationProduction = 0;
 
     /**
+     * @ORM\Column(name="notify",type="integer",nullable=true)
+     */
+    private $notify;
+
+    /**
+     *
+     * @var \Pequiven\SEIPBundle\Entity\User\Notification
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\Notification", mappedBy="user") 
+     */
+    private $notification;
+
+    /**
+     * aciones
+     * 
+     * @var \Pequiven\SIGBundle\Entity\Tracing\Standardization
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SIGBundle\Entity\Tracing\Standardization", mappedBy="responsible") 
+     * 
+     */
+    private $maintenanceResponsibles;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -281,6 +301,9 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->evolutionAction = new \Doctrine\Common\Collections\ArrayCollection();
         $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->notification = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->maintenanceResponsibles = new \Doctrine\Common\Collections\ArrayCollection();        
+
     }
 
     /**
@@ -1048,6 +1071,53 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      */
     public function getQuarterToLoadOperationProduction() {
         return $this->quarterToLoadOperationProduction;
+    }
+
+    /**
+     * 
+     * @param type $notify
+     * @return 
+     */
+    public function setNotify($notify) {
+        $this->notify = $notify;
+    }
+
+    /**
+     * Get notify
+     * @return integer
+     */
+    public function getNotify() {
+        return $this->notify;
+    }
+
+    /**
+     * Add maintenanceResponsibles
+     *
+     * @param \Pequiven\SIGBundle\Entity\Tracing\Standardization $maintenanceResponsibles
+     * @return User
+     */
+    public function addMaintenanceResponsibles(\Pequiven\SIGBundle\Entity\Tracing\Standardization $maintenanceResponsibles) {
+        $this->maintenanceResponsibles[] = $maintenanceResponsibles;
+
+        return $this;
+    }
+
+    /**
+     * Remove maintenanceResponsibles
+     *
+     * @param \Pequiven\SIGBundle\Entity\Tracing\Standardization $maintenanceResponsibles
+     */
+    public function removeMaintenanceResponsibles(\Pequiven\SIGBundle\Entity\Tracing\Standardization $maintenanceResponsibles) {
+        $this->maintenanceResponsibles->removeElement($maintenanceResponsibles);
+    }
+
+    /**
+     * Get maintenanceResponsibles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMaintenanceResponsibles() {
+        return $this->maintenanceResponsibles;
     }
 
 }

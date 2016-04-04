@@ -80,3 +80,50 @@ listArrangementProgramByGroup:
     requirements:
         idGerencia: "\d+"
     methods: [GET]
+
+pequiven_seip_modules_ventas:
+    path:     /module/ventas
+    defaults: { _controller: PequivenSEIPBundle:Default:module }
+pequiven_seip_modules_despacho:
+    path:     /module/despachos
+    defaults: { _controller: PequivenSEIPBundle:Default:module }
+pequiven_seip_modules_contrataciones:
+    path:     /module/contrataciones
+    defaults: { _controller: PequivenSEIPBundle:Default:module }
+pequiven_seip_modules_proyectos:
+    path:     /module/proyectos
+    defaults: { _controller: PequivenSEIPBundle:Default:module }
+
+pequiven_user_notification_data:
+    path: /user/notification
+    defaults:
+        _controller: pequiven_seip.controller.user:notificationAction 
+seip_notification_view_message:
+    path: /user/get-message
+    defaults:
+        _controller: pequiven_seip.controller.user:getNotificationAction
+seip_notification_delete_message:
+    path: /user/delete-message
+    defaults:
+        _controller: pequiven_seip.controller.user:delNotificationAction
+seip_notification_favourite_message:
+    path: /user/favourite-message
+    defaults:
+        _controller: pequiven_seip.controller.user:NotificationFavouriteAction   
+seip_notification_view_messages_data:
+    path: /user/get-message-data
+    defaults:
+        _controller: pequiven_seip.controller.user:getNotifyDataAction
+    methods: [GET]
+seip_notification_view_messages_return_data:
+    path: /user/get-messages
+    defaults:
+        _controller: pequiven_seip.controller.user:getMessagesDataAction
+    methods: [GET|POST]
+seip_notification_get_data_notify:
+    path: /user/get-notify
+    defaults:
+        _controller: pequiven_seip.controller.user:getNotificationUserAction
+    methods: [GET]
+    
+

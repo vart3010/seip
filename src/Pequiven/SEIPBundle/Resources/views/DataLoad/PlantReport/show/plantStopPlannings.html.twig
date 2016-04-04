@@ -21,10 +21,10 @@
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
                 <tr>
-                    <th scope="col" width="35%">{{ 'Month'|trans }}</th>
-                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'pequiven_seip.totalStops'|trans }}</th>
-                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'pequiven_seip.totalHours'|trans }}</th>
-                    <th scope="col" width="10%">&nbsp;</th>
+                    <th scope="col" width="50%">{{ 'Month'|trans }}</th>
+                    <th scope="col" width="15%" class="hide-on-mobile-portrait" align="left">{{ 'pequiven_seip.totalStops'|trans }}</th>
+                    <th scope="col" width="15%" class="hide-on-tablet" align="right">{{ 'pequiven_seip.totalHours'|trans }}</th>
+                    <th scope="col" width="10%">&nbsp;</th>                    
                 </tr>
             </thead>
             {% set colspan = 6 %}
@@ -47,11 +47,11 @@
                             <td>{{ loop.index }} - 
                                 {{ generateLink(plantStopPlanning) }}
                             </td>
-                            <th scope="row">
+                            <td scope="row" align="left">
                                 {{ plantStopPlanning.totalStops }}&nbsp;{{ "pequiven_seip.days"|trans }}
                                 {% set totalStops = totalStops + plantStopPlanning.totalStops %}
-                            </th>
-                            <td>
+                            </td>
+                            <td align="right">
                                 {{ plantStopPlanning.totalHours }}&nbsp;h
                                 {% set totalHours = totalHours + plantStopPlanning.totalHours %}
                             </td>
@@ -67,7 +67,6 @@
                                 {{ "empty.plant_stop_planning"|trans }}
                             </td>
                         </tr>
-
                     {% endfor %}
                 {% endif %}
             </tbody>
@@ -80,6 +79,5 @@
                  </tr>
              </tfoot>#}
         </table>
-
     </div>
 </div>

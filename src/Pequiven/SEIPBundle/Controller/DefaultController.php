@@ -75,6 +75,10 @@ class DefaultController extends Controller {
         var_dump($ref);
     }
 
+    public function moduleAction(){
+        return $this->render('PequivenSEIPBundle:Default:developr.html.twig');
+    }
+
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */

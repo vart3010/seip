@@ -1,4 +1,4 @@
-{% extends "PequivenSEIPBundle:Template:Developer/layout.html.twig" %}
+{% extends "PequivenSEIPBundle:Template:Developer/layoutGestion.html.twig" %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% block stylesheets_base %}
@@ -15,7 +15,9 @@
 {% block body %}
     <div class="with-padding">
         <div class="columns">
+            <div class="twelve-columns center">
             {{ boxRender.renderBox('pequiven_seip_box_linestrategic_icons_dashboard')|raw }}
+            </div>
         </div>
     </div>
 {% endblock body %}

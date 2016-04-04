@@ -1,0 +1,106 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
+
+{% block body %}
+<fieldset class="fieldset ">
+        <legend class="legend">Estandarización</legend>
+        <div class="columns">        
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Area</label>
+                        {{ standardization.area }}
+                </p>
+                <p class="inline-label">
+                    <label class="label">Detección</label>
+                        {{ labelsDetection[standardization.detection - 1].description }}
+                </p>            
+            </div>
+            <div class="six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Codigo</label>
+                        {{ standardization.code }}
+                </p>            
+                <p class="inline-label">
+                    <label class="label">Tipo de NC</label>
+                        {{ labelsTypeNc[standardization.type - 1].description }}
+                </p>
+            </div>
+            <div class="six-columns six-columns-tablet twelve-columns-mobile">            
+                {% if dataAdvance %}
+                    <p class="inline-label">
+                        <label class="label">Avance Cargado</label>
+                            {{ dataAdvance }}%
+                    </p>
+                    <p id="max" style="display:none">{{ dataAdvance }}</p>
+                {% endif %}
+            </div>
+        </div>    
+</fieldset>
+<form method="POST" id="form_maintenance_add">
+    <fieldset class="fieldset fields-list">
+        <legend class="legend">Mantenimiento</legend>            
+            {% if valueCharge == 0 %}
+                <div class="field-block button-height" >            
+                    {{ form_label(form.analysis) }}            
+                    {{ form_widget(form.analysis) }}            
+                </div>  
+                <div class="field-block button-height" >            
+                    {{ form_label(form.dateStart) }}            
+                    {{ form_widget(form.dateStart) }}            
+                </div>  
+                <div class="field-block button-height" >            
+                    {{ form_label(form.dateEnd) }}            
+                    {{ form_widget(form.dateEnd) }}            
+                </div> 
+            {% endif %}
+
+            <div class="field-block button-height" >            
+                {{ form_label(formAdvance.advance) }}            
+                {{ form_widget(formAdvance.advance) }}            
+            </div>              
+            <div class="field-block button-height" >            
+                {{ form_label(formAdvance.observations) }}            
+                {{ form_widget(formAdvance.observations) }}            
+            </div>              
+    </fieldset>    
+</form>   
+
+<script type="text/javascript">
+    {% if period_valid is defined %}
+            $("#sig_maintenance_dateStart").datepicker({
+                    changeYear: false,
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    dateFormat: "dd/mm/yy",
+                    minDate: "01/01/" + {{ period_valid }},
+                    maxDate: "31/12/" + {{ period_valid }},
+            });
+
+            $("#sig_maintenance_dateEnd").datepicker({
+                    changeYear: false,
+                    changeMonth: true,                
+                    numberOfMonths: 1,
+                    dateFormat: "dd/mm/yy",
+                    minDate: "01/01/" + {{ period_valid }},
+                    maxDate: "31/12/" + {{ period_valid }},
+            });
+    {% endif %}
+
+    $('input#sig_maintenance_advance_advance').keyup(function openConfirm() {        
+        var valueCharge = $("#max").text();                
+        var max = 100 - valueCharge;
+
+        if ($("#sig_maintenance_advance_advance").val() > max) {
+            $.modal.alert('Valor ingresado mayor a avance valido para carga ' + max, {
+                buttons: {
+                    'Aceptar': {
+                        classes:    'huge blue-gradient glossy full-width',
+                        click:      function(win) { win.closeModal(); 
+                            $("#sig_maintenance_advance_advance").val("")
+                        }
+                    }
+                }
+            });            
+        };
+    });    
+</script> 
+{% endblock %}

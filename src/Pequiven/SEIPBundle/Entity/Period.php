@@ -13,8 +13,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\PeriodRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Period extends Base implements \Serializable
-{
+class Period extends Base implements \Serializable {
+
     /**
      * @var integer
      *
@@ -31,7 +31,7 @@ class Period extends Base implements \Serializable
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-    
+
     /**
      * Description del periodo
      * @var string
@@ -119,7 +119,7 @@ class Period extends Base implements \Serializable
      * @ORM\Column(name="dateEndLoadSigArrangementProgram", type="date", nullable=true)
      */
     private $dateEndLoadSigArrangementProgram;
-    
+
     /**
      * Fecha inicio de carga de objetivos.
      * @var \DateTime
@@ -135,15 +135,15 @@ class Period extends Base implements \Serializable
      * @ORM\Column(name="dateEndLoadObjetive", type="date", nullable=true)
      */
     private $dateEndLoadObjetive;
-    
-     /**
+
+    /**
      * Fecha inicio de carga de indicadores.
      * @var \DateTime
      *
      * @ORM\Column(name="dateStartLoadIndicator", type="date", nullable=true)
      */
     private $dateStartLoadIndicator;
-    
+
     /**
      * Fecha fin de carga de indicadores.
      * @var \DateTime
@@ -159,7 +159,7 @@ class Period extends Base implements \Serializable
      * @ORM\Column(name="dateStartLoadWorkStudyCircle", type="date", nullable=true)
      */
     private $dateStartLoadWorkStudyCircle;
-    
+
     /**
      * Fecha fin de carga de circulos de estudio.
      * @var \DateTime
@@ -183,7 +183,7 @@ class Period extends Base implements \Serializable
      * @ORM\Column(name="dateStartPenalty", type="date", nullable=true)
      */
     private $dateStartPenalty;
-    
+
     /**
      * Fecha fin de penalizacion
      * @var \DateTime
@@ -191,7 +191,7 @@ class Period extends Base implements \Serializable
      * @ORM\Column(name="dateEndPenalty", type="date", nullable=true)
      */
     private $dateEndPenalty;
-    
+
     /**
      * Porcentaje de penalizacion
      * @var \DateTime
@@ -207,7 +207,7 @@ class Period extends Base implements \Serializable
      * @ORM\Column(name="dateEndClearanceNotificationArrangementProgram", type="date", nullable=true)
      */
     private $dateEndClearanceNotificationArrangementProgram;
-    
+
     /**
      * Periodo anterior o padre
      * 
@@ -215,70 +215,90 @@ class Period extends Base implements \Serializable
      * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period",inversedBy="child")
      */
     private $parent;
-    
+
     /**
      *
      * @var type 
      * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period",mappedBy="parent")
      */
     private $child;
-    
+
     /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
-    
     //****CHECKS PARA ACTIVAR O DESACTIVAR UN TRIMESTRE (Notificación de Indicadores)***/////
     /**
      * @ORM\Column(name="isLoadIndicatorTrim1", type="boolean", nullable=true)
      */
     private $isLoadIndicatorTrim1 = false;
-    
+
     /**
      * @ORM\Column(name="isLoadIndicatorTrim2", type="boolean", nullable=true)
      */
     private $isLoadIndicatorTrim2 = false;
-    
+
     /**
      * @ORM\Column(name="isLoadIndicatorTrim3", type="boolean", nullable=true)
      */
     private $isLoadIndicatorTrim3 = false;
-    
+
     /**
      * @ORM\Column(name="isLoadIndicatorTrim4", type="boolean", nullable=true)
      */
     private $isLoadIndicatorTrim4 = false;
-    
+
     //********************************************//
-    
+
     /**
      * Fecha inicio de planificacion de reportes
      * @var \DateTime
      * @ORM\Column(name="dateStartPlanningReport", type="date", nullable=true)
      */
     private $dateStartPlanningReport;
-    
+
     /**
      * Fecha fin de planificacion de reportes
      * @var \DateTime
      * @ORM\Column(name="dateEndPlanningReport", type="date", nullable=true)
      */
     private $dateEndPlanningReport;
-    
+
     /**
      * ¿Habilita la planificacion?
      * @ORM\Column(name="isPlanningReportEnabled", type="boolean", nullable=true)
      */
     private $isPlanningReportEnabled = false;
 
+
+    /* fecha apra abrir grupo de productos* */
+
+    /**
+     * Fecha inicio de planificacion de reportes
+     * @var \DateTime
+     * @ORM\Column(name="dateStartLoadGroupProduct", type="date", nullable=true)
+     */
+    private $dateStartLoadGroupProduct;
+
+    /**
+     * Fecha fin de planificacion de reportes
+     * @var \DateTime
+     * @ORM\Column(name="dateEndLoadGroupProduct", type="date", nullable=true)
+     */
+    private $dateEndLoadGroupProduct;
+
+    /**
+     * ¿Habilita la planificacion?
+     * @ORM\Column(name="isLoadGroupProductEnabled", type="boolean", nullable=true)
+     */
+    private $isLoadGroupProductEnabled = false;
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -288,8 +308,7 @@ class Period extends Base implements \Serializable
      * @param string $name
      * @return Period
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
 
         return $this;
@@ -300,8 +319,7 @@ class Period extends Base implements \Serializable
      *
      * @return string 
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -311,8 +329,7 @@ class Period extends Base implements \Serializable
      * @param \DateTime $dateStart
      * @return Period
      */
-    public function setDateStart($dateStart)
-    {
+    public function setDateStart($dateStart) {
         $this->dateStart = $dateStart;
 
         return $this;
@@ -323,8 +340,7 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateStart()
-    {
+    public function getDateStart() {
         return $this->dateStart;
     }
 
@@ -334,8 +350,7 @@ class Period extends Base implements \Serializable
      * @param \DateTime $dateEnd
      * @return Period
      */
-    public function setDateEnd($dateEnd)
-    {
+    public function setDateEnd($dateEnd) {
         $this->dateEnd = $dateEnd;
 
         return $this;
@@ -346,8 +361,7 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateEnd()
-    {
+    public function getDateEnd() {
         return $this->dateEnd;
     }
 
@@ -357,8 +371,7 @@ class Period extends Base implements \Serializable
      * @param integer $status
      * @return Period
      */
-    public function setStatus($status)
-    {
+    public function setStatus($status) {
         $this->status = $status;
 
         return $this;
@@ -369,11 +382,10 @@ class Period extends Base implements \Serializable
      *
      * @return integer 
      */
-    public function getStatus()
-    {
+    public function getStatus() {
         return $this->status;
     }
-    
+
     function getDescription() {
         return $this->description;
     }
@@ -385,7 +397,7 @@ class Period extends Base implements \Serializable
      */
     function setDescription($description) {
         $this->description = $description;
-        
+
         return $this;
     }
 
@@ -395,8 +407,7 @@ class Period extends Base implements \Serializable
      * @param \DateTime $dateStartNotificationArrangementProgram
      * @return Period
      */
-    public function setDateStartNotificationArrangementProgram($dateStartNotificationArrangementProgram)
-    {
+    public function setDateStartNotificationArrangementProgram($dateStartNotificationArrangementProgram) {
         $this->dateStartNotificationArrangementProgram = $dateStartNotificationArrangementProgram;
 
         return $this;
@@ -407,8 +418,7 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateStartNotificationArrangementProgram()
-    {
+    public function getDateStartNotificationArrangementProgram() {
         return $this->dateStartNotificationArrangementProgram;
     }
 
@@ -418,8 +428,7 @@ class Period extends Base implements \Serializable
      * @param \DateTime $dateEndNotificationArrangementProgram
      * @return Period
      */
-    public function setDateEndNotificationArrangementProgram($dateEndNotificationArrangementProgram)
-    {
+    public function setDateEndNotificationArrangementProgram($dateEndNotificationArrangementProgram) {
         $this->dateEndNotificationArrangementProgram = $dateEndNotificationArrangementProgram;
 
         return $this;
@@ -430,8 +439,7 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateEndNotificationArrangementProgram()
-    {
+    public function getDateEndNotificationArrangementProgram() {
         return $this->dateEndNotificationArrangementProgram;
     }
 
@@ -441,8 +449,7 @@ class Period extends Base implements \Serializable
      * @param \DateTime $dateStartLoadArrangementProgram
      * @return Period
      */
-    public function setDateStartLoadArrangementProgram($dateStartLoadArrangementProgram)
-    {
+    public function setDateStartLoadArrangementProgram($dateStartLoadArrangementProgram) {
         $this->dateStartLoadArrangementProgram = $dateStartLoadArrangementProgram;
 
         return $this;
@@ -453,8 +460,7 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateStartLoadArrangementProgram()
-    {
+    public function getDateStartLoadArrangementProgram() {
         return $this->dateStartLoadArrangementProgram;
     }
 
@@ -464,8 +470,7 @@ class Period extends Base implements \Serializable
      * @param \DateTime $dateEndLoadArrangementProgram
      * @return Period
      */
-    public function setDateEndLoadArrangementProgram($dateEndLoadArrangementProgram)
-    {
+    public function setDateEndLoadArrangementProgram($dateEndLoadArrangementProgram) {
         $this->dateEndLoadArrangementProgram = $dateEndLoadArrangementProgram;
 
         return $this;
@@ -476,19 +481,17 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateEndLoadArrangementProgram()
-    {
+    public function getDateEndLoadArrangementProgram() {
         return $this->dateEndLoadArrangementProgram;
     }
-    
+
     /**
      * Set dateStartLoadSigArrangementProgram
      *
      * @param \DateTime $dateStartLoadSigArrangementProgram
      * @return Period
      */
-    public function setDateStartLoadSigArrangementProgram($dateStartLoadSigArrangementProgram)
-    {
+    public function setDateStartLoadSigArrangementProgram($dateStartLoadSigArrangementProgram) {
         $this->dateStartLoadSigArrangementProgram = $dateStartLoadSigArrangementProgram;
 
         return $this;
@@ -499,8 +502,7 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateStartLoadSigArrangementProgram()
-    {
+    public function getDateStartLoadSigArrangementProgram() {
         return $this->dateStartLoadSigArrangementProgram;
     }
 
@@ -510,8 +512,7 @@ class Period extends Base implements \Serializable
      * @param \DateTime $dateEndLoadSigArrangementProgram
      * @return Period
      */
-    public function setDateEndLoadSigArrangementProgram($dateEndLoadSigArrangementProgram)
-    {
+    public function setDateEndLoadSigArrangementProgram($dateEndLoadSigArrangementProgram) {
         $this->dateEndLoadSigArrangementProgram = $dateEndLoadSigArrangementProgram;
 
         return $this;
@@ -522,19 +523,17 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateEndLoadSigArrangementProgram()
-    {
+    public function getDateEndLoadSigArrangementProgram() {
         return $this->dateEndLoadSigArrangementProgram;
-    }    
-    
+    }
+
     /**
      * Set dateStartLoadObjetive
      *
      * @param \DateTime $dateStartLoadObjetive
      * @return Period
      */
-    public function setDateStartLoadObjetive($dateStartLoadObjetive)
-    {
+    public function setDateStartLoadObjetive($dateStartLoadObjetive) {
         $this->dateStartLoadObjetive = $dateStartLoadObjetive;
 
         return $this;
@@ -545,19 +544,17 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateStartLoadObjetive()
-    {
+    public function getDateStartLoadObjetive() {
         return $this->dateStartLoadObjetive;
     }
-    
+
     /**
      * Set dateEndLoadObjetive
      *
      * @param \DateTime $dateEndLoadObjetive
      * @return Period
      */
-    public function setDateEndLoadObjetive($dateEndLoadObjetive)
-    {
+    public function setDateEndLoadObjetive($dateEndLoadObjetive) {
         $this->dateEndLoadObjetive = $dateEndLoadObjetive;
 
         return $this;
@@ -568,20 +565,18 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateEndLoadObjetive()
-    {
+    public function getDateEndLoadObjetive() {
         return $this->dateEndLoadObjetive;
     }
-    
+
     /**
      * Set dateStartLoadIndicator
      *
      * @param \DateTime $dateStartLoadIndicator
      * @return Period
      */
-    public function setDateStartLoadIndicator($dateStartLoadIndicator)
-    {
-        $this->dateStartLoadIndicator= $dateStartLoadIndicator;
+    public function setDateStartLoadIndicator($dateStartLoadIndicator) {
+        $this->dateStartLoadIndicator = $dateStartLoadIndicator;
 
         return $this;
     }
@@ -591,19 +586,17 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateStartLoadIndicator()
-    {
+    public function getDateStartLoadIndicator() {
         return $this->dateStartLoadIndicator;
     }
-    
+
     /**
      * Set dateEndLoadIndicator
      *
      * @param \DateTime $dateEndLoadIndicator
      * @return Period
      */
-    public function setDateEndLoadIndicator($dateEndLoadIndicator)
-    {
+    public function setDateEndLoadIndicator($dateEndLoadIndicator) {
         $this->dateEndLoadIndicator = $dateEndLoadIndicator;
 
         return $this;
@@ -614,8 +607,7 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateEndLoadIndicator()
-    {
+    public function getDateEndLoadIndicator() {
         return $this->dateEndLoadIndicator;
     }
 
@@ -625,9 +617,8 @@ class Period extends Base implements \Serializable
      * @param \DateTime $dateStartLoadWorkStudyCircle
      * @return Period
      */
-    public function setDateStartLoadWorkStudyCircle($dateStartLoadWorkStudyCircle)
-    {
-        $this->dateStartLoadWorkStudyCircle= $dateStartLoadWorkStudyCircle;
+    public function setDateStartLoadWorkStudyCircle($dateStartLoadWorkStudyCircle) {
+        $this->dateStartLoadWorkStudyCircle = $dateStartLoadWorkStudyCircle;
 
         return $this;
     }
@@ -637,19 +628,17 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateStartLoadWorkStudyCircle()
-    {
+    public function getDateStartLoadWorkStudyCircle() {
         return $this->dateStartLoadWorkStudyCircle;
     }
-    
+
     /**
      * Set dateEndLoadWorkStudyCircle
      *
      * @param \DateTime $dateEndLoadWorkStudyCircle
      * @return Period
      */
-    public function setDateEndLoadWorkStudyCircle($dateEndLoadWorkStudyCircle)
-    {
+    public function setDateEndLoadWorkStudyCircle($dateEndLoadWorkStudyCircle) {
         $this->dateEndLoadWorkStudyCircle = $dateEndLoadWorkStudyCircle;
 
         return $this;
@@ -660,8 +649,7 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateEndLoadWorkStudyCircle()
-    {
+    public function getDateEndLoadWorkStudyCircle() {
         return $this->dateEndLoadWorkStudyCircle;
     }
 
@@ -671,8 +659,7 @@ class Period extends Base implements \Serializable
      * @param \DateTime $dateStartClearanceNotificationArrangementProgram
      * @return Period
      */
-    public function setDateStartClearanceNotificationArrangementProgram($dateStartClearanceNotificationArrangementProgram)
-    {
+    public function setDateStartClearanceNotificationArrangementProgram($dateStartClearanceNotificationArrangementProgram) {
         $this->dateStartClearanceNotificationArrangementProgram = $dateStartClearanceNotificationArrangementProgram;
 
         return $this;
@@ -683,8 +670,7 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateStartClearanceNotificationArrangementProgram()
-    {
+    public function getDateStartClearanceNotificationArrangementProgram() {
         return $this->dateStartClearanceNotificationArrangementProgram;
     }
 
@@ -694,8 +680,7 @@ class Period extends Base implements \Serializable
      * @param \DateTime $dateEndClearanceNotificationArrangementProgram
      * @return Period
      */
-    public function setDateEndClearanceNotificationArrangementProgram($dateEndClearanceNotificationArrangementProgram)
-    {
+    public function setDateEndClearanceNotificationArrangementProgram($dateEndClearanceNotificationArrangementProgram) {
         $this->dateEndClearanceNotificationArrangementProgram = $dateEndClearanceNotificationArrangementProgram;
 
         return $this;
@@ -706,8 +691,7 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateEndClearanceNotificationArrangementProgram()
-    {
+    public function getDateEndClearanceNotificationArrangementProgram() {
         return $this->dateEndClearanceNotificationArrangementProgram;
     }
 
@@ -717,8 +701,7 @@ class Period extends Base implements \Serializable
      * @param \Pequiven\SEIPBundle\Entity\Period $parent
      * @return Period
      */
-    public function setParent(\Pequiven\SEIPBundle\Entity\Period $parent = null)
-    {
+    public function setParent(\Pequiven\SEIPBundle\Entity\Period $parent = null) {
         $this->parent = $parent;
 
         return $this;
@@ -729,8 +712,7 @@ class Period extends Base implements \Serializable
      *
      * @return \Pequiven\SEIPBundle\Entity\Period 
      */
-    public function getParent()
-    {
+    public function getParent() {
         return $this->parent;
     }
 
@@ -740,8 +722,7 @@ class Period extends Base implements \Serializable
      * @param \Pequiven\SEIPBundle\Entity\Period $child
      * @return Period
      */
-    public function setChild(\Pequiven\SEIPBundle\Entity\Period $child = null)
-    {
+    public function setChild(\Pequiven\SEIPBundle\Entity\Period $child = null) {
         $this->child = $child;
 
         return $this;
@@ -752,8 +733,7 @@ class Period extends Base implements \Serializable
      *
      * @return \Pequiven\SEIPBundle\Entity\Period 
      */
-    public function getChild()
-    {
+    public function getChild() {
         return $this->child;
     }
 
@@ -763,8 +743,7 @@ class Period extends Base implements \Serializable
      * @param \DateTime $deletedAt
      * @return Period
      */
-    public function setDeletedAt($deletedAt)
-    {
+    public function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
 
         return $this;
@@ -775,19 +754,17 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDeletedAt()
-    {
+    public function getDeletedAt() {
         return $this->deletedAt;
     }
-    
+
     /**
      * Set dateStartPenalty
      *
      * @param \DateTime $dateStartPenalty
      * @return Period
      */
-    public function setDateStartPenalty($dateStartPenalty)
-    {
+    public function setDateStartPenalty($dateStartPenalty) {
         $this->dateStartPenalty = $dateStartPenalty;
 
         return $this;
@@ -798,8 +775,7 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateStartPenalty()
-    {
+    public function getDateStartPenalty() {
         return $this->dateStartPenalty;
     }
 
@@ -809,8 +785,7 @@ class Period extends Base implements \Serializable
      * @param \DateTime $dateEndPenalty
      * @return Period
      */
-    public function setDateEndPenalty($dateEndPenalty)
-    {
+    public function setDateEndPenalty($dateEndPenalty) {
         $this->dateEndPenalty = $dateEndPenalty;
 
         return $this;
@@ -821,8 +796,7 @@ class Period extends Base implements \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateEndPenalty()
-    {
+    public function getDateEndPenalty() {
         return $this->dateEndPenalty;
     }
 
@@ -832,8 +806,7 @@ class Period extends Base implements \Serializable
      * @param float $percentagePenalty
      * @return Period
      */
-    public function setPercentagePenalty($percentagePenalty)
-    {
+    public function setPercentagePenalty($percentagePenalty) {
         $this->percentagePenalty = $percentagePenalty;
 
         return $this;
@@ -844,84 +817,74 @@ class Period extends Base implements \Serializable
      *
      * @return float 
      */
-    public function getPercentagePenalty()
-    {
+    public function getPercentagePenalty() {
         return $this->percentagePenalty;
     }
-    
-    
+
     /**
      * 
      * @return type
      */
-    public function getIsLoadIndicatorTrim1()
-    {
+    public function getIsLoadIndicatorTrim1() {
         return $this->isLoadIndicatorTrim1;
     }
+
     /**
      * 
      * @param type $isLoadIndicatorTrim1
      */
-    public function setIsLoadIndicatorTrim1($isLoadIndicatorTrim1)
-    {
+    public function setIsLoadIndicatorTrim1($isLoadIndicatorTrim1) {
         $this->isLoadIndicatorTrim1 = $isLoadIndicatorTrim1;
     }
-    
+
     /**
      * 
      * @return type
      */
-    public function getIsLoadIndicatorTrim2()
-    {
+    public function getIsLoadIndicatorTrim2() {
         return $this->isLoadIndicatorTrim2;
     }
+
     /**
      * 
      * @param type $isLoadIndicatorTrim2
      */
-    public function setIsLoadIndicatorTrim2($isLoadIndicatorTrim2)
-    {
+    public function setIsLoadIndicatorTrim2($isLoadIndicatorTrim2) {
         $this->isLoadIndicatorTrim2 = $isLoadIndicatorTrim2;
     }
-    
+
     /**
      * 
      * @return type
      */
-    public function getIsLoadIndicatorTrim3()
-    {
+    public function getIsLoadIndicatorTrim3() {
         return $this->isLoadIndicatorTrim3;
     }
+
     /**
      * 
      * @param type $isLoadIndicatorTrim3
      */
-    public function setIsLoadIndicatorTrim3($isLoadIndicatorTrim3)
-    {
+    public function setIsLoadIndicatorTrim3($isLoadIndicatorTrim3) {
         $this->isLoadIndicatorTrim3 = $isLoadIndicatorTrim3;
     }
-    
+
     /**
      * 
      * @return type
      */
-    public function getIsLoadIndicatorTrim4()
-    {
+    public function getIsLoadIndicatorTrim4() {
         return $this->isLoadIndicatorTrim4;
     }
-    
+
     /**
      * 
      * @param type $isLoadIndicatorTrim4
      */
-    public function setIsLoadIndicatorTrim4($isLoadIndicatorTrim4)
-    {
+    public function setIsLoadIndicatorTrim4($isLoadIndicatorTrim4) {
         $this->isLoadIndicatorTrim4 = $isLoadIndicatorTrim4;
     }
-    
-    
-    
-    
+
     //TODO Objeto falla al ser serializado
     public function serialize() {
         $data = serialize(array(
@@ -951,12 +914,12 @@ class Period extends Base implements \Serializable
 //        die;
         return base64_encode($data);
     }
+
     //TODO Objeto falla al ser desserializado
     public function unserialize($serialized) {
         $data = unserialize(base64_decode($serialized));
 //        var_dump($data);
 //        die;
-        
         // add a few extra elements in the array to ensure that we have enough keys when unserializing
         // older data which does not include all properties.
         $data = array_merge($data, array_fill(0, 2, null));
@@ -964,45 +927,42 @@ class Period extends Base implements \Serializable
         $data[14] = base64_decode($data[14]);
         $data[15] = base64_decode($data[15]);
         list(
-            $this->name,
-            $this->description,
-            $this->dateStart,
-            $this->dateEnd,
-            $this->status,
-            $this->dateStartNotificationArrangementProgram,
-            $this->dateEndNotificationArrangementProgram,
-            $this->dateStartLoadArrangementProgram,
-            $this->dateEndLoadArrangementProgram,
-            $this->dateStartLoadSigArrangementProgram,
-            $this->dateEndLoadSigArrangementProgram,
-            $this->dateStartClearanceNotificationArrangementProgram,
-            $this->dateStartPenalty,
-            $this->dateEndPenalty,
-            $this->percentagePenalty,
-            $this->dateEndClearanceNotificationArrangementProgram,
-            $this->parent,
-            $this->child,
-            $this->id,
-        ) = $data;
+                $this->name,
+                $this->description,
+                $this->dateStart,
+                $this->dateEnd,
+                $this->status,
+                $this->dateStartNotificationArrangementProgram,
+                $this->dateEndNotificationArrangementProgram,
+                $this->dateStartLoadArrangementProgram,
+                $this->dateEndLoadArrangementProgram,
+                $this->dateStartLoadSigArrangementProgram,
+                $this->dateEndLoadSigArrangementProgram,
+                $this->dateStartClearanceNotificationArrangementProgram,
+                $this->dateStartPenalty,
+                $this->dateEndPenalty,
+                $this->percentagePenalty,
+                $this->dateEndClearanceNotificationArrangementProgram,
+                $this->parent,
+                $this->child,
+                $this->id,
+                ) = $data;
         $this->parent = unserialize($this->parent);
         $this->child = unserialize($this->child);
     }
-    
-    function isOpened() 
-    {
-        return $this->opened;
-    }
-    
-    function getOpened() 
-    {
+
+    function isOpened() {
         return $this->opened;
     }
 
-    function setOpened($opened) 
-    {
+    function getOpened() {
+        return $this->opened;
+    }
+
+    function setOpened($opened) {
         $this->opened = $opened;
     }
-    
+
     function getDateStartPlanningReport() {
         return $this->dateStartPlanningReport;
     }
@@ -1027,8 +987,32 @@ class Period extends Base implements \Serializable
         $this->isPlanningReportEnabled = $isPlanningReportEnabled;
     }
 
-        
-    public function __toString() {
-        return $this->getDescription()?:'-';
+    function getDateStartLoadGroupProduct() {
+        return $this->dateStartLoadGroupProduct;
     }
+
+    function getDateEndLoadGroupProduct() {
+        return $this->dateEndLoadGroupProduct;
+    }
+
+    function getIsLoadGroupProductEnabled() {
+        return $this->isLoadGroupProductEnabled;
+    }
+
+    function setDateStartLoadGroupProduct(\DateTime $dateStartLoadGroupProduct) {
+        $this->dateStartLoadGroupProduct = $dateStartLoadGroupProduct;
+    }
+
+    function setDateEndLoadGroupProduct(\DateTime $dateEndLoadGroupProduct) {
+        $this->dateEndLoadGroupProduct = $dateEndLoadGroupProduct;
+    }
+
+    function setIsLoadGroupProductEnabled($isLoadGroupProductEnabled) {
+        $this->isLoadGroupProductEnabled = $isLoadGroupProductEnabled;
+    }
+
+    public function __toString() {
+        return $this->getDescription()? : '-';
+    }
+
 }

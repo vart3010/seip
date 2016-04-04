@@ -23,6 +23,33 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  */
 class ConsumerPlanningService extends BaseModel
 {
+    
+    /**
+     * Tipo de planificación del servicio por la alicuota y la planificación de los productos de la planta
+     */
+    const TYPE_PLANNING_BY_PLANT = 0;
+    /**
+     * Tipo de planificación del servicio por un rango definido
+     */
+    const TYPE_PLANNING_BY_RANGE = 1;
+    /**
+     * Tipo de planificación del servicio por producto
+     */
+    const TYPE_PLANNING_BY_PRODUCT = 2;
+    
+    /**
+     * La Alícuota será Fija durante el período para la planificación del servicio
+     */
+    const ALIQUOT_FIXED = 0;
+    /**
+     * La Alícuota será Variable durante el período para la planificación del servicio
+     */
+    const ALIQUOT_VARIABLE = 1;
+    /**
+     * La Alícuota no será tomada en cuenta durante el período para la planificación del servicio
+     */
+    const ALIQUOT_DISABLED = 2;
+    
     /**
      * @var integer
      *
@@ -62,6 +89,20 @@ class ConsumerPlanningService extends BaseModel
      * @ORM\Column(name="aliquot",type="float")
      */
     private $aliquot = 0;
+    
+    /**
+     * @var integer
+     * 
+     * @ORM\Column(name="typeOfPlanning", type="integer", nullable=false)
+     */
+    protected $typeOfPlanning = self::TYPE_PLANNING_BY_PLANT;
+    
+    /**
+     * @var integer
+     * 
+     * @ORM\Column(name="typeOfAliquot", type="integer", nullable=false)
+     */
+    protected $typeOfAliquot = self::ALIQUOT_FIXED;
     
     /**
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService
@@ -343,4 +384,51 @@ class ConsumerPlanningService extends BaseModel
     {
         return $this->period;
     }
+    
+    function getTypeOfPlanning() {
+        return $this->typeOfPlanning;
+    }
+
+    function setTypeOfPlanning($typeOfPlanning) {
+        $this->typeOfPlanning = $typeOfPlanning;
+    }
+    
+    function getTypeOfAliquot() {
+        return $this->typeOfAliquot;
+    }
+
+    function setTypeOfAliquot($typeOfAliquot) {
+        $this->typeOfAliquot = $typeOfAliquot;
+    }
+    
+    /**
+     * Retorna los tipos de planificación disponible de los servicios.
+     * 
+     * @staticvar array $typesOfPlanning
+     * @return array
+     */
+    static function getTypesOfPlanning() {
+        static $typesOfPlanning = array(
+            self::TYPE_PLANNING_BY_PLANT => "Por Planta",
+            self::TYPE_PLANNING_BY_RANGE => "Por Rango",
+            self::TYPE_PLANNING_BY_PRODUCT => "Por Producto",
+        );
+        return $typesOfPlanning;
+    }
+    
+    /**
+     * Retorna los tipos alícuota disponibles para la planificación de los servicios.
+     * 
+     * @staticvar array $typesOfAliquot
+     * @return array
+     */
+    static function getTypesOfAliquot() {
+        static $typesOfAliquot = array(
+            self::ALIQUOT_FIXED => "Valor Fijo",
+            self::ALIQUOT_VARIABLE => "Valor Variable",
+            self::ALIQUOT_DISABLED => "Deshabilitada",
+        );
+        return $typesOfAliquot;
+    }
+
 }

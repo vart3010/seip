@@ -29,6 +29,7 @@ class PlantStopPlanningValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint) 
     {
         $totalStops = $value->getTotalStops();
+        
         if($totalStops > 0)
         {
             $dayStops = array();
@@ -49,6 +50,7 @@ class PlantStopPlanningValidator extends ConstraintValidator
 
                         $startDay = $dateFrom->format("d");
                         $endDay = $dateEnd->format("d");
+                        
                         for($i = $startDay; $i <= $endDay; $i++){
                             $dayStop = new \Pequiven\SEIPBundle\Entity\DataLoad\Plant\DayStop();
                             $day = clone($dateFrom);
@@ -61,11 +63,12 @@ class PlantStopPlanningValidator extends ConstraintValidator
                         }
                     }
                     $dayStopsByDay = $value->getDayStopsByDay();
-                    foreach ($dayStops as $dayStop) {
-                        if(!isset($dayStopsByDay[$dayStop->getNroDay()])){
-                            $value->addDayStop($dayStop);
-                        }
-                    }
+//                    foreach ($dayStops as $dayStop) {
+//                        if(!isset($dayStopsByDay[$dayStop->getNroDay()])){
+//                            var_dump($dayStop->getNroDay());
+//                            $value->addDayStop($dayStop);
+//                        }
+//                    }
                 }
             $totalDaysStops = $value->getDayStops()->count();
             if($totalDaysStops > $totalStops){

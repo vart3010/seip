@@ -1,0 +1,64 @@
+{% block body %}
+<form method="POST" id="form_tracing_add">
+    <fieldset class="fieldset fields-list">
+        <legend class="legend">Estandarización</legend>
+            <div class="field-block button-height" >            
+                {{ form_label(form.area) }}            
+                {{ form_widget(form.area) }}            
+            </div>  
+            <div class="field-block button-height" >            
+                {{ form_label(form.detection) }}            
+                {{ form_widget(form.detection) }}            
+            </div>  
+            <div class="field-block button-height" >            
+                {{ form_label(form.code) }}            
+                {{ form_widget(form.code) }}            
+            </div>  
+            <div class="field-block button-height" >            
+                {{ form_label(form.type) }}            
+                {{ form_widget(form.type) }}            
+            </div>  
+            <div class="field-block button-height" >            
+                {{ form_label(form.description) }}            
+                {{ form_widget(form.description) }}            
+            </div>  
+            <div class="field-block button-height" >            
+                <label class="label">Tratamiento</label>                
+                <input type="checkbox" name="analysis" id="analysis" value="1" class="checkbox mid-margin-left"> <label for="checkbox-2" class="">Análisis Causa Raíz</label>
+                
+                <input type="checkbox" name="arrangementProgram" id="arrangementProgram" value="1" class="checkbox mid-margin-left">
+                <label for="checkbox-2" class="">Programa de Gestión</label>
+            </div>    
+    </fieldset>
+    
+    <fieldset class="fieldset" style='display:none;' id="loadPg">
+        <legend class="legend">Programa de Gestión</legend>
+        <label class="label">Seleccione programa de Gestión</label>
+            {{ form_label(form.arrangementProgram) }}            
+            {{ form_widget(form.arrangementProgram) }} 
+        <p></p>
+    </fieldset>            
+
+</form>    
+<script type="text/javascript">
+    $('input#arrangementProgram').change(function() {        
+        if($(this).is(":checked")) {
+            $('#loadPg').show();                    
+        }else{
+            $('#loadPg').hide();        
+        }
+    }); 
+         
+    $(document).ready(function () {
+        $("#sig_standardization_detection").select2({    
+        });
+
+        $("#sig_standardization_type").select2({    
+        });
+
+        $("#sig_standardization_arrangementProgram").select2({
+            //minimumInputLength: 3,
+        });
+    });   
+</script>
+{% endblock %}

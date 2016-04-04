@@ -60,7 +60,7 @@ pequiven_seip:
     enable_auto_login: Habilitar inicio de sesión automático
     send_instructions: Enviarme las instrucciones
     register: Registrar
-    message_register: ¿Nuevo usuario? Yay! Háganos saber un poquito acerca de usted antes de empezar
+    message_register: ¿Nuevo Usuario? Por Favor Complete el Siguiente Formulario
     your_name: Su nombre
     registration: Registro
     clear_sorting: Borrar selección
@@ -623,6 +623,7 @@ chart:
         indicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated: Lesionados personales sin tiempo acumulado del indicador, con los valores del mes además del período actual y del período anterior (línea) y del acumulado por período (columna).
         indicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated: Días perdidos del indicador, con los valores del mes además del período actual y del período anterior (línea) y del acumulado por período (columna).
         typeChartProgressProjectsByFrequencyNotification: Avance de los proyectos por frecuencia de notificación
+        indicatorsVariablesRealPlanByDifferentFrequencyNotification: Real, plan y resultado de medición del Indicador de acuerdo a una frecuencia de notificación diferente a la del indicador
         example: Ejemplo
         
     

@@ -1,17 +1,17 @@
 {% trans_default_domain 'PequivenSIGBundle' %}
 
 <div class="block">
-
     <div ng-controller="IndicatorSigEvolutionController"> 
-
         <div class="block-title">
             <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'form.messages.action_plan'|trans({},'PequivenSIGBundle') }}</h3> 
-            {# añadir plan de acción #}
-            <div class="button-group absolute-right compact">
-                <a class="button icon-list-add " href="" ng-click="loadTemplateActionEvolution()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
-            </div>       
+            {% if not cloning %}            
+                <div class="button-group absolute-right compact">
+                    <a class="button icon-list-add " href="" ng-click="loadTemplateActionEvolution()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+                </div>       
+            {% endif %}
         </div>
         <div class="with-padding">
+        {% if dataAction["values"] %}
             {% set colspan = 5 %}
             <table class="simple-table responsive-table tables-extras" id="sorting-example2">
                 <thead>
@@ -83,21 +83,22 @@
                                 {% endif %}
                             </td>
                         </tr>
-                        <tr>
-                            <td class="vertical-center" height="15">
-                                <span class="select compact">
-                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
-                                    <span class="select-arrow"></span>
-                                    <span class="drop-down">
-                                        <a href ng-click="removeActionEvolution(action_data='{{ action.actionValue.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
-                                        {% if action.observations == null and action.advance < 100 %}
-                                            <a href ng-click="loadTemplateActionAdd(idAction='{{ action.actionValue.id }}',month='{{ month }}')" class="button icon-pencil">{{ "pequiven_indicator.upload_data"|trans({},"PequivenSIGBundle") }}</a>
-                                        {% endif %}
+                        {% if not cloning %}
+                            <tr>
+                                <td class="vertical-center" height="15">
+                                    <span class="select compact">
+                                        <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                        <span class="select-arrow"></span>
+                                        <span class="drop-down">
+                                            <a href ng-click="removeActionEvolution(action_data='{{ action.actionValue.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                            {% if action.observations == null and action.advance < 100 %}
+                                                <a href ng-click="loadTemplateActionAdd(idAction='{{ action.actionValue.id }}',month='{{ month }}')" class="button icon-pencil">{{ "pequiven_indicator.upload_data"|trans({},"PequivenSIGBundle") }}</a>
+                                            {% endif %}
+                                        </span>
                                     </span>
-                                </span>
-                            </td>
-                        </tr>
-
+                                </td>
+                            </tr>
+                        {% endif %}
                         <tr ng-if="indicator.featuresIndicator.length == 0">
                             <td colspan="{{ colspan }}" class="empty_row">
                                 {{ "empty.features_indicator"|trans({},'PequivenSEIPBundle') }}
@@ -107,9 +108,12 @@
                     {% set count = count + 1 %}
                 {% endfor %}
             </table> 
-
             <div class="" ng-init="count='{{ count }}'"></div>
-
+        {% else %}
+        <div class="new-row twelve-columns empty_row" align="center">
+            <br>No hay Carga.                        
+        </div>
+        {% endif %}           
         </div>
     </div>
 </div>

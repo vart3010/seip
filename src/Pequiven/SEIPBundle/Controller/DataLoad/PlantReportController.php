@@ -161,7 +161,7 @@ class PlantReportController extends SEIPController {
                 $totalP[] = array(
                     "id" => $productReport->getId(),
                     "name" => $productReport->getName(),
-                    "line" => $productReport->getProduct()->getName(),
+                    "line" => $productReport->getProduct()->getProductionLine(),
                     "unit" => $productReport->getProduct()->getProductUnit(),
                     "entityProductReport" => $productReport,
                     "groupsProducts" => ""
@@ -249,7 +249,7 @@ class PlantReportController extends SEIPController {
         $consumerPlanningServices = $resource->getConsumerPlanningServices();
         $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
 
-//Funcion que retorna los dias de paradas
+        //Funcion que retorna los dias de paradas
         $getDayStops = function($month) use ($plantStopPlanningsByMonths) {
             $daysStopsArray = array();
             if (isset($plantStopPlanningsByMonths[$month])) {
@@ -261,7 +261,7 @@ class PlantReportController extends SEIPController {
             return $daysStopsArray;
         };
 
-//Servicios
+        //Servicios
         foreach ($consumerPlanningServices as $consumerPlanningService) {
             $details = $consumerPlanningService->getDetails();
             $aliquot = $consumerPlanningService->getAliquot();

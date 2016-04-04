@@ -7,7 +7,7 @@
             ({{ totalGroups|length }})
         </h3>
         <div class="button-group absolute-right compact">
-            {% if periodService().isAllowPlanningReport %}
+            {% if periodService().isAllowPlanningGroupProduct %}
                 <a class="button icon-list-add" href="{{ path('pequiven_product_report_group_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
             {% endif %}
         </div>
@@ -16,9 +16,9 @@
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
                 <tr>
-                    <th scope="col" width="35%">{{ 'Product'|trans }}</th>
-                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Production line'|trans }}</th>
-                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'Product unit'|trans }}</th>
+                    <th scope="col" width="50%">{{ 'Product'|trans }}</th>
+                    <th scope="col" width="15%" class="hide-on-mobile-portrait" align="left">{{ 'Production line'|trans }}</th>
+                    <th scope="col" width="15%" class="hide-on-tablet" align="right">{{ 'Product unit'|trans }}</th>
                     <th scope="col" width="10%">&nbsp;</th>
                 </tr>
             </thead>
@@ -38,12 +38,12 @@
                                 {% endfor %}
                             </small>
                         </td>
-                        <td>
+                        <td align="left">
                             {% for l in product.line  %}
                                 {{ l }}
                             {% endfor %}
                         </td>
-                        <td>
+                        <td align="right">
                             {% for u in product.unit  %}
                                 {{ u }}
                             {% endfor %}

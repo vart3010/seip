@@ -159,8 +159,8 @@ class IndicatorController extends ResourceController {
         }
 
 
-        $isAllowToDownload =  $indicatorService->validFileIndicator($resource);
-        $valueIndicatorId = $indicatorService->validFileIndicator($resource,true);
+        $isAllowToDownload = $indicatorService->validFileIndicator($resource);
+        $valueIndicatorId = $indicatorService->validFileIndicator($resource, true);
 
 
         $view = $this
@@ -176,7 +176,7 @@ class IndicatorController extends ResourceController {
             'hasPermissionToUpdate' => $hasPermissionToUpdate,
             'isAllowToDelete' => $isAllowToDelete,
             'isAllowToDownload' => $isAllowToDownload,
-            'valueIndicatorIdDownload'=>$valueIndicatorId,
+            'valueIndicatorIdDownload' => $valueIndicatorId,
             'hasPermissionToApproved' => $hasPermissionToApproved
                 ))
         ;
@@ -236,7 +236,7 @@ class IndicatorController extends ResourceController {
         //Actualizamos las posibles etiquetas del indicador
         $indicatorService->updateTagIndicator($resource);
         $indicatorService->updateIndicatorChartDetails($resource);
-        
+
         $resultService = $this->getResultService();
         $arrangementRangeService = $this->getArrangementRangeService();
 
@@ -346,7 +346,7 @@ class IndicatorController extends ResourceController {
             'level' => $level,
         );
         $apiDataUrl = $this->generateUrl('pequiven_indicator_list', $routeParameters);
-        
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('list.html'))
@@ -375,8 +375,7 @@ class IndicatorController extends ResourceController {
             $view->setData($resources->toArray('', array(), $formatData));
         }
         return $this->handleView($view);
-    }   
-
+    }
 
     /**
      * @Security("is_granted(['ROLE_WORKER_PLANNING','ROLE_SEIP_INDICATOR_ADD_OBSERVATION'])")
@@ -628,8 +627,6 @@ class IndicatorController extends ResourceController {
 
         return $this->redirectHandler->redirect($redirectUrl);
     }
-    
-    
 
     public function generateUrlFile(Request $request) {
 
@@ -685,4 +682,74 @@ class IndicatorController extends ResourceController {
         return $this->container->get('pequiven_indicator.service.inidicator');
     }
 
+    public function loadFileAction(Request $request) {
+        $indicatorId = $request->get("id");
+        $indicator = $this->container->get('pequiven.repository.indicator')->findOneBy(array("id" => $indicatorId));
+
+        $indicatorFile = new \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile();
+        $fileUploaded = false;
+
+        foreach ($request->files as $file) {
+
+            $indicatorFile->setCreatedBy($this->getUser());
+            $indicatorFile->setNameFile(base64_encode($file->getClientOriginalName()));
+            $indicatorFile->setNameFileOriginal($file->getClientOriginalName());
+            $indicatorFile->setPath(\Pequiven\IndicatorBundle\Model\Indicator\IndicatorFile::getUploadDir());
+            $indicatorFile->setExtensionFile($file->guessExtension());
+
+            //SE MUEVE EL ARCHIVO AL SERVIDOR
+            $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . \Pequiven\IndicatorBundle\Model\Indicator\IndicatorFile::getUploadDir(), base64_encode($file->getClientOriginalName()));
+            $fileUploaded = $file->isValid();
+        }
+
+
+        if (!$fileUploaded) {
+            $em = $this->getDoctrine()->getEntityManager();
+            $indicatorFile->setIndicator($indicator);
+            $em->persist($indicatorFile);
+            $em->flush();
+
+//            $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.saveFileSuccess', array(), 'PequivenIndicatorBundle'));
+//            $request->request->set("uploadFile", "");
+//            $this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));
+
+            $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.saveFileSuccess', array(), 'PequivenIndicatorBundle'));
+            //$request->request->set("fileIndicator", "");
+            //$this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));
+        } else {
+            $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.errorFileUpload', array(), 'PequivenIndicatorBundle'));
+            //$request->request->set("fileIndicator", "");
+            //$this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));
+        }
+
+        //$this->showAction($request);
+        return $this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));
+    }
+
+//    public function getIndicatorPnrAction() {
+//        $cond = array(
+//            "period"=>"2",
+//            "calculationMethod"=>"0",
+//            "typeOfResultSection"=>"3"
+//        );
+//        $indicators = $this->get('pequiven.repository.indicator')->findBy($cond);
+//        
+//        foreach ($indicators as $ind) {
+//            print($ind->getRef()."<br>");
+//            print($ind->getFormula());
+//            $indValues = $ind->getValuesIndicator();
+//            $productReport = $ind->getValueIndicatorConfig();
+//            var_dump($productReport->getId());
+//            foreach ($indValues as $indValue) {
+//                print_r($indValue->getFormulaParameters());
+//                print("<br>");
+//            }
+//            
+//            print("<br>");
+//            print("<br>");
+//            die();
+//        }
+//        
+//        die();
+//    }
 }

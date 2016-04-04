@@ -179,6 +179,11 @@ class PeriodAdmin extends Admin {
                 ->add('isPlanningReportEnabled', null, array(
                     'required' => false,
                 ))
+                ->add('dateStartLoadGroupProduct','sonata_type_date_picker')
+                ->add('dateEndLoadGroupProduct','sonata_type_date_picker')
+                ->add('isLoadGroupProductEnabled', null, array(
+                    'required' => false,
+                ))
         ;
     }
 
