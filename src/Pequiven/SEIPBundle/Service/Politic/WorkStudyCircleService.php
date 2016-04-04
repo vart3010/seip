@@ -566,6 +566,10 @@ class WorkStudyCircleService implements ContainerAwareInterface {
         } else {
             $valid = false;
         }
+        
+        if($this->getSecurityContext()->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_ADD_USERS'))){
+            $valid = true;
+        }
 
         return $valid;
     }
@@ -578,6 +582,18 @@ class WorkStudyCircleService implements ContainerAwareInterface {
     public function isAllowToEditMembers(WorkStudyCircle $workStudyCircle) {
         $valid = false;
         $user = $this->getUser();
+        
+        if ($workStudyCircle->getPhase() == WorkStudyCircle::PHASE_ONE) {
+            if ($this->getSecurityContext()->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_EDIT')) || $workStudyCircle->getCoordinator()->getId() == $user->getId()) {
+                $valid = true;
+            }
+        } else {
+            $valid = true;
+        }
+        
+        if($this->getSecurityContext()->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_EDIT_USERS'))){
+            $valid = true;
+        }
 
         return $valid;
     }
@@ -597,6 +613,10 @@ class WorkStudyCircleService implements ContainerAwareInterface {
             }
         } else {
             $valid = false;
+        }
+        
+        if($this->getSecurityContext()->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_DELETE_USERS'))){
+            $valid = true;
         }
 
         return $valid;
