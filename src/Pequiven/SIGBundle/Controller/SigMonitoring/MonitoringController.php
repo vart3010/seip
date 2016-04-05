@@ -510,7 +510,7 @@ class MonitoringController extends ResourceController
         {   
             $nameFile = sha1(date('d-m-Y : h:m:s'));
             foreach ($request->files as $file) {
-                $file->move($this->container->getParameter("kernel.root_dir") . '/../web/php-export-handler/temp/', $nameFile);
+                $file->move($this->container->getParameter("kernel.root_dir") . '/../web/uploads/documents/standardization_files/', $nameFile);
                 $fileUploaded = $file->isValid();                
             }            
 
@@ -527,7 +527,7 @@ class MonitoringController extends ResourceController
 
         $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($request->get('id'));
         
-        $pathfile = $this->container->getParameter("kernel.root_dir") . '/../web/php-export-handler/temp/'.$standardization->getFile();
+        $pathfile = $this->container->getParameter("kernel.root_dir") . '/../web/uploads/documents/standardization_files/'.$standardization->getFile();
         
         $mi_pdf = $pathfile;
         header('Content-type: application/pdf');

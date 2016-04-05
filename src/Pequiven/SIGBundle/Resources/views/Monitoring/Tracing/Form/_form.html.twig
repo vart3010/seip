@@ -197,14 +197,14 @@
     {
         switch(extension.toLowerCase()) 
         {   
-            /*case 'jpg': case 'gif': case 'png': case 'jpeg':                
-                return true;
-            break;*/
+            case 'jpg': case 'gif': case 'png': case 'jpeg':                
+                return false;
+            break;
             case 'pdf':                
                 return true;
             break;
             default:                
-                return false;
+                return true;
             break;
         }
     }  
