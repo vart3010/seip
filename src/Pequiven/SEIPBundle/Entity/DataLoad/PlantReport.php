@@ -135,6 +135,17 @@ class PlantReport extends ModelBaseMaster {
     private $parent;
 
     /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport")
+     */
+    protected $parentGroup;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport")
+     * @ORM\JoinTable(name="seip_plant_report_groups")
+     */
+    protected $childrensGroup;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -142,6 +153,64 @@ class PlantReport extends ModelBaseMaster {
         $this->plantStopPlannings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->parentGroup = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->childrensGroup = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $childrens
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport
+     */
+    public function addChildrenGroup(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $childrens) {
+        $childrens->setParent($this);
+        $this->childrensGroup->add($childrens);
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $childrens
+     */
+    public function removeChildrenGroup(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $childrens) {
+        $this->childrensGroup->removeElement($childrens);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getChildrensGroup() {
+        return $this->childrensGroup;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $childrens
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport
+     */
+    public function addParentGroup(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $childrens) {
+        $childrens->setParent($this);
+        $this->parentGroup->add($childrens);
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $childrens
+     */
+    public function removeParentGroup(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $childrens) {
+        $this->parentGroup->removeElement($childrens);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getParentGroup() {
+        return $this->parentGroup;
     }
 
     /**
@@ -428,8 +497,7 @@ class PlantReport extends ModelBaseMaster {
      * @param \Pequiven\SEIPBundle\Entity\Period $period
      * @return PlantReport
      */
-    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
-    {
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null) {
         $this->period = $period;
 
         return $this;
@@ -440,8 +508,7 @@ class PlantReport extends ModelBaseMaster {
      *
      * @return \Pequiven\SEIPBundle\Entity\Period 
      */
-    public function getPeriod()
-    {
+    public function getPeriod() {
         return $this->period;
     }
 

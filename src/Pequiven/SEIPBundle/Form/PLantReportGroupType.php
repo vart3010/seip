@@ -6,7 +6,7 @@ use Pequiven\SEIPBundle\Form\SeipAbstractForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class PlantReportType extends SeipAbstractForm {
+class PlantReportGroupType extends SeipAbstractForm {
 
     /**
      * @param FormBuilderInterface $builder

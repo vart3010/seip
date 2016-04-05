@@ -15,6 +15,15 @@ pequiven_plant_report_create:
             form: pequiven_seipbundle_dataload_plantreport
     methods: [GET|POST]
     
+pequiven_plant_report_group_create:
+    path: /{reportTemplate}/createGroup
+    defaults:
+        _controller: pequiven.controller.plant_report:createGroupAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_plantreport
+    methods: [GET|POST]
+    
+    
 pequiven_plant_report_show:
     path: /{id}/show
     defaults:
