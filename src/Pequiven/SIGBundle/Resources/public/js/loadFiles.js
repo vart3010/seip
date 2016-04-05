@@ -1,8 +1,7 @@
 var urlLoadFile;
 
 function setUrlFiles(urlFiles){
-    urlLoadFile = urlFiles;    
-    console.log(urlLoadFile);
+    urlLoadFile = urlFiles;  
 }
 
 //Load File
@@ -24,6 +23,7 @@ $(':file').change(function()
     var fileSize = file.size;
     //obtenemos el tipo de archivo image/png ejemplo
     var fileType = file.type;
+    //console.log(file);
     //mensaje con la información del archivo
     showMessage("<span class='info'>Archivo para subir: "+fileName+", peso total: "+fileSize+" bytes.</span>");
     if(isImage(fileExtension) == false){
