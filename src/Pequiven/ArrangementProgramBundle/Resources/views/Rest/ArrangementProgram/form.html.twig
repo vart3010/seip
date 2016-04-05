@@ -49,6 +49,8 @@
     <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery-1.8.2.min.js') }}"></script>
 
     <script type="text/javascript">
+        var idTemp = 0;
+        
         var formatPhp = "Y-m-d H:i:s";
                 var advancesPlanned = {{ summary['advancesPlanned'] }};
                 var month = '{{ 'now'|date('m') }}';
@@ -64,7 +66,7 @@
             Ext.tip.QuickTipManager.init();
             var idPG = '{{app.request.get('id')}}';
             var win, buttonAddComment;
-//            alert(data);
+            
             var store = Ext.create('Ext.data.Store', {
                 autoLoad: true,
                 autoSync: true,
@@ -72,7 +74,7 @@
                 groupField: 'project',
                 proxy: {
                     type: 'rest',
-                    url: "{{ path('AP_notification_search') }}" + idPG + "/goals-details.json",
+                    url: "{{ path('AP_notification_search') }}" + idPG +"/"+ idTemp + "/goals-details.json",
                     reader: {
                         type: 'json',
                         rootProperty: 'data'
@@ -947,7 +949,7 @@
             });
 
 
-            $(document).ready(function () {
+
         {# $("select#user").change(function () {
              //cargahidden();
              //alert("olas");
@@ -966,7 +968,7 @@
              });
                     
          });#}
-             });
+
 
 
 
@@ -990,9 +992,39 @@
               });
 
           }#}
+              $(document).ready(function () {
+
+                  $("select#user").change(function () {
+                      
+                      var user = $(this).val();
+                      console.log(user);
+                      idTemp = user;
+                      //getData(user);
+                  });
+              });
+              
+              function getData(user) {
+
+                  var url = "{{ path('get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails',{id:app.request.get('id'),format:'json'}) }}";
+
+                  var data = {
+                      user: user
+                  };
+
+                  $.ajax({
+                      type: 'get',
+                      url: url,
+                      data: data,
+                      success: function (data) {
+                          console.log(data);
+                      }
+                  });
+              }
 
 
     </script>
+
+
 {% endblock javascript %}
 {% block content %}
     <br/>
@@ -1002,14 +1034,14 @@
                 <b>{{ 'pequiven.ref'|trans({},'messages') }}:</b> {{ entity.ref }}
             </td>
             <td  width="60%" style="text-align: right;" rowspan="2">
-                <form name="formula" method="POST" action="{{ path('get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails',{id:app.request.get('id'),format:'html'}) }}">
+                <form name="formula" method="GET" action="{{ path('get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails',{id:app.request.get('id'),format:'json'}) }}">
                     <input type="hidden" value="" id="hidden">
-                    <select  id="user" onchange="this.form.submit();" name="user" class="input-large select2" style="width: 50%;">
+                    <select  id="user" onchange="getData();" name="user" class="input-large select2" style="width: 50%;">
                         {% if userobj %}
-                        <option value="{{userobj.id}}" selected>{{userobj.getfullname|ucwords}}</option>    
-                        <option value="0">Total Grupal</option>
-                            {%else%}
-                        <option value="0" selected >Total Grupal</option>
+                            <option value="{{userobj.id}}" selected>{{userobj.getfullname|ucwords}}</option>    
+                            <option value="0">Total Grupal</option>
+                        {%else%}
+                            <option value="0" selected >Total Grupal</option>
                         {%endif%}
                         {% for resp in responsibles %}
                             <option value="{{resp.id}}">{{resp.Responsable|ucwords}}</option>             
