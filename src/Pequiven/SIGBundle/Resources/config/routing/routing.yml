@@ -56,7 +56,7 @@ pequiven_sig_monitoring_show:
         _format: html    
     methods: [GET]
 pequiven_sig_monitoring_show_upload:
-    path: /sig/monitoring/list/show/{type}/upload
+    path: /load-files/upload
     defaults:
         _controller: pequiven.controller.monitoring_sig:uploadAction
         _format: html    
