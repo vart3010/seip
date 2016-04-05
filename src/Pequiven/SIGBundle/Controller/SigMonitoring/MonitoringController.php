@@ -527,7 +527,12 @@ class MonitoringController extends ResourceController
 
         $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($request->get('id'));
         
-        echo $this->container->getParameter("kernel.root_dir") . '/../web/php-export-handler/temp/'.$standardization->getFile();
+        $pathfile = $this->container->getParameter("kernel.root_dir") . '/../web/php-export-handler/temp/'.$standardization->getFile();
+        
+        $mi_pdf = $pathfile;
+        header('Content-type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$mi_pdf.'"');
+        readfile($mi_pdf);
         die();
 
     }
