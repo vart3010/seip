@@ -410,39 +410,48 @@ class MonitoringController extends ResourceController
                 $arrangementProgram = $standardizationData->getArrangementProgram();
             }
             $activeSheet->setCellValue('K'.$row, $arrangementProgram);//Seteamos 
+            
+            if (count($standardizationData->getMaintenance()) > 0) {                
+                foreach ($standardizationData->getMaintenance() as $valueMaintenance) {
+                    $dateStart = $valueMaintenance->getDateStart();
+                    $dateStart->setTimestamp((int)$dateStart->format('U'));
 
-            foreach ($standardizationData->getMaintenance() as $valueMaintenance) {
-                $dateStart = $valueMaintenance->getDateStart();
-                $dateStart->setTimestamp((int)$dateStart->format('U'));
+                    $dateEnd = $valueMaintenance->getDateEnd();
+                    $dateEnd->setTimestamp((int)$dateEnd->format('U'));
+                    
+                    $advance = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance")->findBy(array('maintenance' => $valueMaintenance->getId())); 
+                    foreach ($advance as $valueAdvance) {
+                        $dataAnalsys = $valueMaintenance->getAnalysis();
+                        $dataAdvance = $valueAdvance->getAdvance();
+                        $dataObservations = $valueAdvance->getObservations();                    
+                    }
+                    
+                    $activeSheet->setCellValue('L'.$row, $dataAnalsys);//Seteamos el analisis
+                    $activeSheet->setCellValue('M'.$row, $dateStart->format('d-m-Y'));//Seteamos fecha inicio de la acción
+                    $activeSheet->setCellValue('N'.$row, $dateEnd->format('d-m-Y'));//Seteamos fecha fin de la acción
+                    $activeSheet->setCellValue('O'.$row, $dataAdvance."%");//Seteamos el avance
+                    
+                    $activeSheet->setCellValue('P'.$row, $leyens[$valueMaintenance->getStatus()]);//Seteamos estatus
+                    $activeSheet->getStyle(sprintf('P%s:P%s',$row,$row))->applyFromArray($styleFont);//Aplicación de estilos
+                    $activeSheet->getStyle(sprintf('P%s:P%s',$row, $row))->applyFromArray($styleArray[$valueMaintenance->getStatus()]);
 
-                $dateEnd = $valueMaintenance->getDateEnd();
-                $dateEnd->setTimestamp((int)$dateEnd->format('U'));
-                
-                $advance = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance")->findBy(array('maintenance' => $valueMaintenance->getId())); 
-                foreach ($advance as $valueAdvance) {
-                    $dataAnalsys = $valueMaintenance->getAnalysis();
-                    $dataAdvance = $valueAdvance->getAdvance();
-                    $dataObservations = $valueAdvance->getObservations();                    
-                }
-                
-                $activeSheet->setCellValue('L'.$row, $dataAnalsys);//Seteamos el analisis
-                $activeSheet->setCellValue('M'.$row, $dateStart->format('d-m-Y'));//Seteamos
-                $activeSheet->setCellValue('N'.$row, $dateEnd->format('d-m-Y'));//Seteamos
-                $activeSheet->setCellValue('O'.$row, $dataAdvance."%");//Seteamos
-                
-                $activeSheet->setCellValue('P'.$row, $leyens[$valueMaintenance->getStatus()]);//Seteamos
-                $activeSheet->getStyle(sprintf('P%s:P%s',$row,$row))->applyFromArray($styleFont);                                                           
-                $activeSheet->getStyle(sprintf('P%s:P%s',$row, $row))->applyFromArray($styleArray[$valueMaintenance->getStatus()]);
-
-                //$activeSheet->setCellValue('Q'.$row, $valueMaintenance->getStatus());//Seteamos
-                //$activeSheet->setCellValue('R'.$row, $valueMaintenance->getStatus());//Seteamos
-                $activeSheet->setCellValue('S'.$row, $dataObservations);//Seteamos
+                    //$activeSheet->setCellValue('Q'.$row, $valueMaintenance->getStatus());//Seteamos
+                    //$activeSheet->setCellValue('R'.$row, $valueMaintenance->getStatus());//Seteamos
+                    $activeSheet->setCellValue('S'.$row, $dataObservations);//Seteamos
+                }                
+            }else{
+                $activeSheet->setCellValue('L'.$row, 'Sin carga');
+                $activeSheet->setCellValue('M'.$row, 'Sin carga');
+                $activeSheet->setCellValue('N'.$row, 'Sin carga');
+                $activeSheet->setCellValue('O'.$row, 'Sin carga');
+                $activeSheet->setCellValue('P'.$row, 'Sin carga');
+                $activeSheet->setCellValue('S'.$row, 'Sin carga');                
             }
+
             $row++;                                
             $contResult++; 
             $contRow++;
         }
-
 
         $row = 10;//Fila Inicial del skeleton
         $contRow = ($contRow + $row) - 2;
