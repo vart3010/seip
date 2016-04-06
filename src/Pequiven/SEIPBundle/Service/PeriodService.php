@@ -142,7 +142,7 @@ class PeriodService extends ContainerAware {
         }
         
         $user = $this->getUser();
-        if ($period->getName() == '2016' && ($user->getId() == 100)) {
+        if ($period->getName() == '2016' && ($user->getId() == 100 || $user->getId() == 110)) {
             $result = true;
         }
 
