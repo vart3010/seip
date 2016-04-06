@@ -97,7 +97,7 @@ function showMessage(id){
                 $('#messageNone').html(data['description']);
                 //document.getElementById("messageNone").innerHTML = "<a href=\"{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}\">Ver</a>";
                 var path = data['path'];                
-                $('#href').html("<a href='{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}' class='button red-gradient float-right with-tooltip' title='Visualizar'>Visualizar</a>");
+                $('#href').html("<a href='http://localhost/seip/web/app_dev.php/indicator/2719/evolution/12' class='button red-gradient float-right with-tooltip' title='Visualizar' onclick='visuzalice();'>Visualizar</a>");
                 $('#sectionButton').html('<a href class="button" title="Eliminar" onclick="deleteMessage('+id+');"><span class="icon-trash"></span></a><a href class="button" title="Marcar como Importante" onclick="favouriteMessage('+id+');"><span class="icon-flag"></span></a>');
                 getData(urlData);                
             }
@@ -152,15 +152,15 @@ function favouriteMessage(id){
     });
 }   
 
+function visuzalice(){
+    console.log("hola");
+}
+
 function getMessagesData(type, tag, typeData){    
     var data = {
         type: type, 
         typeData: typeData                   
     };     
-
-    /*$.post(urlMessages, data, function(){        
-        createMessages(type, tag);
-    });*/
 
     $.ajax({
             type: 'get',
