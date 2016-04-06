@@ -25,6 +25,7 @@ class NotificationController extends baseController {
      *
      */
     public function notificationAction(){
+        
         $securityContext = $this->container->get('security.context');        
         $em = $this->getDoctrine()->getManager();  
 

@@ -89,7 +89,7 @@ class MonitoringController extends ResourceController
     }
 
     public function showAction(Request $request){
-        
+
         $this->autoVerificationAction($request);        
 
         $id = $request->get('id');        
@@ -188,10 +188,18 @@ class MonitoringController extends ResourceController
             $responsible = $request->get('actionResults')['responsible'];
             $responsibles = explode(",", $responsible);       
             $catnRes = count($responsibles);
+            
+            $routeParameters = array(                
+                'id'   => $request->get('idObject'),
+                'type' => $request->get('type')
+            );
+
+            $apiDataUrl = $this->generateUrl('pequiven_sig_monitoring_show', $routeParameters);
+            $apiDataUrl = "http://".$_SERVER['HTTP_HOST'].$apiDataUrl;
 
             for ($i=0; $i < $catnRes; $i++) { 
                 $user = $this->get('pequiven_seip.repository.user')->find($responsibles[$i]);
-                $notification = $this->getNotificationService()->setDataNotification("Estandarizacion", "Ha sido asignado como responsable la data de estandarizacion ha sido cargada puede verificar.", 4 , 1, "-", $user);                                        
+                $notification = $this->getNotificationService()->setDataNotification("Estandarizacion", "Ha sido asignado como responsable la data de estandarizacion ha sido cargada puede verificar.", 4 , 1, $apiDataUrl, $user);                                        
                 $standardization->addResponsible($user);
             }            
             

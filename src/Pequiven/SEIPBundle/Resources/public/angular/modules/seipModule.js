@@ -2606,7 +2606,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_sig_monitoring_notification', {id: $scope.dataNotify});                    
+                    var url = Routing.generate('pequiven_sig_monitoring_notification', {id: $scope.dataNotify, type: $scope.type, idObject: $scope.id_managementSystem});                    
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({

@@ -96,13 +96,18 @@ function showMessage(id){
                 $('#buttonToll').css('display', 'block');                        
                 $('#messageNone').html(data['description']);
                 //document.getElementById("messageNone").innerHTML = "<a href=\"{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}\">Ver</a>";
-                var path = data['path'];                
-                $('#href').html("<a href='http://localhost/seip/web/app_dev.php/indicator/2719/evolution/12' class='button red-gradient float-right with-tooltip' title='Visualizar' onclick='visuzalice();'>Visualizar</a>");
+                var path = data['path'];                                
+                $('#href').html("<a href data='"+path+"' id='visualize' class='button red-gradient float-right with-tooltip' title='Visualizar' onclick='visualize();'>Visualizar</a>");
                 $('#sectionButton').html('<a href class="button" title="Eliminar" onclick="deleteMessage('+id+');"><span class="icon-trash"></span></a><a href class="button" title="Marcar como Importante" onclick="favouriteMessage('+id+');"><span class="icon-flag"></span></a>');
                 getData(urlData);                
             }
     });
 }   
+
+function visualize(){    
+    url = $('#visualize').attr('data');    
+    window.open(url, '_blank');
+}
 
 function deleteMessage(id){    
     var data = {
@@ -151,10 +156,6 @@ function favouriteMessage(id){
             }
     });
 }   
-
-function visuzalice(){
-    console.log("hola");
-}
 
 function getMessagesData(type, tag, typeData){    
     var data = {
