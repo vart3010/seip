@@ -37,6 +37,7 @@ class GerenciaAdmin extends Admin
             ->add('gerenciaGroup')
             ->add('validAudit')
             ->add('enabled')
+            ->add('normalizedManagement')
             ;
     }
     
@@ -74,6 +75,9 @@ class GerenciaAdmin extends Admin
             ->add('enabled',null,array(
                 'required' => false,
             ))
+            ->add('normalizedManagement',null,array(
+                'required' => false,
+            ))
             ;
     }
     protected function configureDatagridFilters(DatagridMapper $filter) {
@@ -86,6 +90,7 @@ class GerenciaAdmin extends Admin
             ->add('gerenciaGroup')
             ->add('validAudit')
             ->add('enabled')
+            ->add('normalizedManagement')
             ;
     }
     protected function configureListFields(ListMapper $list) {
