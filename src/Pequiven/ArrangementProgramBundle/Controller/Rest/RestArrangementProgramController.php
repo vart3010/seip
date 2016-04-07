@@ -14,6 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd;
+use Pequiven\ArrangementProgramBundle\Form\GoalDetailsIndType;
 
 /**
  * Controlador rest de Notificacion de los programas de gestion
@@ -46,7 +48,7 @@ class RestArrangementProgramController extends FOSRestController {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
 
-        $data = array();        
+        $data = array();
         $responsibles = $em->getRepository('PequivenArrangementProgramBundle:Goal')->getGoalResponsiblesUserbyAP($id, $user);
         $userobj = $this->get('pequiven.repository.user')->findOneById($user);
 
@@ -61,8 +63,6 @@ class RestArrangementProgramController extends FOSRestController {
             $data[] = $goal->getGoalDetails();
         }
 
-        //var_dump($data);
-
         $view = $this->view();
 
         $result = array(
@@ -76,63 +76,49 @@ class RestArrangementProgramController extends FOSRestController {
         if ($request->get('_format') == 'html') {
             $result['monthsPlanned'] = GoalDetails::getMonthsPlanned();
             $result['entity'] = $entity;
-//            $date = new DateTime();
-//            $month = $date->format('m');
-//            $percentaje = 0;
-//            $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
-//            foreach (GoalDetails::getMonthsPlanned() as $key => $monthGoal) {
-//                if($month < $monthGoal){
-//                    $percentaje = $propertyAccessor->getValue($object,$key);
-//                }
-//            }
-//            foreach ($timeline->getGoals() as $goal) {
-//                $goal->getGoalDetails()
-//            }
-//            foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
-//                    $valuePlanned = $propertyAccessor->getValue($entity, $planned);
-//                    $monthReal = GoalDetails::getMonthOfRealByMonth($monthNumber);
-//                    $valueReal = $propertyAccessor->getValue($entity, $monthReal);
-//                    if ($isEnabledEditByPlannedLoad && ($valuePlanned == '' || $valuePlanned == '0' || $valuePlanned === null)) {
-//                        $propertyAccessor->setValue($entity, $monthReal, 0);
-//                    } else if ($valueReal > $valuePlanned) {
-//                        //Valida que el valor real no pueda ser mayor al planeado.
-//                        if ($isAllowLoadingLongerThanPlannedRealValue === false) {
-//                            $propertyAccessor->setValue($entity, $monthReal, $valuePlanned);
-//                        }
-//                    }
-//                }
-//          
         }
         $view->setData($result);
-        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'goal', 'goalDetails'));
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'goal', 'goalDetailsInd'));
         $view->setTemplate("PequivenArrangementProgramBundle:Rest:ArrangementProgram/form.html.twig");
 
         return $view;
     }
 
     /**
-     * @Annotations\Put("/{id}/goals-details.{_format}/{slug}",name="put_arrangementprogram_rest_restarrangementprogram_putgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
+     * @Annotations\Put("/{id}/{user}/goals-details.{_format}/{slug}",name="put_arrangementprogram_rest_restarrangementprogram_putgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
      */
     function putGoalsDetailsAction($id, Request $request, $slug) {
-        $em = $this->getDoctrine()->getManager();
 
+        $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('PequivenArrangementProgramBundle:GoalDetails')->find($slug);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find GoalDetails entity.');
         }
-        $arrangementProgram = $entity->getGoal()->getTimeline()->getArrangementProgram();
 
+        //NOTIFICACION INDIVIDUAL
+        if ($request->get('user') != 0) {
+            $entityInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneby(array('goalDetails' => $entity));
+            $user = $request->get('user');
+
+            if (!$entityInd) {
+                $entityInd = new GoalDetailsInd();
+            }
+
+            $form = $this->createForm(new GoalDetailsIndType(), $entityInd);
+        } else {
+            $form = $this->createForm(new GoalDetailsType(), $entity);
+        }
+
+        $arrangementProgram = $entity->getGoal()->getTimeline()->getArrangementProgram();
         $hasPermissionToNotify = $this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram);
         $hasPermissionToPlanned = $this->getArrangementProgramManager()->hasPermissionToPlanned($arrangementProgram);
-        if (!$hasPermissionToNotify && !$hasPermissionToPlanned
-        ) {
+
+        if (!$hasPermissionToNotify && !$hasPermissionToPlanned) {
             throw new AccessDeniedException();
         }
 
-        $form = $this->createForm(new GoalDetailsType(), $entity);
         $dataRequest = $request->request->all();
-
         unset($dataRequest['id']);
         unset($dataRequest['null']);
 
@@ -142,8 +128,7 @@ class RestArrangementProgramController extends FOSRestController {
             ) {
                 $permission = false;
             }
-            if (GoalDetails::isRealProperty($property) === true &&
-                    $hasPermissionToNotify === false) {
+            if (GoalDetails::isRealProperty($property) === true && $hasPermissionToNotify === false) {
                 $permission = false;
             }
             if ($permission === false) {
@@ -153,57 +138,92 @@ class RestArrangementProgramController extends FOSRestController {
 
         $form->submit($dataRequest, false);
         $success = false;
-        if ($form->isValid()) {
-            //Habilitar limpiar los valores reales si el planeado se establecio en cero
-            $isEnabledClearRealByPlannedEmpty = true;
-            //Permitir cargar valor real mayor a planificado.
-            $isAllowLoadingLongerThanPlannedRealValue = true;
-            //Habilitar edicion del valor real dependiendo si la planeada no esta vacia
-            $isEnabledEditByPlannedLoad = false;
-            if ($isEnabledClearRealByPlannedEmpty === true) {
-                $propertyAccessor = new PropertyAccessor();
-                foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
-                    $valuePlanned = $propertyAccessor->getValue($entity, $planned);
-                    $monthReal = GoalDetails::getMonthOfRealByMonth($monthNumber);
-                    $valueReal = $propertyAccessor->getValue($entity, $monthReal);
-                    if ($isEnabledEditByPlannedLoad && ($valuePlanned == '' || $valuePlanned == '0' || $valuePlanned === null)) {
-                        $propertyAccessor->setValue($entity, $monthReal, 0);
-                    } else if ($valueReal > $valuePlanned) {
-                        //Valida que el valor real no pueda ser mayor al planeado.
-                        if ($isAllowLoadingLongerThanPlannedRealValue === false) {
-                            $propertyAccessor->setValue($entity, $monthReal, $valuePlanned);
+
+        if ($request->get('user') != 0) {
+            $entityInd->setGoalDetails($entity);
+            $userObj = $em->getRepository('PequivenSEIPBundle:User')->findOneById($user);
+            $entityInd->setUser($userObj);
+            if ($form->isValid()) {
+                //Habilitar limpiar los valores reales si el planeado se establecio en cero
+                $isEnabledClearRealByPlannedEmpty = true;
+                //Permitir cargar valor real mayor a planificado.
+                $isAllowLoadingLongerThanPlannedRealValue = true;
+                //Habilitar edicion del valor real dependiendo si la planeada no esta vacia
+                $isEnabledEditByPlannedLoad = false;
+                if ($isEnabledClearRealByPlannedEmpty === true) {
+                    $propertyAccessor = new PropertyAccessor();
+                    foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+                        $valuePlanned = $propertyAccessor->getValue($entityInd, $planned);
+                        $monthReal = GoalDetails::getMonthOfRealByMonth($monthNumber);
+                        $valueReal = $propertyAccessor->getValue($entityInd, $monthReal);
+                        if ($isEnabledEditByPlannedLoad && ($valuePlanned == '' || $valuePlanned == '0' || $valuePlanned === null)) {
+                            $propertyAccessor->setValue($entityInd, $monthReal, 0);
+                        } else if ($valueReal > $valuePlanned) {
+                            //Valida que el valor real no pueda ser mayor al planeado.
+                            if ($isAllowLoadingLongerThanPlannedRealValue === false) {
+                                $propertyAccessor->setValue($entityInd, $monthReal, $valuePlanned);
+                            }
+                        }
+                    }
+                }                
+                $em->persist($entityInd);
+                $em->flush();
+                $success = true;
+            } else {
+                $entityInd = $form;
+            }
+        } else {
+            if ($form->isValid()) {
+                //Habilitar limpiar los valores reales si el planeado se establecio en cero
+                $isEnabledClearRealByPlannedEmpty = true;
+                //Permitir cargar valor real mayor a planificado.
+                $isAllowLoadingLongerThanPlannedRealValue = true;
+                //Habilitar edicion del valor real dependiendo si la planeada no esta vacia
+                $isEnabledEditByPlannedLoad = false;
+                if ($isEnabledClearRealByPlannedEmpty === true) {
+                    $propertyAccessor = new PropertyAccessor();
+                    foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+                        $valuePlanned = $propertyAccessor->getValue($entity, $planned);
+                        $monthReal = GoalDetails::getMonthOfRealByMonth($monthNumber);
+                        $valueReal = $propertyAccessor->getValue($entity, $monthReal);
+                        if ($isEnabledEditByPlannedLoad && ($valuePlanned == '' || $valuePlanned == '0' || $valuePlanned === null)) {
+                            $propertyAccessor->setValue($entity, $monthReal, 0);
+                        } else if ($valueReal > $valuePlanned) {
+                            //Valida que el valor real no pueda ser mayor al planeado.
+                            if ($isAllowLoadingLongerThanPlannedRealValue === false) {
+                                $propertyAccessor->setValue($entity, $monthReal, $valuePlanned);
+                            }
                         }
                     }
                 }
-            }
-            //Habilitar limpiar los valores planeados no sobrepasen el 100% distribuido en todas las columnas
-            $clearPlannedOnComplete = true;
-            if ($clearPlannedOnComplete === true) {
-                //Limite de porcentaje que se asigna al planeado
-                $limitPlannedPercentaje = 100;
-                $percentajeAcumulated = 0;
-                $propertyAccessor = new PropertyAccessor();
-                $disable = false;
-                foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
-                    $percentaje = $propertyAccessor->getValue($entity, $planned);
-                    $percentajeAcumulated += $percentaje;
-                    if ($disable) {
-                        $propertyAccessor->setValue($entity, $planned, 0);
-                        continue;
-                    }
-                    if ($percentajeAcumulated >= $limitPlannedPercentaje) {
-                        $diff = $percentaje - ($percentajeAcumulated - $limitPlannedPercentaje);
-                        $propertyAccessor->setValue($entity, $planned, $diff);
-                        $disable = true;
+                //Habilitar limpiar los valores planeados no sobrepasen el 100% distribuido en todas las columnas
+                $clearPlannedOnComplete = true;
+                if ($clearPlannedOnComplete === true) {
+                    //Limite de porcentaje que se asigna al planeado
+                    $limitPlannedPercentaje = 100;
+                    $percentajeAcumulated = 0;
+                    $propertyAccessor = new PropertyAccessor();
+                    $disable = false;
+                    foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+                        $percentaje = $propertyAccessor->getValue($entity, $planned);
+                        $percentajeAcumulated += $percentaje;
+                        if ($disable) {
+                            $propertyAccessor->setValue($entity, $planned, 0);
+                            continue;
+                        }
+                        if ($percentajeAcumulated >= $limitPlannedPercentaje) {
+                            $diff = $percentaje - ($percentajeAcumulated - $limitPlannedPercentaje);
+                            $propertyAccessor->setValue($entity, $planned, $diff);
+                            $disable = true;
+                        }
                     }
                 }
+                $em->persist($entity);
+                $em->flush();
+                $success = true;
+            } else {
+                $entity = $form;
             }
-
-            $em->persist($entity);
-            $em->flush();
-            $success = true;
-        } else {
-            $entity = $form;
         }
 
         $view = $this->view();
@@ -213,6 +233,8 @@ class RestArrangementProgramController extends FOSRestController {
             'total' => 1,
             'messages' => 'Exitooooo'
         );
+
+        die();
         $view->setData($result);
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'goal', 'goalDetails'));
         $view->setTemplate("PequivenArrangementProgramBundle:Rest:ArrangementProgram/form.html.twig");

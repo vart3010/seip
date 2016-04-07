@@ -50,7 +50,6 @@
 
     <script type="text/javascript">
         var idTemp = 0;
-        
         var formatPhp = "Y-m-d H:i:s";
                 var advancesPlanned = {{ summary['advancesPlanned'] }};
                 var month = '{{ 'now'|date('m') }}';
@@ -66,7 +65,6 @@
             Ext.tip.QuickTipManager.init();
             var idPG = '{{app.request.get('id')}}';
             var win, buttonAddComment;
-            
             var store = Ext.create('Ext.data.Store', {
                 autoLoad: true,
                 autoSync: true,
@@ -74,29 +72,30 @@
                 groupField: 'project',
                 proxy: {
                     type: 'rest',
-                    url: "{{ path('AP_notification_search') }}" + idPG +"/"+ idTemp + "/goals-details.json",
-                    reader: {
-                        type: 'json',
-                        rootProperty: 'data'
-                    },
-                    writer: {
-                        type: 'json'
-                    },
-                    actionMethods: {
-                        update: 'POST'
-                    }
-                },
-                listeners: {
-                    write: function (store, operation) {
-                        var record = operation.getRecords()[0],
-                                name = Ext.String.capitalize(operation.action),
-                                verb;
-                        if (name == 'Destroy') {
-                            verb = 'Destroyed';
-                        } else {
-                            verb = name + 'd';
+                    url: "{{ path('AP_notification_search') }}" + idPG + "/" + idTemp + "/goals-details.json",
+        {#id:app.request.get('id')#}
+                        reader: {
+                            type: 'json',
+                            rootProperty: 'data'
+                        },
+                        writer: {
+                            type: 'json'
+                        },
+                        actionMethods: {
+                            update: 'POST'
                         }
-        {#                        Ext.example.msg(Translator.trans(name), Ext.String.format("{{ "pequiven.goals.goal"|trans }} {1} {0}", Translator.trans(verb), record.getId()));#}
+                    },
+                    listeners: {
+                        write: function (store, operation) {
+                            var record = operation.getRecords()[0],
+                                    name = Ext.String.capitalize(operation.action),
+                                    verb;
+                            if (name == 'Destroy') {
+                                verb = 'Destroyed';
+                            } else {
+                                verb = name + 'd';
+                            }
+        {#Ext.example.msg(Translator.trans(name), Ext.String.format("{{ "pequiven.goals.goal"|trans }} {1} {0}", Translator.trans(verb), record.getId()));#}
 
                         },
                         update: function (store, record, operation, modifiedFieldNames, eOpts) {
@@ -183,11 +182,11 @@
                     return total;
                 };
                 /**
-                 
+                 * Formatea los numeros del resumen
                  * @param {type} value
                  * @param {type} summaryData
                  * @param {type} dataIndex
-                 * @returns {unresolved}          * Formatea los numeros del resumen
+                 * @returns {unresolved}          
                  */
                 var valSummaryRenderer = function (value, summaryData, dataIndex) {
                     return formatNumber(value);
@@ -224,6 +223,22 @@
                     minValue: 0,
                     maxValue: 100
                 };
+                /**
+                 * 
+                 * DATA DEL SELECT
+                 */
+                var states = Ext.create('Ext.data.Store', {
+                    fields: ['id', 'name'],
+                    data: [
+        {% if userobj %}
+                        {"id": "{{userobj.id}}", "name": "{{userobj.getfullname|ucwords}}"},
+        {%endif%}
+                        {"id": "0", "name": "GENERAL"},
+        {% for resp in responsibles %}
+                        {"id": "{{resp.id}}", "name": "{{resp.Responsable|upper}}"},
+        {% endfor %}                                                                             
+                    ]
+                });
                 var widthColumnValues = 60;
                 var grid = Ext.create('Ext.grid.Panel', {
                     selType: 'cellmodel',
@@ -249,7 +264,8 @@
                         }],
                     dockedItems: [{
                             xtype: 'toolbar',
-                            items: [{
+                            items: [
+                                {
                                     itemId: 'addCommentBtn',
                                     text: '{{ "pequiven.arrangement_program.buttons.add_comment"|trans }}',
                                     iconCls: 'icon-add',
@@ -354,7 +370,28 @@
                                     handler: function () {
                                         store.load();
                                     }
-                                }
+
+                                },
+                                Ext.create('Ext.form.ComboBox', {
+                                    itemId: 'userSelect',
+                                    {#hidden: true,#}
+                                    fieldLabel: '<b>Responsable:</b>',
+                                    store: states,
+                                    queryMode: 'local',
+                                    editable: false,
+                                    autoSelect: true,
+                                    labelWidth: 90,
+                                    displayField: 'name',
+                                    valueField: 'id',
+                                    renderTo: Ext.getBody(),
+                                    listeners: {
+                                        select: function () {
+                                            store.getProxy().setExtraParam("user", this.value);
+                                            store.load();
+                                        }
+                                    }
+                                })
+
                             ]
                         }],
                     columns: [{
@@ -947,108 +984,15 @@
                     ]
                 });
             });
-
-
-
-        {# $("select#user").change(function () {
-             //cargahidden();
-             //alert("olas");
-//                    var select_user = document.getElementById("user").value;
-             var select_user = $(this).val();
-             var idPG = "{{app.request.get('id')}}";
-             //alert(idPG + "-" + select_user);
-             var datos = {
-                 user: select_user,
-                 ifPg: idPG
-             };
-             alert(datos);
-             var url = "{{ path("get_url_reload_notification_by_person") }}";
-             $.post(url, function (data) {
-                 alert(data);
-             });
-                    
-         });#}
-
-
-
-
-        {#  function cargahidden() {
-              var select_user = document.getElementById("user").value;
-              var idPG = '{{app.request.get('id')}}';
-              console.log(idPG);
-              var data = {
-                  user: select_user,
-                  ifPg: idPG
-              };
-              $.ajax({
-                  type: 'get',
-                  url: '{{ path("get_url_reload_notification_by_person") }}',
-                  data: data,
-                  success: function (data) {
-                      //window.open(data["url"]);
-                      //alert(data);
-                      console.log(data);
-                  }
-              });
-
-          }#}
-              $(document).ready(function () {
-
-                  $("select#user").change(function () {
-                      
-                      var user = $(this).val();
-                      console.log(user);
-                      idTemp = user;
-                      //getData(user);
-                  });
-              });
-              
-              function getData(user) {
-
-                  var url = "{{ path('get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails',{id:app.request.get('id'),format:'json'}) }}";
-
-                  var data = {
-                      user: user
-                  };
-
-                  $.ajax({
-                      type: 'get',
-                      url: url,
-                      data: data,
-                      success: function (data) {
-                          console.log(data);
-                      }
-                  });
-              }
-
-
     </script>
-
-
 {% endblock javascript %}
 {% block content %}
     <br/>
     <table width="100%">
         <tr>
-            <td width="40%">
+            <td>
                 <b>{{ 'pequiven.ref'|trans({},'messages') }}:</b> {{ entity.ref }}
-            </td>
-            <td  width="60%" style="text-align: right;" rowspan="2">
-                <form name="formula" method="GET" action="{{ path('get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails',{id:app.request.get('id'),format:'json'}) }}">
-                    <input type="hidden" value="" id="hidden">
-                    <select  id="user" onchange="getData();" name="user" class="input-large select2" style="width: 50%;">
-                        {% if userobj %}
-                            <option value="{{userobj.id}}" selected>{{userobj.getfullname|ucwords}}</option>    
-                            <option value="0">Total Grupal</option>
-                        {%else%}
-                            <option value="0" selected >Total Grupal</option>
-                        {%endif%}
-                        {% for resp in responsibles %}
-                            <option value="{{resp.id}}">{{resp.Responsable|ucwords}}</option>             
-                        {% endfor %}                                                             
-                    </select> 
-                </form>
-            </td>
+            </td>            
         </tr>
         <tr>
             <td colspan="2">
