@@ -4258,7 +4258,7 @@ class IndicatorService implements ContainerAwareInterface {
             $acumLast = $cant = $promLast = 0;
             $indicatorlast = $indicator->getindicatorLastPeriod();
             
-            if ($indicator->getPeriod()->getId() == 3) {
+            if ($indicator->getPeriod()->getId() == 3 and $indicatorPeriod15 != 0) {
                 if ($indicatorPeriod15->getindicatorLastPeriod() === null) {
                     $dataAnt["value"] = 0; //Pasando data a Data2015 si no tiene ralacion
                 }else{
@@ -4279,7 +4279,7 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetAnt["showvalues"] = "1";            
             $dataSetAnt["data"][] = $dataAnt; //2014                
             
-            if ($indicator->getPeriod()->getId() == 3) {
+            if ($indicator->getPeriod()->getId() == 3 and $indicatorPeriod15 != 0) {
                 //Data 2015
                 $dataAnt2015["value"] = round($indicatorlast->getResultReal());
                 $dataAnt2015["color"] = '#f2c500';
