@@ -98,11 +98,13 @@ function showMessage(id){
             },                    
             success: function (data) {                        
                 $(location).attr('href', data["url"]);                                                
-                $('#new-message_' + id).css('display','none');                        
+                //$('#new-message_' + id).css('display','none');                        
                 $('#out-message_' + id).css('display','block');
                 $('#buttonToll').css('display', 'block');                        
-                $('#messageNone').html(data['description']);
-                //document.getElementById("messageNone").innerHTML = "<a href=\"{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}\">Ver</a>";
+                $('#messageNone').html(data['description']);                
+                
+                $('#new-message_' + id).html('<i class="fa fa-envelope-o" id="new-message_'+ id +'"></i>');
+
                 var path = data['path'];                                
                 $('#href').html("<a href data='"+path+"' id='visualize' class='button red-gradient float-right with-tooltip' title='Visualizar' onclick='visualize();'>Visualizar</a>");
                 $('#sectionButton').html('<a href class="button" title="Eliminar" onclick="deleteMessage('+id+');"><span class="icon-trash"></span></a><a href class="button" title="Marcar como Importante" onclick="favouriteMessage('+id+');"><span class="icon-flag"></span></a>');
@@ -207,7 +209,7 @@ function createMessages(type, tag, typeData, data){
             var color = "00d518";            
         };
 
-        myArray.push('<li id="iMessage_'+ data['id'][i] +'"  onclick="showMessage('+id+');"><span class="message-status"><a href="javascript:void(0);" style="color:#ebd106;" id="" title="Mensaje sin leer"><i class="fa '+font+'" id="new-message_"></i></a><a href="javascript:void(0);" class="" style="color:#'+color+';"><i class="fa fa-tag"></i></a></span><a href title="Leer Notificación" id="title" onclick=""><strong class="blue">'+data['title'][id]+'</strong><br><strong>'+data['date'][id]+'</strong></a></li>');
+        myArray.push('<li id="iMessage_'+ data['id'][i] +'"  onclick="showMessage('+id+');"><span class="message-status"><a href="javascript:void(0);" style="color:#ebd106;" title="Mensaje sin leer" id="new-message_'+ data['id'][i] +'"><i class="fa '+font+'"></i></a><a href="javascript:void(0);" class="" style="color:#'+color+';"><i class="fa fa-tag"></i></a></span><a href title="Leer Notificación" id="title" onclick=""><strong class="blue">'+data['title'][id]+'</strong><br><strong>'+data['date'][id]+'</strong></a></li>');
     }
         if (type == 1) {
             $(tag+"_tag").html(myArray);
@@ -261,8 +263,9 @@ function loadAllDataMessage(){
   $( "#notify" ).click();
 });*/
 
-$("#notify").click(function(){    
-      loadAllDataMessage();
+$("#notify").click(function(){ 
+    getData(urlData); 
+    loadAllDataMessage();
 });
 
 $("#fav").click(function(){

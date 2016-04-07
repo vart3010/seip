@@ -4155,7 +4155,8 @@ class IndicatorService implements ContainerAwareInterface {
         
         $em = $this->getDoctrine();        
         $prePlanningItemCloneObject = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array('idCloneObject' => $indicator->getId(), 'typeObject' => \Pequiven\SEIPBundle\Model\PrePlanning\PrePlanningTypeObject::TYPE_OBJECT_INDICATOR));
-        if ($indicator->getPeriod()->getId() == 3) {
+        
+        if ($indicator->getPeriod()->getId() == 3 AND $prePlanningItemCloneObject) {
             $indicatorPeriod15 = $this->container->get('pequiven.repository.indicator')->find($prePlanningItemCloneObject->getIdSourceObject());                    
         }else{
             $indicatorPeriod15 = 0;
