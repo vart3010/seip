@@ -1,3 +1,9 @@
+/*
+    Notify.js - Funciones jQuery para la seccion de notificación del SEIP
+
+    Máximo Sojo <maximosojo@atechnologies.com.ve>
+*/
+
 var urlData;
 
 var urlMessage;
@@ -11,7 +17,8 @@ var urlMessages;
 var notify;
 
 $("#reload").click(function(){    
-    getData(urlData);    
+    getData(urlData); 
+    loadAllDataMessage();   
 });
 
 function setNotifications(dataNotify){     
@@ -209,7 +216,7 @@ function createMessages(type, tag, typeData, data){
         };     
 }
 
-$("#objetives_data").click(function(){
+/*$("#objetives_data").click(function(){
     getMessagesData(1,"#objetives", 1);
     $('#messageNone').text('Selecciones un mensaje.');
 }); 
@@ -237,11 +244,26 @@ $("#production_data").click(function(){
 $("#evolution_data").click(function(){
     getMessagesData(1,"#evolution", 6);
     $('#messageNone').text('Selecciones un mensaje.');
-}); 
+});*/
 
-/*$("#notify").click(function(){
-    console.log('Notify'); 
-}); */
+function loadAllDataMessage(){
+    var arrayData = [];
+    arrayData = ['objetives', 'programt', 'indicators', 'standardization', 'production', 'evolution'];
+    
+    for (var i=0; i<arrayData.length; i++) {
+        var typeData = i+1;   
+        var tag = "#"+arrayData[i];     
+        getMessagesData(1, tag, typeData);         
+    }
+}
+
+/*$( "#prueba" ).click(function() {
+  $( "#notify" ).click();
+});*/
+
+$("#notify").click(function(){    
+      loadAllDataMessage();
+});
 
 $("#fav").click(function(){
     getMessagesData(2,"#favMessage", 0);
