@@ -20,7 +20,7 @@ pequiven_plant_report_group_create:
     defaults:
         _controller: pequiven.controller.plant_report:createGroupAction
         _sylius:
-            form: pequiven_seipbundle_dataload_plantreport
+            form: pequiven_seipbundle_dataload_plantreport_group
     methods: [GET|POST]
     
     

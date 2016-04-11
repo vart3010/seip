@@ -5,6 +5,8 @@ namespace Pequiven\SEIPBundle\Form\DataLoad;
 use Pequiven\SEIPBundle\Form\SeipAbstractForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class PlantReportGroupType extends SeipAbstractForm {
 
@@ -42,8 +44,7 @@ class PlantReportGroupType extends SeipAbstractForm {
                 return $repository->findQueryByLocation($location);
             },
                 ))
-                ->add('plant', null, $parametersToSet)
-                ->add('childrensGroup', null, $parametersToSet)
+//                ->add('plant', null, $parametersToSet)
                 ->add('currentCapacity', null, array(
                     'label_attr' => array('class' => 'label'),
                     "attr" => array("class" => "input"),
@@ -53,6 +54,17 @@ class PlantReportGroupType extends SeipAbstractForm {
                     "attr" => array("class" => "switch medium mid-margin-right", "data-text-on" => "Si", "data-text-off" => "No"),
                     "required" => false,
                 ))
+                ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+
+                    $parametersToSet = array(
+                        'label_attr' => array('class' => 'label'),
+                        "empty_value" => "",
+                        "attr" => array("class" => "select2 input-large"),
+                    );
+                    $user = $event->getData();
+                    $form = $event->getForm();
+                    $form->add('childrensGroup', null, $parametersToSet);
+                });
         ;
     }
 
@@ -70,7 +82,7 @@ class PlantReportGroupType extends SeipAbstractForm {
      * @return string
      */
     public function getName() {
-        return 'pequiven_seipbundle_dataload_plantreport';
+        return 'pequiven_seipbundle_dataload_plantreport_group';
     }
 
 }

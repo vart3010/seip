@@ -122,8 +122,8 @@ class PlantReportController extends SEIPController {
                 ->view()
                 ->setTemplate($this->config->getTemplate('group/create.html'))
                 ->setData(array(
-            $this->config->getResourceName() => $resource,
-            'form' => $form->createView()
+                    $this->config->getResourceName() => $resource,
+                    'form' => $form->createView()
                 ))
         ;
 
