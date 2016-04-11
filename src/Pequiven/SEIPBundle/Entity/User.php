@@ -1119,5 +1119,13 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     public function getMaintenanceResponsibles() {
         return $this->maintenanceResponsibles;
     }
+    
+    function getFeeStructure() {
+        return $this->feeStructure;
+    }
+
+    function setFeeStructure(\Pequiven\SEIPBundle\Entity\User\FeeStructure $feeStructure) {
+        $this->feeStructure = $feeStructure;
+    }
 
 }
