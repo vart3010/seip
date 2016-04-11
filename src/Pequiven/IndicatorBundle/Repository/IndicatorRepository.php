@@ -118,16 +118,13 @@ class IndicatorRepository extends EntityRepository
         //Chuleta: se necesita el id del period, no la descripcion.
         $queryBuilder = $this->getQueryBuilder();
         $queryBuilder
-
                 ->addSelect('i')
-                ->andWhere('i.enabled = 1')
-                ->andWhere('i.period = :periodo')
-                ->andWhere('i.enabled = 1')
+                ->andWhere('i.enabled = 1')                
+                ->andWhere('i.period = :periodo')                
                 ->andWhere('i.tmp = 0')
                 ->orderBy('i.ref')
                 ->setParameter('periodo', $period)
-        ;
-        //$queryBuilder->groupBy('i.ref');
+        ;        
         //$queryBuilder->orderBy('i.ref');
         
         return $queryBuilder;

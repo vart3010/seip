@@ -52,7 +52,7 @@
                         <a class="button icon-list-add " href="" ng-click="removeLastPeriod(idIndicator='{{ indicator_sig.id }}')" title="">{{ 'pequiven.delete'|trans({},'messages')  }}</a>
                     </div>
                 </div>
-            {% elseif indicator_sig.indicatorlastPeriod == false and indicator_sig.period.id == 2 %}
+            {% elseif indicator_sig.indicatorlastPeriod == false and lastPeriod == null %}
                 <div class="block block-title">
                     <h3>El Indicador no tiene relación con el indicador del {{ period }}</h3>
                     <div class="button-group absolute-right compact">

@@ -249,6 +249,7 @@ class IndicatorSigController extends ResourceController {
             'font'       => $font,
             'typeObject' => $typeObject,
             'id'         => $idIndicator,
+            'lastPeriod' => $indicator->getIndicatorLastPeriod(),
             'route'      => "pequiven_indicator_evolution", //Ruta para carga de Archivo
             'urlExportFromChart' => $urlExportFromChart,
             $this->config->getResourceName() => $resource,
@@ -317,16 +318,17 @@ class IndicatorSigController extends ResourceController {
     }
 
     /**
-     * Retorna el formulario de la relacion del indicador con periodo 2014
+     * Retorna el formulario de la relacion del indicador con periodo Anterior
      * 
      * @param Request $request
      * @return type
      */
     function getFormAction(Request $request) {
         $indicator = $this->findIndicatorOr404($request);
-
+        $period = $indicator->getPeriod()->getId() - 1;
+        
         $indicatorRel = new Indicator();
-        $form = $this->createForm(new IndicatorLastPeriodType(), $indicatorRel);
+        $form = $this->createForm(new IndicatorLastPeriodType($period), $indicatorRel);
 
         $view = $this
                 ->view()
