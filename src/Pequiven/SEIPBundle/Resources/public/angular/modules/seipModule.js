@@ -2435,7 +2435,7 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_indicator_last_period_form', parameters);
                 $scope.templates = [
                     {
-                        name: 'Indicador Periodo Anterior 2014',
+                        name: 'Indicador Periodo Anterior',
                         url: url,
                         confirmCallBack: confirmCallBack,
                     }
