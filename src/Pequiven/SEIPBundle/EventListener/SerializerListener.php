@@ -626,9 +626,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
                     $data[$key]['isEnabled'] = false;
                 }
             }
-        }
-        var_dump($data);
-        die();
+        }        
         $event->getVisitor()->addData('_data', $data);
     }
 

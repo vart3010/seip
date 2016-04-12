@@ -72,13 +72,13 @@ class RestArrangementProgramController extends FOSRestController {
             'responsibles' => $responsibles,
             'userobj' => $userobj
         );
-
+        
         if ($request->get('_format') == 'html') {
             $result['monthsPlanned'] = GoalDetails::getMonthsPlanned();
             $result['entity'] = $entity;
         }
         $view->setData($result);
-        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'goal', 'goalDetailsInd'));
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'goal', 'goalDetails'));
         $view->setTemplate("PequivenArrangementProgramBundle:Rest:ArrangementProgram/form.html.twig");
 
         return $view;
