@@ -141,6 +141,14 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
     protected $resultReal = 0;
 
     /**
+     * Resultado original
+     * 
+     * @var float
+     * @ORM\Column(name="realResultGoal",type="float")
+     */
+    protected $realResult = 0;
+
+    /**
      * ¿El resultado que irá a evaluaciones, será colocado manualmente? Quiere decir que de acuerdo a previa solicitud y justificación se puede editar el resultado de la meta.
      * 
      * @var boolean
@@ -589,6 +597,14 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
      */
     public function getresultBeforepenalty() {
         return $this->resultBeforepenalty;
+    }
+
+    function getRealResult() {
+        return $this->realResult;
+    }
+
+    function setRealResult($realResult) {
+        $this->realResult = $realResult;
     }
 
     public function __clone() {

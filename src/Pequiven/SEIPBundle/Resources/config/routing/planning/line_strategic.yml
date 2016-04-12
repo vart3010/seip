@@ -9,6 +9,39 @@ pequiven_line_strategic_view_dashboard:
         id: \d+
     methods: [GET]
     
+#Vista de las Líneas Estratégicas De acuerdo al Complejo(Íconos)
+pequiven_line_strategic_view_dashboard_complejo:
+    path: /dashboardC/{_format}
+    defaults:
+        _controller: pequiven.controller.linestrategic:viewDashboarComplejoAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
+#Vista de los semáforos de acuerdo al complejo seleccionado
+pequiven_line_strategic_view_results_by_complejo:
+    path: /{idComplejo}/{id}.{_format}
+    defaults:
+        _controller: pequiven.controller.linestrategic:showResultsByComplejoAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        idComplejo: \d+
+        id: \d+
+    methods: [GET]
+   
+#Vista de los Indicadores de algún modo especificos (Modo Informe Ejecutivo)
+pequiven_line_strategic_indicators_specific:
+    path: /specific/{complejo}.{_format}
+    defaults:
+        _controller: pequiven.controller.linestrategic:viewOnlyIndicatorSpecificAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        complejo: \d+
+    methods: [GET]
+    
 #Vista de los Indicadores Estratégicos (Modo Informe Ejecutivo)
 pequiven_line_strategic_indicators_strategics:
     path: /indicator/{_format}

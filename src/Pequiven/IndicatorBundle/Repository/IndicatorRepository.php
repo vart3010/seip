@@ -118,16 +118,13 @@ class IndicatorRepository extends EntityRepository
         //Chuleta: se necesita el id del period, no la descripcion.
         $queryBuilder = $this->getQueryBuilder();
         $queryBuilder
-
                 ->addSelect('i')
-                ->andWhere('i.enabled = 1')
-                ->andWhere('i.period = :periodo')
-                ->andWhere('i.enabled = 1')
+                ->andWhere('i.enabled = 1')                
+                ->andWhere('i.period = :periodo')                
                 ->andWhere('i.tmp = 0')
                 ->orderBy('i.ref')
                 ->setParameter('periodo', $period)
-        ;
-        //$queryBuilder->groupBy('i.ref');
+        ;        
         //$queryBuilder->orderBy('i.ref');
         
         return $queryBuilder;
@@ -383,7 +380,9 @@ class IndicatorRepository extends EntityRepository
      * @param type $idLineStrategic
      * @param type $orderBy
      */
-    public function findByLineStrategicAndOrderShowFromParent($idLineStrategic, $orderBy = 'ASC'){
+    public function findByLineStrategicAndOrderShowFromParent($idLineStrategic, $orderBy = 'ASC',$parameters = array()){
+        $parameters = new \Doctrine\Common\Collections\ArrayCollection($parameters);
+        
         $qb = $this->getQueryBuilder();
         $qb
                 ->innerJoin('i.lineStrategics','ls')
@@ -392,6 +391,18 @@ class IndicatorRepository extends EntityRepository
                 ->setParameter('idLineStrategic', $idLineStrategic)
                 ->orderBy('i.orderShowFromParent', $orderBy)
         ;
+        
+        if(($specific = $parameters->remove('specific')) != null){
+            $qb->andWhere('i.showByDashboardSpecific = 1');
+            if(($complejo = $parameters->remove('complejo')) != null){
+                $qb->andWhere('i.complejoDashboardSpecific = :complejo')
+                   ->setParameter('complejo', $complejo)
+                ;
+            }
+        } else{
+            $qb->andWhere('i.showByDashboardSpecific = 0');
+        }
+        
         $this->applyPeriodCriteria($qb);
         
         return $qb->getQuery()->getResult();
@@ -418,19 +429,22 @@ class IndicatorRepository extends EntityRepository
     }
     
     
-    
+    /*
+     * Query que retorna los indicadores que se les debe recalcular el resultado
+     */
     public function findQueryWithResultNull(\Pequiven\SEIPBundle\Entity\Period $period)
     {
         $qb = $this->getQueryBuilder();
         $qb
             ->addSelect('i_o')
-            ->leftJoin('i.objetives', 'i_o')
+//            ->leftJoin('i.objetives', 'i_o')
             ->innerJoin('i.indicatorLevel', 'i_il')
             ->andWhere('i.period = :period')
             ->andWhere($qb->expr()->isNull('i.lastDateCalculateResult'))
             ->orderBy('i_il.level','DESC')
             ->setParameter('period', $period)
             ;
+//        print_r($qb->getQuery()->getSQL());die();
         return $qb;
     }
     
@@ -578,6 +592,22 @@ class IndicatorRepository extends EntityRepository
 //        }
         
         parent::applySorting($queryBuilder, $sorting);
+    }
+
+    public function findQueryIndicatorValid($period, $level)
+    {   
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+            ->select('i')
+            ->andWhere('i.period = :period')
+            ->andWhere('i.indicatorLevel = :level')                        
+            ->andWhere('i.showEvolutionView = :show')                        
+            ->setParameter('period', $period)
+            ->setParameter('level', $level)
+            ->setParameter('show', 1)
+            ;
+        
+        return $queryBuilder->getQuery()->getResult();
     }
     
     protected function getAlias() {

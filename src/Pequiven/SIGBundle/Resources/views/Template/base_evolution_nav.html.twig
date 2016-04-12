@@ -29,6 +29,9 @@
         
         {#{% if  indicator.managementSystems | length > 0 and is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}#}
         {% if indicator.showEvolutionView %}
+            {% if indicator.period.id == 2 %}
+                {% set setmonth = 12 %}
+            {% endif %}
         &nbsp;
             {{ buttons.generic_ext(path('pequiven_indicator_evolution', { 'id': indicator.id , 'month': setmonth}),('pequiven.evolution'|trans({},'messages'))) }}
         {% endif %}

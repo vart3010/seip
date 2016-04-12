@@ -3,8 +3,7 @@
 namespace Pequiven\SEIPBundle\Entity\CEI;
 
 use Doctrine\ORM\Mapping as ORM;
-
-#use Pequiven\SEIPBundle\Model\CEI\DeliveryPoint as Model;
+use Pequiven\SEIPBundle\Model\CEI\DeliveryPoint as Model;
 
 /**
  * punto de despacho 
@@ -13,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="seip_cei_DeliveryPoint")
  * @ORM\Entity()
  */
-class DeliveryPoint {
+class DeliveryPoint extends Model {
 
     /**
      * @var integer
@@ -36,6 +35,13 @@ class DeliveryPoint {
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Warehouse", mappedBy="deliveryPoint")
      * */
     private $warehouse;
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->warehouse = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * 
@@ -74,7 +80,7 @@ class DeliveryPoint {
         $this->id = $id;
     }
 
-    function setDescripcion(String $descripcion) {
+    function setDescripcion($descripcion) {
         $this->descripcion = $descripcion;
     }
 

@@ -1,0 +1,46 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'pequiven_seip.product_group'|trans }}&nbsp;({{ reportTemplateDelivery.productGroupDelivery|length }})</h3>
+        <div class="button-group absolute-right compact">
+            <a class="button icon-list-add" href="{{ path('pequiven_product_group_delivery_create',{"reportTemplateDelivery": app.request.get('id')}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+        </div>
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="35%">{{ 'Plant'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Entity'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'pequiven_seip.products'|trans }}</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </thead>
+            {% set colspan = 6 %}
+
+            <tbody>
+                {% for group in productGroup %}
+                    <tr>
+                        {#                        <td>{{ loop.index }} - {{ generateLink(group) }} #}
+                        <td>
+                            <a href="{{ path("pequiven_product_group_delivery_show",{id:group.id})}}">
+                                {{ loop.index }} - <i class="fa fa-file-o"></i> {{ group }}
+                            </a>
+                        </td>
+                        </td>
+                        <th scope="row">
+                            {{ group.productionLine.name }}
+                        </th>
+                        <td>#</td>
+                        <td class="low-padding align-center">
+                            <a href="{{ path("pequiven_product_group_delivery_update",{id:group.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+    </div>
+</div>

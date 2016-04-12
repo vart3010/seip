@@ -1,0 +1,93 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('Notificaciones'|trans)        
+    ) }}
+{% endblock %} 
+
+{% block body %}
+<br>	
+<div class="with-padding">			
+	<div class="content-panel margin-bottom">
+		<div class="panel-navigation silver-gradient">
+			<div class="panel-control"><a href class="button icon-undo" id="reload">Actualizar</a></div>
+			<div class="panel-load-target scrollable" style="height:490px">
+				<div class="navigable">
+					<ul class="big-menu">
+						<li class="with-right-arrow">
+							<span class="blue-gradient" id="notify">
+								<span class="list-count" id="notifyAll">									
+								</span><i class="fa fa-bell"></i>&nbsp;Recibidas</span>	
+								<ul class="big-menu menu_level_1">
+								{% set cont = 1 %}
+								{% for type in types %}
+								<li class="big-menu grey-gradient with-right-arrow">
+									<span class="blue-gradient" id="{{ types[cont] }}_data">
+										<span class="list-count" id="{{ types[cont] }}"></span>
+										{{ types[cont]|trans({},'messages') }}
+									</span>	
+									<ul class="message-menu" id="{{ types[cont] }}_tag"></ul>
+								</li>
+								{% set cont = cont + 1 %}							
+								{% endfor %}
+							</ul>
+						</li>
+						<li class="big-menu grey-gradient with-right-arrow">
+							<span class="blue-gradient" id="fav">
+								<span class="list-count" id="notifyFav">
+								</span><i class="fa fa-flag"></i>&nbsp;Importantes
+								</span>
+								<ul class="message-menu" id="favMessage"></ul>
+						</li>
+						<li class="big-menu grey-gradient with-right-arrow">
+							<span class="blue-gradient" id="trash">
+								<span class="list-count" id="notifyTrash">									
+								</span><i class="fa fa-trash"></i>&nbsp;Papelera</span>	
+								<ul class="message-menu" id="trashMessage"></ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>		
+		<div class="panel-content linen">
+			<div class="panel-control align-right">	
+				<a href class="margin-left" id="loading" style='display:none;'><span class="loader big working"></span></a>
+			</div>
+			<div class="panel-load-target scrollable with-padding no-margin-top" style="height:450px;background-color:#b8b8b8;">				
+				<div class="large-box-shadow white-gradient with-border">
+					<div class="button-height with-mid-padding silver-gradient no-margin-top" id="buttonToll" style='display:none;'>
+						<a id="href"></a>
+						<span class="button-group children-tooltip" id="sectionButton"></span>
+					</div>
+					<div class="with-padding">
+						<p id="messageNone">Bienvenido a la Sección  de notificaciones del SEIP, Selecciones un mensaje.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascript %}		
+<script src="{{  asset('bundles/pequivenseip/notify.js') }}"></script> 
+<script type="text/javascript">
+	$(document).ready(function() {
+			var urlData = "{{ path("seip_notification_view_messages_data") }}";
+			var urlMessage = "{{ path("seip_notification_view_message") }}";
+			var urlFav = "{{ path("seip_notification_favourite_message") }}";
+			var urlMessageDelete = "{{ path("seip_notification_delete_message") }}";
+			var urlMessagesData = "{{ path("seip_notification_view_messages_return_data") }}";
+
+			setUrlData(urlData);
+			setUrlMessage(urlMessage);
+			setUrlMessageFav(urlFav);
+			setUrlMessageDelete(urlMessageDelete);
+			setUrlMessagesData(urlMessagesData);
+			//setNotifications();
+	});
+</script>   
+{% endblock %}

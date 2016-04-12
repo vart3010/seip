@@ -1,0 +1,58 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
+
+{% block body %}
+<fieldset class="fieldset ">
+        <legend class="legend">Estandarización</legend>
+        <div class="columns">        
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label" align="justify">
+                    <label class="label">Area</label>
+                        {{ standardization.area }}
+                </p>
+                <p class="inline-label">
+                    <label class="label">Detección</label>
+                        {{ labelsDetection[standardization.detection - 1].description }}
+                </p>            
+            </div>
+            <div class="six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Codigo</label>
+                        {{ standardization.code }}
+                </p>            
+                <p class="inline-label">
+                    <label class="label">Tipo de NC</label>
+                        {{ labelsTypeNc[standardization.type - 1].description }}
+                </p>
+            </div>
+        </div>    
+</fieldset>
+<fieldset class="fieldset ">
+        <legend class="legend">Mantenimiento</legend>
+        {% if standardization.maintenance | length > 0 %}
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <td>Analisis</td>
+                    <td>Fecha Inicio</td>
+                    <td>Fecha Cierre</td>
+                    <td>Avance</td>
+                    <td>Estatus</td>
+                </tr>
+            </thead>
+            {% for dataAdvance in advance %}
+            <tr>
+                <td width="40%">{{ dataAdvance.maintenance.analysis }}</td>
+                <td width="10%">{{ dataAdvance.maintenance.dateStart | date("d/m/Y") }}</td>
+                <td width="10%">{{ dataAdvance.maintenance.dateEnd | date("d/m/Y") }}</td>
+                <td width="10%" align="center">{{ dataAdvance.advance }}%</td>
+                <td width="20%">{{ statusMaintanence[dataAdvance.maintenance.status - 1] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="new-row twelve-columns empty_row" align="center">
+            <br>No hay Carga                                
+        </div>
+        {% endif %}
+</fieldset>
+{% endblock %}

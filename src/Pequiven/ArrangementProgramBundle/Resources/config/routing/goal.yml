@@ -79,3 +79,11 @@ goal_movement_export:
     methods: [GET|POST]
     options:
         expose: true
+        
+movement_delete:
+    path: /delete/{idAffected}/{type}/{idMov}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram_movement:deleteAction
+    methods: [GET|POST]
+    options:
+        expose: true

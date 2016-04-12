@@ -1,0 +1,65 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.product_report.product_report'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.productGroupDelivery) }}
+        {{ form_widget(form.productGroupDelivery) }}
+        {{ form_errors(form.productGroupDelivery) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.product) }}
+        {{ form_widget(form.product) }}
+        {{ form_errors(form.product) }}
+    </div>
+    
+    {#<div class="field-block button-height">
+        {{ form_label(form.indicator) }}
+        {{ form_widget(form.indicator) }}
+        {{ form_errors(form.indicator) }}
+    </div>#}
+    <div class="field-block button-height">
+        {{ form_label(form.enabled) }}
+        {{ form_widget(form.enabled) }}
+        {{ form_errors(form.enabled) }}
+    </div>
+</fieldset>
+<script>
+    $(document).ready(function(){
+        var selectCompany = $("#pequiven_seipbundle_dataload_productreport_company");
+        var selectLocation = $("#pequiven_seipbundle_dataload_productreport_location");
+        var selectEntity = $("#pequiven_seipbundle_dataload_productreport_entity");
+        var selectPlant = $("#pequiven_seipbundle_dataload_productreport_plant");
+        var selectProduct = $("#pequiven_seipbundle_dataload_productreport_product");
+        
+        var urlGetLocation = "{{ path("pequiven_seip_location_by_company") }}";
+        var urlGetEntity = "{{ path("pequiven_seip_entity_by_location") }}";
+        var urlGetPlant = "{{ path("pequiven_seip_plant_by_entity") }}";
+        var urlGetProduct = "{{ path("pequiven_seip_product_by_plant") }}";
+        
+        selectCompany.on("change",function(){
+            ajaxToSelect2(urlGetLocation,selectLocation,{ company: selectCompany.val() });
+        });
+        
+        selectLocation.on("change",function(){
+            ajaxToSelect2(urlGetEntity,selectEntity,{ location: selectLocation.val() });
+        });
+        
+        selectEntity.on("change",function(){
+            ajaxToSelect2(urlGetPlant,selectPlant,{ entity: selectEntity.val() });
+        });
+        
+        selectPlant.on("change",function(){
+            ajaxToSelect2(urlGetProduct,selectProduct,{ plant: selectPlant.val() });
+        });
+        
+        selectLocation.empty();
+        selectLocation.select2('disable');
+        
+        selectPlant.empty();
+        selectPlant.select2('disable');
+        
+        selectEntity.empty();
+        selectEntity.select2('disable');
+    });
+</script>

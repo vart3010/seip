@@ -65,6 +65,21 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     const STATUS_WORKER_SPECIAL_RESERVE = 6;
 
+    /**
+     * Aprendíz
+     */
+    const STATUS_WORKER_APPRENTICE = 7;
+
+    /**
+     * Pasante
+     */
+    const STATUS_WORKER_PASANTE = 8;
+    
+    /**
+     * Honorarios Profesionales
+     */
+    const STATUS_WORKER_OUTSOURCING = 9;
+
     /* TIPOS DE RESULTADOS */
 
     /**
@@ -150,10 +165,13 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
         static $labelsStatusWorker = array(
             self::STATUS_WORKER_ACTIVE => 'Trabajador Activo',
             self::STATUS_WORKER_ASSIGNED => 'Asignado',
+            self::STATUS_WORKER_APPRENTICE => 'Aprendíz',
+            self::STATUS_WORKER_PASANTE => 'Pasante',
+            self::STATUS_WORKER_OUTSOURCING => 'OutSourcing/HP',
             self::STATUS_WORKER_SUPERNUMERARY => 'Supernumerario',
-            self::STATUS_WORKER_OUTSIDE_COMPANY => 'Fuera de la Compañía',
-            self::STATUS_WORKER_INDEFINITE_BREAK => 'Reposo indefinido',
             self::STATUS_WORKER_SPECIAL_RESERVE => 'Reserva Especial',
+            self::STATUS_WORKER_INDEFINITE_BREAK => 'Reposo indefinido',
+            self::STATUS_WORKER_OUTSIDE_COMPANY => 'Fuera de la Compañía',
         );
         return $labelsStatusWorker;
     }

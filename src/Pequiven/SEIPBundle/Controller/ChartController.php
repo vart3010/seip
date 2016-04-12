@@ -448,7 +448,7 @@ class ChartController extends SEIPController {
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorLostDaysAccumulatedTime' => true, 'variables' => array("dias_perdidos" => true), 'path_array' => 'resultIndicatorLostDaysAccumulatedTime')); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorLostDaysAccumulatedTime' => true, 'variables' => array("dias_perdidos" => true,"dias_perdidos_severidad" => true), 'path_array' => 'resultIndicatorLostDaysAccumulatedTime')); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
@@ -488,7 +488,7 @@ class ChartController extends SEIPController {
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated' => true, 'variables' => array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true, "lesionados_sin_tiempo_perdido" => true, "dias_perdidos" => true), 'path_array' => 'resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated' => true, 'variables' => array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true, "lesionados_sin_tiempo_perdido" => true, "dias_perdidos" => true, "dias_perdidos_severidad" => true), 'path_array' => 'resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
@@ -548,7 +548,7 @@ class ChartController extends SEIPController {
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated' => true, 'variables' => array("dias_perdidos" => true), 'path_array' => 'resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated' => true, 'variables' => array("dias_perdidos" => true,"dias_perdidos_severidad" => true), 'path_array' => 'resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
@@ -569,6 +569,46 @@ class ChartController extends SEIPController {
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
         $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('progressProjectsByFrequencyNotification' => true, 'path_array' => 'progressProjectsByFrequencyNotification')); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 28-Función que retorna la data para un gráfico de tipo columna y con 2 ejes verticales. Sólo para un indicador con fórmula real/plan (automático o a partir de ecuación)
+     * @return JsonResponse
+     */
+    public function getDataChartColumnLineDualAxisByDifferentFrequencyNotificationAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('byDifferentFrequencyNotification' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 29-Función que retorna la data para un gráfico tipo multiseries de línea, con un trendline horizontal
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorWithTrendlineHorizontal' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 

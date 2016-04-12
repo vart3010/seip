@@ -61,6 +61,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('showCharts')
                 ->add('showEvolutionView')
                 ->add('showTags')
+                ->add('notshowIndicatorNoEvaluateInPeriod')
                 ->add('requiredToImport')
                 ->add('details')
                 ->add('typeOfCompany', 'choice', array(
@@ -105,8 +106,6 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('summary', null, array(
                     'required' => false,
                 ))
-                ->add('lineStrategics')
-                ->add('orderShowFromParent')
                 ->add('typeOfCalculation', 'choice', array(
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                     'translation_domain' => 'PequivenIndicatorBundle'
@@ -138,12 +137,8 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'multiple' => true,
                     'required' => false,
                 ))
-                ->add('childrens', 'sonata_type_model_autocomplete', $childrensParameters);
-        if ($object != null && $object->getId() !== null) {
-            if ($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {
-                $form->add('lineStrategics');
-            }
-        }
+                ->add('childrens', 'sonata_type_model_autocomplete', $childrensParameters)
+        ;
         $form
                 ->add('formulaDetails', 'sonata_type_collection', array(
                     'cascade_validation' => true,
@@ -163,6 +158,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'required' => false,
                 ))
                 ->add('evaluateInPeriod', null, array(
+                    'required' => false,
+                ))
+                ->add('notshowIndicatorNoEvaluateInPeriod', null, array(
                     'required' => false,
                 ))
                 ->add('forcePenalize', null, array(
@@ -199,6 +197,29 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->end()
         ;
 
+        $form->tab('Dashboards (Tableros)');
+        if ($object != null && $object->getId() !== null) {
+            if ($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {
+                $form
+                        ->with('Estratégico')
+                        ->add('lineStrategics')
+                        ->end();
+            }
+        }
+        $form
+                ->with('Gráficos Personalizados')
+                ->add('lineStrategics')
+                ->add('complejoDashboardSpecific', 'sonata_type_model_autocomplete', array(
+                    'property' => array('description'),
+                    'required' => false,
+                ))
+                ->add('orderShowFromParent')
+                ->add('showByDashboardSpecific', null, array(
+                    'required' => false,
+                ))
+                ->end()
+                ->end();
+
 
         $form
                 ->tab("Details")
@@ -225,6 +246,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('resultIsFromChildrensResult', null, array(
                     'required' => false,
                 ))
+                ->add('ignoredByParentResult', null, array(
+                    'required' => false,
+                ))
                 ->end()
                 ->with('Gráficos del Indicador')
                 ->add('resultIsAccumulative', null, array(
@@ -243,6 +267,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'required' => false,
                 ))
                 ->add('showColumnPlanAtTheEnd', null, array(
+                    'required' => false,
+                ))
+                ->add('showDashboardByQuarter', null, array(
                     'required' => false,
                 ))
                 ->end()
@@ -295,11 +322,14 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('managementSystems', 'sonata_type_model_autocomplete', array(
                     'property' => array('description'),
                     'multiple' => true,
-                    'required' => false,                    
+                    'required' => false,
                 ))
                 ->add('showEvolutionView', null, array(
                     'required' => false,
-                ))                
+                ))
+                ->add('loadFiles', null, array(
+                    'required' => false,
+                ))
                 ->end()
                 ->end()
         ;

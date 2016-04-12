@@ -7,7 +7,7 @@
 <input type="hidden" id="categoryArrangementProgramValue" value="{{ entity.categoryArrangementProgram.id }}" >
 
 <fieldset class="fieldset fields-list" {% if formErrors is defined %}ng-init="form={{formErrors|serialize}}"{% endif %}>
-    <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}&nbsp;<b>{{ entity.getTypeLabel|trans }}</b></legend>
+    <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}&nbsp;<b>{{ title }}</b></legend>
 
     <div class="field-block button-height" ng-init="setEntityType({{ entity.type }})" >
         <label class="label">{{ "pequiven.form.period"|trans }}</label>
@@ -17,13 +17,14 @@
         <label class="label">{{ "pequiven.form.ref"|trans }}</label>
         {{ entity.ref }}
     </div>
+
     {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
         <div class="field-block button-height">
             {{ form_label(form.categoryArrangementProgram) }}
             {{ form_widget(form.categoryArrangementProgram) }}
             {{ form_errors(form.categoryArrangementProgram) }}
         </div>
-    {% else%}
+    {% else %}
         <div class="field-block button-height">
             <label class="label">{{ "pequiven.form.category_arrangement_program"|trans }}</label>
             {{ entity.categoryArrangementProgram }}
@@ -31,26 +32,50 @@
     {% endif %}
     {% if entity.categoryArrangementProgram.id == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG') %}
         {% if form.managementSystem is defined %}
-            <div class="field-block button-height">
+            <div class="field-block button-height">                
                 {{ form_label(form.managementSystem) }}
                 {{ form_widget(form.managementSystem) }}
-                {{ form_errors(form.managementSystem) }}
+                {{ form_errors(form.managementSystem) }}                
             </div>
         {% endif %}
     {% endif %}
     {% if form.tacticalObjective is defined %}
-        <div class="field-block button-height">
-            {{ form_label(form.tacticalObjective) }}
-            {{ form_widget(form.tacticalObjective) }}
-            {{ form_errors(form.tacticalObjective) }}
-        </div>
+        {% if(is_granted('ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT')or(entity.status != 3)) %}
+            <div class="field-block button-height">
+                {{ form_label(form.tacticalObjective) }}
+                {{ form_widget(form.tacticalObjective) }}
+                {{ form_errors(form.tacticalObjective) }}
+            </div>
+        {% else %}
+            <div class="field-block button-height hidden">
+                {{ form_label(form.tacticalObjective) }}
+                {{ form_widget(form.tacticalObjective) }}
+                {{ form_errors(form.tacticalObjective) }}
+            </div>
+            <div class="field-block button-height">
+                <label class="label">Objetivo Táctico</label>
+                {{entity.tacticalObjective.ref}}-{{entity.tacticalObjective.description}}
+            </div>
+        {% endif %}
     {% endif %}
     {% if form.operationalObjective is defined %}
-        <div class="field-block button-height">
-            {{ form_label(form.operationalObjective) }}
-            {{ form_widget(form.operationalObjective) }}
-            {{ form_errors(form.operationalObjective) }}
-        </div>
+        {% if(is_granted('ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT')or(entity.status != 3)) %}
+            <div class="field-block button-height">
+                {{ form_label(form.operationalObjective) }}
+                {{ form_widget(form.operationalObjective) }}
+                {{ form_errors(form.operationalObjective) }}            
+            </div>
+        {% else %}
+            <div class="field-block button-height hidden">
+                {{ form_label(form.operationalObjective) }}
+                {{ form_widget(form.operationalObjective) }}
+                {{ form_errors(form.operationalObjective) }}            
+            </div>
+            <div class="field-block button-height">
+                <label class="label">Objetivo Operativo </label>
+                {{entity.operationalObjective.ref}}-{{entity.operationalObjective.description}}
+            </div>
+        {%endif%}
     {% endif %}
     <div class="field-block button-height">
         <label class="label">{{ "pequiven.form.location"|trans }}</label>
@@ -103,11 +128,23 @@
         {{ form_widget(form.responsibles) }}
         {{ form_errors(form.responsibles) }}#}
     </div>
-    <div class="field-block button-height">
-        {{ form_label(form.description) }}
-        {{ form_widget(form.description) }}
-        {{ form_errors(form.description) }}
-    </div>
+    {% if(is_granted('ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT')or(entity.status != 3)) %}
+        <div class="field-block button-height">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description) }}
+            {{ form_errors(form.description) }}
+        </div>
+    {% else %}
+        <div class="field-block button-height hidden">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description) }}
+            {{ form_errors(form.description) }}
+        </div>
+        <div class="field-block button-height">
+            <label class="label">Nombre del Programa </label>
+            {{entity.description}}
+        </div>
+    {% endif %}
     <div class="field-block button-height">
         <label class="label">{{ "pequiven.form.total_weight"|trans }}</label>
         <span ng-if="getTotalWeight() == 0" class="tag">{$ getTotalWeight() $}/100 %</span>

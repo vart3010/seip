@@ -3,7 +3,7 @@ pequiven_sig_homepage:
     defaults: { _controller: PequivenSIGBundle:Default:index }
 #Listado general de objetivos marcados con magementsystem
 pequiven_objetives_list_sig:
-    path: /{level}/list/sig.{_format}
+    path: /sig/{level}/list.{_format}
     defaults:
         _controller: pequiven.controller.managementsystem_sig_objetives:ObjetiveslistAction
         _format: html
@@ -38,5 +38,104 @@ pequiven_sig_gerenciafirst_export:
     methods: [GET]
     options:
         expose: true
-
+#listado de sistemas de la calidad para lista de seguimiento
+pequiven_sig_monitoring_list:
+    path: /sig/monitoring/list/{type}.{_format}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:listAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+pequiven_sig_monitoring_show:
+    path: /sig/monitoring/list/show/{type}/{id}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:showAction
+        _format: html    
+    methods: [GET]
+pequiven_sig_monitoring_show_upload:
+    path: /load-files/upload
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:uploadAction
+        _format: html    
+    methods: [GET|POST]
+pequiven_sig_monitoring_show_download:
+    path: /sig/monitoring/download/{id}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:downloadAction
+        _format: html    
+    methods: [GET|POST]
+pequiven_sig_monitoring_export:
+    path: /sig/export/{type}/{id}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:exportAction
+        _format: html    
+    methods: [GET]
+pequiven_sig_monitoring_add:
+    path: /{id}/get-monitoring.{_format}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:addAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_sig_monitoring_notification:
+    path: /{id}/get-notify-charge.{_format}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:notificationAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_sig_monitoring_delete:
+    path: /{id}/deleting.{_format}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:deleteAction
+        _format: html    
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+pequiven_sig_monitoring_maintenance:
+    path: /set-maintenance.{_format}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig_maintenance:addAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_sig_monitoring_maintenance_show:
+    path: /get-maintenance.{_format}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig_maintenance:showAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_sig_monitoring_auto_verification:
+    path: /sig/verification/auto/{id}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:autoVerificationAction
+        _format: html    
+    methods: [GET|POST]
+#Seguimiento a Carga de informes de evolución
+pequiven_indicator_evolution_load:
+    path: /indicator/sig/load
+    defaults: 
+        _controller: pequiven.controller.indicator_sig:loadAction
+pequiven_indicator_evolution_load_url:
+    path: /indicator/sig/load-url
+    defaults: 
+        _controller: pequiven.controller.indicator_sig:getUrlEvolutionAction
 

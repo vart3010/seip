@@ -1,0 +1,39 @@
+pequiven_report_template_delivery_index:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven.controller.report_template_delivery:indexAction
+        _format: html
+    requirements:
+        _format: json|html
+    methods: [GET]
+    
+pequiven_report_template_delivery_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.report_template_delivery:showAction
+        _format: html
+    requirements:
+        _format: json|html
+    methods: [GET|POST|PUT]
+    
+pequiven_report_template_delivery_create:
+    path: /create
+    defaults:
+        _controller: pequiven.controller.report_template_delivery:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_reporttemplatedelivery
+    methods: [GET|POST]
+    
+pequiven_report_template_delivery_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.report_template_delivery:updateAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_reporttemplatedelivery
+    methods: [GET|POST|PUT]
+
+pequiven_report_template_delivery_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.report_template_delivery:deleteAction
+    methods: [GET|DELETE]

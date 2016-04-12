@@ -83,7 +83,18 @@ services:
             - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Tipo de Punto de Atención" }
         arguments:
             - ~
-            - Pequiven\MasterBundle\Entity\Indicator\TypeFeatureIndicator
+            - Pequiven\IndicatorBundle\Entity\Indicator\TypeFeatureIndicator
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.indicator.type_indicator_file:
+        class: Pequiven\MasterBundle\Admin\Indicator\IndicatorFileAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Archivos de Indicadores" }
+        arguments:
+            - ~
+            - Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
@@ -130,7 +141,7 @@ services:
             - Pequiven\IndicatorBundle\Entity\Indicator
             - ~
         calls:
-            - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setTranslationDomain, [PequivenIndicatorBundle]]
             - [ setModelManager, [@seip.model.manager]]
             - [ setContainer, [@service_container]]
             
@@ -407,6 +418,31 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
     
+    
+  
+    sonata.admin.cei.factor_conversion:
+        class: Pequiven\MasterBundle\Admin\CEI\FactorConversionAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Factor de Conversión" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\FactorConversion
+            - ~
+        calls:
+            - [ setTranslationDomain, [FactorConversion]]
+            
+    sonata.admin.cei.factor_conversion_value:
+        class: Pequiven\MasterBundle\Admin\CEI\FactorConversionValueAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Valor del Factor de Conversión" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\FactorConversionValue
+            - ~
+        calls:
+            - [ setTranslationDomain, [FactorConversion]]
+            
+    
     sonata.admin.cei.service:
         class: Pequiven\MasterBundle\Admin\CEI\ServiceAdmin
         tags:
@@ -550,6 +586,40 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
+    sonata.admin.cei.supply_center:
+        class: Pequiven\MasterBundle\Admin\CEI\SupplyCenterAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Centro de Acopio" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\SupplyCenter
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+            
+    sonata.admin.cei.Warehouse:
+        class: Pequiven\MasterBundle\Admin\CEI\WarehouseAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Almacén" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Warehouse
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.delivery_point:
+        class: Pequiven\MasterBundle\Admin\CEI\DeliveryPointAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Punto de Despacho" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
     sonata.admin.configuration:
         class: Tecnocreaciones\Bundle\ToolsBundle\Admin\Configuration\ConfigurationAdmin
         tags:
@@ -649,15 +719,14 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
-            
-            
-    sonata.admin.user.cargos:
-        class: Pequiven\MasterBundle\Admin\User\CargosAdmin
+                        
+    sonata.admin.user.feestructure:
+        class: Pequiven\MasterBundle\Admin\User\FeeStructureAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Estructura de Cargos" }
         arguments:
             - ~
-            - Pequiven\MasterBundle\Entity\FeeStructure
+            - Pequiven\SEIPBundle\Entity\User\FeeStructure
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]

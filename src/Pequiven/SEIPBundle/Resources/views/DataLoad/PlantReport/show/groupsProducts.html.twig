@@ -3,11 +3,12 @@
 <div class="block">
     <div class="block-title">
         <h3> {{ 'pequiven_seip.productsGroups'|trans }}&nbsp;
-            ({{ groupsProducts|length }})
+            {#            ({{ groupsProducts|length }})#}
+            ({{ totalGroups|length }})
         </h3>
         <div class="button-group absolute-right compact">
-            {% if periodService().isAllowPlanningReport %}
-                <a class="button icon-list-add" href="{{ path('pequiven_product_report_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% if periodService().isAllowPlanningGroupProduct %}
+                <a class="button icon-list-add" href="{{ path('pequiven_product_report_group_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
             {% endif %}
         </div>
     </div>
@@ -15,15 +16,15 @@
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
                 <tr>
-                    <th scope="col" width="35%">{{ 'Product'|trans }}</th>
-                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Production line'|trans }}</th>
-                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'Product unit'|trans }}</th>
+                    <th scope="col" width="50%">{{ 'Product'|trans }}</th>
+                    <th scope="col" width="15%" class="hide-on-mobile-portrait" align="left">{{ 'Production line'|trans }}</th>
+                    <th scope="col" width="15%" class="hide-on-tablet" align="right">{{ 'Product unit'|trans }}</th>
                     <th scope="col" width="10%">&nbsp;</th>
                 </tr>
             </thead>
             {% set colspan = 6 %}
             <tbody>
-                {% for product in groupsProducts %}
+                {% for product in totalGroups %}
                     <tr>
                         <td>{{ loop.index }} - 
                             <a href="{{ path('pequiven_product_report_show_groups',{id:product.entityProductReport.id})}}">
@@ -31,10 +32,22 @@
                                 {{ product.name }}
                             </a>
                             <br>
-                            <small style="margin-left: 50px;">{{ product.groupsProducts }}</small>
+                            <small style="margin-left: 50px;">
+                                {% for gp in product.groupsProducts  %}
+                                    {{ gp }}
+                                {% endfor %}
+                            </small>
                         </td>
-                        <td>{{ product.line }}</td>
-                        <td>{{ product.unit }}</td>
+                        <td align="left">
+                            {% for l in product.line  %}
+                                {{ l }}
+                            {% endfor %}
+                        </td>
+                        <td align="right">
+                            {% for u in product.unit  %}
+                                {{ u }}
+                            {% endfor %}
+                        </td>
                         <td>&nbsp;</td>
                     </tr>
                 {% endfor %}

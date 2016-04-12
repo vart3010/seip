@@ -20,11 +20,18 @@ class FeeStructureController extends SEIPController {
         $array = array();
         $structure = array();
         $em = $this->getDoctrine()->getManager();
+        $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->getgerencias();
 
         if ($request->get('gerencia') != null) {
             $gerencia = $request->get('gerencia');
         } else {
-            $gerencia = 14;
+            if($this->getUser()->getGerencia()){
+            $gerencia = $this->getUser()->getGerencia()->getid();            }
+            else{
+                $this->get('session')->getFlashBag()->add('error', "Usted no se Encuentra Asignado a Ninguna Gerencia de Primera Línea");
+                $gerencia='NO TIENE';
+            }
+            
         }
 
         $gerenciaobj = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneById($gerencia);
@@ -41,10 +48,6 @@ class FeeStructureController extends SEIPController {
             $array[] = $this->getRepository()->find($Gerente->getid());
             $structure = $this->GenerateTree($Gerente->getid(), $array);
         }
-
-        $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->getgerencias();
-
-//OPCIONES PARA LOS FILTROS
 
         return $this->render('PequivenSEIPBundle:User:FeeStructure/show.html.twig', array(
                     'user' => $this->getUser(),
@@ -211,7 +214,7 @@ class FeeStructureController extends SEIPController {
 
         if ($request->get('gerencia') != null) {
             $gerencia = $request->get('gerencia');
-        } 
+        }
 
         $gerenciaobj = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneById($gerencia);
         $feestructure = new FeeStructure();
@@ -285,9 +288,9 @@ class FeeStructureController extends SEIPController {
             }
             $array[] = $this->getRepository()->find($Gerente->getid());
             $structure = $this->GenerateTree($Gerente->getid(), $array);
-        }             
-        
-        return $this->redirect($this->generateUrl('pequiven_user_feestructure', array('gerencia' => $gerencia)));     
+        }
+
+        return $this->redirect($this->generateUrl('pequiven_user_feestructure', array('gerencia' => $gerencia)));
     }
 
     /**

@@ -120,7 +120,7 @@ class SecurityService implements ContainerAwareInterface
         return $result;
     }
     
-    /**
+     /**
      * Evalúa si el Objetivo (cualquier nivel) puede ser aprobado
      * @param type $rol
      * @param Objetive $objetive
@@ -133,17 +133,36 @@ class SecurityService implements ContainerAwareInterface
             if($objetive->getStatus() == Objetive::STATUS_DRAFT && $objetive->getPeriod()->isActive() === true){
                 $result = true;
             } elseif($objetive->getStatus() == Objetive::STATUS_DRAFT){
-                $result = true;
-            } else{
-                $result = false;
-            }
-        } else{
+                        $result = true;
+                    } else{
+                        $result = false;
+                    }
+                } else{
             if($objetive->getStatus() == Objetive::STATUS_DRAFT && $objetive->getPeriod()->isActive() === true){
                 $result = true;
             } elseif($objetive->getStatus() == Objetive::STATUS_DRAFT && $objetive->getPeriod()->getParent()->isActive()){
                 $result = true;            
             } else{
                 $result = false;
+            }
+        }
+        
+        if($result == true){
+            if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO){
+                $totalParents = count($objetive->getParents());
+                $contParents = 0;
+                foreach ($objetive->getParents() as $parent){
+                    if ($parent->getStatus() == Objetive::STATUS_APPROVED){
+                        $contParents++;
+                    }
+                }
+                if($contParents == $totalParents){
+                    $result = true;
+                } else{
+                    $result = false;
+                }
+            } else{
+                $result = true;
             }
         }
         
@@ -218,6 +237,18 @@ class SecurityService implements ContainerAwareInterface
             }
             
             if($valid === false){
+                if($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
+                    if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_MANAGER_FIRST_CLONE_VIEW_TACTIC')){
+                        $valid = true;
+                    }
+                }
+                
+                if($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                    if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_MANAGER_FIRST_CLONE_VIEW_OPERATIVE')){
+                        $valid = true;
+                    }
+                }
+                
                 //Evaluo si soy responsable del programa de gestion
                 if($arrangementProgram->getResponsibles()->contains($user) === true){
                     $valid = true;

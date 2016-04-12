@@ -3,7 +3,7 @@
 namespace Pequiven\SEIPBundle\Entity\CEI;
 
 use Doctrine\ORM\Mapping as ORM;
-#use Pequiven\SEIPBundle\Model\CEI\SupplyCenter as Model;
+use Pequiven\SEIPBundle\Model\CEI\Warehouse as Model;
 
 /**
  * almacen
@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="seip_cei_Warehouse")
  * @ORM\Entity()
  */
-class Warehouse {
+class Warehouse extends Model {
 
     /**
      * @var integer
@@ -29,12 +29,11 @@ class Warehouse {
      * @ORM\Column(name="descripcion",type="text",nullable=false)
      */
     private $descripcion;
-    
+
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint", inversedBy="warehouse")
-     
      */
     private $deliveryPoint;
 
@@ -50,10 +49,10 @@ class Warehouse {
         $this->id = $id;
     }
 
-    function setDescripcion(String $descripcion) {
+    function setDescripcion($descripcion) {
         $this->descripcion = $descripcion;
     }
-    
+
     function getDeliveryPoint() {
         return $this->deliveryPoint;
     }
@@ -62,7 +61,8 @@ class Warehouse {
         $this->deliveryPoint = $deliveryPoint;
     }
 
-
-
+    public function __toString() {
+        return $this->descripcion;
+    }
 
 }

@@ -1,4 +1,4 @@
-{% extends "PequivenSEIPBundle:Template:Developer/layout.html.twig" %}
+{% extends "PequivenSEIPBundle:Template:Developer/layoutGestion.html.twig" %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% block stylesheets_base %}
@@ -66,8 +66,31 @@
 {% endblock %}
 {% block javascript %}
     {{ parent() }}
-    <script type="text/javascript">
+    
+    {% if answer == null  %}
+        <script type="text/javascript">        
+            $(document).ready(function openConfirm(){
+                options = {
+                  textConfirm : "Si",
+                    textCancel : "No"
+                };
+                $.modal.confirm('Desea realizar una vista dinamica?', function(){                               
+                    document.location.href="{{ path('pequiven_line_strategic_show', {'id': id }) }}?r=1";                    
+                }, function(){                
+                    document.location.href="{{ path('pequiven_line_strategic_show', {'id': id }) }}?r=0";                                        
+                }, options);
+            });
+        </script>    
+   {% endif %}
 
-    </script>
+   {% if answer == 1 %}
+        <script type="text/javascript">                     
+            var page = "{{ path('pequiven_line_strategic_show', {'id': id }) }}?r=" + {{ answer }}
+                function redireccionar(){
+                    location.href= page
+                } 
+            setTimeout ("redireccionar()", 15000);
+        </script>    
+    {% endif %}
 
 {% endblock %}

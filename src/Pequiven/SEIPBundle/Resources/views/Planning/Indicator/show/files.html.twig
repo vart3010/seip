@@ -1,0 +1,51 @@
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+
+<div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_feature_indicator_get_form',{'idIndicator':indicator.id}) }}'">
+    <div class="block-title">
+        <h3 class="ng-binding">Archivos ({{ indicator.indicatorFiles|length  }})</h3>
+        {% if is_granted(['ROLE_SEIP_INDICATOR_UPLOAD_FILES']) %}
+            {% if addImg %}
+                <div class="button-group absolute-right compact">
+                    <form  id="loadFileForm" action="{{ path("loadFile",{"id":indicator.id}) }}" method="POST" enctype="multipart/form-data">
+                        <input style="display: none;" type="file" name="fileIndicator" id="fileIndicator" >
+
+                        <a class="button icon-list-add" id="loadFileIndicator" href="" ng-click="" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
+                    </form>
+                </div>
+            {% endif %}
+        {% endif %}
+
+    </div>
+    <div class="with-padding">
+        {% set colspan = 5 %}
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="10%" class="header">Imagen</th>
+                    <th scope="col" width="90%" class="header"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for files in indicator.indicatorFiles %}
+                    {% set url = files.path~"/"~files.nameFile %}
+                    <tr>
+                        <td><img  src="{{ asset(url) }}" id="{{ asset(url) }}"  onclick="openImg(this.id)"  class="img-responsive" alt="{{ files.nameFileOriginal }}" style="width: 80%;  height: auto; cursor: pointer;"></td>
+                        <td scope="col" width="60%" class="header">
+                            {#{{ files.nameFileOriginal }}#}
+{#                            <br>#}
+                            <b>Descripción:</b><p> {{ files.description }}</p>
+                            
+                            <b>Fecha:</b> {{ files.createdAt|date('d/m/Y') }}
+
+                        </td>
+                        {#                        <td scope="col" width="20%" class="header">{{ files.createdAt|date('d/m/Y') }}</td>#}
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
+

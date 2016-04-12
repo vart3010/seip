@@ -36,6 +36,7 @@ pequiven_seip:
     details: Detalles
     plants: Plantas
     plants_groups: Grupos de Plantas
+    product_group: Grupos de Productos
     inventory: Inventario
     date_of_notification: Fecha de notificación
     date_of_report: Fecha de reporte
@@ -59,7 +60,7 @@ pequiven_seip:
     enable_auto_login: Habilitar inicio de sesión automático
     send_instructions: Enviarme las instrucciones
     register: Registrar
-    message_register: ¿Nuevo usuario? Yay! Háganos saber un poquito acerca de usted antes de empezar
+    message_register: ¿Nuevo Usuario? Por Favor Complete el Siguiente Formulario
     your_name: Su nombre
     registration: Registro
     clear_sorting: Borrar selección
@@ -122,6 +123,7 @@ pequiven_seip:
         results: Resultados
         resultsStrategics: Resultados Estratégicos
         resultsIndicatorsStrategics: Indicadores Estratégicos
+        resultsIndicatorsCPJAA: Indicadores CPJAA
         resultsObjetivesStrategics: Objetivos Estratégicos
         resultsByGerencia: Resultados %gerencia%
         resultsByLineStrategic: Resultados %linea_estrategica%
@@ -379,6 +381,7 @@ pequiven_seip:
     report_template:
         report_template: Planificación de producción
         report_day: Reporte del día
+        report_template_delivery: Planificación de Despacho
         load:
             notification: Notificacion
             production: Producción
@@ -389,6 +392,10 @@ pequiven_seip:
             raw_materials: Consumo de materia prima
         raw_material: Consumo de Materia prima
         details_raw_material: Detalle de consumo de materia prima
+    
+    product_group_delivery:
+        product_group: Linea de Negocio
+        
     product_report:
         product_report: Producto
         inventory:
@@ -407,7 +414,7 @@ pequiven_seip:
             materiaPrimaExt: Materia Prima Externa
         question:
             delete: Desea eliminar este detalle de producción
-            
+        
     raw_material:
         type:
             internal: Interna
@@ -458,6 +465,11 @@ pequiven_seip:
     politic:
         work_study_circle: Círculo de Estudio de Trabajo
         proposal: Propuesta
+    
+    supply_center:
+        private: "Privado"
+        public: "Público"
+        trade: "Comerciales"
             
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
@@ -611,7 +623,10 @@ chart:
         indicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated: Lesionados personales sin tiempo acumulado del indicador, con los valores del mes además del período actual y del período anterior (línea) y del acumulado por período (columna).
         indicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated: Días perdidos del indicador, con los valores del mes además del período actual y del período anterior (línea) y del acumulado por período (columna).
         typeChartProgressProjectsByFrequencyNotification: Avance de los proyectos por frecuencia de notificación
+        indicatorsVariablesRealPlanByDifferentFrequencyNotification: Real, plan y resultado de medición del Indicador de acuerdo a una frecuencia de notificación diferente a la del indicador
         example: Ejemplo
+        
+    
 
 Name: Nombre
 nro: "#"
@@ -688,3 +703,4 @@ Unit: Unidad
 'Show inventory': Inventario
 'Show observation': Puntos de Atención
 'Show pnr': PNR
+'production_line': Linea de Producto

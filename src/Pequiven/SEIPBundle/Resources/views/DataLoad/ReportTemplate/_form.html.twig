@@ -23,20 +23,20 @@
     </div>
 </fieldset>
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function () {
         var selectCompany = $("#pequiven_seipbundle_dataload_reporttemplate_company");
         var selectLocation = $("#pequiven_seipbundle_dataload_reporttemplate_location");
-        
+
         var urlGetLocation = "{{ path("pequiven_seip_location_by_company") }}";
-        ajaxToSelect.formaterData = function(response){
+        ajaxToSelect.formaterData = function (response) {
             return response.name;
         };
-        selectCompany.on("change",function(){
-            ajaxToSelect2(urlGetLocation,selectLocation,{ company: selectCompany.val() });
+        selectCompany.on("change", function () {
+            ajaxToSelect2(urlGetLocation, selectLocation, {company: selectCompany.val()});
         });
-        {% if report_template.id <= 0 %}
-            selectLocation.empty();
-            selectLocation.select2('disable');
-        {% endif  %}
-    });
+    {% if report_template.id <= 0 %}
+                selectLocation.empty();
+                selectLocation.select2('disable');
+    {% endif  %}
+            });
 </script>

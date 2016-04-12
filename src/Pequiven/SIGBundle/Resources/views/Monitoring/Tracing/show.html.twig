@@ -1,0 +1,80 @@
+<div class="block" ng-controller="MonitoringTracingSigController">  
+    <div class="block-title">
+        <h3 class="ng-binding">Seguimiento y Eficacia de las Acciones</h3> 
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateTracing()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+            </div>                   
+    </div>
+    <div class="with-padding">
+        {% if standardization %}
+           <div class="new-row twelve-columns">                                                 
+                <div class="panel panel-default">
+                    <div class="panel-heading">        
+                        <table id="table_data" class="table table-striped table-bordered" cellspacing="0" width="100%">          
+                            <thead>
+                                <tr>                                
+                                    <th scope="col"  class="header">#</th>                                     
+                                    <th scope="col"  class="header">Area o Proceso</th>
+                                    <th scope="col"  class="header">Codigo</th>
+                                    <th scope="col"  class="header">Tratamiento</th>                                     
+                                    <th scope="col"  class="header">Estatus</th>                                     
+                                    <th scope="col"  class="header">Estandarización</th>
+                                    <th scope="col"  class="header"></th>                                     
+                                </tr>
+                            </thead>
+                            <tbody>  
+                                {% for dataStandardization in standardization %}
+                                    <tr {{ cycle(["even", "odd"], loop.index) }}>
+                                        <td width="3%"><B>{{ loop.index }}</B></td>
+                                        <td width="20%" align="justify">
+                                            <a href ng-click="loadTemplateMaintenanceShow(id_standardization='{{ dataStandardization.id }}')">{{ dataStandardization.area }}</a>
+                                        </td>
+                                        <td width="8%">{{ dataStandardization.code }}</td>
+                                        <td width="15%">
+                                            {% if dataStandardization.analysis %}
+                                                <a href="{{ path('pequiven_sig_monitoring_show_download', {'id':dataStandardization.id})}}" target="_blank" title="Programa de Gestión" download="{{dataStandardization.file}}"><i class="fa fa-file-text"></i>&nbsp;Análisis Causa Raíz</a> 
+                                                <br>
+                                            {% endif %}
+                                            {% if dataStandardization.arrangementProgram %}                                            
+                                                {{ generateLink(dataStandardization.arrangementProgram) }}
+                                            {% endif %}                                            
+                                        </td>                            
+                                        <td width="8%"><B>{{ status[dataStandardization.status] }}</B></td>
+                                        <td width="10%">
+                                            {% set cont = 0 %}
+                                            {% set statusCharge = 0 %}                                                
+                                            {% if dataStandardization.maintenance | length > 0 %}
+                                                {% for dataMaintenance in dataStandardization.maintenance %}
+                                                    {% if cont == 0 %}
+                                                        {% set statusCharge = dataMaintenance.status %}
+                                                        {{ statusMaintanence[statusCharge] }}                  
+                                                    {% endif %}                                                    
+                                                    {% set cont = cont + 1 %}
+                                                {% endfor %}
+                                            {% else %}
+                                                Sin Carga
+                                            {% endif %}
+                                        </td>
+                                        <th class="align-center vertical-center" width="8%">  
+                                            {% if dataStandardization.status == 0 %}                                                
+                                                <a href ng-click="loadNotify(dataNotify='{{ dataStandardization.id }}')" class="button icon-bell with-tooltip" title="Notificar"></a>
+                                                <a href ng-click="removeStandardization(dataMonitoring='{{ dataStandardization.id }}')" class="button icon-trash with-tooltip confirm" title="Eliminar"></a>
+                                            {% elseif statusCharge == 1 or statusCharge == 0 %}
+                                                <a href ng-click="loadTemplateMaintenance(id_standardization='{{ dataStandardization.id }}')" class="button icon-pencil">Cargar</a>
+                                            {% endif %}
+                                        </th>                        
+                                    </tr>                                    
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>                 
+        {% else %}
+        <div class="new-row twelve-columns empty_row" align="center">
+            <br>No hay Carga                                
+        {% endif %}
+            </div> 
+        </div>
+    </div>
+
+

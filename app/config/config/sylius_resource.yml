@@ -155,6 +155,13 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\UserController
                 model: Pequiven\SEIPBundle\Entity\User
                 repository: Pequiven\SEIPBundle\Repository\UserRepository
+        pequiven_seip.userNotification:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:User
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\User\NotificationController
+                model: Pequiven\SEIPBundle\Entity\User
+                repository: Pequiven\SEIPBundle\Repository\UserRepository
         #ESTRUCTURA DE CARGOS
         pequiven_seip.feestructure:
             driver: doctrine/orm
@@ -292,7 +299,21 @@ sylius_resource:
             classes:
                 controller: Pequiven\SIGBundle\Controller\ObjetivesController
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
+                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
+        pequiven.monitoring_sig:
+            driver: doctrine/orm
+            templates: PequivenSIGBundle:Monitoring/
+            classes:
+                controller: Pequiven\SIGBundle\Controller\SigMonitoring\MonitoringController
+                model: Pequiven\ObjetiveBundle\Entity\Objetive
                 repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository                
+        pequiven.monitoring_sig_maintenance:
+            driver: doctrine/orm
+            templates: PequivenSIGBundle:Monitoring/
+            classes:
+                controller: Pequiven\SIGBundle\Controller\SigMonitoring\MaintenanceController
+                model: Pequiven\ObjetiveBundle\Entity\Objetive
+                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository                              
         #Causas de Desviación del indicador
         pequiven.sig_causes_report_evolution:
             driver: doctrine/orm
@@ -576,3 +597,27 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Sip\Center\ListController  
                 model: Pequiven\SEIPBundle\Entity\Sip\Centro
                 repository: Pequiven\SEIPBundle\Repository\Sip\Centro\ListRepository
+        #DESPACHO
+        pequiven.report_template_delivery:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Delivery/ReportTemplateDelivery
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery
+                controller: Pequiven\SEIPBundle\Controller\Delivery\ReportTemplateDeliveryController
+                repository: Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository
+        
+        pequiven.product_group_delivery:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Delivery/ProductGroupDelivery
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
+                controller: Pequiven\SEIPBundle\Controller\Delivery\ProductGroupDeliveryController
+                repository: Pequiven\SEIPBundle\Repository\Delivery\ProductGroupDeliveryRepository
+                
+        pequiven.product_report_delivery:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Delivery/ProductReportDelivery
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Delivery\ProductReportDelivery
+                controller: Pequiven\SEIPBundle\Controller\Delivery\ProductReportDeliveryController
+                repository: Pequiven\SEIPBundle\Repository\Delivery\ProductReportDeliveryRepository

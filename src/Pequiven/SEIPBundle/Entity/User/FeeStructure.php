@@ -149,6 +149,10 @@ class FeeStructure {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    public function __toString() {
+        return $this->getCharge();
+    }
+
     function getId() {
         return $this->id;
     }

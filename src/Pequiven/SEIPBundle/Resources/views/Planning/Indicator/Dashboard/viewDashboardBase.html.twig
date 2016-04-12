@@ -25,9 +25,10 @@
 </div>
 <hr class="hr-linestrategic-icons" />
 
-<!-- Sección Lateral Izquierda -->
+
 <div class="with-padding">
     <div class="columns">
+        <!-- Sección Lateral Izquierda -->
         <div class="three-columns three-columns-tablet six-columns-mobile new-row-mobile" style="overflow-y: scroll; height: 450px;">
             <div class="with-padding">
                 <div class="columns">
@@ -45,9 +46,12 @@
             </div>
         </div>
 
+        <!-- Sección Central -->
         <div class="nine-columns nine-columns-tablet six-columns-mobile new-row-mobile">
 
+            {#            {% if indicatorService.isIndicatorHasParents(indicator) == true %}#}
             {{ indicatorService.getArrowOfIndicator(indicator)|raw }}
+            {#            {% endif %}#}
 
             {% if indicator.showCharts %}{# En caso de que sólo se necesite ver el gráfico #}
                 <div ng-controller="ChartsDashboardController">
@@ -111,9 +115,31 @@
                                         {% set grafico = "grafico"~loop.index %}
                                         {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH') or chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH') %}
                                             <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ "now"|date("n") }}','{{ grafico }}','100','500')">
-                                        {% else %}
-                                            <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ grafico }}','100','500')">
+                                            {% else %}
+                                                <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ grafico }}','100','500')">
+                                                {% endif %}
+                                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH')  %}
+                                                    <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
+                                                        <select id='month' class="select2 input-xlarge" ng-model="model.months" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'value.id'" ng-init="model.months = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth({{ indicator.id }},model.months.id,'{{ grafico }}','100','500')">
+                                                            <option value='0'>Seleccione un mes</option>
+                                                        </select>
+                                                    </div>
+                                                {% endif %}
+                                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH')  %}
+                                                    <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
+                                                        <select id='monthsGroupByCompany' class="select2 input-xlarge" ng-model="model.monthsGroupByCompany" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'id'" ng-init="model.monthsGroupByCompany = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth({{ indicator.id }},model.monthsGroupByCompany.id,'{{ grafico }}','100','500')">
+                                                            <option value='0'>Seleccione un mes</option>
+                                                        </select>
+                                                    </div>
+                                                {% endif %}
+                                                <span id="{{ grafico }}"></span>
+                                            </div>
                                         {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    {% for chart in Charts %}
+                                        {% set grafico = "grafico"~loop.index %}
+                                        <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ grafico }}','100','500')">
                                             {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH')  %}
                                                 <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
                                                     <select id='month' class="select2 input-xlarge" ng-model="model.months" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'value.id'" ng-init="model.months = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth({{ indicator.id }},model.months.id,'{{ grafico }}','100','500')">
@@ -130,85 +156,90 @@
                                             {% endif %}
                                             <span id="{{ grafico }}"></span>
                                         </div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                {% for chart in Charts %}
-                                    {% set grafico = "grafico"~loop.index %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH')  %}
-                                            <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
-                                                <select id='month' class="select2 input-xlarge" ng-model="model.months" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'value.id'" ng-init="model.months = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth({{ indicator.id }},model.months.id,'{{ grafico }}','100','500')">
-                                                    <option value='0'>Seleccione un mes</option>
-                                                </select>
-                                            </div>
-                                        {% endif %}
-                                        {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH')  %}
-                                            <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
-                                                <select id='monthsGroupByCompany' class="select2 input-xlarge" ng-model="model.monthsGroupByCompany" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'id'" ng-init="model.monthsGroupByCompany = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth({{ indicator.id }},model.monthsGroupByCompany.id,'{{ grafico }}','100','500')">
-                                                    <option value='0'>Seleccione un mes</option>
-                                                </select>
-                                            </div>
-                                        {% endif %}
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endif %}
-            {% if indicator.showTags %}
-                {% if indicator.tagsIndicator|length > 0 and indicator.showTags == true%}
-                    <fieldset class="fieldset">
-                        <legend class="legend">{{ ('pequiven_indicator.tagIndicators'|trans({},'PequivenIndicatorBundle')) }}&nbsp;</legend>
-                        {% include 'PequivenIndicatorBundle:Common:tagIndicators.html.twig' %}
-                    </fieldset>
-                {% else %}
-{#                    <span class="tag red-bg with-tooltip">{{ ('pequiven_indicator.empty'|trans({},'PequivenIndicatorBundle')) }}</span>#}
                 {% endif %}
-            {% endif %}
-            <p class="button-height align-right">
+                {% if indicator.showTags %}
+                    {% if indicator.tagsIndicator|length > 0 and indicator.showTags == true%}
+                        <fieldset class="fieldset">
+                            <legend class="legend">{{ ('pequiven_indicator.tagIndicators'|trans({},'PequivenIndicatorBundle')) }}&nbsp;</legend>
+                            {% include 'PequivenIndicatorBundle:Common:tagIndicators.html.twig' %}
+                        </fieldset>
+                    {% else %}
+                        {#                    <span class="tag red-bg with-tooltip">{{ ('pequiven_indicator.empty'|trans({},'PequivenIndicatorBundle')) }}</span>#}
+                    {% endif %}
+                {% endif %}
+                {% set addImg = false %}
+                {% if is_granted(['ROLE_SEIP_INDICATOR_UPLOAD_FILES']) %}
+                    {% if indicator.loadFiles %}
+                        {% include 'PequivenSEIPBundle:Planning:Indicator/show/files.html.twig' %}
+                    {% endif %}
+                {% endif %}
+                <br /><br />
 
-            {# Visualizacion de Indice de evolucion #}
-                {% include 'PequivenSIGBundle:Template:base_evolution_nav.html.twig' %}
-            {# end #}
-            </p>
+                <p class="button-height align-right">
+
+                    {# Visualizacion de Indice de evolucion #}
+                    {% include 'PequivenSIGBundle:Template:base_evolution_nav.html.twig' %}
+                    {# end #}
+                </p>
+            </div>
         </div>
     </div>
-</div>
 
-{% block javascript %}
-    <script type="text/javascript">
-        var show = true;
-        function showDetail() {
-            if (show == true) {//Ver Detalle
-                $("#chartColumn").hide();
-                $("#chartDetail").show();
-                $("#textDetail").text("Ver Global");
-                show = false;
-            } else {//Ver Global
-                $("#chartColumn").show();
-                $("#chartDetail").hide();
-                $("#textDetail").text("Ver Detalle");
-                show = true;
+    {% block javascript %}
+        <script type="text/javascript">
+
+            function openImg(rutaImg) {
+                var url = "<div align='center'><img src='" + rutaImg + "' class='img-responsive'  style='max-width: 100%;  height: auto;'></div>";
+                $.modal({
+                    title: "",
+                    content: url
+                });
             }
-        }
 
-        $(document).ready(function () {
-            $("#chartDetail").hide();
-            $('.select2').select2({
-                allowClear: true
-            });
-        });
-    </script>
-{% endblock javascript %}
+            var show = true;
+            function showDetail() {
+                if (show == true) {//Ver Detalle
+                    $("#chartColumn").hide();
+                    $("#chartDetail").show();
+                    $("#textDetail").text("Ver Global");
+                    show = false;
+                } else {//Ver Global
+                    $("#chartColumn").show();
+                    $("#chartDetail").hide();
+                    $("#textDetail").text("Ver Detalle");
+                    show = true;
+                }
+            }
+
+            $(document).ready(function () {
+
+                $("a#loadFileIndicator").click(function () {
+                    $("input#fileIndicator").click();
+                });
+
+                $("input#fileIndicator").change(function () {
+                    $("form#loadFileForm").submit();
+                });
+
+                $("#chartDetail").hide();
+                $('.select2').select2({
+                    allowClear: true
+                });
+            }
+            );
+        </script>
+    {% endblock javascript %}
 
 
-{#<div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartDoughnut2d({{ indicator.id }})" fusioncharts
-    width="100%"
-    height="400"
-    type="{{ chart.alias }}"
-    dataFormat= "json"
-    dataSource="{$chartDoughnut2d$}" >
-</div>#}
+    {#<div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartDoughnut2d({{ indicator.id }})" fusioncharts
+        width="100%"
+        height="400"
+        type="{{ chart.alias }}"
+        dataFormat= "json"
+        dataSource="{$chartDoughnut2d$}" >
+    </div>#}

@@ -44,6 +44,16 @@ class ProductRepository extends SeipEntityRepository {
         return $qb;
     }
 
+    public function findQueryByProductionLine($productLine) {
+        $qb = $this->getQueryAllEnabled();
+        $qb
+                ->innerJoin("p.productionLine", "pl")
+                ->andWhere("pl.id = :productionLine")
+                ->setParameter("productionLine", $productLine)
+        ;
+        return $qb;
+    }
+
     public function findByPlant($plant) {
         return $this->findQueryByPlant($plant)->getQuery()->getResult();
     }
@@ -72,7 +82,7 @@ class ProductRepository extends SeipEntityRepository {
     public function findById($productId) {
         $qb = $this->getQueryAllEnabled();
         $qb->andWhere("p.id = :idProd")
-           ->setParameter("idProd", $productId);
+                ->setParameter("idProd", $productId);
         return $qb;
     }
 

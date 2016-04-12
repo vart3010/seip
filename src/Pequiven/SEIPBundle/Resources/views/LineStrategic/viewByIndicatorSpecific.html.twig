@@ -1,0 +1,41 @@
+{#Indicadores Estratégicos de acuerdo a el reporte ejecutivo#}
+{#{% extends "PequivenSEIPBundle:Template:Developer/layout.html.twig" %}#}
+{% extends "PequivenSEIPBundle:Template:Developer/layoutGestion.html.twig" %}
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/icons.css') }}">
+{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("complejo.dashboardIndicator"|trans ({'%complejo%': summaryComplejo},'complejo'))
+    ) }}
+{% endblock %}
+
+{% block body %}
+    <div class="with-padding">
+        <div class="columns">
+            {{ boxRender.renderBox('pequiven_seip_box_linestrategic_icons_indicator_specific_dashboard')|raw }}
+        </div>
+    </div>
+{% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+    </script>
+
+{% endblock %}

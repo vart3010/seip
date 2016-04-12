@@ -223,8 +223,16 @@
         <service id="pequiven_seip.box.linestrategic.icons_indicator_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        <!-- Box donde se renderizan los indicatores específicos en formato de íconos -->
+        <service id="pequiven_seip.box.linestrategic.icons_indicator_specific_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsSpecificBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
         <!-- Box donde se renderizan los indicatores estratégicos en formato de íconos de acuerdo a una línea estratégica seleccionada -->
         <service id="pequiven_seip.box.linestrategic.icons_indicator_by_line_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsByLineBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Mostrar los indicadores de acuerdo a una linea estrategica y un complejo -->
+        <service id="pequiven_seip.box.linestrategic.icons_indicator_by_line_and_complejo" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsByLineBoxAndComplejo">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Box con la base del dashboard de un indicador -->
@@ -245,6 +253,15 @@
             <tag name="tecnocreaciones_box.box" />
         </service>
         
+        <!-- Resultados Estrategicos de acuerdo al Complejo Seleccionado -->
+        <service id="pequiven_seip_box_result_by_complejo" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IconsBoxByComplejo">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        
+        <!-- Resultado estategicos de acuerdo al complejo seleccionado (iconos) -->
+        <service id="pequiven_seip_box_result_by_complejo_iconos" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IconsNavBarBoxByComplejo">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
         
         <service id="pequiven_seip_box_user_summary_items" class="Pequiven\SEIPBundle\Model\Box\UserSummary\UserSummaryItemsBox">
             <tag name="tecnocreaciones_box.box" />
@@ -282,13 +299,22 @@
         </service>
         <service id="pequiven.indicator.form.value_indicator_config" class="Pequiven\IndicatorBundle\Form\Indicator\ValueIndicator\ValueIndicatorConfigType">
             <tag name="form.type" alias="pequiven_indicatorbundle_indicator_valueindicator_valueindicatorconfig" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
         <service id="pequiven.form.report_template" class="Pequiven\SEIPBundle\Form\DataLoad\ReportTemplateType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_reporttemplate" />
         </service>
+        
         <service id="pequiven.form.product_report" class="Pequiven\SEIPBundle\Form\DataLoad\ProductReportType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_productreport" />
         </service>
+        
+        <service id="pequiven.form.product_group_report" class="Pequiven\SEIPBundle\Form\DataLoad\ProductReportGroupType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_productreportgroup" />
+        </service>
+        
         <service id="pequiven.form.product_planning" class="Pequiven\SEIPBundle\Form\DataLoad\Production\ProductPlanningType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_production_productplanning" />
         </service>
@@ -414,6 +440,18 @@
             </call>
         </service>
         
+        <service id="seip.service.onePerTen" class="Pequiven\SEIPBundle\Service\Sip\OnePerTenService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+        <service id="pequiven_factorConversion.service.factorConversion" class="Pequiven\SEIPBundle\Service\FactorConversionService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
         <service id="pequiven.repository.plant_report" class="Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
@@ -443,6 +481,35 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        
+        <!--SERVICIOS DE DESPACHO-->
+        <service id="pequiven.repository.report_template_delivery" class="Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery" />
+        </service>
+        
+        <service id="pequiven.repository.report_product_group" class="Pequiven\SEIPBundle\Repository\Delivery\ProductGroupDeliveryRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery" />
+        </service>
+        
+        <service id="pequiven.form.report_template_delivery" class="Pequiven\SEIPBundle\Form\Delivery\ReportTemplateDeliveryType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_reporttemplatedelivery" />
+        </service>
+        
+        <service id="pequiven.form.product_group_delivery" class="Pequiven\SEIPBundle\Form\Delivery\ProductGroupDeliveryType">
+            <tag name="form.type" alias="pequiven_seipbundle_delivery_productgroup" />
+        </service>
+        
+        <service id="pequiven.form.product_report_delivery" class="Pequiven\SEIPBundle\Form\Delivery\ProductReportDeliveryType">
+            <tag name="form.type" alias="pequiven_seipbundle_delivery_productreport" />
+        </service>
+
+        <service id="seip.service.notification" class="Pequiven\SEIPBundle\Service\NotificationService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+        
         
     </services>
 </container>

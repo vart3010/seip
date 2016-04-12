@@ -50,7 +50,7 @@ class Plant extends BaseModel {
     /**
      * Alias corto de la planta
      * @var string
-     * @ORM\Column(name="alias",type="string",length=20)
+     * @ORM\Column(name="alias",type="string",length=200)
      */
     private $alias;
 
@@ -107,6 +107,13 @@ class Plant extends BaseModel {
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",mappedBy="parent",cascade={"persist"})
      */
     private $childrens;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="permitGroupProduct", type="boolean")
+     */
+    private $permitGroupProduct = false;
 
     /**
      * Constructor
@@ -375,6 +382,14 @@ class Plant extends BaseModel {
             $_toString = $this->getName();
         }
         return $_toString;
+    }
+
+    function getPermitGroupProduct() {
+        return $this->permitGroupProduct;
+    }
+
+    function setPermitGroupProduct($permitGroupProduct) {
+        $this->permitGroupProduct = $permitGroupProduct;
     }
 
 }

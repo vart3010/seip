@@ -58,10 +58,9 @@ class IndicatorsIconsBox extends GenericBox
                     );
                 }
                 $tree[(string)$lineStrategic]['child'][(string)$indicator] = $indicator;
-                $data[(string)$lineStrategic->getRef()][(string)$indicator->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicator);
+                $data[(string)$lineStrategic->getRef()][(string)$indicator->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicator);                
             }
-        }
-//        die();
+        }        
         
         return array(
             'iconsLineStrategic' => $iconsLineStrategic,
@@ -69,6 +68,7 @@ class IndicatorsIconsBox extends GenericBox
             'tree' => $tree,
             'data' => $data,
             'style' => $style,
+            'indicatorService' => $indicatorService,
         );
     }
     

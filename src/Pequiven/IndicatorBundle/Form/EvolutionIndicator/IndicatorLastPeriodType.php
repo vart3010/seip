@@ -16,24 +16,15 @@ class IndicatorLastPeriodType extends AbstractType
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    {   
+        $period = $this->period;
+
         $builder            
-            /*->add('indicatorlastPeriod','entity',array(
-                'label' => 'Relación Indicador 2014',
-                'label_attr' => array('class' => 'label'),
-                'class' => 'Pequiven\IndicatorBundle\Entity\Indicator',
-                'property' => 'ref',
-                'attr'=> array(
-                'class'=> 'select2 input-large form-control',
-                //'ng-model' => 'model.lastPeriod',
-                //'ng-options' => 'value as value.ref for (key,value) in data.lastPeriod'
-                ),
-                               ))*/
             ->add('indicatorlastPeriod', null, array(
-                    'query_builder' => function(\Pequiven\IndicatorBundle\Repository\IndicatorRepository $repository) {
-                        return $repository->getLastPeriod(1);
+                    'query_builder' => function(\Pequiven\IndicatorBundle\Repository\IndicatorRepository $repository) use($period){
+                        return $repository->getLastPeriod($period);
                     },
-                    'label' => 'Relación Indicador 2014',
+                    'label' => 'Indicador Período Anterior',
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
                         'class' => "input-xlarge select2",
@@ -62,5 +53,12 @@ class IndicatorLastPeriodType extends AbstractType
     public function getName()
     {
         return 'lastPeriod';
+    }
+
+    protected $period;    
+    
+    public function __construct ($period)
+    {
+        $this->period = $period;               
     }
 }

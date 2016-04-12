@@ -84,7 +84,6 @@
                     {% else %}
                         {{ plant_report.currentCapacity|myNumberFormat }}
                     {% endif %}
-
                 </p>
             </div>
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -113,18 +112,17 @@
         </div>
     </fieldset>
 
-
     {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/plantStopPlannings.html.twig' %}
     <br /><br />
     {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/products.html.twig' %}
     <br /><br />
 
-    {#    {% if(groupsProducts|length>0) %}#}
-    <br /><br />
-    {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/groupsProducts.html.twig' %}
-    <br /><br />
-    {#    {% endif %}#}
-    {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/services.html.twig' %}
+    {% if(plant_report.plant.permitGroupProduct) %}
+        <br /><br />
+        {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/groupsProducts.html.twig' %}
+        <br /><br />
+    {% endif %}
+        {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/services.html.twig' %}
     <br /><br />
     {% if(plant_report.plant.childrens|length==0) %}
         <p class="button-height align-right">
@@ -142,5 +140,4 @@
             {% endif %}
         </p>
     {% endif %}
-
 {% endblock %}

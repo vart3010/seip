@@ -1,0 +1,207 @@
+{% trans_default_domain 'workStudyCircle' %}
+{% if (workStudyCircle.getphase < 4) %}
+    {% if (workStudyCircle.getphase > 1) %}
+        {% set userCreatedId = workStudyCircle.getCoordinator.id %}
+    {% else %}
+        {% set userCreatedId = workStudyCircle.getCreatedBy.id %}
+    {% endif %}
+{% endif %}
+
+<style>
+    .body {
+        font-size: 8pt;
+    }
+    td{
+        font-size: 8pt;
+    }
+    .title_bold {
+        font-weight: bold;
+    }
+    table {
+        padding: 2px;
+    }
+    .alin_font {
+        text-align: justify;
+    }
+</style>
+{% block body %}
+    <table width="100%" style="page-break-after: always">
+        <tr>
+            <td style="text-align: justify; font-size: 12pt;">
+                <b>Atención. </b><br><br>
+                Sr. Presidente de la República Bolivariana de Venezuela, Nicolás Maduro Moros. <br>
+                Sr. Presidente de Petroquímica de Venezuela S.A., Juancarlo Depablos.<br><br><br>
+                Nosotros los abajo firmantes, quienes conformamos los Círculos de Estudio y Trabajo
+                Petroquímicos (CETP),  ante las acciones desestabilizadoras iniciadas por la oligarquía nacional,
+                quienes obedeciendo las órdenes emanadas por sus amos imperiales, y visto las actitudes de 
+                los diputados de la contrarrevolución en la Asamblea Nacional, que insisten en violar una y otra 
+                vez la Constitución de la República Bolivariana de Venezuela y el marco legal vigente; queremos 
+                fijar la siguiente posición: <br><br>
+
+                Expresamos nuestro total y absoluto desacuerdo con la propuesta de ley de 
+                PRIVATIZACIÓN DE LA GRAN MISIÓN VIVIENDA VENEZUELA Y LA LEY DE 
+                AMNISTIA, decretadas por la Asamblea Nacional ADECOBURGUESA y 
+                ULTRADERECHISTA.<br><br>
+
+                <span style="font-weight: bold">1.</span> El país puede tener por seguro que los trabajadores petroquímicos estamos dispuestos a  
+                garantizar la operatividad de cada Complejo, cada planta, cada espacio de trabajo, hasta 
+                con nuestras propias vidas. <br><br>
+
+                <span style="font-weight: bold">2.</span> No permitiremos ningún tipo de paralización de las actividades y menos ahora cuando 
+                somos el segundo motor para la nueva economía productiva.<br><br>
+
+                <span style="font-weight: bold">3.</span> Respaldamos al Presidente de PEQUIVEN Juancarlo Depablos, sepa que cuenta con 
+                nuestro apoyo para fortalecer la petroquímica y así poder cumplir con nuestra 
+                responsabilidad ante los nuevos escenarios políticos y económicos planteados.<br><br>
+
+                <span style="font-weight: bold">4.</span> Apoyamos de forma irrestricta cualquier medida que decida tomar el Directorio 
+                Revolucionario Nacional comandado por el Presidente Nicolás Maduro.<br><br>           
+            </td>    
+        </tr>
+        <tr>
+            <td style="text-align: center; font-weight: bold;  font-size: 14pt;">
+                HOY MÁS QUE NUNCA UNIDAD, LUCHA, BATALLA y VICTORIA<br><br>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: justify;  font-size: 12pt;">
+                Con la moral Chavista en alto y con el orgullo de haberle cumplido a la PATRIA, al Comandante 
+                Chávez y al Presidente Maduro. Chávez Vive, la Patria Sigue. Viva Maduro y Viva la Revolución.<br><br>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center; font-weight: bold;  font-size: 12pt;">
+                Firman Círculos de Estudio y Trabajo Petroquímicos (CETP)
+            </td>
+        </tr>
+    </table>
+
+    <table width="100%">
+        <tr>
+            <th class="title_bold" style="font-size: 10pt;">- Datos del Círculo de Estudio y Trabajo</th>
+        </tr>
+    </table>
+    <br>
+    <table width="95%" class="simple-table responsive-table tables-extras"> 
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="10%">{{ "workStudyCircle.form.code"|trans }}:</td>
+            <td width="30%"> {{ workStudyCircle.codigo }}</td>                        
+            <td class="title_bold" bgcolor="#F2F2F2" width="20%">{{ "workStudyCircle.form.nombre"|trans }}:</td>
+            <td width="40%">  {{ workStudyCircle.name }}</td>
+        </tr>                
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="10%">{{ "workStudyCircle.form.region"|trans }}:</td>
+            <td width="30%">  {{ workStudyCircle.region.name }}</td>
+            <td class="title_bold" bgcolor="#F2F2F2" width="20%">{{ "workStudyCircle.form.complejo"|trans }}:</td>
+            <td width="40%">  {{ workStudyCircle.complejo.description}}</td>
+        </tr>        
+        {% if workStudyCircle.phase == 1 %}
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="25%">{{ "workStudyCircle.form.gerenciaFirst"|trans }}:</td>
+                <td width="75%"> 
+                    <table>
+                        {% for gerencia in  workStudyCircle.gerencias %}
+                            <tr>
+                                <td>
+                                    - {{ gerencia }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>  
+                </td>                
+            </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="25%">{{ "workStudyCircle.form.gerenciaSecond"|trans }}:</td>
+                <td width="75%"> 
+                    <table>
+                        {% for gerencia in  workStudyCircle.gerenciaSeconds %}
+                            <tr>
+                                <td>
+                                    - {{ gerencia }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>  
+                </td>
+            </tr>
+            {% if (workStudyCircle.superintendencia)%}
+                <tr>
+                    <td class="title_bold" bgcolor="#F2F2F2" width="25%">{{ "workStudyCircle.form.superintendencia"|trans }}:</td>
+                    <td width="75%"> {{ workStudyCircle.superintendencia}}</td>
+                </tr>
+            {%endif%}
+            {% if (workStudyCircle.supervision)%}
+                <tr>
+                    <td class="title_bold" bgcolor="#F2F2F2" width="25%">{{ "workStudyCircle.form.supervision"|trans }}:</td>
+                    <td width="75%">  {{ workStudyCircle.supervision}}</td>
+                </tr>
+            {%endif%}
+            {% if (workStudyCircle.departamento)%}
+                <tr>
+                    <td class="title_bold" bgcolor="#F2F2F2" width="25%">{{ "workStudyCircle.form.departamento"|trans }}:</td>
+                    <td width="75%">  {{ workStudyCircle.departamento}}</td>
+                </tr>
+            {%endif%}
+        {% endif %}
+
+    </table>
+    <br/>
+    <br/>
+    <table width="100%">
+        <tr>
+            <th class="title_bold" style="font-size: 10pt;">- Coordinador o Líder </th>
+        </tr>
+    </table>
+    <br>
+    <table width="95%" class="simple-table responsive-table tables-extras" > 
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="10%">{{ "workStudyCircle.form.coordinador.nombre"|trans }}:</td>
+            <td width="90%"> {{ workStudyCircle.getCoordinator.getFullNameUser |upper}}</td>                        
+        </tr>
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="10%">{{ "workStudyCircle.form.coordinador.telefono"|trans }}:</td>
+            <td width="40%"> {{ workStudyCircle.getCoordinator.cellphone }}</td>
+            <td class="title_bold" bgcolor="#F2F2F2" width="10%">{{ "workStudyCircle.form.coordinador.ext"|trans }}:</td>
+            <td width="40%"> {{ workStudyCircle.getCoordinator.ext }}</td>
+        </tr>
+    </table>       
+    <br/>
+    <br/>
+    <table width="95%">
+        <tr>
+            <th class="title_bold" style="font-size: 10pt;">- Miembros del Círculo de Estudio de Trabajo</th>
+        </tr>
+    </table>  
+    <br>
+    <table width="95%" class="simple-table responsive-table tables-extras" style="padding: 1pt;">  
+        <thead>
+            <tr>
+                <th scope="col"  width="5%" bgcolor="#F2F2F2" class="title_bold" style="font-size: 9pt; text-align: center;"> N° </th>
+                <th scope="col"  width="15%" bgcolor="#F2F2F2" class="title_bold" style="font-size: 9pt; text-align: center;"> C.I. </th>
+                <th scope="col"  width="50%" bgcolor="#F2F2F2" class="title_bold" style="font-size: 9pt;"> Nombre </th>
+                <th scope="col"  width="30%" bgcolor="#F2F2F2" class="title_bold" style="font-size: 9pt; text-align: center;"> Firma </th>                
+            </tr>          
+        </thead>
+        <tbody>
+            {% if workStudyCircle.phase > 1 %}
+                {% set users = workStudyCircle.getMembers %}
+            {% else %}
+                {% set users = workStudyCircle.userWorkerId %}
+            {% endif %}
+            {% set count = 0 %}
+            {% for miembro in users %}
+                {% set count= count + 1%}
+                <tr>
+                    <td width="5%" > </td>                        
+                </tr>
+                <tr>
+                    <td width="5%" style="font-size: 9pt; text-align: center;"> {{ count }} </td>
+                    <td width="15%" style="font-size: 9pt; text-align: center;"> {{ miembro.getIndentification|number_format(0, ',', '.') }} </td>
+                    <td width="50%" style="font-size: 9pt;" > {{ miembro.firstname | ucwords}} {{ miembro.lastname | ucwords}}</td>
+                    <td width="30%" style="font-size: 9pt; text-align: center"> __________________________ </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

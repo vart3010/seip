@@ -87,6 +87,9 @@ class PlantAdmin extends BaseAdmin {
                         ;
                     }
                 ))
+                ->add('permitGroupProduct',null, array(
+                    'required' => false,
+                ))
         ;
         parent::configureFormFields($form);
     }

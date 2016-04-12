@@ -1,0 +1,71 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+{% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
+
+{% trans_default_domain 'PequivenSIGBundle' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_sig_monitoring_list', {'type': type})):('monitoring.title'|trans)},        
+        ('pequiven_indicator.show'|trans)
+    ) }}
+{% endblock %} 
+
+{% block body %}
+
+{% if type == 1 %}
+    {% set title = "Sistema de Gestión" %}
+{% else %}
+    {% set title = "Gerencias Normalizadas" %}
+{% endif %}
+
+<div class="block_id" ng-init="id_managementSystem='{{ data.id }}'"></div>
+<div ng-init="type='{{ type }}'"></div>
+
+<fieldset class="fieldset">
+    <legend class="legend">{{ data }}&nbsp;</legend>
+    <div class="columns">        
+        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">{{ title }}</label>
+                    {{ data.description }}
+            </p>
+        </div>                
+    </div>                        
+</fieldset>	
+{#<a href="{{ path('pequiven_sig_monitoring_auto_verification',{'id': data.id})}}">Auto Verification</a>#}
+{% include 'PequivenSIGBundle:Monitoring:Tracing/show.html.twig' %}                         
+
+<p class="button-height align-right">          
+    <div style="text-align: right; margin-left:15px;">
+        {{ buttons.generic_ext_sv(path('pequiven_sig_monitoring_export', { 'id': data.id, 'type':type }),('Descargar'|trans({},'messages'))) }}
+    </div>
+</p>
+</div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}  
+    <!-- dataTable -->
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/dataTable/dataTable-ext.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/dataTable/dataTables.bootstrap.min.css') }}"> 
+    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}    
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $("#sig_standardization_detection").select2({        
+        });
+    });
+    </script>
+
+    <!-- datatable -->
+    <script src="{{  asset('bundles/pequivenseip/dataTable/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/dataTable/jquery.dataTables.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#table_data').DataTable();            
+        } );
+    </script>
+{% endblock %}

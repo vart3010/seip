@@ -122,27 +122,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $tmp = false;
 
     /**
-     * @var integer
-     * 
-     * @ORM\Column(name="indicator_sig_medition", type="integer", nullable=true)
-     */
-    private $indicatorSigMedition;
-
-    /**
-     * @var integer
-     * 
-     * @ORM\Column(name="indicator_sig_objetive", type="integer", nullable=true)
-     */
-    private $indicatorSigObjetive;
-
-    /**
-     * @var integer
-     * 
-     * @ORM\Column(name="indicator_sig_tendency", type="integer", nullable=true)
-     */
-    private $indicatorSigTendency;
-
-    /**
      * Formula
      * @var \Pequiven\MasterBundle\Entity\Formula
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Formula",inversedBy="indicators")
@@ -195,6 +174,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $valuesIndicator;
+
+    /**
+     * Archivos de indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile",mappedBy="indicator",cascade={"persist","remove"})
+     */
+    protected $indicatorFiles;
 
     /**
      * Valor (Evaluado a partir de todos los valores y formula)
@@ -640,14 +627,86 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $indicatorVerification;
-    
+
     /**
      * ¿En los gráficos de columna, se mostrará una columna plan, al final y con el valor de 'plan anual' que es el mismo?
      * @var boolean
      *  @ORM\Column(name="showColumnPlanAtTheEnd",type="boolean")
      */
     private $showColumnPlanAtTheEnd = false;
-    
+
+    /**
+     * ¿EL indicador esta disponible para verse en el dashboard de tipo específico?
+     * @var boolean
+     *  @ORM\Column(name="showByDashboardSpecific",type="boolean")
+     */
+    private $showByDashboardSpecific = false;
+
+    /**
+     * Complejo
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Complejo
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $complejoDashboardSpecific;
+
+    /**
+     * ¿EL indicador tomará en cuenta las variables de valor estático?
+     * @var boolean
+     *  @ORM\Column(name="validVariableStaticValue",type="boolean")
+     */
+    private $validVariableStaticValue = false;
+
+    /**
+     * @var integer
+     * 
+     * @ORM\Column(name="indicator_sig_medition", type="integer", nullable=true)
+     */
+    private $indicatorSigMedition = 1;
+
+    /**
+     * Indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="indicatorEvolutionCloning",cascade={"persist"})
+     */
+    protected $parentCloning;
+
+    /**
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+     *
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="parentCloning",cascade={"persist"}))          
+     */
+    private $indicatorEvolutionCloning;
+
+    /**
+     * ¿El indicador esta disponible para verse en el dashboard de forma trimestral? (Para aquellos cuya frecuencia de notificación sea mensual)
+     * @var boolean
+     *  @ORM\Column(name="showDashboardByQuarter",type="boolean")
+     */
+    private $showDashboardByQuarter = false;
+
+    /**
+     * ¿Mostrar notificacion de indicador no evaluado en periodo actual?
+     * @var boolean
+     *  @ORM\Column(name="notshowIndicatorNoEvaluateInPeriod",type="boolean")
+     */
+    private $notshowIndicatorNoEvaluateInPeriod = false;
+
+    /**
+     * ¿EL indicador será ignorado para el resultado del indicador padre?
+     * @var boolean
+     *  @ORM\Column(name="ignoredByParentResult",type="boolean")
+     */
+    private $ignoredByParentResult = false;
+
+    /**
+     * check para activar la carga de  archivos
+     * @var boolean
+     *  @ORM\Column(name="loadFiles",type="boolean")
+     */
+    private $loadFiles = false;
 
     /**
      * Constructor
@@ -793,69 +852,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getGoal() {
         return $this->goal;
-    }
-
-    /**
-     * Set indicatorSigMedition
-     *
-     * @param float $indicatorSigMedition
-     * @return Indicator
-     */
-    public function setIndicatorSigMedition($indicatorSigMedition) {
-        $this->indicatorSigMedition = $indicatorSigMedition;
-
-        return $this;
-    }
-
-    /**
-     * Get indicatorSigMedition
-     *
-     * @return float 
-     */
-    public function getIndicatorSigMedition() {
-        return $this->indicatorSigMedition;
-    }
-
-    /**
-     * Set indicatorSigObjetive
-     *
-     * @param float $indicatorSigObjetive
-     * @return Indicator
-     */
-    public function setIndicatorSigObjetive($indicatorSigObjetive) {
-        $this->indicatorSigObjetive = $indicatorSigObjetive;
-
-        return $this;
-    }
-
-    /**
-     * Get indicatorSigObjetive
-     *
-     * @return float 
-     */
-    public function getIndicatorSigObjetive() {
-        return $this->indicatorSigObjetive;
-    }
-
-    /**
-     * Set indicatorSigTendency
-     *
-     * @param float $indicatorSigTendency
-     * @return Indicator
-     */
-    public function setIndicatorSigTendency($indicatorSigTendency) {
-        $this->indicatorSigTendency = $indicatorSigTendency;
-
-        return $this;
-    }
-
-    /**
-     * Get indicatorSigTendency
-     *
-     * @return float 
-     */
-    public function getIndicatorSigTendency() {
-        return $this->indicatorSigTendency;
     }
 
     /**
@@ -2582,7 +2578,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getShowColumnPlanAtTheEnd() {
         return $this->showColumnPlanAtTheEnd;
     }
-    
+
     /**
      * 
      * @param type $showColumnPlanAtTheEnd
@@ -2623,6 +2619,44 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
 
     /**
      * 
+     * @param type $showByDashboardSpecific
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setShowByDashboardSpecific($showByDashboardSpecific) {
+        $this->showByDashboardSpecific = $showByDashboardSpecific;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowByDashboardSpecific() {
+        return $this->showByDashboardSpecific;
+    }
+
+    /**
+     * 
+     * @param type $showDashboardByQuarter
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setShowDashboardByQuarter($showDashboardByQuarter) {
+        $this->showDashboardByQuarter = $showDashboardByQuarter;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowDashboardByQuarter() {
+        return $this->showDashboardByQuarter;
+    }
+
+    /**
+     * 
      * @param type $resultsAdditionalInDashboardColumn
      * @return \Pequiven\IndicatorBundle\Entity\Indicator
      */
@@ -2638,6 +2672,198 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getResultsAdditionalInDashboardColumn() {
         return $this->resultsAdditionalInDashboardColumn;
+    }
+
+    /**
+     * 
+     * @param type $validVariableStaticValue
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setValidVariableStaticValue($validVariableStaticValue) {
+        $this->validVariableStaticValue = $validVariableStaticValue;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getValidVariableStaticValue() {
+        return $this->validVariableStaticValue;
+    }
+
+    /**
+     * Set complejoDashboardSpecific
+     *
+     * @param \Pequiven\MasterBundle\Entity\Complejo $complejoDashboardSpecific
+     * @return Indicator
+     */
+    public function setComplejoDashboardSpecific(\Pequiven\MasterBundle\Entity\Complejo $complejoDashboardSpecific = null) {
+        $this->complejoDashboardSpecific = $complejoDashboardSpecific;
+
+        return $this;
+    }
+
+    /**
+     * Get complejoDashboardSpecific
+     *
+     * @return \Pequiven\MasterBundle\Entity\Complejo 
+     */
+    public function getComplejoDashboardSpecific() {
+        return $this->complejoDashboardSpecific;
+    }
+
+    /**
+     * Set indicatorSigMedition
+     *
+     * @param float $indicatorSigMedition
+     * @return Indicator
+     */
+    public function setIndicatorSigMedition($indicatorSigMedition) {
+        $this->indicatorSigMedition = $indicatorSigMedition;
+
+        return $this;
+    }
+
+    /**
+     * Get indicatorSigMedition
+     *
+     * @return float 
+     */
+    public function getIndicatorSigMedition() {
+        return $this->indicatorSigMedition;
+    }
+
+    /**
+     * Set parentCloning
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $parentCloning
+     * @return Indicator
+     */
+    public function setParentCloning(\Pequiven\IndicatorBundle\Entity\Indicator $parentCloning = null) {
+        $this->parentCloning = $parentCloning;
+
+        return $this;
+    }
+
+    /**
+     * Get parentCloning
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator 
+     */
+    public function getParentCloning() {
+        return $this->parentCloning;
+    }
+
+    /**
+     * Add indicatorEvolutionCloning
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator
+     * @return Indicator
+     */
+    public function addIndicatorEvolutionCloning(\Pequiven\IndicatorBundle\Entity\Indicator $indicatorEvolutionCloning) {
+        $indicatorEvolutionCloning->addParentCloning($this);
+        $this->indicatorEvolutionCloning->add($indicatorEvolutionCloning);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicatorEvolutionCloning
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicatorEvolutionCloning
+     */
+    public function removeIndicatorEvolutionCloning(\Pequiven\IndicatorBundle\Entity\Indicator $indicatorEvolutionCloning) {
+        $this->indicatorEvolutionCloning->removeElement($indicatorEvolutionCloning);
+    }
+
+    /**
+     * Get indicatorEvolutionCloning
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getindIcatorEvolutionCloning() {
+        return $this->indicatorEvolutionCloning;
+    }
+
+    /**
+     * 
+     * @param type $notshowIndicatorNoEvaluateInPeriod
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setNotshowIndicatorNoEvaluateInPeriod($notshowIndicatorNoEvaluateInPeriod) {
+        $this->notshowIndicatorNoEvaluateInPeriod = $notshowIndicatorNoEvaluateInPeriod;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getNotshowIndicatorNoEvaluateInPeriod() {
+        return $this->notshowIndicatorNoEvaluateInPeriod;
+    }
+
+    /**
+     * Set ignoredByParentResult
+     *
+     * @param boolean $ignoredByParentResult
+     * @return Indicator
+     */
+    public function setIgnoredByParentResult($ignoredByParentResult) {
+        $this->ignoredByParentResult = $ignoredByParentResult;
+
+        return $this;
+    }
+
+    /**
+     * Get ignoredByParentResult
+     *
+     * @return boolean 
+     */
+    public function getIgnoredByParentResult() {
+        return $this->ignoredByParentResult;
+    }
+
+    /**
+     * Add rawMaterialConsumptionPlannings
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile
+     * @return Indicator
+     */
+    public function addIndicatorFiles(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile $indicatorFiles) {
+        $indicatorFiles->setIndicator($this);
+        $this->indicatorFiles->add($indicatorFiles);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicatorFiles
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile $indicatorFiles
+     */
+    public function removeIndicatorFiles(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile $indicatorFiles) {
+        $this->indicatorFiles->removeElement($indicatorFiles);
+    }
+
+    /**
+     * Get indicatorFiles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicatorFiles() {
+        return $this->indicatorFiles;
+    }
+
+    function getLoadFiles() {
+        return $this->loadFiles;
+    }
+
+    function setLoadFiles($loadFiles) {
+        $this->loadFiles = $loadFiles;
     }
 
 }

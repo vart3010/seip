@@ -20,6 +20,7 @@ class CoreExtension extends \Twig_Extension {
             new \Twig_SimpleFunction('form_top', null, array('node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => array('html'))),
             new \Twig_SimpleFunction('print_error', array($this, 'printError'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('contentHeader', array($this, 'contentHeader'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('contentHeaderAllPeriods', array($this, 'contentHeaderAllPeriods'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('generateLink', array($this, 'generateLink'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('generateLinkUrlOnly', array($this, 'generateLinkUrlOnly'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('call_static_method', array($this, 'call_static_method')),
@@ -35,6 +36,7 @@ class CoreExtension extends \Twig_Extension {
                     }),
             new \Twig_SimpleFilter('myNumberFormat', array($this, 'myNumberFormat')),
             new \Twig_SimpleFilter('ucwords', array($this, 'ucwords')),
+            new \Twig_SimpleFilter('is_string', array($this, 'is_string')),
             new \Twig_SimpleFilter('myFormatDateTime', array($this, 'myFormatDateTime')),
             new \Twig_SimpleFilter('myFormatDate', array($this, 'myFormatDate')),
             new \Twig_SimpleFilter('render_yes_no', array($this, 'renderYesNo'), array('is_safe' => array('html'))),
@@ -42,6 +44,61 @@ class CoreExtension extends \Twig_Extension {
     }
 
     function contentHeader($args = array(), $type = \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS, $forceAllPeriods = false, $forceEvalArgs = true) {
+        $parameters = array();
+        if ($forceEvalArgs == true) {
+            $args = func_get_args();
+        }
+        foreach ($args as $key => $arg) {
+            if (empty($arg)) {
+                continue;
+            }
+            $item = new \stdClass();
+            $item->link = null;
+            $item->label = null;
+            if (is_array($arg)) {
+                $count = count($arg);
+                if ($count > 1) {
+                    throw new \LogicException('The array elment must be one, count');
+                }
+                foreach ($arg as $key => $value) {
+                    $item->link = $key;
+                    $item->label = $value;
+                }
+            } else {
+                $item->label = $arg;
+            }
+            $parameters[] = $item;
+        }
+        $periodService = $this->getPeriodService();
+
+//        if (!$this->isGranted('ROLE_SEIP_VIEW_ALL_PERIODS') && $type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS) {
+//
+//            //Si tiene un solo rol y es personal PQV --> $FORCEALLPERIODS = TRUE
+//            $groupsUsers = $this->getUser()->getGroups();
+//       $securityService = $this->getSecurityService();
+//        $rolReal = $this->getUser()->getRealGroup()->getLevel();
+//            if (((count($groupsUsers) == 1) && ($securityService->isGranted(array("ROLE_WORKER_PQV")))) || ($rolReal >= \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_SECOND && $rolReal <= \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE)) {
+//                $forceAllPeriods = true;
+//            }
+//
+        if (!$forceAllPeriods) {
+            $type = \Pequiven\SEIPBundle\Entity\Period::VIEW_ONLY_PERIOD_ACTIVE;
+        }
+//        }
+
+        $period = $this->getPeriodService()->getPeriodActive($type);
+
+        $listArrayPeriods = $periodService->getListArrayPeriodsAvailableConsultation($type);
+        return $this->container->get('templating')->render('PequivenSEIPBundle:Template:Developer/contentHeader.html.twig', array(
+                    'breadcrumbs' => $parameters,
+                    'period' => $period,
+                    'listArrayPeriods' => $listArrayPeriods,
+                    'type' => $type
+                        )
+        );
+    }
+
+    function contentHeaderAllPeriods($args = array(), $type = \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS, $forceAllPeriods = false, $forceEvalArgs = true) {
         $parameters = array();
         if ($forceEvalArgs == true) {
             $args = func_get_args();
@@ -124,6 +181,15 @@ class CoreExtension extends \Twig_Extension {
      */
     function ucwords($value) {
         return ucwords(mb_strtolower($value, 'UTF-8'));
+    }
+
+    /**
+     * Filtro para Determinar si la Entrada es String o No
+     * @param type $value
+     * @return type
+     */
+    function is_string($value) {
+        return is_string($value);
     }
 
     /**

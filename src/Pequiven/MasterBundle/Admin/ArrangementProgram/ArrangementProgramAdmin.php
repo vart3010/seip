@@ -49,6 +49,7 @@ class ArrangementProgramAdmin extends Admin
     {
         $object = $this->getSubject();
         $form
+            ->tab("General")
             ->add('ref')
             ->add('period')
             ->add('tacticalObjective','sonata_type_model_autocomplete',array(
@@ -71,6 +72,11 @@ class ArrangementProgramAdmin extends Admin
             ->add('showEvolutionView',null,array(
                 'required' => false,
             ))
+            ->add('managementSystems', 'sonata_type_model_autocomplete', array(
+                    'property' => array('description'),
+                    'multiple' => true,
+                    'required' => false,                    
+            ))            
             ;
         if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
             $form->add('updateResultByAdmin', null, array(

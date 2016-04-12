@@ -8,7 +8,6 @@
     ) }}
 {% endblock %}
 
-
 {% block body %}
 {#    {{ showInventory }}#}
     {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
@@ -27,13 +26,13 @@
                     </p>
                 </div>
 
-                <div class="six-columns six-columns-tablet twelve-columns-mobile">
+               <!-- <div class="six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         {{ form_widget(form.plantReport) }}
                         {{ form_errors(form.plantReport) }}
                         {{ form_label(form.plantReport) }}
                     </p>
-                </div>
+                </div> -->
 
                 <div style="display: none;" class="six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
