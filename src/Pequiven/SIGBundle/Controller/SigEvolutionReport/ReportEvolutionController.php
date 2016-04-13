@@ -287,10 +287,19 @@ class ReportEvolutionController extends ResourceController
         //Recibiendo responsables
         $reponsibles = explode(",", $responsible);         
         $catnRes = count($reponsibles);
+        //Creación de url
+        $routeParameters = array(                
+            'id'    => $id,
+            'month' => $monthSet
+        );
+
+        $apiDataUrl = $this->generateUrl('pequiven_indicator_evolution', $routeParameters);
+        $apiDataUrl = "http://".$_SERVER['HTTP_HOST'].$apiDataUrl;
+
         //Añadiendo responsables
         for ($i=0; $i < $catnRes; $i++) { 
             $user = $this->get('pequiven_seip.repository.user')->find($reponsibles[$i]);
-            $notification = $this->getNotificationService()->setDataNotification("Informe de Evolución", "Ha sido asignado como responsable a un Plan de Acción en el Informe de Evolucion del Indicador ". $indicator->getRef() ." con fecha de incio: ".$dateStart." y fecha de cierre: ".$dateEnd.", el cual presenta un avance de inicio de ".$AcValue."%.", 6 , 1, "-", $user);                        
+            $notification = $this->getNotificationService()->setDataNotification("Informe de Evolución", "Ha sido asignado como responsable a un Plan de Acción en el Informe de Evolucion del Indicador ". $indicator->getRef() ." con fecha de incio: ".$dateStart." y fecha de cierre: ".$dateEnd.", el cual presenta un avance de inicio de ".$AcValue."%.", 6 , 1, $apiDataUrl, $user);                        
             $action->addResponsible($user);            
         }
         

@@ -179,6 +179,13 @@ class Gerencia extends modelGerencia implements AuditableInterface
     private $feeStructure;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="normalizedManagement", type="boolean", nullable=true)
+     */
+    private $normalizedManagement = false;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -667,6 +674,28 @@ class Gerencia extends modelGerencia implements AuditableInterface
         $this->feeStructure = $feeStructure;
     }
 
+    /**
+     * Set normalizedManagement
+     *
+     * @param \DateTime $normalizedManagement
+     * @return Gerencia
+     */
+    public function setNormalizedManagement($normalizedManagement)
+    {
+        $this->normalizedManagement = $normalizedManagement;
+
+        return $this;
+    }
+
+    /**
+     * Get normalizedManagement
+     *
+     * @return \DateTime 
+     */
+    public function getNormalizedManagement()
+    {
+        return $this->normalizedManagement;
+    }
 
 }
 

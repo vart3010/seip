@@ -1,7 +1,5 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
-
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
-
 {% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
 
 {% block javascripts_base %}
@@ -17,8 +15,7 @@
         (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO')):'pequiven_indicator.indicator_operative',
     } %}
 
-{% set level = indicator_sig.indicatorLevel.level %}
-    
+{% set level = indicator_sig.indicatorLevel.level %}    
 
 {% block before_body %}
     {{ contentHeader(
@@ -52,7 +49,7 @@
                         <a class="button icon-list-add " href="" ng-click="removeLastPeriod(idIndicator='{{ indicator_sig.id }}')" title="">{{ 'pequiven.delete'|trans({},'messages')  }}</a>
                     </div>
                 </div>
-            {% elseif indicator_sig.indicatorlastPeriod == false and indicator_sig.period.id == 2 %}
+            {% elseif indicator_sig.indicatorlastPeriod == false and lastPeriod == null %}
                 <div class="block block-title">
                     <h3>El Indicador no tiene relación con el indicador del {{ period }}</h3>
                     <div class="button-group absolute-right compact">
@@ -226,8 +223,7 @@
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
 
-    <script type="text/javascript">
-        
+    <script type="text/javascript">        
         $(document).ready(function () {
             $("a#showItems").click(function () {
                 $("#evolutionItems").toggle("slow");
@@ -258,8 +254,7 @@
 
         }
         //set url
-        function getUrl(data) {
-            
+        function getUrl(data) {            
             var rs;
             return rs;
         }

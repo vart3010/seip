@@ -802,7 +802,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if (!$arrangementRange) {
             throw new \LogicException(sprintf('El indicador "%s(%s)" no tiene un rango de gestión definido.', $indicator->getRef(), $indicator->getId()));
         }
-        
+
         //Validamos que no existe error en el rango del Indicador para que pueda ser recalculado sin problemas
         $error = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendenty);
         $result = 0;
@@ -814,9 +814,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($error == null) {
                 if ($indicator->hasNotification()) {
                     if ($this->calculateRangeGood($indicator, $tendenty)) {//Rango Verde R*100% (Máximo 100)
-                            $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_GOOD);
+                        $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_GOOD);
 //                        if ($result > 100) {
-                            $result = 100;
+                        $result = 100;
 //                        }
                     } else if ($this->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
                         $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_MIDDLE);
@@ -931,10 +931,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if ($result == 0) {
             $amountPenalty = 0;
         }
-        
+
         $resultComplete = $result - $amountPenalty;
-        $resultComplete = $resultComplete > 100 ? 100: ($resultComplete < 0 ? 0:$resultComplete);
-        
+        $resultComplete = $resultComplete > 100 ? 100 : ($resultComplete < 0 ? 0 : $resultComplete);
+
 //        $indicator->setResult($result - $amountPenalty);
         $indicator->setResult($resultComplete);
 
@@ -987,14 +987,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 
         if ($tendency->getRef() == Tendency::TENDENCY_EST) {
             $varToCatch = bcadd($arrangementRange->getRankTopMixedBottom(), $arrangementRange->getRankTopMixedTop(), 2) / 2;
-            if($varToCatch == 0){
+            if ($varToCatch == 0) {
                 $varToCatch = $varToCatch + 1;
                 $result = $result + 1;
             }
             if ($result > $varToCatch) {
                 $varMulti = $result * 100;
                 $result = bcdiv($varMulti, $varToCatch, 2);
-                
+
 //                $varSum = bcadd($varToCatch, $varToCatch, 2);
 //                $varResult = bcadd($result, 0, 2);
 //
@@ -1031,7 +1031,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         } else if ($tendency->getRef() == Tendency::TENDENCY_MAX) {
             if ($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]) {
                 $varToCatch = $arrangementRange->getRankTopBasic();
-                if($varToCatch == 0){
+                if ($varToCatch == 0) {
                     $varToCatch = $varToCatch + 1;
                     $result = $result + 1;
                 }
@@ -1039,17 +1039,17 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $result = bcdiv($varMulti, $varToCatch, 2);
             } elseif ($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_MIXED]) {
                 $varToCatch = $arrangementRange->getRankTopMixedTop();
-                if($varToCatch == 0){
+                if ($varToCatch == 0) {
                     $varToCatch = $varToCatch + 1;
                     $result = $result + 1;
                 }
                 $varMulti = $result * 100;
                 $result = bcdiv($varMulti, $varToCatch, 2);
             }
-        } elseif ($tendency->getRef() == Tendency::TENDENCY_MIN){
+        } elseif ($tendency->getRef() == Tendency::TENDENCY_MIN) {
             if ($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]) {
                 $varToCatch = $arrangementRange->getRankBottomBasic();
-                if($varToCatch == 0){
+                if ($varToCatch == 0) {
                     $varToCatch = $varToCatch + 1;
                     $result = $result + 1;
                 }
@@ -1057,7 +1057,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $result = bcdiv($varMulti, $result, 2);
             } elseif ($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]) {
                 $varToCatch = $arrangementRange->getRankBottomMixedTop();
-                if($varToCatch == 0){
+                if ($varToCatch == 0) {
                     $varToCatch = $varToCatch + 1;
                     $result = $result + 1;
                 }
@@ -1535,7 +1535,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         foreach ($childrens as $child) {
             $i = 0;
 
-            if(!$child->getIgnoredByParentResult()){
+            if (!$child->getIgnoredByParentResult()) {
                 foreach ($child->getValuesIndicator() as $valueIndicator) {
 
                     $plan = $real = 0.0;
@@ -2272,9 +2272,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             //PROGRAMAS EN LOS CUALES YA NO SE ENCUENTRA ASIGNADO
             $arrangementprogramPast = $arrangementProgramRepository->getDivestedIdAPbyUser($idUser, $period->getid());
             foreach ($arrangementprogramPast as $ap) {
-                $arrangementProgramsObjects[$ap["id_affected"]]= $em->getRepository('Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram')->find($ap["id_affected"]);               
-            }            
-            
+                $arrangementProgramsObjects[$ap["id_affected"]] = $em->getRepository('Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram')->find($ap["id_affected"]);
+            }
+
             ToolService::getObjetiveFromPrograms($arrangementProgramsForObjetives, $objetives);
 
             foreach ($arrangementProgramsObjects as $key => $arrangementProgram) {
@@ -2314,7 +2314,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 foreach ($movements as $mov) {
                     $valores[$idarray] = $mov->getRealAdvance();
                     $planeado[$idarray] = $mov->getplanned();
-                    $realResult[$idarray]=$mov->getRealAdvance()+$mov->getPentalty();
+                    $realResult[$idarray] = $mov->getRealAdvance() + $mov->getPentalty();
                     $tipos[$idarray] = $mov->getType();
                     $idarray++;
                 }
@@ -2339,6 +2339,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                             array_unshift($tipos, 'I');
                             array_unshift($valores, 0);
                             array_unshift($planeado, 0);
+                        } else {
+                            $status = 'Actual';
                         }
 
                         //SI LOS MOVIMIENTOS CONCLUYEN CON UNA ENTRADA, SE AÑADE LA SALIDA DEL PROGRAMA DE GESTION CON EL VALOR ACTUAL DEL MISMO
@@ -2348,6 +2350,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                             $tipos[] = 'O';
                             $valores[] = $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResultReal());
                             $planeado[] = $advanceToDate;
+                        } else {
+                            $status = 'Pasada';
                         }
 
                         //DETERMINO LA CANTIDAD DE MOVIMIENTOS EN EL PROGRAMA DE GESTION
@@ -2409,7 +2413,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 } else {
                     //SI EL PROGRAMA DE GESTION NO TIENE MOVIMIENTOS, LOS VALORES ACTUALES SON LOS VALORES DE LA EVALUACION
                     $status = 'Actual';
-                    $eval = $aporte = $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResultReal());
+                    $aporte = $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResultReal());
+                    if ($advanceToDate == 0) {
+                        $eval = "N/A";
+                    } else {
+                        $eval = ($aporte * 100) / ($advanceToDate);
+                    }
                     $aportePlan = $advanceToDate;
                 }
 
@@ -2419,7 +2428,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     'ref' => $arrangementProgram->getRef(),
                     'description' => $arrangementProgram->getDescription(),
                     'result' => $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResultReal()),
-                    'resulToDate' => $advanceToDate,
+                    'resultToDate' => $advanceToDate,
                     'dateStart' => array(
                         'plan' => ToolService::formatDateTime($planDateStart),
                         'real' => ToolService::formatDateTime($realDateStart)
@@ -2563,7 +2572,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 foreach ($movements as $mov) {
                     $valores[$idarray] = $mov->getRealAdvance();
                     $planeado[$idarray] = $mov->getplanned();
-                    $realResult[$idarray]=$mov->getRealAdvance()+$mov->getPentalty();
+                    $realResult[$idarray] = $mov->getRealAdvance() + $mov->getPentalty();
                     $tipos[$idarray] = $mov->getType();
                     $idarray++;
                 }
@@ -2588,6 +2597,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                             array_unshift($tipos, 'I');
                             array_unshift($valores, 0);
                             array_unshift($planeado, 0);
+                        } else {
+                            $status = 'Actual';
                         }
 
                         //SI LOS MOVIMIENTOS CONCLUYEN CON UNA ENTRADA, SE AÑADE LA SALIDA A LA META CON EL VALOR ACTUAL DE LA MISMA
@@ -2597,6 +2608,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                             $tipos[] = 'O';
                             $valores[] = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
                             $planeado[] = $goal->getGoalDetails()->getPlannedTotal($fecha);
+                        } else {
+                            $status = 'Pasada';
                         }
 
                         //DETERMINO LA CANTIDAD DE MOVIMIENTOS EN LA META
@@ -2658,7 +2671,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 } else {
                     //SI LA META NO TIENE MOVIMIENTOS, LOS VALORES ACTUALES SON LOS VALORES DE LA EVALUACION
                     $status = 'Actual';
-                    $eval = $aporte = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                    $aporte = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                    if ($goal->getGoalDetails()->getPlannedTotal($fecha) == 0) {
+                        $eval = "N/A";
+                    } else {
+                        $eval = ($aporte * 100) / ($goal->getGoalDetails()->getPlannedTotal($fecha));
+                    }
                     $aportePlan = $goal->getGoalDetails()->getPlannedTotal($fecha);
                 }
 

@@ -24,68 +24,67 @@
 <div class="block_id" ng-init="typeObj='{{ typeObject }}'"></div>
 
 <fieldset class="fieldset">
-        <legend class="legend">{{ 'arrangementprogram.title'|trans }}&nbsp;<b>{{ ArrangementProgram.getTypeLabel|trans({},'PequivenArrangementProgramBundle')}}</b></legend>
-        
-         <div class="columns">
-             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+    <legend class="legend">{{ 'arrangementprogram.title'|trans }}&nbsp;<b>{{ ArrangementProgram.getTypeLabel|trans({},'PequivenArrangementProgramBundle')}}</b></legend>
+    
+     <div class="columns">
+         <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
+                {{ generateLink(ArrangementProgram) }}
+            </p>
+         </div>
+         <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+            <p class="inline-label">
+                <label class="label">{{ 'arrangementprogram.period'|trans }}</label>
+                {{ ArrangementProgram.period }}
+            </p>
+        </div>
+        <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+            <p class="inline-label">
+                <label class="label">{{ 'arrangementprogram.asociate'|trans }}</label>
+                {{ ArrangementProgram.categoryArrangementProgram }}
+            </p>
+        </div>
+        <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            {% if ArrangementProgram.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') %}
                 <p class="inline-label">
-                    <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
-                    {{ generateLink(ArrangementProgram) }}
+                    <label class="label">{{ 'arrangementprogram.location'|trans }}</label>
+                    {{ ArrangementProgram.tacticalObjective.gerencia.complejo }}
                 </p>
-             </div>
-             <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                <p class="inline-label">
-                    <label class="label">{{ 'arrangementprogram.period'|trans }}</label>
-                    {{ ArrangementProgram.period }}
-                </p>
-            </div>
-            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                <p class="inline-label">
-                    <label class="label">{{ 'arrangementprogram.asociate'|trans }}</label>
-                    {{ ArrangementProgram.categoryArrangementProgram }}
-                </p>
-            </div>
-            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                {% if ArrangementProgram.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') %}
-                    <p class="inline-label">
-                        <label class="label">{{ 'arrangementprogram.location'|trans }}</label>
-                        {{ ArrangementProgram.tacticalObjective.gerencia.complejo }}
-                    </p>
-                {% endif %}
-                {% if ArrangementProgram.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
-                    <p class="inline-label">
-                        <label class="label">{{ 'arrangementprogram.location'|trans }}</label>
-                        {{ ArrangementProgram.operationalObjective.gerencia.complejo }}
-                    </p>
-                {% endif %}
-            </div>
-            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'arrangementprogram.tactical_objective'|trans }}</label>
-                    {% set avancedUsed = ArrangementProgram.tacticalObjective.result %}
-                    {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
-                    {{ generateLink(ArrangementProgram.tacticalObjective) }}
-                </p>        
-            </div>
+            {% endif %}
             {% if ArrangementProgram.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
-                <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                        <p class="inline-label">
-                            <label class="label">{{ 'arrangementprogram.operational_objective'|trans }}</label>
-                            {% set avancedUsed = ArrangementProgram.operationalObjective.result %}
-                            {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
-                            {{ generateLink(ArrangementProgram.operationalObjective) }}
-                        </p>
-                </div>
-            {% endif %}            
-        </div>        
-        {% include 'PequivenSIGBundle:Template:base_month.html.twig' %} 
-    </fieldset>
+                <p class="inline-label">
+                    <label class="label">{{ 'arrangementprogram.location'|trans }}</label>
+                    {{ ArrangementProgram.operationalObjective.gerencia.complejo }}
+                </p>
+            {% endif %}
+        </div>
+        <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">{{ 'arrangementprogram.tactical_objective'|trans }}</label>
+                {% set avancedUsed = ArrangementProgram.tacticalObjective.result %}
+                {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                {{ generateLink(ArrangementProgram.tacticalObjective) }}
+            </p>        
+        </div>
+        {% if ArrangementProgram.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                    <p class="inline-label">
+                        <label class="label">{{ 'arrangementprogram.operational_objective'|trans }}</label>
+                        {% set avancedUsed = ArrangementProgram.operationalObjective.result %}
+                        {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                        {{ generateLink(ArrangementProgram.operationalObjective) }}
+                    </p>
+            </div>
+        {% endif %}            
+    </div>        
+    {% include 'PequivenSIGBundle:Template:base_month.html.twig' %} 
+</fieldset>
         {# Graficos #}
         <div class="columns with-padding"> 
             <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 82%;" align="center">                
-                <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
-                <!-- This div will hold the chart generated in the footer -->
-                </div>            
+                <div class="nine-columns twelve-columns-mobile" id="chartContainerResult"></div>   
+                <input id='exportpng' type='hidden' value='Exportar Informe' />
             </div>  
         </div> 
         {# Analisis de tendencia #}
@@ -99,6 +98,7 @@
         <div class="columns with-padding">         
             <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 82%; height:55%;" align="center">
                 <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs"></div>
+                <input id='export_causespng' type='hidden' value='Exportar Informe' />
             </div>
         </div> 
         <br>        
@@ -134,32 +134,26 @@
                 </span>
                 <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
                 <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
-            </a>
-        
+            </a>        
         {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}
             {# Descarga de Informe de Evolución#}
             {% set typeObj = 2 %}
             &nbsp;
-            {{ buttons.generic_download(path('pequiven_indicator_evolution_export', { 'id': ArrangementProgram.id, 'month': month,'typeObj': typeObj }),('pequiven_indicator.download'|trans({},'PequivenSIGBundle'))) }}        
+            {{ buttons.generic_download }}       
         {% endif %}
-
         </div>
     </p>
         {# Box historico de informe de evolución #}
-        <div id="evolutionItems" style="display: none;">
-            {% set data = ArrangementProgram.id %}
-             
-            {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}
-            
-        </div> 
-
+        {#<div id="evolutionItems" style="display: none;">
+            {% set data = ArrangementProgram.id %}             
+            {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}            
+        </div> #}
 {% endblock %}
 
 {% block stylesheets %}
   {{ parent() }}
     
-<style type="text/css">
-    
+<style type="text/css">    
     .position{        
         margin-right: 20px;
         margin-top: 20px;
@@ -191,7 +185,6 @@
     }    
 
 </style>
-
 {% endblock stylesheets %}
 
 {% block javascripts %}
@@ -199,8 +192,7 @@
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
 
-    <script type="text/javascript">
-        
+    <script type="text/javascript">        
         $(document).ready(function () {
             $("a#showItems").click(function () {
                 $("#evolutionItems").toggle("slow");
@@ -231,8 +223,7 @@
 
         }
         //set url
-        function getUrl(data) {
-            
+        function getUrl(data) {            
             var rs;
             return rs;
         }
@@ -241,6 +232,23 @@
             valueCauseId = valueCauseId.split("_");
             $("#field_" + valueCauseId[1]).val(valueCauseId[1]);
             $("#form_" + valueCauseId[1]).submit();
+        }
+
+        //Carga de Evento de Descarga de Grafica de Indicador
+        function downloadEvolution(){            
+            var button = document.getElementById("exportpng");
+            if (button){
+               button.click();   
+               window.setTimeout(downloadCause,1000);
+               //downloadCause();               
+            }            
+        }
+        //Carga de Evento de Descarga de Grafica de Causas del Indicador
+        function downloadCause(){
+            var button_cause = document.getElementById("export_causespng");
+            if (button_cause){
+                button_cause.click();                
+            }
         }
         
     </script>

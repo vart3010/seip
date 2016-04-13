@@ -18,19 +18,28 @@ use Pequiven\SIGBundle\Form\Tracing\StandardizationType;
 class MonitoringController extends ResourceController
 {
     public function listAction(Request $request)
-    {
+    {   
+        $type = $request->get('type');
+
+        if ($type == 1) {
+            $queryRepository = "createPaginatorManagementSystems";            
+            $repository = $this->container->get('pequiven.repository.sig_management_system'); 
+            $title = "Sistemas de la Calidad";
+        }elseif($type == 2) {
+            $queryRepository = "createPaginatorNormalizedGerency";            
+            $repository = $this->container->get('pequiven.repository.gerenciafirst'); 
+            $title = "Gerencias Normalizadas";
+        }
+        
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         
-        $repository = $this->container->get('pequiven.repository.sig_management_system'); 
-        
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
-                $repository,
-                'createPaginatorManagementSystems',
+                $repository,$queryRepository,
                 array($criteria, $sorting)
             );
             
@@ -52,7 +61,7 @@ class MonitoringController extends ResourceController
         }
         $routeParameters = array(
             '_format' => 'json' ,
-            'type'    => 1           
+            'type'    => $type
         );
         $apiDataUrl = $this->generateUrl('pequiven_sig_monitoring_list', $routeParameters);        
         
@@ -67,28 +76,33 @@ class MonitoringController extends ResourceController
         if($request->get('_format') == 'html'){
         	$data = array(
                 'apiDataUrl' => $apiDataUrl,
-                $this->config->getPluralResourceName() => $resources,                
-            );            
+                $this->config->getPluralResourceName() => $resources,
+                'title'      => $title,
+                'type'       => $type
+            );             
             $view->setData($data);
         }else{
             $formatData = $request->get('_formatData','default');
-
             $view->setData($resources->toArray('',array(),$formatData));
         }
         return $this->handleView($view); 
     }
 
     public function showAction(Request $request){
-        
-        $this->autoVerificationAction($request);
 
-        $id = $request->get('id');
+        $this->autoVerificationAction($request);        
+
+        $id = $request->get('id');        
+        $type = $request->get('type');
 
         $em = $this->getDoctrine()->getManager();                        
         $dataAdvance = 0;
-    	$managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id); 
-        
-        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('managementSystem' => $id));
+        if ($type == 1){
+            $result = $this->container->get('pequiven.repository.sig_management_system')->find($id);                  
+        }elseif ($type == 2) {
+            $result = $this->container->get('pequiven.repository.gerenciafirst')->find($id);             
+        }
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('relationObject' => $id, 'typeObject' => $type));
         
         foreach (Standardization::getDetectionArray() as $key => $value) {
                 $labelsDetection[] = array(
@@ -116,12 +130,13 @@ class MonitoringController extends ResourceController
         ];
 
     	return $this->render('PequivenSIGBundle:Monitoring:show.html.twig', array(
-            'data'              => $managemensystems,
+            'data'              => $result,
             'standardization'   => $standardization,
             'detection'         => $labelsDetection,
             'labelsTypeNc'      => $labelsTypeNc,
             'status'            => $status,
-            'statusMaintanence' => $statusMaintanence            
+            'statusMaintanence' => $statusMaintanence,
+            'type'              => $type
             ));
     }
 
@@ -129,20 +144,19 @@ class MonitoringController extends ResourceController
         
         $id = $request->get('id');  
         $period = $this->getPeriodService()->getPeriodActive();
-
         $standardization = new standardization();
         $form  = $this->createForm(new StandardizationType($period), $standardization);
         
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
-            $managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id); 
+        if ($request->isMethod('POST')) {            
+            $form->handleRequest($request);            
             $em = $this->getDoctrine()->getManager();                        
 
             if ($request->get('analysis')) {
                 $standardization->setAnalysis(1);
+                $standardization->setFile($request->get('fileName'));
             }
-
-            $standardization->setManagementSystem($managemensystems);
+            $standardization->setTypeObject($request->get('type'));
+            $standardization->setRelationObject($id);
             $em->persist($standardization);            
             $em->flush();
 
@@ -174,10 +188,18 @@ class MonitoringController extends ResourceController
             $responsible = $request->get('actionResults')['responsible'];
             $responsibles = explode(",", $responsible);       
             $catnRes = count($responsibles);
+            
+            $routeParameters = array(                
+                'id'   => $request->get('idObject'),
+                'type' => $request->get('type')
+            );
+
+            $apiDataUrl = $this->generateUrl('pequiven_sig_monitoring_show', $routeParameters);
+            $apiDataUrl = "http://".$_SERVER['HTTP_HOST'].$apiDataUrl;
 
             for ($i=0; $i < $catnRes; $i++) { 
                 $user = $this->get('pequiven_seip.repository.user')->find($responsibles[$i]);
-                $notification = $this->getNotificationService()->setDataNotification("Estandarizacion", "Ha sido asignado como responsable la data de estandarizacion ha sido cargada puede verificar.", 4 , 1, "-", $user);                                        
+                $notification = $this->getNotificationService()->setDataNotification("Estandarizacion", "Ha sido asignado como responsable la data de estandarizacion ha sido cargada puede verificar.", 4 , 1, $apiDataUrl, $user);                                        
                 $standardization->addResponsible($user);
             }            
             
@@ -216,9 +238,10 @@ class MonitoringController extends ResourceController
         $em = $this->getDoctrine()->getManager();
         
         $id = $request->get('id');
+        $type = $request->get('type');
 
         $managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id);         
-        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('managementSystem' => $id));
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('relationObject' => $id));
         foreach ($standardization as $valueMaintenance) {
             foreach ($valueMaintenance->getMaintenance() as $value) {
                 if ($value->getStatus() == 1) {
@@ -234,7 +257,7 @@ class MonitoringController extends ResourceController
                 }
             }
         }
-        return $this->redirect($this->generateUrl("pequiven_sig_monitoring_show", array("id" => $id)));         
+        return $this->redirect($this->generateUrl("pequiven_sig_monitoring_show", array('id' => $id, 'type' => $type)));         
         die();        
     }
 
@@ -243,11 +266,12 @@ class MonitoringController extends ResourceController
         $em = $this->getDoctrine()->getManager();
 
         $id = $request->get('id');
+
         $managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id); 
         
         $resource = $this->findOr404($request);
         
-        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('managementSystem' => $id));
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('relationObject' => $id, 'typeObject' => $request->get('type')));
         
         //Formato para todo el documento
         $styleArrayBordersContent = array(
@@ -394,39 +418,48 @@ class MonitoringController extends ResourceController
                 $arrangementProgram = $standardizationData->getArrangementProgram();
             }
             $activeSheet->setCellValue('K'.$row, $arrangementProgram);//Seteamos 
+            
+            if (count($standardizationData->getMaintenance()) > 0) {                
+                foreach ($standardizationData->getMaintenance() as $valueMaintenance) {
+                    $dateStart = $valueMaintenance->getDateStart();
+                    $dateStart->setTimestamp((int)$dateStart->format('U'));
 
-            foreach ($standardizationData->getMaintenance() as $valueMaintenance) {
-                $dateStart = $valueMaintenance->getDateStart();
-                $dateStart->setTimestamp((int)$dateStart->format('U'));
+                    $dateEnd = $valueMaintenance->getDateEnd();
+                    $dateEnd->setTimestamp((int)$dateEnd->format('U'));
+                    
+                    $advance = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance")->findBy(array('maintenance' => $valueMaintenance->getId())); 
+                    foreach ($advance as $valueAdvance) {
+                        $dataAnalsys = $valueMaintenance->getAnalysis();
+                        $dataAdvance = $valueAdvance->getAdvance();
+                        $dataObservations = $valueAdvance->getObservations();                    
+                    }
+                    
+                    $activeSheet->setCellValue('L'.$row, $dataAnalsys);//Seteamos el analisis
+                    $activeSheet->setCellValue('M'.$row, $dateStart->format('d-m-Y'));//Seteamos fecha inicio de la acción
+                    $activeSheet->setCellValue('N'.$row, $dateEnd->format('d-m-Y'));//Seteamos fecha fin de la acción
+                    $activeSheet->setCellValue('O'.$row, $dataAdvance."%");//Seteamos el avance
+                    
+                    $activeSheet->setCellValue('P'.$row, $leyens[$valueMaintenance->getStatus()]);//Seteamos estatus
+                    $activeSheet->getStyle(sprintf('P%s:P%s',$row,$row))->applyFromArray($styleFont);//Aplicación de estilos
+                    $activeSheet->getStyle(sprintf('P%s:P%s',$row, $row))->applyFromArray($styleArray[$valueMaintenance->getStatus()]);
 
-                $dateEnd = $valueMaintenance->getDateEnd();
-                $dateEnd->setTimestamp((int)$dateEnd->format('U'));
-                
-                $advance = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\MaintenanceAdvance")->findBy(array('maintenance' => $valueMaintenance->getId())); 
-                foreach ($advance as $valueAdvance) {
-                    $dataAnalsys = $valueMaintenance->getAnalysis();
-                    $dataAdvance = $valueAdvance->getAdvance();
-                    $dataObservations = $valueAdvance->getObservations();                    
-                }
-                
-                $activeSheet->setCellValue('L'.$row, $dataAnalsys);//Seteamos el analisis
-                $activeSheet->setCellValue('M'.$row, $dateStart->format('d-m-Y'));//Seteamos
-                $activeSheet->setCellValue('N'.$row, $dateEnd->format('d-m-Y'));//Seteamos
-                $activeSheet->setCellValue('O'.$row, $dataAdvance."%");//Seteamos
-                
-                $activeSheet->setCellValue('P'.$row, $leyens[$valueMaintenance->getStatus()]);//Seteamos
-                $activeSheet->getStyle(sprintf('P%s:P%s',$row,$row))->applyFromArray($styleFont);                                                           
-                $activeSheet->getStyle(sprintf('P%s:P%s',$row, $row))->applyFromArray($styleArray[$valueMaintenance->getStatus()]);
-
-                //$activeSheet->setCellValue('Q'.$row, $valueMaintenance->getStatus());//Seteamos
-                //$activeSheet->setCellValue('R'.$row, $valueMaintenance->getStatus());//Seteamos
-                $activeSheet->setCellValue('S'.$row, $dataObservations);//Seteamos
+                    //$activeSheet->setCellValue('Q'.$row, $valueMaintenance->getStatus());//Seteamos
+                    //$activeSheet->setCellValue('R'.$row, $valueMaintenance->getStatus());//Seteamos
+                    $activeSheet->setCellValue('S'.$row, $dataObservations);//Seteamos
+                }                
+            }else{
+                $activeSheet->setCellValue('L'.$row, 'Sin carga');
+                $activeSheet->setCellValue('M'.$row, 'Sin carga');
+                $activeSheet->setCellValue('N'.$row, 'Sin carga');
+                $activeSheet->setCellValue('O'.$row, 'Sin carga');
+                $activeSheet->setCellValue('P'.$row, 'Sin carga');
+                $activeSheet->setCellValue('S'.$row, 'Sin carga');                
             }
+
             $row++;                                
             $contResult++; 
             $contRow++;
         }
-
 
         $row = 10;//Fila Inicial del skeleton
         $contRow = ($contRow + $row) - 2;
@@ -486,6 +519,39 @@ class MonitoringController extends ResourceController
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
         exit;
+    }
+
+    public function uploadAction(Request $request){
+        $response = new JsonResponse();    
+        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') 
+        {   
+            $nameFile = sha1(date('d-m-Y : h:m:s'));
+            foreach ($request->files as $file) {
+                $file->move($this->container->getParameter("kernel.root_dir") . '/../web/uploads/documents/standardization_files/', $nameFile);
+                $fileUploaded = $file->isValid();                
+            }            
+
+            sleep(3);            
+            $response->setData($nameFile);
+            return $response;            
+        }else{
+            throw new Exception("Error Processing Request", 1);   
+        }
+    }
+
+    public function downloadAction(Request $request){
+        $em = $this->getDoctrine()->getManager();                        
+
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($request->get('id'));
+        
+        $pathfile = $this->container->getParameter("kernel.root_dir") . '/../web/uploads/documents/standardization_files/'.$standardization->getFile();
+        
+        $mi_pdf = $pathfile;
+        header('Content-type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$mi_pdf.'"');
+        readfile($mi_pdf);
+        die();
+
     }
 
     /**

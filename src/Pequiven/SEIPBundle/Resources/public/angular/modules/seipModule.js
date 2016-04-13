@@ -2435,7 +2435,7 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_indicator_last_period_form', parameters);
                 $scope.templates = [
                     {
-                        name: 'Indicador Periodo Anterior 2014',
+                        name: 'Indicador Periodo Anterior',
                         url: url,
                         confirmCallBack: confirmCallBack,
                     }
@@ -2526,7 +2526,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_sig_monitoring_add', {id: $scope.id_managementSystem});                    
+                    var url = Routing.generate('pequiven_sig_monitoring_add', {id: $scope.id_managementSystem, type: $scope.type});                    
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2606,7 +2606,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_sig_monitoring_notification', {id: $scope.dataNotify});                    
+                    var url = Routing.generate('pequiven_sig_monitoring_notification', {id: $scope.dataNotify, type: $scope.type, idObject: $scope.id_managementSystem});                    
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2665,7 +2665,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormTracing = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(750);
+                $scope.setHeight(800);
                 $scope.setWidth(800);
 
                 var parameters = {
