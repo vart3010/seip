@@ -51,207 +51,195 @@
     <script type="text/javascript">
         var idTemp = 0;
         var formatPhp = "Y-m-d H:i:s";
-        var advancesPlanned = {{ summary['advancesPlanned'] }};
-        var month = '{{ 'now'|date('m') }}';
+                var advancesPlanned = {{ summary['advancesPlanned'] }};
+                var month = '{{ 'now'|date('m') }}';
+
         Ext.require([
-                'Ext.grid.*',
-                'Ext.data.*',
-                'Ext.form.field.Number',
-                'Ext.form.field.Date',
-                'Ext.tip.QuickTipManager',
-                'Ext.layout.container.Fit'
+            'Ext.grid.*',
+            'Ext.data.*',
+            'Ext.form.field.Number',
+            'Ext.form.field.Date',
+            'Ext.tip.QuickTipManager',
+            'Ext.layout.container.Fit'
         ]);
+
         Ext.onReady(function () {
-        Ext.tip.QuickTipManager.init();
-        var idPG = '{{app.request.get('id')}}';
-        var user = {% if (userobj!=null) %}        
-            '{{ userobj.id}}'
-        {%else%}
-            '0'
-        {%endif%};
-                                var win, buttonAddComment;
-                        var store = Ext.create('Ext.data.Store', {
-                        autoLoad: true,
-                                autoSync: true,
-                                model: 'Pequiven.ArrangementProgramBundle.Entity.GoalDetails',
-                                groupField: 'project',
-                                proxy: {
-                                type: 'rest',
-                                        url: "{{ path('AP_notification_search') }}" + idPG + "/" + idTemp + "/goals-details.json",
+            Ext.tip.QuickTipManager.init();
+            var idPG = '{{app.request.get('id')}}';
+            var win, buttonAddComment;
+            var store = Ext.create('Ext.data.Store', {
+                autoLoad: true,
+                autoSync: true,
+                model: 'Pequiven.ArrangementProgramBundle.Entity.GoalDetails',
+                groupField: 'project',
+                proxy: {
+                    type: 'rest',
+                    url: "{{ path('AP_notification_search') }}" + idPG + "/" + idTemp + "/goals-details.json",
         {#id:app.request.get('id')#}
-                            reader: {
+                        reader: {
                             type: 'json',
-                                    rootProperty: 'data'
-                            },
-                            writer: {
+                            rootProperty: 'data'
+                        },
+                        writer: {
                             type: 'json'
-                            },
-                            actionMethods: {
+                        },
+                        actionMethods: {
                             update: 'POST'
-                            }
+                        }
                     },
                     listeners: {
-                    write: function (store, operation) {
-                    var record = operation.getRecords()[0],
-                            name = Ext.String.capitalize(operation.action),
-                            verb;
-                    if (name == 'Destroy') {
-                    verb = 'Destroyed';
-                    } else {
-                    verb = name + 'd';
-                    }
+                        write: function (store, operation) {
+                            var record = operation.getRecords()[0],
+                                    name = Ext.String.capitalize(operation.action),
+                                    verb;
+                            if (name == 'Destroy') {
+                                verb = 'Destroyed';
+                            } else {
+                                verb = name + 'd';
+                            }
         {#Ext.example.msg(Translator.trans(name), Ext.String.format("{{ "pequiven.goals.goal"|trans }} {1} {0}", Translator.trans(verb), record.getId()));#}
 
-                    },
-                            update: function (store, record, operation, modifiedFieldNames, eOpts) {
+                        },
+                        update: function (store, record, operation, modifiedFieldNames, eOpts) {
                             if (Ext.data.Model.EDIT == operation) {
-                            store.getProxy().setExtraParam("_method", "PUT");
+                                store.getProxy().setExtraParam("_method", "PUT");
                             } else if (Ext.data.Model.COMMIT == operation) {
-                            delete store.getProxy().getExtraParams()["_method"];
+                                delete store.getProxy().getExtraParams()["_method"];
                             }
-                            }
+                        }
                     }
-            });
-            /**
-             * Calcula el promedio de los valores planeados de una fila
-             * @param {type} data
-             * @returns {form.html_L11.calculateAverageRow.value}             */
-            var calculateAverageRow = function (data, property) {
-            var key;
-            var value = 0;
-            for (key in data) {
-            if (key.match(property)) {
-            value = value + data[key];
-            }
-            }
-            return value;
-            };
-            var monthsPlanned = {{ monthsPlanned | json_encode()|raw }};
-            var getMonthOfPlanned = function (key) {
-            return monthsPlanned[key];
-            };
-            var summaryTypeOfSummary = function (records, property) {
-            var i, length, data, average, total, subAverage;
-            length = records.length;
-            total = 0;
-            for (i = 0; i < length; i++) {
-            data = records[i].data;
-            subAverage = calculateAverageRow(data, property);
-            total = total + subAverage;
-            }
-            average = 0;
-            if (total > 0) {
-            average = total / length;
-            }
-            return average;
-            };
-            /**
-             * Custom function used for column renderer
-             * @param {Object} val
-             */
-            function valGoalDetails(val, metaData, record, rowIndex, colIndex, store) {
-            var columnName = grid.columns[colIndex + 7].dataIndex;
-            var data = record.data;
-            if (data._data[columnName] != undefined) {
-            var extraData = data._data[columnName];
-            if (extraData['isEnabled'] != undefined) {
-            if (extraData.isEnabled == false) {
-            metaData.css = 'td-bg-disabled';
-            if (data.GoalDetailsInd != null) {
-            return 1500;
-            } else {
-            return val;
-            }
+                });
 
-            }
-            }
-            }
-            if (val > 0) {
-            return '<span style="color:green;">' + formatNumber(val) + '</span>';
-            } else if (val < 0) {
-            return '<span style="color:red;">' + val + '</span>';
-            }
-            return val;
-            }
-            /**
-             * Calcula el resumen de lo planeado y real 
-             */
-            var calculateSummaryRenderer = function (records, values, nameField) {
-            var i = 0,
-                    length = records.length,
-                    total = 0,
-                    record,
-                    val;
-            for (; i < length; ++i) {
-            record = records[i];
-            val = record.get(nameField);
-            if (val > 0) {
-            total += (record.get('goalWeight') / 100) * val;
-            }
-            }
-            return total;
-            };
-            /**
-             * Formatea los numeros del resumen
-             * @param {type} value
-             * @param {type} summaryData
-             * @param {type} dataIndex
-             * @returns {unresolved}          
-             */
-            var valSummaryRenderer = function (value, summaryData, dataIndex) {
-            return formatNumber(value);
-            };
-            var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit: 1,
-                    listeners: {
-                    cancelEdit: function (rowEditing, context) {
-                    // Canceling editing of a locally added, unsaved record: remove it
-                    if (context.record.phantom) {
-                    store.remove(context.record);
+                /**
+                 * Calcula el promedio de los valores planeados de una fila
+                 * @param {type} data
+                 * @returns {form.html_L11.calculateAverageRow.value}             */
+                var calculateAverageRow = function (data, property) {
+                    var key, value = 0;
+                    for (key in data) {
+                        if (key.match(property)) {
+                            value = value + data[key];
+                        }
                     }
-                    },
-                            beforeedit: function (editor, context, eOpts) {
-                            var columnName = context.field;
-                            var data = context.record.data;
-                            if (data._data[columnName] != undefined) {
-                            var extraData = data._data[columnName];
-                            if (extraData['isEnabled'] != undefined) {
+                    return value;
+                };
+
+                var monthsPlanned = {{ monthsPlanned | json_encode()|raw }};
+                        var getMonthOfPlanned = function (key) {
+                            return monthsPlanned[key];
+                        };
+
+                var summaryTypeOfSummary = function (records, property) {
+                    var i, length = records.length, data, average, total = 0, subAverage;
+                    for (i = 0; i < length; i++) {
+                        data = records[i].data;
+                        subAverage = calculateAverageRow(data, property);
+                        total = total + subAverage;
+                    }
+                    average = 0;
+                    if (total > 0) {
+                        average = total / length;
+                    }
+                    return average;
+                };
+                /**
+                 * Custom function used for column renderer
+                 * @param {Object} val
+                 */
+                function valGoalDetails(val, metaData, record, rowIndex, colIndex, store) {                    
+                    var columnName = grid.columns[colIndex + 7].dataIndex;
+                    var data = record.data;
+                    if (data._data[columnName] != undefined) {
+                        var extraData = data._data[columnName];
+                        if (extraData['isEnabled'] != undefined) {
                             if (extraData.isEnabled == false) {
-                            return false;
+                                metaData.css = 'td-bg-disabled';
+                                return val;
                             }
+                        }
+                    }
+
+                    if (val > 0) {
+                        return '<span style="color:green;">' + formatNumber(val) + '</span>';
+                    }
+
+                    if (val < 0) {
+                        return '<span style="color:red;">' + val + '</span>';
+                    }
+
+                    return val;
+                }
+                /**
+                 * Calcula el resumen de lo planeado y real 
+                 */
+                var calculateSummaryRenderer = function (records, values, nameField) {
+                    var i = 0, length = records.length, total = 0, record, val;
+                    for (; i < length; ++i) {
+                        record = records[i];
+                        val = record.get(nameField);
+                        if (val > 0) {
+                            total += (record.get('goalWeight') / 100) * val;
+                        }
+                    }
+                    return total;
+                };
+                /**
+                 * Formatea los numeros del resumen
+                 * @param {type} value
+                 * @param {type} summaryData
+                 * @param {type} dataIndex
+                 * @returns {unresolved}          
+                 */
+                var valSummaryRenderer = function (value, summaryData, dataIndex) {
+                    return formatNumber(value);
+                };
+                var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
+                    clicksToEdit: 1,
+                    listeners: {
+                        cancelEdit: function (rowEditing, context) {
+                            // Canceling editing of a locally added, unsaved record: remove it
+                            if (context.record.phantom) {
+                                store.remove(context.record);
                             }
+                        },
+                        beforeedit: function (editor, context, eOpts) {
+                            var columnName = context.field, data = context.record.data;
+                            if (data._data[columnName] != undefined) {
+                                var extraData = data._data[columnName];
+                                if (extraData['isEnabled'] != undefined) {
+                                    if (extraData.isEnabled == false) {
+                                        return false;
+                                    }
+                                }
                             }
                             if (context.value == 0) {
-                            context.value = '';
+                                context.value = '';
                             }
                             return true;
-                            }
+                        }
                     }
-            });
-            var fieldTypeProperties = {
-            xtype: 'numberfield',
+                });
+                var fieldTypeProperties = {
+                    xtype: 'numberfield',
                     minValue: 0,
                     maxValue: 100
-            };
-            /**
-             * 
-             * DATA DEL SELECT
-             */
-            var states = Ext.create('Ext.data.Store', {
-            fields: ['id', 'name'],
+                };
+                /**
+                 * 
+                 * DATA DEL SELECT
+                 */
+                var states = Ext.create('Ext.data.Store', {
+                    fields: ['id', 'name'],
                     data: [
-        {% if userobj %}
-                    {"id": "{{userobj.id}}", "name": "{{userobj.getfullname|ucwords}}"},
-        {%endif%}
-                    {"id": "0", "name": "GENERAL"},
+                        {"id": "0", "name": "GENERAL"},
         {% for resp in responsibles %}
-                    {"id": "{{resp.id}}", "name": "{{resp.Responsable|upper}}"},
+                        {"id": "{{resp.id}}", "name": "{{resp.Responsable|upper}}"},
         {% endfor %}                                                                             
                     ]
-            });
-            var widthColumnValues = 60;
-            var grid = Ext.create('Ext.grid.Panel', {
-            selType: 'cellmodel',
+                });
+                var widthColumnValues = 60;
+                var grid = Ext.create('Ext.grid.Panel', {
+                    selType: 'cellmodel',
                     renderTo: 'grid-example-2',
                     plugins: [cellEditing],
                     height: 600,
@@ -261,159 +249,158 @@
                     store: store,
                     iconCls: 'icon-user',
                     listeners: {
-                    beforeedit: function (editor, context, eOpts) {
-                    //return false;
-                    }
+                        beforeedit: function (editor, context, eOpts) {
+                            //return false;
+                        }
                     },
                     features: [{
-                    id: 'group',
+                            id: 'group',
                             ftype: 'groupingsummary',
                             groupHeaderTpl: '{name}',
                             hideGroupedHeader: true,
                             enableGroupingMenu: false
-                    }],
+                        }],
                     dockedItems: [{
-                    xtype: 'toolbar',
+                            xtype: 'toolbar',
                             items: [
-                            {
-                            itemId: 'addCommentBtn',
+                                {
+                                    itemId: 'addCommentBtn',
                                     text: '{{ "pequiven.arrangement_program.buttons.add_comment"|trans }}',
                                     iconCls: 'icon-add',
                                     xtype: 'button',
         {#                            ui: 'default',#}
                                     handler: function () {
-                                    buttonAddComment = this;
-                                    if (!win) {
-                                    var form = Ext.create('Ext.form.Panel', {
-                                    url: '{{ path('arrangementprogram_add_observation',{id: entity.id }) }}',
-                                            layout: {
-                                            type: 'vbox',
+                                        buttonAddComment = this;
+                                        if (!win) {
+                                            var form = Ext.create('Ext.form.Panel', {
+                                                url: '{{ path('arrangementprogram_add_observation',{id: entity.id }) }}',
+                                                layout: {
+                                                    type: 'vbox',
                                                     align: 'stretch'
-                                            },
-                                            border: true,
-                                            bodyPadding: 10,
-                                            fieldDefaults: {
-                                            labelAlign: 'top',
+                                                },
+                                                border: true,
+                                                bodyPadding: 10,
+                                                fieldDefaults: {
+                                                    labelAlign: 'top',
                                                     labelWidth: 100,
                                                     labelStyle: 'font-weight:bold'
-                                            },
-                                            items: [
-                                            {
-                                            xtype: 'textareafield',
-                                                    fieldLabel: '{{ "pequiven.form.observations"|trans }}',
-                                                    name: 'observation',
-                                                    labelAlign: 'top',
-                                                    flex: 1,
-                                                    margins: '0',
-                                                    height: 250,
-                                                    allowBlank: false
-                                            }],
-                                            buttons: [{
-                                            text: '{{ 'pequiven.buttons.cancel'|trans({},'messages') }}',
-                                                    handler: function () {
-                                                    this.up('form').getForm().reset();
-                                                    this.up('window').hide();
-                                                    }
-                                            }, {
-                                            text: '{{ 'pequiven.buttons.submit'|trans({},'messages') }}',
-                                                    formBind: true,
-                                                    disabled: true,
-                                                    handler: function () {
-                                                    var form = this.up('form').getForm();
-                                                    if (form.isValid()) {
-                                                    // In a real application, this would submit the form to the configured url
-                                                    form.submit({
-                                                    success: function (form, action) {
-                                                    Ext.MessageBox.alert('{{ 'pequiven.arrangement_program.arrangement_program'|trans }}', '{{ 'pequiven.arrangement_program.flash.send_comment'|trans({},'PequivenArrangementProgramBundle') }}');
-                                                    form.reset();
-                                                    },
-                                                            failure: function (form, action) {
-                                                            Ext.Msg.alert('{{ 'pequiven.arrangement_program.arrangement_program'|trans }}', '{{ 'pequiven.arrangement_program.flash.no_send_comment'|trans({},'PequivenArrangementProgramBundle') }}');
-                                                            form.reset();
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'textareafield',
+                                                        fieldLabel: '{{ "pequiven.form.observations"|trans }}',
+                                                        name: 'observation',
+                                                        labelAlign: 'top',
+                                                        flex: 1,
+                                                        margins: '0',
+                                                        height: 250,
+                                                        allowBlank: false
+                                                    }],
+                                                buttons: [{
+                                                        text: '{{ 'pequiven.buttons.cancel'|trans({},'messages') }}',
+                                                        handler: function () {
+                                                            this.up('form').getForm().reset();
+                                                            this.up('window').hide();
+                                                        }
+                                                    }, {
+                                                        text: '{{ 'pequiven.buttons.submit'|trans({},'messages') }}',
+                                                        formBind: true,
+                                                        disabled: true,
+                                                        handler: function () {
+                                                            var form = this.up('form').getForm();
+                                                            if (form.isValid()) {
+                                                                // In a real application, this would submit the form to the configured url
+                                                                form.submit({
+                                                                    success: function (form, action) {
+                                                                        Ext.MessageBox.alert('{{ 'pequiven.arrangement_program.arrangement_program'|trans }}', '{{ 'pequiven.arrangement_program.flash.send_comment'|trans({},'PequivenArrangementProgramBundle') }}');
+                                                                        form.reset();
+                                                                    },
+                                                                    failure: function (form, action) {
+                                                                        Ext.Msg.alert('{{ 'pequiven.arrangement_program.arrangement_program'|trans }}', '{{ 'pequiven.arrangement_program.flash.no_send_comment'|trans({},'PequivenArrangementProgramBundle') }}');
+                                                                        form.reset();
+                                                                    }
+                                                                });
+                                                                this.up('window').hide();
                                                             }
-                                                    });
-                                                    this.up('window').hide();
-                                                    }
-                                                    }
-                                            }]
-                                    });
-                                    win = Ext.create('widget.window', {
-                                    title: '{{ 'pequiven.arrangement_program.arrangement_program'|trans }}',
-                                            header: {
-                                            titlePosition: 2,
+                                                        }
+                                                    }]
+                                            });
+                                            win = Ext.create('widget.window', {
+                                                title: '{{ 'pequiven.arrangement_program.arrangement_program'|trans }}',
+                                                header: {
+                                                    titlePosition: 2,
                                                     titleAlign: 'center'
-                                            },
-                                            closable: true,
-                                            closeAction: 'hide',
-                                            maximizable: true,
-                                            animateTarget: buttonAddComment,
-                                            width: 600,
-                                            minWidth: 350,
-                                            height: 350,
-                                            tools: [{type: 'pin'}],
-                                            layout: {
-                                            type: 'border',
+                                                },
+                                                closable: true,
+                                                closeAction: 'hide',
+                                                maximizable: true,
+                                                animateTarget: buttonAddComment,
+                                                width: 600,
+                                                minWidth: 350,
+                                                height: 350,
+                                                tools: [{type: 'pin'}],
+                                                layout: {
+                                                    type: 'border',
                                                     padding: 5
-                                            },
-                                            items: {
-                                            region: 'center',
+                                                },
+                                                items: {
+                                                    region: 'center',
                                                     xtype: 'container',
                                                     items: form
-                                            }
-                                    });
+                                                }
+                                            });
+                                        }
+                                        if (win.isVisible()) {
+                                            win.hide(this, function () {
+                                                buttonAddComment.enable();
+                                            });
+                                        } else {
+                                            win.show(this, function () {
+                                                buttonAddComment.enable();
+                                            });
+                                        }
                                     }
-                                    if (win.isVisible()) {
-                                    win.hide(this, function () {
-                                    buttonAddComment.enable();
-                                    });
-                                    } else {
-                                    win.show(this, function () {
-                                    buttonAddComment.enable();
-                                    });
-                                    }
-                                    }
-                            }, {
-                            itemId: 'refreshBtn',
+                                }, {
+                                    itemId: 'refreshBtn',
                                     text: '{{ "pequiven.arrangement_program.buttons.refresh"|trans }}',
                                     iconCls: 'icon-refresh',
                                     xtype: 'button',
                                     handler: function () {
-                                    store.load();
+                                        store.load();
                                     }
 
-                            },
-                                    Ext.create('Ext.form.ComboBox', {
+                                },
+                                Ext.create('Ext.form.ComboBox', {
                                     itemId: 'userSelect',
         {#hidden: true,#}
-                                            fieldLabel: '<b>Responsable:</b>',
-                                            store: states,
-                                            queryMode: 'local',
-                                            editable: false,
-                                            autoSelect: true,
-                                            labelWidth: 90,
-                                            displayField: 'name',
-                                            valueField: 'id',
-                                            renderTo: Ext.getBody(),
-                                            listeners: {
-                                            select: function () {
+                                    fieldLabel: '<b>Responsable:</b>',
+                                    store: states,
+                                    queryMode: 'local',
+                                    editable: false,
+                                    autoSelect: true,
+                                    labelWidth: 90,
+                                    displayField: 'name',
+                                    valueField: 'id',
+                                    renderTo: Ext.getBody(),
+                                    listeners: {
+                                        select: function () {
                                             store.getProxy().setExtraParam("user", this.value);
                                             store.load();
-                                            }
-                                            }
-                                    })
-
+                                        }
+                                    }
+                                })
                             ]
-                    }],
+                        }],
                     columns: [{
-                    text: 'Nro',
+                            text: 'Nro',
                             width: 30,
                             sortable: true,
                             locked: true,
                             renderer: function (v, meta, rec, rowIndex) {
-                            return ++rowIndex;
+                                return ++rowIndex;
                             }
-                    }, {
-                    text: '{{ "pequiven.name"|trans({},"messages") }}',
+                        }, {
+                            text: '{{ "pequiven.name"|trans({},"messages") }}',
                             flex: 1,
                             width: 425,
                             sortable: true,
@@ -421,107 +408,107 @@
                             locked: true,
                             hideable: false,
                             renderer: function (v, m, r) {
-                            var d = r.data.goal.name;
-                            return d;
+                                var d = r.data.goal.name;
+                                return d;
                             },
                             summaryType: 'count',
                             summaryRenderer: function (value, summaryData, dataIndex) {
-                            return ((value === 0 || value > 1) ? '' + value + ' {{ 'pequiven.goals.goals_only'|trans }}' : '1 {{ 'pequiven.goals.goal'|trans }}');
+                                return ((value === 0 || value > 1) ? '' + value + ' {{ 'pequiven.goals.goals_only'|trans }}' : '1 {{ 'pequiven.goals.goal'|trans }}');
                             }
-                    }, {
-                    header: '{{ "pequiven.start_date"|trans({},"messages") }}',
+                        }, {
+                            header: '{{ "pequiven.start_date"|trans({},"messages") }}',
                             width: 80,
                             sortable: true,
                             dataIndex: 'goalDateStart',
                             locked: true,
                             renderer: function (v, m, r) {
-                            var d = r.data.goal.startDate;
-                            if (!(d instanceof Date)) {
-                            d = Ext.Date.parse(d, formatPhp, true);
-                            }
-                            return Ext.util.Format.date(d, 'Y-m-d');
+                                var d = r.data.goal.startDate;
+                                if (!(d instanceof Date)) {
+                                    d = Ext.Date.parse(d, formatPhp, true);
+                                }
+                                return Ext.util.Format.date(d, 'Y-m-d');
                             },
                             summaryType: 'min',
                             summaryRenderer: Ext.util.Format.dateRenderer('Y-m-d')
-                    }, {
-                    text: '{{ "pequiven.end_date"|trans({},"messages") }}',
+                        }, {
+                            text: '{{ "pequiven.end_date"|trans({},"messages") }}',
                             width: 80,
                             sortable: true,
                             dataIndex: 'goalDateEnd',
                             locked: true,
                             renderer: function (v, m, r) {
-                            var d = r.data.goal.endDate;
-                            if (!(d instanceof Date)) {
-                            d = Ext.Date.parse(d, formatPhp, true);
-                            }
-                            return Ext.util.Format.date(d, 'Y-m-d');
+                                var d = r.data.goal.endDate;
+                                if (!(d instanceof Date)) {
+                                    d = Ext.Date.parse(d, formatPhp, true);
+                                }
+                                return Ext.util.Format.date(d, 'Y-m-d');
                             },
                             summaryType: 'max',
                             summaryRenderer: Ext.util.Format.dateRenderer('Y-m-d')
-                    }, {text: '{{ "pequiven.weight_goal"|trans({},"messages") }}',
+                        }, {text: '{{ "pequiven.weight_goal"|trans({},"messages") }}',
                             sortable: true,
                             width: 60,
                             dataIndex: 'goalWeight',
                             locked: true,
                             renderer: function (v, m, r) {
-                            var d = r.data.goal.weight;
-                            return formatNumber(d) + '%';
+                                var d = r.data.goal.weight;
+                                return formatNumber(d) + '%';
                             },
                             summaryType: function (records, values) {
-                            var i, key, value = 0, summary, valuePlanned = 0, plannedMonth = 0;
-                            for (i = 0; i < 1; i++) {
-                            var data = records[i].data;
-                            for (key in data) {
-                            if (key.match('Real')) {
-                            summary = calculateSummaryRenderer(records, values, key);
-                            value = value + summary;
-                            }
-                            if (key.match('Planned')) {
-                            plannedMonth = getMonthOfPlanned(key);
-                            if (!(plannedMonth > month)) {
-                            summary = calculateSummaryRenderer(records, values, key);
-                            valuePlanned = valuePlanned + summary;
-                            }
-                            }
-                            }
-                            }
-                            advancesPlanned = valuePlanned;
-                            var programSummary = document.getElementById("program_summary");
-                            programSummary.innerHTML = formatNumber(value);
-                            var tenPercentage = advancesPlanned - (advancesPlanned * 0.10);
-                            var classSummary = '';
-                            if (value >= advancesPlanned) {
-                            classSummary = 'green-bg';
-                            } else if (value >= tenPercentage && value < advancesPlanned) {
-                            classSummary = 'orange-bg';
-                            } else if (value < tenPercentage) {
-                            classSummary = 'red-bg';
-                            }
-                            if (advancesPlanned == 0) {
-                            classSummary = '';
-                            }
+                                var i, key, value = 0, summary, valuePlanned = 0, plannedMonth = 0;
+                                for (i = 0; i < 1; i++) {
+                                    var data = records[i].data;
+                                    for (key in data) {
+                                        if (key.match('Real')) {
+                                            summary = calculateSummaryRenderer(records, values, key);
+                                            value = value + summary;
+                                        }
+                                        if (key.match('Planned')) {
+                                            plannedMonth = getMonthOfPlanned(key);
+                                            if (!(plannedMonth > month)) {
+                                                summary = calculateSummaryRenderer(records, values, key);
+                                                valuePlanned = valuePlanned + summary;
+                                            }
+                                        }
+                                    }
+                                }
+                                advancesPlanned = valuePlanned;
+                                var programSummary = document.getElementById("program_summary");
+                                programSummary.innerHTML = formatNumber(value);
+                                var tenPercentage = advancesPlanned - (advancesPlanned * 0.10);
+                                var classSummary = '';
+                                if (value >= advancesPlanned) {
+                                    classSummary = 'green-bg';
+                                } else if (value >= tenPercentage && value < advancesPlanned) {
+                                    classSummary = 'orange-bg';
+                                } else if (value < tenPercentage) {
+                                    classSummary = 'red-bg';
+                                }
+                                if (advancesPlanned == 0) {
+                                    classSummary = '';
+                                }
 
-                            var programPlanned = document.getElementById("program_planned");
-                            var programSummaryContainer = document.getElementById("program_summary_container");
-                            programPlanned.innerHTML = formatNumber(advancesPlanned);
-                            programSummaryContainer.className = 'tag ' + classSummary;
-                            summary = 0;
-                            for (i in values) {
-                            summary += values[i];
-                            }
-                            return summary;
+                                var programPlanned = document.getElementById("program_planned");
+                                var programSummaryContainer = document.getElementById("program_summary_container");
+                                programPlanned.innerHTML = formatNumber(advancesPlanned);
+                                programSummaryContainer.className = 'tag ' + classSummary;
+                                summary = 0;
+                                for (i in values) {
+                                    summary += values[i];
+                                }
+                                return summary;
                             },
                             summaryRenderer: function (value, summaryData, dataIndex) {
-                            return formatNumber(value) + '%';
+                                return formatNumber(value) + '%';
                             }
-                    }, {
-                    text: '{{ 'pequiven.quarter.first'|trans({},'messages') }}',
+                        }, {
+                            text: '{{ 'pequiven.quarter.first'|trans({},'messages') }}',
                             columns: [
-                            {
-                            text: '{{ "pequiven.months.january"|trans({},"messages") }}',
+                                {
+                                    text: '{{ "pequiven.months.january"|trans({},"messages") }}',
                                     columns: [
-                                    {
-                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                        {
+                                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                                             width: widthColumnValues,
                                             baseCls: 'bg-column-gray',
                                             sortable: true,
@@ -531,12 +518,12 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'januaryPlanned';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'januaryPlanned';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }, {
-                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                        }, {
+                                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -545,18 +532,18 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'januaryReal';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'januaryReal';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }
+                                        }
                                     ]
-                            },
-                            {
-                            text: '{{ "pequiven.months.february"|trans({},"messages") }}',
+                                },
+                                {
+                                    text: '{{ "pequiven.months.february"|trans({},"messages") }}',
                                     columns: [
-                                    {
-                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                        {
+                                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             baseCls: 'bg-column-gray',
@@ -566,12 +553,12 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'februaryPlanned';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'februaryPlanned';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }, {
-                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                        }, {
+                                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -580,18 +567,18 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'februaryReal';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'februaryReal';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }
+                                        }
                                     ]
-                            },
-                            {
-                            text: '{{ "pequiven.months.march"|trans({},"messages") }}',
+                                },
+                                {
+                                    text: '{{ "pequiven.months.march"|trans({},"messages") }}',
                                     columns: [
-                                    {
-                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                        {
+                                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -601,12 +588,12 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'marchPlanned';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'marchPlanned';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }, {
-                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                        }, {
+                                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -615,22 +602,22 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'marchReal';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'marchReal';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }
+                                        }
                                     ]
-                            }
+                                }
                             ]
-                    }, {
-                    text: '{{ 'pequiven.quarter.second'|trans({},'messages') }}',
+                        }, {
+                            text: '{{ 'pequiven.quarter.second'|trans({},'messages') }}',
                             columns: [
-                            {
-                            text: '{{ "pequiven.months.april"|trans({},"messages") }}',
+                                {
+                                    text: '{{ "pequiven.months.april"|trans({},"messages") }}',
                                     columns: [
-                                    {
-                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                        {
+                                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -640,12 +627,12 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'aprilPlanned';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'aprilPlanned';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }, {
-                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                        }, {
+                                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -654,18 +641,18 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'aprilReal';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'aprilReal';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }
+                                        }
                                     ]
-                            },
-                            {
-                            text: '{{ "pequiven.months.may"|trans({},"messages") }}',
+                                },
+                                {
+                                    text: '{{ "pequiven.months.may"|trans({},"messages") }}',
                                     columns: [
-                                    {
-                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                        {
+                                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -675,12 +662,12 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'mayPlanned';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'mayPlanned';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }, {
-                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                        }, {
+                                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -689,18 +676,18 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'mayReal';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'mayReal';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }
+                                        }
                                     ]
-                            },
-                            {
-                            text: '{{ "pequiven.months.june"|trans({},"messages") }}',
+                                },
+                                {
+                                    text: '{{ "pequiven.months.june"|trans({},"messages") }}',
                                     columns: [
-                                    {
-                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                        {
+                                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -710,12 +697,12 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'junePlanned';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'junePlanned';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }, {
-                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                        }, {
+                                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -724,23 +711,23 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'juneReal';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'juneReal';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }
+                                        }
                                     ]
-                            }
+                                }
                             ]
-                    },
-                    {
-                    text: '{{ 'pequiven.quarter.third'|trans({},'messages') }}',
+                        },
+                        {
+                            text: '{{ 'pequiven.quarter.third'|trans({},'messages') }}',
                             columns: [
-                            {
-                            text: '{{ "pequiven.months.july"|trans({},"messages") }}',
+                                {
+                                    text: '{{ "pequiven.months.july"|trans({},"messages") }}',
                                     columns: [
-                                    {
-                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                        {
+                                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -750,12 +737,12 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'julyPlanned';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'julyPlanned';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }, {
-                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                        }, {
+                                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -764,18 +751,18 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'julyReal';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'julyReal';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }
+                                        }
                                     ]
-                            },
-                            {
-                            text: '{{ "pequiven.months.august"|trans({},"messages") }}',
+                                },
+                                {
+                                    text: '{{ "pequiven.months.august"|trans({},"messages") }}',
                                     columns: [
-                                    {
-                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                        {
+                                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -785,12 +772,12 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'augustPlanned';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'augustPlanned';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }, {
-                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                        }, {
+                                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -799,17 +786,17 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'augustReal';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'augustReal';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }
+                                        }
                                     ]
-                            }, {
-                            text: '{{ "pequiven.months.september"|trans({},"messages") }}',
+                                }, {
+                                    text: '{{ "pequiven.months.september"|trans({},"messages") }}',
                                     columns: [
-                                    {
-                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                        {
+                                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -819,12 +806,12 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'septemberPlanned';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'septemberPlanned';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }, {
-                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                        }, {
+                                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -833,23 +820,23 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'septemberReal';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'septemberReal';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }
+                                        }
                                     ]
-                            }
+                                }
                             ]
-                    },
-                    {
-                    text: '{{ 'pequiven.quarter.fourth'|trans({},'messages') }}',
+                        },
+                        {
+                            text: '{{ 'pequiven.quarter.fourth'|trans({},'messages') }}',
                             columns: [
-                            {
-                            text: '{{ "pequiven.months.october"|trans({},"messages") }}',
+                                {
+                                    text: '{{ "pequiven.months.october"|trans({},"messages") }}',
                                     columns: [
-                                    {
-                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                        {
+                                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -859,12 +846,12 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'octoberPlanned';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'octoberPlanned';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }, {
-                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                        }, {
+                                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -873,17 +860,17 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'octoberReal';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'octoberReal';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }
+                                        }
                                     ]
-                            }, {
-                            text: '{{ "pequiven.months.november"|trans({},"messages") }}',
+                                }, {
+                                    text: '{{ "pequiven.months.november"|trans({},"messages") }}',
                                     columns: [
-                                    {
-                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                        {
+                                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -893,12 +880,12 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'novemberPlanned';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'novemberPlanned';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }, {
-                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                        }, {
+                                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -907,17 +894,17 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'novemberReal';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'novemberReal';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }
+                                        }
                                     ]
-                            }, {
-                            text: '{{ "pequiven.months.december"|trans({},"messages") }}',
+                                }, {
+                                    text: '{{ "pequiven.months.december"|trans({},"messages") }}',
                                     columns: [
-                                    {
-                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                        {
+                                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -927,12 +914,12 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'decemberPlanned';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'decemberPlanned';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }, {
-                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                        }, {
+                                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
                                             sortable: true,
                                             groupable: false,
                                             width: widthColumnValues,
@@ -941,58 +928,58 @@
                                             renderer: valGoalDetails,
                                             field: fieldTypeProperties,
                                             summaryType: function (records, values) {
-                                            var nameField = 'decemberReal';
-                                            return calculateSummaryRenderer(records, values, nameField);
+                                                var nameField = 'decemberReal';
+                                                return calculateSummaryRenderer(records, values, nameField);
                                             },
                                             summaryRenderer: valSummaryRenderer
-                                    }
+                                        }
                                     ]
-                            }
+                                }
                             ]
-                    },
-                    {
-                    text: '{{ "pequiven.goals.summary"|trans }}',
+                        },
+                        {
+                            text: '{{ "pequiven.goals.summary"|trans }}',
                             locked: true,
                             hideable: false,
                             columns: [
-                            {
-                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                {
+                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                                     sortable: true,
                                     groupable: false,
                                     width: widthColumnValues,
                                     baseCls: 'bg-column-gray',
                                     align: 'center',
                                     renderer: function (v, m, r) {
-                                    var data = m.record.data;
-                                    return formatNumber(calculateAverageRow(data, 'Planned')) + "%";
+                                        var data = m.record.data;
+                                        return formatNumber(calculateAverageRow(data, 'Planned')) + "%";
                                     },
                                     summaryType: function (records, values) {
-                                    return summaryTypeOfSummary(records, 'Planned');
+                                        return summaryTypeOfSummary(records, 'Planned');
                                     },
                                     summaryRenderer: function (value, summaryData, dataIndex) {
-                                    return formatNumber(value) + '%';
+                                        return formatNumber(value) + '%';
                                     }
-                            }, {
-                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                }, {
+                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
                                     sortable: true,
                                     groupable: false,
                                     width: widthColumnValues,
                                     align: 'center',
                                     renderer: function (v, m, r) {
-                                    var data = m.record.data;
-                                    return formatNumber(calculateAverageRow(data, 'Real')) + "%";
+                                        var data = m.record.data;
+                                        return formatNumber(calculateAverageRow(data, 'Real')) + "%";
                                     },
                                     summaryType: function (records, values) {
-                                    return summaryTypeOfSummary(records, 'Real');
+                                        return summaryTypeOfSummary(records, 'Real');
                                     },
                                     summaryRenderer: function (value, summaryData, dataIndex) {
-                                    return formatNumber(value) + '%';
+                                        return formatNumber(value) + '%';
                                     }
-                            }
+                                }
                             ]
-                    }
+                        }
                     ]
-            });
+                });
             });
     </script>
 {% endblock javascript %}

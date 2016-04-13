@@ -63,7 +63,7 @@ class GoalDetailsInd {
      *
      * @ORM\Column(name="januaryPlanned", type="float",nullable=true)
      */
-    private $januaryPlanned;
+    public $januaryPlanned;
 
     /**
      * Real de enero
@@ -79,7 +79,7 @@ class GoalDetailsInd {
      *
      * @ORM\Column(name="februaryPlanned", type="float",nullable=true)
      */
-    private $februaryPlanned;
+    public $februaryPlanned;
 
     /**
      * Real de febrero
@@ -95,7 +95,7 @@ class GoalDetailsInd {
      *
      * @ORM\Column(name="marchPlanned", type="float",nullable=true)
      */
-    private $marchPlanned;
+    public $marchPlanned;
 
     /**
      * @var float
@@ -110,7 +110,7 @@ class GoalDetailsInd {
      *
      * @ORM\Column(name="aprilPlanned", type="float",nullable=true)
      */
-    private $aprilPlanned;
+    public $aprilPlanned;
 
     /**
      * Real de abril
@@ -126,7 +126,7 @@ class GoalDetailsInd {
      *
      * @ORM\Column(name="mayPlanned", type="float",nullable=true)
      */
-    private $mayPlanned;
+    public $mayPlanned;
 
     /**
      * Real de mayo
@@ -142,7 +142,7 @@ class GoalDetailsInd {
      *
      * @ORM\Column(name="junePlanned", type="float",nullable=true)
      */
-    private $junePlanned;
+    public $junePlanned;
 
     /**
      * Real de junio
@@ -158,7 +158,7 @@ class GoalDetailsInd {
      *
      * @ORM\Column(name="julyPlanned", type="float",nullable=true)
      */
-    private $julyPlanned;
+    public $julyPlanned;
 
     /**
      * Real de julio
@@ -174,7 +174,7 @@ class GoalDetailsInd {
      *
      * @ORM\Column(name="augustPlanned", type="float",nullable=true)
      */
-    private $augustPlanned;
+    public $augustPlanned;
 
     /**
      * Real de agosto
@@ -190,7 +190,7 @@ class GoalDetailsInd {
      *
      * @ORM\Column(name="septemberPlanned", type="float",nullable=true)
      */
-    private $septemberPlanned;
+    public $septemberPlanned;
 
     /**
      * Real de septiembre
@@ -206,7 +206,7 @@ class GoalDetailsInd {
      *
      * @ORM\Column(name="octoberPlanned", type="float",nullable=true)
      */
-    private $octoberPlanned;
+    public $octoberPlanned;
 
     /**
      * Real de octubre
@@ -222,7 +222,7 @@ class GoalDetailsInd {
      *
      * @ORM\Column(name="novemberPlanned", type="float",nullable=true)
      */
-    private $novemberPlanned;
+    public $novemberPlanned;
 
     /**
      * Real de noviembre
@@ -238,7 +238,7 @@ class GoalDetailsInd {
      *
      * @ORM\Column(name="decemberPlanned", type="float",nullable=true)
      */
-    private $decemberPlanned;
+    public $decemberPlanned;
 
     /**
      * Real de diciembre
@@ -292,96 +292,48 @@ class GoalDetailsInd {
         return $this->user;
     }
 
-    function getJanuaryPlanned() {
-        return $this->januaryPlanned;
-    }
-
     function getJanuaryReal() {
         return $this->januaryReal;
-    }
-
-    function getFebruaryPlanned() {
-        return $this->februaryPlanned;
     }
 
     function getFebruaryReal() {
         return $this->februaryReal;
     }
 
-    function getMarchPlanned() {
-        return $this->marchPlanned;
-    }
-
     function getMarchReal() {
         return $this->marchReal;
-    }
-
-    function getAprilPlanned() {
-        return $this->aprilPlanned;
     }
 
     function getAprilReal() {
         return $this->aprilReal;
     }
 
-    function getMayPlanned() {
-        return $this->mayPlanned;
-    }
-
     function getMayReal() {
         return $this->mayReal;
-    }
-
-    function getJunePlanned() {
-        return $this->junePlanned;
     }
 
     function getJuneReal() {
         return $this->juneReal;
     }
 
-    function getJulyPlanned() {
-        return $this->julyPlanned;
-    }
-
     function getJulyReal() {
         return $this->julyReal;
-    }
-
-    function getAugustPlanned() {
-        return $this->augustPlanned;
     }
 
     function getAugustReal() {
         return $this->augustReal;
     }
 
-    function getSeptemberPlanned() {
-        return $this->septemberPlanned;
-    }
-
     function getSeptemberReal() {
         return $this->septemberReal;
-    }
-
-    function getOctoberPlanned() {
-        return $this->octoberPlanned;
     }
 
     function getOctoberReal() {
         return $this->octoberReal;
     }
 
-    function getNovemberPlanned() {
-        return $this->novemberPlanned;
-    }
-
     function getNovemberReal() {
         return $this->novemberReal;
-    }
-
-    function getDecemberPlanned() {
-        return $this->decemberPlanned;
     }
 
     function getDecemberReal() {
@@ -420,96 +372,48 @@ class GoalDetailsInd {
         $this->user = $user;
     }
 
-    function setJanuaryPlanned($januaryPlanned) {
-        $this->januaryPlanned = $januaryPlanned;
-    }
-
     function setJanuaryReal($januaryReal) {
         $this->januaryReal = $januaryReal;
-    }
-
-    function setFebruaryPlanned($februaryPlanned) {
-        $this->februaryPlanned = $februaryPlanned;
     }
 
     function setFebruaryReal($februaryReal) {
         $this->februaryReal = $februaryReal;
     }
 
-    function setMarchPlanned($marchPlanned) {
-        $this->marchPlanned = $marchPlanned;
-    }
-
     function setMarchReal($marchReal) {
         $this->marchReal = $marchReal;
-    }
-
-    function setAprilPlanned($aprilPlanned) {
-        $this->aprilPlanned = $aprilPlanned;
     }
 
     function setAprilReal($aprilReal) {
         $this->aprilReal = $aprilReal;
     }
 
-    function setMayPlanned($mayPlanned) {
-        $this->mayPlanned = $mayPlanned;
-    }
-
     function setMayReal($mayReal) {
         $this->mayReal = $mayReal;
-    }
-
-    function setJunePlanned($junePlanned) {
-        $this->junePlanned = $junePlanned;
     }
 
     function setJuneReal($juneReal) {
         $this->juneReal = $juneReal;
     }
 
-    function setJulyPlanned($julyPlanned) {
-        $this->julyPlanned = $julyPlanned;
-    }
-
     function setJulyReal($julyReal) {
         $this->julyReal = $julyReal;
-    }
-
-    function setAugustPlanned($augustPlanned) {
-        $this->augustPlanned = $augustPlanned;
     }
 
     function setAugustReal($augustReal) {
         $this->augustReal = $augustReal;
     }
 
-    function setSeptemberPlanned($septemberPlanned) {
-        $this->septemberPlanned = $septemberPlanned;
-    }
-
     function setSeptemberReal($septemberReal) {
         $this->septemberReal = $septemberReal;
-    }
-
-    function setOctoberPlanned($octoberPlanned) {
-        $this->octoberPlanned = $octoberPlanned;
     }
 
     function setOctoberReal($octoberReal) {
         $this->octoberReal = $octoberReal;
     }
 
-    function setNovemberPlanned($novemberPlanned) {
-        $this->novemberPlanned = $novemberPlanned;
-    }
-
     function setNovemberReal($novemberReal) {
         $this->novemberReal = $novemberReal;
-    }
-
-    function setDecemberPlanned($decemberPlanned) {
-        $this->decemberPlanned = $decemberPlanned;
     }
 
     function setDecemberReal($decemberReal) {
@@ -526,6 +430,54 @@ class GoalDetailsInd {
 
     function setResultBeforepenalty($resultBeforepenalty) {
         $this->resultBeforepenalty = $resultBeforepenalty;
+    }
+
+    function getJanuaryPlanned() {
+        $this->getGoalDetails()->getJanuaryPlanned();
+    }
+
+    function getFebruaryPlanned() {
+        $this->getGoalDetails()->getFebruaryPlanned();
+    }
+
+    function getMarchPlanned() {
+        $this->getGoalDetails()->getMarchPlanned();
+    }
+
+    function getAprilPlanned() {
+        $this->getGoalDetails()->getAprilPlanned();
+    }
+
+    function getMayPlanned() {
+        $this->getGoalDetails()->getMayPlanned();
+    }
+
+    function getJunePlanned() {
+        $this->getGoalDetails()->getJunePlanned();
+    }
+
+    function getJulyPlanned() {
+        $this->getGoalDetails()->getJulyPlanned();
+    }
+
+    function getAugustPlanned() {
+        $this->getGoalDetails()->getAugustPlanned();
+    }
+
+    function getSeptemberPlanned() {
+        $this->getGoalDetails()->getSeptemberPlanned();
+    }
+
+    function getOctoberPlanned() {
+        $this->getGoalDetails()->getOctoberPlanned();
+    }
+
+    function getNovemberPlanned() {
+        $this->getGoalDetails()->getNovemberPlanned();
+    }
+
+    function getDecemberPlanned() {
+        $this->getGoalDetails()->getDecemberPlanned();
     }
 
     public function __toString() {

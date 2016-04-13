@@ -60,7 +60,33 @@ class RestArrangementProgramController extends FOSRestController {
         }
 
         foreach ($list as $goal) {
-            $data[] = $goal->getGoalDetails();
+            if ($user != 0) {
+                $searchCriteria = array('goalDetails' => $goal->getGoalDetails(), 'user' => $userobj);
+                $obj = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy($searchCriteria);
+                $obj->januaryPlanned = $obj->getJanuaryPlanned();
+                $obj->februaryPlanned = $obj->getFebruaryPlanned();
+                $obj->marchPlanned = $obj->getMarchPlanned();
+                $obj->aprilPlanned = $obj->getAprilPlanned();
+                $obj->mayPlanned = $obj->getMayPlanned();
+                $obj->junePlanned = $obj->getJunePlanned();
+                $obj->julyPlanned = $obj->getJulyPlanned();
+                $obj->augustPlanned = $obj->getAugustPlanned();
+                $obj->septemberPlanned = $obj->getSeptemberPlanned();
+                $obj->octoberPlanned = $obj->getOctoberPlanned();
+                $obj->novemberPlanned = $obj->getNovemberPlanned();
+                $obj->decemberPlanned = $obj->getDecemberPlanned();
+                $data[] = $obj;
+                var_dump($obj);
+            } else {
+                $data[] = $goal->getGoalDetails();
+            }
+//            if ($user != '0') {
+//                $searchCriteria = array('goalDetails' => $goal->getGoalDetails(), 'user' => $userobj);
+//                $dataInd[] = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy($searchCriteria);
+//                $data = $dataInd;
+//            } else {
+//                $dataInd = null;
+//            }
         }
 
         $view = $this->view();
@@ -70,9 +96,10 @@ class RestArrangementProgramController extends FOSRestController {
             'success' => true,
             'total' => count($data),
             'responsibles' => $responsibles,
-            'userobj' => $userobj
+            'userobj' => $userobj,
+            'user' => $user,
         );
-        
+
         if ($request->get('_format') == 'html') {
             $result['monthsPlanned'] = GoalDetails::getMonthsPlanned();
             $result['entity'] = $entity;
@@ -104,9 +131,10 @@ class RestArrangementProgramController extends FOSRestController {
             if (!$entityInd) {
                 $entityInd = new GoalDetailsInd();
             }
-
+            //AFECTA A LA ENTIDAD DE NOTIFICACION DE METAS INDIVIDUAL
             $form = $this->createForm(new GoalDetailsIndType(), $entityInd);
         } else {
+            //AFECTA A LA ENTIDAD DE NOTIFICACION DE METAS GLOBAL
             $form = $this->createForm(new GoalDetailsType(), $entity);
         }
 
@@ -165,7 +193,7 @@ class RestArrangementProgramController extends FOSRestController {
                             }
                         }
                     }
-                }                
+                }
                 $em->persist($entityInd);
                 $em->flush();
                 $success = true;
@@ -234,7 +262,6 @@ class RestArrangementProgramController extends FOSRestController {
             'messages' => 'Exitooooo'
         );
 
-        die();
         $view->setData($result);
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'goal', 'goalDetails'));
         $view->setTemplate("PequivenArrangementProgramBundle:Rest:ArrangementProgram/form.html.twig");
