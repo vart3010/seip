@@ -1,7 +1,5 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
-
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
-
 {% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
 
 {% block javascripts_base %}
@@ -17,8 +15,7 @@
         (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO')):'pequiven_indicator.indicator_operative',
     } %}
 
-{% set level = indicator_sig.indicatorLevel.level %}
-    
+{% set level = indicator_sig.indicatorLevel.level %}    
 
 {% block before_body %}
     {{ contentHeader(
@@ -226,8 +223,7 @@
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
 
-    <script type="text/javascript">
-        
+    <script type="text/javascript">        
         $(document).ready(function () {
             $("a#showItems").click(function () {
                 $("#evolutionItems").toggle("slow");
@@ -258,8 +254,7 @@
 
         }
         //set url
-        function getUrl(data) {
-            
+        function getUrl(data) {            
             var rs;
             return rs;
         }

@@ -472,7 +472,7 @@ class IndicatorSigController extends ResourceController {
      * @return \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauses
      * @throws type
      */
-    private function findEvolutionCause($indicator, $request) {
+    private function findEvolutionCause($indicator, $request) {        
         $id = $indicator->getId();
         $typeObject = $request->get('typeObj');
 
@@ -547,10 +547,10 @@ class IndicatorSigController extends ResourceController {
 
         //Carga de array con la data
         $data = [
-            'action' => $actionResult, //Pasando la data de las acciones si las hay
-            'verification' => $verification, //Pasando la data de las verificaciones            
-            'actionValue' => $actionsValues,
-            'cant' => $cant
+            'action'        => $actionResult, //Pasando la data de las acciones si las hay
+            'verification'  => $verification, //Pasando la data de las verificaciones            
+            'actionValue'   => $actionsValues,
+            'cant'          => $cant
         ];
 
         return $data;
@@ -589,12 +589,12 @@ class IndicatorSigController extends ResourceController {
      *
      */
     public function exportAction(Request $request) {
-        
         $em = $this->getDoctrine()->getManager();
         $routing = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/temp/*.png";
         
         //$fileSVG = $this->exportChrat($request);        
         sleep(1);
+        $formula = "";
         //Buscando los Archivos por Codigo
         $nameSVG = glob("$routing");
         $user = $this->getUser()->getId();//Id Usuario    
@@ -619,23 +619,26 @@ class IndicatorSigController extends ResourceController {
         }        
         
         $id = $request->get('id'); //id         
-        $indicator = $this->get('pequiven.repository.indicator')->find($id); //Obtenemos el indicador
-        $indicatorBase = $indicator;
-
+        $typeObject = $request->get('typeObj'); //Tipo de objeto (1 = Indicador/2 = Programa G.) 
         //si el indicador es clonado
-        if ($indicator->getParentCloning()) {
-            $id = $indicator->getParentCloning()->getId();            
-            $indicator = $indicator->getParentCloning();
-            //Si el indicador es clonado y viene del estratetico
+        if ($typeObject == 1) { 
+            $indicator = $this->get('pequiven.repository.indicator')->find($id); //Obtenemos el indicador
+            $indicatorBase = $indicator;
             if ($indicator->getParentCloning()) {
-                $id = $indicator->getParentCloning()->getId();
+                $id = $indicator->getParentCloning()->getId();            
                 $indicator = $indicator->getParentCloning();
+                //Si el indicador es clonado y viene del estratetico
+                if ($indicator->getParentCloning()) {
+                    $id = $indicator->getParentCloning()->getId();
+                    $indicator = $indicator->getParentCloning();
+                }
             }
+        }else{
+            $indicator = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
         }
 
         $dataAction = $this->findEvolutionCause($indicator, $request); //Carga la data de las causas y sus acciones relacionadas
         $month = $request->get('month'); //El mes pasado por parametro
-        $typeObject = $request->get('typeObj'); //Tipo de objeto (1 = Indicador/2 = Programa G.) 
         
         $font = "";
         if ($typeObject == 1) {            
@@ -662,6 +665,7 @@ class IndicatorSigController extends ResourceController {
                     break;
             }
             $font = $routing.$routingTendency.$font;            
+            $formula = $indicator->getFormula();
 
         } elseif ($typeObject == 2) {
             $ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
@@ -671,7 +675,6 @@ class IndicatorSigController extends ResourceController {
             $objRel = $ArrangementProgram->getTacticalObjective()->getDescription();
         }
         
-        $formula = $indicator->getFormula();
         
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array($type => $id, 'month' => $month));

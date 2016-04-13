@@ -63,15 +63,17 @@ class ArrangementProgramSigController extends ResourceController
         }*/
         //fin de la carga
 
-    	$ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
+        $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export_chart', array('id' => $request->get("id"), 'month' => $month, 'typeObj' => 2));
+
+        $ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
         //Creaciń de Grafico para informe de Evolución
         $response = new JsonResponse();
 
         $ArrangementProgramService = $this->getArrangementProgramService(); //Obtenemos el servicio del indicador
         
-        $dataChart = $ArrangementProgramService->getDataChartOfArrangementProgramEvolution($ArrangementProgram); //Obtenemos la data del gráfico de acuerdo al programa
+        $dataChart = $ArrangementProgramService->getDataChartOfArrangementProgramEvolution($ArrangementProgram, $urlExportFromChart); //Obtenemos la data del gráfico de acuerdo al programa
 
-        $dataCause = $ArrangementProgramService->getDataChartOfCausesEvolution($ArrangementProgram, $month); //Obtenemos la data del grafico de las causas de desviación
+        $dataCause = $ArrangementProgramService->getDataChartOfCausesEvolution($ArrangementProgram, $month, $urlExportFromChart); //Obtenemos la data del grafico de las causas de desviación
 
         //Carga de las Causas
         $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('arrangementProgram' => $id,'month' => $month, 'typeObject' => 2));

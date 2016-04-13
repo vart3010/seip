@@ -65,7 +65,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
      * @param ArrangementProgram $ArrangementProgram
      * @return type
      */
-    public function getDataChartOfArrangementProgramEvolution($ArrangementProgram) {
+    public function getDataChartOfArrangementProgramEvolution($ArrangementProgram, $urlExportFromChart) {
     	
     	$data = array(
             'dataSource' => array(
@@ -78,27 +78,20 @@ class ArrangementProgramService implements ContainerAwareInterface {
         );
         $chart = array();
 
-        $chart["caption"] = "Gráfico Informe de Evolución";
-        $chart["subCaption"] = "Periodo-2015";
-        $chart["palette"]= "1";
-        $chart["showvalues"]= "0";
-        $chart["paletteColors"]= "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
-        $chart["showBorder"] = "0";
+        $chart["palette"]        = "1";
+        $chart["showvalues"]     = "0";
+        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
         $chart["yaxisvaluespadding"] = "10";
         $chart["valueFontColor"] = "#000000";
-        $chart["rotateValues"] = "0";
-        $chart["bgAlpha"] = "0,0";
-        $chart["theme"] = "fint";
-        //$chart["YAxisMaxValue"] = "150";
-        //$chart["decimalSeparator"] = ",";
-        //$chart["decimals"] = "2";
-        $chart["showborder"] = "0";
-        $chart["decimals"] = "0";
-        $chart["exportenabled"] = "1";
+        $chart["rotateValues"]   = "0";
+        $chart["theme"]          = "fint";
+        $chart["showborder"]     = "0";
+        $chart["decimals"]       = "0";
+        $chart["exportenabled"]  = "1";
         $chart["exportatclient"] = "0";
-        $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
+        $chart["exportFormats"]  = "PNG= Exportar Informe de Evolución PDF";
         $chart["exportFileName"] = "Grafico Resultados ";
-        $chart["exporthandler"] = "http://107.21.74.91/";
+        $chart["exporthandler"]  = $urlExportFromChart;
 
         $category = $dataSetReal = $dataSetPlan = $dataSetAcum = array();
         $label = $dataReal = $dataPlan = $dataAcum = $dataMedition = array();
@@ -283,7 +276,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
      * @param ArrangementProgram $ArrangementProgram
      * @return type
      */
-    public function getDataChartOfCausesEvolution($ArrangementProgram, $month) {
+    public function getDataChartOfCausesEvolution($ArrangementProgram, $month, $urlExportFromChart) {
         
         $data = array(
             'dataSource' => array(
@@ -296,19 +289,17 @@ class ArrangementProgramService implements ContainerAwareInterface {
         );
         
         $chart = array();
-        $chart["caption"] = "Gráfico Causas de Desviación";
-        $chart["subCaption"] = "Periodo-2015";
         $chart["valueFontColor"] = "#000000";
-        $chart["showvalues"]= "1";
-        $chart["showSum"]= "1";
+        $chart["showvalues"] = "1";
+        $chart["showSum"] = "1";
         $chart["numberSuffix"] = "%";
-        $chart["bgalpha"]= "0,0";
+        $chart["bgalpha"] = "0,0";
         $chart["baseFontColor"] = "#ffffff";
         $chart["bgColor"] = "#ffffff";
-        $chart["legendBgColor"] = "#ffffff";        
+        $chart["legendBgColor"] = "#ffffff";
         $chart["legendItemFontSize"] = "10";
         $chart["legendItemFontColor"] = "#666666";
-        $chart["toolTipColor"] = "#ffffff";                
+        $chart["toolTipColor"] = "#ffffff";
         $chart["outCnvBaseFontColor"] = "#000000";
         $chart["visible"] = "1";
         $chart["theme"] = "fint";
@@ -319,13 +310,13 @@ class ArrangementProgramService implements ContainerAwareInterface {
         $chart["setadaptivesymin"] = "1";
         //$chart["sYAxisMaxValue"] = "150";
         //$chart["pYAxisMaxValue"] = "150";
-        $chart["linethickness"]= "5";
+        $chart["linethickness"] = "5";
         $chart["showborder"] = "0";
         $chart["exportenabled"] = "1";
         $chart["exportatclient"] = "0";
-        $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
+        $chart["exportFormats"] = "PNG= Exportar Informe de Evolución PDF";
         $chart["exportFileName"] = "Grafico Resultados ";
-        $chart["exporthandler"] = "http://107.21.74.91/";
+        $chart["exporthandler"] = $urlExportFromChart;
 
         //Inicialización
         $category = $dataSetCause = array();
