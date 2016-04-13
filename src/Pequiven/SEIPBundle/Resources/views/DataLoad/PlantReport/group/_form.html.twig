@@ -22,11 +22,13 @@
         {{ form_widget(form.entity) }}
         {{ form_errors(form.entity) }}
     </div>
+
     <div class="field-block button-height">
         {{ form_label(form.childrensGroup) }}
         {{ form_widget(form.childrensGroup) }}
         {{ form_errors(form.childrensGroup) }}
     </div>
+
     <div class="field-block button-height">
         {{ form_label(form.currentCapacity) }}
         {{ form_widget(form.currentCapacity) }}
@@ -41,22 +43,22 @@
 {#        {{ dump(_context|keys) }}#}
 <script type="text/javascript">
     var dateFormat = "dd-mm-yy";
-    $(document).ready(function(){
-        
+    $(document).ready(function () {
+
         var selectEntity = $("#pequiven_seipbundle_dataload_plantreport_entity");
         var selectPlant = $("#pequiven_seipbundle_dataload_plantreport_plant");
-        
+
         var urlGetPlant = "{{ path("pequiven_seip_plant_by_entity") }}";
-        
-        ajaxToSelect.formaterData = function(response){
+
+        ajaxToSelect.formaterData = function (response) {
             return response.name;
         };
-        selectEntity.on("change",function(){
-            ajaxToSelect2(urlGetPlant,selectPlant,{ entity: selectEntity.val() });
+        selectEntity.on("change", function () {
+            ajaxToSelect2(urlGetPlant, selectPlant, {entity: selectEntity.val()});
         });
-        {% if plant_report.id <= 0 %}
+    {% if plant_report.id <= 0 %}
             selectPlant.empty();
             selectPlant.select2('disable');
-        {% endif  %}
-    });
+    {% endif  %}
+        });
 </script>

@@ -36,14 +36,6 @@ class PlantReportGroupType extends SeipAbstractForm {
                 ->add('reportTemplate', null, $parametersPreSet)
                 ->add('company', null, $parametersPreSet)
                 ->add('location', null, $parametersPreSet)
-                ->add('entity', null, array(
-                    'label_attr' => array('class' => 'label'),
-                    "empty_value" => "",
-                    "attr" => array("class" => "select2 input-large"),
-                    "query_builder" => function (\Pequiven\SEIPBundle\Repository\CEI\EntityRepository $repository) use ($location) {
-                return $repository->findQueryByLocation($location);
-            },
-                ))
 //                ->add('plant', null, $parametersToSet)
                 ->add('currentCapacity', null, array(
                     'label_attr' => array('class' => 'label'),
@@ -54,17 +46,15 @@ class PlantReportGroupType extends SeipAbstractForm {
                     "attr" => array("class" => "switch medium mid-margin-right", "data-text-on" => "Si", "data-text-off" => "No"),
                     "required" => false,
                 ))
-                ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-
-                    $parametersToSet = array(
-                        'label_attr' => array('class' => 'label'),
-                        "empty_value" => "",
-                        "attr" => array("class" => "select2 input-large"),
-                    );
-                    $user = $event->getData();
-                    $form = $event->getForm();
-                    $form->add('childrensGroup', null, $parametersToSet);
-                });
+                ->add('entity', null, array(
+                    'label_attr' => array('class' => 'label'),
+                    "empty_value" => "",
+                    "attr" => array("class" => "select2 input-large"),
+                    "query_builder" => function (\Pequiven\SEIPBundle\Repository\CEI\EntityRepository $repository) use ($location) {
+                return $repository->findQueryByLocation($location);
+            },
+                ))
+                ->add('childrensGroup', null, $parametersToSet)
         ;
     }
 

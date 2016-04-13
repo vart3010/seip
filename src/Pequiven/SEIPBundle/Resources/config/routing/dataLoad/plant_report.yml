@@ -54,3 +54,14 @@ pequiven_plant_report_run:
     defaults:
         _controller: pequiven.controller.plant_report:runAction
     methods: [GET]
+    
+pequiven_entity_load_data_group:
+    path: /entity-load.{_format}
+    defaults: 
+        _controller: pequiven.controller.plant_report:getGroupLoadAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

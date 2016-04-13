@@ -232,7 +232,7 @@ angular.module('seipModule.controllers', [])
             //FUNCIÓN UTILIZADA PARA VER EL VALOR REAL SI LA META SOBREPASA EL 120% O CON VALOR NEGATIVO
             $scope.getOverflowForm = function (overflow) {
 
-                if ((overflow < 0)||(overflow>120)) {
+                if ((overflow < 0) || (overflow > 120)) {
                     return "";
                 } else {
                     return "hideClass";
@@ -320,6 +320,7 @@ angular.module('seipModule.controllers', [])
             var loadTemplateMetaButton = angular.element('#loadTemplateMeta');
             var categoryArrangementProgramId = angular.element('#categoryArrangementProgramValue');
             $scope.setOperationalObjective = function (tacticalObjetive, selected) {
+
                 if (tacticalObjetive) {
                     notificationBarService.getLoadStatus().loading();
                     $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives", {idObjetiveTactical: tacticalObjetive, idCategoryArrangementProgram: categoryArrangementProgramId.val()})).success(function (data) {
@@ -338,6 +339,8 @@ angular.module('seipModule.controllers', [])
                     operationalObjective.select2('enable', false);
                 }
             };
+            //$scope.setOperationalObjective();
+
             managementSystem.on('change', function (e) {
                 console.log(e.val);
                 if (e.val) {
@@ -530,6 +533,45 @@ angular.module('seipModule.controllers', [])
             };
             $scope.init();
         })
+
+        .controller("PlantReportGroupController", function ($scope, notificationBarService, $http, $filter, $timeout, $cookies) {
+            var entity = angular.element('#pequiven_seipbundle_dataload_plantreport_group_entity');
+            var childrensPlants = angular.element('#pequiven_seipbundle_dataload_plantreport_group_childrensGroup');
+            console.log(entity);
+            childrensPlants.select2('val', '');
+            childrensPlants.select2('enable', false);
+            
+            entity.on('change', function (e) {
+                console.log(e.val);
+                if (e.val) {
+                    var entityId = e.val;
+                    //tacticalObjective.find('option').remove().end();
+                    //notificationBarService.getLoadStatus().loading();
+                    $http.get(Routing.generate("pequiven_entity_load_data_group", {entityId: entityId})).success(function (data) {
+                        /*tacticalObjective.append('<option value="">' + Translator.trans('pequiven.select') + '</option>');
+                        angular.forEach(data, function (value) {
+                            tacticalObjective.append('<option value="' + value.id + '">' + value.ref + " " + value.description + ' - ' + value.gerencia.description + '</option>');
+                        });
+                        if (data.length > 0) {
+                            tacticalObjective.select2('val', e.val);
+                            tacticalObjective.select2('enable', true);
+                        } else {
+                            tacticalObjective.select2('val', '');
+                            tacticalObjective.select2('enable', false);
+                        }
+                        notificationBarService.getLoadStatus().done();*/
+                    });
+                    childrensPlants.select2('val', '');
+                    childrensPlants.select2('enable', true);
+                } else {
+                    childrensPlants.select2('val', '');
+                    childrensPlants.select2('enable', false);
+                }
+            });
+
+
+        })
+
         .controller("ArrangementProgramTemplateController", function ($scope, notificationBarService, $http, $filter, $timeout, $cookies) {
             $scope.entity = null;
             $scope.complejo = null;
@@ -1696,22 +1738,22 @@ angular.module('seipModule.controllers', [])
             $scope.templateOptions.setVar('addActionValues', addActionValues);
             $scope.templateOptions.setVar('addTrendEvolution', addTrendEvolution);
             var confirmCallBackCauses = function () {
-                addCause(true, function (data) {                
-                });                
+                addCause(true, function (data) {
+                });
                 return true;
             };
             var confirmCallBackAction = function () {
-                addAction(true, function (data) {                    
+                addAction(true, function (data) {
                 });
                 return true;
             };
             var confirmCallBackActionValues = function () {
-                addActionValues(true, function (data) {                
+                addActionValues(true, function (data) {
                 });
                 return true;
             };
             var confirmCallBackTrend = function () {
-                addTrendEvolution(true, function (data) {                
+                addTrendEvolution(true, function (data) {
                 });
                 return true;
             };
@@ -2155,7 +2197,7 @@ angular.module('seipModule.controllers', [])
                     isInit = true;
                 }
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(resource);                
+                $scope.templateOptions.setParameterCallBack(resource);
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -2170,7 +2212,7 @@ angular.module('seipModule.controllers', [])
                     isInit = true;
                 }
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(resource);                
+                $scope.templateOptions.setParameterCallBack(resource);
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -2196,7 +2238,7 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
@@ -2239,7 +2281,7 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
@@ -2266,13 +2308,13 @@ angular.module('seipModule.controllers', [])
             };
             $scope.templateOptions.setVar('addConfig', addConfig);
             var confirmCallBack = function () {
-                addConfig(true, function (data) {                   
+                addConfig(true, function (data) {
                 });
                 return true;
             };
             $scope.templateOptions.setVar('addCloning', addCloning);
             var confirmCallBackCloning = function () {
-                addCloning(true, function (data) {                   
+                addCloning(true, function (data) {
                 });
                 return true;
             };
@@ -2281,7 +2323,7 @@ angular.module('seipModule.controllers', [])
 
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(350);                
+                $scope.setHeight(350);
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
@@ -2306,7 +2348,7 @@ angular.module('seipModule.controllers', [])
 
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(350);                
+                $scope.setHeight(350);
 
                 var parameters = {
                     id: $scope.id_indicator,
@@ -2457,7 +2499,7 @@ angular.module('seipModule.controllers', [])
                     isInit = true;
                 }
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(resource);                
+                $scope.templateOptions.setParameterCallBack(resource);
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -2472,7 +2514,7 @@ angular.module('seipModule.controllers', [])
                     isInit = true;
                 }
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(resource);                
+                $scope.templateOptions.setParameterCallBack(resource);
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -2482,8 +2524,8 @@ angular.module('seipModule.controllers', [])
             };
 
             $scope.loadTemplateMaintenanceShow = function (resource) {
-                $scope.initFormMaintenaceShow(resource);                
-                $scope.openModalAuto();                
+                $scope.initFormMaintenaceShow(resource);
+                $scope.openModalAuto();
             };
 
             //Removiendo 
@@ -2508,12 +2550,12 @@ angular.module('seipModule.controllers', [])
                         notificationBarService.getLoadStatus().done();
                         return false;
                     });
-                    $timeout(callAtTimeout, 1000);                    
+                    $timeout(callAtTimeout, 1000);
                 });
                 function callAtTimeout() {
                     location.reload();
                 }
-                
+
             };
 
             //Añadir
@@ -2524,7 +2566,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_sig_monitoring_add', {id: $scope.id_managementSystem});                    
+                    var url = Routing.generate('pequiven_sig_monitoring_add', {id: $scope.id_managementSystem});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2533,7 +2575,7 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
@@ -2553,7 +2595,7 @@ angular.module('seipModule.controllers', [])
                     }
                     notificationBarService.getLoadStatus().done();
                     return false;
-                });                
+                });
             };
 
             //Añadir
@@ -2564,7 +2606,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_sig_monitoring_maintenance', {id: $scope.id_standardization});                    
+                    var url = Routing.generate('pequiven_sig_monitoring_maintenance', {id: $scope.id_standardization});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2573,7 +2615,7 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
@@ -2593,23 +2635,23 @@ angular.module('seipModule.controllers', [])
                     }
                     notificationBarService.getLoadStatus().done();
                     return false;
-                });                
+                });
             };
             $scope.templateOptions.setVar('addStandardization', addStandardization);
             var confirmCallBack = function () {
-                addStandardization(true, function (data) {                   
+                addStandardization(true, function (data) {
                 });
                 return true;
             };
 
             $scope.templateOptions.setVar('addMaintenance', addMaintenance);
             var confirmCallBackMaintenace = function () {
-                addMaintenance(true, function (data) {                   
+                addMaintenance(true, function (data) {
                 });
                 return true;
             };
 
-             var confirmCallBackShow = function () {                
+            var confirmCallBackShow = function () {
                 return true;
             };
             //Formulario Tracing
@@ -2620,7 +2662,7 @@ angular.module('seipModule.controllers', [])
                 $scope.setWidth(800);
 
                 var parameters = {
-                    id: $scope.id_managementSystem,                    
+                    id: $scope.id_managementSystem,
                     _dc: numero
                 };
                 if (resource) {
@@ -2641,12 +2683,12 @@ angular.module('seipModule.controllers', [])
             $scope.initFormMaintenace = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(800); 
+                $scope.setHeight(800);
                 $scope.setWidth(800);
-                var parameters = {                                     
+                var parameters = {
                     id: $scope.id_standardization,
                     _dc: numero
-                };                
+                };
                 var url = Routing.generate('pequiven_sig_monitoring_maintenance', parameters);
                 $scope.templates = [
                     {
@@ -2662,19 +2704,19 @@ angular.module('seipModule.controllers', [])
             $scope.initFormMaintenaceShow = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(700); 
+                $scope.setHeight(700);
                 $scope.setWidth(1000);
-                var parameters = {                                     
+                var parameters = {
                     id: $scope.id_standardization,
                     _dc: numero
-                };                
+                };
                 var url = Routing.generate('pequiven_sig_monitoring_maintenance_show', parameters);
                 $scope.templates = [
                     {
                         name: 'Ficha Detalles',
                         url: url,
-                        confirmCallBack: confirmCallBackShow, 
-                        setTemplateLoad: true                       
+                        confirmCallBack: confirmCallBackShow,
+                        setTemplateLoad: true
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
@@ -4420,9 +4462,9 @@ angular.module('seipModule.controllers', [])
             $scope.setHeight = function (h) {
                 $scope.height = h;
             };
-            
+
             $scope.setWidth = function (w) {
-                $scope.width = w;                
+                $scope.width = w;
             };
 
             var modalOpen, modalConfirm;
@@ -4486,7 +4528,7 @@ angular.module('seipModule.controllers', [])
                     modalOpen.dialog("option", "height", height);
                     modalOpen.dialog("option", "width", width);
                 }
-                
+
                 if ($scope.template.modeEdit) {
                     $scope.template.modeEdit = false;
                     // setter
@@ -4511,7 +4553,7 @@ angular.module('seipModule.controllers', [])
                             }
                         }
                     ]);
-                } else if($scope.template.setTemplateLoad){
+                } else if ($scope.template.setTemplateLoad) {
                     // setter
                     modalOpen.dialog("option", "buttons", [
                         {text: "Aceptar", click: function () {
@@ -4562,7 +4604,7 @@ angular.module('seipModule.controllers', [])
                 }
                 notificationBarService.getLoadStatus().done();
             }
-            
+
             $scope.openModalConfirm = function (content, confirmCallBack, cancelCallBack) {
                 $scope.dialog.confirm.content = sfTranslator.trans(content);
                 // setter
@@ -4951,7 +4993,7 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['coordinators'] = null;
                 }
             });
-            
+
         })
 
         .controller('ReportSipController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
@@ -5979,7 +6021,7 @@ angular.module('seipModule.controllers', [])
         })
 
         .controller('WorkStudyCircleController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
-            
+
             $scope.removeMember = function () {
                 var TextName = '¿Desea Sacar a ' + $scope.userName + ' del Círculo de Estudio y Trabajo ' + $scope.workStudyCircleName + '?';
                 $scope.openModalConfirm(TextName, function () {
@@ -6676,7 +6718,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //28-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
             $scope.chargeChartColumnLineDualAxisByDifferentFrequencyNotification = function (indicatorId, render, width, height) {
                 var getDataChartColumnLineDualAxisByDifferentFrequencyNotification = Routing.generate("getDataChartColumnLineDualAxisByDifferentFrequencyNotification", {id: indicatorId});
@@ -6699,7 +6741,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //29-Gráfico tipo multiseries de línea, con un trendline de forma horizontal
             $scope.chargeChartMultiSeriesLineIndicatorWithTrendlineHorizontal = function (indicatorId, render, width, height) {
                 var getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal = Routing.generate("getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal", {id: indicatorId});

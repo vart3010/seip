@@ -521,5 +521,19 @@ class PlantReportController extends SEIPController {
         $this->domainManager->delete($resource);
         return $this->redirect($url);
     }
+    
+    public function getGroupLoadAction(Request $request) {
+        var_dump($request);
+        //$criteria = $request->get('filter', $this->config->getCriteria());
+        $criteria['entityId'] = $request->get('entityId');
+        
+        $repository = $this->get('pequiven.repository.objetiveoperative');
+        $results = $repository->findTacticalObjetives($user, $criteria);
+//        $view = $this->view();
+//        $view->setData($results);
+//        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'gerencia'));
+//        return $this->handleView($view);
+        
+    }
 
 }
