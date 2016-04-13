@@ -63,30 +63,48 @@ class RestArrangementProgramController extends FOSRestController {
             if ($user != 0) {
                 $searchCriteria = array('goalDetails' => $goal->getGoalDetails(), 'user' => $userobj);
                 $obj = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy($searchCriteria);
-                $obj->januaryPlanned = $obj->getJanuaryPlanned();
-                $obj->februaryPlanned = $obj->getFebruaryPlanned();
-                $obj->marchPlanned = $obj->getMarchPlanned();
-                $obj->aprilPlanned = $obj->getAprilPlanned();
-                $obj->mayPlanned = $obj->getMayPlanned();
-                $obj->junePlanned = $obj->getJunePlanned();
-                $obj->julyPlanned = $obj->getJulyPlanned();
-                $obj->augustPlanned = $obj->getAugustPlanned();
-                $obj->septemberPlanned = $obj->getSeptemberPlanned();
-                $obj->octoberPlanned = $obj->getOctoberPlanned();
-                $obj->novemberPlanned = $obj->getNovemberPlanned();
-                $obj->decemberPlanned = $obj->getDecemberPlanned();
-                $data[] = $obj;
-                var_dump($obj);
-            } else {
-                $data[] = $goal->getGoalDetails();
+
+                if ($obj) {
+                    //SI HAY NOTIFICACIONES INDIVIDUALES SUSTITUYO EL VALOR GRUPAL POR EL INDIVIDUAL
+                    if (($obj->getJanuaryReal()) != null) {
+                        $goal->getGoalDetails()->setJanuaryReal($obj->getJanuaryReal());
+                    }
+                    if (($obj->getFebruaryReal()) != null) {
+                        $goal->getGoalDetails()->setFebruaryReal($obj->getFebruaryReal());
+                    }
+                    if (($obj->getMarchReal()) != null) {
+                        $goal->getGoalDetails()->setMarchReal($obj->getMarchReal());
+                    }
+                    if (($obj->getAprilReal()) != null) {
+                        $goal->getGoalDetails()->setAprilReal($obj->getAprilReal());
+                    }
+                    if (($obj->getMayReal()) != null) {
+                        $goal->getGoalDetails()->setMayReal($obj->getMayReal());
+                    }
+                    if (($obj->getJuneReal()) != null) {
+                        $goal->getGoalDetails()->setJuneReal($obj->getJuneReal());
+                    }
+                    if (($obj->getJulyReal()) != null) {
+                        $goal->getGoalDetails()->setJulyReal($obj->getJulyReal());
+                    }
+                    if (($obj->getAugustReal()) != null) {
+                        $goal->getGoalDetails()->setAugustReal($obj->getAugustReal());
+                    }
+                    if (($obj->getSeptemberReal()) != null) {
+                        $goal->getGoalDetails()->setSeptemberReal($obj->getSeptemberReal());
+                    }
+                    if (($obj->getOctoberReal()) != null) {
+                        $goal->getGoalDetails()->setOctoberReal($obj->getOctoberReal());
+                    }
+                    if (($obj->getNovemberReal()) != null) {
+                        $goal->getGoalDetails()->setNovemberReal($obj->getNovemberReal());
+                    }
+                    if (($obj->getDecemberReal()) != null) {
+                        $goal->getGoalDetails()->setDecemberReal($obj->getDecemberReal());
+                    }
+                }
             }
-//            if ($user != '0') {
-//                $searchCriteria = array('goalDetails' => $goal->getGoalDetails(), 'user' => $userobj);
-//                $dataInd[] = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy($searchCriteria);
-//                $data = $dataInd;
-//            } else {
-//                $dataInd = null;
-//            }
+            $data[] = $goal->getGoalDetails();
         }
 
         $view = $this->view();
