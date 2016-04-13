@@ -1,6 +1,8 @@
 parameters:
     knp_menu.menu_builder.class: Pequiven\SEIPBundle\Menu\Template\Developer\BackendMenuBuilder
     knp_menu.voter.request.class: Pequiven\SEIPBundle\Menu\Template\Developer\RequestVoter
+    knp_menu.renderer.twig.options:
+        currentClass: current
 
 services:
     app.menu_builder:
