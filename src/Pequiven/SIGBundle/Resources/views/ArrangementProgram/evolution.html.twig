@@ -80,51 +80,38 @@
     </div>        
     {% include 'PequivenSIGBundle:Template:base_month.html.twig' %} 
 </fieldset>
-        {# Graficos #}
-        <div class="columns with-padding"> 
-            <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 82%;" align="center">                
-                <div class="nine-columns twelve-columns-mobile" id="chartContainerResult"></div>   
-                <input id='exportpng' type='hidden' value='Exportar Informe' />
-            </div>  
-        </div> 
-        {# Analisis de tendencia #}
-        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}
-            {# Analisis de Tendencia #}    
-            <br /><br />
-            {% include 'PequivenSIGBundle:Indicator:show/analysis_trend.html.twig' %} 
-            &nbsp; 
-        {% endif %}
 
-        <div class="columns with-padding">         
-            <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 82%; height:55%;" align="center">
-                <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs"></div>
-                <input id='export_causespng' type='hidden' value='Exportar Informe' />
-            </div>
-        </div> 
-        <br>        
-        {# Fin de Graficos #}
-        {# Analisis de Causas #}
-        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CAUSE') %}    
-            <br /><br />
-            {% include 'PequivenSIGBundle:Indicator:show/causes_list.html.twig' %} 
-            <br /><br />            
-            {% include 'PequivenSIGBundle:Indicator:show/analysis_cause.html.twig' %} 
-            &nbsp;
-        {% endif %}
+<div class="columns with-padding"> 
+    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 82%;" align="center">                
+        <div class="nine-columns twelve-columns-mobile" id="chartContainerResult"></div>   
+        <input id='exportpng' type='hidden' value='Exportar Informe' />
+    </div>  
+</div> 
 
-        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION') %}
-        {# Plan de accion y seguimiento #}
-            <br /><br />
-            {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %}
-            &nbsp;
-        {% if dataAction["values"] and is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION_VERIFICATION')%}
+{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}             
+    <br/><br/>{% include 'PequivenSIGBundle:Indicator:show/analysis_trend.html.twig' %} &nbsp; 
+{% endif %}
 
-            {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
+<div class="columns with-padding">         
+    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 82%; height:55%;" align="center">
+        <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs"></div>
+        <input id='export_causespng' type='hidden' value='Exportar Informe' />
+    </div>
+</div> 
+<br>        
+        
+{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CAUSE') %}    
+    <br/><br/> {% include 'PequivenSIGBundle:Indicator:show/causes_list.html.twig' %}         
+    <br/><br/> {% include 'PequivenSIGBundle:Indicator:show/analysis_cause.html.twig' %} &nbsp;           
+{% endif %}  
 
-        {% endif %}        
-            &nbsp;
-
-        {% endif %}
+{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION') %}    
+    <br/><br/> {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %} &nbsp;
+{% if dataAction["values"] and is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION_VERIFICATION')%}  
+    {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
+{% endif %}        
+&nbsp;
+{% endif %} 
 
     <p class="button-height align-right">          
         <div style="text-align: left; margin-left:15px;">
@@ -149,10 +136,8 @@
             {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}            
         </div> #}
 {% endblock %}
-
 {% block stylesheets %}
-  {{ parent() }}
-    
+  {{ parent() }}    
 <style type="text/css">    
     .position{        
         margin-right: 20px;
@@ -220,7 +205,6 @@
                     window.open(data["url"]);
                 }
             });
-
         }
         //set url
         function getUrl(data) {            
@@ -251,6 +235,5 @@
             }
         }
         
-    </script>
-    
+    </script>    
 {% endblock %}

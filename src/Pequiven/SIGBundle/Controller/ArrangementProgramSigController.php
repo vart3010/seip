@@ -19,18 +19,14 @@ class ArrangementProgramSigController extends ResourceController
 {
     public function evolutionAction(Request $request)
     {
-        //$resource = $this->findOr404($request);
-
-        //$form = $this->getForm($resource);
-
-    	$id = $request->get("id");//Id ArrangmentProgram
+        $id = $request->get("id");//Id ArrangmentProgram
         
         $month = $request->get('month'); //El mes pasado por parametro
 
         $em = $this->getDoctrine()->getManager();
 
         $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
-    	
+        
         //Validación de que el mes pasado este entre los validos
         if ($month > 12) {
             $this->get('session')->getFlashBag()->add('error', "El mes consultado no es un mes valido!");
@@ -74,17 +70,23 @@ class ArrangementProgramSigController extends ResourceController
         $dataChart = $ArrangementProgramService->getDataChartOfArrangementProgramEvolution($ArrangementProgram, $urlExportFromChart); //Obtenemos la data del gráfico de acuerdo al programa
 
         $dataCause = $ArrangementProgramService->getDataChartOfCausesEvolution($ArrangementProgram, $month, $urlExportFromChart); //Obtenemos la data del grafico de las causas de desviación
+        
+        $analysis = $sumCause = 0;
 
         //Carga de las Causas
         $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('arrangementProgram' => $id,'month' => $month, 'typeObject' => 2));
         
+        foreach ($results as $value) {
+            $dataCa = $value->getValueOfCauses();
+            $sumCause = $sumCause + $dataCa;
+        }
+
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('arrangementProgram' => $id, 'month' => $month, 'typeObject' => 2));
        
         //Carga el analisis de Causas
         $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('arrangementProgram'=> $id, 'month' => $month, 'typeObject'=> 2));
         
-        $analysis = $sumCause = 0;
 
         $dataAction = [
             'action' => $data["action"],
