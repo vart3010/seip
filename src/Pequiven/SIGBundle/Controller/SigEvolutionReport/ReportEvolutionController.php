@@ -300,8 +300,14 @@ class ReportEvolutionController extends ResourceController
             'id'    => $id,
             'month' => $monthSet
         );
+        
+        if ($typeObject == 1) {
+            $route = "pequiven_indicator_evolution";
+        }else{
+            $route = "pequiven_seip_arrangementprogram_evolution_sig";
+        }
 
-        $apiDataUrl = $this->generateUrl('pequiven_indicator_evolution', $routeParameters);
+        $apiDataUrl = $this->generateUrl($route, $routeParameters);
         $apiDataUrl = "http://".$_SERVER['HTTP_HOST'].$apiDataUrl;
 
         //Añadiendo responsables
