@@ -4653,14 +4653,14 @@ class IndicatorService implements ContainerAwareInterface {
                         $indicatorParentOperative = $indicatorParent->getParent();
                         if ($levelParentOperative === $indicatorLevel) {
                             $indicatorParentOperative = $indicatorParentOperative->getParent();
-                            if ($indicatorParentOperative) {                                                    
+                            if ($indicatorParentOperative) {
                                 $value = false;
-                            }                            
-                        }elseif($indicatorParentOperative){                            
+                            }
+                        }elseif($indicatorParentOperative){
                                 $value = false;
                         }else{
                             $value = true;
-                        }                                        
+                        }
         
                     }else{
                         $value = true;
@@ -4668,7 +4668,7 @@ class IndicatorService implements ContainerAwareInterface {
                     
                 break;
                 
-                default: 
+                default:
                     $value = false;
             }
         

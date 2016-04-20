@@ -1874,10 +1874,71 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 
                 $valueIndicator->setParameter($variableToPlanValueName, $totalPlanAcumulated);
                 $valueIndicator->setParameter($variableToRealValueName, $totalRealAcumulated);
+            } elseif ($calculationMethod == Indicator::CALCULATION_METHOD_OF_EQUATION_PARTIAL_VARIABLES) {
+                //var_dump($variableToPlanValueName);
+                //var_dump($variableToRealValueName);
+                foreach ($formulaUsed->getVariables() as $variable) {
+                    //En caso de que el número del resultado no este cargado
+                    if (isset($resultsItems[$i]) == false) {
+                        continue;
+                    }
+                    $nameParameter = $variable->getName();
+                    $valueParameter = $valueIndicator->getParameter($nameParameter, 0);
+                    $valueParameterInit = $valueParameter;
+                    $results = $resultsItems[$i];
+                   // var_dump($variable->getName());
+                    
+                    if ($variable->isFromEQ()) {
+                        $childrensObjects = $indicator->getChildrens();
+                        $children = $childrensObjects[0];
+                        $parametersForTemplate = array(
+                            'indicator' => $children,
+                            'numValueIndicator' => ($i + 1),
+                        );
+                        $valueParameter = (float)trim($this->renderString($variable->getEquation(), $parametersForTemplate));
+                        //var_dump($valueParameter);
+                    } else {
+//                        if (!$variable->isStaticValue()) {
+//                            $valueParameter = 0.0;
+//                        }
+//                        else{
+//                            if($indicator->getValidVariableStaticValue()){
+//                                $valueParameter = 0;
+//                            }
+//                        }
+                        /*foreach ($results as $resultItem) {
+                            $childValueParameter = $resultItem->getParameter($nameParameter);
+                            if ($childValueParameter !== null) {
+                                if ($variable->isStaticValue()) {//En caso de que la variable sea "estática" y tenga que obtener el valor del indicador hijo
+                                    if (count($indicator->getChildrens()) == 1) {
+                                        $valueParameter = $childValueParameter;
+                                    }
+//                                    else{
+//                                        $valueParameter += $childValueParameter;
+//                                    }
+                                } else {
+                                    $valueParameter += $childValueParameter;
+                                }
+                            }
+                        }*/
+
+//                        if ($variable->isStaticValue() && $indicator->getValidVariableStaticValue()) {
+//                            if($valueParameterInit != $valueParameter){
+//                                
+//                            }
+//                        }
+                    }
+                    $valueIndicator->setParameter($nameParameter, $valueParameter);
+                }
+                //var_dump($resultsItems[$i]);
+                //die();
             }
             $i++;
-
+            //var_dump($valueIndicator->getFormulaParameters());
+            //var_dump($formulaUsed);
             $value = $indicatorService->calculateFormulaValue($formulaUsed, $valueIndicator->getFormulaParameters());
+            //var_dump($value);
+            //die();
             $valueIndicator->setValueOfIndicator($value);
         }
         $this->evaluateIndicatorByFormula($indicator);

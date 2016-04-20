@@ -72,6 +72,7 @@ pequiven_indicator:
         average_based_number_children: Promedio en base a número de hijos
         average_plan_real_children: Promedio de las variables plan y real en base a número de hijos
         weighted_average_result_children: Promedio ponderado de los resultadosa de los hijos
+        equation_of_partial_variables: Variables parciales se obtienes a partir de ecuaciones
     results: Resultado(s)
     value_indicator:
         enter_values_variables: Ingrese los valores de las variables
