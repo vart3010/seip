@@ -430,7 +430,7 @@ class ObjetivesController extends ResourceController
             //Pasando la politica del Sistema de la Calidad
             if ($contTac == 1) {
                 //Politica del Sistema de la Calidad Consultado
-                $textPoliticManagementSystem = $managementSystem->getPoliticManagementSystem()->getDescription();
+                $textPoliticManagementSystem = $managementSystem->getPoliticManagementSystem()->getDescriptionBody();
                 $activeSheet->setCellValue('A'.$rowIniTac, $textPoliticManagementSystem);//Seteamos la Politica del Sistema de la Calidad consultado
 
             }elseif ($contTac == $countObjTac) {
