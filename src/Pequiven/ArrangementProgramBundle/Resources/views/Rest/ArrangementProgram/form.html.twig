@@ -53,7 +53,6 @@
         var formatPhp = "Y-m-d H:i:s";
                 var advancesPlanned = {{ summary['advancesPlanned'] }};
                 var month = '{{ 'now'|date('m') }}';
-
         Ext.require([
             'Ext.grid.*',
             'Ext.data.*',
@@ -62,7 +61,6 @@
             'Ext.tip.QuickTipManager',
             'Ext.layout.container.Fit'
         ]);
-
         Ext.onReady(function () {
             Ext.tip.QuickTipManager.init();
             var idPG = '{{app.request.get('id')}}';
@@ -109,7 +107,6 @@
                         }
                     }
                 });
-
                 /**
                  * Calcula el promedio de los valores planeados de una fila
                  * @param {type} data
@@ -123,12 +120,10 @@
                     }
                     return value;
                 };
-
                 var monthsPlanned = {{ monthsPlanned | json_encode()|raw }};
                         var getMonthOfPlanned = function (key) {
                             return monthsPlanned[key];
                         };
-
                 var summaryTypeOfSummary = function (records, property) {
                     var i, length = records.length, data, average, total = 0, subAverage;
                     for (i = 0; i < length; i++) {
@@ -146,7 +141,7 @@
                  * Custom function used for column renderer
                  * @param {Object} val
                  */
-                function valGoalDetails(val, metaData, record, rowIndex, colIndex, store) {                    
+                function valGoalDetails(val, metaData, record, rowIndex, colIndex, store) {
                     var columnName = grid.columns[colIndex + 7].dataIndex;
                     var data = record.data;
                     if (data._data[columnName] != undefined) {

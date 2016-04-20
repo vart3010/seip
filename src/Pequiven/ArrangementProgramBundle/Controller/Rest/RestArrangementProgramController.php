@@ -62,10 +62,12 @@ class RestArrangementProgramController extends FOSRestController {
         foreach ($list as $goal) {
             if ($user != 0) {
                 $searchCriteria = array('goalDetails' => $goal->getGoalDetails(), 'user' => $userobj);
+
                 $obj = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy($searchCriteria);
 
                 if ($obj) {
                     //SI HAY NOTIFICACIONES INDIVIDUALES SUSTITUYO EL VALOR GRUPAL POR EL INDIVIDUAL
+                    //CABLE DESESPERADO. TODA META INDIVIDUAL TENDRA UN VALOR NEGATIVO Y SUPERIOR A 1000
                     if (($obj->getJanuaryReal()) != null) {
                         $goal->getGoalDetails()->setJanuaryReal($obj->getJanuaryReal());
                     }
@@ -104,6 +106,7 @@ class RestArrangementProgramController extends FOSRestController {
                     }
                 }
             }
+
             $data[] = $goal->getGoalDetails();
         }
 

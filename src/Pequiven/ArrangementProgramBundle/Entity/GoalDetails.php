@@ -833,7 +833,7 @@ class GoalDetails extends Base {
 
         return $this;
     }
-    
+
     function getGoalWeight() {
         return $this->goalWeight;
     }
@@ -866,7 +866,6 @@ class GoalDetails extends Base {
         $this->GoalDetailsInd = $GoalDetailsInd;
     }
 
-    
     public function __toString() {
         $toString = $this->getId() ? '' . $this->getId() : '-';
         return $toString;
