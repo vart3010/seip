@@ -14,13 +14,12 @@
 {% block body %}
     <div ng-controller="TableFormatController">
         <div ng-controller="TableIndicatorController">
-
             <div loading-container="tableParams.settings().$loading">
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info">
                     <tbody>
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
-                            <td data-title="'Sistemas de la Calidad'" sortable="'description'" filter="{'description' : 'text'}">
-                                - <a href="show/{$ result.id $}">{$ result.ref+result.description $} </a>
+                            <td data-title="'{{title}}'" sortable="'description'" filter="{'description' : 'text'}">
+                                - <a href="show/{{type}}/{$ result.id $}">{$ result.description $}</a>
                             </td>                            
                         </tr>
                     </tbody>

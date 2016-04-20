@@ -32,18 +32,17 @@
                                         <td width="8%">{{ dataStandardization.code }}</td>
                                         <td width="15%">
                                             {% if dataStandardization.analysis %}
-                                                <a href class="" title="Programa de Gestión"><i class="fa fa-file-text"></i>&nbsp;Análisis Causa Raíz</a>
+                                                <a href="{{ path('pequiven_sig_monitoring_show_download', {'id':dataStandardization.id})}}" target="_blank" title="Programa de Gestión" download="{{dataStandardization.file}}"><i class="fa fa-file-text"></i>&nbsp;Análisis Causa Raíz</a> 
                                                 <br>
                                             {% endif %}
                                             {% if dataStandardization.arrangementProgram %}                                            
-                                                {{ generateLink(dataStandardization.arrangementProgram) }}                                            
+                                                {{ generateLink(dataStandardization.arrangementProgram) }}
                                             {% endif %}                                            
                                         </td>                            
                                         <td width="8%"><B>{{ status[dataStandardization.status] }}</B></td>
                                         <td width="10%">
                                             {% set cont = 0 %}
-                                            {% set statusCharge = 0 %}
-                                                
+                                            {% set statusCharge = 0 %}                                                
                                             {% if dataStandardization.maintenance | length > 0 %}
                                                 {% for dataMaintenance in dataStandardization.maintenance %}
                                                     {% if cont == 0 %}
@@ -74,7 +73,8 @@
         <div class="new-row twelve-columns empty_row" align="center">
             <br>No hay Carga                                
         {% endif %}
-        </div> 
+            </div> 
+        </div>
     </div>
-</div>
+
 

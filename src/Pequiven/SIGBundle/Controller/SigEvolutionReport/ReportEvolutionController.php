@@ -245,8 +245,16 @@ class ReportEvolutionController extends ResourceController
      */
     public function addAction(Request $request)
     {   
-        //$month = date("m");//Carga del mes de Creación de la causa "Automatico"
-        $indicator = $this->findIndicatorOr404($request);           
+        $em = $this->getDoctrine()->getManager();
+
+        if ($request->get('typeObj') == 1) {
+            $object = $this->findIndicatorOr404($request);
+            $objectName = "Indicador";
+        }else{
+            $object = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($request->get('idIndicator'));
+            $objectName = "Programa de Gestión";
+        }
+        
         $em = $this->getDoctrine()->getManager();
 
         $id = $this->getRequest()->get('idIndicator');
@@ -287,10 +295,25 @@ class ReportEvolutionController extends ResourceController
         //Recibiendo responsables
         $reponsibles = explode(",", $responsible);         
         $catnRes = count($reponsibles);
+        //Creación de url
+        $routeParameters = array(                
+            'id'    => $id,
+            'month' => $monthSet
+        );
+        
+        if ($typeObject == 1) {
+            $route = "pequiven_indicator_evolution";
+        }else{
+            $route = "pequiven_seip_arrangementprogram_evolution_sig";
+        }
+
+        $apiDataUrl = $this->generateUrl($route, $routeParameters);
+        $apiDataUrl = "http://".$_SERVER['HTTP_HOST'].$apiDataUrl;
+
         //Añadiendo responsables
         for ($i=0; $i < $catnRes; $i++) { 
             $user = $this->get('pequiven_seip.repository.user')->find($reponsibles[$i]);
-            $notification = $this->getNotificationService()->setDataNotification("Informe de Evolución", "Ha sido asignado como responsable a un Plan de Acción en el Informe de Evolucion del Indicador ". $indicator->getRef() ." con fecha de incio: ".$dateStart." y fecha de cierre: ".$dateEnd.", el cual presenta un avance de inicio de ".$AcValue."%.", 6 , 1, "-", $user);                        
+            $notification = $this->getNotificationService()->setDataNotification("Informe de Evolución", "Ha sido asignado como responsable a un Plan de Acción en el Informe de Evolucion del ".$objectName." ". $object->getRef() ." con fecha de incio: ".$dateStart." y fecha de cierre: ".$dateEnd.", el cual presenta un avance de inicio de ".$AcValue."%.", 6 , 1, $apiDataUrl, $user);                        
             $action->addResponsible($user);            
         }
         

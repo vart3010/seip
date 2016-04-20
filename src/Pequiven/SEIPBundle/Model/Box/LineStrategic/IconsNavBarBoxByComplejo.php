@@ -61,7 +61,7 @@ class IconsNavBarBoxByComplejo extends GenericBox
     }
     
     public function hasPermission() {
-        return $this->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING','ROLE_ICONS_LINE_NAV_BAR'));
+        return $this->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING','ROLE_ICONS_LINE_NAV_BAR')); 
     }
     
     public function getTemplateName() {

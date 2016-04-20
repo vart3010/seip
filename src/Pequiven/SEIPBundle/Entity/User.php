@@ -167,6 +167,14 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     protected $statusWorker = 1;
 
     /**
+     * Trabajador de Empresa Filiar o Mixta
+     * @var boolean
+     *
+     * @ORM\Column(name="affiliated_worker", type="boolean", nullable=true)
+     */
+    protected $affiliatedWorker = false;
+
+    /**
      * Periodo.
      * 
      * @var \Pequiven\SEIPBundle\Entity\Period
@@ -320,8 +328,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         $this->evolutionAction = new \Doctrine\Common\Collections\ArrayCollection();
         $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
         $this->notification = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->maintenanceResponsibles = new \Doctrine\Common\Collections\ArrayCollection();        
-
+        $this->maintenanceResponsibles = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1146,6 +1153,70 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      */
     public function getMaintenanceResponsibles() {
         return $this->maintenanceResponsibles;
+    }
+
+    function getFeeStructure() {
+        return $this->feeStructure;
+    }
+
+    function setFeeStructure(\Pequiven\SEIPBundle\Entity\User\FeeStructure $feeStructure) {
+        $this->feeStructure = $feeStructure;
+    }
+
+    function getUsername() {
+        return $this->username;
+    }
+
+    function getBoxes() {
+        return $this->boxes;
+    }
+
+    function getAffiliatedWorker() {
+        return $this->affiliatedWorker;
+    }
+
+    function getIdentification() {
+        return $this->identification;
+    }
+
+    function getMovementEmployee() {
+        return $this->movementEmployee;
+    }
+
+    function getMovementFeeStructure() {
+        return $this->movementFeeStructure;
+    }
+
+    function getNotification() {
+        return $this->notification;
+    }
+
+    function setUsername($username) {
+        $this->username = $username;
+    }
+
+    function setBoxes(\Pequiven\SEIPBundle\Entity\Box\ModelBox $boxes) {
+        $this->boxes = $boxes;
+    }
+
+    function setAffiliatedWorker($affiliatedWorker) {
+        $this->affiliatedWorker = $affiliatedWorker;
+    }
+
+    function setIdentification($identification) {
+        $this->identification = $identification;
+    }
+
+    function setMovementEmployee(\Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee) {
+        $this->movementEmployee = $movementEmployee;
+    }
+
+    function setMovementFeeStructure(\Pequiven\SEIPBundle\Entity\User\MovementFeeStructure $movementFeeStructure) {
+        $this->movementFeeStructure = $movementFeeStructure;
+    }
+
+    function setNotification(\Pequiven\SEIPBundle\Entity\User\Notification $notification) {
+        $this->notification = $notification;
     }
 
 }
