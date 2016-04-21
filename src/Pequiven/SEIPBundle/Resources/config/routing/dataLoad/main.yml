@@ -42,6 +42,10 @@ pequiven_data_load_consumer_planning_service:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/consumer_planning_service.yml"
     prefix:   /consumer-planning-service
     
+pequiven_data_load_consumer_planning_gas_flow:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/consumer_planning_gas_flow.yml"
+    prefix:   /consumer-planning-gasflow
+    
 pequiven_data_load_inventory:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/inventory.yml"
     prefix:   /inventory
@@ -53,6 +57,10 @@ pequiven_data_load_unrealized_production:
 pequiven_data_load_detail_consumer_planning_service:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/detail_consumer_planning_service.yml"
     prefix:   /detail-consumer-planning-service
+    
+pequiven_data_load_detail_consumer_planning_gas_flow:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/detail_consumer_planning_gas_flow.yml"
+    prefix:   /detail-consumer-planning-gasflow
     
 pequiven_data_load_dashboard:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/dashboard.yml"

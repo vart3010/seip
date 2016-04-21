@@ -124,6 +124,8 @@
     {% endif %}
         {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/services.html.twig' %}
     <br /><br />
+        {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/gasFlow.html.twig' %}
+    <br /><br />
     {% if(plant_report.plant.childrens|length==0) %}
         <p class="button-height align-right">
             {% if periodService().isAllowPlanningReport %}
