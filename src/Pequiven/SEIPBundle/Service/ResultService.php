@@ -906,14 +906,20 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //                        $result = $result / 2;
                     } else if ($this->calculateRangeBad($indicator, $tendenty)) {//Rango Rojo R*0%
                         $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_BAD);
+                        //var_dump($indicator->getId());
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
+                        //var_dump($result);
                         $varMulti = 20 * $result;
+                        //var_dump($varMulti);
                         $varDiv = bcdiv($varMulti, 100, 2);
+                        //var_dump($varDiv);
                         $result = bcsub($result, $varDiv, 2);
+                        //var_dump($result);
 //                        if ($result < 0) {
 //                            $result = 0;
 //                        }
 //                        $result = 0;
+                        //die();
                     }
                 } else {
                     $result = 0;
@@ -992,8 +998,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $result = $result + 1;
             }
             if ($result > $varToCatch) {
-                $varMulti = $result * 100;
-                $result = bcdiv($varMulti, $varToCatch, 2);
+                $varMulti = $varToCatch * 100;
+                $result = bcdiv($varMulti, $result, 2);
 
 //                $varSum = bcadd($varToCatch, $varToCatch, 2);
 //                $varResult = bcadd($result, 0, 2);
@@ -1013,8 +1019,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //
 //                $result = bcdiv($varMulti, $varToCatch, 2);
             } else {
-                $varMulti = $varToCatch * 100;
-                $result = bcdiv($result, $varMulti, 2);
+                //var_dump($result);
+                $varMulti = $result * 100;
+                $result = bcdiv($varMulti, $varToCatch, 2);
+                //var_dump($result);
+                //die();
+                //var_dump($varMulti);
+                //var_dump($result);
 //                $varResult = bcadd($result, 0, 2);
 //                $varMinus = bcsub($varToCatch, $varResult, 2);
 //                if ($varToCatch >= -1 && $varToCatch <= 1) {
