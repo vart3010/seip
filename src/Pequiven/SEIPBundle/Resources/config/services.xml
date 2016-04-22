@@ -351,6 +351,9 @@
         <service id="pequiven.form.detail_consumer_planning_service" class="Pequiven\SEIPBundle\Form\DataLoad\Service\DetailConsumerPlanningServiceType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_service_detailconsumerplanningservice" />
         </service>
+        <service id="pequiven.form.detail_consumer_planning_gasflow" class="Pequiven\SEIPBundle\Form\DataLoad\GasFlow\DetailConsumerPlanningGasFlowType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_gasflow_detailconsumerplanninggasflow" />
+        </service>
         <service id="pequiven_seip.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

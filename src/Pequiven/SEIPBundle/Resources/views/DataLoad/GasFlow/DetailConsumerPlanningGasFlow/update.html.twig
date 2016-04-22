@@ -1,0 +1,24 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.report_template.raw_material"|trans ),
+        ( 'pequiven.update'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <form method="POST" action="{{ path("pequiven_detail_consumer_planning_service_update",{id:detail_consumer_planning_service.id }) }}">
+        <input type="hidden" name="_metod" value="PUT" />
+       <br /><br />
+       {% include 'PequivenSEIPBundle:DataLoad/Service/DetailConsumerPlanningService:_form.html.twig' %}
+       {{ actions.update() }}
+       <div class="hidden">
+           {{ form_rest(form) }}
+       </div>
+   </form>
+{% endblock %}

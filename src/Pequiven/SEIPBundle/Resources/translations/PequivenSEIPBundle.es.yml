@@ -444,6 +444,12 @@ pequiven_seip:
     consumer_planning_gasflow:
         consumer_planning_gasflow: Consumo de flujo de gas
         details_consumer_planning_gasflow: Detalle de consumo de flujo de gas
+        question:
+            delete: Desea eliminar este detalle de consumo de flujo de gas
+    gasflow_consumption_planning:
+        gasflow_consumption_planning: Presupuesto de consumo de flujo de gas
+        question:
+            delete: Desea eliminar este detalle de consumo de flujo de gas
 
     month:
         1: Enero
@@ -586,6 +592,7 @@ empty:
     consumer_planning_services: No hay servicios.
     consumer_planning_gas_flow: No hay consumo de flujo de gas.
     no_details_service: No hay detalles del consumo de servicios.
+    no_details_gasflow: No hay detalles del consumo de flujo de gas.
     inventorys: No hay detalles de inventario.
     unrealized_productions: No hay detalles de producción no realizada.
     day_stops: No hay detalles de paradas.
