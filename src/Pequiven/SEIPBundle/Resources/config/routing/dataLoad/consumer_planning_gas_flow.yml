@@ -1,6 +1,6 @@
 ## YAML Template.
 ---
-pequiven_consumer_planning_gas_flow_create:
+pequiven_consumer_planning_gasflow_create:
     path: /{plantReport}/create
     defaults:
         _controller: pequiven.controller.consumer_planning_gasflow:createAction
@@ -8,13 +8,13 @@ pequiven_consumer_planning_gas_flow_create:
             form: pequiven_seipbundle_dataload_gasflow_consumerplanninggasflow
     methods: [GET|POST]
     
-pequiven_consumer_planning_gas_flow_show:
+pequiven_consumer_planning_gasflow_show:
     path: /{id}/show
     defaults:
         _controller: pequiven.controller.consumer_planning_gasflow:showAction
     methods: [GET]
     
-pequiven_consumer_planning_gas_flow_update:
+pequiven_consumer_planning_gasflow_update:
     path: /{id}/update
     defaults:
         _controller: pequiven.controller.consumer_planning_gasflow:updateAction
@@ -22,7 +22,7 @@ pequiven_consumer_planning_gas_flow_update:
             form: pequiven_seipbundle_dataload_gasflow_consumerplanninggasflow
     methods: [GET|POST|PUT]
     
-pequiven_consumer_planning_gas_flow_delete:
+pequiven_consumer_planning_gasflow_delete:
     path: /{id}/delete
     defaults:
         _controller: pequiven.controller.consumer_planning_gasflow:deleteAction

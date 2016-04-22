@@ -36,13 +36,13 @@
     {#{% set details = consumer_planning_service.getDetailsByMonth %}
     {% set title_top = ('pequiven_seip.consumer_planning_service.details_consumer_planning_service'|trans) %}
     {% set unit = consumer_planning_service.service.serviceUnit %}
-    {% include 'PequivenSEIPBundle:DataLoad/RawMaterial/RawMaterialConsumptionPlanning:show/detail_tabs_raw_material_consumptions.html.twig' %}
+    {% include 'PequivenSEIPBundle:DataLoad/RawMaterial/RawMaterialConsumptionPlanning:show/detail_tabs_raw_material_consumptions.html.twig' %}#}
     <br /><br />
     <p class="button-height align-right">
         {% if periodService().isAllowPlanningReport %}
-            {{ buttons.generic(path('pequiven_consumer_planning_service_update', { 'id': consumer_planning_service.id }),('pequiven.edit'|trans({},'messages'))) }}
+            {{ buttons.generic(path('pequiven_consumer_planning_gasflow_update', { 'id': consumer_planning_gasflow.id }),('pequiven.edit'|trans({},'messages'))) }}
             &nbsp;
-            {{ buttons.delete(path('pequiven_consumer_planning_service_delete', { 'id': consumer_planning_service.id })) }}
+            {{ buttons.delete(path('pequiven_consumer_planning_gasflow_delete', { 'id': consumer_planning_gasflow.id })) }}
         {% endif %}
-    </p>#}
+    </p>
 {% endblock %}

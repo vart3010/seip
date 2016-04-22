@@ -7,8 +7,8 @@
         </h3>
         <div class="button-group absolute-right compact">
             {% if periodService().isAllowPlanningReport %}
-                {% if(plant_report.plant.childrens|length==0) %}
-                    <a class="button icon-list-add" href="{{ path('pequiven_consumer_planning_gas_flow_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+                {% if(plant_report.plant.childrens|length == 0) and (plant_report.consumerPlanningGasFlow|length == 0) %}
+                    <a class="button icon-list-add" href="{{ path('pequiven_consumer_planning_gasflow_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
                 {% endif %}
             {% endif %}
         </div>
@@ -30,7 +30,7 @@
                         </td>
                         <td class="low-padding align-center">
                             {% if periodService().isAllowPlanningReport %}
-                                <a href="{{ path("pequiven_consumer_planning_gas_flow_update",{id: consumerPlanningGasFlowObject.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                                <a href="{{ path("pequiven_consumer_planning_gasflow_update",{id: consumerPlanningGasFlowObject.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
                             {% endif %}
                         </td>
                     </tr>

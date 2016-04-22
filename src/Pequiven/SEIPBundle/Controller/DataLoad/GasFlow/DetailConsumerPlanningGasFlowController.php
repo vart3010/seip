@@ -32,7 +32,7 @@ class DetailConsumerPlanningGasFlowController extends SEIPController
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $resource = $this->domainManager->create($resource);
 
-            $url = $this->generateUrl("pequiven_consumer_planning_gas_flow_show",array(
+            $url = $this->generateUrl("pequiven_consumer_planning_gasflow_show",array(
                 "id" => $resource->getConsumerPlanningGasFlow()->getId(),
             ));
 
@@ -64,7 +64,7 @@ class DetailConsumerPlanningGasFlowController extends SEIPController
 
             $this->domainManager->update($resource);
 
-            $url = $this->generateUrl("pequiven_consumer_planning_gas_flow_show",array(
+            $url = $this->generateUrl("pequiven_consumer_planning_gasflow_show",array(
                 "id" => $resource->getConsumerPlanningGasFlow()->getId(),
             ));
 

@@ -47,7 +47,7 @@ class LinkGeneratorService extends LinkGenerator
             array('class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport','icon' => '','route' => 'pequiven_plant_report_show',"translation_domain" => "PequivenSEIPBundle"),
             array('class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning','icon' => '','route' => 'pequiven_plant_stop_planning_show',"translation_domain" => "PequivenSEIPBundle"),
             array('class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService','icon' => '','route' => 'pequiven_consumer_planning_service_show',"translation_domain" => "PequivenSEIPBundle"),
-            array('class' => 'Pequiven\SEIPBundle\Entity\DataLoad\GasFlow\ConsumerPlanningGasFlow','icon' => '','route' => 'pequiven_consumer_planning_gas_flow_show',"translation_domain" => "PequivenSEIPBundle"),
+            array('class' => 'Pequiven\SEIPBundle\Entity\DataLoad\GasFlow\ConsumerPlanningGasFlow','icon' => '','route' => 'pequiven_consumer_planning_gasflow_show',"translation_domain" => "PequivenSEIPBundle"),
         );
     }
     
