@@ -1982,6 +1982,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 
         $valuesIndicatorQuantity = count($valuesIndicator);
         $i = 0;
+        //var_dump($valuesIndicatorQuantity);
         foreach ($valuesIndicator as $valueIndicator) {
             $formulaParameters = $valueIndicator->getFormulaParameters();
             $resultItem = $this->getFormulaResultFromEQ($formula, $formulaParameters);
@@ -1991,8 +1992,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($details) {
                 if ($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID) {
                     if (($resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] != 0 || $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] != 0)) {
-                        $totalPlan = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
-                        $totalReal = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                        if($indicator->getNumberValueIndicatorToForce() > 0){
+                            if($i == $indicator->getNumberValueIndicatorToForce()){
+                                $totalPlan = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                                $totalReal = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                            }
+                        } else{
+                            $totalPlan = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                            $totalReal = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                        }
                     }
                     continue;
                 } elseif ($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity) {
@@ -2004,6 +2012,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $totalPlan += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
             $totalReal += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
         }
+        
+        //var_dump($totalReal);
+        //die();
 
         $value = $totalReal;
         $indicator

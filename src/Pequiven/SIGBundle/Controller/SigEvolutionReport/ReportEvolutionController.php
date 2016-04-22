@@ -271,11 +271,11 @@ class ReportEvolutionController extends ResourceController
 
         $AcObservation = $request->get('actionValue')['observations'];//RecibiendoObservations
 
-        $causeResult = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeAction);        
+        $causeResult = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeAction);
         
         //Calculando la cantidad de meses que durara la acción
         $dateStart = $request->get('actionResults')['dateStart'];
-        $dateEnd   = $request->get('actionResults')['dateEnd'];                
+        $dateEnd   = $request->get('actionResults')['dateEnd'];
         
         $monthStart = explode("/", $dateStart);//Sacando el mes de inicio
         $monthEnd   = explode("/", $dateEnd);//Sacando el mes de cierre        
@@ -311,11 +311,11 @@ class ReportEvolutionController extends ResourceController
         $apiDataUrl = "http://".$_SERVER['HTTP_HOST'].$apiDataUrl;
         //Añadiendo responsables
         for ($i=0; $i < $catnRes; $i++) { 
-            if($reponsibles[$i] != ''){
+            //if($reponsibles[$i] != ''){
                 $user = $this->get('pequiven_seip.repository.user')->find($reponsibles[$i]);
                 $notification = $this->getNotificationService()->setDataNotification("Informe de Evolución", "Ha sido asignado como responsable a un Plan de Acción en el Informe de Evolucion del ".$objectName." ". $object->getRef() ." con fecha de incio: ".$dateStart." y fecha de cierre: ".$dateEnd.", el cual presenta un avance de inicio de ".$AcValue."%.", 6 , 1, $apiDataUrl, $user);                        
                 $action->addResponsible($user);
-            }
+            //}
         }
         
         $action->setRef($ref);//referencia
@@ -355,7 +355,7 @@ class ReportEvolutionController extends ResourceController
                 $AcObservation = null;                    
             }
         }
-        $this->get('session')->getFlashBag()->add('success', "Plan de Acción Cargado Exitosamente");            
+        $this->get('session')->getFlashBag()->add('success', "Plan de Acción Cargado Exitosamente");
     
     }
 
