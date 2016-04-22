@@ -12,8 +12,9 @@
 {% endblock %}
 
 {% block body -%}
-    <form method="POST" ng-controller="PlantReportGroupController" action="{{ path("pequiven_plant_report_create",{reportTemplate:app.request.get("reportTemplate") }) }}">
+    <form method="POST" ng-controller="PlantReportGroupController" action="{{ path("pequiven_plant_report_group_create",{reportTemplate:app.request.get("reportTemplate") }) }}">
        <br /><br />
+       <input type="hidden" name="setUpdate" id="setUpdate" value="0" />
        {% include 'PequivenSEIPBundle:DataLoad/PlantReport/group:_form.html.twig' %}
        {{ actions.create() }}
        {{ form_rest(form) }}

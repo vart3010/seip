@@ -150,20 +150,22 @@
         </div>
 
 
-
-
         {{ form_rest(form) }}
         <a id="btnRefresh" href="#" class="button" >Refrescar</a>
     </div>
 </form>
-    
+
 
 {% if production %}
     <div class="with-padding">
         {% if byRange %}
             {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:reportVizualiceProductsByRange.html.twig' %}
         {% else %}
-            {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:reportVizualiceProducts.html.twig' %}
+            {% if groupsPlants %}
+                {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:reportVizualiceGroupsPlants.html.twig' %}
+            {% else %}
+                {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:reportVizualiceProducts.html.twig' %}
+            {% endif %}
         {% endif %}
     </div>
 {% endif %}

@@ -40,6 +40,12 @@ pequiven_plant_report_update:
     path: /{id}/update
     defaults:
         _controller: pequiven.controller.plant_report:updateAction
+
+        
+pequiven_plant_report_group_update:
+    path: /{id}/updateGroup
+    defaults:
+        _controller: pequiven.controller.plant_report:updateGroupAction
         
     methods: [GET|POST|PUT]
     

@@ -34,6 +34,13 @@ class PlantReport extends ModelBaseMaster {
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="nameGroup",type="string",length=255,nullable=true)
+     */
+    private $nameGroup;
+
+    /**
      * Reporte de plantilla
      * @var ReportTemplate
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate",inversedBy="plantReports")
@@ -72,7 +79,7 @@ class PlantReport extends ModelBaseMaster {
      * 
      * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",inversedBy="plantReport")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $plant;
 
@@ -156,7 +163,7 @@ class PlantReport extends ModelBaseMaster {
         $this->parentGroup = new \Doctrine\Common\Collections\ArrayCollection();
         $this->childrensGroup = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * 
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $childrens
@@ -450,13 +457,18 @@ class PlantReport extends ModelBaseMaster {
      * @ORM\PreUpdate()
      */
     public function calculate() {
-        $designCapacity = $this->getPlant()->getDesignCapacity();
-        $percentageCurrentCapacity = 0;
-        if ($designCapacity > 0) {
-            $percentageCurrentCapacity = ($this->currentCapacity * 100) / $designCapacity;
-        }
+        //var_dump($this->getPlant());die();
+        if (!is_null($this->getPlant())) {
+            $designCapacity = $this->getPlant()->getDesignCapacity();
+            $percentageCurrentCapacity = 0;
+            if ($designCapacity > 0) {
+                $percentageCurrentCapacity = ($this->currentCapacity * 100) / $designCapacity;
+            }
 
-        $this->percentageCurrentCapacity = $percentageCurrentCapacity;
+            $this->percentageCurrentCapacity = $percentageCurrentCapacity;
+        } else {
+            $this->percentageCurrentCapacity = 0.0;
+        }
     }
 
     public function init(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate) {
@@ -531,6 +543,14 @@ class PlantReport extends ModelBaseMaster {
      */
     public function getParent() {
         return $this->parent;
+    }
+
+    function getNameGroup() {
+        return $this->nameGroup;
+    }
+
+    function setNameGroup($nameGroup) {
+        $this->nameGroup = $nameGroup;
     }
 
 }

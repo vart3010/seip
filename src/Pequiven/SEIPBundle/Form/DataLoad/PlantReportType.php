@@ -43,7 +43,7 @@ class PlantReportType extends SeipAbstractForm {
             },
                 ))
                 ->add('plant', null, $parametersToSet)
-                ->add('childrensGroup', null, $parametersToSet)
+                //->add('childrensGroup', null, $parametersToSet)
                 ->add('currentCapacity', null, array(
                     'label_attr' => array('class' => 'label'),
                     "attr" => array("class" => "input"),

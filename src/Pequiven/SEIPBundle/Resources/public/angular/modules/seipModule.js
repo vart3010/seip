@@ -537,32 +537,39 @@ angular.module('seipModule.controllers', [])
         .controller("PlantReportGroupController", function ($scope, notificationBarService, $http, $filter, $timeout, $cookies) {
             var entity = angular.element('#pequiven_seipbundle_dataload_plantreport_group_entity');
             var childrensPlants = angular.element('#pequiven_seipbundle_dataload_plantreport_group_childrensGroup');
-            console.log(entity);
-            childrensPlants.select2('val', '');
-            childrensPlants.select2('enable', false);
+            var setUpdate = $("#setUpdate");
             
+            if (setUpdate.val() == 0) {
+                console.log(setUpdate.val());
+                childrensPlants.select2('val', '');
+                childrensPlants.select2('enable', false);
+            }
+
             entity.on('change', function (e) {
                 console.log(e.val);
                 if (e.val) {
                     var entityId = e.val;
-                    //tacticalObjective.find('option').remove().end();
+                    childrensPlants.find('option').remove().end();
                     //notificationBarService.getLoadStatus().loading();
                     $http.get(Routing.generate("pequiven_entity_load_data_group", {entityId: entityId})).success(function (data) {
-                        /*tacticalObjective.append('<option value="">' + Translator.trans('pequiven.select') + '</option>');
+                        childrensPlants.append('<option value="">' + Translator.trans('pequiven.select') + '</option>');
+                        //console.log(data);
+
                         angular.forEach(data, function (value) {
-                            tacticalObjective.append('<option value="' + value.id + '">' + value.ref + " " + value.description + ' - ' + value.gerencia.description + '</option>');
+                            //console.log(value.plant);
+                            if (value.plant != null) {
+                                childrensPlants.append('<option value="' + value.id + '">' + value.plant.name + '</option>');
+                            }
                         });
                         if (data.length > 0) {
-                            tacticalObjective.select2('val', e.val);
-                            tacticalObjective.select2('enable', true);
+                            childrensPlants.select2('val', e.val);
+                            childrensPlants.select2('enable', true);
                         } else {
-                            tacticalObjective.select2('val', '');
-                            tacticalObjective.select2('enable', false);
+                            childrensPlants.select2('val', '');
+                            childrensPlants.select2('enable', false);
                         }
-                        notificationBarService.getLoadStatus().done();*/
+                        notificationBarService.getLoadStatus().done();
                     });
-                    childrensPlants.select2('val', '');
-                    childrensPlants.select2('enable', true);
                 } else {
                     childrensPlants.select2('val', '');
                     childrensPlants.select2('enable', false);

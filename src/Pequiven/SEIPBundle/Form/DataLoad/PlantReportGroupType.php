@@ -46,6 +46,10 @@ class PlantReportGroupType extends SeipAbstractForm {
                     "attr" => array("class" => "switch medium mid-margin-right", "data-text-on" => "Si", "data-text-off" => "No"),
                     "required" => false,
                 ))
+                ->add('nameGroup', null, array(
+                    'label_attr' => array('class' => 'label'),
+                    "attr" => array("class" => "input"),
+                ))
                 ->add('entity', null, array(
                     'label_attr' => array('class' => 'label'),
                     "empty_value" => "",
