@@ -28,7 +28,26 @@ class ObjetivesController extends EvolutionController
      *
      */
     public function evlutionAction(Request $request){
-        return $this->render('PequivenSIGBundle:Objetives:evolution.html.twig');        
+        //return $this->render('PequivenSIGBundle:Objetives:evolution.html.twig');  
+        $resource = $this->findOr404($request);
+        
+        
+        $id     = $request->get('id');
+        $month  = $request->get('month');
+
+        $objetive = $this->get('pequiven.repository.objetive')->find($id); //Obtenemos el indicador   
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('evolution.html'))
+                ->setData(array(
+                'typeObject' => 3,
+                'month'      => $month,
+                'entity'     => $objetive,
+                $this->config->getResourceName() => $resource,                
+        ));
+
+        return $this->handleView($view);      
     }
 
     /**
