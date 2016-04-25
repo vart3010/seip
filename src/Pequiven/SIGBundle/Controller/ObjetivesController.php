@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Pequiven\SIGBundle\Controller\EvolutionController;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
 
@@ -14,11 +15,20 @@ use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
  */
-class ObjetivesController extends ResourceController
+class ObjetivesController extends EvolutionController
 {
     public function strategicAction()
     {
         return $this->render('PequivenSIGBundle:Objetives:list.html.twig');
+    }
+    
+    /**
+     *
+     *  Metodo informe de evolución
+     *
+     */
+    public function evlutionAction(Request $request){
+        return $this->render('PequivenSIGBundle:Objetives:evolution.html.twig');        
     }
 
     /**
@@ -475,23 +485,6 @@ class ObjetivesController extends ResourceController
         $objWriter->save('php://output');
         exit;
         
-    }
-
-
-    /**
-     * 
-     * @return \Pequiven\SEIPBundle\Service\SecurityService
-     */
-    protected function getSecurityService() {
-
-        return $this->container->get('seip.service.security');
-    } 
-	/**
-     *  Period
-     *
-     */
-    protected function getPeriodService() {
-        return $this->container->get('pequiven_seip.service.period');
     }
    
 }
