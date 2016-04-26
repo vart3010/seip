@@ -15,7 +15,7 @@ use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
  */
-class ObjetivesController extends EvolutionController
+class ObjetivesSigController extends EvolutionController
 {
     public function strategicAction()
     {
@@ -504,6 +504,22 @@ class ObjetivesController extends EvolutionController
         $objWriter->save('php://output');
         exit;
         
+    }
+
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    protected function getSecurityService() {
+
+        return $this->container->get('seip.service.security');
+    } 
+    /**
+     *  Period
+     *
+     */
+    protected function getPeriodService() {
+        return $this->container->get('pequiven_seip.service.period');
     }
    
 }
