@@ -5,7 +5,7 @@ namespace Pequiven\SEIPBundle\Service;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class productReportService implements ContainerAwareInterface {
+class ProductReportService implements ContainerAwareInterface {
 
     private $container;
 

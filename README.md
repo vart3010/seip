@@ -72,3 +72,17 @@ services:
 ```
 Cambiar el segundo pequiven_data_load --> pequiven_data_load_main
 ```
+
+**Pequiven/MasterBundle/Admin/PeriodAdmin.php**
+```
+Cambiar $xor = $qb->expr()->orX($qb->expr()->isNull('p_c')); -> isNull('p_c.id'));
+```
+
+**Configurar la zona horaria**
+```
+/etc/php5/apache2/php.ini -> date.timezone = "America/Caracas"
+
+/etc/apache2/apache2.conf -> SetEnv TZ America/Caracas
+
+/etc/mysql/conf.d/mariadb.cnf -> default-time-zone = "America/Caracas"
+```
