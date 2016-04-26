@@ -4192,7 +4192,7 @@ class IndicatorService implements ContainerAwareInterface {
             1 => "2014",
             2 => "2015"
         ];
-        
+
         $valuesLastPeriod = $this->chargeLastPeriod($indicator, $periods);
 
         $em = $this->getDoctrine();        
@@ -4236,10 +4236,12 @@ class IndicatorService implements ContainerAwareInterface {
         //Lamado obj 2015
         $obj = $this->getObjIndicator($indicator);
         //Paso de Valores Validos
-        $resultNumbers = $this->getIndicatorHasResultValid($indicator);
-        
+        //$resultNumbers = $this->getIndicatorHasResultValid($indicator);
+        $resultNumbers = $month;
+
         //Llamado de frecuencia de Notificacion del Indicador
         $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+
         //Número de indicadores asociados
         $totalNumValues = count($indicator->getValuesIndicator());        
         if ($totalNumValues >= 3) {
@@ -4351,8 +4353,8 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["data"][] = $dataObj; //Acumulado
             
             //Carga de Tendencia
-            $cantValue = count($dataSetTend['data']);
-            if ($cantValue >= 4) {
+            $cantValue = count($dataSetTend['data']);            
+            if ($cantValue >= 4 and $resultNumbers > 2) {
                 $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetTend['data']);
             } elseif (!$cantValue) {
                 $dataSetValues['tendencia'] = 0;
