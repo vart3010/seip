@@ -1364,7 +1364,7 @@ class ReportTemplateController extends SEIPController {
                     'label_attr' => array('class' => 'label bold'),
                     'required' => false,
                     'translation_domain' => 'PequivenSEIPBundle',
-                    'data' => $defaultShow,
+                    'data' => false,
                 ])
                 ->getForm();
 
@@ -1442,7 +1442,7 @@ class ReportTemplateController extends SEIPController {
             $observations = array();
             $arrayIdProducts = array();
 
-            $groupsProducts = array();
+            //$groupsProducts = array();
 
             //CONSUMO DE MATERIA PRIMA
             $arrayProdServices = array();
@@ -2418,6 +2418,12 @@ class ReportTemplateController extends SEIPController {
                 } //END REPORT TEMPLATE RANGE
 
 
+                $reportService = $this->getProductReportService();
+                $graphicProducctionRange = $reportService->generateColumn3dLineryPerRange(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $arrayProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd));
+
+
+
+
                 $data = array(
                     'productsReport' => "",
                     'form' => $form->createView(),
@@ -2447,6 +2453,7 @@ class ReportTemplateController extends SEIPController {
                     'showObservation' => $showObservation,
                     'dateFrom' => $dateFrom,
                     'dateEnd' => $dateEnd,
+                    'graphicRange' => $graphicProducctionRange
                 );
 
 
@@ -2777,6 +2784,7 @@ class ReportTemplateController extends SEIPController {
         if ($byRange === true) {
 
 
+
             $dateDesde = $dateFrom->format("U");
             $dateHasta = $dateEnd->format("U");
 
@@ -2975,7 +2983,8 @@ class ReportTemplateController extends SEIPController {
                 $totalProdPlan,
                 $totalProdReal,
                 $subTotalProdPlan,
-                $totalProdPlan - $totalProdReal);
+                $totalProdPlan - $totalProdReal
+            );
 
 //TOTALES DE MATERIA PRIMA
             $arrayRawMaterialTotals = array(
