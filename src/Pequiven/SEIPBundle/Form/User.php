@@ -6,7 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
-
+use Pequiven\MasterBundle\Repository\RolRepository;
+use Symfony\Component\Form\FormBuilder;
 /**
  * Description of User
  *
@@ -21,8 +22,12 @@ class User extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $parametersUser = array(
             'class' => 'Pequiven\MasterBundle\Entity\Rol',
+            'query_builder' =>
+            function(RolRepository $qb) {
+                return $qb->FindQBRolNotAdmin();
+            },
             'property' => 'description',
-            'label' => 'Grupos de Roles',            
+            'label' => 'Grupos de Roles',
             'attr' => array(
                 'class' => 'select2 input-xlarge'
             ),
@@ -59,7 +64,7 @@ class User extends AbstractType {
                 ->add('complejo', 'entity', array(
                     'class' => 'Pequiven\MasterBundle\Entity\Complejo',
                     'property' => 'description', 'required' => false,
-                    'empty_data' => null, 
+                    'empty_data' => null,
                     'empty_value' => 'Ninguna',
                     'label' => 'pequiven_seip.complejo',
                     'translation_domain' => 'PequivenSEIPBundle',
@@ -91,7 +96,7 @@ class User extends AbstractType {
                     'empty_data' => null,
                     'empty_value' => 'Ninguna',
                     'required' => false,
-                    'label' => 'Gerencia de 2da Línea',                    
+                    'label' => 'Gerencia de 2da Línea',
                     'attr' => array('class' => 'select2 input-xlarge')))
                 ->add('direction', null, array(
                     'label' => 'pequiven_seip.direction',
@@ -101,8 +106,8 @@ class User extends AbstractType {
                     'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
                     'property' => 'plant',
                     'required' => false,
-                    'empty_data' => null,                    
-                    'label' => 'Reportes de Plantas de Producción',                    
+                    'empty_data' => null,
+                    'label' => 'Reportes de Plantas de Producción',
                     'attr' => array('class' => 'select2 input-xlarge'),
                     'multiple' => true,
                     'group_by' => 'reportTemplate'))
@@ -112,7 +117,7 @@ class User extends AbstractType {
                     'required' => false,
                     'empty_data' => null,
                     'empty_value' => 'Ninguna',
-                    'label' => 'Report Templates de Producción',                    
+                    'label' => 'Report Templates de Producción',
                     'attr' => array('class' => 'select2 input-xlarge'),
                     'multiple' => true))
                 ->add('groups', 'entity', $parametersUser)
@@ -123,23 +128,23 @@ class User extends AbstractType {
                         'ROLE_WORKER_PQV' => 'Trabajador de pequiven',
                         'ROLE_WORKER_PLANNING' => 'Trabajador de planificacion'),
                     'multiple' => true,
-                    'required' => false,                    
+                    'required' => false,
                     'attr' => array('class' => 'select2 input-xlarge')))
-                                /* ->add('plantReports', null, array(
-                  'query_builder' => function(\Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository $repository) {
-                  return $repository->findByPlantReport();
-                  },
-                  'label' => 'Reportes de plantas',
-                  'label_attr' => array('class' => 'label'),
-                  'attr' => array(
-                  'class' => "input-xlarge select2",
-                  //'style' => 'width: 270px',
-                  //'multiple' => 'multiple'
-                  ),
-                  'multiple' => true,
-                  'group_by' => 'reportTemplate',
-                  'required' => true,
-                  )) */
+        /* ->add('plantReports', null, array(
+          'query_builder' => function(\Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository $repository) {
+          return $repository->findByPlantReport();
+          },
+          'label' => 'Reportes de plantas',
+          'label_attr' => array('class' => 'label'),
+          'attr' => array(
+          'class' => "input-xlarge select2",
+          //'style' => 'width: 270px',
+          //'multiple' => 'multiple'
+          ),
+          'multiple' => true,
+          'group_by' => 'reportTemplate',
+          'required' => true,
+          )) */
 //            ->add('supervised',null,array(
 //                'label' => 'pequiven_seip.supervised',
 //                'translation_domain' => 'PequivenSEIPBundle',
