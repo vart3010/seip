@@ -97,6 +97,95 @@ class EvolutionService implements ContainerAwareInterface {
     }   
 
     /**
+     * 
+     * Gráfico de Columna para Causas de Desviación
+     * @return type
+     */
+    public function getDataChartOfCausesEvolution($object, $urlExportFromChart, $month, $typeObject) {
+
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        
+        $chart = array();
+        $chart["valueFontColor"] = "#000000";
+        $chart["showvalues"] = "0";
+        $chart["showSum"] = "1";
+        $chart["numberSuffix"] = "%";
+        $chart["bgalpha"] = "0,0";
+        $chart["baseFontColor"] = "#ffffff";
+        $chart["bgColor"] = "#ffffff";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";
+        $chart["toolTipColor"] = "#ffffff";
+        $chart["outCnvBaseFontColor"] = "#000000";
+        $chart["visible"] = "1";
+        $chart["theme"] = "fint";
+        $chart["snumbersuffix"] = "%";
+        $chart["decimals"] = "0";
+        $chart["setadaptiveymin"] = "1";
+        $chart["setadaptivesymin"] = "1";
+        $chart["linethickness"] = "5";
+        $chart["showborder"] = "0";
+        $chart["exportenabled"] = "1";
+        $chart["exportatclient"] = "0";
+        $chart["exportFormats"] = "PNG= Exportar Informe de Evolución PDF";
+        $chart["exportFileName"] = "Grafico Resultados ";
+        $chart["exporthandler"] = $urlExportFromChart;
+
+        //Inicialización
+        $category = $dataSetCause = array();
+        $label = $dataCause = array();
+        $contCause = 1;
+        //Carga de Nombres de Labels
+        $dataSetCause["seriesname"] = "Causas";
+        $monthCause = (int)$month;
+        
+        switch ($typeObject) {
+            case '1':
+                $query = $object->getindicatorCause();
+                break;
+            case '2':
+                $query = $object->getArrangementProgramCauses();
+                break;
+            case '3':
+                $query = 0;
+                break;            
+            default:
+                $query = 0;
+                break;
+        }            
+
+        foreach ($query as $value) {                
+            if ($value->getMonth() === $monthCause) {                
+                $label["label"] = $value->getCauses();                    
+                $contCause = $contCause + 1;
+                $category[] = $label;
+            }
+        }
+        
+        foreach ($query as $value) {                
+            if ($value->getMonth() === $monthCause) {                                    
+                $dataCause["value"] = $value->getvalueOfCauses();
+                $dataSetCause["data"][] = $dataCause;                
+            }                
+        }        
+           
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetCause;
+
+        return $data;
+    }
+
+    /**
      *
      *
      */

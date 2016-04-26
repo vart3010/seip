@@ -48,9 +48,9 @@ class ArrangementProgramSigController extends ResourceController
 
         $ArrangementProgramService = $this->getArrangementProgramService(); //Obtenemos el servicio del indicador
         
-        $dataChart = $ArrangementProgramService->getDataChartOfArrangementProgramEvolution($ArrangementProgram, $urlExportFromChart); //Obtenemos la data del gráfico de acuerdo al programa
+        $dataChart = $ArrangementProgramService->getDataChartOfArrangementProgramEvolution($ArrangementProgram, $urlExportFromChart, $month); //Obtenemos la data del gráfico de acuerdo al programa
 
-        $dataCause = $ArrangementProgramService->getDataChartOfCausesEvolution($ArrangementProgram, $month, $urlExportFromChart); //Obtenemos la data del grafico de las causas de desviación
+        $dataCause = $evolutionService->getDataChartOfCausesEvolution($ArrangementProgram, $urlExportFromChart, $month, $typeObject); //Obtenemos la data del grafico de las causas de desviación
         
         $analysis = $sumCause = 0;
 

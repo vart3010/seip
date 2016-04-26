@@ -189,7 +189,7 @@ class IndicatorSigController extends EvolutionController {
         $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicatorBase,$urlExportFromChart,$month); //Obtenemos la data del gráfico de acuerdo al indicador
         
         //Carga de los datos de la grafica de las Causas de Desviación
-        $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month, $urlExportFromChart); //Obtenemos la data del grafico de las causas de desviación
+        $dataCause = $evolutionService->getDataChartOfCausesEvolution($indicator, $urlExportFromChart, $month, $typeObject); //Obtenemos la data del grafico de las causas de desviación
         
         $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $idIndicator, 'month' => $month));
         foreach ($results as $value) {
