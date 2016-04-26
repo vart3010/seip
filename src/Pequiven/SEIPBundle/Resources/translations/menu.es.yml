@@ -101,10 +101,10 @@ app:
                             strategic: Estratégico
                             tactic: Táctico
                             operative: Operativo
-                            recalculate: Recalcular resultados
+                            recalculate: Recalcular Resultados
                         operations:
                             main: Operaciones
-                            recalculate_results: Recalcular resultados
+                            recalculate_results: Recalcular Resultados
                         monitor:
                             main: Monitor de Carga
                             objective_tactic: Objetivos Tácticos

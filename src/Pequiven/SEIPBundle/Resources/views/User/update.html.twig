@@ -1,103 +1,264 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
-
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
-{% block body -%}
-    <form action="{{ path('pequiven_user_update',{id:user.id} ) }}" method="POST" >
-        <input type="hidden" name="_method" value="PUT">
+{% block before_body %}    
+    {{ contentHeader(
+        { ( path('userList') ): ("Usuarios") },
+         ("Editar")
+    ) }}
+{% endblock %}
+{% block body %}
+    <br><br>
+    <form action="{{ path('pequiven_user_update',{id:user.id} ) }}" method="POST" >             
+        <fieldset class="fieldset">
+            <legend class="legend"><b>Datos Personales</b></legend>
+            <div class="with-padding">
+                <div class="columns">
+                    <div class="new-row tree-columns bold">
+                        {{ form_label(form.username) }}:
+                    </div>
+                    <div class="tree-columns">
+                        {{ form_widget(form.username) }}
+                        {{ form_errors(form.username) }}
+                    </div>
+                    <div class="tree-columns bold">
+                        {{ form_label(form.firstname) }}:
+                    </div>
+                    <div class="tree-columns">
+                        {{ form_widget(form.firstname) }}
+                        {{ form_errors(form.firstname) }}
+                    </div>
+                    <div class="tree-columns bold">
+                        {{ form_label(form.lastname) }}:
+                    </div>
+                    <div class="tree-columns">
+                        {{ form_widget(form.lastname) }}
+                        {{ form_errors(form.lastname) }}
+                    </div>
+                    <div class="new-row tree-columns bold">
+                        {{ form_label(form.numPersonal) }}:
+                    </div>
+                    <div class="tree-columns">
+                        {{ form_widget(form.numPersonal) }}
+                        {{ form_errors(form.numPersonal) }}
+                    </div>
+                    <div class="tree-columns bold">
+                        {{ form_label(form.identification) }}:
+                    </div>
+                    <div class="two-columns">
+                        {{ form_widget(form.identification) }}
+                        {{ form_errors(form.identification) }}
+                    </div>
+                    <div class="tree-columns bold">
+                        {{ form_label(form.cellphone) }}:
+                    </div>
+                    <div class="two-columns">
+                        {{ form_widget(form.cellphone) }}
+                        {{ form_errors(form.cellphone) }}
+                    </div>
+
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="fieldset">
+            <legend class="legend"><b>Datos Laborales</b></legend>
+            <div class="with-padding">
+                <div class="columns">
+                    <div class="new-row tree-columns bold">
+                        {{ form_label(form.complejo) }}:
+                    </div>
+                    <div class="tree-columns">
+                        {{ form_widget(form.complejo) }}
+                        {{ form_errors(form.complejo) }}
+                    </div>
+                    <div class="tree-columns bold">
+                        {{ form_label(form.gerencia) }}:
+                    </div>
+                    <div class="tree-columns">
+                        {{ form_widget(form.gerencia) }}
+                        {{ form_errors(form.gerencia) }}
+                    </div>
+                    <div class="new-row tree-columns bold">
+                        {{ form_label(form.gerenciaSecond) }}:
+                    </div>
+                    <div class="tree-columns">
+                        {{ form_widget(form.gerenciaSecond) }}
+                        {{ form_errors(form.gerenciaSecond) }}
+                    </div>
+                    <div class="tree-columns bold">
+                        {{ form_label(form.direction) }}:
+                    </div>
+                    <div class="tree-columns">
+                        {{ form_widget(form.direction) }}
+                        {{ form_errors(form.direction) }}
+                    </div>
+                    <div class="new-row tree-columns bold">
+                        {{ form_label(form.statusWorker) }}:
+                    </div>
+                    <div class="tree-columns">
+                        {{ form_widget(form.statusWorker) }}
+                        {{ form_errors(form.statusWorker) }}
+                    </div>
+                    <div class="one-column bold">
+                        {{ form_label(form.ext) }}:
+                    </div>
+                    <div class="two-columns">
+                        {{ form_widget(form.ext) }}
+                        {{ form_errors(form.ext) }}
+                    </div>
+                    <div class="one-column bold">
+                        {{ form_label(form.locked) }}:
+                    </div>
+                    <div class="one-column">
+                        {{ form_widget(form.locked) }}
+                        {{ form_errors(form.locked) }}
+                    </div>
+                    <div class="two-columns bold">
+                        {{ form_label(form.affiliatedWorker) }}:
+                    </div>
+                    <div class="one-column">
+                        {{ form_widget(form.affiliatedWorker) }}
+                        {{ form_errors(form.affiliatedWorker) }}
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="fieldset">
+            <legend class="legend"><b>Perfiles</b></legend>
+            <div class="with-padding">
+                <div class="columns">
+                    <div class="new-row six-columns bold">
+                        {{ form_label(form.plantReports) }}:     <br>               
+                        {{ form_widget(form.plantReports) }}
+                        {{ form_errors(form.plantReports) }}
+                    </div>                   
+                    <div class="six-columns bold">
+                        {{ form_label(form.reportTemplates) }}:<br>
+                        {{ form_widget(form.reportTemplates) }}
+                        {{ form_errors(form.reportTemplates) }}
+                    </div>
+                    <div class="new-row six-columns bold">
+                        {{ form_label(form.groups) }}:     <br>               
+                        {{ form_widget(form.groups) }}
+                        {{ form_errors(form.groups) }}
+                    </div>                   
+                    <div class="six-columns bold">
+                        {{ form_label(form.roles) }}:<br>
+                        {{ form_widget(form.roles) }}
+                        {{ form_errors(form.roles) }}
+                    </div>
+                </div>
+            </div>
+        </fieldset>
         {{ form_widget(form) }}
-    
-        {{ actions.update() }}
-    </form>
+
+        <input type="hidden" name="_method" value="PUT">
+
+        <fieldset class="fieldset">
+            <legend class="legend"><b>Configuraciones</b></legend>
+            {% set user = user %}      
+            {% include 'PequivenSEIPBundle:User:show.html.twig' %}
+        </fieldset>
+        <table width="80%">
+            <tr>
+                <td class="align-center">                    
+                    {{ actions.update() }}
+                </td>
+            </tr>
+        </table>
+
+    </form>    
+
+
 {% endblock %}
 
 {% block javascript %}
     {{ parent() }}
     <script type="text/javascript">
-        
-        var selectGerenciaSecond =  $("#pequiven_seipbundle_user_gerenciaSecond"),//Select de Gerencia de 2da Línea
-            selectGerenciaFirst =  $("#pequiven_seipbundle_user_gerencia")//Select de Gerencia de 1ra Línea
-        ;
-        
-        $(document).ready(function()
+
+        var selectGerenciaSecond = $("#pequiven_seipbundle_user_gerenciaSecond"), //Select de Gerencia de 2da Línea
+                selectGerenciaFirst = $("#pequiven_seipbundle_user_gerencia")//Select de Gerencia de 1ra Línea
+                ;
+
+        $(document).ready(function ()
         {
-            
+
             charge();
-            
-            function charge(){
+
+            function charge() {
                 chargeSelectGerenciaSecond("selected");
             }
         });
-        
-        selectGerenciaFirst.on("select2-selecting", function(e) {
-            chargeSelectGerenciaSecond('choice',e);
+
+        selectGerenciaFirst.on("select2-selecting", function (e) {
+            chargeSelectGerenciaSecond('choice', e);
             //chargeList(e);
             //displayObjetiveStrategicFromLineStrategic();//Actualizamos los Objetivos Estratégicos
-        })
-        
-        selectGerenciaFirst.change(function(){
-            selectGerenciaSecond.select2("val",'');
         });
-        
-        function chargeSelectGerenciaSecond(type,e){
+
+        selectGerenciaFirst.change(function () {
+            selectGerenciaSecond.select2("val", '');
+        });
+
+        function chargeSelectGerenciaSecond(type, e) {
             var data = '';
             var gerenciaSecondValue = selectGerenciaSecond.val();
             var gerenciaValue = selectGerenciaFirst.val();
-            if(type == 'choice'){
+            if (type == 'choice') {
                 data = {
                     gerencia: $.trim(e.val),
                 };
-            } else{
+            } else {
                 data = {
-                    gerencia: gerenciaValue,
+                    gerencia: gerenciaValue
                 };
             }
-            
+
             $.ajax({
                 type: 'post',
                 url: '{{ path("select_gerenciaSecond") }}',
                 data: data,
-                success: function(data) {
-                    
+                success: function (data) {
+
                     $("#pequiven_seipbundle_user_gerenciaSecond optgroup").remove();
                     $("#pequiven_seipbundle_user_gerenciaSecond option[value]").remove();
 
-                    if(typeof data[0].empty === 'undefined'){
+                    if (typeof data[0].empty === 'undefined') {
                         var cantidad = data.length;
                         var text = '';
                         text = text + '<option value>Ninguna</option>';
-                        
+
                         text = text + '<optgroup label="' + data[0].optGroup + '">';
 
-                        for(var i=0, total = data.length; i<total; i++){
-                            if(i == 0){
-                                if(type == 'selected'  && data[i].id == gerenciaSecondValue){
+                        for (var i = 0, total = data.length; i < total; i++) {
+                            if (i == 0) {
+                                if (type == 'selected' && data[i].id == gerenciaSecondValue) {
                                     text = text + '<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>';
-                                } else{
+                                } else {
                                     text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
                                 }
-                            } else if (data[i].idGroup != data[i-1].idGroup && (i + 1) < cantidad ){
-                                if(type == 'selected' && data[i].id == gerenciaSecondValue){
-                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>';
-                                } else{
-                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                            } else if (data[i].idGroup != data[i - 1].idGroup && (i + 1) < cantidad) {
+                                if (type == 'selected' && data[i].id == gerenciaSecondValue) {
+                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' + '<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>';
+                                } else {
+                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
                                 }
-                            } else if (data[i].idGroup != data[i-1].idGroup && (i + 1) == cantidad ){
-                                if(type == 'selected' && data[i].id == gerenciaSecondValue){
-                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" selected="selected" >' + data[i].description + '</option> </optgroup>';
-                                } else{
-                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
+                            } else if (data[i].idGroup != data[i - 1].idGroup && (i + 1) == cantidad) {
+                                if (type == 'selected' && data[i].id == gerenciaSecondValue) {
+                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' + '<option value="' + data[i].id + '" selected="selected" >' + data[i].description + '</option> </optgroup>';
+                                } else {
+                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' + '<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
                                 }
-                            } else if ((i+1) == cantidad){
-                                if(type == 'selected' && data[i].id == gerenciaSecondValue){
-                                    text = text +'<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option> </optgroup>';
-                                } else{
-                                    text = text +'<option value="' + data[i].id + '">' + data[i].description + '</option> </optgroup>';
+                            } else if ((i + 1) == cantidad) {
+                                if (type == 'selected' && data[i].id == gerenciaSecondValue) {
+                                    text = text + '<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option> </optgroup>';
+                                } else {
+                                    text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option> </optgroup>';
                                 }
-                            } else{
-                                if(type == 'selected' && data[i].id == gerenciaSecondValue){
+                            } else {
+                                if (type == 'selected' && data[i].id == gerenciaSecondValue) {
                                     text = text + '<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>';
-                                } else{
+                                } else {
                                     text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
                                 }
                             }
@@ -106,23 +267,23 @@
                         selectGerenciaSecond.append(text);
                         selectGerenciaSecond.select2({
                         });
-                        selectGerenciaSecond.select2("enable",true);
-                    } else{
+                        selectGerenciaSecond.select2("enable", true);
+                    } else {
                         chargeSelect2GerenciaSecond("empty");
                     }
                 }
             });
         }
-        
+
         //Función que carga el select2 de Gerencia de 2da Línea
-        function chargeSelect2GerenciaSecond(type){
+        function chargeSelect2GerenciaSecond(type) {
             selectGerenciaSecond.select2({
                 allowClear: true,
                 placeholder: '{{ 'form.messages.selectObjetiveStrategicPlaceholder'|trans }}',
-                formatNoMatches: function(term) {
-                    if(type == 'full'){
+                formatNoMatches: function (term) {
+                    if (type == 'full') {
                         return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
-                    } else if (type == 'empty'){
+                    } else if (type == 'empty') {
                         return "{{ 'form.messages.selectObjetiveStrategicFormatNoResult'|trans }}";
                     } else {
                         return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
