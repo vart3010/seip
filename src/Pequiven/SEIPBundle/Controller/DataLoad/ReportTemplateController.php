@@ -1837,15 +1837,18 @@ class ReportTemplateController extends SEIPController {
                     ////POR GRUPO DE PLANTAS Y REPORTE HASTA LA FECHA
                     //
                     //$summaryProduction = array();
+                    $arrayConsumerServices = array();
+                    $arrayUnrealizedProduction = array();
+                    $arrayInventory = array();
                     $groupsCount = 0;
                     foreach ($reportTemplates as $reportTemplate) {
                         foreach ($reportTemplate->getPlantReports() as $plantReport) {
                             $childrens = $plantReport->getChildrensGroup();
                             $nameGroup = $plantReport->getNameGroup();
 
+
                             if (count($childrens) > 0) {
-                                //var_dump($plantReport->getId());
-                                //var_dump($nameGroup);
+                                //VARS RAW MATERIAL
                                 $dayPlan = 0;
                                 $dayReal = 0;
                                 $monthPlan = 0;
@@ -1853,15 +1856,17 @@ class ReportTemplateController extends SEIPController {
                                 $yearPlan = 0;
                                 $yearReal = 0;
 
-                                $dayPlanConsume = 0;
-                                $dayRealConsume = 0;
-                                $monthPlanConsume = 0;
-                                $monthRealConsume = 0;
-                                $yearPlanConsume = 0;
-                                $yearRealConsume = 0;
+                                //VARS PNR
+                                $dayPnr = 0.0;
+                                $monthPnr = 0.0;
+                                $yearPnr = 0.0;
+
+                                //VARS INVENTORY
+                                $dayInventory = 0.0;
+                                $monthInventory = 0.0;
+                                $yearInventory = 0.0;
 
                                 foreach ($childrens as $child) {
-                                    //var_dump($child->getId());
 
                                     foreach ($child->getProductsReport() as $productReport) {
                                         if ($productReport->getIsGroup() == 0) {
@@ -1871,6 +1876,8 @@ class ReportTemplateController extends SEIPController {
 
                                             $dayPlan+=$summaryDay["plan"];
                                             $dayReal+=$summaryDay["real"];
+
+
 
                                             //ME TRAIGO LAS OBSERVACIONES 
                                             $observations[] = array(
@@ -1884,6 +1891,7 @@ class ReportTemplateController extends SEIPController {
                                             $MonthPlan+=$summaryMonth["plan_month"];
                                             $MonthPlanAcumulated+=$summaryMonth["plan_acumulated"];
                                             $MonthRealAcumualated+=$summaryMonth["real_acumulated"];
+
 
                                             //SUMMARY YEAR
                                             $summaryYear = $productReport->getSummaryYear($dateReport, $typeReport);
@@ -1911,46 +1919,65 @@ class ReportTemplateController extends SEIPController {
                                             }
                                         }
                                     }//FIN DE PRODUCTOS POR PLANT REPORT
-
+                                    $consumeReal = 0.0;
+                                    $consumePlan = 0.0;
+                                    $consumeRealMonth = 0.0;
+                                    $consumePlanMonth = 0.0;
+                                    $consumeRealYear = 0.0;
+                                    $consumePlanYear = 0.0;
                                     foreach ($child->getConsumerPlanningServices() as $consumerPlanningService) {
 
                                         $serviceName = $consumerPlanningService->getService()->getName() . " (" . $consumerPlanningService->getService()->getServiceUnit() . ")";
                                         $serviceId = $consumerPlanningService->getService()->getId();
                                         $consumerPlanning = $consumerPlanningService->getSummary($dateReport);
-                                        // var_dump($consumerPlanning);
-                                        $arrayConsumerServices["real"] += $consumerPlanning["total_day"];
-                                        $arrayConsumerServices["plan"] += $consumerPlanning["total_day_plan"];
-                                        $arrayConsumerServices["real_month"] += $consumerPlanning["total_month"];
-                                        $arrayConsumerServices["plan_month"] += $consumerPlanning["total_month_plan"];
-                                        $arrayConsumerServices["real_year"] += $consumerPlanning["total_year"];
-                                        $arrayConsumerServices["plan_year"] += $consumerPlanning["total_year_plan"];
+
+                                        $consumeReal += $consumerPlanning["total_day"];
+                                        $consumePlan += $consumerPlanning["total_day_plan"];
+                                        $consumeRealMonth += $consumerPlanning["total_month"];
+                                        $consumePlanMonth += $consumerPlanning["total_month_plan"];
+                                        $consumeRealYear += $consumerPlanning["total_year"];
+                                        $consumePlanYear += $consumerPlanning["total_year_plan"];
+                                    }//FIN CONSUME SERVICES
+                                    //
+                                    
+                                    //PRODUCION NO REALIZADA
+
+                                    foreach ($child->getProductsReport() as $productReport) {
+
+
+                                        if (!$productReport->getIsGroup()) {
+                                            //var_dump($productReport->getName());
+                                            $productId = $productReport->getProduct()->getId();
+                                            $productReportId = $productReport->getId();
+
+                                            $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($dateReport);
+                                            //var_dump($unrealizedProduction);
+                                            $dayPnr += $unrealizedProduction["total_day"];
+                                            $monthPnr += $unrealizedProduction["total_month"];
+                                            $yearPnr += $unrealizedProduction["total_year"];
+                                        }
+                                    }//FIN PNR
+                                    //INVENTORY
+                                    foreach ($child->getProductsReport() as $productReport) {
+                                        if (!$productReport->getIsGroup()) {
+                                            // var_dump($productReport->getProduct()->getName());
+                                            $productId = $productReport->getProduct()->getId();
+                                            $Inventory = $productReport->getSummaryInventory($dateReport);
+                                            $dayInventory += $Inventory["total_day"];
+                                            $monthInventory += $Inventory["total_month"];
+                                            #$totalInventory["day"] += $Inventory["total_day"];
+                                            #$totalInventory["day_preview"] += $Inventory["total_month"];
+//                                            $arrayInventory[] = array(
+//                                                "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+//                                                "day" => $Inventory["total_day"],
+//                                                "day_preview" => $Inventory["total_month"]
+//                                            );
+                                        }
                                     }
+                                    //FIN INVENTORY
                                 }
 
-                                //ARRAY DE CONSUMER PLANNING SERVICES
-
-                                $arrayConsumerServices = array(
-                                    "productName" => $nameGroup,
-                                    "plan" => 0.0,
-                                    "real" => 0.0,
-                                    "plan_month" => 0.0,
-                                    "real_month" => 0.0,
-                                    "plan_year" => 0.0,
-                                    "real_year" => 0.0
-                                );
-
-                                //ARRAY DE RAW MATERIAL 
-                                $arrayRawMaterial[] = array(
-                                    "nameGroup" => $nameGroup,
-                                    "plan" => number_format($dayPlan, 2, ",", "."),
-                                    "real" => number_format($dayReal, 2, ",", "."),
-                                    "plan_month" => number_format($monthPlan, 2, ",", "."),
-                                    "real_month" => number_format($monthReal, 2, ",", "."),
-                                    "plan_year" => number_format($yearPlan, 2, ",", "."),
-                                    "real_year" => number_format($yearReal, 2, ",", ".")
-                                );
-
-                                //SECCION DE TOTALES DIARIOS
+                                //SECCION DE SUMMARY DIARIOS
                                 if ($dayPlan - $dayReal < 0) {
                                     $var = 0;
                                 } else {
@@ -1970,8 +1997,14 @@ class ReportTemplateController extends SEIPController {
                                     "var" => number_format($var, 2, ",", "."),
                                     "ejec" => number_format($ejecutionDay, 2, ",", ".")
                                 );
-                                //FIN VALORES DIARIOS
-                                //SECCION DE TOTALES MENSUALES
+                                //TOTALES SUMMARY
+                                $summaryProducctionTotals["day"]["ppto"] +=$dayPlan;
+                                $summaryProducctionTotals["day"]["real"] +=$dayReal;
+                                $summaryProducctionTotals["day"]["ejec"] +=$ejecutionDay;
+                                $summaryProducctionTotals["day"]["var"] +=$var;
+
+
+                                //SECCION DE SUMMARY MENSUALES
                                 if ($summaryMonth["plan_acumulated"] - $summaryMonth["real_acumulated"] < 0) {
                                     $varMonth = 0;
                                 } else {
@@ -1992,6 +2025,16 @@ class ReportTemplateController extends SEIPController {
                                     "var" => number_format($varMonth, 2, ",", "."),
                                     "ejecution" => number_format($ejecutionMonth, 2, ",", ".")
                                 );
+
+                                //TOTALES SECCION MES
+                                $summaryProducctionTotals["month"]["ppto"] +=$MonthPlan;
+                                $summaryProducctionTotals["month"]["pptoAcumulado"] +=$MonthPlanAcumulated;
+                                $summaryProducctionTotals["month"]["realAcumulado"] +=$MonthRealAcumualated;
+                                $summaryProducctionTotals["month"]["ejec"] +=$ejecutionMonth;
+                                $summaryProducctionTotals["month"]["var"] +=$varMonth;
+
+
+
 
                                 //SECCION DE TOTALES ANUALES
                                 if ($summaryYear["plan_acumulated"] - $summaryYear["real_acumulated"] < 0) {
@@ -2015,6 +2058,51 @@ class ReportTemplateController extends SEIPController {
                                     "var" => number_format($varYear, 2, ",", "."),
                                     "ejecution" => number_format($ejecutionYear, 2, ",", ".")
                                 );
+                                //TOTALES SECCION YEAR
+                                $summaryProducctionTotals["year"]["ppto"] +=$yearPlan;
+                                $summaryProducctionTotals["year"]["pptoAcumulado"] +=$yearPlanAcumulated;
+                                $summaryProducctionTotals["year"]["realAcumulado"] +=$yearRealAcumualated;
+                                $summaryProducctionTotals["year"]["ejec"] +=$ejecutionYear;
+                                $summaryProducctionTotals["year"]["var"] +=$varYear;
+
+                                //ARRAY DE RAW MATERIAL 
+                                $arrayRawMaterial[] = array(
+                                    "nameGroup" => $nameGroup,
+                                    "plan" => number_format($dayPlan, 2, ",", "."),
+                                    "real" => number_format($dayReal, 2, ",", "."),
+                                    "plan_month" => number_format($monthPlan, 2, ",", "."),
+                                    "real_month" => number_format($monthReal, 2, ",", "."),
+                                    "plan_year" => number_format($yearPlan, 2, ",", "."),
+                                    "real_year" => number_format($yearReal, 2, ",", ".")
+                                );
+
+                                //ARRAY DE CONSUMER PLANNING SERVICES
+                                $arrayConsumerServices[] = array(
+                                    "productName" => $nameGroup,
+                                    "plan" => $consumePlan,
+                                    "real" => $consumeReal,
+                                    "plan_month" => $consumePlanMonth,
+                                    "real_month" => $consumeRealMonth,
+                                    "plan_year" => $consumePlanYear,
+                                    "real_year" => $consumeRealYear
+                                );
+
+                                //ARRAY UNREALIZED PRODUCTION
+                                $arrayUnrealizedProduction[] = array(
+                                    "productName" => $nameGroup,
+                                    "day" => $dayPnr,
+                                    "month" => $monthPnr,
+                                    "year" => $yearPnr,
+                                );
+                                //var_dump($arrayUnrealizedProduction);
+                                //
+                                //
+                                //ARRAY INVENTORY
+                                $arrayInventory[] = array(
+                                    "productName" => $nameGroup,
+                                    "day" => $dayInventory,
+                                    "day_preview" => $monthInventory
+                                );
                             }
                             $groupsCount++;
                         }
@@ -2024,6 +2112,7 @@ class ReportTemplateController extends SEIPController {
 //                    }
                 }
 
+                //die();
 
 
                 $data = array(
@@ -2033,7 +2122,7 @@ class ReportTemplateController extends SEIPController {
                     'totalProduction' => $summaryProducctionTotals,
                     'observations' => $observations,
                     'rawMaterials' => $arrayRawMaterial,
-                    'totalRawMaterial' => $arrayRawMaterialTotals,
+                    //'totalRawMaterial' => $arrayRawMaterialTotals,
                     'consumerServices' => $arrayConsumerServices,
                     'unrealizedProductions' => $arrayUnrealizedProduction,
                     'inventorys' => $arrayInventory,

@@ -10,13 +10,13 @@
 {% else %}
     {% set tipoProd='(PRODUCCIÓN BRUTA)'%}
 {% endif %}
-
+{#
 <div class="columns">
     <div class="twelve-columns twelve-columns-mobile">
         <h3 class="thin underline text-center">Gráficas</h3>
     </div>
 </div>
-
+#}
 {#<div class="columns">
     <div class="twelve-columns twelve-columns-mobile">
         <div class="standard-tabs margin-bottom" id="add-tabs">
@@ -262,14 +262,14 @@
                         </tr>
                     {% endfor %}
                 </tbody>
-                <tfoot>
+                {#<tfoot>
                     <tr>
                         <th class="header">TOTALES</th>
                             {% for  totals in totalRawMaterial %}    
                             <th scope="col" width="15%" class="header" style="text-align: right;">{{ totals|myNumberFormat }}</th>
                             {% endfor %}
                     </tr>
-                </tfoot>
+                </tfoot>#}
             </table>
         </div>
     </div>     
@@ -313,6 +313,7 @@
                         {% endif %}
                     </tr>
                 </thead>
+{#                $consumeRealYear {{ dump(consumerServices) }}#}
                 <tbody>
                     {% for  consumerService in consumerServices %}
                         <tr style="text-align: center;"> 
@@ -371,12 +372,13 @@
                     {% for unrealizedProduction in unrealizedProductions %}
                         <tr>
                             <th scope="col" width="40%" class="header">
-                                <a href="{{ path("pequiven_report_template_visualize_pnr_time",{
+                              {#  <a href="{{ path("pequiven_report_template_visualize_pnr_time",{
                                 idProduct:unrealizedProduction.idProduct,
                                 idReportTemplate: (unrealizedProduction.reportTemplateId),
                                 idProductReport: (unrealizedProduction.productId),dateReport: (dateReport|date('d/m/Y'))}) }}">
                                     {{ unrealizedProduction.productName|upper }}
-                                </a>
+                                </a>#}
+                                {{ unrealizedProduction.productName|upper }}
                             </th>
                             {%  if showDay %}
                                 <td scope="col" width="20%" class="text-right">{{ unrealizedProduction.day|myNumberFormat }}</td>
@@ -423,7 +425,7 @@
                     </tr>
                 </thead>
                 <tbody>
-
+{#                    {{ dump(inventorys) }}#}
                     {% for inventory in inventorys  %}
                         <tr>
                             <th scope="col" width="40%" class="header">{{ inventory.productName|upper }}</th>
@@ -479,7 +481,7 @@
     </div>
 {% endif %}
 
-<p class="button-height float-right">
+{#<p class="button-height float-right">
     <a id="btnExportToPdf" href="#" class="button">
         <span class="button-icon"><span class="icon-download"></span></span>
             {{ "pequiven_seip.buttons.export_pdf"|trans }}            
@@ -492,3 +494,4 @@
         </a>
     {% endif %}
 </p>
+#}
