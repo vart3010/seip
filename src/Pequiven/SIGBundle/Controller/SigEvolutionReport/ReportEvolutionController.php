@@ -44,11 +44,11 @@ class ReportEvolutionController extends ResourceController
     function getFormTrendAction(Request $request)
     {
         
-        $id = $request->get('idIndicator');
+        $id = $request->get('idObject');
 
         $typeObject = $request->get('typeObj');
         if ($typeObject == 1) {            
-            $result = $this->findIndicatorOr404($request);                    
+            $result = $this->get('pequiven.repository.indicator')->find($id);
         }elseif($typeObject == 2){            
             $repository = $this->get('pequiven_seip.repository.arrangementprogram');
             $result = $repository->find($id); 
@@ -79,7 +79,7 @@ class ReportEvolutionController extends ResourceController
      */
     public function addTrendAction(Request $request)
     {   
-        $result = $request->get('idIndicator');
+        $result = $request->get('idObject');
 
         $typeObject = $request->get('typeObj');
         
@@ -152,12 +152,12 @@ class ReportEvolutionController extends ResourceController
      */
     function getFormPlanAction(Request $request)
     {
-        $id = $request->get('idIndicator');
+        $id = $request->get('idObject');
 
         $typeObject = $request->get('typeObj');//Tipo de objeto Indicador o PG
 
         if ($typeObject == 1) {            
-            $result = $this->findIndicatorOr404($request);             
+            $result = $this->get('pequiven.repository.indicator')->find($id);
         }elseif($typeObject == 2){            
             $repository = $this->get('pequiven_seip.repository.arrangementprogram');
             $result = $repository->find($id);             
@@ -200,12 +200,12 @@ class ReportEvolutionController extends ResourceController
      */
     function getFormPlanAddAction(Request $request)
     {   
-        $id = $request->get('idIndicator');
+        $id = $request->get('idObject');
 
         $typeObject = $request->get('typeObj');
 
         if ($typeObject == 1) {            
-            $result = $this->findIndicatorOr404($request);                    
+            $result = $this->get('pequiven.repository.indicator')->find($id);
         }elseif($typeObject == 2){            
             $repository = $this->get('pequiven_seip.repository.arrangementprogram');
             $result = $repository->find($id); 
@@ -246,18 +246,19 @@ class ReportEvolutionController extends ResourceController
     public function addAction(Request $request)
     {   
         $em = $this->getDoctrine()->getManager();
-
+        $id = $request->get('idObject');
+        
         if ($request->get('typeObj') == 1) {
-            $object = $this->findIndicatorOr404($request);
+            $object =  $this->get('pequiven.repository.indicator')->find($id);
             $objectName = "Indicador";
         }else{
-            $object = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($request->get('idIndicator'));
+            $object = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($request->get('idObject'));
             $objectName = "Programa de Gestión";
         }
         
         $em = $this->getDoctrine()->getManager();
 
-        $id = $this->getRequest()->get('idIndicator');
+        $id = $this->getRequest()->get('idObject');
         $typeObject = $this->getRequest()->get('typeObj');
         
         $user = $this->getUser();
@@ -458,7 +459,7 @@ class ReportEvolutionController extends ResourceController
      */
     public function addVerificationAction(Request $request)
     {   
-        $id = $request->get('idIndicator');//Carga de indicador
+        $id = $request->get('idObject');//Carga de indicador
         $typeObject = $request->get('typeObj');
         $month = $request->get('month');;//Mes
         $user = $this->getUser();
@@ -610,7 +611,7 @@ class ReportEvolutionController extends ResourceController
      */
     private function findEvolutionActionRef(Request $request, $monthSet, $causeAction)
     {
-        $id = $request->get('idIndicator');
+        $id = $request->get('idObject');
         $typeObject = $request->get('typeObj');
         $cont = 1; 
         $posCause = 1;        
@@ -713,23 +714,6 @@ class ReportEvolutionController extends ResourceController
         $view->setData($results);
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
         return $this->handleView($view);
-    }
-
-    /**
-     * Busca el indicador o retorna un 404
-     * @param Request $request
-     * @return \Pequiven\IndicatorBundle\Entity\Indicator
-     * @throws type
-     */
-    private function findIndicatorOr404(Request $request)
-    {
-        $id = $request->get('idIndicator');
-        
-        $indicator = $this->get('pequiven.repository.indicator')->find($id);
-        if(!$indicator){
-            throw $this->createNotFoundException();
-        }
-        return $indicator;
     }
     
     /**

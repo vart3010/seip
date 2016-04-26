@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Servicios para los informes de evolución
  * 
  * 
- * @author Máxmimo Sojo <maxsojo13@gmail.com>
+ * @author Máximo Sojo <maxsojo13@gmail.com>
  */
 class EvolutionService implements ContainerAwareInterface {
 
@@ -25,18 +25,12 @@ class EvolutionService implements ContainerAwareInterface {
      * @return \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauses
      * @throws type
      */
-    public function findEvolutionCause($indicator, $request) {        
-        $id = $indicator->getId();
-        $typeObject = $request->get('typeObj');
+    public function findEvolutionCause($object, $request, $typeObject) {        
+        $id = $object->getId();
 
-        if ($typeObject === NULL) {
-            $typeObject = 1;
-        }
-
-        //Mes Actual
-        $monthActual = date("m");
         //Mes Consultado       
         $month = $request->get('month');
+
         //Carga de variable base
         $opc = false;
         $idAction = $actionResult = 0;
@@ -47,13 +41,6 @@ class EvolutionService implements ContainerAwareInterface {
             $results = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $id));
         } elseif ($typeObject == 2) {
             $results = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('arrangementProgram' => $id));
-        }
-
-        //Determinando si esta en historico de informe o periodo actual
-        if ($month < $monthActual) {
-            $statusCons = 1;
-        } else {
-            $statusCons = 0;
         }
 
         $cause = array();

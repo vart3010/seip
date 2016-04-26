@@ -120,9 +120,9 @@ class IndicatorSigController extends EvolutionController {
     public function evolutionAction(Request $request) {
         
         $resource = $this->findOr404($request);
-        $form = $this->getForm($resource);
-
-        $sumCause = 0; $typeObject = 1;
+        
+        $sumCause = 0; 
+        $typeObject = 1;
 
         $idIndicator = $request->get('id');
 
@@ -148,7 +148,7 @@ class IndicatorSigController extends EvolutionController {
 
         $month = $request->get('month'); //El mes pasado por parametro
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
-        $data = $evolutionService->findEvolutionCause($indicator, $request); //Carga la data de las causas y sus acciones relacionadas
+        $data = $evolutionService->findEvolutionCause($indicator, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
        
         //Validación de que el mes pasado este entre los validos
         if ($month > 12) {
@@ -255,8 +255,7 @@ class IndicatorSigController extends EvolutionController {
             'lastPeriod' => $indicator->getIndicatorLastPeriod(),
             'route'      => "pequiven_indicator_evolution", //Ruta para carga de Archivo
             'urlExportFromChart' => $urlExportFromChart,
-            $this->config->getResourceName() => $resource,
-            'form' => $form->createView()
+            $this->config->getResourceName() => $resource,            
         ));
 
         return $this->handleView($view);
@@ -353,7 +352,7 @@ class IndicatorSigController extends EvolutionController {
      * @return type
      */
     public function addLastPeriodAction(Request $request) {
-        $idIndicator = $request->get('idIndicator');
+        $idIndicator = $request->get('idObject');
 
         $lastPeriod = $request->get('lastPeriod')['indicatorlastPeriod'];
         
@@ -399,7 +398,7 @@ class IndicatorSigController extends EvolutionController {
      */
     function getFormConfigAction(Request $request)
     {
-        $id = $request->get('idIndicator');        
+        $id = $request->get('idObject');        
         //$typeObject = $request->get('typeObj');
         //$month = $request->get('evolutiontrend')['month'];//Carga de Mes pasado        
         
@@ -476,7 +475,7 @@ class IndicatorSigController extends EvolutionController {
      * @throws type
      */
     private function findIndicatorOr404(Request $request) {
-        $id = $request->get('idIndicator');
+        $id = $request->get('idObject');
 
         $indicator = $this->get('pequiven.repository.indicator')->find($id);
         if (!$indicator) {

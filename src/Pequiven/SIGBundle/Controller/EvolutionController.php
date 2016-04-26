@@ -95,7 +95,7 @@ class EvolutionController extends ResourceController
         }
 
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
-        $dataAction = $evolutionService->findEvolutionCause($indicator, $request); //Carga la data de las causas y sus acciones relacionadas
+        $dataAction = $evolutionService->findEvolutionCause($indicator, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
 
         $month = $request->get('month'); //El mes pasado por parametro
         
@@ -217,7 +217,6 @@ class EvolutionController extends ResourceController
         // print a block of text using Write()
         $pdf->writeHTML($html, true, false, true, false, '');
 
-        //$pdf->Output('Reporte del dia'.'.pdf', 'I');
         $pdf->Output('Informe de evolucion' . '.pdf', 'D');
 
         $this->rmTempFile($data);

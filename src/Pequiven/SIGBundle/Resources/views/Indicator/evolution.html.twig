@@ -29,9 +29,8 @@
 {% if typeObject == 1 %}
     {% set cloning = indicator_sig.parentCloning %}
 {% endif %}
-<div class="" ng-init="urlValueLastIndicatorForm='{{ path('pequiven_indicator_last_period_form',{'idIndicator':indicator_sig.id }) }}'">
-    <div class="block_id" ng-init="id_indicator='{{ indicator_sig.id }}'"></div>
-        <div class="block_id" ng-init="typeObj='{{ typeObject }}'"></div>    
+<div class="block_id" ng-init="idObject='{{ indicator_sig.id }}'"></div>
+    <div class="block_id" ng-init="typeObj='{{ typeObject }}'"></div>    
     
     {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}  
     <div ng-controller="TableFormatController">        
@@ -60,7 +59,7 @@
         </div>
     </div>
     {% endif %}
-</div>
+
    <br>
 <fieldset class="fieldset">
     <legend class="legend">{{ indicator_sig }}&nbsp;</legend>
