@@ -939,27 +939,29 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
              */
 
             /*             * COMPLEJOS */
-            $complejos = $this->factory->createItem('results.visualize.complejo', $this->getSubLevelOptions())
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.complejo', $section)));
+            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_*')) {
+                $complejos = $this->factory->createItem('results.visualize.complejo', $this->getSubLevelOptions())
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.complejo', $section)));
 
-            $em = $this->getDoctrine()->getManager();
-            $complejos_sql = $em->getRepository('PequivenMasterBundle:Complejo')->findAll();
+                $em = $this->getDoctrine()->getManager();
+                $complejos_sql = $em->getRepository('PequivenMasterBundle:Complejo')->findAll();
 
-            foreach ($complejos_sql as $varComplejo) {
-                $idC = $varComplejo->getId();
-                $refC = $varComplejo->getRef();
+                foreach ($complejos_sql as $varComplejo) {
+                    $idC = $varComplejo->getId();
+                    $refC = $varComplejo->getRef();
 
-                if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_' . $refC)) {
-                    $refC = strtolower($refC);
-                    $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.' . $refC, array(
-                                'route' => 'pequiven_line_strategic_view_dashboard_complejo',
-                                //'route' => 'pequiven_line_strategic_indicators_specific',
-                                'routeParameters' => array('complejo' => $idC),
-                            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.' . $refC, $section)));
-                    $complejos->addChild($itemStrategicsIndicators);
+                    if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_' . $refC)) {
+                        $refC = strtolower($refC);
+                        $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.' . $refC, array(
+                                    'route' => 'pequiven_line_strategic_view_dashboard_complejo',
+                                    //'route' => 'pequiven_line_strategic_indicators_specific',
+                                    'routeParameters' => array('complejo' => $idC),
+                                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.' . $refC, $section)));
+                        $complejos->addChild($itemStrategicsIndicators);
+                    }
                 }
+                $visualize->addChild($complejos);
             }
-            $visualize->addChild($complejos);
             /*             * */
 
             $itemPeriod = $this->factory->createItem('results.period', $this->getSubLevelOptions())
