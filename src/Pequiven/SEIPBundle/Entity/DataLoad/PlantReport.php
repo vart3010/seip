@@ -96,6 +96,13 @@ class PlantReport extends ModelBaseMaster {
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService",mappedBy="plantReport",cascade={"remove"})
      */
     private $consumerPlanningServices;
+    
+    /**
+     * Planificacion de consumo de flujo de gas
+     * @var GasFlow\ConsumerPlanningGasFlow
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\GasFlow\ConsumerPlanningGasFlow",mappedBy="plantReport",cascade={"remove"})
+     */
+    private $consumerPlanningGasFlow;
 
     /**
      * Porcentaje de la capacidad actual
@@ -141,6 +148,7 @@ class PlantReport extends ModelBaseMaster {
         $this->productsReport = new \Doctrine\Common\Collections\ArrayCollection();
         $this->plantStopPlannings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->consumerPlanningGasFlow = new \Doctrine\Common\Collections\ArrayCollection();
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -348,6 +356,36 @@ class PlantReport extends ModelBaseMaster {
      */
     public function getConsumerPlanningServices() {
         return $this->consumerPlanningServices;
+    }
+
+    /**
+     * Add consumerPlanningGasFlow
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\GasFlow\ConsumerPlanningGasFlow $consumerPlanningGasFlow
+     * @return PlantReport
+     */
+    public function addConsumerPlanningGasFlow(\Pequiven\SEIPBundle\Entity\DataLoad\GasFlow\ConsumerPlanningGasFlow $consumerPlanningGasFlow) {
+        $this->consumerPlanningGasFlow[] = $consumerPlanningGasFlow;
+
+        return $this;
+    }
+
+    /**
+     * Remove consumerPlanningGasFlow
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\GasFlow\ConsumerPlanningGasFlow $consumerPlanningGasFlow
+     */
+    public function removeConsumerPlanningGasFlow(\Pequiven\SEIPBundle\Entity\DataLoad\GasFlow\ConsumerPlanningGasFlow $consumerPlanningGasFlow) {
+        $this->consumerPlanningGasFlow->removeElement($consumerPlanningGasFlow);
+    }
+
+    /**
+     * Get consumerPlanningGasFlow
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getConsumerPlanningGasFlow() {
+        return $this->consumerPlanningGasFlow;
     }
 
     function getCurrentCapacity() {

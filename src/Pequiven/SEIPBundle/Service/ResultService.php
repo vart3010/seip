@@ -906,14 +906,20 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //                        $result = $result / 2;
                     } else if ($this->calculateRangeBad($indicator, $tendenty)) {//Rango Rojo R*0%
                         $indicator->setTypeOfRangeFromResult(Indicator::RESULT_RANGE_BAD);
+                        //var_dump($indicator->getId());
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
+                        //var_dump($result);
                         $varMulti = 20 * $result;
+                        //var_dump($varMulti);
                         $varDiv = bcdiv($varMulti, 100, 2);
+                        //var_dump($varDiv);
                         $result = bcsub($result, $varDiv, 2);
+                        //var_dump($result);
 //                        if ($result < 0) {
 //                            $result = 0;
 //                        }
 //                        $result = 0;
+                        //die();
                     }
                 } else {
                     $result = 0;
@@ -992,8 +998,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $result = $result + 1;
             }
             if ($result > $varToCatch) {
-                $varMulti = $result * 100;
-                $result = bcdiv($varMulti, $varToCatch, 2);
+                $varMulti = $varToCatch * 100;
+                $result = bcdiv($varMulti, $result, 2);
 
 //                $varSum = bcadd($varToCatch, $varToCatch, 2);
 //                $varResult = bcadd($result, 0, 2);
@@ -1013,8 +1019,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //
 //                $result = bcdiv($varMulti, $varToCatch, 2);
             } else {
-                $varMulti = $varToCatch * 100;
-                $result = bcdiv($result, $varMulti, 2);
+                //var_dump($result);
+                $varMulti = $result * 100;
+                $result = bcdiv($varMulti, $varToCatch, 2);
+                //var_dump($result);
+                //die();
+                //var_dump($varMulti);
+                //var_dump($result);
 //                $varResult = bcadd($result, 0, 2);
 //                $varMinus = bcsub($varToCatch, $varResult, 2);
 //                if ($varToCatch >= -1 && $varToCatch <= 1) {
@@ -1971,6 +1982,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 
         $valuesIndicatorQuantity = count($valuesIndicator);
         $i = 0;
+        //var_dump($valuesIndicatorQuantity);
         foreach ($valuesIndicator as $valueIndicator) {
             $formulaParameters = $valueIndicator->getFormulaParameters();
             $resultItem = $this->getFormulaResultFromEQ($formula, $formulaParameters);
@@ -1980,8 +1992,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($details) {
                 if ($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID) {
                     if (($resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] != 0 || $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] != 0)) {
-                        $totalPlan = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
-                        $totalReal = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                        if($indicator->getNumberValueIndicatorToForce() > 0){
+                            if($i == $indicator->getNumberValueIndicatorToForce()){
+                                $totalPlan = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                                $totalReal = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                            }
+                        } else{
+                            $totalPlan = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                            $totalReal = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                        }
                     }
                     continue;
                 } elseif ($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity) {
@@ -1993,6 +2012,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $totalPlan += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
             $totalReal += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
         }
+        
+        //var_dump($totalReal);
+        //die();
 
         $value = $totalReal;
         $indicator

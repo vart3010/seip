@@ -707,6 +707,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *  @ORM\Column(name="loadFiles",type="boolean")
      */
     private $loadFiles = false;
+    
+    /**
+     * Número del resultado para forzar
+     * @var integer
+     * @ORM\Column(name="numberValueIndicatorToForce",type="integer", nullable=true)
+     */
+    private $numberValueIndicatorToForce = 1;
 
     /**
      * Constructor
@@ -2864,6 +2871,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
 
     function setLoadFiles($loadFiles) {
         $this->loadFiles = $loadFiles;
+    }
+    
+    function getNumberValueIndicatorToForce() {
+        return $this->numberValueIndicatorToForce;
+    }
+
+    function setNumberValueIndicatorToForce($numberValueIndicatorToForce) {
+        $this->numberValueIndicatorToForce = $numberValueIndicatorToForce;
     }
 
 }
