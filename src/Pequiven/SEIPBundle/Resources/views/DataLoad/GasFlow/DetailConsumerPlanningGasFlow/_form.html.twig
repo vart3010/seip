@@ -40,7 +40,7 @@
 </div>
 <script type="text/javascript">
     jQuery(document).ready(function() {
-        var selectMonth = $("#pequiven_seipbundle_dataload_service_detailconsumerplanningservice_month");
+        var selectMonth = $("#pequiven_seipbundle_dataload_gasflow_detailconsumerplanninggasflow_month");
         var dateFormat = "dd-mm-yy";
         var $collectionHolderRange;
 
@@ -69,8 +69,8 @@
             
             // add a delete link to the new form
             addRangeFormDeleteLink($newFormLi);
-            var idDateFrom = "pequiven_seipbundle_dataload_service_detailconsumerplanningservice_ranges_"+index+"_dateFrom";
-            var idDateEnd = "pequiven_seipbundle_dataload_service_detailconsumerplanningservice_ranges_"+index+"_dateEnd";
+            var idDateFrom = "pequiven_seipbundle_dataload_gasflow_detailconsumerplanninggasflow_ranges_"+index+"_dateFrom";
+            var idDateEnd = "pequiven_seipbundle_dataload_gasflow_detailconsumerplanninggasflow_ranges_"+index+"_dateEnd";
             
             var monthOfPlanning = selectMonth.val();
             var date = new Date();
