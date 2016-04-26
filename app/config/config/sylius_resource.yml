@@ -295,9 +295,9 @@ sylius_resource:
                 repository: Pequiven\SIGBundle\Repository\TypeVerificationManagementSystemRepository
         pequiven.managementsystem_sig_objetives:
             driver: doctrine/orm
-            templates: PequivenSIGBundle:Objetives/
+            templates: PequivenSIGBundle:Objetive/
             classes:
-                controller: Pequiven\SIGBundle\Controller\ObjetivesSigController
+                controller: Pequiven\SIGBundle\Controller\ObjetiveSigController
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
                 repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
         pequiven.monitoring_sig:

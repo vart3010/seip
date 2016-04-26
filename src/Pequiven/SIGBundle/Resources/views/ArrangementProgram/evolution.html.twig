@@ -1,5 +1,4 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
-{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 {% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
 
 {% block javascripts_base %}
@@ -12,6 +11,7 @@
 {% block before_body %}
     {{ contentHeader(
         ('arrangementprogram.title'|trans({})),        
+        (ArrangementProgram.ref),        
         ('pequiven.evolution'|trans({},'messages'))
     ) }}
 {% endblock %} 

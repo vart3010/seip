@@ -15,7 +15,7 @@ use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
  */
-class ObjetivesSigController extends EvolutionController
+class ObjetiveSigController extends EvolutionController
 {
     public function strategicAction()
     {

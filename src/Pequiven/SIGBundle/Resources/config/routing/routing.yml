@@ -1,6 +1,6 @@
 #Ruta de informe de Evolucion de Objetivos
 pequiven_sig_objetive_evolution_show:
-    path: /objetives/evolution/{id}/{month}
+    path: /objetive/{id}/evolution/{month}
     defaults:
         _controller: pequiven.controller.managementsystem_sig_objetives:evlutionAction           
 #Listado general de objetivos marcados con magementsystem
