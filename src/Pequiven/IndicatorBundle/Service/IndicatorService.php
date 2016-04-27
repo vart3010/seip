@@ -4236,7 +4236,7 @@ class IndicatorService implements ContainerAwareInterface {
         //Lamado obj 2015
         $obj = $this->getObjIndicator($indicator);
         
-        if ($indicator->getViewDataChartEvolutionConsultedMonth() == 1) {
+        if ($indicator->getViewDataChartEvolutionConsultedMonth() == 1 or $indicator->getFrequencyNotificationIndicator()->getId() == 1) {
             $resultNumbers = $this->getIndicatorHasResultValid($indicator);            
         }else{
             $resultNumbers = $month;            
