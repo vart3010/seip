@@ -1443,7 +1443,6 @@ class ReportTemplateController extends SEIPController {
             $arrayIdProducts = array();
 
             //$groupsProducts = array();
-
             //CONSUMO DE MATERIA PRIMA
             $arrayProdServices = array();
             $arrayConsumerServices = array();
@@ -1496,6 +1495,7 @@ class ReportTemplateController extends SEIPController {
 
             //HASTA LA FECHA
             if (!$byRange) {
+                $dataProductsReports = new \Doctrine\Common\Collections\ArrayCollection();
 
                 //SESSION HASTA LA FECHA SIN GRUPO DE PLANTAS
                 if (!$groupsPlants) {
@@ -1507,6 +1507,10 @@ class ReportTemplateController extends SEIPController {
                             foreach ($plantReport->getProductsReport() as $productReport) {
                                 //VALIDA Q SEAN PLANTS REPORTS HIJOS
                                 if ($productReport->getIsGroup() == 0) {
+
+                                    if (!$dataProductsReports->contains($productReport)) {
+                                        $dataProductsReports->add($productReport);
+                                    }
                                     //var_dump($productReport->getProduct()->getId());
                                     //PRODUCCION DIARIA
                                     $summaryDay = $productReport->getSummaryDay($dateReport, $typeReport);
@@ -1661,13 +1665,6 @@ class ReportTemplateController extends SEIPController {
                                                 $arrayRawMaterial[$indice]["real_month"] = $arrayRawMaterial[$indice]["real_month"] + $rawMaterialResult["total_month"];
                                                 $arrayRawMaterial[$indice]["plan_year"] = $arrayRawMaterial[$indice]["plan_year"] + $rawMaterialResult["total_year_plan"];
                                                 $arrayRawMaterial[$indice]["real_year"] = $arrayRawMaterial[$indice]["real_year"] + $rawMaterialResult["total_year"];
-
-//                                        $arrayRawMaterial[$indice]["plan"] = number_format($planRm["plan"], 2, ",", ".");
-//                                        $arrayRawMaterial[$indice]["real"] = number_format($realRm["plan"], 2, ",", ".");
-//                                        $arrayRawMaterial[$indice]["plan_month"] = number_format($planRmMonth["plan"], 2, ",", ".");
-//                                        $arrayRawMaterial[$indice]["real_month"] = number_format($realRmMonth["plan"], 2, ",", ".");
-//                                        $arrayRawMaterial[$indice]["plan_year"] = number_format($planRmYear["plan"], 2, ",", ".");
-//                                        $arrayRawMaterial[$indice]["real_year"] = number_format($realRmYear["plan"], 2, ",", ".");
                                             }
 
                                             if ($showDay) {
@@ -1784,6 +1781,12 @@ class ReportTemplateController extends SEIPController {
 //                    }
 //                }
 
+                    $reportService = $this->getProductReportService();
+                    $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
+                    $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
+                    $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
+
+
 
 
                     $data = array(
@@ -1822,7 +1825,10 @@ class ReportTemplateController extends SEIPController {
                         //"tools" => $tools,
                         "startDatePeriod" => $startDatePeriod,
                         "endDatePeriod" => $endDatePeriod,
-                        "groupsPlants" => false
+                        "groupsPlants" => false,
+                        "graphicsDays" => $graphicsDays,
+                        "graphicsMonth" => $graphicsMonth,
+                        "graphicsYear" => $graphicsYear
                     );
 
                     $view = $this
@@ -3133,7 +3139,6 @@ class ReportTemplateController extends SEIPController {
                         }
                     }
                 }
-
 
 
                 $reportService = $this->getProductReportService();
