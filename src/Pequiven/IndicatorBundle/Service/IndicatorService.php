@@ -4192,7 +4192,7 @@ class IndicatorService implements ContainerAwareInterface {
             1 => "2014",
             2 => "2015"
         ];
-        
+
         $valuesLastPeriod = $this->chargeLastPeriod($indicator, $periods);
 
         $em = $this->getDoctrine();        
@@ -4235,11 +4235,16 @@ class IndicatorService implements ContainerAwareInterface {
         $prom = $this->getPromdIndicator($indicator);
         //Lamado obj 2015
         $obj = $this->getObjIndicator($indicator);
-        //Paso de Valores Validos
-        $resultNumbers = $this->getIndicatorHasResultValid($indicator);
         
+        if ($indicator->getViewDataChartEvolutionConsultedMonth() == 1) {
+            $resultNumbers = $this->getIndicatorHasResultValid($indicator);            
+        }else{
+            $resultNumbers = $month;            
+        }
+
         //Llamado de frecuencia de Notificacion del Indicador
         $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+
         //Número de indicadores asociados
         $totalNumValues = count($indicator->getValuesIndicator());        
         if ($totalNumValues >= 3) {
@@ -4351,8 +4356,8 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["data"][] = $dataObj; //Acumulado
             
             //Carga de Tendencia
-            $cantValue = count($dataSetTend['data']);
-            if ($cantValue >= 4) {
+            $cantValue = count($dataSetTend['data']);            
+            if ($cantValue >= 4 and $resultNumbers > 2) {
                 $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetTend['data']);
             } elseif (!$cantValue) {
                 $dataSetValues['tendencia'] = 0;
@@ -4373,99 +4378,6 @@ class IndicatorService implements ContainerAwareInterface {
 
         return $data;
     }    
-
-    /**
-     * Gráfico de Columna para Causas de Desviación
-     * @param Indicator $indicator
-     * @return type
-     */
-    public function getDataChartOfCausesIndicatorEvolution(Indicator $indicator, $month, $urlExportFromChart) {
-        
-        $period = $indicator->getPeriod()->getDescription();
-
-        $data = array(
-            'dataSource' => array(
-                'chart' => array(),
-                'categories' => array(
-                ),
-                'dataset' => array(
-                ),
-            ),
-        );
-        $chart = array();
-        //$chart["caption"] = "Gráfico Causas de Desviación";
-        //$chart["subCaption"] = $period;
-        $chart["valueFontColor"] = "#000000";
-        $chart["showvalues"] = "1";
-        $chart["showSum"] = "1";
-        $chart["numberSuffix"] = "%";
-        $chart["bgalpha"] = "0,0";
-        $chart["baseFontColor"] = "#ffffff";
-        $chart["bgColor"] = "#ffffff";
-        $chart["legendBgColor"] = "#ffffff";
-        $chart["legendItemFontSize"] = "10";
-        $chart["legendItemFontColor"] = "#666666";
-        $chart["toolTipColor"] = "#ffffff";
-        $chart["outCnvBaseFontColor"] = "#000000";
-        $chart["visible"] = "1";
-        $chart["theme"] = "fint";
-        //$chart["rotateValues"] = "0";
-        $chart["snumbersuffix"] = "%";
-        $chart["decimals"] = "0";
-        $chart["setadaptiveymin"] = "1";
-        $chart["setadaptivesymin"] = "1";
-        //$chart["sYAxisMaxValue"] = "150";
-        //$chart["pYAxisMaxValue"] = "150";
-        $chart["linethickness"] = "5";
-        $chart["showborder"] = "0";
-        $chart["exportenabled"] = "1";
-        $chart["exportatclient"] = "0";
-        $chart["exportFormats"] = "PNG= Exportar Informe de Evolución PDF";
-        $chart["exportFileName"] = "Grafico Resultados ";
-        $chart["exporthandler"] = $urlExportFromChart;
-
-        //Inicialización
-        $category = $dataSetCause = array();
-        $label = $dataCause = array();
-        $contCause = 1;
-        //Carga de Nombres de Labels
-        $dataSetCause["seriesname"] = "Causas";
-        $monthCause = (int) $month;
-        //
-        foreach ($indicator->getindicatorCause() as $value) {
-            //$idCause = $value->getId();
-            //Carga del label de la Causa
-            //$label["label"] = 'Causa'.' '.$contCause;                                    
-
-            if ($value->getMonth() === $monthCause) {
-
-                $label["label"] = $value->getCauses();
-                $contCause = $contCause + 1;
-                $category[] = $label;
-            }
-        }
-        //$label["label"] = 'Causa';
-
-        foreach ($indicator->getindicatorCause() as $value) {
-            //Carga de los Valores de la causa
-            if ($value->getMonth() === $monthCause) {
-
-                $dataCause["value"] = $value->getvalueOfCauses();
-                $dataSetCause["data"][] = $dataCause;
-            }
-            //Carga del label de la Causa
-            //$label["label"] = 'Causa'.' '.$contCause;                    
-            //$contCause = $contCause + 1;
-            //$category[] = $label;
-        }
-        //die();
-
-        $data['dataSource']['chart'] = $chart;
-        $data['dataSource']['categories'][]["category"] = $category;
-        $data['dataSource']['dataset'][] = $dataSetCause;
-
-        return $data;
-    }
 
     public function obtainIndicatorChartDetails(Indicator $indicator, \Pequiven\SEIPBundle\Entity\Chart $chart) {
         $indicatorChartDetailsRepository = $this->container->get('pequiven.repository.indicatorchartdetails');

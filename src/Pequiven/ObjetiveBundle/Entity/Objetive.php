@@ -317,6 +317,13 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      * @ORM\JoinTable(name="management_systems_objetive_process")
      */
     protected $processManagementSystem;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="showEvolutionView", type="boolean")
+     */
+    private $showEvolutionView = false;
     
     /**
      * Constructor
@@ -1363,5 +1370,26 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     public function getProcessManagementSystem()
     {
         return $this->processManagementSystem;
+    }
+
+    /**
+     * Set showEvolutionView
+     *
+     * @param boolean $showEvolutionView
+     * @return Objetive
+     */
+    public function setShowEvolutionView($showEvolutionView) {
+        $this->showEvolutionView = $showEvolutionView;
+
+        return $this;
+    }
+
+    /**
+     * Get showEvolutionView
+     *
+     * @return boolean 
+     */
+    public function getShowEvolutionView() {
+        return $this->showEvolutionView;
     }
 }

@@ -18,6 +18,12 @@
             </call>
             <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator" />
         </service>
+
+        <service id="seip.service.evolution" class="Pequiven\SIGBundle\Service\EvolutionService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         
     </services>
     
