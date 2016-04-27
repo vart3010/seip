@@ -102,7 +102,7 @@ class PeriodAdmin extends Admin {
             $childrensParameters['query_builder'] = function(\Pequiven\SEIPBundle\Repository\PeriodRepository $repository) use ($object) {
                 $qb = $repository->createQueryBuilder('p');
                 $qb
-                        ->leftJoin('p.child', 'p_c')
+                        ->leftJoin('p.child', 'p_c')    
                 ;
                 $xor = $qb->expr()->orX($qb->expr()->isNull('p_c.id'));
                 if ($object != null && $object->getId() !== null) {
