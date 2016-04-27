@@ -4223,7 +4223,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["rotateValues"]   = "0";
         $chart["theme"]          = "fint";
         $chart["showborder"]     = "0";
-        $chart["decimals"]       = "0";
+        $chart["decimals"]       = $indicator->getDecimalsToChartEvolution();
         $chart["exportenabled"]  = "1";
         $chart["exportatclient"] = "0";
         $chart["exportFormats"]  = "PNG= Exportar Informe de Evolución PDF";

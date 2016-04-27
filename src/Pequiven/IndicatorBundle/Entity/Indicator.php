@@ -723,6 +723,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $viewDataChartEvolutionConsultedMonth = false;
 
     /**
+     * Decimales en Gráfica de Informe de Evolución
+     * @var integer
+     *  @ORM\Column(name="decimalsToChartEvolution",type="integer")
+     */
+    private $decimalsToChartEvolution = 0;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -2894,6 +2901,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
 
     function setViewDataChartEvolutionConsultedMonth($viewDataChartEvolutionConsultedMonth) {
         $this->viewDataChartEvolutionConsultedMonth = $viewDataChartEvolutionConsultedMonth;
+    }
+
+    function getDecimalsToChartEvolution() {
+        return $this->decimalsToChartEvolution;
+    }
+
+    function setDecimalsToChartEvolution($decimalsToChartEvolution) {
+        $this->decimalsToChartEvolution = $decimalsToChartEvolution;
     }
 
 }
