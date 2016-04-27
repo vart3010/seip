@@ -120,11 +120,11 @@ class IndicatorRepository extends EntityRepository
         $queryBuilder
                 ->addSelect('i')
                 ->andWhere('i.enabled = 1')                
-                ->andWhere('i.period != 1')
+                ->andWhere('i.period = :periodo')                
                 ->andWhere('i.tmp = 0')
                 ->orderBy('i.ref')
-                //->setParameter('periodo', $period)
-        ;                
+                ->setParameter('periodo', $period)
+        ;        
         //$queryBuilder->orderBy('i.ref');
         
         return $queryBuilder;
