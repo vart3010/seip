@@ -84,7 +84,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //        }
 //        
         //Menú Estadística e Información
-        if (($this->isGranted('ROLE_SEIP_PLANNING_*')) && ($this->isGranted('ROLE_SEIP_RESULT_*'))) {
+        if (($this->isGranted('ROLE_SEIP_PLANNING_*')) || ($this->isGranted('ROLE_SEIP_RESULT_*'))) {
             $this->addPlanningMenu($menu, $section);
         }
 
@@ -112,8 +112,10 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $this->addMenuSip($menu, $section);
         }
 
-        //Menú Administración
-        $this->addAdministrationMenu($menu, $section);
+        //Menú Administración         
+        if (($this->isGranted('ROLE_SEIP_PLANNING_LIST_USER')) && ($this->isGranted('ROLE_SONATA_ADMIN'))) {
+            $this->addAdministrationMenu($menu, $section);
+        }
 
         //Modulos en Construcción        
         $this->addMenuModules($menu, $section);
@@ -371,30 +373,30 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
 
         //Gerencia de 1ra Línea
-        $subchild = $this->factory->createItem('admin.gerencia_first', $this->getSubLevelOptions(array(
+        if ($this->isGranted('ROLE_SEIP_PLANNING_LIST_USER')) {
+            $subchild = $this->factory->createItem('admin.gerencia_first', $this->getSubLevelOptions(array(
 //                            'uri' => 'gerencia_first',
 //                            'route' => 'pequiven_master_menu_list_gerenciaFirst',
-                        ))
-                )
-                ->setLabel($this->translate(sprintf('Gerencias de 1ra Línea', $section)));
+                            ))
+                    )
+                    ->setLabel($this->translate(sprintf('Gerencias de 1ra Línea', $section)));
 
 //        $subchild->addChild('admin.gerencia_first.list', array(
 //                ))
 //                ->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.gerencia_first.list', $section)));
 
-        $child->addChild($subchild);
+            $child->addChild($subchild);
 
-        //Gerencia de 2da Línea
-        $subchild = $this->factory->createItem('admin.gerencia_second', $this->getSubLevelOptions(array(
+            //Gerencia de 2da Línea
+            $subchild = $this->factory->createItem('admin.gerencia_second', $this->getSubLevelOptions(array(
 //                            'uri' => 'gerencia_second',
 //                            'route' => 'pequiven_master_menu_list_gerenciaSecond',
-                        ))
-                )
-                ->setLabel($this->translate(sprintf('Gerencias de 2da Línea', $section)));
+                            ))
+                    )
+                    ->setLabel($this->translate(sprintf('Gerencias de 2da Línea', $section)));
 
-        $child->addChild($subchild);
+            $child->addChild($subchild);
 
-        if ($this->isGranted('ROLE_SEIP_PLANNING_LIST_USER')) {
             $subchild = $this->factory->createItem('planning.visualize.users', $this->getSubLevelOptions(array('uri' => null,
                                 'labelAttributes' => array('icon' => ''),
                             ))
