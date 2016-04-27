@@ -1251,7 +1251,7 @@ class ReportTemplateController extends SEIPController {
         $form = $this
                 ->createFormBuilder()
                 ->add('reportTemplate', 'entity', $parametersReportTemplate)
-                ->add('plantReport', 'entity', $parametersPlantReport)
+                //->add('plantReport', 'entity', $parametersPlantReport)
                 ->add('dateReport', 'date', [
                     'label_attr' => array('class' => 'label bold'),
                     'format' => 'd/M/y',
@@ -1842,7 +1842,7 @@ class ReportTemplateController extends SEIPController {
                     //POR GRUPO DE PLANTAS Y REPORTE HASTA LA FECHA
                     ////POR GRUPO DE PLANTAS Y REPORTE HASTA LA FECHA
                     //
-                    //$summaryProduction = array();
+                    $summaryProduction = array();
                     $arrayConsumerServices = array();
                     $arrayUnrealizedProduction = array();
                     $arrayInventory = array();
@@ -2109,12 +2109,15 @@ class ReportTemplateController extends SEIPController {
                                     "day" => $dayInventory,
                                     "day_preview" => $monthInventory
                                 );
+                                 $groupsCount++;
                             }
-                            $groupsCount++;
+                           
                         }
                     }
+                    
 //                    if ($groupsCount == 0) {
-//                        var_dump("No hay grupos de plantas en este complejo");
+//                        //var_dump("No hay grupos de plantas en este complejo");
+//                        $showProduction = false;
 //                    }
                 }
 

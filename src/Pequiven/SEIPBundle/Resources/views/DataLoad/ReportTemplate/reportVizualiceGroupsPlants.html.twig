@@ -65,7 +65,6 @@
         </div>
     </div>
 </div>#}
-
 {% if showProduction %}
     <div class="columns">
         <div class="twelve-columns twelve-columns-mobile">
@@ -313,7 +312,7 @@
                         {% endif %}
                     </tr>
                 </thead>
-{#                $consumeRealYear {{ dump(consumerServices) }}#}
+                {#                $consumeRealYear {{ dump(consumerServices) }}#}
                 <tbody>
                     {% for  consumerService in consumerServices %}
                         <tr style="text-align: center;"> 
@@ -372,12 +371,12 @@
                     {% for unrealizedProduction in unrealizedProductions %}
                         <tr>
                             <th scope="col" width="40%" class="header">
-                              {#  <a href="{{ path("pequiven_report_template_visualize_pnr_time",{
-                                idProduct:unrealizedProduction.idProduct,
-                                idReportTemplate: (unrealizedProduction.reportTemplateId),
-                                idProductReport: (unrealizedProduction.productId),dateReport: (dateReport|date('d/m/Y'))}) }}">
-                                    {{ unrealizedProduction.productName|upper }}
-                                </a>#}
+                                {#  <a href="{{ path("pequiven_report_template_visualize_pnr_time",{
+                                  idProduct:unrealizedProduction.idProduct,
+                                  idReportTemplate: (unrealizedProduction.reportTemplateId),
+                                  idProductReport: (unrealizedProduction.productId),dateReport: (dateReport|date('d/m/Y'))}) }}">
+                                      {{ unrealizedProduction.productName|upper }}
+                                  </a>#}
                                 {{ unrealizedProduction.productName|upper }}
                             </th>
                             {%  if showDay %}
@@ -425,7 +424,7 @@
                     </tr>
                 </thead>
                 <tbody>
-{#                    {{ dump(inventorys) }}#}
+                    {#                    {{ dump(inventorys) }}#}
                     {% for inventory in inventorys  %}
                         <tr>
                             <th scope="col" width="40%" class="header">{{ inventory.productName|upper }}</th>
@@ -479,6 +478,8 @@
             </div>
         {% endif %}
     </div>
+{% else  %}
+    <h2 class="text-center">Sin Grupo de Productos</h2>
 {% endif %}
 
 {#<p class="button-height float-right">

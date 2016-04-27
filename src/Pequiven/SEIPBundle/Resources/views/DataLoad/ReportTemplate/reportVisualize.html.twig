@@ -26,13 +26,13 @@
                     </p>
                 </div>
 
-                <div class="six-columns six-columns-tablet twelve-columns-mobile">
+                {#<div class="six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         {{ form_widget(form.plantReport) }}
                         {{ form_errors(form.plantReport) }}
                         {{ form_label(form.plantReport) }}
                     </p>
-                </div> 
+                </div> #}
 
                 <div style="display: none;" class="six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
@@ -151,7 +151,7 @@
 
 
         {{ form_rest(form) }}
-        <a id="btnRefresh" href="#" class="button" >Refrescar</a>
+        <a id="btnRefresh" href="#" class="button" >Consultar</a>
     </div>
 </form>
 
@@ -168,7 +168,14 @@
             {% endif %}
         {% endif %}
     </div>
+{% else %}
+    {% if groupsPlants %}
+        <h2 class="text-center">Sin Grupo de Productos</h2>
+    {% else %}
+        <h2 class="text-center">Sin Productos</h2>
+    {% endif %}
 {% endif %}
+
 
 {% endblock body %}
 
