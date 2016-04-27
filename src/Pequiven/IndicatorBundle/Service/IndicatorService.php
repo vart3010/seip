@@ -4235,9 +4235,12 @@ class IndicatorService implements ContainerAwareInterface {
         $prom = $this->getPromdIndicator($indicator);
         //Lamado obj 2015
         $obj = $this->getObjIndicator($indicator);
-        //Paso de Valores Validos
-        //$resultNumbers = $this->getIndicatorHasResultValid($indicator);
-        $resultNumbers = $month;
+        
+        if ($indicator->getViewDataChartEvolutionConsultedMonth() == 1) {
+            $resultNumbers = $this->getIndicatorHasResultValid($indicator);            
+        }else{
+            $resultNumbers = $month;            
+        }
 
         //Llamado de frecuencia de Notificacion del Indicador
         $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);

@@ -714,6 +714,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="numberValueIndicatorToForce",type="integer", nullable=true)
      */
     private $numberValueIndicatorToForce = 1;
+    
+    /**
+     * ¿Mostrar grafico de barras hasta mes consultado o global?
+     * @var boolean
+     *  @ORM\Column(name="viewDataChartIndicatorEvolution",type="boolean")
+     */
+    private $viewDataChartEvolutionConsultedMonth = false;
 
     /**
      * Constructor
@@ -2879,6 +2886,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
 
     function setNumberValueIndicatorToForce($numberValueIndicatorToForce) {
         $this->numberValueIndicatorToForce = $numberValueIndicatorToForce;
+    }
+
+    function getViewDataChartEvolutionConsultedMonth() {
+        return $this->viewDataChartEvolutionConsultedMonth;
+    }
+
+    function setViewDataChartEvolutionConsultedMonth($viewDataChartEvolutionConsultedMonth) {
+        $this->viewDataChartEvolutionConsultedMonth = $viewDataChartEvolutionConsultedMonth;
     }
 
 }
