@@ -96,7 +96,7 @@ class PeriodService extends ContainerAware {
             }
         }
 
-        if ($period->getName() == '2016' && ($this->getUser()->getId() == 59 || $this->getUser()->getId() == 96)) {
+        if ($period->getName() == '2016' && ($this->getUser()->getId() == 59 || $this->getUser()->getId() == 96 || $this->getUser()->getId() == 121)) {
             $result = true;
         }
 
@@ -140,6 +140,12 @@ class PeriodService extends ContainerAware {
                 }
             }
         }
+        
+        $user = $this->getUser();
+        if ($period->getName() == '2016' && ($user->getId() == 100 || $user->getId() == 110)) {
+            $result = true;
+        }
+
 
         return $result;
     }
@@ -166,10 +172,10 @@ class PeriodService extends ContainerAware {
             }
         }
         
-//        $user = $this->getUser();
-//        if ($period->getName() == '2016' && ($user->getId() == 110)) {
-//            $result = true;
-//        }
+        $user = $this->getUser();
+        if ($period->getName() == '2016' && ($user->getId() == 64)) {
+            $result = true;
+        }
 
         return $result;
     }

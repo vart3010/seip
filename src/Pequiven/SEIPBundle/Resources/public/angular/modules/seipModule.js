@@ -197,21 +197,21 @@ angular.module('seipModule.controllers', [])
             $scope.getClassForMeter = function (percentaje, numMeter) {
                 var className = '';
                 if (numMeter == 1) {
-                    if (percentaje > 0 && percentaje <= 30) {
+                    if (percentaje > 0 && percentaje <= 50) {
                         className = 'red-gradient';
-                    } else if (percentaje > 30 && percentaje < 70) {
+                    } else if (percentaje > 50 && percentaje <= 80) {
                         className = 'orange-gradient';
-                    } else if (percentaje >= 70) {
+                    } else if (percentaje > 80) {
                         className = 'green-gradient';
                     }
                 } else if (numMeter == 2) {
-                    if (percentaje > 30 && percentaje < 70) {
+                    if (percentaje > 50 && percentaje <= 80) {
                         className = 'orange-gradient';
-                    } else if (percentaje >= 70) {
+                    } else if (percentaje > 80) {
                         className = 'green-gradient';
                     }
                 } else if (numMeter == 3) {
-                    if (percentaje >= 70) {
+                    if (percentaje > 80) {
                         className = 'green-gradient';
                     }
                 }
@@ -1500,7 +1500,6 @@ angular.module('seipModule.controllers', [])
         })
         //Controladores SIG
         .controller('IndicatorSigEvolutionController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
-
             $scope.urlCausesEvolutionForm = null;
             $scope.indicator = null;
             var isInit = false;
@@ -1510,8 +1509,7 @@ angular.module('seipModule.controllers', [])
                 $scope.initFormTrend(resource);
                 if (isInit == false) {
                     isInit = true;
-                }
-                //$scope.setHeight(350);                
+                }                           
 
                 $scope.templateOptions.setParameterCallBack(resource);
 
@@ -1527,9 +1525,7 @@ angular.module('seipModule.controllers', [])
                 $scope.initFormActionAdd(resource);
                 if (isInit == false) {
                     isInit = true;
-                }
-                //$scope.setHeight(350);                
-
+                }                
                 $scope.templateOptions.setParameterCallBack(resource);
 
                 if (resource) {
@@ -1545,7 +1541,6 @@ angular.module('seipModule.controllers', [])
                 if (isInit == false) {
                     isInit = true;
                 }
-
                 $scope.templateOptions.setParameterCallBack(resource);
 
                 if (resource) {
@@ -1580,7 +1575,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_causes_evolution_add', {idIndicator: $scope.id_indicator, typeObj: $scope.typeObj});
+                    var url = Routing.generate('pequiven_causes_evolution_add', {idObject: $scope.idObject, typeObj: $scope.typeObj});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -1623,7 +1618,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_action_evolution_add', {idIndicator: $scope.id_indicator, typeObj: $scope.typeObj});
+                    var url = Routing.generate('pequiven_action_evolution_add', {idObject: $scope.idObject, typeObj: $scope.typeObj});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -1665,7 +1660,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_action_values_evolution_add', {idIndicator: $scope.id_indicator, idAction: $scope.idAction, month: $scope.month});
+                    var url = Routing.generate('pequiven_action_values_evolution_add', {idObject: $scope.idObject, idAction: $scope.idAction, month: $scope.month});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -1707,7 +1702,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_trend_evolution_add', {idIndicator: $scope.id_indicator, typeObj: $scope.typeObj});
+                    var url = Routing.generate('pequiven_trend_evolution_add', {idObject: $scope.idObject, typeObj: $scope.typeObj});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -1771,7 +1766,7 @@ angular.module('seipModule.controllers', [])
                 $scope.setHeight(350);
 
                 var parameters = {
-                    idIndicator: $scope.id_indicator,
+                    idObject: $scope.idObject,
                     typeObj: $scope.typeObj,
                     _dc: numero
                 };
@@ -1795,7 +1790,7 @@ angular.module('seipModule.controllers', [])
                 $scope.setHeight(750);
 
                 var parameters = {
-                    idIndicator: $scope.id_indicator,
+                    idObject: $scope.idObject,
                     typeObj: $scope.typeObj,
                     _dc: numero
                 };
@@ -1816,9 +1811,10 @@ angular.module('seipModule.controllers', [])
             $scope.initFormAction = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
+                $scope.setHeight(350);
 
                 var parameters = {
-                    idIndicator: $scope.id_indicator,
+                    idObject: $scope.idObject,
                     typeObj: $scope.typeObj,
                     _dc: numero
                 };
@@ -1843,8 +1839,9 @@ angular.module('seipModule.controllers', [])
                 $scope.setHeight(420);
 
                 var parameters = {
-                    idIndicator: $scope.id_indicator,
+                    idObject: $scope.idObject,
                     typeObj: $scope.typeObj,
+                    month: $scope.month,
                     _dc: numero
                 };
                 if (resource) {
@@ -1978,7 +1975,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_analysis_cause_evolution_add', {idIndicator: $scope.id_indicator, typeObj: $scope.typeObj});
+                    var url = Routing.generate('pequiven_analysis_cause_evolution_add', {idObject: $scope.idObject, typeObj: $scope.typeObj});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2024,7 +2021,7 @@ angular.module('seipModule.controllers', [])
                 $scope.setHeight(350);
 
                 var parameters = {
-                    idIndicator: $scope.id_indicator,
+                    idObject: $scope.idObject,
                     typeObj: $scope.typeObj,
                     _dc: numero
                 };
@@ -2099,7 +2096,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_verification_evolution_add', {idIndicator: $scope.id_indicator, month: $scope.month, typeObj: $scope.typeObj});
+                    var url = Routing.generate('pequiven_verification_evolution_add', {idObject: $scope.idObject, month: $scope.month, typeObj: $scope.typeObj});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2145,7 +2142,7 @@ angular.module('seipModule.controllers', [])
                 var numero = d.getTime();
 
                 var parameters = {
-                    idIndicator: $scope.id_indicator,
+                    idObject: $scope.idObject,
                     typeObj: $scope.typeObj,
                     _dc: numero
                 };
@@ -2236,7 +2233,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_config_chart_get_form', {idIndicator: $scope.id_indicator});
+                    var url = Routing.generate('pequiven_config_chart_get_form', {idObject: $scope.idObject});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2279,7 +2276,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_indicator_clonig_data_evolution', {id: $scope.id_indicator});
+                    var url = Routing.generate('pequiven_indicator_clonig_data_evolution', {id: $scope.idObject});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2333,7 +2330,7 @@ angular.module('seipModule.controllers', [])
                 $scope.setHeight(350);
 
                 var parameters = {
-                    idIndicator: $scope.id_indicator,
+                    idObject: $scope.idObject,
                     _dc: numero
                 };
                 if (resource) {
@@ -2358,7 +2355,7 @@ angular.module('seipModule.controllers', [])
                 $scope.setHeight(350);
 
                 var parameters = {
-                    id: $scope.id_indicator,
+                    id: $scope.idObject,
                     _dc: numero
                 };
                 if (resource) {
@@ -2404,7 +2401,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_indicator_last_period', {idIndicator: $scope.id_indicator});
+                    var url = Routing.generate('pequiven_indicator_last_period', {idObject: $scope.idObject});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2441,7 +2438,7 @@ angular.module('seipModule.controllers', [])
             $scope.removeLastPeriod = function (relatioLastPeriod) {
                 $scope.openModalConfirm('¿Desea eliminar la relación?', function () {
                     notificationBarService.getLoadStatus().loading();
-                    var url = Routing.generate("pequiven_indicator_last_period_delete", {id: $scope.idIndicator});
+                    var url = Routing.generate("pequiven_indicator_last_period_delete", {id: $scope.idObject});
                     $http({
                         method: 'GET',
                         url: url,
@@ -2478,7 +2475,7 @@ angular.module('seipModule.controllers', [])
                 var numero = d.getTime();
                 $scope.setHeight(350);
                 var parameters = {
-                    idIndicator: $scope.id_indicator,
+                    idObject: $scope.idObject,
                     _dc: numero
                 };
                 if (resource) {
@@ -2487,7 +2484,7 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_indicator_last_period_form', parameters);
                 $scope.templates = [
                     {
-                        name: 'Indicador Periodo Anterior 2014',
+                        name: 'Indicador Periodo Anterior',
                         url: url,
                         confirmCallBack: confirmCallBack,
                     }
@@ -2533,6 +2530,11 @@ angular.module('seipModule.controllers', [])
             $scope.loadTemplateMaintenanceShow = function (resource) {
                 $scope.initFormMaintenaceShow(resource);
                 $scope.openModalAuto();
+            };
+
+            $scope.loadNotify = function (resource) {
+                $scope.initFormNotify(resource);                
+                $scope.openModalAuto();                
             };
 
             //Removiendo 
@@ -2644,6 +2646,46 @@ angular.module('seipModule.controllers', [])
                     return false;
                 });
             };
+
+            //Añadir
+            var addNotify = function (save, successCallBack) {
+                var formConfig = angular.element('#form_notify_add');
+                var formData = formConfig.serialize();
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_sig_monitoring_notification', {id: $scope.dataNotify, type: $scope.type, idObject: $scope.id_managementSystem});                    
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();                    
+                    location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });                
+            };
+
             $scope.templateOptions.setVar('addStandardization', addStandardization);
             var confirmCallBack = function () {
                 addStandardization(true, function (data) {
@@ -2657,6 +2699,13 @@ angular.module('seipModule.controllers', [])
                 });
                 return true;
             };
+            
+            $scope.templateOptions.setVar('addNotify', addNotify);            
+            var confirmCallBackNotify = function () {
+                addNotify(true, function (data) {                   
+                });
+                return true;
+            };
 
             var confirmCallBackShow = function () {
                 return true;
@@ -2665,7 +2714,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormTracing = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(750);
+                $scope.setHeight(800);
                 $scope.setWidth(800);
 
                 var parameters = {
@@ -2678,7 +2727,7 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_sig_monitoring_add', parameters);
                 $scope.templates = [
                     {
-                        name: 'Tracing',
+                        name: 'Estandarización',
                         url: url,
                         confirmCallBack: confirmCallBack,
                     }
@@ -2724,6 +2773,29 @@ angular.module('seipModule.controllers', [])
                         url: url,
                         confirmCallBack: confirmCallBackShow,
                         setTemplateLoad: true
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+            $scope.initFormNotify = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(300);
+                $scope.setWidth(800);
+                var parameters = {
+                    id: $scope.dataNotify,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_sig_monitoring_notification', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Notificación de Usuario',
+                        url: url,
+                        confirmCallBack: confirmCallBackNotify,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);

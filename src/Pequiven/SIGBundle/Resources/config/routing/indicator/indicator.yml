@@ -1,6 +1,6 @@
 #carga de formulario de relacion del indicador
 pequiven_indicator_last_period_form:
-    path: /{idIndicator}/get-form.{_format}
+    path: /{idObject}/get-form.{_format}
     defaults:
         _controller: pequiven.controller.indicator_sig:getFormAction
         _format: html
@@ -22,7 +22,7 @@ pequiven_indicator_last_period_delete:
         expose: true
 #carga de formulario plan de acción
 pequiven_indicatoraction_get_form:
-    path: /{idIndicator}/{typeObj}/get-form_action.{_format}
+    path: /{idObject}/{typeObj}/get-form_action.{_format}
     defaults:
         _controller: pequiven.controller.sig_trend_report_evolution:getFormPlanAction
         _format: html
@@ -33,7 +33,7 @@ pequiven_indicatoraction_get_form:
         expose: true
 #carga de formulario plan de acción añdir los resultados 0
 pequiven_indicator_action_add_get_form:
-    path: /{idIndicator}/{typeObj}/get-form_add.{_format}
+    path: /{idObject}/{typeObj}/get-form_add.{_format}
     defaults:
         _controller: pequiven.controller.sig_trend_report_evolution:getFormPlanAddAction
         _format: html
@@ -44,7 +44,7 @@ pequiven_indicator_action_add_get_form:
         expose: true
 #Carga de formulario de causas de evolution
 pequiven_indicatorcauses_get_form:
-    path: /{idIndicator}/{typeObj}/get-form_causes.{_format}
+    path: /{idObject}/{typeObj}/get-form_causes.{_format}
     defaults:
         _controller: pequiven.controller.sig_causes_report_evolution:getFormCausesAction
         _format: html
@@ -55,7 +55,7 @@ pequiven_indicatorcauses_get_form:
         expose: true
 #Carga de formulario del analisis de tendencia
 pequiven_indicatortrend_get_form:
-    path: /{idIndicator}/{typeObj}/get-form_trend.{_format}
+    path: /{idObject}/{typeObj}/get-form_trend.{_format}
     defaults:
         _controller: pequiven.controller.sig_trend_report_evolution:getFormTrendAction
         _format: html
@@ -66,7 +66,7 @@ pequiven_indicatortrend_get_form:
         expose: true
 #Carga de formulario del analisis de las causas
 pequiven_causes_analysis_get_form:
-    path: /{idIndicator}/{typeObj}/get-form_causeanalysis.{_format}
+    path: /{idObject}/{typeObj}/get-form_causeanalysis.{_format}
     defaults:
         _controller: pequiven.controller.sig_causes_report_evolution:getFormAnalysisAction
         _format: html
@@ -77,7 +77,7 @@ pequiven_causes_analysis_get_form:
         expose: true
 #Carga de formulario de la verificación del indicador
 pequiven_verification_get_form:
-    path: /{idIndicator}/{typeObj}/get-form_verification.{_format}
+    path: /{idObject}/{typeObj}/get-form_verification.{_format}
     defaults:
         _controller: pequiven.controller.sig_trend_report_evolution:getFormVerificationAction
         _format: html
@@ -88,7 +88,7 @@ pequiven_verification_get_form:
         expose: true
 #Carga de formulario de la configuración de la gráfica
 pequiven_config_chart_get_form:
-    path: /{idIndicator}/get-form_config.{_format}
+    path: /{idObject}/get-form_config.{_format}
     defaults:
         _controller: pequiven.controller.indicator_sig:getFormConfigAction
         _format: html
@@ -99,7 +99,7 @@ pequiven_config_chart_get_form:
         expose: true
 #Guardamos el formulario de la relacion del indicador
 pequiven_indicator_last_period:
-    path: /{idIndicator}/addLastPeriod.{_format}
+    path: /{idObject}/addLastPeriod.{_format}
     defaults:
         _controller: pequiven.controller.indicator_sig:addLastPeriodAction
         _format: json
@@ -110,7 +110,7 @@ pequiven_indicator_last_period:
         expose: true
 #Guardamos el formulario del plan de Acción del Indicador
 pequiven_action_evolution_add:
-    path: /{idIndicator}/{typeObj}/add.{_format}
+    path: /{idObject}/{typeObj}/add.{_format}
     defaults:
         _controller: pequiven.controller.sig_trend_report_evolution:addAction
         _format: json
@@ -121,7 +121,7 @@ pequiven_action_evolution_add:
         expose: true
 #Guardamos el formulario de los valores del plan de acción indicador
 pequiven_action_values_evolution_add:
-    path: /{idIndicator}/add_values.{_format}
+    path: /{idObject}/add_values.{_format}
     defaults:
         _controller: pequiven.controller.sig_trend_report_evolution:addValuesAction
         _format: json
@@ -132,7 +132,7 @@ pequiven_action_values_evolution_add:
         expose: true
 #Guardamos el formulario de las causas del indicador
 pequiven_causes_evolution_add:
-    path: /{idIndicator}/{typeObj}/addCauses.{_format}
+    path: /{idObject}/{typeObj}/addCauses.{_format}
     defaults:
         _controller: pequiven.controller.sig_causes_report_evolution:addCausesAction
         _format: json
@@ -143,7 +143,7 @@ pequiven_causes_evolution_add:
         expose: true
 #Guardamos el formulario de la tendencia del indicador
 pequiven_trend_evolution_add:
-    path: /{idIndicator}/{typeObj}/addTrend.{_format}
+    path: /{idObject}/{typeObj}/addTrend.{_format}
     defaults:
         _controller: pequiven.controller.sig_trend_report_evolution:addTrendAction
         _format: json
@@ -154,7 +154,7 @@ pequiven_trend_evolution_add:
         expose: true
 #Guardamos el formulario del analisis de las causas
 pequiven_analysis_cause_evolution_add:
-    path: /{idIndicator}/{typeObj}/addCauseAnalysis.{_format}
+    path: /{idObject}/{typeObj}/addCauseAnalysis.{_format}
     defaults:
         _controller: pequiven.controller.sig_causes_report_evolution:addCauseAnalysisAction
         _format: json
@@ -165,7 +165,7 @@ pequiven_analysis_cause_evolution_add:
         expose: true
 #Guardamos el formulario de Verificación del Plan de Acción
 pequiven_verification_evolution_add:
-    path: /{idIndicator}/{month}/{typeObj}/addVerification.{_format}
+    path: /{idObject}/{month}/{typeObj}/addVerification.{_format}
     defaults:
         _controller: pequiven.controller.sig_trend_report_evolution:addVerificationAction
         _format: json
@@ -269,6 +269,17 @@ pequiven_indicator_clonig_data_evolution:
         _format: html
     requirements:
         _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+#Responsibles to plan
+pequiven_responsibles_to_plan:
+    path: /responsibles-to-plan.{_format}
+    defaults:
+        _controller: pequiven.controller.sig_trend_report_evolution:getResponsiblesToPlanAction
+        _format: json
+    requirements:
+        _format: json
     methods: [GET|POST]
     options:
         expose: true

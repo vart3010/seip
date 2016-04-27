@@ -37,7 +37,8 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
               $setMonth[] = $count;
               $count = $count + 1;
         }  
-          
+        
+        $frequency = $ind->getFrequencyNotificationIndicator()->getId();        
         $indicator = $idIndicator;
         $listMonth = $setMonth;
         $boxmonth =  $month;
@@ -49,7 +50,8 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
             'listMonth'     => $listMonth,
             'labelsMonths'  => $labelMonth,
             'typeObject'    => $typeObject,
-            'year'          => $year
+            'year'          => $year,
+            'frequency'    => $frequency
             );
         
     }

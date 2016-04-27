@@ -151,6 +151,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                 //ALMACENO EN ARRAYS LOS VALORES DE PLAN, REAL Y TIPO
                 foreach ($movements as $mov) {
                     $valores[$idarray] = $mov->getRealAdvance();
+                    $realResult[$idarray] = $mov->getRealAdvance() + $mov->getPenalty();
                     $planeado[$idarray] = $mov->getplanned();
                     $tipos[$idarray] = $mov->getType();
                     $idarray++;
@@ -161,8 +162,8 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
 
                     //NO SE TOMA EN CUENTA PARA EVALUACIONES CUANDO.
                     //SI EL EMPLEADO AL FINAL SALE DEL PROGRAMA DE GESTION DE PLAN 0%
-                    //SI EL EMPLEADO AL PRINCIPIO ENTRA CON UN PROGRAMA DE GESTION DE REAL 100%
-                    if ((($tipos[count($tipos) - 1] == 'O') && ($planeado[count($tipos) - 1] == 0)) || ((reset($tipos) == 'I') && (reset($valores) == 100))) {
+                    //SI EL EMPLEADO AL PRINCIPIO ENTRA CON UN PROGRAMA DE GESTION DE REAL 100%                    
+                    if ((($tipos[count($tipos) - 1] == 'O') && ($planeado[count($tipos) - 1] == 0)) || ((reset($tipos) == 'I') && (reset($realResult) >= 100))) {
                         $eval = "N/A";
                         $aporte = 0;
                         $aportePlan = 0;
@@ -176,6 +177,8 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                             array_unshift($tipos, 'I');
                             array_unshift($valores, 0);
                             array_unshift($planeado, 0);
+                        } else {
+                            $status = 'Actual';
                         }
 
                         //SI LOS MOVIMIENTOS CONCLUYEN CON UNA ENTRADA, SE AÑADE LA SALIDA DEL PROGRAMA DE GESTION CON EL VALOR ACTUAL DEL MISMO
@@ -185,6 +188,8 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                             $tipos[] = 'O';
                             $valores[] = $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResultReal());
                             $planeado[] = $advanceToDate;
+                        } else {
+                            $status = 'Pasada';
                         }
 
                         //DETERMINO LA CANTIDAD DE MOVIMIENTOS EN EL PROGRAMA DE GESTION
@@ -246,11 +251,16 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                 } else {
                     //SI EL PROGRAMA DE GESTION NO TIENE MOVIMIENTOS, LOS VALORES ACTUALES SON LOS VALORES DE LA EVALUACION
                     $status = 'Actual';
-                    $eval = $aporte = $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResultReal());
+                    $aporte = $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResultReal());
+                    if ($advanceToDate == 0) {
+                        $eval = "N/A";
+                    } else {
+                        $eval = ($aporte * 100) / ($advanceToDate);
+                    }
                     $aportePlan = $advanceToDate;
                 }
 
-                 if ($eval == "N/A") {
+                if ($eval == "N/A") {
                     unset($arrangementPrograms[$key]);
                 } else {
                     $arrangementPrograms[$key] = array(
@@ -400,6 +410,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                 foreach ($movements as $mov) {
                     $valores[$idarray] = $mov->getRealAdvance();
                     $planeado[$idarray] = $mov->getplanned();
+                    $realResult[$idarray] = $mov->getRealAdvance() + $mov->getPenalty();
                     $tipos[$idarray] = $mov->getType();
                     $idarray++;
                 }
@@ -410,7 +421,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                     //NO SE TOMA EN CUENTA PARA EVALUACIONES CUANDO.
                     //SI EL EMPLEADO AL FINAL SALE DE LA META DE PLAN 0%
                     //SI EL EMPLEADO AL PRINCIPIO ENTRA CON UNA META DE REAL 100%
-                    if ((($tipos[count($tipos) - 1] == 'O') && ($planeado[count($tipos) - 1] == 0)) || ((reset($tipos) == 'I') && (reset($valores) == 100))) {
+                    if ((($tipos[count($tipos) - 1] == 'O') && ($planeado[count($tipos) - 1] == 0)) || ((reset($tipos) == 'I') && (reset($realResult) >= 100))) {
                         $eval = "N/A";
                         $aporte = 0;
                         $aportePlan = 0;
@@ -424,6 +435,8 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                             array_unshift($tipos, 'I');
                             array_unshift($valores, 0);
                             array_unshift($planeado, 0);
+                        } else {
+                            $status = 'Actual';
                         }
 
                         //SI LOS MOVIMIENTOS CONCLUYEN CON UNA ENTRADA, SE AÑADE LA SALIDA A LA META CON EL VALOR ACTUAL DE LA MISMA
@@ -433,6 +446,8 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                             $tipos[] = 'O';
                             $valores[] = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
                             $planeado[] = $goal->getGoalDetails()->getPlannedTotal($fecha);
+                        } else {
+                            $status = 'Pasada';
                         }
 
                         //DETERMINO LA CANTIDAD DE MOVIMIENTOS EN LA META
@@ -494,7 +509,12 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                 } else {
                     //SI LA META NO TIENE MOVIMIENTOS, LOS VALORES ACTUALES SON LOS VALORES DE LA EVALUACION
                     $status = 'Actual';
-                    $eval = $aporte = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                    $aporte = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                    if ($goal->getGoalDetails()->getPlannedTotal($fecha) == 0) {
+                        $eval = "N/A";
+                    } else {
+                        $eval = ($aporte * 100) / ($goal->getGoalDetails()->getPlannedTotal($fecha));
+                    }
                     $aportePlan = $goal->getGoalDetails()->getPlannedTotal($fecha);
                 }
 

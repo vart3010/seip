@@ -1,4 +1,44 @@
 {% block body %}
+<style type="text/css">
+    .messages{
+        float: left;
+        font-family: sans-serif;
+        display: none;
+    }
+    .info{
+        padding: 10px;
+        border-radius: 10px;
+        background: orange;
+        color: #fff;
+        font-size: 10px;
+        text-align: center;
+    }
+    .before{
+        padding: 10px;
+        border-radius: 10px;
+        background: blue;
+        color: #fff;
+        font-size: 10px;
+        text-align: center;
+    }
+    .success{
+        padding: 10px;
+        border-radius: 10px;
+        background: green;
+        color: #fff;
+        font-size: 10px;
+        text-align: center;
+    }
+    .error{
+        padding: 10px;
+        border-radius: 10px;
+        background: red;
+        color: #fff;
+        font-size: 10px;
+        text-align: center;
+    }
+</style>
+
 <form method="POST" id="form_tracing_add">
     <fieldset class="fieldset fields-list">
         <legend class="legend">Estandarización</legend>
@@ -23,26 +63,72 @@
                 {{ form_widget(form.description) }}            
             </div>  
             <div class="field-block button-height" >            
-                <label class="label">Tratamiento</label>                
-                <input type="checkbox" name="analysis" id="analysis" value="1" class="checkbox mid-margin-left"> <label for="checkbox-2" class="">Análisis Causa Raíz</label>
-                
-                <input type="checkbox" name="arrangementProgram" id="arrangementProgram" value="1" class="checkbox mid-margin-left" onchange="showPg();">                 
+                <label class="label">Tratamiento</label>                                
+                <input type="checkbox" name="arrangementProgram" id="arrangementProgram" value="1" class="checkbox mid-margin-left">
                 <label for="checkbox-2" class="">Programa de Gestión</label>
+
+                <input type="checkbox" name="analysis" id="analysis" value="1" class="checkbox mid-margin-left"> <label for="checkbox-2" class="">Análisis Causa Raíz</label>
             </div>    
     </fieldset>
     
-    <fieldset class="fieldset" style='display:none;' id="loadPg">
-        <legend class="legend">Programa de Gestión</legend>
-        <label class="label">Seleccione programa de Gestión</label>
-            {{ form_label(form.arrangementProgram) }}            
-            {{ form_widget(form.arrangementProgram) }} 
-        <p></p>
-    </fieldset>            
+    <input type="hidden" value="" id="fileName" name="fileName">
 
+    <div class="columns">                
+        <div class="six-columns six-columns-tablet twelve-columns-mobile">
+            <fieldset class="fieldset" style='display:none;' id="loadPg">
+                <legend class="legend">Programa de Gestión</legend>
+                <label class="label">Seleccione programa de Gestión</label>
+                    {{ form_label(form.arrangementProgram) }}            
+                    {{ form_widget(form.arrangementProgram) }} 
+            </fieldset>            
+        </div>    
 </form>    
+        <div class="six-columns six-columns-tablet twelve-columns-mobile">
+            <fieldset class="fieldset" style='display:none;' id="loadCr">
+                <legend class="legend">Analisis Causa Raiz</legend>                
+                <form enctype="multipart/form-data" class="formulario">                    
+                    <input name="archivo" type="file" id="imagen"/>
+                    <input type="button" id="subir" value="Subir archivo"/>
+                </form>                
+                <div class="messages"></div>
+            </fieldset>
+        </div>
+    </div>
+
+<script src="{{  asset('bundles/pequivensig/js/loadFiles.js') }}"></script> 
 <script type="text/javascript">
-    function showPg(){
-        document.getElementById('loadPg').style.display = 'block';                        
-    }    
+    $('input#arrangementProgram').change(function() {        
+        if($(this).is(":checked")) {
+            $('#loadPg').show();                    
+        }else{
+            $('#loadPg').hide();        
+        }
+    });
+
+    $('input#analysis').change(function() {        
+        if($(this).is(":checked")) {
+            $('#loadCr').show();                    
+        }else{
+            $('#loadCr').hide();        
+        }
+    }); 
+         
+    $(document).ready(function () {
+        $("#sig_standardization_detection").select2({    
+        });
+
+        $("#sig_standardization_type").select2({    
+        });
+
+        $("#sig_standardization_arrangementProgram").select2({
+            //minimumInputLength: 3,
+        });  
+        
+        var urlFiles = "{{ path("pequiven_sig_monitoring_show_upload") }}";
+        setUrlFiles(urlFiles);      
+    })
+        
+    
 </script>
+
 {% endblock %}

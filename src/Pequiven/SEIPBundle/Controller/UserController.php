@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Pequiven\SEIPBundle\Form\User\UserType;
 
 /**
  * Description of UserController
@@ -38,143 +39,6 @@ class UserController extends baseController {
     public function listAuxAction() {
         return array(
         );
-    }
-
-    /**
-     *
-     *
-     */
-    public function notificationAction(){
-        $securityContext = $this->container->get('security.context');        
-        $em = $this->getDoctrine()->getManager();  
-
-        $types = [
-            1 => "objetives",
-            2 => "programt",
-            3 => "indicators",
-            4 => "standardization",
-            5 => "production",
-            6 => "evolution",
-        ];
-
-        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('user' => $securityContext->getToken()->getUser()), array('createdAt' => 'DESC'));
-
-        return $this->render('PequivenSEIPBundle:User:notification.html.twig', array('notifications' => $notification, 'types' => $types));
-    }
-    
-    /**
-     *
-     *
-     */
-    public function getNotificationAction(Request $request){
-        $response = new JsonResponse();        
-        
-        $em = $this->getDoctrine()->getManager();   
-
-        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->find($request->get('idMessage'));
-        
-        if ($notification->getReadNotification() != true) {
-            $this->getNotificationService()->findMessageUser();        
-            $this->getNotificationService()->findReadNotification($request->get('idMessage'));            
-        }
-        
-        $data = [
-            'description' => $notification->getDescription(),
-            'path'        => $notification->getPath()
-        ];
-
-        $response->setData($data);
-
-        return $response;        
-    }
-
-    /**
-     *
-     *
-     */
-    public function delNotificationAction(Request $request){
-        $response = new JsonResponse();        
-        
-        $em = $this->getDoctrine()->getManager();   
-
-        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->find($request->get('idMessage'));
-        
-        $em->remove($notification);
-        $em->flush();
-        
-        $response->setData($notification->getDescription());
-
-        return $response;        
-    }
-
-     /**
-     *
-     *
-     */
-    public function NotificationFavouriteAction(Request $request){
-        $response = new JsonResponse();        
-        
-        $em = $this->getDoctrine()->getManager();   
-
-        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->find($request->get('idMessage'));
-        
-        $notification->setTypeMessage(2);
-        
-        $em->flush();
-        
-        $response->setData($notification->getDescription());
-
-        return $response;        
-    }
-
-    public function getNotifyDataAction(Request $request){
-        $em = $this->getDoctrine()->getManager();   
-        $securityContext = $this->container->get('security.context');
-
-        $response = new JsonResponse();   
-        $notify = $fav = $trash = 0;
-        $objetives = $programt = $indicators = $standardization = $production = $evolution = 0;
-
-        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('user' => $securityContext->getToken()->getUser()));
-        
-        foreach ($notification as $valueNotify) {
-            if ($valueNotify->getTypeMessage() == 1) {
-                $notify = $notify + 1;
-            }elseif($valueNotify->getTypeMessage() == 2){
-                $fav = $fav + 1;
-            }
-
-            if ($valueNotify->getType() == 1) {
-                $objetives = $objetives + 1;
-            }elseif ($valueNotify->getType() == 2) {
-                $programt = $programt + 1;
-            }elseif ($valueNotify->getType() == 3) {
-                $indicators = $indicators + 1;
-            }elseif ($valueNotify->getType() == 4) {
-                $standardization = $standardization + 1;
-            }elseif ($valueNotify->getType() == 5) {
-                $production = $production + 1;
-            }elseif ($valueNotify->getType() == 6) {
-                $evolution = $evolution + 1;
-            }
-            
-        }
-
-        $data = [
-            'notify' => $notify,
-            'fav'    => $fav,
-            'trash'  => $trash,
-            'objetives' => $objetives,
-            'programt'  => $programt,
-            'indicators'=> $indicators,
-            'standardization' => $standardization,
-            'production'=> $production,
-            'evolution' => $evolution
-        ];
-
-        $response->setData($data);
-
-        return $response;        
     }
 
     /**
@@ -276,11 +140,12 @@ class UserController extends baseController {
     }
 
     public function showAction(Request $request) {
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
                 ->setTemplateVar($this->config->getResourceName())
-                ->setData($this->findOr404($request))
+                ->setData($this->findOr404($request))                
         ;
 //        $groups = array_merge(array('api_list'), $request->get('_groups',array()));
 //        $view->getSerializationContext()->setGroups($groups);
@@ -308,7 +173,7 @@ class UserController extends baseController {
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
         return $this->handleView($view);
     }
-    
+
     /**
      * Busca un coordinador
      * 
@@ -330,7 +195,7 @@ class UserController extends baseController {
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
         return $this->handleView($view);
     }
-    
+
     /**
      * Busca un coordinador
      * 
@@ -338,7 +203,7 @@ class UserController extends baseController {
      * @return type
      */
     function searchOnlyCoordinatorAction(Request $request) {
-        
+
         $query = $request->get('query');
         $criteria = array(
             'username' => $query,
@@ -346,9 +211,9 @@ class UserController extends baseController {
             'lastname' => $query,
             'numPersonal' => $query,
         );
-        
+
         $criteria['workStudyCircleId'] = $request->get('workStudyCircleId');
-        
+
         $results = $this->get('pequiven_seip.repository.user')->searchOnlyCoordinator($criteria);
 
         $view = $this->view();
@@ -356,8 +221,6 @@ class UserController extends baseController {
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
         return $this->handleView($view);
     }
-    
-    
 
     /**
      * Filtra los usuarios que esten por debajo
@@ -372,7 +235,6 @@ class UserController extends baseController {
             'firstname' => $query,
             'lastname' => $query,
             'numPersonal' => $query,
-        
         );
         $user = $this->getUser();
         $securityService = $this->getSecurityService();
@@ -380,9 +242,9 @@ class UserController extends baseController {
         if (!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_ALL_MANAGEMENT_USER_ITEMS')) {
             $levelUser = $user->getLevelRealByGroup();
             $criteria['levelUser'] = $levelUser;
-            if($levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_FIRST || $levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO){
+            if ($levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_FIRST || $levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO) {
                 $criteria['idGerenciaUser'] = $this->getUser()->getGerencia()->getId();
-            } elseif($levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_SECOND){
+            } elseif ($levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_SECOND) {
                 $criteria['idGerenciaUser'] = $this->getUser()->getGerencia()->getId();
                 $criteria['idGerenciaSecondUser'] = $this->getUser()->getGerenciaSecond()->getId();
             }
@@ -437,7 +299,10 @@ class UserController extends baseController {
             $resource->setConfiguration(new \Pequiven\SEIPBundle\Entity\User\Configuration());
             $this->domainManager->update($resource);
         }
-        return $this->redirectHandler->redirectTo($resource);
+        
+      //  return $this->redirectHandler->redirectTo($resource);
+        $user = $request->get('id');        
+        return $this->redirect($this->generateUrl('pequiven_user_update',array('id' => $user)));
     }
 
     /**
@@ -446,14 +311,6 @@ class UserController extends baseController {
      */
     protected function getSecurityService() {
         return $this->container->get('seip.service.security');
-    }
-
-    /**
-     *  Notification
-     *
-     */
-    protected function getNotificationService() {        
-        return $this->container->get('seip.service.notification');        
     }
 
 }

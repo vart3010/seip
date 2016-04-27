@@ -101,10 +101,10 @@ app:
                             strategic: Estratégico
                             tactic: Táctico
                             operative: Operativo
-                            recalculate: Recalcular resultados
+                            recalculate: Recalcular Resultados
                         operations:
                             main: Operaciones
-                            recalculate_results: Recalcular resultados
+                            recalculate_results: Recalcular Resultados
                         monitor:
                             main: Monitor de Carga
                             objective_tactic: Objetivos Tácticos
@@ -144,6 +144,7 @@ app:
                                 main: Cargar
                                 tactic: Táctico
                                 operative: Operativo
+                                find: Hallazgo SIG
                             visualize:
                                 main: Visualizar
                                 listAll: Lista
@@ -154,18 +155,20 @@ app:
                                 for_notifying: Por notificar
                         monitoring:
                             title: Seguimiento y Eficacia
-                            list_managementSystem: Lista Sistemas de la Calidad
+                            list_managementSystem: Lista Sistemas de Gestión
                             list_gerencias: Lista Gerencias Normalizadas
                     results:
                         main: Resultados
                         visualize:
                             main: Visualizar
                             strategics: Estratégicos
+                            complejo: Complejos
                             indicator:
                                 strategics: Indicadores Estratégicos
                                 cphc: Indicadores CPHC
                                 cpamc: Indicadores CPAMC
                                 cpjaa: Indicadores CPJAA
+                                pru:   Indicadores PRU
                             objetive:
                                 strategics: Objetivos Estratégicos
                             tactic: Táctico

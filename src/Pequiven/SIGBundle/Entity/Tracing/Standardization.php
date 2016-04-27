@@ -96,11 +96,11 @@ class Standardization extends model
     private $deletedAt;
 
     /**
-     * Sistemas de la Calidad
-     * @var \Pequiven\SIGBundle\Entity\ManagementSystem
-     * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem")
+     * type
+     * @var integer
+     * @ORM\Column(name="relationObject",type="integer")
      */
-    protected $managementSystem;
+    protected $relationObject;
 
     /**
      * Mantenimiento
@@ -109,12 +109,36 @@ class Standardization extends model
      * 
      */
     private $maintenance;
+
+    /**
+     * Responsables
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User",inversedBy="maintenanceResponsibles", cascade={"persist","remove"})     
+     * @ORM\JoinTable(name="ManagementSystem_Monitoring_Maintenance_responsibles")    
+     */
+    private $responsible;
     
+     /**
+     * type
+     * @var integer
+     * @ORM\Column(name="typeObject",type="integer")
+     */
+    private $typeObject;
+
+    /**
+     * File
+     * @var string
+     * @ORM\Column(name="file",type="string",length=150, nullable=true)
+     */
+    private $file;
+
     /**
      * Constructor
      */
     public function __construct(){
-        $this->maintenance = new \Doctrine\Common\Collections\ArrayCollection();        
+        $this->maintenance = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->responsible = new \Doctrine\Common\Collections\ArrayCollection();         
     }
     
     /**
@@ -357,29 +381,6 @@ class Standardization extends model
         return $this->enabled;
     }
 
-     /**
-     * Set managementSystem
-     *
-     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem
-     * @return ManagementSystem
-     */
-    public function setManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem = null)
-    {
-        $this->managementSystem = $managementSystem;
-
-        return $this;
-    }
-
-    /**
-     * Get managementSystem
-     *
-     * @return \Pequiven\SIGBundle\Entity\ManagementSystem 
-     */
-    public function getManagementSystem()
-    {
-        return $this->managementSystem;
-    }
-
     /**
      * Add maintenance
      *
@@ -409,5 +410,104 @@ class Standardization extends model
     public function getMaintenance() {
         return $this->maintenance;
     }
+
+    /**
+     * Add responsible
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $responsible
+     * @return Indicator
+     */
+    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsible) {
+        $this->responsible[] = $responsible;
+
+        return $this;
+    }
+
+    /**
+     * Remove responsible
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $responsible
+     */
+    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsible) {
+        $this->responsible->removeElement($responsible);
+    }
+
+    /**
+     * Get responsible
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResponsible() {
+        return $this->responsible;
+    }
     
+    /**
+     * Set typeObject
+     *
+     * @param string $typeObject
+     * @return 
+     */
+    public function setTypeObject($typeObject)
+    {
+        $this->typeObject = $typeObject;
+
+        return $this;
+    }
+
+    /**
+     * Get typeObject
+     *
+     * @return string 
+     */
+    public function getTypeObject()
+    {
+        return $this->typeObject;
+    }
+
+    /**
+     * Set relationObject
+     *
+     * @param string $relationObject
+     * @return 
+     */
+    public function setRelationObject($relationObject)
+    {
+        $this->relationObject = $relationObject;
+
+        return $this;
+    }
+
+    /**
+     * Get relationObject
+     *
+     * @return string 
+     */
+    public function getRelationObject()
+    {
+        return $this->relationObject;
+    }
+
+    /**
+     * Set file
+     *
+     * @param string $file
+     * @return 
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    /**
+     * Get file
+     *
+     * @return string 
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
 }

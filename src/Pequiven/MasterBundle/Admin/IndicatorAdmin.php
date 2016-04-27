@@ -60,6 +60,8 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('showFeatures')
                 ->add('showCharts')
                 ->add('showEvolutionView')
+                ->add('viewDataChartEvolutionConsultedMonth')
+                ->add('decimalsToChartEvolution')
                 ->add('showTags')
                 ->add('notshowIndicatorNoEvaluateInPeriod')
                 ->add('requiredToImport')
@@ -325,6 +327,12 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'required' => false,
                 ))
                 ->add('showEvolutionView', null, array(
+                    'required' => false,
+                ))
+                ->add('viewDataChartEvolutionConsultedMonth', null, array(
+                    'required' => false,
+                ))
+                ->add('decimalsToChartEvolution', null, array(
                     'required' => false,
                 ))
                 ->add('loadFiles', null, array(

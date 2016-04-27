@@ -4144,6 +4144,38 @@ class IndicatorService implements ContainerAwareInterface {
         return $dataTendency;
     }
 
+    public function chargeLastPeriod($indicator, $periods){
+        $cantPeriodValid = count($periods);
+        $dataPeriods = [];
+        $value14 = $value15 = 0;
+        $lastPeriod = $indicator->getIndicatorLastPeriod();        
+        $period = $indicator->getPeriod()->getId();
+
+        switch ($period) {
+            case 1:                
+                break;
+            case 2:
+                //echo "Indicador 2015 sin lastPeriod";
+                break;
+            case 3:
+                if ($lastPeriod) {
+                   $value15 = $lastPeriod->getResultReal();
+                   if ($lastPeriod->getIndicatorLastPeriod()) {
+                       $value14 = $lastPeriod->getIndicatorLastPeriod()->getResultReal();
+                   }
+                }
+                break;
+        }
+        
+        $dataPeriods = [
+            1 => $value14,
+            2 => $value15
+        ];
+
+        return $dataPeriods;       
+
+    }
+
     /**
      * Gráfico de Columna para informe de Evolución
      * @param Indicator $indicator
@@ -4152,13 +4184,24 @@ class IndicatorService implements ContainerAwareInterface {
     public function getDataChartOfIndicatorEvolution(Indicator $indicator, $urlExportFromChart, $month) {
         
         $period = $indicator->getPeriod()->getDescription();
+        $periodInvalid = 2;
+        $periodInicator = $indicator->getPeriod()->getId();
+        $periodCharge  = $periodInicator - 1;
         
+        $periods = [
+            1 => "2014",
+            2 => "2015"
+        ];
+
+        $valuesLastPeriod = $this->chargeLastPeriod($indicator, $periods);
+
         $em = $this->getDoctrine();        
         $prePlanningItemCloneObject = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array('idCloneObject' => $indicator->getId(), 'typeObject' => \Pequiven\SEIPBundle\Model\PrePlanning\PrePlanningTypeObject::TYPE_OBJECT_INDICATOR));
-        if ($indicator->getPeriod()->getId() == 3) {
-            $indicatorPeriod15 = $this->container->get('pequiven.repository.indicator')->find($prePlanningItemCloneObject->getIdSourceObject());                    
+        
+        if ($periodInicator != $periodInvalid AND $prePlanningItemCloneObject) {
+            $indicatorParent = $this->container->get('pequiven.repository.indicator')->find($prePlanningItemCloneObject->getIdSourceObject());                    
         }else{
-            $indicatorPeriod15 = 0;
+            $indicatorParent = 0;
         }
         
         $data = array(
@@ -4180,7 +4223,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["rotateValues"]   = "0";
         $chart["theme"]          = "fint";
         $chart["showborder"]     = "0";
-        $chart["decimals"]       = "0";
+        $chart["decimals"]       = $indicator->getDecimalsToChartEvolution();
         $chart["exportenabled"]  = "1";
         $chart["exportatclient"] = "0";
         $chart["exportFormats"]  = "PNG= Exportar Informe de Evolución PDF";
@@ -4192,11 +4235,16 @@ class IndicatorService implements ContainerAwareInterface {
         $prom = $this->getPromdIndicator($indicator);
         //Lamado obj 2015
         $obj = $this->getObjIndicator($indicator);
-        //Paso de Valores Validos
-        $resultNumbers = $this->getIndicatorHasResultValid($indicator);
         
+        if ($indicator->getViewDataChartEvolutionConsultedMonth() == 1 or $indicator->getFrequencyNotificationIndicator()->getId() == 1) {
+            $resultNumbers = $this->getIndicatorHasResultValid($indicator);            
+        }else{
+            $resultNumbers = $month;            
+        }
+
         //Llamado de frecuencia de Notificacion del Indicador
         $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+
         //Número de indicadores asociados
         $totalNumValues = count($indicator->getValuesIndicator());        
         if ($totalNumValues >= 3) {
@@ -4219,18 +4267,17 @@ class IndicatorService implements ContainerAwareInterface {
         $dataSetPlan["seriesname"] = "Plan";
         $dataSetAcum["seriesname"] = "Acumulado";
         $dataSetAnt["seriesname"]  = "Periodo";
-        $labelAntper = "2014";
-        $labelAnt2015 = "2015";
-        $labelProm   = $medition;
-        $labelobj    = "Objetivo ".$indicator->getPeriod()->getName();
+        
+        foreach ($periods as $key => $value) {
+            $arrayLabelAnt[]  = $value;            
+        }
 
-        //Carga de datos del label principal Periodo-2015
-        $labelAnt["label"] = $labelAntper; //Label del 2014
-        $category[] = $labelAnt; //Label del 2014
+        $labelProm    = $medition;
+        $labelobj     = "Objetivo ".$indicator->getPeriod()->getName();
 
-        if ($indicator->getPeriod()->getId() == 3) {
-            $labelAnt2["label"] = $labelAnt2015; //Label del 2015
-            $category[] = $labelAnt2; //Label del 2015
+        for ($i=0; $i < $periodCharge; $i++) { 
+            $labelAnt["label"] = $arrayLabelAnt[$i]; //Label de periodos anteriores
+            $category[] = $labelAnt; //Label de periodos anteriores            
         }
 
         if ($totalNumValues > 0) {
@@ -4253,42 +4300,24 @@ class IndicatorService implements ContainerAwareInterface {
             $labelo["label"] = $labelobj; //Label del ObjAcum
             $category[] = $labelo; //Label del ObjAcum
             
-            //Data 2014            
-            $acumLast = $cant = $promLast = 0;
+            //Declaración de Variables
+            $valueData =  $acumLast = $cant = $promLast = 0;
             $indicatorlast = $indicator->getindicatorLastPeriod();
             
-            if ($indicator->getPeriod()->getId() == 3) {
-                if ($indicatorPeriod15->getindicatorLastPeriod() === null) {
-                    $dataAnt["value"] = 0; //Pasando data a Data2015 si no tiene ralacion
-                }else{
-                    $value = round($indicatorPeriod15->getindicatorLastPeriod()->getResultReal());
-                    $dataAnt["value"] = $value; //Pasando data a Data2014                
-                }
-            }else{
-                if ($indicatorlast === null) {
-                    $dataAnt["value"] = 0; //Pasando data a Data2014 si no tiene ralacion
-                }else{
-                    $value = round($indicatorlast->getResultReal());
-                    $dataAnt["value"] = $value; //Pasando data a Data2014                
-                }
-            }
+            for ($i=0; $i < $periodCharge; $i++) {                     
+                $valueData = round($valuesLastPeriod[$i + 1]);                
+                $dataAnt["value"] = $valueData;
+                $dataAnt["color"] = '#f2c500';
+                $dataSetAnt["showvalues"] = "1";            
+                $dataSetAnt["data"][] = $dataAnt;                
+            }                            
             
-            //Data 2014
-            $dataAnt["color"] = '#f2c500';
-            $dataSetAnt["showvalues"] = "1";            
-            $dataSetAnt["data"][] = $dataAnt; //2014                
-            
-            if ($indicator->getPeriod()->getId() == 3) {
-                //Data 2015
-                $dataAnt2015["value"] = round($indicatorlast->getResultReal());
-                $dataAnt2015["color"] = '#f2c500';
-                $dataSetAnt["showvalues"] = "1";
-                $dataSetAnt["data"][] = $dataAnt2015; //2015                
-                
+            if ($periodInicator != $periodInvalid) {
                 $dataSetTend["data"][] = array('value' => '');
                 $dataSetReal["data"][] = array('value' => '');
-                $dataSetLine["data"][] = array('value' => ''); //Valor vacio para saltar 2015
+                $dataSetLine["data"][] = array('value' => '');
             }            
+            
             //Pasando espacios vacios para desarrollo de la gráfica
             $dataSetTend["data"][] = array('value' => '');
             $dataSetReal["data"][] = array('value' => '');
@@ -4308,9 +4337,10 @@ class IndicatorService implements ContainerAwareInterface {
 
             $dataSetLine["data"][] = array('value' => ''); //Valor vacio para saltar 2014
             for ($i = 0; $i < $contCant; $i++) {
-                $dataLine["value"] = $obj; //Carga de valores     2015      
-                $dataSetLine["data"][] = $dataLine; //Data del Objetivo 2015
+                $dataLine["value"] = $obj; //Carga valores objetivo del Indicador
+                $dataSetLine["data"][] = $dataLine; //Data del Objetivo
             }
+
             //Paso de la data ya formateada
             $dataSetV['data'] = array('seriesname' => 'Plan', 'parentyaxis' => 'S', 'renderas' => 'Line', 'data' => $dataSetLine['data']);
 
@@ -4326,8 +4356,8 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["data"][] = $dataObj; //Acumulado
             
             //Carga de Tendencia
-            $cantValue = count($dataSetTend['data']);
-            if ($cantValue >= 4) {
+            $cantValue = count($dataSetTend['data']);            
+            if ($cantValue >= 4 and $resultNumbers > 2) {
                 $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetTend['data']);
             } elseif (!$cantValue) {
                 $dataSetValues['tendencia'] = 0;
@@ -4347,100 +4377,7 @@ class IndicatorService implements ContainerAwareInterface {
         $data['dataSource']['dataset'][] = $dataSetV['data'];
 
         return $data;
-    }
-
-    /**
-     * Gráfico de Columna para Causas de Desviación
-     * @param Indicator $indicator
-     * @return type
-     */
-    public function getDataChartOfCausesIndicatorEvolution(Indicator $indicator, $month, $urlExportFromChart) {
-        
-        $period = $indicator->getPeriod()->getDescription();
-
-        $data = array(
-            'dataSource' => array(
-                'chart' => array(),
-                'categories' => array(
-                ),
-                'dataset' => array(
-                ),
-            ),
-        );
-        $chart = array();
-        //$chart["caption"] = "Gráfico Causas de Desviación";
-        //$chart["subCaption"] = $period;
-        $chart["valueFontColor"] = "#000000";
-        $chart["showvalues"] = "1";
-        $chart["showSum"] = "1";
-        $chart["numberSuffix"] = "%";
-        $chart["bgalpha"] = "0,0";
-        $chart["baseFontColor"] = "#ffffff";
-        $chart["bgColor"] = "#ffffff";
-        $chart["legendBgColor"] = "#ffffff";
-        $chart["legendItemFontSize"] = "10";
-        $chart["legendItemFontColor"] = "#666666";
-        $chart["toolTipColor"] = "#ffffff";
-        $chart["outCnvBaseFontColor"] = "#000000";
-        $chart["visible"] = "1";
-        $chart["theme"] = "fint";
-        //$chart["rotateValues"] = "0";
-        $chart["snumbersuffix"] = "%";
-        $chart["decimals"] = "0";
-        $chart["setadaptiveymin"] = "1";
-        $chart["setadaptivesymin"] = "1";
-        //$chart["sYAxisMaxValue"] = "150";
-        //$chart["pYAxisMaxValue"] = "150";
-        $chart["linethickness"] = "5";
-        $chart["showborder"] = "0";
-        $chart["exportenabled"] = "1";
-        $chart["exportatclient"] = "0";
-        $chart["exportFormats"] = "PNG= Exportar Informe de Evolución PDF";
-        $chart["exportFileName"] = "Grafico Resultados ";
-        $chart["exporthandler"] = $urlExportFromChart;
-
-        //Inicialización
-        $category = $dataSetCause = array();
-        $label = $dataCause = array();
-        $contCause = 1;
-        //Carga de Nombres de Labels
-        $dataSetCause["seriesname"] = "Causas";
-        $monthCause = (int) $month;
-        //
-        foreach ($indicator->getindicatorCause() as $value) {
-            //$idCause = $value->getId();
-            //Carga del label de la Causa
-            //$label["label"] = 'Causa'.' '.$contCause;                                    
-
-            if ($value->getMonth() === $monthCause) {
-
-                $label["label"] = $value->getCauses();
-                $contCause = $contCause + 1;
-                $category[] = $label;
-            }
-        }
-        //$label["label"] = 'Causa';
-
-        foreach ($indicator->getindicatorCause() as $value) {
-            //Carga de los Valores de la causa
-            if ($value->getMonth() === $monthCause) {
-
-                $dataCause["value"] = $value->getvalueOfCauses();
-                $dataSetCause["data"][] = $dataCause;
-            }
-            //Carga del label de la Causa
-            //$label["label"] = 'Causa'.' '.$contCause;                    
-            //$contCause = $contCause + 1;
-            //$category[] = $label;
-        }
-        //die();
-
-        $data['dataSource']['chart'] = $chart;
-        $data['dataSource']['categories'][]["category"] = $category;
-        $data['dataSource']['dataset'][] = $dataSetCause;
-
-        return $data;
-    }
+    }    
 
     public function obtainIndicatorChartDetails(Indicator $indicator, \Pequiven\SEIPBundle\Entity\Chart $chart) {
         $indicatorChartDetailsRepository = $this->container->get('pequiven.repository.indicatorchartdetails');
@@ -4628,14 +4565,14 @@ class IndicatorService implements ContainerAwareInterface {
                         $indicatorParentOperative = $indicatorParent->getParent();
                         if ($levelParentOperative === $indicatorLevel) {
                             $indicatorParentOperative = $indicatorParentOperative->getParent();
-                            if ($indicatorParentOperative) {                                                    
+                            if ($indicatorParentOperative) {
                                 $value = false;
-                            }                            
-                        }elseif($indicatorParentOperative){                            
+                            }
+                        }elseif($indicatorParentOperative){
                                 $value = false;
                         }else{
                             $value = true;
-                        }                                        
+                        }
         
                     }else{
                         $value = true;
@@ -4643,7 +4580,7 @@ class IndicatorService implements ContainerAwareInterface {
                     
                 break;
                 
-                default: 
+                default:
                     $value = false;
             }
         

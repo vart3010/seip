@@ -1,17 +1,14 @@
 {% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
-{% block body %}
-    
-    <hgroup id="main-title" class="thin breadcrumb">
-        <h1>
-            {{ 'pequiven_seip.users'|trans }}
-            {#<a href="{{ path(route_index) }}">{{ 'pequiven_objetive.objetive_strategic'|trans }}</a>
-            <span class="icon-forward"></span>
-            <span class="thin">{{ 'pequiven_objetive.list'|trans }}</span>#}
-        </h1>
-    </hgroup>
-    
+{% block before_body %}    
+    {{ contentHeader(
+        { ( path('userList') ): ("Usuarios SEIP") },
+         ("Lista")
+    ) }}
+{% endblock %}
+
+{% block body %}    
     <div ng-controller="TableFormatController">
         <div ng-controller="TableUserController">
             <div loading-container="tableParams.settings().$loading">

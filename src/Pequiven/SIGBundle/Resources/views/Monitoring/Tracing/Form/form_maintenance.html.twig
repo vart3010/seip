@@ -30,19 +30,19 @@
                         <label class="label">Avance Cargado</label>
                             {{ dataAdvance }}%
                     </p>
+                    <p id="max" style="display:none">{{ dataAdvance }}</p>
                 {% endif %}
             </div>
         </div>    
 </fieldset>
 <form method="POST" id="form_maintenance_add">
     <fieldset class="fieldset fields-list">
-        <legend class="legend">Mantenimiento</legend>
-            <div class="field-block button-height" >            
-                {{ form_label(formAdvance.analysis) }}            
-                {{ form_widget(formAdvance.analysis) }}            
-            </div>  
-            
+        <legend class="legend">Mantenimiento</legend>            
             {% if valueCharge == 0 %}
+                <div class="field-block button-height" >            
+                    {{ form_label(form.analysis) }}            
+                    {{ form_widget(form.analysis) }}            
+                </div>  
                 <div class="field-block button-height" >            
                     {{ form_label(form.dateStart) }}            
                     {{ form_widget(form.dateStart) }}            
@@ -84,5 +84,23 @@
                     maxDate: "31/12/" + {{ period_valid }},
             });
     {% endif %}
+
+    $('input#sig_maintenance_advance_advance').keyup(function openConfirm() {        
+        var valueCharge = $("#max").text();                
+        var max = 100 - valueCharge;
+
+        if ($("#sig_maintenance_advance_advance").val() > max) {
+            $.modal.alert('Valor ingresado mayor a avance valido para carga ' + max, {
+                buttons: {
+                    'Aceptar': {
+                        classes:    'huge blue-gradient glossy full-width',
+                        click:      function(win) { win.closeModal(); 
+                            $("#sig_maintenance_advance_advance").val("")
+                        }
+                    }
+                }
+            });            
+        };
+    });    
 </script> 
 {% endblock %}

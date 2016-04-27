@@ -441,6 +441,9 @@ pequiven_seip:
     consumer_planning_service:
         consumer_planning_service: Consumo de servicios
         details_consumer_planning_service: Detalle de consumo de servicios
+    consumer_planning_gasflow:
+        consumer_planning_gasflow: Consumo de flujo de gas
+        details_consumer_planning_gasflow: Detalle de consumo de flujo de gas
 
     month:
         1: Enero
@@ -531,7 +534,7 @@ principal:
         indicatorPorc: % Carga
         
 result:
-    recalculate: Recalcular resultados
+    recalculate: Recalcular Resultados
     list:
         titleObjetiveOperative: Resultados Objetivos
         columnLocation: Localidad
@@ -581,6 +584,7 @@ empty:
     plant_stop_planning: No hay planificación de paradas.
     no_service: Sin servicios.
     consumer_planning_services: No hay servicios.
+    consumer_planning_gas_flow: No hay consumo de flujo de gas.
     no_details_service: No hay detalles del consumo de servicios.
     inventorys: No hay detalles de inventario.
     unrealized_productions: No hay detalles de producción no realizada.
@@ -663,6 +667,7 @@ nro: "#"
 "Plant report": Reporte de planta
 "Day stops": Dias de parada
 "Services": Servicios
+"GasFlow": Flujo de Gas
 "Service": Servicio
 'Stop time': Tiempo de parada
 'Other time': Otro

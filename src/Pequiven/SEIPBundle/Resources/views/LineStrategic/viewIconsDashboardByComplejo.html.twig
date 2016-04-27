@@ -1,0 +1,27 @@
+<!-- Widgets de los Indicadores Estratégicos de acuerdo a como se muestran en el reporte ejecutivo -->
+{% trans_default_domain 'PequivenSEIPBundle' %}
+{% for key, line in linesStrategics %}
+    {% set styleIcon= 'background: none' %}
+    <div class="four-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
+        {% if line.id in linesAsociated %}
+            {% set styleIcon= 'background: #EEE; box-shadow: inset 0 3px 8px rgba(0,0,0,0.125);' %}
+            <a href="{{ path('pequiven_line_strategic_view_results_by_complejo',{id:line.id, idComplejo:idComplejo}) }}">
+                <span>
+                    <div class='contentLine' style= "{{styleIcon}}">
+                        <img class="icon-strategic" src="{{ asset(iconsLineStrategic[line.id]) }}" style='margin: 5% 15%'>
+                    </div>
+                </span>
+                <p class="title-icon-strategic" style=' text-align: center; margin-top: 2%'>{{ line.description }}</p>   
+            </a>
+        {% else %}
+{#             <a href="{{ path('pequiven_line_strategic_view_results_by_complejo',{id:line.id, idComplejo:idComplejo}) }}">#}
+                <span>
+                    <div class='contentLine' style= "{{styleIcon}}">
+                        <img class="icon-strategic" src="{{ asset(iconsLineStrategic[line.id]) }}" style='margin: 5% 15%'>
+                    </div>
+                </span>
+              <p class="title-icon-strategic" style=' text-align: center; margin-top: 2%'>{{line.description}}</p>
+{#            </a>#}
+        {%endif%}
+      </div>
+{%endfor%}

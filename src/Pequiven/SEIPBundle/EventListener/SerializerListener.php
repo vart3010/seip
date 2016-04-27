@@ -199,11 +199,11 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $isEnabledLoadByQuarter = true;
 
         //Habilitar la carga del primer trimestre (Requiere isEnabledLoadByQuarter)
-        $isEnabledLoadByQuarterFirst = false;
+        $isEnabledLoadByQuarterFirst = true;
         //Habilitar la carga de valores planificados del primer trimestre (Requiere isEnabledLoadByQuarterFirst)
         $isEnabledLoadByQuarterFirstPlanned = false;
         //Habilitar la carga de valores reales del primer trimestre (Requiere isEnabledLoadByQuarterFirst)
-        $isEnabledLoadByQuarterFirstReal = false;
+        $isEnabledLoadByQuarterFirstReal = true;
 
         //Habilitar la carga del segundo trimestre (Requiere isEnabledLoadByQuarter)
         $isEnabledLoadByQuarterSecond = false;
@@ -591,7 +591,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $links = array();
         $object = $event->getObject();
         $group = $object->getRealGroup();
-        $links['self']['href'] = $this->generateUrl('pequiven_seip_user_show', array('id' => $object->getId()));
+        $links['self']['href'] = $this->generateUrl('pequiven_user_update', array('id' => $object->getId()));
         $links['self']['edit'] = $this->generateUrl('pequiven_user_update', array('id' => $object->getId()));
         $event->getVisitor()->addData('_links', $links);
         $rol = 'SIN ASIGNAR';

@@ -96,24 +96,29 @@ abstract class Indicator implements IndicatorInterface {
     const TYPE_DETAIL_DAILY_LOAD_PRODUCTION = 1;
 
     /**
-     * Metodo de calculo tradicional donde se acumulan las variables
+     * Metodo de cálculo tradicional donde se acumulan las variables
      */
     const CALCULATION_METHOD_ACCUMULATION_OF_VARIABLES = 0;
 
     /**
-     * Metodo de calculo por promedio de los resultados de cada hijos en sus resultados
+     * Metodo de cálculo por promedio de los resultados de cada hijos en sus resultados
      */
     const CALCULATION_METHOD_AVERAGE_BASED_ON_NUMBER_CHILDREN = 1;
 
     /**
-     * Metodo de calculo por promedio del plan y real acumulado de los hijos
+     * Metodo de cálculo por promedio del plan y real acumulado de los hijos
      */
     const CALCULATION_METHOD_AVERAGE_PLAN_REAL_CHILDREN = 2;
 
     /**
-     * Metodo de calculo por promedio ponderado del resultado de los hijos
+     * Metodo de cálculo por promedio ponderado del resultado de los hijos
      */
     const CALCULATION_METHOD_WEIGHTED_AVERAGE_RESULT_CHILDREN = 3;
+    
+    /**
+     * Metodo de cálculo dónde variables parciales se obtienen a través de ecuaciones de las variables
+     */
+    const CALCULATION_METHOD_OF_EQUATION_PARTIAL_VARIABLES = 4;
     
     
     /**
@@ -337,6 +342,7 @@ abstract class Indicator implements IndicatorInterface {
             self::CALCULATION_METHOD_AVERAGE_BASED_ON_NUMBER_CHILDREN => 'pequiven_indicator.calculation_method.average_based_number_children',
             self::CALCULATION_METHOD_AVERAGE_PLAN_REAL_CHILDREN => 'pequiven_indicator.calculation_method.average_plan_real_children',
             self::CALCULATION_METHOD_WEIGHTED_AVERAGE_RESULT_CHILDREN => 'pequiven_indicator.calculation_method.weighted_average_result_children',
+            self::CALCULATION_METHOD_OF_EQUATION_PARTIAL_VARIABLES => 'pequiven_indicator.calculation_method.equation_of_partial_variables',
         );
     }
 

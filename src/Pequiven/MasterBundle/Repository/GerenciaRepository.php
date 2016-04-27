@@ -95,6 +95,26 @@ class GerenciaRepository extends EntityRepository {
         return $this->getPaginator($queryBuilder);
     }
 
+    /**
+     * Crea un paginador para las gerencias de 1ra línea
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorNormalizedGerency(array $criteria = null, array $orderBy = null) {
+        
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $user = $this->getUser();
+        $queryBuilder
+            ->leftJoin('g.complejo', 'c')
+            ->andWhere('g.normalizedManagement = :valid')
+            ->setParameter('valid', true)
+        ;
+
+        return $this->getPaginator($queryBuilder);
+    }
+
     function findGerencia(array $criteria = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);

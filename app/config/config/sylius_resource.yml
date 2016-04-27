@@ -155,6 +155,13 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\UserController
                 model: Pequiven\SEIPBundle\Entity\User
                 repository: Pequiven\SEIPBundle\Repository\UserRepository
+        pequiven_seip.userNotification:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:User
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\User\NotificationController
+                model: Pequiven\SEIPBundle\Entity\User
+                repository: Pequiven\SEIPBundle\Repository\UserRepository
         #ESTRUCTURA DE CARGOS
         pequiven_seip.feestructure:
             driver: doctrine/orm
@@ -288,9 +295,9 @@ sylius_resource:
                 repository: Pequiven\SIGBundle\Repository\TypeVerificationManagementSystemRepository
         pequiven.managementsystem_sig_objetives:
             driver: doctrine/orm
-            templates: PequivenSIGBundle:Objetives/
+            templates: PequivenSIGBundle:Objetive/
             classes:
-                controller: Pequiven\SIGBundle\Controller\ObjetivesController
+                controller: Pequiven\SIGBundle\Controller\ObjetiveSigController
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
                 repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
         pequiven.monitoring_sig:
@@ -403,6 +410,12 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\Service\ConsumerPlanningServiceController
+        pequiven.consumer_planning_gasflow:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/GasFlow/ConsumerPlanningGasFlow
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\GasFlow\ConsumerPlanningGasFlow
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\GasFlow\ConsumerPlanningGasFlowController
         pequiven.inventory:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:DataLoad/Inventory/Inventory
@@ -422,6 +435,12 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\Service\DetailConsumerPlanningServiceController
+        pequiven.detail_consumer_planning_gasflow:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/GasFlow/DetailConsumerPlanningGasFlow
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\GasFlow\DetailConsumerPlanningGasFlow
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\GasFlow\DetailConsumerPlanningGasFlowController
         pequiven.formula:
             driver: doctrine/orm
             classes:

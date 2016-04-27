@@ -1,0 +1,15 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.consumer_planning_gasflow.consumer_planning_gasflow'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.plantReport) }}
+        {{ form_widget(form.plantReport) }}
+        {{ form_errors(form.plantReport) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.enabled) }}
+        {{ form_widget(form.enabled) }}
+        {{ form_errors(form.enabled) }}
+    </div>
+</fieldset>

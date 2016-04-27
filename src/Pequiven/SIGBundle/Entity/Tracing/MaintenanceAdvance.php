@@ -37,13 +37,6 @@ class MaintenanceAdvance
     private $advance;
 
     /**
-     * analysis
-     * @var text
-     * @ORM\Column(name="analysis",type="text", nullable=true)
-     */
-    private $analysis;
-
-    /**
      * observations
      * @var string
      * @ORM\Column(name="observations",type="text")
@@ -202,30 +195,6 @@ class MaintenanceAdvance
     {
         return $this->deletedAt;
     }
-
-    /**
-     * Set analysis
-     *
-     * @param string $analysis
-     * @return analysis
-     */
-    public function setAnalysis($analysis)
-    {
-        $this->analysis = $analysis;
-
-        return $this;
-    }
-
-    /**
-     * Get analysis
-     *
-     * @return string 
-     */
-    public function getAnalysis()
-    {
-        return $this->analysis;
-    }
-
     
     /**
      * Set observations

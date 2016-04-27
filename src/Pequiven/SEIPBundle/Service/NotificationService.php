@@ -17,7 +17,7 @@ use Pequiven\SEIPBundle\Entity\User;
  * Servicios para las notificaciones
  * 
  * 
- * @author Máxmimo Sojo <maxsojo13@gmail.com>
+ * @author Máximo Sojo <maxsojo13@gmail.com>
  */
 class NotificationService implements ContainerAwareInterface {
 
@@ -27,7 +27,7 @@ class NotificationService implements ContainerAwareInterface {
      * 
      * @param Notification
      */
-    public function setDataNotification($title, $message, $type, $status, $path) {
+    public function setDataNotification($title, $message, $type, $status, $path, $user) {
 
         $securityContext = $this->container->get('security.context');        
         $em = $this->getDoctrine()->getManager();                
@@ -39,20 +39,20 @@ class NotificationService implements ContainerAwareInterface {
         $notificacion->setType($type);                                      
         $notificacion->setStatus($status);                                      
         $notificacion->setPath($path);                                      
-        $notificacion->setUser($securityContext->getToken()->getUser());                
+        $notificacion->setUser($user);                
 
         $em->persist($notificacion);
         $em->flush();            
 
-        $this->setUserNotification();
+        $this->setUserNotification($user);
     }
 
-    public function setUserNotification(){
+    public function setUserNotification($user){
     	
         $securityContext = $this->container->get('security.context');
     	$em = $this->getDoctrine()->getManager();                
 
-    	$user = $this->container->get('pequiven.repository.user')->find($securityContext->getToken()->getUser()->getId()); 
+    	$user = $this->container->get('pequiven.repository.user')->find($user->getId()); 
 
         $dataNotification = $user->getNotify() + 1;            
     	$user->setNotify($dataNotification);
@@ -60,12 +60,7 @@ class NotificationService implements ContainerAwareInterface {
 
     }
 
-    public function getUserNotificationStandardization(){
-
-    }
-
-    public function findMessageUser(){
-        
+    public function findMessageUser(){        
         $securityContext = $this->container->get('security.context');
         $em = $this->getDoctrine()->getManager();                
 

@@ -35,8 +35,8 @@ class EvolutionCausesController extends ResourceController
      */
     function getFormAnalysisAction(Request $request)
     {
-        $indicator = $this->findIndicatorOr404($request);        
-        $idIndicator = $request->get('idIndicator');
+        $indicator = $this->get('pequiven.repository.indicator')->find($id);              
+        $idIndicator = $request->get('idObject');
         
         $causeAnalysis = new EvolutionCauseAnalysis();
         $form  = $this->createForm(new EvolutionCauseAnalysisType(), $causeAnalysis);
@@ -67,7 +67,7 @@ class EvolutionCausesController extends ResourceController
         
         $month = $request->get('causeAnalysis_form')['month'];//Carga de Mes pasado
 
-        $indicator = $request->get('idIndicator');
+        $indicator = $request->get('idObject');
         $repository = $this->get('pequiven.repository.sig_indicator');
         $results = $repository->find($indicator);
         
@@ -91,48 +91,6 @@ class EvolutionCausesController extends ResourceController
            // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
         }     
     }
-
-    /**
-     * Busca las Causas del indicador para filtrarlas para el plan de acción
-     * @param type $param
-     */
-    function getCausesEvolutionAction(\Symfony\Component\HttpFoundation\Request $request) {
-        
-        $idIndicator = $request->get('idIndicator');
-        var_dump($idIndicator);
-        die();
-        //$idIndicator = $request->get('id');
-        $results = $this->get('pequiven.repository.sig_causes_indicator')->findByindicator($idIndicator);
-        var_dump(count($results));
-        die();
-        //$user = $this->getUser();
-        $criteria = $request->get('filter',$this->config->getCriteria());
-        $repository = $this->get('pequiven.repository.managementsystem_sig');
-        $results = $repository->findAll();
-        //var_dump(count($results));
-        //die();
-        $view = $this->view();
-        $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id','api_list','description'));
-        return $this->handleView($view);
-    }
-
-    /**
-     * Busca el indicador o retorna un 404
-     * @param Request $request
-     * @return \Pequiven\IndicatorBundle\Entity\Indicator
-     * @throws type
-     */
-    private function findIndicatorOr404(Request $request)
-    {
-        $id = $request->get('idIndicator');
-        
-        $indicator = $this->get('pequiven.repository.indicator')->find($id);
-        if(!$indicator){
-            throw $this->createNotFoundException();
-        }
-        return $indicator;
-    }    
 
     /**
      * 

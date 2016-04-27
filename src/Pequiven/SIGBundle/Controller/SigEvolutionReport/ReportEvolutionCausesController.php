@@ -36,10 +36,10 @@ class ReportEvolutionCausesController extends ResourceController
     function getFormAnalysisAction(Request $request)
     {
         $typeObj = $request->get('typeObj');//tipo de Objeto
-        $id = $request->get('idIndicator');// Id generico pero debo cambiar que diga id indicator
+        $id = $request->get('idObject');// Id generico pero debo cambiar que diga id indicator
         
         if ($typeObj == 1) {
-            $result = $this->findIndicatorOr404($request);  
+            $result = $this->get('pequiven.repository.indicator')->find($id);
         }elseif ($typeObj == 2) {
             $repository = $this->get('pequiven_seip.repository.arrangementprogram');
             $result = $repository->find($id); 
@@ -70,7 +70,7 @@ class ReportEvolutionCausesController extends ResourceController
      */
     public function addCauseAnalysisAction(Request $request)
     {   
-        $result = $request->get('idIndicator');//Id
+        $result = $request->get('idObject');//Id
 
         $typeObject = $request->get('typeObj');//Tipo de Objeto
 
@@ -120,15 +120,21 @@ class ReportEvolutionCausesController extends ResourceController
     {
         
         $typeObj = $request->get('typeObj');//tipo de Objeto
-        $id = $request->get('idIndicator');// Id generico pero debo cambiar que diga id indicator
+        $id = $request->get('idObject');// Id generico pero debo cambiar que diga id indicator
         
         if ($typeObj == 1) {
-            $result = $this->findIndicatorOr404($request);                    
+            $result = $this->get('pequiven.repository.indicator')->find($id);
+            $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $id, 'month' => $request->get('month')));
         }elseif ($typeObj == 2) {
             $repository = $this->get('pequiven_seip.repository.arrangementprogram');
             $result = $repository->find($id); 
+            $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('arrangementProgram' => $id, 'month' => $request->get('month')));
+        }        
+        $sumCause = 0;
+        foreach ($causes as $valueCauses) {
+            $sumCause = $sumCause + $valueCauses->getValueOfCauses();            
         }
-        
+
         $cause = new EvolutionCause();
         $form  = $this->createForm(new EvolutionCauseType(), $cause);
         $view = $this
@@ -138,8 +144,9 @@ class ReportEvolutionCausesController extends ResourceController
             ->setData(array(
                 'form'           => $form->createView(),
                 'indicator'      => $result,
-                'id' => $id,
-                'period'        => $result->getPeriod()->getName()                
+                'id'             => $id,
+                'period'         => $result->getPeriod()->getName(),
+                'sumCause'       => $sumCause
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -155,7 +162,7 @@ class ReportEvolutionCausesController extends ResourceController
      */
     public function addCausesAction(Request $request)
     {   
-        $result = $request->get('idIndicator');
+        $result = $request->get('idObject');
 
         $typeObject = $request->get('typeObj');
         
@@ -240,23 +247,6 @@ class ReportEvolutionCausesController extends ResourceController
             $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteCauseAnalysis', array(), 'PequivenSIGBundle'));
         }  
     }
-
-    /**
-     * Busca el indicador o retorna un 404
-     * @param Request $request
-     * @return \Pequiven\IndicatorBundle\Entity\Indicator
-     * @throws type
-     */
-    private function findIndicatorOr404(Request $request)
-    {
-        $id = $request->get('idIndicator');
-        
-        $indicator = $this->get('pequiven.repository.indicator')->find($id);
-        if(!$indicator){
-            throw $this->createNotFoundException();
-        }
-        return $indicator;
-    }    
 
     /**
      * 
