@@ -42,9 +42,9 @@
         "sylius/resource-bundle": "0.10.0",
         "phpoffice/phpexcel": "1.8.1",
         "tecnocreaciones/extjs-bundle": "dev-master",
-        "sonata-project/admin-bundle": "~2.4@dev",
+        "sonata-project/admin-bundle": "dev-master",
         "sonata-project/core-bundle": "2.3.*@dev",
-        "sonata-project/doctrine-orm-admin-bundle": "2.4.*@dev",
+        "sonata-project/doctrine-orm-admin-bundle": "dev-master",
         "sonata-project/easy-extends-bundle": "~2.1@dev",
         "sonata-project/doctrine-extensions": "~1@dev",
         "sonata-project/block-bundle": "~2.2@dev",
@@ -58,9 +58,19 @@
         "tecnocreaciones/console-bundle": "dev-master",
         "symfony/doctrine-bridge": "~3.0"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "git@172.20.124.26:sonata-project/admin-bundle.git"
+        },
+        {
+            "type": "vcs",
+            "url":  "git@172.20.124.26:sonata-project/doctrine-orm-admin-bundle.git"
+        }
+    ],  
     "scripts": {
         "post-install-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Incenteev\\ParameterHandledr\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
