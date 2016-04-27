@@ -7,6 +7,8 @@ use Pequiven\SIGBundle\Entity\ManagementSystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
+use Pequiven\SIGBundle\Controller\EvolutionController;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 
@@ -23,7 +25,7 @@ use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionIndicatorCloningTy
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
  */
-class IndicatorSigController extends ResourceController {
+class IndicatorSigController extends EvolutionController {
 
     /**
      * Lista de Indicadores por nivel(Estratégico, Táctico u Operativo)
@@ -118,9 +120,9 @@ class IndicatorSigController extends ResourceController {
     public function evolutionAction(Request $request) {
         
         $resource = $this->findOr404($request);
-        $form = $this->getForm($resource);
-
-        $sumCause = 0; $typeObject = 1;
+        
+        $sumCause = 0; 
+        $typeObject = 1;
 
         $idIndicator = $request->get('id');
 
@@ -145,7 +147,8 @@ class IndicatorSigController extends ResourceController {
         
 
         $month = $request->get('month'); //El mes pasado por parametro
-        $data = $this->findEvolutionCause($indicator, $request); //Carga la data de las causas y sus acciones relacionadas
+        $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
+        $data = $evolutionService->findEvolutionCause($indicator, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
        
         //Validación de que el mes pasado este entre los validos
         if ($month > 12) {
@@ -186,7 +189,7 @@ class IndicatorSigController extends ResourceController {
         $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicatorBase,$urlExportFromChart,$month); //Obtenemos la data del gráfico de acuerdo al indicador
         
         //Carga de los datos de la grafica de las Causas de Desviación
-        $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month, $urlExportFromChart); //Obtenemos la data del grafico de las causas de desviación
+        $dataCause = $evolutionService->getDataChartOfCausesEvolution($indicator, $urlExportFromChart, $month, $typeObject); //Obtenemos la data del grafico de las causas de desviación
         
         $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $idIndicator, 'month' => $month));
         foreach ($results as $value) {
@@ -252,8 +255,7 @@ class IndicatorSigController extends ResourceController {
             'lastPeriod' => $indicator->getIndicatorLastPeriod(),
             'route'      => "pequiven_indicator_evolution", //Ruta para carga de Archivo
             'urlExportFromChart' => $urlExportFromChart,
-            $this->config->getResourceName() => $resource,
-            'form' => $form->createView()
+            $this->config->getResourceName() => $resource,            
         ));
 
         return $this->handleView($view);
@@ -350,7 +352,7 @@ class IndicatorSigController extends ResourceController {
      * @return type
      */
     public function addLastPeriodAction(Request $request) {
-        $idIndicator = $request->get('idIndicator');
+        $idIndicator = $request->get('idObject');
 
         $lastPeriod = $request->get('lastPeriod')['indicatorlastPeriod'];
         
@@ -396,7 +398,7 @@ class IndicatorSigController extends ResourceController {
      */
     function getFormConfigAction(Request $request)
     {
-        $id = $request->get('idIndicator');        
+        $id = $request->get('idObject');        
         //$typeObject = $request->get('typeObj');
         //$month = $request->get('evolutiontrend')['month'];//Carga de Mes pasado        
         
@@ -464,326 +466,8 @@ class IndicatorSigController extends ResourceController {
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $view;
-    }
-
-    /**
-     * Buscamos las acciones de las causas
-     * @param Request $request
-     * @return \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauses
-     * @throws type
-     */
-    private function findEvolutionCause($indicator, $request) {        
-        $id = $indicator->getId();
-        $typeObject = $request->get('typeObj');
-
-        if ($typeObject === NULL) {
-            $typeObject = 1;
-        }
-
-        //Mes Actual
-        $monthActual = date("m");
-        //Mes Consultado       
-        $month = $request->get('month');
-        //Carga de variable base
-        $opc = false;
-        $idAction = $actionResult = 0;
-        $idCons = [0];
-
-        //$results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $idIndicator,'month'=> $month));
-        if ($typeObject == 1) {
-            $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $id));
-        } elseif ($typeObject == 2) {
-            $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('arrangementProgram' => $id));
-        }
-
-        //Determinando si esta en historico de informe o periodo actual
-        if ($month < $monthActual) {
-            $statusCons = 1;
-        } else {
-            $statusCons = 0;
-        }
-
-        $cause = array();
-        if ($results) {
-            foreach ($results as $value) {
-                $idCause = $value->getId();
-                $cause[] = $idCause;
-            }
-            $action = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause));
-        }
-
-        if (!$results) {
-            $action = null;
-        }
-
-        //Carga de las acciones para sacar la verificaciones realizadas
-        if ($action) {
-            foreach ($action as $value) {
-                $relation = $value->getRelactionValue();
-                foreach ($relation as $value) {
-                    $monthAction = $value->getMonth();
-                    $monthGet = (int) $month;
-                    if ($monthAction === $monthGet) {
-
-                        $idAction = $value->getActionValue()->getId();
-                        $idCons[] = $idAction;
-                    }
-                }
-            }
-            $actionResult = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('id' => $idCons));
-        }
-//        $actionsValues = EvolutionActionValue::getActionValues($idCons, $month);          
-        $actionsValues = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue' => $idCons, 'month' => $month));
-        $cant = count($actionResult);
-
-        if ($opc = false) {
-            $idAction = null;
-        }
-        if ($typeObject == 1) {
-            $verification = $this->get('pequiven.repository.sig_action_verification')->findBy(array('indicator' => $id, 'month' => $month));
-        } elseif ($typeObject == 2) {
-            $verification = $this->get('pequiven.repository.sig_action_verification')->findBy(array('arrangementProgram' => $id, 'month' => $month));
-        }
-
-        //Carga de array con la data
-        $data = [
-            'action'        => $actionResult, //Pasando la data de las acciones si las hay
-            'verification'  => $verification, //Pasando la data de las verificaciones            
-            'actionValue'   => $actionsValues,
-            'cant'          => $cant
-        ];
-
-        return $data;
     }    
-
-    /**
-     *
-     *
-     *
-     */
-    public function exportChrat(Request $request)
-    {          
-        if($request->isMethod('POST')){
-          $exportRequestStream = $request->request->all();          
-          $request->request->remove('charttype');
-          $request->request->remove('stream');
-          $request->request->remove('stream_type');
-          $request->request->remove('meta_bgColor');
-          $request->request->remove('meta_bgAlpha');
-          $request->request->remove('meta_DOMId');
-          $request->request->remove('meta_width');
-          $request->request->remove('meta_height');
-          $request->request->remove('parameters');
-          $fusionchartService = $this->getFusionChartExportService();          
-          $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);           
-        }        
-
-        //return $fileSVG;
-        $this->exportAction($request);            
-
-    }
-
-    /**
-     *
-     * Exportar informe de Evolución
-     *
-     */
-    public function exportAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $routing = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/temp/*.png";
-        
-        //$fileSVG = $this->exportChrat($request);        
-        sleep(1);
-        $formula = "";
-        //Buscando los Archivos por Codigo
-        $nameSVG = glob("$routing");
-        $user = $this->getUser()->getId();//Id Usuario    
-        $user = str_pad($user, 6,"0", STR_PAD_LEFT);
-        
-        $cont = 0;
-        $contImg = 1;
-        foreach ($nameSVG as $value) {            
-            $pos = strpos($nameSVG[$cont], $user);            
-            if ($pos !== false) {                                 
-                if (strpos($nameSVG[$cont], "mscolumnline3d")) {                    
-                    $chartEvolution = $nameSVG[$cont];                    
-                    $contImg ++;
-                    //var_dump("1");
-                }
-                if (strpos($nameSVG[$cont], "stackedbar3d")) {
-                    $chartCause = $nameSVG[$cont];                                        
-                    //var_dump("2");
-                }
-            }
-            $cont ++;
-        }        
-        
-        $id = $request->get('id'); //id         
-        $typeObject = $request->get('typeObj'); //Tipo de objeto (1 = Indicador/2 = Programa G.) 
-        //si el indicador es clonado
-        if ($typeObject == 1) { 
-            $indicator = $this->get('pequiven.repository.indicator')->find($id); //Obtenemos el indicador
-            $indicatorBase = $indicator;
-            if ($indicator->getParentCloning()) {
-                $id = $indicator->getParentCloning()->getId();            
-                $indicator = $indicator->getParentCloning();
-                //Si el indicador es clonado y viene del estratetico
-                if ($indicator->getParentCloning()) {
-                    $id = $indicator->getParentCloning()->getId();
-                    $indicator = $indicator->getParentCloning();
-                }
-            }
-        }else{
-            $indicator = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
-        }
-
-        $dataAction = $this->findEvolutionCause($indicator, $request); //Carga la data de las causas y sus acciones relacionadas
-        $month = $request->get('month'); //El mes pasado por parametro
-        
-        $font = "";
-        if ($typeObject == 1) {            
-            $name = $indicatorBase->getRef() . ' ' . $indicatorBase->getDescription(); //Nombre del Indicador
-            $type = "indicator";
-            //Relación - Objetivo
-            foreach ($indicator->getObjetives() as $value) {
-                $objRel = $value->getDescription();
-            }
-            $routingTendency = "/../web/bundles/pequivensig/images/";//Ruta de la Tendencia
-            $tendency = $indicator->getTendency()->getId();
-            switch ($tendency) {
-                case 0:
-                    $font = "";
-                    break;
-                case 1:
-                    $font = "1.png";
-                    break;
-                case 2:
-                    $font = "2.png";
-                    break;
-                case 3:
-                    $font = "3.png";
-                    break;
-            }
-            $font = $routing.$routingTendency.$font;            
-            $formula = $indicator->getFormula();
-
-        } elseif ($typeObject == 2) {
-            $ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
-            $type = "arrangementProgram";
-            $name = $ArrangementProgram->getRef() . '' . $ArrangementProgram->getDescription();
-            //Relacion
-            $objRel = $ArrangementProgram->getTacticalObjective()->getDescription();
-        }
-        
-        
-        //Carga el analisis de la tendencia
-        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array($type => $id, 'month' => $month));
-        if ($trend) {
-            foreach ($trend as $value) {
-                $trendDescription = $value->getDescription(); //Tendencia
-            }
-        } else {
-            $trendDescription = "No se ha Cargando el Analisis de Tendencia";
-        }
-
-        //Carga del analisis de las causas
-        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array($type => $id, 'month' => $month));
-        if ($causeAnalysis) {
-            foreach ($causeAnalysis as $value) {
-                $causeA = $value->getDescription();
-            }
-        } else {
-            $causeA = "No se ha Cargando el Analisis de Causas";
-        }
-
-        //Verificación
-        $verification = $this->get('pequiven.repository.sig_action_verification')->findBy(array($type => $id, 'month' => $month));
-
-        //Periodo
-        $period = $this->getPeriodService()->getPeriodActive();
-        
-            $data = array(
-                'formula'       => $formula,            
-                'nameSVG'       => $chartEvolution,
-                'chartCause'    => $chartCause,
-                'month'         => $month,
-                'name'          => $name,
-                'trend'         => $trendDescription,
-                'causeAnalysis' => $causeA,
-                'dataAction'    => $dataAction["actionValue"],
-                'obj'           => $objRel,
-                'verification'  => $verification,
-                'period'        => $period,
-                'font'          => $font
-            );
-
-        //Solo si existen las dos graficas
-        //if (isset($chartEvolution) AND isset($chartCause)) {            
-            $this->generatePdf($data);            
-        //}
-    }
-
-    public function generatePdf($data) {
-        $pdf = new \Pequiven\SIGBundle\Model\PDF\SIGPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setPrintLineFooter(false);
-        $pdf->setContainer($this->container);
-        //$pdf->setPeriod($this->getPeriodService()->getPeriodActive());
-        //$pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
-    // set document information
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('SIG');
-        $pdf->setTitle('INFORME DE EVOLUCIÓN');
-        $pdf->SetSubject('Resultados SIG');
-        $pdf->SetKeywords('PDF, SIG, Resultados');
-
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-    // set default monospaced font
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-    // set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-    // set auto page breaks
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-    // set image scale factor
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-    // set font
-    //  $pdf->SetFont('times', 'BI', 12);
-    // add a page        
-        $pdf->AddPage('L');
-
-    // set some text to print 
-        $html = $this->renderView('PequivenSIGBundle:Indicator:viewPdf.html.twig', $data);
-
-    // print a block of text using Write()
-        $pdf->writeHTML($html, true, false, true, false, '');
-
-    //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
-        $pdf->Output('Informe de evolucion' . '.pdf', 'D');
-
-        $this->rmTempFile($data);
-    }
-    /**
-     *
-     *  Eliminación de Archivos temporales
-     *
-     */
-    public function rmTempFile($data)
-    {   
-        $imgChart = $data['nameSVG'];//Ruta
-        $imgCause = $data['chartCause'];//Ruta
-        
-        shell_exec("rm $imgChart");//Eliminamos
-        shell_exec("rm $imgCause");//Eliminamos
-
-    }
-
+    
     /**
      * Busca el indicador o retorna un 404
      * @param Request $request
@@ -791,7 +475,7 @@ class IndicatorSigController extends ResourceController {
      * @throws type
      */
     private function findIndicatorOr404(Request $request) {
-        $id = $request->get('idIndicator');
+        $id = $request->get('idObject');
 
         $indicator = $this->get('pequiven.repository.indicator')->find($id);
         if (!$indicator) {
@@ -945,19 +629,11 @@ class IndicatorSigController extends ResourceController {
 
     /**
      * 
-     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     * @return \Pequiven\SIGBundle\Service\EvolutionService
      */
-    protected function getSecurityService() {
-
-        return $this->container->get('seip.service.security');
-    }
-
-    /**
-     * @return \Pequiven\SEIPBundle\Service\FusionChartExportService
-     */
-    private function getFusionChartExportService() {
-        return $this->container->get('pequiven_seip.service.fusion_chart');
-    }
+    protected function getEvolutionService() {
+        return $this->container->get('seip.service.evolution');
+    } 
 
     /**
      * 
@@ -965,8 +641,16 @@ class IndicatorSigController extends ResourceController {
      */
     protected function getIndicatorService() {
         return $this->container->get('pequiven_indicator.service.inidicator');
-    }
+    }    
 
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    protected function getSecurityService() {
+
+        return $this->container->get('seip.service.security');
+    } 
     /**
      *  Period
      *
