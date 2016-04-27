@@ -42,15 +42,9 @@
         "sylius/resource-bundle": "0.10.0",
         "phpoffice/phpexcel": "1.8.1",
         "tecnocreaciones/extjs-bundle": "dev-master",
-<<<<<<< HEAD
         "sonata-project/admin-bundle": "dev-master",
         "sonata-project/core-bundle": "2.3.*@dev",
         "sonata-project/doctrine-orm-admin-bundle": "dev-master",
-=======
-        "sonata-project/admin-bundle": "~2.3.10",
-        "sonata-project/core-bundle": "2.3.*@dev",
-        "sonata-project/doctrine-orm-admin-bundle": "2.3.3",
->>>>>>> bf19b236ae9e98ef0bc6617d38a826046523357f
         "sonata-project/easy-extends-bundle": "~2.1@dev",
         "sonata-project/doctrine-extensions": "~1@dev",
         "sonata-project/block-bundle": "~2.2@dev",
