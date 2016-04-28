@@ -1389,7 +1389,6 @@ class ReportTemplateController extends SEIPController {
             $dateEnd = $data["dateEnd"];
             $groupsPlants = $data["showGroupsPlants"];
 
-
             $showProduction = $data["showProduction"];
             $showRawMaterial = $data["showRawMaterial"];
             $showPnr = $data["showPnr"];
@@ -1400,6 +1399,8 @@ class ReportTemplateController extends SEIPController {
             $reportTemplates = $data["reportTemplate"];
 
             $typeReport = $data['typeReport'];
+            $dateReport = $data['dateReport']; //new
+            
 
 
             $dayPlan = 0.0;
@@ -1499,6 +1500,8 @@ class ReportTemplateController extends SEIPController {
 
                 //SESSION HASTA LA FECHA SIN GRUPO DE PLANTAS
                 if (!$groupsPlants) {
+                    
+                    //var_dump($dateReport);
 
                     foreach ($reportTemplates as $reportTemplate) {
 
