@@ -1727,6 +1727,7 @@ class ReportTemplateController extends SEIPController {
                                 $arrayConsumerServices[$serviceId]["real_year"] += $consumerPlanning["total_year"];
                                 $arrayConsumerServices[$serviceId]["plan_year"] += $consumerPlanning["total_year_plan"];
                             }//FIN CONSUMO DE SERVICIOS
+                            //
                             //PRODUCION NO REALIZADA
                             foreach ($plantReport->getProductsReport() as $productReport) {
                                 if (!$productReport->getIsGroup()) {
