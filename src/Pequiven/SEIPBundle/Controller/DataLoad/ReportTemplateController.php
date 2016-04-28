@@ -2497,6 +2497,7 @@ class ReportTemplateController extends SEIPController {
             'showObservation' => $showObservation,
             'dateFrom' => $dateFrom,
             'dateEnd' => $dateEnd,
+            'groupsPlants' => null,
         );
 
 
