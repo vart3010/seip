@@ -34,6 +34,8 @@ class PlantReportController extends SEIPController {
         }
         return $entity;
     }
+    
+    
 
     public function indexAction(Request $request) {
         $criteria = $request->get('filter', $this->config->getCriteria());
@@ -94,6 +96,42 @@ class PlantReportController extends SEIPController {
         return $this->handleView($view);
     }
 
+    public function createGroupAction(Request $request) {
+        $saveAndClose = $request->get("save_and_close");
+
+        $resource = $this->createNew();
+        $form = $this->getForm($resource);
+
+        if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
+            $resource = $this->domainManager->create($resource);
+            
+            if (null === $resource) {
+                return $this->redirectHandler->redirectToIndex();
+            }
+
+            if ($saveAndClose !== null) {
+                return $this->redirectHandler->redirectTo($resource);
+            } else {
+                return $this->redirectHandler->redirectToRoute($this->config->getRedirectRoute('group_update'), ['id' => $resource->getId()]);
+            }
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('group/create.html'))
+                ->setData(array(
+                    $this->config->getResourceName() => $resource,
+                    'form' => $form->createView()
+                ))
+        ;
+
+        return $this->handleView($view);
+    }
+
     public function showAction(Request $request) {
 
         $plantReport = $this->getRepository()->find($request->get("id"));
@@ -125,7 +163,7 @@ class PlantReportController extends SEIPController {
          * SERVICIOS
          */
         $productReports = $plantReport->getProductsReport();
-        
+
         foreach ($productReports as $productReport) {
             //$product = $productReport->getproduct();
 
@@ -474,6 +512,38 @@ class PlantReportController extends SEIPController {
 
         return $this->handleView($view);
     }
+    
+    public function updateGroupAction(Request $request) {
+
+        $resource = $this->findOr404($request);
+        $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\PlantReportGroupType(), $resource);
+//        $form = $this->createForm($this->container->get('pequiven_seipbundle_dataload_plantreport'), $resource);
+//        $form = $this->getForm($resource);
+        $method = $request->getMethod();
+
+        if (in_array($method, array('POST', 'PUT', 'PATCH')) &&
+                $form->submit($request, !$request->isMethod('PATCH'))->isValid()) {
+            $this->domainManager->update($resource);
+
+            return $this->redirectHandler->redirectTo($resource);
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('group/update.html'))
+                ->setData(array(
+            $this->config->getResourceName() => $resource,
+            'form' => $form->createView()
+                ))
+        ;
+
+        return $this->handleView($view);
+    }
+
 
     public function deleteAction(Request $request) {
         $resource = $this->findOr404($request);
@@ -484,6 +554,30 @@ class PlantReportController extends SEIPController {
 
         $this->domainManager->delete($resource);
         return $this->redirect($url);
+    }
+    
+    public function getGroupLoadAction(Request $request) {
+        //$criteria = $request->get('filter', $this->config->getCriteria());
+        $em = $this->getDoctrine();
+        $entityId = $request->get('entityId');
+        $entityObj = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Entity")->find($entityId);
+        
+        $period = $this->getPeriodService()->getPeriodActive();
+        $entity = $em->getRepository("Pequiven\SEIPBundle\Entity\DataLoad\PlantReport")->findBy(array("entity"=>$entityObj,"period"=>$period));
+        //var_dump($entity);
+        $view = $this->view();
+        $view->setData($entity);
+        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+        return $this->handleView($view);
+        
+//        
+        //$repository = $this->get('pequiven.repository.objetiveoperative');
+        //$results = $repository->findTacticalObjetives($user, $criteria);
+//        $view = $this->view();
+//        $view->setData($results);
+//        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'gerencia'));
+//        return $this->handleView($view);
+        
     }
 
 }

@@ -95,10 +95,47 @@ class ReportTemplateController extends SEIPController {
         $arrayPlants = array();
         $arrayPlantsGroup = array();
         $groupNames = "";
-        foreach ($plantReports as $plantReport) {
-            $childrens = $plantReport->getPlant()->getChildrens();
 
-            if (count($childrens) == 0) { //SIN HIJOS
+        foreach ($plantReports as $plantReport) {
+
+            $childrens = $plantReport->getChildrensGroup();
+            //var_dump(count($childrens));
+            if (count($childrens) > 0) {
+
+                $cont = 0;
+                $arrayPlantsIds = array();
+                $groupNames = "";
+                foreach ($childrens as $children) {
+                    //var_dump($children);
+                    $plant = $children->getPlant();
+
+                    if (!in_array($plant->getName(), $arrayPlantsIds)) {
+                        $arrayPlantsIds[] = $plant->getName();
+                    }
+//                    
+////                    foreach ($plant->getProducts() as $productChild) {
+////                        if (!in_array($productChild->getName(), $arrayProductsIds)) {
+////                            $arrayProductsIds[] = $productChild->getName();
+////                        }
+////                    }
+                    if ($cont == 0) {
+                        $groupNames .= $plant->getName();
+                    } else {
+                        $groupNames .= "," . $plant->getName();
+                    }
+                    $cont++;
+                }
+//                var_dump($groupNames);
+                $arrayPlantsGroup[] = array(
+                    "id" => $children->getPlant()->getId(),
+                    "name" => $plantReport->getnameGroup(),
+                    "groups" => $groupNames,
+                    "alias" => $children->getPlant()->getEntity()->getAlias(),
+                    "entity" => $children,
+                    "products" => $arrayPlantsIds,
+                    "plantReportId" => $plantReport->getId()
+                );
+            } else {
                 $arrayPlants[] = array(
                     "id" => $plantReport->getPlant()->getId(),
                     "name" => $plantReport->getPlant()->getName(),
@@ -106,34 +143,48 @@ class ReportTemplateController extends SEIPController {
                     "entity" => $plantReport,
                     "plantReportId" => $plantReport->getId()
                 );
-            } else if (count($childrens) > 0) { //CON HIJOS
-                $cont = 0;
-                $arrayProductsIds = array();
-                $groupNames = "";
-                foreach ($childrens as $children) {
-                    foreach ($children->getProducts() as $productChild) {
-                        if (!in_array($productChild->getName(), $arrayProductsIds)) {
-                            $arrayProductsIds[] = $productChild->getName();
-                        }
-                    }
-                    if ($cont == 0) {
-                        $groupNames .= $children->getName();
-                    } else {
-                        $groupNames .= "," . $children->getName();
-                    }
-                    $cont++;
-                }
-                $arrayPlantsGroup[] = array(
-                    "id" => $plantReport->getPlant()->getId(),
-                    "name" => $plantReport->getPlant()->getName(),
-                    "groups" => $groupNames,
-                    "alias" => $plantReport->getPlant()->getEntity()->getAlias(),
-                    "entity" => $plantReport,
-                    "products" => $arrayProductsIds,
-                    "plantReportId" => $plantReport->getId()
-                );
             }
+
+
+//            if (count($childrens) == 0) { //SIN HIJOS
+//                $arrayPlants[] = array(
+//                    "id" => $plantReport->getPlant()->getId(),
+//                    "name" => $plantReport->getPlant()->getName(),
+//                    "alias" => $plantReport->getPlant()->getEntity()->getAlias(),
+//                    "entity" => $plantReport,
+//                    "plantReportId" => $plantReport->getId()
+//                );
+//            } else if (count($childrens) > 0) { //CON HIJOS
+//                $cont = 0;
+//                $arrayProductsIds = array();
+//                $groupNames = "";
+//                foreach ($childrens as $children) {
+//                    foreach ($children->getProducts() as $productChild) {
+//                        if (!in_array($productChild->getName(), $arrayProductsIds)) {
+//                            $arrayProductsIds[] = $productChild->getName();
+//                        }
+//                    }
+//                    if ($cont == 0) {
+//                        $groupNames .= $children->getName();
+//                    } else {
+//                        $groupNames .= "," . $children->getName();
+//                    }
+//                    $cont++;
+//                }
+//                $arrayPlantsGroup[] = array(
+//                    "id" => $plantReport->getPlant()->getId(),
+//                    "name" => $plantReport->getPlant()->getName(),
+//                    "groups" => $groupNames,
+//                    "alias" => $plantReport->getPlant()->getEntity()->getAlias(),
+//                    "entity" => $plantReport,
+//                    "products" => $arrayProductsIds,
+//                    "plantReportId" => $plantReport->getId()
+//                );
+//            }
         }
+        //var_dump($arrayPlantsGroup);
+        // die();
+
 
         $data = array(
             "report_template" => $reportTemplate,
@@ -485,9 +536,8 @@ class ReportTemplateController extends SEIPController {
                 $daysMonth = $causeFailService->getDaysMonth($unrealizedProduction);
                 $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
                 $pnrByCausesMP = $causeFailService->getPNRByFailsCauseMp($unrealizedProduction, $rawMaterials);
-//                var_dump($pnrByCausesIntExt);
-//                var_dump($pnrByCausesMP);
-//                die();
+
+
 
                 foreach ($failsInternal as $failInternal) {
                     for ($day = 1; $day <= $daysMonth; $day++) {
@@ -721,7 +771,7 @@ class ReportTemplateController extends SEIPController {
                 $externalRawMaterials = $rawMaterialsArray[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP];
                 $internalRawMaterials = $rawMaterialsArray[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP];
 
-//                var_dump ($rawMaterialsArray);
+
 
                 if (count($externalRawMaterials) > 0) {
                     foreach ($externalRawMaterials as $key => $rawMaterial) {
@@ -737,7 +787,6 @@ class ReportTemplateController extends SEIPController {
                         }
                     }
                 }
-//                var_dump($unrealizedProduction->getMonth());
             }
         }
 
@@ -770,9 +819,7 @@ class ReportTemplateController extends SEIPController {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]['empty']['year'] = 0.0;
         }
 
-//        var_dump($internalRawMaterials);
-//        var_dump($externalRawMaterials);
-//        die();
+
         //Recorremos las producciones no realizadas
         foreach ($unrealizedProductions as $unrealizedProduction) {
             $monthUnrealizedProduction = $unrealizedProduction->getMonth();
@@ -1060,6 +1107,1409 @@ class ReportTemplateController extends SEIPController {
         }
     }
 
+    public function summaryProduction($productsReports, $dateReport, $typeReport) {
+
+        $dayPlan = 0.0;
+        $dayReal = 0.0;
+
+        $observations = array();
+
+        $summaryProducction = array();
+        $summaryProducctionTotals = array(
+            "day" => array(
+                "ppto" => 0.0,
+                "real" => 0.0,
+                "ejec" => 0.0,
+                "var" => 0.0
+            ),
+            "month" => array(
+                "ppto" => 0.0,
+                "pptoAcumulado" => 0.0,
+                "realAcumulado" => 0.0,
+                "ejec" => 0.0,
+                "var" => 0.0
+            ),
+            "year" => array(
+                "ppto" => 0.0,
+                "pptoAcumulado" => 0.0,
+                "realAcumulado" => 0.0,
+                "ejec" => 0.0,
+                "var" => 0.0
+            )
+        );
+
+        //PRODUCTS REPORTS
+        foreach ($productsReports as $productReport) {
+            //var_dump($productReport->getProduct()->getId());
+            //PRODUCCION DIARIA
+            $summaryDay = $productReport->getSummaryDay($dateReport, $typeReport);
+
+            $dayPlan+=$summaryDay["plan"];
+            $dayReal+=$summaryDay["real"];
+
+            if ($summaryDay["plan"] - $summaryDay["real"] < 0) {
+                $var = 0;
+            } else {
+                $var = $summaryDay["plan"] - $summaryDay["real"];
+            }
+
+            //ME TRAIGO LAS OBSERVACIONES 
+            $observations[] = array(
+                "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
+                "obs" => $summaryDay["observation"]
+            );
+
+            if ($summaryDay["plan"] > 0) {
+                $ejecutionDay = ($summaryDay["real"] * 100) / $summaryDay["plan"];
+            } else {
+                $ejecutionDay = 0;
+            }
+
+            $group = null;
+            if ($productReport->getParent() != null) {
+                $group = $productReport->getParent()->getId();
+            }
+
+            $summaryProducction["day"][] = array(
+                "idProduct" => $productReport->getProduct()->getId(),
+                "idPlant" => $productReport->getPlantReport()->getPlant()->getId(),
+                "group" => $group,
+                "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
+                "plan" => number_format($summaryDay["plan"], 2, ',', '.'),
+                "real" => number_format($summaryDay["real"], 2, ',', '.'),
+                "ejecution" => number_format($ejecutionDay, 2, ',', '.'),
+                "var" => number_format($var, 2, ',', '.')
+            );
+            //TOTALES SECCION DIA
+            $summaryProducctionTotals["day"]["ppto"] +=$summaryDay["plan"];
+            $summaryProducctionTotals["day"]["real"] +=$summaryDay["real"];
+            $summaryProducctionTotals["day"]["ejec"] +=$ejecutionDay;
+            $summaryProducctionTotals["day"]["var"] +=$var;
+        }
+        var_dump($summaryProducction);
+    }
+
+    public function reportAction(Request $request) {
+        $plantReportId = null;
+        if ($request->isMethod("POST")) {
+            $formData = $request->get("form");
+            if (isset($formData['plantReport'])) {
+                $plantReportId = (int) $formData['plantReport'];
+            }
+        }
+
+        $periodActive = $this->getPeriodService()->getPeriodActive();
+        $yearPeriodSelected = date("Y", $periodActive->getDateStart()->getTimestamp());
+
+        $startDatePeriod = "01/01/" . $yearPeriodSelected;
+        $endDatePeriod = "31/12/" . $yearPeriodSelected;
+
+        $dateReport = new \DateTime(date("Y-m-d", strtotime("-1 day")));
+
+        if (!$this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')) {
+            $dateReport = new \DateTime(date("Y-m-d", strtotime("-1 day")));
+        }
+
+        /* CHECKS DE FILTROS PREDETERMINADOS COMO TRUE */
+        $showDay = $showMonth = $showYear = $defaultShow = $withDetails = true;
+        $dateFrom = $dateEnd = new \DateTime();
+
+        $byRange = false;
+
+        $emptyValue = "Seleccione";
+        $parametersReportTemplate = array(
+            'label_attr' => array('class' => 'label bold'),
+            'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
+            'property' => 'reportTemplateWithName',
+            'required' => false,
+            'empty_value' => $emptyValue,
+            'translation_domain' => 'PequivenSEIPBundle',
+            'attr' => array('class' => 'select2 input-xlarge'),
+            'multiple' => true,
+        );
+        $qb = function (\Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository $repository) {
+            return $repository->getQueryBuilderByUser();
+        };
+        $parametersReportTemplate['query_builder'] = $qb;
+
+        $parametersPlantReport = array(
+            'label_attr' => array('class' => 'label bold'),
+            'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
+            'property' => 'plant',
+            'required' => true,
+            'empty_value' => $emptyValue,
+            'translation_domain' => 'PequivenSEIPBundle',
+            'attr' => array('class' => 'select2 input-xlarge'),
+            'multiple' => false,
+            'group_by' => 'reportTemplateWithName'
+        );
+        $qb = function (\Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository $repository) {
+            return $repository->getQueryBuilderByUser();
+        };
+        $parametersPlantReport['query_builder'] = $qb;
+
+        $form = $this
+                ->createFormBuilder()
+                ->add('reportTemplate', 'entity', $parametersReportTemplate)
+                //->add('plantReport', 'entity', $parametersPlantReport)
+                ->add('dateReport', 'date', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'format' => 'd/M/y',
+                    'widget' => 'single_text',
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'attr' => array('class' => 'input input-xlarge'),
+                    'data' => $dateReport,
+                    'required' => false,
+                ])
+                ->add('productsReport', 'entity', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ProductReport',
+                    'multiple' => true,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'required' => false,
+                    'attr' => array('class' => 'select2 input-xlarge'),
+                ])
+                ->add('showDay', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showMonth', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showYear', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('byRange', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => false,
+                ])
+//                ->add('withDetails', 'checkbox', [
+//                    'label_attr' => array('class' => 'label bold'),
+//                    'required' => false,
+//                    'translation_domain' => 'PequivenSEIPBundle',
+//                ])
+                ->add('dateFrom', 'date', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'format' => 'd/M/y',
+                    'widget' => 'single_text',
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'attr' => array('class' => 'input input-xlarge'),
+                    'required' => false,
+                ])
+                ->add('dateEnd', 'date', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'format' => 'd/M/y',
+                    'widget' => 'single_text',
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'attr' => array('class' => 'input input-xlarge'),
+                    'required' => false,
+                ])
+                ->add('typeReport', 'choice', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'choices' => [
+                        'Gross' => 'Bruta',
+                        'Net' => 'Neta',
+                    ],
+                    'data' => 'Gross',
+                    'attr' => array('class' => 'select2 input-xlarge'),
+                    'translation_domain' => 'PequivenSEIPBundle',
+                ])
+                ->add('showProduction', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showRawMaterial', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showServices', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showPnr', 'checkbox', [
+                    //           'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showInventory', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showObservation', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showGroupsPlants', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => false,
+                ])
+                ->getForm();
+
+        $showProduction = null;
+        $showRawMaterial = null;
+        $showService = null;
+        $showPnr = null;
+        $showInventory = null;
+        $showObservation = null;
+
+        if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
+
+            $data = $form->getData();
+
+            $byRange = $data['byRange'];
+//$withDetails = $data['withDetails'];
+            $showDay = $data['showDay'];
+            $showMonth = $data['showMonth'];
+            $showYear = $data['showYear'];
+
+            $dateFrom = $data["dateFrom"];
+            $dateEnd = $data["dateEnd"];
+            $groupsPlants = $data["showGroupsPlants"];
+
+
+            $showProduction = $data["showProduction"];
+            $showRawMaterial = $data["showRawMaterial"];
+            $showPnr = $data["showPnr"];
+            $showService = $data["showServices"];
+            $showInventory = $data["showInventory"];
+            $showObservation = $data["showObservation"];
+
+            $reportTemplates = $data["reportTemplate"];
+
+            $typeReport = $data['typeReport'];
+
+
+            $dayPlan = 0.0;
+            $dayReal = 0.0;
+
+            $MonthPlan = 0.0;
+            $MonthPlanAcumulated = 0.0;
+            $MonthRealAcumualated = 0.0;
+
+            $yearPlan = 0.0;
+            $yearPlanAcumulated = 0.0;
+            $yearRealAcumualated = 0.0;
+
+            $summaryProducction = array();
+            $summaryProducctionTotals = array(
+                "day" => array(
+                    "ppto" => 0.0,
+                    "real" => 0.0,
+                    "ejec" => 0.0,
+                    "var" => 0.0
+                ),
+                "month" => array(
+                    "ppto" => 0.0,
+                    "pptoAcumulado" => 0.0,
+                    "realAcumulado" => 0.0,
+                    "ejec" => 0.0,
+                    "var" => 0.0
+                ),
+                "year" => array(
+                    "ppto" => 0.0,
+                    "pptoAcumulado" => 0.0,
+                    "realAcumulado" => 0.0,
+                    "ejec" => 0.0,
+                    "var" => 0.0
+                )
+            );
+
+
+
+            $observations = array();
+            $arrayIdProducts = array();
+
+            //$groupsProducts = array();
+            //CONSUMO DE MATERIA PRIMA
+            $arrayProdServices = array();
+            $arrayConsumerServices = array();
+            $arrayRawMaterial = array();
+            $arrayRawMaterialTotals = array();
+
+            if ($showDay) {
+                $arrayRawMaterialTotals["plan"] = 0.0;
+                $arrayRawMaterialTotals["real"] = 0.0;
+            }
+            if ($showMonth) {
+                $arrayRawMaterialTotals["plan_month"] = 0.0;
+                $arrayRawMaterialTotals["real_month"] = 0.0;
+            }
+            if ($showYear) {
+                $arrayRawMaterialTotals["plan_year"] = 0.0;
+                $arrayRawMaterialTotals["real_year"] = 0.0;
+            }
+
+            //CONSUME SERVICES
+//            $totalConsumerServices = array();
+            if ($showDay) {
+                $totalConsumerServices["plan"] = 0.0;
+                $totalConsumerServices["real"] = 0.0;
+            }
+            if ($showMonth) {
+                $totalConsumerServices["plan_month"] = 0.0;
+                $totalConsumerServices["real_month"] = 0.0;
+            }
+            if ($showYear) {
+                $totalConsumerServices["plan_year"] = 0.0;
+                $totalConsumerServices["real_year"] = 0.0;
+            }
+
+
+            //UNERALIZED PRODUCCTION
+            $arrayUnrealizedProduction = array();
+            $totalUnrealizedProduction = array(
+                "day" => 0.0,
+                "month" => 0.0,
+                "year" => 0.0
+            );
+
+            //INVENTORY
+            $arrayInventory = array();
+            $totalInventory = array(
+                "day" => 0.0,
+                "day_preview" => 0.0
+            );
+
+            //HASTA LA FECHA
+            if (!$byRange) {
+                $dataProductsReports = new \Doctrine\Common\Collections\ArrayCollection();
+
+                //SESSION HASTA LA FECHA SIN GRUPO DE PLANTAS
+                if (!$groupsPlants) {
+
+                    foreach ($reportTemplates as $reportTemplate) {
+
+                        foreach ($reportTemplate->getPlantReports() as $plantReport) {
+                            //PRODUCTS REPORTS
+                            foreach ($plantReport->getProductsReport() as $productReport) {
+                                //VALIDA Q SEAN PLANTS REPORTS HIJOS
+                                if ($productReport->getIsGroup() == 0) {
+
+                                    if (!$dataProductsReports->contains($productReport)) {
+                                        $dataProductsReports->add($productReport);
+                                    }
+                                    //var_dump($productReport->getProduct()->getId());
+                                    //PRODUCCION DIARIA
+                                    $summaryDay = $productReport->getSummaryDay($dateReport, $typeReport);
+
+                                    $dayPlan+=$summaryDay["plan"];
+                                    $dayReal+=$summaryDay["real"];
+
+                                    if ($summaryDay["plan"] - $summaryDay["real"] < 0) {
+                                        $var = 0;
+                                    } else {
+                                        $var = $summaryDay["plan"] - $summaryDay["real"];
+                                    }
+                                    //var_dump($productReport->getProduct());
+                                    //ME TRAIGO LAS OBSERVACIONES 
+                                    $observations[] = array(
+                                        "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
+                                        "obs" => $summaryDay["observation"]
+                                    );
+
+
+                                    if ($summaryDay["plan"] > 0) {
+                                        $ejecutionDay = ($summaryDay["real"] * 100) / $summaryDay["plan"];
+                                    } else {
+                                        $ejecutionDay = 0;
+                                    }
+
+                                    $group = null;
+                                    if ($productReport->getParent() != null) {
+                                        $group = $productReport->getParent()->getId();
+                                    }
+
+                                    $summaryProducction["day"][] = array(
+                                        "idProduct" => $productReport->getProduct()->getId(),
+                                        "idPlant" => $productReport->getPlantReport()->getPlant()->getId(),
+                                        "group" => $group,
+                                        "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
+                                        "plan" => number_format($summaryDay["plan"], 2, ',', '.'),
+                                        "real" => number_format($summaryDay["real"], 2, ',', '.'),
+                                        "ejecution" => number_format($ejecutionDay, 2, ',', '.'),
+                                        "var" => number_format($var, 2, ',', '.')
+                                    );
+                                    //TOTALES SECCION DIA
+                                    $summaryProducctionTotals["day"]["ppto"] +=$summaryDay["plan"];
+                                    $summaryProducctionTotals["day"]["real"] +=$summaryDay["real"];
+                                    $summaryProducctionTotals["day"]["ejec"] +=$ejecutionDay;
+                                    $summaryProducctionTotals["day"]["var"] +=$var;
+
+
+
+
+//PRODUCCTION MONTH
+                                    $summaryMonth = $productReport->getSummaryMonth($dateReport, $typeReport);
+
+                                    $MonthPlan+=$summaryMonth["plan_month"];
+                                    $MonthPlanAcumulated+=$summaryMonth["plan_acumulated"];
+                                    $MonthRealAcumualated+=$summaryMonth["real_acumulated"];
+
+                                    if ($summaryMonth["plan_acumulated"] - $summaryMonth["real_acumulated"] < 0) {
+                                        $varMonth = 0;
+                                    } else {
+                                        $varMonth = $summaryMonth["plan_acumulated"] - $summaryMonth["real_acumulated"];
+                                    }
+
+                                    if ($summaryMonth["plan_acumulated"] > 0) {
+                                        $ejecutionMonth = ($summaryMonth["real_acumulated"] * 100) / $summaryMonth["plan_acumulated"];
+                                    } else {
+                                        $ejecutionMonth = 0;
+                                    }
+
+                                    $summaryProducction["month"][] = array(
+                                        "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
+                                        "plan_month" => number_format($summaryMonth["plan_month"], 2, ',', '.'),
+                                        "plan_acumulated" => number_format($summaryMonth["plan_acumulated"], 2, ',', '.'),
+                                        "real_acumulated" => number_format($summaryMonth["real_acumulated"], 2, ',', '.'),
+                                        "ejecution" => number_format($ejecutionMonth, 2, ',', '.'),
+                                        "var" => number_format($varMonth, 2, ',', '.')
+                                    );
+                                    //TOTALES SECCION MES
+                                    $summaryProducctionTotals["month"]["ppto"] +=$summaryMonth["plan_month"];
+                                    $summaryProducctionTotals["month"]["pptoAcumulado"] +=$summaryMonth["plan_acumulated"];
+                                    $summaryProducctionTotals["month"]["realAcumulado"] +=$summaryMonth["real_acumulated"];
+                                    $summaryProducctionTotals["month"]["ejec"] +=$ejecutionMonth;
+                                    $summaryProducctionTotals["month"]["var"] +=$varMonth;
+
+
+//PRODUCCTION YEAR
+                                    $summaryYear = $productReport->getSummaryYear($dateReport, $typeReport);
+
+                                    $yearPlan+=$summaryYear["plan_year"];
+                                    $yearPlanAcumulated+=$summaryYear["plan_acumulated"];
+                                    $yearRealAcumualated+=$summaryYear["real_acumulated"];
+
+                                    if ($summaryYear["plan_acumulated"] - $summaryYear["real_acumulated"] < 0) {
+                                        $varYear = 0;
+                                    } else {
+                                        $varYear = $summaryYear["plan_acumulated"] - $summaryYear["real_acumulated"];
+                                    }
+
+
+                                    if ($summaryYear["plan_acumulated"] > 0) {
+                                        $ejecutionYear = ($summaryYear["real_acumulated"] * 100) / $summaryYear["plan_acumulated"];
+                                    } else {
+                                        $ejecutionYear = 0;
+                                    }
+
+                                    $summaryProducction["year"][] = array(
+                                        "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
+                                        "plan_year" => number_format($summaryYear["plan_year"], 2, ',', '.'),
+                                        "plan_acumulated" => number_format($summaryYear["plan_acumulated"], 2, ',', '.'),
+                                        "real_acumulated" => number_format($summaryYear["real_acumulated"], 2, ',', '.'),
+                                        "ejecution" => number_format($ejecutionYear, 2, ',', '.'),
+                                        "var" => number_format($varYear, 2, ',', '.')
+                                    );
+
+                                    //TOTALES SECCION AÑO
+                                    $summaryProducctionTotals["year"]["ppto"] +=$summaryYear["plan_year"];
+                                    $summaryProducctionTotals["year"]["pptoAcumulado"] +=$summaryYear["plan_acumulated"];
+                                    $summaryProducctionTotals["year"]["realAcumulado"] +=$summaryYear["real_acumulated"];
+                                    $summaryProducctionTotals["year"]["ejec"] +=$ejecutionYear;
+                                    $summaryProducctionTotals["year"]["var"] +=$varYear;
+
+                                    $cont = 0;
+
+                                    //RAW MATERIAL 
+                                    foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
+                                        if ($rawMaterial->getProduct()->getIsRawMaterial()) {
+                                            $rawMaterialResult = $rawMaterial->getSummary($dateReport);
+                                            $idProduct = $rawMaterial->getProduct()->getId();
+
+
+                                            if (!in_array($idProduct, $arrayIdProducts)) {
+                                                $arrayIdProducts[] = $idProduct;
+                                                //$n = $rawMaterial->getProductReport()->getPlantReport()->getPlant();
+                                                $arrayRawMaterial[] = array(
+                                                    "id" => $rawMaterial->getProduct()->getId(),
+                                                    "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
+                                                    //"productName" => $n,
+                                                    "plan" => number_format($rawMaterialResult["total_day_plan"], 2, ",", "."),
+                                                    "real" => number_format($rawMaterialResult["total_day"], 2, ",", "."),
+                                                    "plan_month" => number_format($rawMaterialResult["total_month_plan"], 2, ",", "."),
+                                                    "real_month" => number_format($rawMaterialResult["total_month"], 2, ",", "."),
+                                                    "plan_year" => number_format($rawMaterialResult["total_year_plan"], 2, ",", "."),
+                                                    "real_year" => number_format($rawMaterialResult["total_year"], 2, ",", ".")
+                                                );
+                                            } else {
+                                                $indice = array_search($idProduct, $arrayIdProducts);
+
+                                                //var_dump($rawMaterial->getProduct()->getName() . " | nuevo: " . $arrayRawMaterial[$indice]["real_year"] . "- suma: " . $rawMaterialResult["total_year"]);
+                                                $arrayRawMaterial[$indice]["plan"] = $arrayRawMaterial[$indice]["plan"] + $rawMaterialResult["total_day_plan"];
+                                                $arrayRawMaterial[$indice]["real"] = $arrayRawMaterial[$indice]["real"] + $rawMaterialResult["total_day"];
+                                                $arrayRawMaterial[$indice]["plan_month"] = $arrayRawMaterial[$indice]["plan_month"] + $rawMaterialResult["total_month_plan"];
+                                                $arrayRawMaterial[$indice]["real_month"] = $arrayRawMaterial[$indice]["real_month"] + $rawMaterialResult["total_month"];
+                                                $arrayRawMaterial[$indice]["plan_year"] = $arrayRawMaterial[$indice]["plan_year"] + $rawMaterialResult["total_year_plan"];
+                                                $arrayRawMaterial[$indice]["real_year"] = $arrayRawMaterial[$indice]["real_year"] + $rawMaterialResult["total_year"];
+                                            }
+
+                                            if ($showDay) {
+                                                $arrayRawMaterialTotals["plan"] += $rawMaterialResult["total_day_plan"];
+                                                $arrayRawMaterialTotals["real"] += $rawMaterialResult["total_day"];
+                                            }
+                                            if ($showMonth) {
+                                                $arrayRawMaterialTotals["plan_month"] += $rawMaterialResult["total_month_plan"];
+                                                $arrayRawMaterialTotals["real_month"] += $rawMaterialResult["total_month"];
+                                            }
+                                            if ($showYear) {
+                                                $arrayRawMaterialTotals["plan_year"] += $rawMaterialResult["total_year_plan"];
+                                                $arrayRawMaterialTotals["real_year"] += $rawMaterialResult["total_year"];
+                                            }
+                                            $cont++;
+                                        }
+                                    }//RAW MATERIAL
+                                }
+                            } //PRODUCT REPORT
+                            //CONSUMO DE SERVICIOS 
+                            foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
+
+                                $serviceName = $consumerPlanningService->getService()->getName() . " (" . $consumerPlanningService->getService()->getServiceUnit() . ")";
+                                $serviceId = $consumerPlanningService->getService()->getId();
+
+                                if (!in_array($serviceName, $arrayProdServices)) {
+                                    array_push($arrayProdServices, $serviceName);
+                                    $arrayConsumerServices[$serviceId] = array(
+                                        "productName" => $serviceName,
+                                        "plan" => 0.0,
+                                        "real" => 0.0,
+                                        "plan_month" => 0.0,
+                                        "real_month" => 0.0,
+                                        "plan_year" => 0.0,
+                                        "real_year" => 0.0
+                                    );
+                                }
+                                $consumerPlanning = $consumerPlanningService->getSummary($dateReport);
+                                if ($showDay) {
+                                    $totalConsumerServices["plan"] += $consumerPlanning["total_day_plan"];
+                                    $totalConsumerServices["real"] += $consumerPlanning["total_day"];
+                                }
+                                if ($showMonth) {
+                                    $totalConsumerServices["plan_month"] += $consumerPlanning["total_month_plan"];
+                                    $totalConsumerServices["real_month"] += $consumerPlanning["total_month"];
+                                }
+                                if ($showYear) {
+                                    $totalConsumerServices["plan_year"] += $consumerPlanning["total_year_plan"];
+                                    $totalConsumerServices["real_year"] += $consumerPlanning["total_year"];
+                                }
+
+
+                                $arrayConsumerServices[$serviceId]["real"] += $consumerPlanning["total_day"];
+                                $arrayConsumerServices[$serviceId]["plan"] += $consumerPlanning["total_day_plan"];
+                                $arrayConsumerServices[$serviceId]["real_month"] += $consumerPlanning["total_month"];
+                                $arrayConsumerServices[$serviceId]["plan_month"] += $consumerPlanning["total_month_plan"];
+                                $arrayConsumerServices[$serviceId]["real_year"] += $consumerPlanning["total_year"];
+                                $arrayConsumerServices[$serviceId]["plan_year"] += $consumerPlanning["total_year_plan"];
+                            }//FIN CONSUMO DE SERVICIOS
+                            //PRODUCION NO REALIZADA
+                            foreach ($plantReport->getProductsReport() as $productReport) {
+                                if (!$productReport->getIsGroup()) {
+                                    $productId = $productReport->getProduct()->getId();
+                                    $productReportId = $productReport->getId();
+
+//                    if (!in_array($productReportId, $arrayNamesUnrealizedProduction)) {
+//                        $arrayNamesUnrealizedProduction[] = $productId;
+                                    $arrayUnrealizedProduction[$productReportId] = array(
+                                        "productName" => $productReport->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                                        //ID DEL PRODUCT_REPORT
+                                        "productId" => $productReport->getId(),
+                                        "reportTemplateId" => $productReport->getPlantReport()->getReportTemplate()->getId(),
+                                        //ID DEL PRODUCTO
+                                        "idProduct" => $productId
+                                    );
+                                    // }
+
+                                    $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($dateReport);
+
+                                    $arrayUnrealizedProduction[$productReportId]["day"] = $unrealizedProduction["total_day"];
+                                    $arrayUnrealizedProduction[$productReportId]["month"] = $unrealizedProduction["total_month"];
+                                    $arrayUnrealizedProduction[$productReportId]["year"] = $unrealizedProduction["total_year"];
+
+                                    $totalUnrealizedProduction["day"] += $unrealizedProduction["total_day"];
+                                    $totalUnrealizedProduction["month"] += $unrealizedProduction["total_month"];
+                                    $totalUnrealizedProduction["year"] += $unrealizedProduction["total_year"];
+                                }
+                            }//FIN PNR
+                            //INVENTARIO
+                            foreach ($plantReport->getProductsReport() as $productReport) {
+                                if (!$productReport->getIsGroup()) {
+                                    $productId = $productReport->getProduct()->getId();
+                                    $Inventory = $productReport->getSummaryInventory($dateReport);
+                                    $totalInventory["day"] += $Inventory["total_day"];
+                                    $totalInventory["day_preview"] += $Inventory["total_month"];
+
+                                    $arrayInventory[] = array(
+                                        "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                                        "day" => $Inventory["total_day"],
+                                        "day_preview" => $Inventory["total_month"]
+                                    );
+                                }
+                            }//FIN INVENTARIO
+                        }//PLANT REPORT
+                    }//REPORT TEMPLATE
+//                $keyPrimary = array_keys($arrayRawMaterial);
+//                foreach ($keyPrimary as $kp) {
+//                    $keySecond = array_keys($arrayRawMaterial[$kp]);
+//                    foreach ($keySecond as $ks) {
+//                        if (gettype($arrayRawMaterial[$kp][$ks]) != "string") {
+//                            //echo($arrayRawMaterial[$kp][$ks] . "\n");
+//                            $arrayRawMaterial[$kp][$ks] = number_format($arrayRawMaterial[$kp][$ks], 2, ",", ".");
+//                        }
+//                    }
+//                }
+
+                    $reportService = $this->getProductReportService();
+                    $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
+                    $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
+                    $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
+
+
+
+
+                    $data = array(
+                        'productsReport' => "",
+                        'dateReport' => $dateReport,
+                        'production' => $summaryProducction,
+                        'totalProduction' => $summaryProducctionTotals,
+                        'observations' => $observations,
+                        'rawMaterials' => $arrayRawMaterial,
+                        'totalRawMaterial' => $arrayRawMaterialTotals,
+                        'consumerServices' => $arrayConsumerServices,
+                        'unrealizedProductions' => $arrayUnrealizedProduction,
+                        'inventorys' => $arrayInventory,
+                        //'observation' => $arrayObservation,
+                        //'plantsNames' => $plants,
+                        'typeReport' => $typeReport,
+                        'plantReportId' => $plantReportId,
+                        'form' => $form->createView(),
+                        'showDay' => $showDay,
+                        'showMonth' => $showMonth,
+                        'showYear' => $showYear,
+                        'byRange' => $byRange,
+                        'showProduction' => $showProduction,
+                        'showRawMaterial' => $showRawMaterial,
+                        'showPnr' => $showPnr,
+                        'showService' => $showService,
+                        'showInventory' => $showInventory,
+                        'showObservation' => $showObservation,
+                        //'withDetails' => $withDetails,
+                        'dateFrom' => $dateFrom,
+                        'dateEnd' => $dateEnd,
+                        'typeReport' => $typeReport,
+                        //"graphicRange" => $graphicProducctionRange,
+                        "securityService" => $this->getSecurityService(),
+                        //"plant" => $plant,
+                        //"tools" => $tools,
+                        "startDatePeriod" => $startDatePeriod,
+                        "endDatePeriod" => $endDatePeriod,
+                        "groupsPlants" => false,
+                        "graphicsDays" => $graphicsDays,
+                        "graphicsMonth" => $graphicsMonth,
+                        "graphicsYear" => $graphicsYear
+                    );
+
+                    $view = $this
+                            ->view()
+                            ->setTemplate($this->config->getTemplate('reportVisualize.html'))
+                    ;
+                    $view->setData($data);
+
+                    return $this->handleView($view);
+                } else {//POR GRUPO DE PLANTAS Y REPORTE HASTA LA FECHA
+                    //POR GRUPO DE PLANTAS Y REPORTE HASTA LA FECHA
+                    ////POR GRUPO DE PLANTAS Y REPORTE HASTA LA FECHA
+                    //
+                    $summaryProduction = array();
+                    $arrayConsumerServices = array();
+                    $arrayUnrealizedProduction = array();
+                    $arrayInventory = array();
+                    $groupsCount = 0;
+                    foreach ($reportTemplates as $reportTemplate) {
+                        foreach ($reportTemplate->getPlantReports() as $plantReport) {
+                            $childrens = $plantReport->getChildrensGroup();
+                            $nameGroup = $plantReport->getNameGroup();
+
+
+                            if (count($childrens) > 0) {
+                                //VARS RAW MATERIAL
+                                $dayPlan = 0;
+                                $dayReal = 0;
+                                $monthPlan = 0;
+                                $monthReal = 0;
+                                $yearPlan = 0;
+                                $yearReal = 0;
+
+                                //VARS PNR
+                                $dayPnr = 0.0;
+                                $monthPnr = 0.0;
+                                $yearPnr = 0.0;
+
+                                //VARS INVENTORY
+                                $dayInventory = 0.0;
+                                $monthInventory = 0.0;
+                                $yearInventory = 0.0;
+
+                                foreach ($childrens as $child) {
+
+                                    foreach ($child->getProductsReport() as $productReport) {
+                                        if ($productReport->getIsGroup() == 0) {
+                                            //var_dump($productReport->getId());
+                                            //SUMMARY DAY
+                                            $summaryDay = $productReport->getSummaryDay($dateReport, $typeReport);
+
+                                            $dayPlan+=$summaryDay["plan"];
+                                            $dayReal+=$summaryDay["real"];
+
+
+
+                                            //ME TRAIGO LAS OBSERVACIONES 
+                                            $observations[] = array(
+                                                "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
+                                                "obs" => $summaryDay["observation"]
+                                            );
+
+                                            //SUMMARY MONTH
+                                            $summaryMonth = $productReport->getSummaryMonth($dateReport, $typeReport);
+
+                                            $MonthPlan+=$summaryMonth["plan_month"];
+                                            $MonthPlanAcumulated+=$summaryMonth["plan_acumulated"];
+                                            $MonthRealAcumualated+=$summaryMonth["real_acumulated"];
+
+
+                                            //SUMMARY YEAR
+                                            $summaryYear = $productReport->getSummaryYear($dateReport, $typeReport);
+
+                                            $yearPlan+=$summaryYear["plan_year"];
+                                            $yearPlanAcumulated+=$summaryYear["plan_acumulated"];
+                                            $yearRealAcumualated+=$summaryYear["real_acumulated"];
+
+
+
+                                            //CONSUMO DE MATERIA PRIMA
+                                            foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
+                                                if ($rawMaterial->getProduct()->getIsRawMaterial()) {
+                                                    $rawMaterialResult = $rawMaterial->getSummary($dateReport);
+
+                                                    //var_dump($rawMaterialResult);
+                                                    $idProduct = $rawMaterial->getProduct()->getId();
+                                                    $dayPlan += $rawMaterialResult["total_day_plan"];
+                                                    $dayReal += $rawMaterialResult["total_day"];
+                                                    $monthPlan += $rawMaterialResult["total_month_plan"];
+                                                    $monthReal += $rawMaterialResult["total_month"];
+                                                    $yearPlan += $rawMaterialResult["total_year_plan"];
+                                                    $yearReal += $rawMaterialResult["total_year"];
+                                                }
+                                            }
+                                        }
+                                    }//FIN DE PRODUCTOS POR PLANT REPORT
+                                    $consumeReal = 0.0;
+                                    $consumePlan = 0.0;
+                                    $consumeRealMonth = 0.0;
+                                    $consumePlanMonth = 0.0;
+                                    $consumeRealYear = 0.0;
+                                    $consumePlanYear = 0.0;
+                                    foreach ($child->getConsumerPlanningServices() as $consumerPlanningService) {
+
+                                        $serviceName = $consumerPlanningService->getService()->getName() . " (" . $consumerPlanningService->getService()->getServiceUnit() . ")";
+                                        $serviceId = $consumerPlanningService->getService()->getId();
+                                        $consumerPlanning = $consumerPlanningService->getSummary($dateReport);
+
+                                        $consumeReal += $consumerPlanning["total_day"];
+                                        $consumePlan += $consumerPlanning["total_day_plan"];
+                                        $consumeRealMonth += $consumerPlanning["total_month"];
+                                        $consumePlanMonth += $consumerPlanning["total_month_plan"];
+                                        $consumeRealYear += $consumerPlanning["total_year"];
+                                        $consumePlanYear += $consumerPlanning["total_year_plan"];
+                                    }//FIN CONSUME SERVICES
+                                    //
+                                    
+                                    //PRODUCION NO REALIZADA
+
+                                    foreach ($child->getProductsReport() as $productReport) {
+
+
+                                        if (!$productReport->getIsGroup()) {
+                                            //var_dump($productReport->getName());
+                                            $productId = $productReport->getProduct()->getId();
+                                            $productReportId = $productReport->getId();
+
+                                            $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($dateReport);
+                                            //var_dump($unrealizedProduction);
+                                            $dayPnr += $unrealizedProduction["total_day"];
+                                            $monthPnr += $unrealizedProduction["total_month"];
+                                            $yearPnr += $unrealizedProduction["total_year"];
+                                        }
+                                    }//FIN PNR
+                                    //INVENTORY
+                                    foreach ($child->getProductsReport() as $productReport) {
+                                        if (!$productReport->getIsGroup()) {
+                                            // var_dump($productReport->getProduct()->getName());
+                                            $productId = $productReport->getProduct()->getId();
+                                            $Inventory = $productReport->getSummaryInventory($dateReport);
+                                            $dayInventory += $Inventory["total_day"];
+                                            $monthInventory += $Inventory["total_month"];
+                                            #$totalInventory["day"] += $Inventory["total_day"];
+                                            #$totalInventory["day_preview"] += $Inventory["total_month"];
+//                                            $arrayInventory[] = array(
+//                                                "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+//                                                "day" => $Inventory["total_day"],
+//                                                "day_preview" => $Inventory["total_month"]
+//                                            );
+                                        }
+                                    }
+                                    //FIN INVENTORY
+                                }
+
+                                //SECCION DE SUMMARY DIARIOS
+                                if ($dayPlan - $dayReal < 0) {
+                                    $var = 0;
+                                } else {
+                                    $var = $dayPlan - $dayReal;
+                                }
+
+                                if ($dayPlan > 0) {
+                                    $ejecutionDay = ($dayReal * 100) / $dayPlan;
+                                } else {
+                                    $ejecutionDay = 0;
+                                }
+
+                                $summaryProduction["day"][] = array(
+                                    "nameGroup" => $nameGroup,
+                                    "plan" => number_format($dayPlan, 2, ",", "."),
+                                    "real" => number_format($dayReal, 2, ",", "."),
+                                    "var" => number_format($var, 2, ",", "."),
+                                    "ejec" => number_format($ejecutionDay, 2, ",", ".")
+                                );
+                                //TOTALES SUMMARY
+                                $summaryProducctionTotals["day"]["ppto"] +=$dayPlan;
+                                $summaryProducctionTotals["day"]["real"] +=$dayReal;
+                                $summaryProducctionTotals["day"]["ejec"] +=$ejecutionDay;
+                                $summaryProducctionTotals["day"]["var"] +=$var;
+
+
+                                //SECCION DE SUMMARY MENSUALES
+                                if ($summaryMonth["plan_acumulated"] - $summaryMonth["real_acumulated"] < 0) {
+                                    $varMonth = 0;
+                                } else {
+                                    $varMonth = $summaryMonth["plan_acumulated"] - $summaryMonth["real_acumulated"];
+                                }
+
+                                if ($summaryMonth["plan_acumulated"] > 0) {
+                                    $ejecutionMonth = ($summaryMonth["real_acumulated"] * 100) / $summaryMonth["plan_acumulated"];
+                                } else {
+                                    $ejecutionMonth = 0;
+                                }
+
+                                $summaryProduction["month"][] = array(
+                                    "nameGroup" => $nameGroup,
+                                    "plan_month" => number_format($MonthPlan, 2, ",", "."),
+                                    "plan_acumulated" => number_format($MonthPlanAcumulated, 2, ",", "."),
+                                    "real_acumulated" => number_format($MonthRealAcumualated, 2, ",", "."),
+                                    "var" => number_format($varMonth, 2, ",", "."),
+                                    "ejecution" => number_format($ejecutionMonth, 2, ",", ".")
+                                );
+
+                                //TOTALES SECCION MES
+                                $summaryProducctionTotals["month"]["ppto"] +=$MonthPlan;
+                                $summaryProducctionTotals["month"]["pptoAcumulado"] +=$MonthPlanAcumulated;
+                                $summaryProducctionTotals["month"]["realAcumulado"] +=$MonthRealAcumualated;
+                                $summaryProducctionTotals["month"]["ejec"] +=$ejecutionMonth;
+                                $summaryProducctionTotals["month"]["var"] +=$varMonth;
+
+
+
+
+                                //SECCION DE TOTALES ANUALES
+                                if ($summaryYear["plan_acumulated"] - $summaryYear["real_acumulated"] < 0) {
+                                    $varYear = 0;
+                                } else {
+                                    $varYear = $summaryYear["plan_acumulated"] - $summaryYear["real_acumulated"];
+                                }
+
+
+                                if ($summaryYear["plan_acumulated"] > 0) {
+                                    $ejecutionYear = ($summaryYear["real_acumulated"] * 100) / $summaryYear["plan_acumulated"];
+                                } else {
+                                    $ejecutionYear = 0;
+                                }
+
+                                $summaryProduction["year"][] = array(
+                                    "nameGroup" => $nameGroup,
+                                    "plan_year" => number_format($yearPlan, 2, ",", "."),
+                                    "plan_acumulated" => number_format($yearPlanAcumulated, 2, ",", "."),
+                                    "real_acumulated" => number_format($yearRealAcumualated, 2, ",", "."),
+                                    "var" => number_format($varYear, 2, ",", "."),
+                                    "ejecution" => number_format($ejecutionYear, 2, ",", ".")
+                                );
+                                //TOTALES SECCION YEAR
+                                $summaryProducctionTotals["year"]["ppto"] +=$yearPlan;
+                                $summaryProducctionTotals["year"]["pptoAcumulado"] +=$yearPlanAcumulated;
+                                $summaryProducctionTotals["year"]["realAcumulado"] +=$yearRealAcumualated;
+                                $summaryProducctionTotals["year"]["ejec"] +=$ejecutionYear;
+                                $summaryProducctionTotals["year"]["var"] +=$varYear;
+
+                                //ARRAY DE RAW MATERIAL 
+                                $arrayRawMaterial[] = array(
+                                    "nameGroup" => $nameGroup,
+                                    "plan" => number_format($dayPlan, 2, ",", "."),
+                                    "real" => number_format($dayReal, 2, ",", "."),
+                                    "plan_month" => number_format($monthPlan, 2, ",", "."),
+                                    "real_month" => number_format($monthReal, 2, ",", "."),
+                                    "plan_year" => number_format($yearPlan, 2, ",", "."),
+                                    "real_year" => number_format($yearReal, 2, ",", ".")
+                                );
+
+                                //ARRAY DE CONSUMER PLANNING SERVICES
+                                $arrayConsumerServices[] = array(
+                                    "productName" => $nameGroup,
+                                    "plan" => $consumePlan,
+                                    "real" => $consumeReal,
+                                    "plan_month" => $consumePlanMonth,
+                                    "real_month" => $consumeRealMonth,
+                                    "plan_year" => $consumePlanYear,
+                                    "real_year" => $consumeRealYear
+                                );
+
+                                //ARRAY UNREALIZED PRODUCTION
+                                $arrayUnrealizedProduction[] = array(
+                                    "productName" => $nameGroup,
+                                    "day" => $dayPnr,
+                                    "month" => $monthPnr,
+                                    "year" => $yearPnr,
+                                );
+                                //var_dump($arrayUnrealizedProduction);
+                                //
+                                //
+                                //ARRAY INVENTORY
+                                $arrayInventory[] = array(
+                                    "productName" => $nameGroup,
+                                    "day" => $dayInventory,
+                                    "day_preview" => $monthInventory
+                                );
+                                 $groupsCount++;
+                            }
+                           
+                        }
+                    }
+                    
+//                    if ($groupsCount == 0) {
+//                        //var_dump("No hay grupos de plantas en este complejo");
+//                        $showProduction = false;
+//                    }
+                }
+
+                //die();
+
+
+                $data = array(
+                    'productsReport' => "",
+                    'dateReport' => $dateReport,
+                    'production' => $summaryProduction,
+                    'totalProduction' => $summaryProducctionTotals,
+                    'observations' => $observations,
+                    'rawMaterials' => $arrayRawMaterial,
+                    //'totalRawMaterial' => $arrayRawMaterialTotals,
+                    'consumerServices' => $arrayConsumerServices,
+                    'unrealizedProductions' => $arrayUnrealizedProduction,
+                    'inventorys' => $arrayInventory,
+                    //'observation' => $arrayObservation,
+                    //'plantsNames' => $plants,
+                    'typeReport' => $typeReport,
+                    'plantReportId' => $plantReportId,
+                    'form' => $form->createView(),
+                    'showDay' => $showDay,
+                    'showMonth' => $showMonth,
+                    'showYear' => $showYear,
+                    'byRange' => $byRange,
+                    'showProduction' => $showProduction,
+                    'showRawMaterial' => $showRawMaterial,
+                    'showPnr' => $showPnr,
+                    'showService' => $showService,
+                    'showInventory' => $showInventory,
+                    'showObservation' => $showObservation,
+                    //'withDetails' => $withDetails,
+                    'dateFrom' => $dateFrom,
+                    'dateEnd' => $dateEnd,
+                    'typeReport' => $typeReport,
+                    //"graphicRange" => $graphicProducctionRange,
+                    "securityService" => $this->getSecurityService(),
+                    //"plant" => $plant,
+                    //"tools" => $tools,
+                    "startDatePeriod" => $startDatePeriod,
+                    "endDatePeriod" => $endDatePeriod,
+                    "groupsPlants" => $groupsPlants
+                );
+
+                $view = $this
+                        ->view()
+                        ->setTemplate($this->config->getTemplate('reportVisualize.html'))
+                ;
+                $view->setData($data);
+
+                return $this->handleView($view);
+            } else {
+                //FILTRO POR RANGO 
+                $dateDesde = $dateFrom->format("U");
+                $dateHasta = $dateEnd->format("U");
+
+                $totalProdPlan = 0;
+                $totalProdReal = 0;
+
+                $exportToPdf = false;
+                $arrayIdProductsByRange = array();
+                $summaryProducctionRangeTotals = array(
+                    "ppto" => 0.0,
+                    "real" => 0.0,
+                    "ejec" => 0.0,
+                    "var" => 0.0
+                );
+                $rawMaterialRangeTotals = array(
+                    "ppto" => 0.0,
+                    "real" => 0.0,
+                    "ejec" => 0.0,
+                    "var" => 0.0
+                );
+                $serviceRangeTotals = array(
+                    "ppto" => 0.0,
+                    "real" => 0.0,
+                    "ejec" => 0.0,
+                    "var" => 0.0
+                );
+                $arrayObservation = array();
+                $arrayProduction = array();
+
+                $arrayNamesUnrealizedProduction = array();
+
+
+                foreach ($reportTemplates as $reportTemplate) {
+                    //var_dump($reportTemplate->getShortName());
+                    foreach ($reportTemplate->getPlantReports() as $plantReport) {
+                        //PRODUCTS REPORTS
+                        foreach ($plantReport->getProductsReport() as $productReport) {
+                            if (!$productReport->getIsGroup()) {
+
+                                $i = $dateDesde;
+                                $rs = array();
+                                $totalPlan = $totalReal = $totalPercentaje = $totalPnr = 0.0;
+                                $totalRawPlan = $totalRawReal = 0.0;
+                                while ($i != ($dateHasta + 86400)) {
+                                    $timeNormal = new \DateTime(date("Y-m-d", $i));
+                                    //RESULTADOS DE PRODUCCION
+                                    $rs = $productReport->getSummaryDay($timeNormal, $typeReport);
+                                    $totalPlan += $rs["plan"];
+                                    $totalReal += $rs["real"];
+                                    $totalProdPlan += $rs["plan"];
+                                    $totalProdReal += $rs["real"];
+
+
+                                    $totalPercentaje += $rs["percentage"];
+                                    $totalPnr += $rs["pnr"];
+                                    $rs["plan"] = $totalPlan;
+                                    $rs["real"] = $totalReal;
+                                    if ($totalPlan > 0) {
+                                        $rs["percentage"] = ($totalReal * 100) / $totalPlan;
+                                    } else {
+                                        $rs["percentage"] = 0.0;
+                                        $rs["pnr"] = 0.0;
+                                    }
+                                    $pnr = $totalPlan - $totalReal;
+                                    if ($pnr > 0) {
+                                        $rs["pnr"] = $pnr;
+                                    } else {
+                                        $rs["pnr"] = 0.0;
+                                    }
+
+                                    //Verifica si va a exportar y obvia las observaciones vacías.
+                                    if ($exportToPdf) {
+                                        if ($rs["observation"] != "") {
+                                            $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
+                                        }
+                                    } else {
+                                        $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
+                                    }
+                                    $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
+                                    //TOTALES PRODUCCTION
+                                }
+                                //PRODUCTION 
+                                $rs["productName"] = $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")";
+
+                                if ($summaryProducctionRangeTotals["ppto"] > 0) {
+                                    $ejectRange = ($summaryProducctionRangeTotals["real"] * 100) / $summaryProducctionRangeTotals["ppto"];
+                                } else {
+                                    $ejectRange = 0.0;
+                                }
+
+                                if ($totalPlan - $totalReal < 0) {
+                                    $varRange = 0;
+                                } else {
+                                    $varRange = $totalPlan - $totalReal;
+                                }
+
+                                $summaryProducctionRangeTotals["ppto"] +=$totalPlan;
+                                $summaryProducctionRangeTotals["real"] +=$totalReal;
+                                $summaryProducctionRangeTotals["ejec"] +=$ejectRange;
+                                $summaryProducctionRangeTotals["var"] +=$varRange;
+
+
+                                $arrayProduction[] = $rs;
+
+                                //CONSUMO DE MATERIA PRIMA
+                                //VERIFICA SI EL PRODUCTO ES MATERIA PRIMA
+
+
+                                foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
+                                    if ($rawMaterial->getProduct()->getIsRawMaterial()) {
+                                        $totalRawDayPlan = 0.0;
+                                        $totalRawDayReal = 0.0;
+
+                                        $i = $dateDesde;
+
+
+                                        while ($i != ($dateHasta + 86400)) {
+                                            $timeNormal = new \DateTime(date("Y-m-d", $i));
+                                            $rawMaterialResult = $rawMaterial->getSummary($timeNormal);
+
+                                            $totalRawDayPlan += $rawMaterialResult["total_day_plan"];
+                                            $totalRawDayReal += $rawMaterialResult["total_day"];
+                                            $totalRawPlan += $rawMaterialResult["total_day_plan"];
+                                            $totalRawReal += $rawMaterialResult["total_day"];
+
+                                            $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
+                                        }
+                                        $idProduct = $rawMaterial->getProduct()->getId();
+
+                                        if (!in_array($idProduct, $arrayIdProductsByRange)) {
+                                            $arrayIdProductsByRange[] = $idProduct;
+                                            //$n = $rawMaterial->getProductReport()->getPlantReport()->getPlant()->getName();
+                                            $arrayRawMaterial[] = array(
+                                                "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
+                                                "productId" => $rawMaterial->getProduct()->getId(),
+                                                "planRaw" => $totalRawDayPlan,
+                                                "realRaw" => $totalRawDayReal
+                                            );
+                                        } else {
+                                            $indice = array_search($idProduct, $arrayIdProductsByRange);
+
+                                            $arrayRawMaterial[$indice]["planRaw"] = $arrayRawMaterial[$indice]["planRaw"] + $totalRawDayPlan;
+                                            $arrayRawMaterial[$indice]["realRaw"] = $arrayRawMaterial[$indice]["realRaw"] + $totalRawDayReal;
+                                        }
+                                        //TOTALES RAW MATERIAL RANGE
+                                        if ($rawMaterialRangeTotals["ppto"] > 0) {
+                                            $ejectRange = ($rawMaterialRangeTotals["real"] * 100) / $rawMaterialRangeTotals["ppto"];
+                                        } else {
+                                            $ejectRange = 0.0;
+                                        }
+
+                                        if ($totalRawDayPlan - $totalRawDayReal < 0) {
+                                            $varRange = 0;
+                                        } else {
+                                            $varRange = $totalRawDayPlan - $totalRawDayReal;
+                                        }
+
+
+                                        //TOTALES RAW MATERIAL RANGE 
+                                        $rawMaterialRangeTotals["ppto"] += $totalRawDayPlan;
+                                        $rawMaterialRangeTotals["real"] += $totalRawDayReal;
+                                        $rawMaterialRangeTotals["ejec"] += $ejectRange;
+                                        $rawMaterialRangeTotals["var"] += $varRange;
+                                    }
+                                }
+                            }
+                        } //END PRODUCT REPORT RANGE
+                        //CONSUMO DE SERVICIOS
+                        foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
+                            $i = $dateDesde;
+                            $serviceName = $consumerPlanningService->getService()->getName() . " (" . $consumerPlanningService->getService()->getServiceUnit() . ")";
+                            $serviceId = $consumerPlanningService->getService()->getId();
+
+                            $totalServicePlan = 0.0;
+                            $totalServiceReal = 0.0;
+
+                            if (!in_array($serviceName, $arrayProdServices)) {
+                                array_push($arrayProdServices, $serviceName);
+                                $arrayConsumerServices[$serviceId] = array("productName" => $serviceName, "plan" => 0.0, "real" => 0.0);
+                            }
+                            while ($i != ($dateHasta + 86400)) {
+
+                                $timeNormal = new \DateTime(date("Y-m-d", $i));
+                                $consumerPlanning = $consumerPlanningService->getSummary($timeNormal);
+                                $totalServicePlan +=$consumerPlanning["total_day_plan"];
+                                $totalServiceReal +=$consumerPlanning["total_day"];
+
+                                $arrayConsumerServices[$serviceId]["real"] += $consumerPlanning["total_day"];
+                                $arrayConsumerServices[$serviceId]["plan"] += $consumerPlanning["total_day_plan"];
+
+                                $i += 86400; //VOY RECORRIENDO DIA POR DIA
+                            }
+
+                            //TOTALES CONSUMO DE SERVICIOS
+                            if ($serviceRangeTotals["ppto"] > 0) {
+                                $ejectRangeService = ($serviceRangeTotals["real"] * 100) / $serviceRangeTotals["ppto"];
+                            } else {
+                                $ejectRangeService = 0.0;
+                            }
+
+                            if ($totalServicePlan - $totalServiceReal < 0) {
+                                $varRangeService = 0;
+                            } else {
+                                $varRangeService = $totalServicePlan - $totalServiceReal;
+                            }
+
+
+
+                            $serviceRangeTotals["ppto"] += $totalServicePlan;
+                            $serviceRangeTotals["real"] += $totalServiceReal;
+                            $serviceRangeTotals["ejec"] += $ejectRangeService;
+                            $serviceRangeTotals["var"] += $varRangeService;
+                        }
+
+                        //PRODUCION NO REALIZADA
+                        $i = $dateDesde;
+
+                        foreach ($plantReport->getProductsReport() as $productReport) {
+                            if (!$productReport->getIsGroup()) {
+                                $productReportId = $productReport->getId();
+                                if (!in_array($productReportId, $arrayNamesUnrealizedProduction)) {
+                                    $arrayNamesUnrealizedProduction[] = $productReportId;
+                                    $arrayUnrealizedProduction[$productReportId] = array(
+                                        "productName" => $productReport->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                                        "idProduct" => $productReport->getProduct()->getId(),
+                                        "idProductReport" => $productReport->getId(),
+                                        "idReportTemplate" => $plantReport->getReportTemplate()->getId(),
+                                        "total" => 0.0
+                                    );
+                                }
+
+                                while ($i != ($dateHasta + 86400)) {
+                                    $timeNormal = new \DateTime(date("Y-m-d", $i));
+                                    $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($timeNormal);
+
+                                    $arrayUnrealizedProduction[$productReportId]["total"] += $unrealizedProduction["total_day"];
+
+                                    $i += 86400; //VOY RECORRIENDO DIA POR DIA
+                                }
+                            }
+                        } //FIN PNR
+                        //
+                        //INVENTARIO
+                        foreach ($plantReport->getProductsReport() as $productReport) {
+                            if (!$productReport->getIsGroup()) {
+                                $productId = $productReport->getProduct()->getId();
+                                $timeNormal = new \DateTime(date("Y-m-d", $dateHasta));
+                                $Inventory = $productReport->getSummaryInventory($timeNormal);
+                                $arrayInventory[] = array("productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")", "total" => $Inventory["total_day"]);
+                            }
+                        }//END INVENTARIO
+                    } //END PLANT REPORT RANGE
+                } //END REPORT TEMPLATE RANGE
+
+
+                $reportService = $this->getProductReportService();
+                $graphicProducctionRange = $reportService->generateColumn3dLineryPerRange(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $arrayProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd));
+
+
+
+
+                $data = array(
+                    'productsReport' => "",
+                    'form' => $form->createView(),
+                    "securityService" => $this->getSecurityService(),
+                    "byRange" => true,
+                    "rawMaterial" => $arrayRawMaterial,
+                    "totalRawMaterial" => null,
+                    "consumerPlanning" => $arrayConsumerServices,
+                    "totalConsumeService" => null,
+                    "unrealizedProduction" => $arrayUnrealizedProduction,
+                    "inventory" => $arrayInventory,
+                    "observation" => $arrayObservation,
+                    "startDatePeriod" => $startDatePeriod,
+                    "endDatePeriod" => $endDatePeriod,
+                    'production' => $arrayProduction,
+                    'totalProduction' => $summaryProducctionRangeTotals,
+                    'typeReport' => $typeReport,
+                    'showDay' => $showDay,
+                    'showMonth' => $showMonth,
+                    'showYear' => $showYear,
+                    'byRange' => $byRange,
+                    'showProduction' => $showProduction,
+                    'showRawMaterial' => $showRawMaterial,
+                    'showPnr' => $showPnr,
+                    'showService' => $showService,
+                    'showInventory' => $showInventory,
+                    'showObservation' => $showObservation,
+                    'dateFrom' => $dateFrom,
+                    'dateEnd' => $dateEnd,
+                    'graphicRange' => $graphicProducctionRange
+                );
+
+
+                $view = $this
+                        ->view()
+                        ->setTemplate($this->config->getTemplate('reportVisualize.html'))
+                ;
+                $view->setData($data);
+
+                return $this->handleView($view);
+            }
+        } //FIN DE FORM-SUBMIT
+
+        $data = array(
+            'productsReport' => "",
+            'form' => $form->createView(),
+            "securityService" => $this->getSecurityService(),
+            "byRange" => false,
+            "startDatePeriod" => $startDatePeriod,
+            "endDatePeriod" => $endDatePeriod,
+            'production' => null,
+            'typeReport' => null,
+            'showDay' => $showDay,
+            'showMonth' => $showMonth,
+            'showYear' => $showYear,
+            'byRange' => $byRange,
+            'showProduction' => $showProduction,
+            'showRawMaterial' => $showRawMaterial,
+            'showPnr' => $showPnr,
+            'showService' => $showService,
+            'showInventory' => $showInventory,
+            'showObservation' => $showObservation,
+            'dateFrom' => $dateFrom,
+            'dateEnd' => $dateEnd,
+            'groupsPlants' => null,
+        );
+
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('reportVisualize.html'))
+        ;
+        $view->setData($data);
+
+        return $this->handleView($view);
+    }
+
     /**
      * Vizualizar la planificación
      * @param Request $request
@@ -1096,6 +2546,7 @@ class ReportTemplateController extends SEIPController {
         }
         $showDay = $showMonth = $showYear = $defaultShow = $withDetails = true;
         $dateFrom = $dateEnd = new \DateTime();
+
         $byRange = false;
 
         $parametersReportTemplate = array(
@@ -1268,6 +2719,8 @@ class ReportTemplateController extends SEIPController {
             $showInventory = $data["showInventory"];
             $showObservation = $data["showObservation"];
 
+            $typeReport = $data['typeReport'];
+
 
             $dateFrom = $data['dateFrom'];
             $dateEnd = $data['dateEnd'];
@@ -1339,6 +2792,7 @@ class ReportTemplateController extends SEIPController {
         $exportToPdf = $request->get('exportToPdf', false);
 
         if ($byRange === true) {
+
 
 
             $dateDesde = $dateFrom->format("U");
@@ -1539,7 +2993,8 @@ class ReportTemplateController extends SEIPController {
                 $totalProdPlan,
                 $totalProdReal,
                 $subTotalProdPlan,
-                $totalProdPlan - $totalProdReal);
+                $totalProdPlan - $totalProdReal
+            );
 
 //TOTALES DE MATERIA PRIMA
             $arrayRawMaterialTotals = array(
@@ -1602,272 +3057,307 @@ class ReportTemplateController extends SEIPController {
             ;
             $view->setData($data);
         } else {
+//            $byrange
 
-            $productsReport = new \Doctrine\Common\Collections\ArrayCollection();
-            $consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
-            $rawMaterialConsumptionPlannings = new \Doctrine\Common\Collections\ArrayCollection();
 
-            $productsReportByIdProduct = $consumerPlanningServicesByIdService = $rawMaterialConsumptionPlanningsById = array();
-            foreach ($plantReports as $plantReport) {
+            $band = true;
 
-                if (!in_array($plantReport->getReportTemplate()->getName(), $plants)) {
-                    $plants[] = $plantReport->getReportTemplate()->getName();
-                }
+            if ($band) {
+                //if
+                $productsReport = new \Doctrine\Common\Collections\ArrayCollection();
+                $consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
+                $rawMaterialConsumptionPlannings = new \Doctrine\Common\Collections\ArrayCollection();
 
-                foreach ($plantReport->getProductsReport() as $productReport) {
+                $productsReportByIdProduct = $consumerPlanningServicesByIdService = $rawMaterialConsumptionPlanningsById = array();
+                foreach ($plantReports as $plantReport) {
 
-                    if (!$productReport->getIsGroup()) {
-                        //var_dump($productReport->getId());
-                        $product = $productReport->getProduct();
-                        if (!isset($productsReportByIdProduct[$product->getId()])) {
-                            $productsReportByIdProduct[$product->getId()] = array();
-                        }
-                        $productsReportByIdProduct[$product->getId()][] = $productReport;
 
-                        foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterialConsumptionPlanning) {
-                            $product = $rawMaterialConsumptionPlanning->getProduct();
-                            if (!isset($rawMaterialConsumptionPlanningsById[$product->getId()])) {
-                                $rawMaterialConsumptionPlanningsById[$product->getId()] = array();
+                    if (!in_array($plantReport->getReportTemplate()->getName(), $plants)) {
+                        $plants[] = $plantReport->getReportTemplate()->getName();
+                    }
+
+                    foreach ($plantReport->getProductsReport() as $productReport) {
+
+                        if (!$productReport->getIsGroup()) {
+                            //var_dump($productReport->getId());
+                            $product = $productReport->getProduct();
+                            if (!isset($productsReportByIdProduct[$product->getId()])) {
+                                $productsReportByIdProduct[$product->getId()] = array();
                             }
-                            $rawMaterialConsumptionPlanningsById[$product->getId()][] = $rawMaterialConsumptionPlanning;
+                            $productsReportByIdProduct[$product->getId()][] = $productReport;
+
+                            foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterialConsumptionPlanning) {
+                                $product = $rawMaterialConsumptionPlanning->getProduct();
+                                if (!isset($rawMaterialConsumptionPlanningsById[$product->getId()])) {
+                                    $rawMaterialConsumptionPlanningsById[$product->getId()] = array();
+                                }
+                                $rawMaterialConsumptionPlanningsById[$product->getId()][] = $rawMaterialConsumptionPlanning;
+                            }
+                        }
+                    }
+
+
+                    foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
+                        $service = $consumerPlanningService->getService();
+                        if (!isset($consumerPlanningServicesByIdService[$service->getId()])) {
+                            $consumerPlanningServicesByIdService[$service->getId()] = array();
+                        }
+                        $consumerPlanningServicesByIdService[$service->getId()][] = $consumerPlanningService;
+                    }
+                }
+
+
+                foreach ($productsReportByIdProduct as $id => $groups) {
+                    foreach ($groups as $productReport) {
+                        if (!$productReport->getIsGroup()) {
+                            if (!$productsReport->contains($productReport)) {
+                                $productsReport->add($productReport);
+                            }
                         }
                     }
                 }
 
 
-                foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
-                    $service = $consumerPlanningService->getService();
-                    if (!isset($consumerPlanningServicesByIdService[$service->getId()])) {
-                        $consumerPlanningServicesByIdService[$service->getId()] = array();
-                    }
-                    $consumerPlanningServicesByIdService[$service->getId()][] = $consumerPlanningService;
-                }
-            }
-
-
-            foreach ($productsReportByIdProduct as $id => $groups) {
-                foreach ($groups as $productReport) {
-                    if (!$productReport->getIsGroup()) {
-                        if (!$productsReport->contains($productReport)) {
-                            $productsReport->add($productReport);
+                foreach ($consumerPlanningServicesByIdService as $id => $groups) {
+                    foreach ($groups as $consumerPlanningService) {
+                        if (!$consumerPlanningServices->contains($consumerPlanningService)) {
+                            $consumerPlanningServices->add($consumerPlanningService);
                         }
                     }
                 }
-            }
 
-
-            foreach ($consumerPlanningServicesByIdService as $id => $groups) {
-                foreach ($groups as $consumerPlanningService) {
-                    if (!$consumerPlanningServices->contains($consumerPlanningService)) {
-                        $consumerPlanningServices->add($consumerPlanningService);
+                foreach ($rawMaterialConsumptionPlanningsById as $id => $groups) {
+                    foreach ($groups as $rawMaterialConsumptionPlanning) {
+                        if (!$rawMaterialConsumptionPlannings->contains($rawMaterialConsumptionPlanning)) {
+                            $rawMaterialConsumptionPlannings->add($rawMaterialConsumptionPlanning);
+                        }
                     }
                 }
-            }
-
-            foreach ($rawMaterialConsumptionPlanningsById as $id => $groups) {
-                foreach ($groups as $rawMaterialConsumptionPlanning) {
-                    if (!$rawMaterialConsumptionPlannings->contains($rawMaterialConsumptionPlanning)) {
-                        $rawMaterialConsumptionPlannings->add($rawMaterialConsumptionPlanning);
-                    }
-                }
-            }
 //Filtrar productos que quiere el usuario
-            if ($productsReportConsulting && count($productsReportConsulting) > 0) {
-                foreach ($productsReport as $productReport) {
-                    if (!$productReport->getIsGroup()) {
-                        if (!$productsReportConsulting->contains($productReport)) {
-                            $productsReport->removeElement($productReport);
+                if ($productsReportConsulting && count($productsReportConsulting) > 0) {
+                    foreach ($productsReport as $productReport) {
+                        if (!$productReport->getIsGroup()) {
+                            if (!$productsReportConsulting->contains($productReport)) {
+                                $productsReport->removeElement($productReport);
+                            }
                         }
                     }
                 }
-            }
 
 
-
-            $reportService = $this->getProductReportService();
-            $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
-            $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
-            $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
+                $reportService = $this->getProductReportService();
+                $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
+                $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
+                $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
 //PRODUCTION
-            $dayPlan = 0.0;
-            $dayReal = 0.0;
+                $dayPlan = 0.0;
+                $dayReal = 0.0;
 
-            $MonthPlan = 0.0;
-            $MonthPlanAcumulated = 0.0;
-            $MonthRealAcumualated = 0.0;
+                $MonthPlan = 0.0;
+                $MonthPlanAcumulated = 0.0;
+                $MonthRealAcumualated = 0.0;
 
-            $yearPlan = 0.0;
-            $yearPlanAcumulated = 0.0;
-            $yearRealAcumualated = 0.0;
-
-
-
-            $summaryProducction = array();
-            $summaryProducctionTotals = array();
-
-            $observations = array();
-            $arrayIdProducts = array();
+                $yearPlan = 0.0;
+                $yearPlanAcumulated = 0.0;
+                $yearRealAcumualated = 0.0;
 
 
-            foreach ($productsReport as $productReport) {
+
+                $summaryProducction = array();
+                $summaryProducctionTotals = array();
+
+                $observations = array();
+                $arrayIdProducts = array();
+
+                $groupsProducts = array();
+
+
+                foreach ($productsReport as $productReport) {
+
 //PRODUCCTION DAY
-                $summaryDay = $productReport->getSummaryDay($dateReport, $typeReport);
+                    $g = $productReport->getChildrensGroup();
 
-                $dayPlan+=$summaryDay["plan"];
-                $dayReal+=$summaryDay["real"];
+                    $isGroup = $productReport->getPlantReport()->getPlant()->getPermitGroupProduct();
+                    $group = $productReport->getPlantReport()->getPlant()->getName();
+//                 if ($productReport->getIsGroup()) {
+//                    $productReportChildrens = $productReport->getChildrensGroup();
+//                 }
+                    if (in_array($group, $groupsProducts)) {
+                        $groupsProducts[] = $group;
+                    }
 
-                if ($summaryDay["plan"] - $summaryDay["real"] < 0) {
-                    $var = 0;
-                } else {
-                    $var = $summaryDay["plan"] - $summaryDay["real"];
-                }
+                    $summaryDay = $productReport->getSummaryDay($dateReport, $typeReport);
 
-//ME TRAIGO LAS OBSERVACIONES 
-                $observations[] = array(
-                    "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
-                    "obs" => $summaryDay["observation"]
-                );
+                    $dayPlan+=$summaryDay["plan"];
+                    $dayReal+=$summaryDay["real"];
 
-                if ($summaryDay["plan"] > 0) {
-                    $ejecutionDay = ($summaryDay["real"] * 100) / $summaryDay["plan"];
-                } else {
-                    $ejecutionDay = 0;
-                }
-                $summaryProducction["day"][] = array(
-                    "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
-                    "plan" => number_format($summaryDay["plan"], 2, ',', '.'),
-                    "real" => number_format($summaryDay["real"], 2, ',', '.'),
-                    "ejecution" => number_format($ejecutionDay, 2, ',', '.'),
-                    "var" => number_format($var, 2, ',', '.')
-                );
+                    if ($summaryDay["plan"] - $summaryDay["real"] < 0) {
+                        $var = 0;
+                    } else {
+                        $var = $summaryDay["plan"] - $summaryDay["real"];
+                    }
+
+                    //ME TRAIGO LAS OBSERVACIONES 
+                    $observations[] = array(
+                        "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
+                        "obs" => $summaryDay["observation"]
+                    );
+
+                    if ($summaryDay["plan"] > 0) {
+                        $ejecutionDay = ($summaryDay["real"] * 100) / $summaryDay["plan"];
+                    } else {
+                        $ejecutionDay = 0;
+                    }
+
+                    $group = null;
+                    if ($productReport->getParent() != null) {
+                        $group = $productReport->getParent()->getId();
+                    }
+
+                    $summaryProducction["day"][] = array(
+                        "idProduct" => $productReport->getProduct()->getId(),
+                        "idPlant" => $productReport->getPlantReport()->getPlant()->getId(),
+                        "group" => $group,
+                        "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
+                        "plan" => number_format($summaryDay["plan"], 2, ',', '.'),
+                        "real" => number_format($summaryDay["real"], 2, ',', '.'),
+                        "ejecution" => number_format($ejecutionDay, 2, ',', '.'),
+                        "var" => number_format($var, 2, ',', '.')
+                    );
+
+
+
+
+
+
+
 
 
 //PRODUCCTION MONTH
-                $summaryMonth = $productReport->getSummaryMonth($dateReport, $typeReport);
+                    $summaryMonth = $productReport->getSummaryMonth($dateReport, $typeReport);
 
-                $MonthPlan+=$summaryMonth["plan_month"];
-                $MonthPlanAcumulated+=$summaryMonth["plan_acumulated"];
-                $MonthRealAcumualated+=$summaryMonth["real_acumulated"];
+                    $MonthPlan+=$summaryMonth["plan_month"];
+                    $MonthPlanAcumulated+=$summaryMonth["plan_acumulated"];
+                    $MonthRealAcumualated+=$summaryMonth["real_acumulated"];
 
-                if ($summaryMonth["plan_acumulated"] - $summaryMonth["real_acumulated"] < 0) {
-                    $varMonth = 0;
-                } else {
-                    $varMonth = $summaryMonth["plan_acumulated"] - $summaryMonth["real_acumulated"];
-                }
+                    if ($summaryMonth["plan_acumulated"] - $summaryMonth["real_acumulated"] < 0) {
+                        $varMonth = 0;
+                    } else {
+                        $varMonth = $summaryMonth["plan_acumulated"] - $summaryMonth["real_acumulated"];
+                    }
 
-                if ($summaryMonth["plan_acumulated"] > 0) {
-                    $ejecutionMonth = ($summaryMonth["real_acumulated"] * 100) / $summaryMonth["plan_acumulated"];
-                } else {
-                    $ejecutionMonth = 0;
-                }
+                    if ($summaryMonth["plan_acumulated"] > 0) {
+                        $ejecutionMonth = ($summaryMonth["real_acumulated"] * 100) / $summaryMonth["plan_acumulated"];
+                    } else {
+                        $ejecutionMonth = 0;
+                    }
 
-                $summaryProducction["month"][] = array(
-                    "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
-                    "plan_month" => number_format($summaryMonth["plan_month"], 2, ',', '.'),
-                    "plan_acumulated" => number_format($summaryMonth["plan_acumulated"], 2, ',', '.'),
-                    "real_acumulated" => number_format($summaryMonth["real_acumulated"], 2, ',', '.'),
-                    "ejecution" => number_format($ejecutionMonth, 2, ',', '.'),
-                    "var" => number_format($varMonth, 2, ',', '.')
-                );
+                    $summaryProducction["month"][] = array(
+                        "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
+                        "plan_month" => number_format($summaryMonth["plan_month"], 2, ',', '.'),
+                        "plan_acumulated" => number_format($summaryMonth["plan_acumulated"], 2, ',', '.'),
+                        "real_acumulated" => number_format($summaryMonth["real_acumulated"], 2, ',', '.'),
+                        "ejecution" => number_format($ejecutionMonth, 2, ',', '.'),
+                        "var" => number_format($varMonth, 2, ',', '.')
+                    );
 
 
 //PRODUCCTION YEAR
-                $summaryYear = $productReport->getSummaryYear($dateReport, $typeReport);
+                    $summaryYear = $productReport->getSummaryYear($dateReport, $typeReport);
 
-                $yearPlan+=$summaryYear["plan_year"];
-                $yearPlanAcumulated+=$summaryYear["plan_acumulated"];
-                $yearRealAcumualated+=$summaryYear["real_acumulated"];
+                    $yearPlan+=$summaryYear["plan_year"];
+                    $yearPlanAcumulated+=$summaryYear["plan_acumulated"];
+                    $yearRealAcumualated+=$summaryYear["real_acumulated"];
 
-                if ($summaryYear["plan_acumulated"] - $summaryYear["real_acumulated"] < 0) {
-                    $varYear = 0;
-                } else {
-                    $varYear = $summaryYear["plan_acumulated"] - $summaryYear["real_acumulated"];
-                }
-
-
-                if ($summaryYear["plan_acumulated"] > 0) {
-                    $ejecutionYear = ($summaryYear["real_acumulated"] * 100) / $summaryYear["plan_acumulated"];
-                } else {
-                    $ejecutionYear = 0;
-                }
+                    if ($summaryYear["plan_acumulated"] - $summaryYear["real_acumulated"] < 0) {
+                        $varYear = 0;
+                    } else {
+                        $varYear = $summaryYear["plan_acumulated"] - $summaryYear["real_acumulated"];
+                    }
 
 
+                    if ($summaryYear["plan_acumulated"] > 0) {
+                        $ejecutionYear = ($summaryYear["real_acumulated"] * 100) / $summaryYear["plan_acumulated"];
+                    } else {
+                        $ejecutionYear = 0;
+                    }
 
-                $summaryProducction["year"][] = array(
-                    "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
-                    "plan_year" => number_format($summaryYear["plan_year"], 2, ',', '.'),
-                    "plan_acumulated" => number_format($summaryYear["plan_acumulated"], 2, ',', '.'),
-                    "real_acumulated" => number_format($summaryYear["real_acumulated"], 2, ',', '.'),
-                    "ejecution" => number_format($ejecutionYear, 2, ',', '.'),
-                    "var" => number_format($varYear, 2, ',', '.')
-                );
+
+
+                    $summaryProducction["year"][] = array(
+                        "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
+                        "plan_year" => number_format($summaryYear["plan_year"], 2, ',', '.'),
+                        "plan_acumulated" => number_format($summaryYear["plan_acumulated"], 2, ',', '.'),
+                        "real_acumulated" => number_format($summaryYear["real_acumulated"], 2, ',', '.'),
+                        "ejecution" => number_format($ejecutionYear, 2, ',', '.'),
+                        "var" => number_format($varYear, 2, ',', '.')
+                    );
 
 //RAW MATERIAL 
 
-                foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
-                    if ($rawMaterial->getProduct()->getIsRawMaterial()) {
-                        $rawMaterialResult = $rawMaterial->getSummary($dateReport);
-                        $idProduct = $rawMaterial->getProduct()->getId();
+                    foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
+                        if ($rawMaterial->getProduct()->getIsRawMaterial()) {
+                            $rawMaterialResult = $rawMaterial->getSummary($dateReport);
+                            $idProduct = $rawMaterial->getProduct()->getId();
 
-                        if (!in_array($idProduct, $arrayIdProducts)) {
-                            $arrayIdProducts[] = $idProduct;
-                            //$n = $rawMaterial->getProductReport()->getPlantReport()->getPlant();
-                            $arrayRawMaterial[] = array(
-                                "id" => $rawMaterial->getProduct()->getId(),
-                                "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
-                                //"productName" => $n,
-                                "plan" => $rawMaterialResult["total_day_plan"],
-                                "real" => $rawMaterialResult["total_day"],
-                                "plan_month" => $rawMaterialResult["total_month_plan"],
-                                "real_month" => $rawMaterialResult["total_month"],
-                                "plan_year" => $rawMaterialResult["total_year_plan"],
-                                "real_year" => $rawMaterialResult["total_year"]
-                            );
-                        } else {
-                            $indice = array_search($idProduct, $arrayIdProducts);
+                            if (!in_array($idProduct, $arrayIdProducts)) {
+                                $arrayIdProducts[] = $idProduct;
+                                //$n = $rawMaterial->getProductReport()->getPlantReport()->getPlant();
+                                $arrayRawMaterial[] = array(
+                                    "id" => $rawMaterial->getProduct()->getId(),
+                                    "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
+                                    //"productName" => $n,
+                                    "plan" => $rawMaterialResult["total_day_plan"],
+                                    "real" => $rawMaterialResult["total_day"],
+                                    "plan_month" => $rawMaterialResult["total_month_plan"],
+                                    "real_month" => $rawMaterialResult["total_month"],
+                                    "plan_year" => $rawMaterialResult["total_year_plan"],
+                                    "real_year" => $rawMaterialResult["total_year"]
+                                );
+                            } else {
+                                $indice = array_search($idProduct, $arrayIdProducts);
 
-                            //var_dump($rawMaterial->getProduct()->getName() . " | nuevo: " . $arrayRawMaterial[$indice]["real_year"] . "- suma: " . $rawMaterialResult["total_year"]);
+                                //var_dump($rawMaterial->getProduct()->getName() . " | nuevo: " . $arrayRawMaterial[$indice]["real_year"] . "- suma: " . $rawMaterialResult["total_year"]);
 
-                            $arrayRawMaterial[$indice]["plan"] = $arrayRawMaterial[$indice]["plan"] + $rawMaterialResult["total_day_plan"];
-                            $arrayRawMaterial[$indice]["real"] = $arrayRawMaterial[$indice]["real"] + $rawMaterialResult["total_day"];
-                            $arrayRawMaterial[$indice]["plan_month"] = $arrayRawMaterial[$indice]["plan_month"] + $rawMaterialResult["total_month_plan"];
-                            $arrayRawMaterial[$indice]["real_month"] = $arrayRawMaterial[$indice]["real_month"] + $rawMaterialResult["total_month"];
-                            $arrayRawMaterial[$indice]["plan_year"] = $arrayRawMaterial[$indice]["plan_year"] + $rawMaterialResult["total_year_plan"];
-                            $arrayRawMaterial[$indice]["real_year"] = $arrayRawMaterial[$indice]["real_year"] + $rawMaterialResult["total_year"];
+                                $arrayRawMaterial[$indice]["plan"] = $arrayRawMaterial[$indice]["plan"] + $rawMaterialResult["total_day_plan"];
+                                $arrayRawMaterial[$indice]["real"] = $arrayRawMaterial[$indice]["real"] + $rawMaterialResult["total_day"];
+                                $arrayRawMaterial[$indice]["plan_month"] = $arrayRawMaterial[$indice]["plan_month"] + $rawMaterialResult["total_month_plan"];
+                                $arrayRawMaterial[$indice]["real_month"] = $arrayRawMaterial[$indice]["real_month"] + $rawMaterialResult["total_month"];
+                                $arrayRawMaterial[$indice]["plan_year"] = $arrayRawMaterial[$indice]["plan_year"] + $rawMaterialResult["total_year_plan"];
+                                $arrayRawMaterial[$indice]["real_year"] = $arrayRawMaterial[$indice]["real_year"] + $rawMaterialResult["total_year"];
+                            }
                         }
                     }
                 }
-            }
-            //var_dump($arrayRawMaterial);die();
+                //var_dump($groupsProduct);die();
 
 
-
-            $cont = 0;
-            foreach ($arrayRawMaterial as $rawMaterial) {
-                $arrayRawMaterial[$cont]["plan"] = number_format($rawMaterial["plan"], 2, ",", ".");
-                $arrayRawMaterial[$cont]["real"] = number_format($rawMaterial["real"], 2, ",", ".");
-                $arrayRawMaterial[$cont]["plan_month"] = number_format($rawMaterial["plan_month"], 2, ",", ".");
-                $arrayRawMaterial[$cont]["real_month"] = number_format($rawMaterial["real_month"], 2, ",", ".");
-                $arrayRawMaterial[$cont]["plan_year"] = number_format($rawMaterial["plan_year"], 2, ",", ".");
-                $arrayRawMaterial[$cont]["real_year"] = number_format($rawMaterial["real_year"], 2, ",", ".");
-                $cont++;
-            }
+                $cont = 0;
+                foreach ($arrayRawMaterial as $rawMaterial) {
+                    $arrayRawMaterial[$cont]["plan"] = number_format($rawMaterial["plan"], 2, ",", ".");
+                    $arrayRawMaterial[$cont]["real"] = number_format($rawMaterial["real"], 2, ",", ".");
+                    $arrayRawMaterial[$cont]["plan_month"] = number_format($rawMaterial["plan_month"], 2, ",", ".");
+                    $arrayRawMaterial[$cont]["real_month"] = number_format($rawMaterial["real_month"], 2, ",", ".");
+                    $arrayRawMaterial[$cont]["plan_year"] = number_format($rawMaterial["plan_year"], 2, ",", ".");
+                    $arrayRawMaterial[$cont]["real_year"] = number_format($rawMaterial["real_year"], 2, ",", ".");
+                    $cont++;
+                }
 
 
 //CONSUME SERVICES
 //            $totalConsumerServices = array();
-            if ($showDay) {
-                $totalConsumerServices["plan"] = 0.0;
-                $totalConsumerServices["real"] = 0.0;
-            }
-            if ($showMonth) {
-                $totalConsumerServices["plan_month"] = 0.0;
-                $totalConsumerServices["real_month"] = 0.0;
-            }
-            if ($showYear) {
-                $totalConsumerServices["plan_year"] = 0.0;
-                $totalConsumerServices["real_year"] = 0.0;
-            }
+                if ($showDay) {
+                    $totalConsumerServices["plan"] = 0.0;
+                    $totalConsumerServices["real"] = 0.0;
+                }
+                if ($showMonth) {
+                    $totalConsumerServices["plan_month"] = 0.0;
+                    $totalConsumerServices["real_month"] = 0.0;
+                }
+                if ($showYear) {
+                    $totalConsumerServices["plan_year"] = 0.0;
+                    $totalConsumerServices["real_year"] = 0.0;
+                }
 //            $totalConsumerServices = array(
 //                "plan" => 0.0,
 //                "real" => 0.0,
@@ -1876,238 +3366,275 @@ class ReportTemplateController extends SEIPController {
 //                "plan_year" => 0.0,
 //                "real_year" => 0.0,
 //            );
-            $arrayConsumerServices = array();
+                $arrayConsumerServices = array();
 
 //UNERALIZED PRODUCCTION
-            $arrayUnrealizedProduction = array();
-            $totalUnrealizedProduction = array(
-                "day" => 0.0,
-                "month" => 0.0,
-                "year" => 0.0
-            );
+                $arrayUnrealizedProduction = array();
+                $totalUnrealizedProduction = array(
+                    "day" => 0.0,
+                    "month" => 0.0,
+                    "year" => 0.0
+                );
 
 //INVENTORY
-            $arrayInventory = array();
-            $totalInventory = array(
-                "day" => 0.0,
-                "day_preview" => 0.0
-            );
+                $arrayInventory = array();
+                $totalInventory = array(
+                    "day" => 0.0,
+                    "day_preview" => 0.0
+                );
 
-            foreach ($plantReports as $planReport) {
+                foreach ($plantReports as $planReport) {
 //CONSUMO DE SERVICIOS
 
-                foreach ($planReport->getConsumerPlanningServices() as $consumerPlanningService) {
+                    foreach ($planReport->getConsumerPlanningServices() as $consumerPlanningService) {
 
-                    $serviceName = $consumerPlanningService->getService()->getName() . " (" . $consumerPlanningService->getService()->getServiceUnit() . ")";
-                    $serviceId = $consumerPlanningService->getService()->getId();
+                        $serviceName = $consumerPlanningService->getService()->getName() . " (" . $consumerPlanningService->getService()->getServiceUnit() . ")";
+                        $serviceId = $consumerPlanningService->getService()->getId();
 
-                    if (!in_array($serviceName, $arrayProdServices)) {
-                        array_push($arrayProdServices, $serviceName);
-                        $arrayConsumerServices[$serviceId] = array(
-                            "productName" => $serviceName,
-                            "plan" => 0.0,
-                            "real" => 0.0,
-                            "plan_month" => 0.0,
-                            "real_month" => 0.0,
-                            "plan_year" => 0.0,
-                            "real_year" => 0.0
-                        );
-                    }
-                    $consumerPlanning = $consumerPlanningService->getSummary($dateReport);
-                    if ($showDay) {
-                        $totalConsumerServices["plan"] += $consumerPlanning["total_day_plan"];
-                        $totalConsumerServices["real"] += $consumerPlanning["total_day"];
-                    }
-                    if ($showMonth) {
-                        $totalConsumerServices["plan_month"] += $consumerPlanning["total_month_plan"];
-                        $totalConsumerServices["real_month"] += $consumerPlanning["total_month"];
-                    }
-                    if ($showYear) {
-                        $totalConsumerServices["plan_year"] += $consumerPlanning["total_year_plan"];
-                        $totalConsumerServices["real_year"] += $consumerPlanning["total_year"];
-                    }
+                        if (!in_array($serviceName, $arrayProdServices)) {
+                            array_push($arrayProdServices, $serviceName);
+                            $arrayConsumerServices[$serviceId] = array(
+                                "productName" => $serviceName,
+                                "plan" => 0.0,
+                                "real" => 0.0,
+                                "plan_month" => 0.0,
+                                "real_month" => 0.0,
+                                "plan_year" => 0.0,
+                                "real_year" => 0.0
+                            );
+                        }
+                        $consumerPlanning = $consumerPlanningService->getSummary($dateReport);
+                        if ($showDay) {
+                            $totalConsumerServices["plan"] += $consumerPlanning["total_day_plan"];
+                            $totalConsumerServices["real"] += $consumerPlanning["total_day"];
+                        }
+                        if ($showMonth) {
+                            $totalConsumerServices["plan_month"] += $consumerPlanning["total_month_plan"];
+                            $totalConsumerServices["real_month"] += $consumerPlanning["total_month"];
+                        }
+                        if ($showYear) {
+                            $totalConsumerServices["plan_year"] += $consumerPlanning["total_year_plan"];
+                            $totalConsumerServices["real_year"] += $consumerPlanning["total_year"];
+                        }
 
 
-                    $arrayConsumerServices[$serviceId]["real"] += $consumerPlanning["total_day"];
-                    $arrayConsumerServices[$serviceId]["plan"] += $consumerPlanning["total_day_plan"];
-                    $arrayConsumerServices[$serviceId]["real_month"] += $consumerPlanning["total_month"];
-                    $arrayConsumerServices[$serviceId]["plan_month"] += $consumerPlanning["total_month_plan"];
-                    $arrayConsumerServices[$serviceId]["real_year"] += $consumerPlanning["total_year"];
-                    $arrayConsumerServices[$serviceId]["plan_year"] += $consumerPlanning["total_year_plan"];
-                }
+                        $arrayConsumerServices[$serviceId]["real"] += $consumerPlanning["total_day"];
+                        $arrayConsumerServices[$serviceId]["plan"] += $consumerPlanning["total_day_plan"];
+                        $arrayConsumerServices[$serviceId]["real_month"] += $consumerPlanning["total_month"];
+                        $arrayConsumerServices[$serviceId]["plan_month"] += $consumerPlanning["total_month_plan"];
+                        $arrayConsumerServices[$serviceId]["real_year"] += $consumerPlanning["total_year"];
+                        $arrayConsumerServices[$serviceId]["plan_year"] += $consumerPlanning["total_year_plan"];
+                    }
 
 
 //PRODUCION NO REALIZADA
 
-                foreach ($planReport->getProductsReport() as $productReport) {
-                    if (!$productReport->getIsGroup()) {
-                        $productId = $productReport->getProduct()->getId();
-                        $productReportId = $productReport->getId();
+                    foreach ($planReport->getProductsReport() as $productReport) {
+                        if (!$productReport->getIsGroup()) {
+                            $productId = $productReport->getProduct()->getId();
+                            $productReportId = $productReport->getId();
 
 //                    if (!in_array($productReportId, $arrayNamesUnrealizedProduction)) {
 //                        $arrayNamesUnrealizedProduction[] = $productId;
-                        $arrayUnrealizedProduction[$productReportId] = array(
-                            "productName" => $productReport->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
-                            //ID DEL PRODUCT_REPORT
-                            "productId" => $productReport->getId(),
-                            "reportTemplateId" => $productReport->getPlantReport()->getReportTemplate()->getId(),
-                            //ID DEL PRODUCTO
-                            "idProduct" => $productId
-                        );
-                        // }
+                            $arrayUnrealizedProduction[$productReportId] = array(
+                                "productName" => $productReport->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                                //ID DEL PRODUCT_REPORT
+                                "productId" => $productReport->getId(),
+                                "reportTemplateId" => $productReport->getPlantReport()->getReportTemplate()->getId(),
+                                //ID DEL PRODUCTO
+                                "idProduct" => $productId
+                            );
+                            // }
 
-                        $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($dateReport);
+                            $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($dateReport);
 
-                        $arrayUnrealizedProduction[$productReportId]["day"] = $unrealizedProduction["total_day"];
-                        $arrayUnrealizedProduction[$productReportId]["month"] = $unrealizedProduction["total_month"];
-                        $arrayUnrealizedProduction[$productReportId]["year"] = $unrealizedProduction["total_year"];
+                            $arrayUnrealizedProduction[$productReportId]["day"] = $unrealizedProduction["total_day"];
+                            $arrayUnrealizedProduction[$productReportId]["month"] = $unrealizedProduction["total_month"];
+                            $arrayUnrealizedProduction[$productReportId]["year"] = $unrealizedProduction["total_year"];
 
-                        $totalUnrealizedProduction["day"] += $unrealizedProduction["total_day"];
-                        $totalUnrealizedProduction["month"] += $unrealizedProduction["total_month"];
-                        $totalUnrealizedProduction["year"] += $unrealizedProduction["total_year"];
+                            $totalUnrealizedProduction["day"] += $unrealizedProduction["total_day"];
+                            $totalUnrealizedProduction["month"] += $unrealizedProduction["total_month"];
+                            $totalUnrealizedProduction["year"] += $unrealizedProduction["total_year"];
+                        }
+                    }
+
+
+                    foreach ($planReport->getProductsReport() as $productReport) {
+                        if (!$productReport->getIsGroup()) {
+                            $productId = $productReport->getProduct()->getId();
+                            $Inventory = $productReport->getSummaryInventory($dateReport);
+                            $totalInventory["day"] += $Inventory["total_day"];
+                            $totalInventory["day_preview"] += $Inventory["total_month"];
+
+                            $arrayInventory[] = array(
+                                "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                                "day" => $Inventory["total_day"],
+                                "day_preview" => $Inventory["total_month"]
+                            );
+                        }
                     }
                 }
-
-
-                foreach ($planReport->getProductsReport() as $productReport) {
-                    if (!$productReport->getIsGroup()) {
-                        $productId = $productReport->getProduct()->getId();
-                        $Inventory = $productReport->getSummaryInventory($dateReport);
-                        $totalInventory["day"] += $Inventory["total_day"];
-                        $totalInventory["day_preview"] += $Inventory["total_month"];
-
-                        $arrayInventory[] = array(
-                            "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
-                            "day" => $Inventory["total_day"],
-                            "day_preview" => $Inventory["total_month"]
-                        );
-                    }
-                }
-            }
 
 
 //TOTALES YEAR PRODUCTIONS
-            if ($dayPlan - $dayReal < 0) {
-                $varDay = 0;
-            } else {
-                $varDay = $dayPlan - $dayReal;
-            }
-            if ($dayReal != 0) {
-                if ($dayPlan <= 0) {
-                    $ejecutionDay = 0;
+                if ($dayPlan - $dayReal < 0) {
+                    $varDay = 0;
                 } else {
-                    $ejecutionDay = ($dayReal * 100) / $dayPlan;
+                    $varDay = $dayPlan - $dayReal;
                 }
-            } else {
-                $ejecutionDay = 0;
-            }
-            $summaryProducctionTotals["day"] = array(
-                "plan_total" => number_format($dayPlan, 2, ',', '.'),
-                "real_total" => number_format($dayReal, 2, ',', '.'),
-                "ejectution_total" => number_format($ejecutionDay, 2, ',', '.'),
-                "var" => number_format($varDay, 2, ',', '.')
-            );
+                if ($dayReal != 0) {
+                    if ($dayPlan <= 0) {
+                        $ejecutionDay = 0;
+                    } else {
+                        $ejecutionDay = ($dayReal * 100) / $dayPlan;
+                    }
+                } else {
+                    $ejecutionDay = 0;
+                }
+                $summaryProducctionTotals["day"] = array(
+                    "plan_total" => number_format($dayPlan, 2, ',', '.'),
+                    "real_total" => number_format($dayReal, 2, ',', '.'),
+                    "ejectution_total" => number_format($ejecutionDay, 2, ',', '.'),
+                    "var" => number_format($varDay, 2, ',', '.')
+                );
 
 //TOTALES MONTH PRODUCCTIONS
-            if ($MonthPlanAcumulated - $MonthRealAcumualated < 0) {
-                $varMonth = 0;
+                if ($MonthPlanAcumulated - $MonthRealAcumualated < 0) {
+                    $varMonth = 0;
+                } else {
+                    $varMonth = $MonthPlanAcumulated - $MonthRealAcumualated;
+                }
+
+                if ($MonthRealAcumualated != 0) {
+                    $ejecutionMonth = ($MonthRealAcumualated * 100) / $MonthPlanAcumulated;
+                } else {
+                    $ejecutionMonth = 0;
+                }
+                $summaryProducctionTotals["month"] = array(
+                    "plan_total" => number_format($MonthPlan, 2, ',', '.'),
+                    "plan_acumulated_total" => number_format($MonthPlanAcumulated, 2, ',', '.'),
+                    "real_acumulated_total" => number_format($MonthRealAcumualated, 2, ',', '.'),
+                    "ejectution_total" => number_format($ejecutionMonth, 2, ',', '.'),
+                    "var" => number_format($varMonth, 2, ',', '.')
+                );
+
+
+                //TOTALES YEAR PRODUCCTIONS
+                if (($yearPlanAcumulated - $yearRealAcumualated) < 0) {
+                    $varMonth = 0;
+                } else {
+                    $varMonth = $yearPlanAcumulated - $yearRealAcumualated;
+                }
+
+                if ($yearRealAcumualated != 0) {
+                    $ejecutionYear = ($yearRealAcumualated * 100) / $yearPlanAcumulated;
+                } else {
+                    $ejecutionYear = 0;
+                }
+                $summaryProducctionTotals["year"] = array(
+                    "plan_total" => number_format($yearPlan, 2, ',', '.'),
+                    "plan_acumulated_total" => number_format($yearPlanAcumulated, 2, ',', '.'),
+                    "real_acumulated_total" => number_format($yearRealAcumualated, 2, ',', '.'),
+                    "ejectution_total" => number_format($ejecutionYear, 2, ',', '.'),
+                    "var" => number_format($varMonth, 2, ',', '.')
+                );
+
+
+
+
+                $tools = new \Pequiven\SEIPBundle\Service\ToolService();
+
+
+                if (count($data["reportTemplate"]) != 0) {
+                    $plant = $data["reportTemplate"][0]->getName();
+                } else {
+                    $plant = "null";
+                }
+
+                $data = array(
+                    'dateReport' => $dateReport,
+                    'productsReport' => $productsReport,
+                    'productReport' => $productsReport,
+                    'typeReport' => $typeReport,
+                    'producction' => $summaryProducction,
+                    'totalProducction' => $summaryProducctionTotals,
+                    'rawMaterials' => $arrayRawMaterial,
+                    'consumerServices' => $arrayConsumerServices,
+                    'totalConsumerServices' => $totalConsumerServices,
+                    'unrealizedProductions' => $arrayUnrealizedProduction,
+                    'totalUnrealizedProduction' => $totalUnrealizedProduction,
+                    'inventorys' => $arrayInventory,
+                    'totalInventorys' => $totalInventory,
+                    'observations' => $observations,
+                    'plantReportId' => $plantReportId,
+                    'plantsNames' => $plants,
+                    'form' => $form->createView(),
+                    'showDay' => $showDay,
+                    'showMonth' => $showMonth,
+                    'showYear' => $showYear,
+                    'byRange' => $byRange,
+                    'showProduction' => $showProduction,
+                    'showRawMaterial' => $showRawMaterial,
+                    'showPnr' => $showPnr,
+                    'showService' => $showService,
+                    'showInventory' => $showInventory,
+                    'showObservation' => $showObservation,
+                    //'withDetails' => $withDetails,
+                    'dateFrom' => $dateFrom,
+                    'dateEnd' => $dateEnd,
+                    'typeReport' => $typeReport,
+                    "graphicsDays" => $graphicsDays,
+                    "graphicsMonth" => $graphicsMonth,
+                    "graphicsYear" => $graphicsYear,
+                    "securityService" => $this->getSecurityService(),
+                    "plant" => $plant,
+                    "tools" => $tools,
+                    "startDatePeriod" => $startDatePeriod,
+                    "endDatePeriod" => $endDatePeriod
+                );
+
+                $view = $this
+                        ->view()
+                        ->setTemplate($this->config->getTemplate('vizualice.html'))
+                ;
+                $view->setData($data);
             } else {
-                $varMonth = $MonthPlanAcumulated - $MonthRealAcumualated;
-            }
+                $productsReport = new \Doctrine\Common\Collections\ArrayCollection();
+                $consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
+                $rawMaterialConsumptionPlannings = new \Doctrine\Common\Collections\ArrayCollection();
 
-            if ($MonthRealAcumualated != 0) {
-                $ejecutionMonth = ($MonthRealAcumualated * 100) / $MonthPlanAcumulated;
-            } else {
-                $ejecutionMonth = 0;
-            }
-            $summaryProducctionTotals["month"] = array(
-                "plan_total" => number_format($MonthPlan, 2, ',', '.'),
-                "plan_acumulated_total" => number_format($MonthPlanAcumulated, 2, ',', '.'),
-                "real_acumulated_total" => number_format($MonthRealAcumualated, 2, ',', '.'),
-                "ejectution_total" => number_format($ejecutionMonth, 2, ',', '.'),
-                "var" => number_format($varMonth, 2, ',', '.')
-            );
+                $productsReportByIdProduct = $consumerPlanningServicesByIdService = $rawMaterialConsumptionPlanningsById = array();
+                foreach ($plantReports as $plantReport) {
+                    if (!in_array($plantReport->getReportTemplate()->getName(), $plants)) {
+                        $plants[] = $plantReport->getReportTemplate()->getName();
+                    }
+                    print($plantReport->getPlant()->getName());
+                    foreach ($plantReport->getProductsReport() as $productReport) {
 
-
-            //TOTALES YEAR PRODUCCTIONS
-            if (($yearPlanAcumulated - $yearRealAcumualated) < 0) {
-                $varMonth = 0;
-            } else {
-                $varMonth = $yearPlanAcumulated - $yearRealAcumualated;
-            }
-
-            if ($yearRealAcumualated != 0) {
-                $ejecutionYear = ($yearRealAcumualated * 100) / $yearPlanAcumulated;
-            } else {
-                $ejecutionYear = 0;
-            }
-            $summaryProducctionTotals["year"] = array(
-                "plan_total" => number_format($yearPlan, 2, ',', '.'),
-                "plan_acumulated_total" => number_format($yearPlanAcumulated, 2, ',', '.'),
-                "real_acumulated_total" => number_format($yearRealAcumualated, 2, ',', '.'),
-                "ejectution_total" => number_format($ejecutionYear, 2, ',', '.'),
-                "var" => number_format($varMonth, 2, ',', '.')
-            );
-
-
-
-
-            $tools = new \Pequiven\SEIPBundle\Service\ToolService();
-
-
-            if (count($data["reportTemplate"]) != 0) {
-                $plant = $data["reportTemplate"][0]->getName();
-            } else {
-                $plant = "null";
-            }
-
-            $data = array(
-                'dateReport' => $dateReport,
-                'productsReport' => $productsReport,
-                'productReport' => $productsReport,
-                'typeReport' => $typeReport,
-                'producction' => $summaryProducction,
-                'totalProducction' => $summaryProducctionTotals,
-                'rawMaterials' => $arrayRawMaterial,
-                'consumerServices' => $arrayConsumerServices,
-                'totalConsumerServices' => $totalConsumerServices,
-                'unrealizedProductions' => $arrayUnrealizedProduction,
-                'totalUnrealizedProduction' => $totalUnrealizedProduction,
-                'inventorys' => $arrayInventory,
-                'totalInventorys' => $totalInventory,
-                'observations' => $observations,
-                'plantReportId' => $plantReportId,
-                'plantsNames' => $plants,
-                'form' => $form->createView(),
-                'showDay' => $showDay,
-                'showMonth' => $showMonth,
-                'showYear' => $showYear,
-                'byRange' => $byRange,
-                'showProduction' => $showProduction,
-                'showRawMaterial' => $showRawMaterial,
-                'showPnr' => $showPnr,
-                'showService' => $showService,
-                'showInventory' => $showInventory,
-                'showObservation' => $showObservation,
-                //'withDetails' => $withDetails,
-                'dateFrom' => $dateFrom,
-                'dateEnd' => $dateEnd,
-                'typeReport' => $typeReport,
-                "graphicsDays" => $graphicsDays,
-                "graphicsMonth" => $graphicsMonth,
-                "graphicsYear" => $graphicsYear,
-                "securityService" => $this->getSecurityService(),
-                "plant" => $plant,
-                "tools" => $tools,
-                "startDatePeriod" => $startDatePeriod,
-                "endDatePeriod" => $endDatePeriod
-            );
-
-            $view = $this
-                    ->view()
-                    ->setTemplate($this->config->getTemplate('vizualice.html'))
-            ;
-            $view->setData($data);
+                        if ($productReport->getIsGroup()) {
+                            var_dump($productReport->getNameGroup());
+                            var_dump(count($productReport->getChildrensGroup()));
+                        }
+//                        if (!$productReport->getIsGroup()) {
+//                            //var_dump($productReport->getId());
+//                            $product = $productReport->getProduct();
+//                            if (!isset($productsReportByIdProduct[$product->getId()])) {
+//                                $productsReportByIdProduct[$product->getId()] = array();
+//                            }
+//                            $productsReportByIdProduct[$product->getId()][] = $productReport;
+//
+//                            foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterialConsumptionPlanning) {
+//                                $product = $rawMaterialConsumptionPlanning->getProduct();
+//                                if (!isset($rawMaterialConsumptionPlanningsById[$product->getId()])) {
+//                                    $rawMaterialConsumptionPlanningsById[$product->getId()] = array();
+//                                }
+//                                $rawMaterialConsumptionPlanningsById[$product->getId()][] = $rawMaterialConsumptionPlanning;
+//                            }
+//                        }
+                    }
+                }
+                die();
+            }//fin else
         }
 
         $sections = array(

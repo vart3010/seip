@@ -4298,11 +4298,11 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["paletteColors"] = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
         $chart["yaxisvaluespadding"] = "10";
         $chart["valueFontColor"] = "#000000";
-        $chart["rotateValues"] = "0";
-        $chart["theme"] = "fint";
-        $chart["showborder"] = "0";
-        $chart["decimals"] = "0";
-        $chart["exportenabled"] = "1";
+        $chart["rotateValues"]   = "0";
+        $chart["theme"]          = "fint";
+        $chart["showborder"]     = "0";
+        $chart["decimals"]       = $indicator->getDecimalsToChartEvolution();
+        $chart["exportenabled"]  = "1";
         $chart["exportatclient"] = "0";
         $chart["exportFormats"] = "PNG= Exportar Informe de Evolución PDF";
         $chart["exportFileName"] = "Grafico Resultados ";
@@ -4313,11 +4313,11 @@ class IndicatorService implements ContainerAwareInterface {
         $prom = $this->getPromdIndicator($indicator);
         //Lamado obj 2015
         $obj = $this->getObjIndicator($indicator);
-
-        if ($indicator->getViewDataChartEvolutionConsultedMonth() == 1) {
-            $resultNumbers = $this->getIndicatorHasResultValid($indicator);
-        } else {
-            $resultNumbers = $month;
+        
+        if ($indicator->getViewDataChartEvolutionConsultedMonth() == 1 or $indicator->getFrequencyNotificationIndicator()->getId() == 1) {
+            $resultNumbers = $this->getIndicatorHasResultValid($indicator);            
+        }else{
+            $resultNumbers = $month;            
         }
 
         //Llamado de frecuencia de Notificacion del Indicador

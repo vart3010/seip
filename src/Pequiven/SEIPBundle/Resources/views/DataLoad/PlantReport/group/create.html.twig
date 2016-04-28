@@ -1,0 +1,22 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.plant_report.plant_report"|trans ),
+        ( 'pequiven.add'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <form method="POST" ng-controller="PlantReportGroupController" action="{{ path("pequiven_plant_report_group_create",{reportTemplate:app.request.get("reportTemplate") }) }}">
+       <br /><br />
+       <input type="hidden" name="setUpdate" id="setUpdate" value="0" />
+       {% include 'PequivenSEIPBundle:DataLoad/PlantReport/group:_form.html.twig' %}
+       {{ actions.create() }}
+       {{ form_rest(form) }}
+   </form>
+{% endblock %}
