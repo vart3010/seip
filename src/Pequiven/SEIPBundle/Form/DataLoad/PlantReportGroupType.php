@@ -5,8 +5,10 @@ namespace Pequiven\SEIPBundle\Form\DataLoad;
 use Pequiven\SEIPBundle\Form\SeipAbstractForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
-class PlantReportType extends SeipAbstractForm {
+class PlantReportGroupType extends SeipAbstractForm {
 
     /**
      * @param FormBuilderInterface $builder
@@ -34,16 +36,7 @@ class PlantReportType extends SeipAbstractForm {
                 ->add('reportTemplate', null, $parametersPreSet)
                 ->add('company', null, $parametersPreSet)
                 ->add('location', null, $parametersPreSet)
-                ->add('entity', null, array(
-                    'label_attr' => array('class' => 'label'),
-                    "empty_value" => "",
-                    "attr" => array("class" => "select2 input-large"),
-                    "query_builder" => function (\Pequiven\SEIPBundle\Repository\CEI\EntityRepository $repository) use ($location) {
-                return $repository->findQueryByLocation($location);
-            },
-                ))
-                ->add('plant', null, $parametersToSet)
-                //->add('childrensGroup', null, $parametersToSet)
+//                ->add('plant', null, $parametersToSet)
                 ->add('currentCapacity', null, array(
                     'label_attr' => array('class' => 'label'),
                     "attr" => array("class" => "input"),
@@ -53,6 +46,19 @@ class PlantReportType extends SeipAbstractForm {
                     "attr" => array("class" => "switch medium mid-margin-right", "data-text-on" => "Si", "data-text-off" => "No"),
                     "required" => false,
                 ))
+                ->add('nameGroup', null, array(
+                    'label_attr' => array('class' => 'label'),
+                    "attr" => array("class" => "input"),
+                ))
+                ->add('entity', null, array(
+                    'label_attr' => array('class' => 'label'),
+                    "empty_value" => "",
+                    "attr" => array("class" => "select2 input-large"),
+                    "query_builder" => function (\Pequiven\SEIPBundle\Repository\CEI\EntityRepository $repository) use ($location) {
+                return $repository->findQueryByLocation($location);
+            },
+                ))
+                ->add('childrensGroup', null, $parametersToSet)
         ;
     }
 
@@ -70,7 +76,7 @@ class PlantReportType extends SeipAbstractForm {
      * @return string
      */
     public function getName() {
-        return 'pequiven_seipbundle_dataload_plantreport';
+        return 'pequiven_seipbundle_dataload_plantreport_group';
     }
 
 }

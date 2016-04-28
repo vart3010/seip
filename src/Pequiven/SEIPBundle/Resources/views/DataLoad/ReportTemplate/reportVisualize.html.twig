@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block body %}
-{#    {{ showInventory }}#}
+    {#    {{ showInventory }}#}
     {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
     <form id="frmFilter" action="{{ path("pequiven_report_template_vizualice") }}" method="POST">
         <input id="exportToPdf" type="hidden" name="exportToPdf" value="0" />
@@ -26,13 +26,13 @@
                     </p>
                 </div>
 
-                <div class="six-columns six-columns-tablet twelve-columns-mobile">
+                {#<div class="six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         {{ form_widget(form.plantReport) }}
                         {{ form_errors(form.plantReport) }}
                         {{ form_label(form.plantReport) }}
                     </p>
-                </div> 
+                </div> #}
 
                 <div style="display: none;" class="six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
@@ -139,27 +139,43 @@
                         {{ form_errors(form.showObservation) }}&nbsp;
                         {{ form_label(form.showObservation) }}
                     </div>
+                    <div class="four-columns" >
+                        {{ form_widget(form.showGroupsPlants) }}
+                        {{ form_errors(form.showGroupsPlants) }}&nbsp;
+                        {{ form_label(form.showGroupsPlants) }}
+                    </div>
                 </div>
 
             </div>
         </div>
 
 
-
-
         {{ form_rest(form) }}
-        <a id="btnRefresh" href="#" class="button" >Refrescar</a>
+        <a id="btnRefresh" href="#" class="button" >Consultar</a>
     </div>
 </form>
 
 
-<div class="with-padding">
-    {% if byRange %}
-        {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_by_range.html.twig' %}
+{% if production %}
+    <div class="with-padding">
+        {% if byRange %}
+            {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:reportVizualiceProductsByRange.html.twig' %}
+        {% else %}
+            {% if groupsPlants %}
+                {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:reportVizualiceGroupsPlants.html.twig' %}
+            {% else %}
+                {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:reportVizualiceProducts.html.twig' %}
+            {% endif %}
+        {% endif %}
+    </div>
+{% else %}
+    {% if groupsPlants %}
+        <h2 class="text-center">Sin Grupo de Productos</h2>
     {% else %}
-        {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_normal.html.twig' %}
+        <h2 class="text-center">Sin Productos</h2>
     {% endif %}
-</div>
+{% endif %}
+
 
 {% endblock body %}
 
@@ -183,8 +199,8 @@
         $(document).ready(function () {
         {% if byRange %}
             {% if production is not empty %}
-                        validateSelectsOnLoad($("#form_reportTemplate"));
-                        validateSelectsOnLoad($("#form_plantReport"));
+                    validateSelectsOnLoad($("#form_reportTemplate"));
+                    validateSelectsOnLoad($("#form_plantReport"));
             {% endif %}
         {% else %}
             {% if productsReport is not empty %}
@@ -192,10 +208,6 @@
                     validateSelectsOnLoad($("#form_plantReport"));
             {% endif %}
         {% endif %}
-
-
-
-
 
                 $("#form_reportTemplate").change(function () {
                     validateSelectsOnChange($(this), $("#form_plantReport"));
@@ -234,11 +246,11 @@
                 }).on("change", function () {
                 });
         {% endif %}
-            
+
                 var startDate = '{{ startDatePeriod }}';
                 var endDate = '{{ endDatePeriod }}';
-                jQuery("#form_dateReport").datepicker( "option", "minDate", startDate );
-                jQuery("#form_dateReport").datepicker( "option", "maxDate", endDate );
+                jQuery("#form_dateReport").datepicker("option", "minDate", startDate);
+                jQuery("#form_dateReport").datepicker("option", "maxDate", endDate);
 
                 $("#form_dateFrom").datepicker({
                     defaultDate: "+1w",
