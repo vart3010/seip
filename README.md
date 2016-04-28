@@ -57,6 +57,14 @@ services:
       arguments:    [@app.twig_string_loader, %knp_menu.renderer.twig.options%]
 ```
 
+**Pequiven/SEIPBundle/Menu/Template/Developer/RequestVoter.php**
+```php
+//Comentar...
+else if($item->getUri() !== $this->container->get('request')->getBaseUrl().'/' && (substr($this->container->get('request')->getRequestUri(), 0,  strlen($item->getUri() === $item->getUri())))){
+     return true;
+}
+```
+
 **Pequiven/SEIPBundle/Resources/views/Template/Developer/base.html.twig**
 ```html
 <html class="no-js linen ng-app" lang="{{ app.request.locale }}">
@@ -86,29 +94,31 @@ Cambiar $xor = $qb->expr()->orX($qb->expr()->isNull('p_c')); -> isNull('p_c.id')
 
 /etc/mysql/conf.d/mariadb.cnf -> default-time-zone = "-04:30"
 ```
+
 **vendor/sonata-project/admin-bundle/Form/ChoiceList/ModelChoiceList.php**
 ```php
-    Agregar el siguiente código en la función load:
-    protected function load($choices)
-    {
-        if (is_array($choices) && count($choices) > 0) {
-            $entities = $choices;
-        } elseif ($this->query) {
-            $entities = $this->modelManager->executeQuery($this->query);
-        } else {
-            $entities = $this->modelManager->findBy($this->class);
-        }
-        if (null === $entities) {
-            return array();
-        }
-        $choices = array();
-        $this->entities = array();
-        ...
+Agregar el siguiente código en la función load:
+protected function load($choices)
+{
+    if (is_array($choices) && count($choices) > 0) {
+        $entities = $choices;
+    } elseif ($this->query) {
+        $entities = $this->modelManager->executeQuery($this->query);
+    } else {
+        $entities = $this->modelManager->findBy($this->class);
+    }
+    if (null === $entities) {
+        return array();
+    }
+    $choices = array();
+    $this->entities = array();
+    ...
 ```
+
 **vendor/sonata-project/admin-bundle/Form/Type/ModelType.php**
 ```php
-    En la línea 90, cambiar el 
-        'choices'           => null,
-    por
-        'choices'           => array(),
+En la línea 90, cambiar el 
+    'choices'           => null,
+por
+    'choices'           => array(),
 ```
