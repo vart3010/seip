@@ -1399,7 +1399,8 @@ class ReportTemplateController extends SEIPController {
             $reportTemplates = $data["reportTemplate"];
 
             $typeReport = $data['typeReport'];
-            $dateReport = $data['dateReport'];
+            $dateReport = $data['dateReport']; //new
+            
 
 
             $dayPlan = 0.0;
