@@ -496,7 +496,7 @@ class ProductReport extends BaseModel {
     public function getUnrealizedProductionsSortByMonthWithOutProduction() {
         $sorted = array();
         foreach ($this->unrealizedProductions as $productDetailDailyMonth) {
-            var_dump($productDetailDailyMonth);
+            var_dump($productDetailDailyMonth->getday1Details()->getInternalCauses());
             die();
             $sorted[$productDetailDailyMonth->getMonth()] = $productDetailDailyMonth;
         }

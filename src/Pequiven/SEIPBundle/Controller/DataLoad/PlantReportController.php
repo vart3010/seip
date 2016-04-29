@@ -264,16 +264,16 @@ class PlantReportController extends SEIPController {
             "alicuota" => $alicuota
         );
 
-        if (count($plantReport) > 0) {
-            $viewDefault = 'showGroups.html';
-        } else {
-            $viewDefault = 'show.html';
-        }
+//        if (count($plantReport) > 0) {
+//            $viewDefault = 'showGroups.html';
+//        } else {
+//            $viewDefault = 'show.html';
+//        }
 
 
         $view = $this
                 ->view()
-                ->setTemplate($this->config->getTemplate($viewDefault))
+                ->setTemplate($this->config->getTemplate("show.html"))
                 ->setTemplateVar($this->config->getResourceName())
                 ->setData($data)
         ;
