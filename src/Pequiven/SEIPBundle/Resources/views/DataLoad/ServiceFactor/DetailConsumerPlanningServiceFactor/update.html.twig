@@ -12,10 +12,10 @@
 {% endblock %}
 
 {% block body -%}
-    <form method="POST" action="{{ path("pequiven_detail_consumer_planning_gasflow_update",{id:detail_consumer_planning_gasflow.id }) }}">
+    <form method="POST" action="{{ path("pequiven_detail_consumer_planning_servicefactor_update",{id:detail_consumer_planning_servicefactor.id }) }}">
         <input type="hidden" name="_metod" value="PUT" />
        <br /><br />
-       {% include 'PequivenSEIPBundle:DataLoad/GasFlow/DetailConsumerPlanningGasFlow:_form.html.twig' %}
+       {% include 'PequivenSEIPBundle:DataLoad/ServiceFactor/DetailConsumerPlanningServiceFactor:_form.html.twig' %}
        {{ actions.update() }}
        <div class="hidden">
            {{ form_rest(form) }}

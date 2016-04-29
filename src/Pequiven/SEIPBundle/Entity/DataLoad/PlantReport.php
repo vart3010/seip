@@ -110,6 +110,13 @@ class PlantReport extends ModelBaseMaster {
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\GasFlow\ConsumerPlanningGasFlow",mappedBy="plantReport",cascade={"remove"})
      */
     private $consumerPlanningGasFlow;
+    
+    /**
+     * Planificacion de consumo de factor de servicio
+     * @var ServiceFactor\ConsumerPlanningServiceFactor
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ServiceFactor\ConsumerPlanningServiceFactor",mappedBy="plantReport",cascade={"remove"})
+     */
+    private $consumerPlanningServiceFactor;
 
     /**
      * Porcentaje de la capacidad actual
@@ -167,6 +174,7 @@ class PlantReport extends ModelBaseMaster {
         $this->plantStopPlannings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
         $this->consumerPlanningGasFlow = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->consumerPlanningServiceFactor = new \Doctrine\Common\Collections\ArrayCollection();
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->parentGroup = new \Doctrine\Common\Collections\ArrayCollection();
         $this->childrensGroup = new \Doctrine\Common\Collections\ArrayCollection();
@@ -462,6 +470,36 @@ class PlantReport extends ModelBaseMaster {
      */
     public function getConsumerPlanningGasFlow() {
         return $this->consumerPlanningGasFlow;
+    }
+
+    /**
+     * Add consumerPlanningServiceFactor
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ServiceFactor\ConsumerPlanningServiceFactor $consumerPlanningServiceFactor
+     * @return PlantReport
+     */
+    public function addConsumerPlanningServiceFactor(\Pequiven\SEIPBundle\Entity\DataLoad\ServiceFactor\ConsumerPlanningServiceFactor $consumerPlanningServiceFactor) {
+        $this->consumerPlanningServiceFactor[] = $consumerPlanningServiceFactor;
+
+        return $this;
+    }
+
+    /**
+     * Remove consumerPlanningServiceFactor
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ServiceFactor\ConsumerPlanningServiceFactor $consumerPlanningServiceFactor
+     */
+    public function removeConsumerPlanningServiceFactor(\Pequiven\SEIPBundle\Entity\DataLoad\ServiceFactor\ConsumerPlanningServiceFactor $consumerPlanningServiceFactor) {
+        $this->consumerPlanningServiceFactor->removeElement($consumerPlanningServiceFactor);
+    }
+
+    /**
+     * Get consumerPlanningServiceFactor
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getConsumerPlanningServiceFactor() {
+        return $this->consumerPlanningServiceFactor;
     }
 
     function getCurrentCapacity() {

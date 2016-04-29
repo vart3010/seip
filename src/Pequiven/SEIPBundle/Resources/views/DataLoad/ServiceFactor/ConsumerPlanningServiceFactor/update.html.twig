@@ -6,16 +6,15 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("pequiven_seip.report_template.raw_material"|trans ),
+        ("pequiven_seip.consumer_planning_servicefactor.consumer_planning_servicefactor"|trans ),
         ( 'pequiven.update'|trans({},'messages') )
     ) }}
 {% endblock %}
 
 {% block body -%}
-    <form method="POST" action="{{ path("pequiven_detail_consumer_planning_gasflow_update",{id:detail_consumer_planning_gasflow.id }) }}">
-        <input type="hidden" name="_metod" value="PUT" />
+    <form method="POST" action="{{ path('pequiven_consumer_planning_servicefactor_update',{id: consumer_planning_servicefactor.id, save_and_close: true })}}">
        <br /><br />
-       {% include 'PequivenSEIPBundle:DataLoad/GasFlow/DetailConsumerPlanningGasFlow:_form.html.twig' %}
+       {% include 'PequivenSEIPBundle:DataLoad/ServiceFactor/ConsumerPlanningServiceFactor:_form.html.twig' %}
        {{ actions.update() }}
        <div class="hidden">
            {{ form_rest(form) }}

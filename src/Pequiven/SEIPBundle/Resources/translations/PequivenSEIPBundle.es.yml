@@ -450,6 +450,15 @@ pequiven_seip:
         gasflow_consumption_planning: Presupuesto de consumo de flujo de gas
         question:
             delete: Desea eliminar este detalle de consumo de flujo de gas
+    consumer_planning_servicefactor:
+        consumer_planning_servicefactor: Consumo de factor de servicio
+        details_consumer_planning_servicefactor: Detalle de consumo de factor de servicio
+        question:
+            delete: Desea eliminar este detalle de consumo de factor de servicio
+    servicefactor_consumption_planning:
+        servicefactor_consumption_planning: Presupuesto de consumo de factor de servicio
+        question:
+            delete: Desea eliminar este detalle de consumo de factor de servicio
 
     month:
         1: Enero
@@ -591,8 +600,10 @@ empty:
     no_service: Sin servicios.
     consumer_planning_services: No hay servicios.
     consumer_planning_gas_flow: No hay consumo de flujo de gas.
+    consumer_planning_service_factor: No hay consumo de factor de servicio.
     no_details_service: No hay detalles del consumo de servicios.
     no_details_gasflow: No hay detalles del consumo de flujo de gas.
+    no_details_servicefactor: No hay detalles del consumo de factor de servicio.
     inventorys: No hay detalles de inventario.
     unrealized_productions: No hay detalles de producción no realizada.
     day_stops: No hay detalles de paradas.
@@ -675,6 +686,7 @@ nro: "#"
 "Day stops": Dias de parada
 "Services": Servicios
 "GasFlow": Flujo de Gas
+"ServiceFactor": Factor de Servicio
 "Service": Servicio
 'Stop time': Tiempo de parada
 'Other time': Otro
