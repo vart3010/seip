@@ -933,11 +933,11 @@ class IndicatorService implements ContainerAwareInterface {
                 foreach ($indicatorsChildrens as $indicatorChildren) {
                     $sumResultChildren+= $indicatorChildren->getResultReal();
                 }
-
+                $cont = 1;
                 foreach ($indicatorsChildrens as $indicatorChildren) {
                     $set = array();
                     $set["label"] = $indicatorChildren->getRef() . ' ' . $indicatorChildren->getSummary() . ': ' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
-                    $set["value"] = $sumResultChildren != 0 ? bcdiv($indicatorChildren->getResultReal(), $sumResultChildren, 2) : bcadd(0, 0, 2);
+                    $set["value"] = $sumResultChildren != 0 ? bcdiv($indicatorChildren->getResultReal(), $sumResultChildren, 2) : $cont == 1 ? bcadd(100, 0, 2) : bcadd(0, 0, 2);
                     $set["displayValue"] = $indicatorChildren->getRef() . ' - ' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
                     $set["toolText"] = $indicatorChildren->getSummary() . ':{br}' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
                     $set["color"] = $this->getColorOfResult($indicatorChildren);
@@ -946,6 +946,7 @@ class IndicatorService implements ContainerAwareInterface {
                     }
                     $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicatorChildren->getId()));
                     $dataSet[] = $set;
+                    $cont++;
                 }
             }
         } elseif (isset($options['withVariablesRealPLan']) && array_key_exists('withVariablesRealPLan', $options)) {//Para que muestre las variables de acuerdo a 
@@ -2521,7 +2522,7 @@ class IndicatorService implements ContainerAwareInterface {
             }
 
             //Seteamos el arreglo a devolver para cada serie
-            $showUntilMonth = 12; //TODO: Ponerlo por el administrador del indicador
+            $showUntilMonth = 3; //TODO: Ponerlo por el administrador del indicador
             $showValue = 1;
             for ($i = 1; $i <= $numberResults; $i++) {
 //                $showValue = $i <= $showUntilMonth ? 1 : 0;
@@ -2596,7 +2597,7 @@ class IndicatorService implements ContainerAwareInterface {
             }
 
             //Seteamos el arreglo a devolver para cada serie
-            $showUntilMonth = 12; //TODO: Ponerlo por el administrador del indicador
+            $showUntilMonth = 3; //TODO: Ponerlo por el administrador del indicador
             $showValue = 1;
             for ($i = 1; $i <= $numberResults; $i++) {
 //                $showValue = $i <= $showUntilMonth ? 1 : 0;
@@ -2610,7 +2611,7 @@ class IndicatorService implements ContainerAwareInterface {
 
             $childrens = $indicator->getChildrens();
             $variables = $formula->getVariables();
-            $showUntilMonth = 9;
+            $showUntilMonth = 3;
             //[children][periodo][value]
 
             $arrayVarsSpecific = $options['variables'];
@@ -2751,7 +2752,7 @@ class IndicatorService implements ContainerAwareInterface {
                 }
             }
 
-            $showUntilMonth = 12; //TODO: Ponerlo por el administrador del indicador
+            $showUntilMonth = 3; //TODO: Ponerlo por el administrador del indicador
             //Seteamos el acumulado para cada serie
             for ($i = 1; $i <= $numberResults; $i++) {
                 if ($i <= $showUntilMonth) {
@@ -2832,7 +2833,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $contLastPeriodValueIndicator++;
             }
 
-            $showUntilMonth = 12; //TODO: Ponerlo por el administrador del indicador
+            $showUntilMonth = 3; //TODO: Ponerlo por el administrador del indicador
             //Seteamos el acumulado para cada serie
             for ($i = 1; $i <= $numberResults; $i++) {
                 if ($i <= $showUntilMonth) {
