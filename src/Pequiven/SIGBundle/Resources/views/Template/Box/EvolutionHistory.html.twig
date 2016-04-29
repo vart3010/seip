@@ -57,14 +57,20 @@
                                 {% set name = "Diciembre" %}
                                 {% set dataMonth = "12" %}                                    
                             {% endif %}
-                            
-                            {% if data > 8 and year == 2015 %}
-                                {% set disabled = TRUE %}
-                                {{ buttons.generic_history(path( route, { 'id': Box_indicator , 'month': dataMonth }),( name )) }}
-                            {% elseif year != 2015 %}    
-                                {{ buttons.generic_history(path( route, { 'id': Box_indicator , 'month': dataMonth }),( name )) }}
-                            {% endif %}                            
-                        
+
+                            {#{% if frequency != 5 %}#}
+                                {% if data > 8 and year == 2015 %}
+                                    {% set disabled = TRUE %}
+                                    {{ buttons.generic_history(path( route, { 'id': Box_indicator , 'month': dataMonth }),( name )) }}
+                                {% elseif year != 2015 %}    
+                                    {{ buttons.generic_history(path( route, { 'id': Box_indicator , 'month': dataMonth }),( name )) }}
+                                {% endif %}                            
+                            {#{% elseif frequency == 5 %}                            
+                                {% if data == 3 or  data == 6 or data == 9 or data == 12 %}
+                                    {% set disabled = TRUE %}
+                                    {{ buttons.generic_history(path( route, { 'id': Box_indicator , 'month': dataMonth }),( name )) }}
+                                {% endif %}                            
+                            {% endif %}  #}
                         {% endfor %}
                         <br>
                 </fieldset>

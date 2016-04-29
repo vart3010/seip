@@ -271,6 +271,19 @@ class GenericDataController extends SEIPController {
     }
 
     /**
+     * Busca los objetivos operativos tacticos del usuario logueado
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     * @throws type
+     */
+    function getGroupLoadAction(\Symfony\Component\HttpFoundation\Request $request) {
+        var_dump($request->get("entityId"));
+        die();
+        
+    }
+
+    /**
      * Manejador de usuario o administrador
      * @return \Pequiven\SEIPBundle\Model\UserManager
      */

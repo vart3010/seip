@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Pequiven\SIGBundle\Controller\EvolutionController;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
 
@@ -14,11 +15,39 @@ use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
  */
-class ObjetivesController extends ResourceController
+class ObjetiveSigController extends EvolutionController
 {
     public function strategicAction()
     {
         return $this->render('PequivenSIGBundle:Objetives:list.html.twig');
+    }
+    
+    /**
+     *
+     *  Metodo informe de evolución
+     *
+     */
+    public function evlutionAction(Request $request){
+        //return $this->render('PequivenSIGBundle:Objetives:evolution.html.twig');  
+        $resource = $this->findOr404($request);
+        
+        
+        $id     = $request->get('id');
+        $month  = $request->get('month');
+
+        $objetive = $this->get('pequiven.repository.objetive')->find($id); //Obtenemos el indicador   
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('evolution.html'))
+                ->setData(array(
+                'typeObject' => 3,
+                'month'      => $month,
+                'entity'     => $objetive,
+                $this->config->getResourceName() => $resource,                
+        ));
+
+        return $this->handleView($view);      
     }
 
     /**
@@ -477,7 +506,6 @@ class ObjetivesController extends ResourceController
         
     }
 
-
     /**
      * 
      * @return \Pequiven\SEIPBundle\Service\SecurityService
@@ -486,7 +514,7 @@ class ObjetivesController extends ResourceController
 
         return $this->container->get('seip.service.security');
     } 
-	/**
+    /**
      *  Period
      *
      */

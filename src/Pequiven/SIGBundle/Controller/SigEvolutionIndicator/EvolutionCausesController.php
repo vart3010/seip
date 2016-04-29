@@ -35,8 +35,8 @@ class EvolutionCausesController extends ResourceController
      */
     function getFormAnalysisAction(Request $request)
     {
-        $indicator = $this->findIndicatorOr404($request);        
-        $idIndicator = $request->get('idIndicator');
+        $indicator = $this->get('pequiven.repository.indicator')->find($id);              
+        $idIndicator = $request->get('idObject');
         
         $causeAnalysis = new EvolutionCauseAnalysis();
         $form  = $this->createForm(new EvolutionCauseAnalysisType(), $causeAnalysis);
@@ -67,7 +67,7 @@ class EvolutionCausesController extends ResourceController
         
         $month = $request->get('causeAnalysis_form')['month'];//Carga de Mes pasado
 
-        $indicator = $request->get('idIndicator');
+        $indicator = $request->get('idObject');
         $repository = $this->get('pequiven.repository.sig_indicator');
         $results = $repository->find($indicator);
         
@@ -91,23 +91,6 @@ class EvolutionCausesController extends ResourceController
            // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
         }     
     }
-
-    /**
-     * Busca el indicador o retorna un 404
-     * @param Request $request
-     * @return \Pequiven\IndicatorBundle\Entity\Indicator
-     * @throws type
-     */
-    private function findIndicatorOr404(Request $request)
-    {
-        $id = $request->get('idIndicator');
-        
-        $indicator = $this->get('pequiven.repository.indicator')->find($id);
-        if(!$indicator){
-            throw $this->createNotFoundException();
-        }
-        return $indicator;
-    }    
 
     /**
      * 

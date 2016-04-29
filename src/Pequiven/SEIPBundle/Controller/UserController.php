@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Pequiven\SEIPBundle\Form\User\UserType;
 
 /**
  * Description of UserController
@@ -139,11 +140,12 @@ class UserController extends baseController {
     }
 
     public function showAction(Request $request) {
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
                 ->setTemplateVar($this->config->getResourceName())
-                ->setData($this->findOr404($request))
+                ->setData($this->findOr404($request))                
         ;
 //        $groups = array_merge(array('api_list'), $request->get('_groups',array()));
 //        $view->getSerializationContext()->setGroups($groups);
@@ -171,7 +173,7 @@ class UserController extends baseController {
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
         return $this->handleView($view);
     }
-    
+
     /**
      * Busca un coordinador
      * 
@@ -193,7 +195,7 @@ class UserController extends baseController {
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
         return $this->handleView($view);
     }
-    
+
     /**
      * Busca un coordinador
      * 
@@ -201,7 +203,7 @@ class UserController extends baseController {
      * @return type
      */
     function searchOnlyCoordinatorAction(Request $request) {
-        
+
         $query = $request->get('query');
         $criteria = array(
             'username' => $query,
@@ -209,9 +211,9 @@ class UserController extends baseController {
             'lastname' => $query,
             'numPersonal' => $query,
         );
-        
+
         $criteria['workStudyCircleId'] = $request->get('workStudyCircleId');
-        
+
         $results = $this->get('pequiven_seip.repository.user')->searchOnlyCoordinator($criteria);
 
         $view = $this->view();
@@ -219,8 +221,6 @@ class UserController extends baseController {
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
         return $this->handleView($view);
     }
-    
-    
 
     /**
      * Filtra los usuarios que esten por debajo
@@ -235,7 +235,6 @@ class UserController extends baseController {
             'firstname' => $query,
             'lastname' => $query,
             'numPersonal' => $query,
-        
         );
         $user = $this->getUser();
         $securityService = $this->getSecurityService();
@@ -243,9 +242,9 @@ class UserController extends baseController {
         if (!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_ALL_MANAGEMENT_USER_ITEMS')) {
             $levelUser = $user->getLevelRealByGroup();
             $criteria['levelUser'] = $levelUser;
-            if($levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_FIRST || $levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO){
+            if ($levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_FIRST || $levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO) {
                 $criteria['idGerenciaUser'] = $this->getUser()->getGerencia()->getId();
-            } elseif($levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_SECOND){
+            } elseif ($levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_SECOND) {
                 $criteria['idGerenciaUser'] = $this->getUser()->getGerencia()->getId();
                 $criteria['idGerenciaSecondUser'] = $this->getUser()->getGerenciaSecond()->getId();
             }
@@ -300,7 +299,10 @@ class UserController extends baseController {
             $resource->setConfiguration(new \Pequiven\SEIPBundle\Entity\User\Configuration());
             $this->domainManager->update($resource);
         }
-        return $this->redirectHandler->redirectTo($resource);
+        
+      //  return $this->redirectHandler->redirectTo($resource);
+        $user = $request->get('id');        
+        return $this->redirect($this->generateUrl('pequiven_user_update',array('id' => $user)));
     }
 
     /**

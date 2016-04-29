@@ -26,14 +26,12 @@ class RequestVoter implements VoterInterface {
     }
     
     public function matchItem(ItemInterface $item){
-        //var_dump($this->container->get('request')->getRequestUri());
-        
         if($item->getUri() === $this->container->get('request')->getRequestUri()){
-//            var_dump('alli<br>');
-            return true;
-        } else if($item->getUri() !== $this->container->get('request')->getBaseUrl().'/' && (substr($this->container->get('request')->getRequestUri(), 0,  strlen($item->getUri() === $item->getUri())))){
             return true;
         }
+        // else if($item->getUri() !== $this->container->get('request')->getBaseUrl().'/' && (substr($this->container->get('request')->getRequestUri(), 0,  strlen($item->getUri() === $item->getUri())))){
+        //     return true;
+        // }
         return null;
     }
 }

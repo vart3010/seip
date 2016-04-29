@@ -50,7 +50,7 @@ pequiven_seip:
     #Login
     sign_in: Ingresar
     remind_me: Recuerdame
-    login: Iniciar sesión
+#    login: Iniciar sesión
     group_roles: Roles
     lost_password: Recuperar contraseña
     username: Nombre de usuario
@@ -540,7 +540,7 @@ principal:
         indicatorPorc: % Carga
         
 result:
-    recalculate: Recalcular resultados
+    recalculate: Recalcular Resultados
     list:
         titleObjetiveOperative: Resultados Objetivos
         columnLocation: Localidad
@@ -716,3 +716,6 @@ Unit: Unidad
 'Show observation': Puntos de Atención
 'Show pnr': PNR
 'production_line': Linea de Producto
+'Name group' : Nombre de Grupo
+'Childrens group': Sub Plantas
+'Show groups plants': Agrupar por Plantas

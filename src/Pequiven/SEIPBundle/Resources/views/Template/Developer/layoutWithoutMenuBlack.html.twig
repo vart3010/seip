@@ -69,6 +69,7 @@
         joinDependencias = joinDependencias.concat(myDependencies);
         joinDependencias = joinDependencias.concat(dependencies);
         $script('{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular/angular.min.js') }}','base');
+        // $script('{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-route/angular-route.min.js') }}','base');
         
         var extraAngularDependencies = {{ templateConfig.getTemplateOption('developer','angular_modules')|json_encode()|raw }};
         $script.ready('base',function(){

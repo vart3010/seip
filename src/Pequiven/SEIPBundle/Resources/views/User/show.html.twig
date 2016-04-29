@@ -1,25 +1,34 @@
-{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{#{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}#}
 
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
+{#{% block before_body %}    
+    {{ contentHeader(
+        { ( path('userList') ): ("Usuarios") },
+         ("Editar")
+    ) }}
+{% endblock %}#}
+
 {% block body %}
-Usuario: <b>{{ user }}</b>
-<br/>
-{% set configuration = user.configuration %}
-{% if configuration != null %}
-    <br/>
-    {% include 'PequivenSEIPBundle:User:show/localization.html.twig' %}
-    <br/>
-    {% include 'PequivenSEIPBundle:User:show/pre_planning_configuration.html.twig' %}
-    
-{% else %}
-    <br/>
-    <span class="tag red-bg">No hay configuracion para el usuario.</span>
-    <br/>
-    <a href="{{ path('pequiven_seip_user_add_configuration',{'id':user.id}) }}">Haga click aqui para crear la configuración</a>
-{% endif %}
-<br/>
-<a href="{{ path('pequiven_user_update',{id: user.id }) }}" class="btn button">Editar</a>
+    {#    Usuario: <b>{{ user }}</b>#}
+    {% set configuration = user.configuration %}
+    {% if configuration != null %}
+        {% include 'PequivenSEIPBundle:User:show/localization.html.twig' %}
+        <br/>
+        {% include 'PequivenSEIPBundle:User:show/pre_planning_configuration.html.twig' %}
+    {% else %}
+        <table width="100%">
+            <tr>
+                <td style="height: 100px; text-align: center;">
+                    <br/>
+                    <span style="text-align: center; vertical-align: middle; font-weight: bold; color: red; font-size: large;">No Hay Configuración para el Usuario</span>
+                    <br><br>
+                    <a href="{{ path('pequiven_seip_user_add_configuration',{'id':user.id}) }}"><b>Haga Click Aquí Para Crear la Configuración</b></a>
+                </td>                
+            </tr>
+        </table>
+    {% endif %}
+    {#<a href="{{ path('pequiven_user_update',{id: user.id }) }}" class="btn button">Editar</a>#}
 {% endblock body %}
