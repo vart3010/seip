@@ -616,7 +616,7 @@ class ChartController extends SEIPController {
     }
     
     /**
-     * 30-Función que retorna la data para un gráfico de piramide seccionada
+     * 30-Función que retorna la data para un gráfico de piramide seccionada basada en el plan
      * @return JsonResponse
      * @author Gilbert C. <glavrjk@gmail.com>
      */
@@ -630,7 +630,28 @@ class ChartController extends SEIPController {
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
         $dataChart = $indicatorService->getDataPyramid3DSectioned($indicator, array('resultPyramid3DSectioned' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+        
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
+        return $response;
+    }
+    
+     /**
+     * 30-Función que retorna la data para un gráfico de piramide seccionada basada en el plan
+     * @return JsonResponse
+     * @author Gilbert C. <glavrjk@gmail.com>
+     */
+    public function getDataPyramid3DSectionedAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataPyramid3DSectioned($indicator, array('resultPyramid3DSectioned' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+        
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
         return $response;

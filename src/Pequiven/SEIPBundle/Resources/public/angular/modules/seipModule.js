@@ -6842,13 +6842,14 @@ angular.module('seipModule.controllers', [])
 
             //30-Gráfico tipo Piramide 3D Seccionada
             $scope.chargeChartPyramid3DSectioned = function (indicatorId, render, width, height) {
-                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId});
+                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId});                
                 $http.get(getDataPyramid3DSectioned).success(function (data) {
                     FusionCharts.ready(function () {
-                        var wealthChart = new FusionCharts({
+//                        console.log(data.dataSource.data);
+                        var pyramid3DSectioned = new FusionCharts({
                             "type": 'pyramid',
                             "renderAt": render,                            
-                            "width": width,
+                            "width": width+ "%",
                             "height": height,
                             "dataFormat": 'json',
                             dataSource: {
@@ -6856,8 +6857,8 @@ angular.module('seipModule.controllers', [])
                                 "data": data.dataSource.data
                             }
                         });
-                        getDataPyramid3DSectioned.setTransparent(true);
-                        getDataPyramid3DSectioned.render();
+                        pyramid3DSectioned.setTransparent(true);
+                        pyramid3DSectioned.render();
                     });
                 });
             }

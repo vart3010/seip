@@ -237,7 +237,7 @@ abstract class Chart
             self::TYPE_CHART_PROGRESS_PROJECTS_BY_FREQUENCY_NOTIFICATION => 'chart.type.typeChartProgressProjectsByFrequencyNotification',
             self::TYPE_CHART_COLUMN_REAL_PLAN_BY_DIFFERENT_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsVariablesRealPlanByDifferentFrequencyNotification',
             self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL => 'chart.type.indicatorWithTrendlineHorizontal',
-            self::TYPE_CHART_PYRAMID_3D_SECTIONED => 'chart.type.pyramid3DSectioned',
+            self::TYPE_CHART_PYRAMID_3D_SECTIONED => 'Pirámide 3D',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

@@ -111,6 +111,48 @@ class IndicatorService implements ContainerAwareInterface {
      * @param array $data
      * @return type
      */
+    public function calculateFormulaValueFromSourceEquation(Formula $formula, $data) {
+        if (!is_array($data)) {
+            $data = array();
+        }
+        $variables = $formula->getVariables();
+        foreach ($variables as $variable) {
+            $name = $variable->getName();
+            $$name = 0;
+            if (isset($data[$name])) {
+                $$name = $data[$name];
+            }
+        }
+        $sourceEquationReal = $sourceEquationPlan = 0.0;
+        $result = array();
+
+        $sourceEquationReal = $this->parseFormulaVars($formula, $formula->getSourceEquationReal());
+        $sourceEquationPlan = $this->parseFormulaVars($formula, $formula->getSourceEquationPlan());
+
+        $result_equation_real = $result_equation_plan = 0.0;
+        try {
+            @eval(sprintf('$result_equation_real = %s;', $sourceEquationReal));
+            @eval(sprintf('$result_equation_plan = %s;', $sourceEquationPlan));
+        } catch (ErrorException $exc) {
+//            echo 'Excepción capturada 1 : ',  $e->getMessage(), "\n";
+        } catch (Exception $exc) {
+//            echo $exc->getTraceAsString();
+//            echo 'Excepción capturada 2: ',  $e->getMessage(), "\n";
+            $result_equation_real = $result_equation_plan = 0.0;
+        }
+
+        $result['sourceEquationReal'] = $result_equation_real;
+        $result['sourceEquationPlan'] = $result_equation_plan;
+
+        return $result;
+    }
+
+    /**
+     * 
+     * @param Formula $formula
+     * @param array $data
+     * @return type
+     */
     public function calculateFormulaValueFromCardEquation(Formula $formula, $data, $options = array()) {
         if (!is_array($data)) {
             $data = array();
@@ -2845,76 +2887,150 @@ class IndicatorService implements ContainerAwareInterface {
         //CARGO LAS CONFIGURACIONES DEL GRAFICO
         $chart["dataSource"]["chart"] = array(
             "theme" => "fint",
-            "caption" => "The Global Wealth Pyramid",
-            "captionOnTop" => "0",
+            "showLegend" => "1",
+            "caption" => $indicator->getDescription(),
+            "captionOnTop" => "1",
             "captionPadding" => "25",
             "alignCaptionWithCanvas" => "1",
-            "subcaption" => "Credit Suisse 2013",
-            "subCaptionFontSize" => "12",
+//            "subcaption" => "Credit Suisse 2013",
+            "captionFontSize" => "16",
             "borderAlpha" => "20",
             "is2D" => "0",
-            "bgColor" => "#ffffff",
+            "bgColor" => "FFFFFF",
             "showValues" => "1",
-            "numberPrefix" => "$",
-            "numberSuffix" => "M",
-            "plotTooltext" => "Valor del Indicador",
-            "showPercentValues" => "1",
-            "chartLeftMargin" => "40"
-        );
-
-        //CARGO LOS DATOS DEL GRÁFICO
-        $chart["dataSource"]["data"] = array();
-
-        $indicators = array(
-            'id' => 0,
-            'label' => null,
-            'value' => 0,
-            'color' => 0
+            "showlabels" => "0",
+//            "numberPrefix" => "Bs./TM",
+            "numberSuffix" => " Bs./TM",
+//            "plotTooltext" => "Valor del Indicador",
+            "showPercentValues" => "0",
+            "chartLeftMargin" => "40",
+            "thousandSeparator" => ".",
+            "decimalSeparator" => ",",
+            "decimals" => "0",
+            "forceDecimals" => "1",
+            "formatNumberScale" => "0",
         );
 
         $colors = array(
-            1 => "FF00FF",
+            1 => "BDBDBD",
             2 => "CB3D3A",
             3 => "FF8F26",
             4 => "3C7BCF",
             5 => "9BC348",
-            6 => "FFFFCC"
+            6 => "FFFFCC",
+            7 => "FFFFFF",
+            8 => "FFFFFF",
+            9 => "FFFFFF",
+            10 => "FFFFFF",
         );
 
+        $idflagColor = $indicator->getId();
+        $flagColor = 0;
+        $i = 1;
         $indicatorPadre = $indicator;
 
         while (($indicatorPadre->getParent()) != null) {
             $indicatorPadre = $indicatorPadre->getParent();
         }
 
+        //PARA REAL    
+        if ((isset($options["realValue"])) && ($options["realValue"] = 1)) {
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicatorPadre, array('viewVariablesFromRealEquation' => true));
+            foreach ($arrayVariables as $key => $arrays) {
+                $arregloVariables[$key] = $arrays["value"];
+            }
+            $valor = $this->calculateFormulaValueFromSourceEquation($indicatorPadre->getFormula(), $arregloVariables);
+            $value = $valor["sourceEquationReal"];
+        }
 
-        $i = 1;
-        $indicators = array(
-            'id' => $indicatorPadre->getId(),
-            'label' => null,
-            'value' => $indicatorPadre->getResultReal(),
-            'color' => $colors[$i],
-            'type' => $indicator->getIndicatorLevel(),
-        );
+        //PARA PLAN    
+        if ((isset($options["planValue"])) && ($options["planValue"] = 1)) {
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicatorPadre, array('viewVariablesFromPlanEquation' => true));
+            foreach ($arrayVariables as $key => $arrays) {
+                $arregloVariables[$key] = $arrays["value"];
+            }
+            $valor = $this->calculateFormulaValueFromSourceEquation($indicatorPadre->getFormula(), $arregloVariables);
+            $value = $valor["sourceEquationPlan"];
+        }
 
-        $children = $indicatorPadre->getChildrens();
-        
-        //$chil
-        
-        //$while()
-            $i++;
-            $aux = array(
-                'id' => $child->getId(),
-                'label' => null,
-                'value' => 0,
-                'color' => $colors[$i],
-                'type' => $child->getIndicatorLevel(),
+        if ($indicatorPadre->getId() == $idflagColor) {
+            $flagColor = 1;
+        }
+        if ($flagColor == 1) {
+            $colorItem = $colors[$i];
+        } else {
+            $colorItem = "FFFFFF";
+        }
+        if ($flagColor == 1) {
+            $configPadre = array(
+                "id" => $indicatorPadre->getId(),
+                "label" => str_replace("% Cumplimiento de ", "", $indicatorPadre->getDescription()),
+                "value" => $value,
+                "color" => $colorItem,
+                "type" => $indicatorPadre->getIndicatorLevel()->getDescription(),
+                "tooltext" => "boo",
+                "link" => $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorPadre->getId())),
             );
-            array_push($indicators, $aux);
-     //   }
-        
-        //CARGO LOS DATOS DEL GRÁFICO
-      //  $chart["dataSource"]["data"] = $indicators;
+
+            $chart["dataSource"]["data"][] = $configPadre;
+        }
+
+//        $indicadoresHijos = $indicatorPadre->getChildrens();
+//        $indicadorHijo = $indicadoresHijos[0];
+        $indicadorHijo = $indicatorPadre;
+
+        while ((count($indicadorHijo->getChildrens()) > 0) && ($indicadorHijo != null)) {
+            $tempvarios = $indicadorHijo->getChildrens();
+            $temp = $tempvarios[0];
+            $i++;
+
+            //PARA REAL        
+            if ((isset($options["realValue"])) && ($options["realValue"] = 1)) {
+                $arrayVariables = $this->getArrayVariablesFormulaWithData($temp, array('viewVariablesFromRealEquation' => true));
+                foreach ($arrayVariables as $key => $arrays) {
+                    $arregloVariables[$key] = $arrays["value"];
+                }
+                $valor = $this->calculateFormulaValueFromSourceEquation($temp->getFormula(), $arregloVariables);
+                $value = $valor["sourceEquationReal"];
+            }
+
+            //PARA PLAN    
+            if ((isset($options["planValue"])) && ($options["planValue"] = 1)) {
+                $arrayVariables = $this->getArrayVariablesFormulaWithData($temp, array('viewVariablesFromPlanEquation' => true));
+                foreach ($arrayVariables as $key => $arrays) {
+                    $arregloVariables[$key] = $arrays["value"];
+                }
+                $valor = $this->calculateFormulaValueFromSourceEquation($temp->getFormula(), $arregloVariables);
+                $value = $valor["sourceEquationPlan"];
+            }
+
+            if ($temp->getId() == $idflagColor) {
+                $flagColor = 1;
+            }
+            if ($flagColor == 1) {
+                $colorItem = $colors[$i];
+            } else {
+                $colorItem = "FFFFFF";
+            }
+            if ($flagColor == 1) {
+                $config = array(
+                    "id" => $temp->getId(),
+                    "label" => str_replace("% Cumplimiento de ", "", $temp->getDescription()),
+                    "value" => $value,
+                    "color" => $colorItem,
+                    "type" => $temp->getIndicatorLevel()->getDescription(),
+                    "link" => $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $temp->getId())),
+                );
+
+                $chart["dataSource"]["data"][] = $config;
+            }
+            $indicadorHijo = $temp;
+        }
+
+
+//        var_dump(json_encode($chart["dataSource"]["data"]));
+//        die();
+        return $chart;
     }
 
     /**
@@ -4298,11 +4414,11 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["paletteColors"] = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
         $chart["yaxisvaluespadding"] = "10";
         $chart["valueFontColor"] = "#000000";
-        $chart["rotateValues"]   = "0";
-        $chart["theme"]          = "fint";
-        $chart["showborder"]     = "0";
-        $chart["decimals"]       = $indicator->getDecimalsToChartEvolution();
-        $chart["exportenabled"]  = "1";
+        $chart["rotateValues"] = "0";
+        $chart["theme"] = "fint";
+        $chart["showborder"] = "0";
+        $chart["decimals"] = $indicator->getDecimalsToChartEvolution();
+        $chart["exportenabled"] = "1";
         $chart["exportatclient"] = "0";
         $chart["exportFormats"] = "PNG= Exportar Informe de Evolución PDF";
         $chart["exportFileName"] = "Grafico Resultados ";
@@ -4313,11 +4429,11 @@ class IndicatorService implements ContainerAwareInterface {
         $prom = $this->getPromdIndicator($indicator);
         //Lamado obj 2015
         $obj = $this->getObjIndicator($indicator);
-        
+
         if ($indicator->getViewDataChartEvolutionConsultedMonth() == 1 or $indicator->getFrequencyNotificationIndicator()->getId() == 1) {
-            $resultNumbers = $this->getIndicatorHasResultValid($indicator);            
-        }else{
-            $resultNumbers = $month;            
+            $resultNumbers = $this->getIndicatorHasResultValid($indicator);
+        } else {
+            $resultNumbers = $month;
         }
 
         //Llamado de frecuencia de Notificacion del Indicador
