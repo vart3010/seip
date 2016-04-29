@@ -487,6 +487,26 @@ class ProductReport extends BaseModel {
         ksort($sorted);
         return $sorted;
     }
+    
+    /**
+     * FILTRO POR CAUSA
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUnrealizedProductionsSortByMonthWithOutProduction() {
+        $sorted = array();
+        foreach ($this->unrealizedProductions as $productDetailDailyMonth) {
+            var_dump($productDetailDailyMonth->getday1Details()->getInternalCauses());
+            die();
+            $sorted[$productDetailDailyMonth->getMonth()] = $productDetailDailyMonth;
+        }
+        ksort($sorted);
+        return $sorted;
+    }
+    
+    public function parche($productDailyMonth) {
+        
+    }
 
     /**
      * Set indicator

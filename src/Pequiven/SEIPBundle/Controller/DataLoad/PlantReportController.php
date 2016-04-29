@@ -34,8 +34,6 @@ class PlantReportController extends SEIPController {
         }
         return $entity;
     }
-    
-    
 
     public function indexAction(Request $request) {
         $criteria = $request->get('filter', $this->config->getCriteria());
@@ -104,7 +102,7 @@ class PlantReportController extends SEIPController {
 
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $resource = $this->domainManager->create($resource);
-            
+
             if (null === $resource) {
                 return $this->redirectHandler->redirectToIndex();
             }
@@ -124,8 +122,8 @@ class PlantReportController extends SEIPController {
                 ->view()
                 ->setTemplate($this->config->getTemplate('group/create.html'))
                 ->setData(array(
-                    $this->config->getResourceName() => $resource,
-                    'form' => $form->createView()
+            $this->config->getResourceName() => $resource,
+            'form' => $form->createView()
                 ))
         ;
 
@@ -136,7 +134,9 @@ class PlantReportController extends SEIPController {
 
         $plantReport = $this->getRepository()->find($request->get("id"));
 
-        $childs = $plantReport->getPlant()->getChildrens();
+        #$childs = $plantReport->getPlant()->getChildrens();
+        $childs = $plantReport->getchildrensGroup();
+
         $totalStops = array();
         $totalHours = array();
         $totalProducts = array();
@@ -208,39 +208,39 @@ class PlantReportController extends SEIPController {
         }
 
 
-        if (count($childs) > 0) {
+        if (count($childs) > 0) { 
 
             //SECCIÒN PRODUCTOS HEREDADOS
-            foreach ($childs as $child) {
-                foreach ($child->getPlantReport() as $plantReportByChild) {
-                    //PLANT STOP PLANNING
-                    $planStopPlannings = $plantReportByChild->getPlantStopPlannings();
-                    foreach ($planStopPlannings as $planStopPlanning) {
-                        if (array_key_exists($planStopPlanning->getMonth(), $totalStops)) {
-                            $totalStops[$planStopPlanning->getMonth()] += $planStopPlanning->getTotalStops();
-                            $totalHours[$planStopPlanning->getMonth()] += $planStopPlanning->getTotalHours();
-                        }
+            #foreach ($childs as $child) {
+            foreach ($childs as $plantReportByChild) {
+                //PLANT STOP PLANNING
+                $planStopPlannings = $plantReportByChild->getPlantStopPlannings();
+                foreach ($planStopPlannings as $planStopPlanning) {
+                    if (array_key_exists($planStopPlanning->getMonth(), $totalStops)) {
+                        $totalStops[$planStopPlanning->getMonth()] += $planStopPlanning->getTotalStops();
+                        $totalHours[$planStopPlanning->getMonth()] += $planStopPlanning->getTotalHours();
                     }
+                }
 
-                    //SERVICIOS
-                    foreach ($plantReportByChild->getConsumerPlanningServices() as $planningService) {
-                        if (array_key_exists($planningService->getService()->getId(), $alicuota)) {
-                            $alicuota[$planningService->getService()->getId()] += $planningService->getAliquot();
-                        } else {
-                            $alicuota[$planningService->getService()->getId()] = $planningService->getAliquot();
-                        }
-                        if (!CommonObject::validIdExist($planningService->getService()->getId(), $totalServices)) {
-                            //if (!$this->validIdExist($planningService->getService()->getId(), $totalServices)) {
-                            $totalServices[] = array(
-                                "id" => $planningService->getService()->getId(),
-                                "name" => $planningService->getService()->getName(),
-                                "unit" => $planningService->getService()->getServiceUnit(),
-                                "alicuota" => $alicuota
-                            );
-                        }
+                //SERVICIOS
+                foreach ($plantReportByChild->getConsumerPlanningServices() as $planningService) {
+                    if (array_key_exists($planningService->getService()->getId(), $alicuota)) {
+                        $alicuota[$planningService->getService()->getId()] += $planningService->getAliquot();
+                    } else {
+                        $alicuota[$planningService->getService()->getId()] = $planningService->getAliquot();
+                    }
+                    if (!CommonObject::validIdExist($planningService->getService()->getId(), $totalServices)) {
+                        //if (!$this->validIdExist($planningService->getService()->getId(), $totalServices)) {
+                        $totalServices[] = array(
+                            "id" => $planningService->getService()->getId(),
+                            "name" => $planningService->getService()->getName(),
+                            "unit" => $planningService->getService()->getServiceUnit(),
+                            "alicuota" => $alicuota
+                        );
                     }
                 }
             }
+            # }
         }
 
 
@@ -264,9 +264,16 @@ class PlantReportController extends SEIPController {
             "alicuota" => $alicuota
         );
 
+//        if (count($plantReport) > 0) {
+//            $viewDefault = 'showGroups.html';
+//        } else {
+//            $viewDefault = 'show.html';
+//        }
+
+
         $view = $this
                 ->view()
-                ->setTemplate($this->config->getTemplate('show.html'))
+                ->setTemplate($this->config->getTemplate("show.html"))
                 ->setTemplateVar($this->config->getResourceName())
                 ->setData($data)
         ;
@@ -512,7 +519,7 @@ class PlantReportController extends SEIPController {
 
         return $this->handleView($view);
     }
-    
+
     public function updateGroupAction(Request $request) {
 
         $resource = $this->findOr404($request);
@@ -544,7 +551,6 @@ class PlantReportController extends SEIPController {
         return $this->handleView($view);
     }
 
-
     public function deleteAction(Request $request) {
         $resource = $this->findOr404($request);
 
@@ -555,21 +561,21 @@ class PlantReportController extends SEIPController {
         $this->domainManager->delete($resource);
         return $this->redirect($url);
     }
-    
+
     public function getGroupLoadAction(Request $request) {
         //$criteria = $request->get('filter', $this->config->getCriteria());
         $em = $this->getDoctrine();
         $entityId = $request->get('entityId');
         $entityObj = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Entity")->find($entityId);
-        
+
         $period = $this->getPeriodService()->getPeriodActive();
-        $entity = $em->getRepository("Pequiven\SEIPBundle\Entity\DataLoad\PlantReport")->findBy(array("entity"=>$entityObj,"period"=>$period));
+        $entity = $em->getRepository("Pequiven\SEIPBundle\Entity\DataLoad\PlantReport")->findBy(array("entity" => $entityObj, "period" => $period));
         //var_dump($entity);
         $view = $this->view();
         $view->setData($entity);
         $view->getSerializationContext()->setGroups(array('id', 'api_list'));
         return $this->handleView($view);
-        
+
 //        
         //$repository = $this->get('pequiven.repository.objetiveoperative');
         //$results = $repository->findTacticalObjetives($user, $criteria);
@@ -577,7 +583,6 @@ class PlantReportController extends SEIPController {
 //        $view->setData($results);
 //        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'gerencia'));
 //        return $this->handleView($view);
-        
     }
 
 }
