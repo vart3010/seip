@@ -626,7 +626,7 @@ class IndicatorService implements ContainerAwareInterface {
                             }
                         }
                     }
-                    if($indicator->getShowResultWithoutPercentageInDashboard()){
+                    if ($indicator->getShowResultWithoutPercentageInDashboard()) {
                         $value = number_format($indicator->getResultReal(), 2, ',', '.');
                     }
                     $colorData["label"] = $value;
@@ -2892,9 +2892,9 @@ class IndicatorService implements ContainerAwareInterface {
             "caption" => $indicator->getDescription(),
             "captionOnTop" => "1",
             "captionPadding" => "25",
-            "alignCaptionWithCanvas" => "1",
-//            "subcaption" => "Credit Suisse 2013",
             "captionFontSize" => "16",
+            "alignCaptionWithCanvas" => "1",
+//            "subcaption" => "Credit Suisse 2013",            
             "borderAlpha" => "20",
             "is2D" => "0",
             "bgColor" => "FFFFFF",
@@ -3047,43 +3047,48 @@ class IndicatorService implements ContainerAwareInterface {
 
         if (isset($options["colors"])) {
             $colors = $options["colors"];
+            $indicatorPadre = $indicator;
+
+            //VALIDO SOLO PARA LOS INDICADORES DE COSTO UNITARIO
+            $i = 2;
+            while (($indicatorPadre->getParent()) != null) {
+                $indicatorPadre = $indicatorPadre->getParent();
+                $i++;
+            }
+            $colorbase = $colors[$i];
         } else {
-            $colors = "";
+            $colorbase = "";
         }
 
 //CARGO LAS CONFIGURACIONES DEL GRAFICO
         $chart["dataSource"]["chart"] = array(
-            "showvalues" => "0",
-            "caption" => "Cost Analysis",
-            "xaxisname" => "Plan, Real",
-            "yaxisname" => "Bs./TM",
-            "showBorder" => "0",
-//            "paletteColors" => $colors,
+            "caption" => $indicator->getDescription(),
+            "captionOnTop" => "1",
+            "captionPadding" => "25",
+            "captionFontSize" => "16",
+            "yAxisName" => "Bs./TM",            
             "bgColor" => "#ffffff",
-            "canvasBgColor" => "#ffffff",
-            "captionFontSize" => "14",
-            "subcaptionFontSize" => "14",
-            "subcaptionFontBold" => "0",
-            "divlineColor" => "#999999",
-            "divLineIsDashed" => "1",
-            "divLineDashLen" => "1",
-            "divLineGapLen" => "1",
-            "toolTipColor" => "#ffffff",
-            "toolTipBorderThickness" => "0",
-            "toolTipBgColor" => "#000000",
-            "toolTipBgAlpha" => "80",
-            "toolTipBorderRadius" => "2",
-            "toolTipPadding" => "5",
-            "legendBgColor" => "#ffffff",
-            "legendBorderAlpha" => '0',
-            "legendShadow" => '0',
-            "legendItemFontSize" => '10',
-            "legendItemFontColor" => '#666666',
+            "borderAlpha" => "20",
+            "showCanvasBorder" => "0",            
+            "plotBorderAlpha" => "10",
+            "legendBorderAlpha" => "0",
+            "legendShadow" => "1",
+            "showXAxisLine" => "1",
+            "xAxisLineColor" => "#999999",
+            "divlineColor" => "#999999",            
+            "divLineIsDashed" => "1",                        
+            "useRoundEdges" => "1",                                                            
+            "showSum" => "0",
             "thousandSeparator" => ".",
             "decimalSeparator" => ",",
-            "decimals" => "2",
-            "forceDecimals" => "1",
+            "decimals" => "0",
             "formatNumberScale" => "0",
+            "valueFontColor" => "000000",
+            "valueFontBold" => "0",
+            "valueFontSize" => "10",
+            "forceDecimals" => "1",
+            "showPlotBorder" => "0",     
+            "usePlotGradientColor"=>"0",
         );
 
 //TRAIGO LOS VALORES PLAN Y REAL DE LAS VARIABLES
@@ -3091,35 +3096,48 @@ class IndicatorService implements ContainerAwareInterface {
         $arrayVariablesR = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesFromRealEquation' => true));
 
 //CATEGORIAS DEL ARRAY
-        $chart["dataSource"]["categories"]["category"] = array(
-            array("label" => "Presupuesto"),
-            array("label" => "Real")
+        $chart["dataSource"]["categories"][] = array(
+            "category" => array(
+                array("label" => "Presupuesto"),
+                array("label" => "Real")
+            )
         );
 
 
         $index = 0;
         foreach ($arrayVariablesP as $arrays) {
-            $valoresP[] = $arrays["value"];
+            $valoresP[] = str_replace(".", ",", $arrays["value"]);
             $labels[] = ucwords(str_replace(array("ppto ", "Ppto "), "", $arrays["description"]));
             $index++;
         }
 
         foreach ($arrayVariablesR as $arrays) {
-            $valoresR[] = $arrays["value"];
+            $valoresR[] = str_replace(".", ",", $arrays["value"]);
             $labels[] = ucwords(str_replace(array("Real ", "real "), "", $arrays["description"]));
         }
 
 //CONSTRUYO LOS VALORES DE LOS ITEMS
         for ($i = 0; $i < $index; $i++) {
 
+            if ($i == 0) {
+                $color = $colorbase;
+                $child = $indicator->getChildrens();
+                $link = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $child[0]->getId()));
+            } else {
+                $color = "";
+                $link = "";
+            }
+
             $value = array(
                 array(
-                    "value" => number_format($valoresP[$i], 2, ',', '.'),
-                    "color" => ""
+                    "value" => $valoresP[$i],
+                    "color" => $color,
+                    "link" => $link
                 ),
                 array(
-                    "value" => number_format($valoresP[$i], 2, ',', '.'),
-                    "color" => ""
+                    "value" => $valoresR[$i],
+                    "color" => $color,
+                    "link" => $link
                 ),
             );
 
@@ -3130,10 +3148,8 @@ class IndicatorService implements ContainerAwareInterface {
         }
 
         $chart["dataSource"]["dataset"] = $datos;
-
-//        var_dump(json_encode($chart["dataSource"]["dataset"]));
+        //var_dump(json_encode($chart["dataSource"]["dataset"]));
 //        die();
-
         return $chart;
     }
 
