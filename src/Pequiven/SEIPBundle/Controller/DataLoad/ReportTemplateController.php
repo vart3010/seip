@@ -1737,6 +1737,7 @@ class ReportTemplateController extends SEIPController {
                             }//FIN CONSUMO DE SERVICIOS
                             //
                             //PRODUCION NO REALIZADA
+                            $productReportService = $this->getProductReportService();
                             foreach ($plantReport->getProductsReport() as $productReport) {
                                 if (!$productReport->getIsGroup()) {
                                     $productId = $productReport->getProduct()->getId();
@@ -1753,9 +1754,18 @@ class ReportTemplateController extends SEIPController {
                                         "idProduct" => $productId
                                     );
                                     // }
-
-                                    $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($dateReport,$this->getCauseFailService());
                                     
+                                    $unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
+                                    $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport,$productReport);
+                                    //var_dump($unrealizedProduction["total_day"]);
+                                    //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day']);
+                                    $unrealizedProduction["total_day"] = $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
+                                    $unrealizedProduction["total_month"] = $unrealizedProduction["total_month"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'];
+                                    //var_dump($unrealizedProduction["total_month"]);
+                                    //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month']);
+                                    $unrealizedProduction["total_year"] = $unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year'];
+                                    //var_dump($unrealizedProduction["total_year"]);
+                                    //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year']);
                                     
                                     $arrayUnrealizedProduction[$productReportId]["day"] = $unrealizedProduction["total_day"];
                                     $arrayUnrealizedProduction[$productReportId]["month"] = $unrealizedProduction["total_month"];
