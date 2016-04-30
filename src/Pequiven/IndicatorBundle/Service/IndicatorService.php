@@ -584,6 +584,9 @@ class IndicatorService implements ContainerAwareInterface {
                             }
                         }
                     }
+                    if($indicator->getShowResultWithoutPercentageInDashboard()){
+                        $value = number_format($indicator->getResultReal(), 2, ',', '.');
+                    }
                     $colorData["label"] = $value;
                     if ($resultService->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {
                         $colorData["code"] = "#1aaf5d";

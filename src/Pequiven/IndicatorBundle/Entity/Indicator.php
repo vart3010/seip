@@ -728,6 +728,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *  @ORM\Column(name="decimalsToChartEvolution",type="integer")
      */
     private $decimalsToChartEvolution = 0;
+    
+    /**
+     * ¿Se puede mostrar el rango?
+     * @var boolean
+     * @ORM\Column(name="showResultWithoutPercentageInDashboard",type="boolean", nullable=true)
+     */
+    private $showResultWithoutPercentageInDashboard = true;
 
     /**
      * Constructor
@@ -2909,6 +2916,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
 
     function setDecimalsToChartEvolution($decimalsToChartEvolution) {
         $this->decimalsToChartEvolution = $decimalsToChartEvolution;
+    }
+    
+    function getShowResultWithoutPercentageInDashboard() {
+        return $this->showResultWithoutPercentageInDashboard;
+    }
+
+    function setShowResultWithoutPercentageInDashboard($showResultWithoutPercentageInDashboard) {
+        $this->showResultWithoutPercentageInDashboard = $showResultWithoutPercentageInDashboard;
     }
 
 }

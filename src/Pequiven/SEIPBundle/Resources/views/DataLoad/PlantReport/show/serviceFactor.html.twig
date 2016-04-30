@@ -1,0 +1,48 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'ServiceFactor'|trans }}&nbsp;
+            ({{ plant_report.consumerPlanningServiceFactor|length }})
+        </h3>
+        <div class="button-group absolute-right compact">
+            {% if periodService().isAllowPlanningReport %}
+                {% if(plant_report.plant.childrens|length == 0) and (plant_report.consumerPlanningServiceFactor|length == 0) %}
+                    <a class="button icon-list-add" href="{{ path('pequiven_consumer_planning_servicefactor_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="80%">{{ 'ServiceFactor'|trans }}</th>
+                    <th scope="col" width="20%">&nbsp;</th>
+                </tr>
+            </thead>
+            {% set colspan = 6 %}
+            <tbody>
+                {% for consumerPlanningServiceFactorObject in plant_report.consumerPlanningServiceFactor %}
+                    <tr>
+                        <td>{{ loop.index }} - 
+                            {{ generateLink(consumerPlanningServiceFactorObject) }}
+                        </td>
+                        <td class="low-padding align-center">
+                            {% if periodService().isAllowPlanningReport %}
+                                <a href="{{ path("pequiven_consumer_planning_servicefactor_update",{id: consumerPlanningServiceFactorObject.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr >
+                        <td colspan="{{ colspan }}" class="empty_row">
+                            {{ "empty.consumer_planning_service_factor"|trans }}
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>
