@@ -416,6 +416,12 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\GasFlow\ConsumerPlanningGasFlow
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\GasFlow\ConsumerPlanningGasFlowController
+        pequiven.consumer_planning_servicefactor:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/ServiceFactor/ConsumerPlanningServiceFactor
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\ServiceFactor\ConsumerPlanningServiceFactor
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\ServiceFactor\ConsumerPlanningServiceFactorController
         pequiven.inventory:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:DataLoad/Inventory/Inventory
@@ -441,6 +447,12 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\GasFlow\DetailConsumerPlanningGasFlow
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\GasFlow\DetailConsumerPlanningGasFlowController
+        pequiven.detail_consumer_planning_servicefactor:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/ServiceFactor/DetailConsumerPlanningServiceFactor
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\ServiceFactor\DetailConsumerPlanningServiceFactor
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\ServiceFactor\DetailConsumerPlanningServiceFactorController
         pequiven.formula:
             driver: doctrine/orm
             classes:

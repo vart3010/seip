@@ -1,0 +1,78 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% set message = ("pequiven_seip.consumer_planning_servicefactor.question.delete"|trans) %}
+
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'ServiceFactor'|trans }}&nbsp;({{ consumer_planning_servicefactor.detailConsumerPlanningServiceFactor|length }})</h3>
+        <div class="button-group absolute-right compact">
+            {% if periodService().isAllowPlanningReport %}
+                <a class="button icon-list-add" href="{{ path("pequiven_detail_consumer_planning_servicefactor_create",{consumerPlanningServiceFactor:consumer_planning_servicefactor.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="20%">{{ 'Month'|trans }}</th>
+                    <td align="right" scope="col" width="15%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ 'pequiven_seip.headers.totalPlan'|trans }}</td>
+                    <td align="right" scope="col" width="15%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ 'pequiven_seip.headers.totalReal'|trans }}</td>
+                    <td align="right" scope="col" width="15%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ 'pequiven_seip.headers.percentage'|trans }}</td>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </thead>
+            {% set colspan = 9 %}
+            <tbody>
+                {% set totals = consumer_planning_servicefactor.getTotalToDay %}
+                {% for detail in consumer_planning_servicefactor.getDetailsByMonth %}
+                    {% set tableIdRow = "row-detail-"~detail.id %}
+                    <tr id="{{ tableIdRow }}">
+                        <th scope="row">{{ loop.index }} - 
+                            {{ detail|trans }}
+                        </th>
+                        <td align="right">{{ detail.totalPlan|myNumberFormat }}</td>
+                        <td align="right">{{ detail.totalReal|myNumberFormat }}</td>
+                        <td align="right">{{ detail.percentage|myNumberFormat }}&nbsp;%</td>
+                        <td class="low-padding align-center">
+                            <p class="button-height">
+                                <span class="button-group">
+                                    {% if periodService().isAllowPlanningReport %}
+                                        <a href="{{ path("pequiven_detail_consumer_planning_servicefactor_update",{id: detail.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                                        {% set deleteUrl = path("pequiven_detail_consumer_planning_servicefactor_delete",{id: detail.id}) %}
+                                        {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                    {% endif %}
+                                </span>
+                            </p>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr >
+                        <td colspan="{{ colspan }}" class="empty_row">
+                            {{ "empty.no_details_servicefactor"|trans }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr style="font-weight: bold;">
+                    <th scope="col" width="10%">{{ 'Total month before'|trans }}</th>
+                    <td align="right" scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totals['tp_b']|myNumberFormat }}</td>
+                    <td align="right" scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totals['tr_b']|myNumberFormat }}</td>
+                    <td align="right" scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totals['percentage_b']|myNumberFormat }}&nbsp;%</td>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+                <tr style="font-weight: bold;">
+                    <th scope="col" width="10%">{{ 'Total accumulated'|trans }}</th>
+                    <td align="right" scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totals['tp']|myNumberFormat }}</td>
+                    <td align="right" scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totals['tr']|myNumberFormat }}</td>
+                    <td align="right" scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totals['percentage']|myNumberFormat }}&nbsp;%</td>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </tfoot>
+        </table>
+        
+    </div>
+</div>

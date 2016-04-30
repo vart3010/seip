@@ -1,0 +1,23 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.consumer_planning_servicefactor.consumer_planning_servicefactor"|trans ),
+        ( 'pequiven.add'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <form method="POST" action="{{ path('pequiven_consumer_planning_servicefactor_create',{plantReport: app.request.get("plantReport"),save_and_close: true})}}">
+       <br /><br />
+       {% include 'PequivenSEIPBundle:DataLoad/ServiceFactor/ConsumerPlanningServiceFactor:_form.html.twig' %}
+       {{ actions.create() }}
+       <div class="hidden">
+           {{ form_rest(form) }}
+       </div>
+   </form>
+{% endblock %}

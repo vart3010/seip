@@ -1727,6 +1727,7 @@ class ReportTemplateController extends SEIPController {
                                 $arrayConsumerServices[$serviceId]["real_year"] += $consumerPlanning["total_year"];
                                 $arrayConsumerServices[$serviceId]["plan_year"] += $consumerPlanning["total_year_plan"];
                             }//FIN CONSUMO DE SERVICIOS
+                            //
                             //PRODUCION NO REALIZADA
                             foreach ($plantReport->getProductsReport() as $productReport) {
                                 if (!$productReport->getIsGroup()) {
@@ -1745,7 +1746,7 @@ class ReportTemplateController extends SEIPController {
                                     );
                                     // }
 
-                                    $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($dateReport);
+                                    $unrealizedProduction = $productReport->getUnrealizedProductionsSortByMonthWithOutProduction($dateReport);
 
                                     $arrayUnrealizedProduction[$productReportId]["day"] = $unrealizedProduction["total_day"];
                                     $arrayUnrealizedProduction[$productReportId]["month"] = $unrealizedProduction["total_month"];
