@@ -6887,23 +6887,24 @@ angular.module('seipModule.controllers', [])
 
             //32- GRAFICO DE COLUMNA APILADA QUE MUESTRA EL PLAN/REAL DE TODAS LAS VARIABLES DEL INDICADOR
             $scope.chargeChartStackedColumn3DbyIndicator = function (indicatorId, render, width, height) {
-                var getDataChartProductionReportTemplateByDate = Routing.generate("getDataStackedColumn3DbyIndicator", {id: indicatorId});
-                $http.get(getDataChartProductionReportTemplateByDate).success(function (data) {
+                var getDataStackedColumn3DbyIndicator = Routing.generate("getDataStackedColumn3DbyIndicator", {id: indicatorId});
+                $http.get(getDataStackedColumn3DbyIndicator).success(function (data) {
                     FusionCharts.ready(function () {
-                        var revenueChartProductionReportTemplateByDate = new FusionCharts({
+                        var ChartStackedColumn3DbyIndicator = new FusionCharts({
                             "type": 'stackedcolumn3d',
+                            "theme": "fint",
                             "renderAt": render,
                             "width": width + "%",
                             "height": height,
-                            "dataFormat": 'json',
+                            "dataFormat": 'json',                            
                             "dataSource": {
                                 "chart": data.dataSource.chart,
-                                "categories": data.dataSource.categories,
+                                "categories": data.dataSource.categories,                                
                                 "dataset": data.dataSource.dataset
                             }
                         });
-                        revenueChartProductionReportTemplateByDate.setTransparent(true);
-                        revenueChartProductionReportTemplateByDate.render();
+                        ChartStackedColumn3DbyIndicator.setTransparent(true);
+                        ChartStackedColumn3DbyIndicator.render();
                     });
                 });
             }
