@@ -1746,8 +1746,9 @@ class ReportTemplateController extends SEIPController {
                                     );
                                     // }
 
-                                    $unrealizedProduction = $productReport->getUnrealizedProductionsSortByMonthWithOutProduction($dateReport);
-
+                                    $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($dateReport,$this->getCauseFailService());
+                                    
+                                    
                                     $arrayUnrealizedProduction[$productReportId]["day"] = $unrealizedProduction["total_day"];
                                     $arrayUnrealizedProduction[$productReportId]["month"] = $unrealizedProduction["total_month"];
                                     $arrayUnrealizedProduction[$productReportId]["year"] = $unrealizedProduction["total_year"];

@@ -487,25 +487,63 @@ class ProductReport extends BaseModel {
         ksort($sorted);
         return $sorted;
     }
-    
+
     /**
      * FILTRO POR CAUSA
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getUnrealizedProductionsSortByMonthWithOutProduction() {
+    public function getUnrealizedProductionsSortByMonthWithOutProduction($failService) {
         $sorted = array();
         foreach ($this->unrealizedProductions as $productDetailDailyMonth) {
-            var_dump($productDetailDailyMonth->getday1Details()->getInternalCauses());
-            die();
-            $sorted[$productDetailDailyMonth->getMonth()] = $productDetailDailyMonth;
+            if ($this->getFailsExceptOverProducction($productDetailDailyMonth, $this->unrealizedProductions, $failService)) {
+                $sorted[$productDetailDailyMonth->getMonth()] = $productDetailDailyMonth;
+            }
         }
         ksort($sorted);
         return $sorted;
     }
-    
-    public function parche($productDailyMonth) {
+
+    /**
+     * Obtiene todas las causas de PNR excepto la de sobre produccion 
+     * PARCHE PARA CIERRE DE PRIMER TRIMESTRE DE 2016
+     * @param type $productDailyMonth
+     */
+    public function getFailsExceptOverProducction($productDailyMonths, $unrealizedProductions, $failService) {
+        //ID DE SOBRE PRODUCCION
+        $idSobreProduction = 11;
+        $band = false;
+
+        foreach ($unrealizedProductions as $unrealizedProduction) {
+            //var_dump($unrealizedProduction->getId());
+            $internalOverProduction = $failService->getFailsCause($unrealizedProduction);
+        }
+        var_dump($internalOverProduction);
+        die();
         
+        $overProductionDay = $internalOverProduction["TYPE_FAIL_INTERNAL"]["Sobre Producción"];
+
+        
+        for ($i = 1; $i <= 31; $i++) {
+            $dayDetails = sprintf('getDay%sDetails', $i);
+            //var_dump($productDailyMonths->$dayDetails());
+            $unrealizedProductionDay = $productDailyMonths->$dayDetails();
+            //var_dump($unrealizedProductionDay->getInternalCauses());
+
+            if ($overProductionDay[$i] != 0) {
+                foreach ($unrealizedProductionDay->getInternalCauses() as $internalCauses) {
+                    // var_dump($internalCauses->getFail()->getId());
+                    if ($internalCauses->getFail()->getId() == $idSobreProduction) {
+                        $band = true;
+                        break;
+                    }
+                }
+            }
+        }
+        //   die();
+
+
+        return $band;
     }
 
     /**

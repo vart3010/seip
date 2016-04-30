@@ -382,7 +382,10 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $totalDay = $totalMonth = $totalYear = 0.0;
 
         $unrealizedProductions = $this->getUnrealizedProductionsSortByMonth();
+        
         foreach ($unrealizedProductions as $monthDetail => $detail) {
+            //var_dump($detail);
+            
             $totalYear = $totalYear + $detail->getTotal();
 
             if ($monthDetail > $month) {
@@ -395,7 +398,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
                 $totalMonth = $totalMonth + $detail->getTotal();
             }
         }
-
+        //die();
         $total = array(
             'total_day' => $totalDay,
             'total_month' => $totalMonth,
@@ -408,14 +411,19 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
      * @param \DateTime $date
      * @return type
      */
-    public function getSummaryUnrealizedProductionsFilterCause(\DateTime $date) {
+    public function getSummaryUnrealizedProductionsFilterCause(\DateTime $date,$failService) {
         $month = (int) $date->format("m");
         $day = (int) $date->format("d");
 
         $totalDay = $totalMonth = $totalYear = 0.0;
 
-        $unrealizedProductions = $this->getUnrealizedProductionsSortByMonthWithOutProduction();
+        //$unrealizedProductions = $this->getUnrealizedProductionsSortByMonthWithOutProduction($failService);
+        $unrealizedProductions = $this->getUnrealizedProductionsSortByMonth();
+        
+        
         foreach ($unrealizedProductions as $monthDetail => $detail) {
+            var_dump($detail);
+            
             $totalYear = $totalYear + $detail->getTotal();
 
             if ($monthDetail > $month) {
@@ -428,6 +436,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
                 $totalMonth = $totalMonth + $detail->getTotal();
             }
         }
+        die();
 
         $total = array(
             'total_day' => $totalDay,
