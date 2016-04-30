@@ -219,6 +219,12 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('showByDashboardSpecific', null, array(
                     'required' => false,
                 ))
+                ->end();
+        $form
+                ->with('Esferas')
+                ->add('showResultWithoutPercentageInDashboard', null, array(
+                    'required' => false,
+                ))
                 ->end()
                 ->end();
 

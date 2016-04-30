@@ -1,0 +1,29 @@
+## YAML Template.
+---
+pequiven_consumer_planning_servicefactor_create:
+    path: /{plantReport}/create
+    defaults:
+        _controller: pequiven.controller.consumer_planning_servicefactor:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_servicefactor_consumerplanningservicefactor
+    methods: [GET|POST]
+    
+pequiven_consumer_planning_servicefactor_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.consumer_planning_servicefactor:showAction
+    methods: [GET]
+    
+pequiven_consumer_planning_servicefactor_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.consumer_planning_servicefactor:updateAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_servicefactor_consumerplanningservicefactor
+    methods: [GET|POST|PUT]
+    
+pequiven_consumer_planning_servicefactor_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.consumer_planning_servicefactor:deleteAction
+    methods: [GET|DELETE]
