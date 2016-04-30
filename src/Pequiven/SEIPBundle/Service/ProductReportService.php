@@ -34,13 +34,13 @@ class ProductReportService implements ContainerAwareInterface {
 
         return $rs;
     }
-    
-    public function getArrayByDateFromInternalCausesPnr(\DateTime $dateReport,  \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productReport){
+
+    public function getArrayByDateFromInternalCausesPnr(\DateTime $dateReport, \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productReport) {
         $day = date_format($dateReport, 'j');
         $month = date_format($dateReport, 'n');
         $monthWithZero = date_format($dateReport, 'm');
         $year = date_format($dateReport, 'Y');
-        
+
         $em = $this->getDoctrine()->getManager();
         $causeFailService = $this->getCauseFailService();
 
@@ -62,14 +62,11 @@ class ProductReportService implements ContainerAwareInterface {
         //Obtenemos la plantilla del reporte
 //        $reportTemplateId = $options['idReportTemplate'];
 //        $reportTemplate = $this->container->get('pequiven.repository.report_template')->findOneBy(array('id' => $reportTemplateId));
-
         //Obtenemos el producto
 //        $product = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Product")->find($options["idProduct"]);
-
         //Obtenemos el Reporte del Producto
 //        $productReportId = $options['idProductReport'];
 //        $productReport = $this->container->get('pequiven.repository.product_report')->find($productReportId);
-
         //Obtenemos las producciones no realizadas, asociadas al Reporte del Producto
         $unrealizedProductions = $productReport->getUnrealizedProductions();
 
@@ -91,12 +88,12 @@ class ProductReportService implements ContainerAwareInterface {
             if ($month == $unrealizedProduction->getMonth()) {
                 $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
                 foreach ($failsInternal as $failInternal) {
-                    if($failInternal->getName() == 'Sobre Producción'){
+                    if ($failInternal->getName() == 'Sobre Producción') {
                         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['day'] = $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
                         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
                     }
                     for ($dayMonth = 1; $dayMonth <= $day; $dayMonth++) {
-                        if($failInternal->getName() == 'Sobre Producción'){
+                        if ($failInternal->getName() == 'Sobre Producción') {
                             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
                             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
                         }
@@ -112,13 +109,13 @@ class ProductReportService implements ContainerAwareInterface {
                     for ($dayMonth = 1; $dayMonth <= \Pequiven\SEIPBundle\Model\Common\CommonObject::getDaysPerMonth($monthUnrealizedProduction, $year); $dayMonth++) {
                         if ($month == $monthUnrealizedProduction) {
                             if ($dayMonth <= $day) {
-                                if($failInternal->getName() == 'Sobre Producción'){
+                                if ($failInternal->getName() == 'Sobre Producción') {
                                     $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
                                     $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
                                 }
                             }
                         } else {
-                            if($failInternal->getName() == 'Sobre Producción'){
+                            if ($failInternal->getName() == 'Sobre Producción') {
                                 $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
                                 $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
                             }
@@ -127,7 +124,7 @@ class ProductReportService implements ContainerAwareInterface {
                 }
             }
         }
-        
+
         return $result;
     }
 
@@ -466,8 +463,8 @@ class ProductReportService implements ContainerAwareInterface {
 
         return json_encode($data);
     }
-    
-        /**
+
+    /**
      * Shortcut to return the Doctrine Registry service.
      *
      * @return Registry
@@ -481,7 +478,7 @@ class ProductReportService implements ContainerAwareInterface {
 
         return $this->container->get('doctrine');
     }
-    
+
     protected function getCauseFailService() {
         return $this->container->get('seip.service.causefail');
     }

@@ -62,7 +62,10 @@
                 </tr>
                 {% set totalInternal = 0 %}
                 {% for failInternal in failsInternal %}
-                    {% set totalInternal = totalInternal + result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]["total"] %}
+                    {#                    SE COLOCO ESTE IF PARA Q NO SALGA LA SOBRE PRODUCCION EN LA SUMA CABLE DE 1ER CIERRE 2016 #} 
+                    {% if (failInternal.id != 11 ) %}
+                        {% set totalInternal = totalInternal + result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]["total"] %}
+                    {% endif %}
                     <tr>
                         <th scope="row">
                             <span>{{ failInternal.name }}</span>
