@@ -538,7 +538,7 @@ angular.module('seipModule.controllers', [])
             var entity = angular.element('#pequiven_seipbundle_dataload_plantreport_group_entity');
             var childrensPlants = angular.element('#pequiven_seipbundle_dataload_plantreport_group_childrensGroup');
             var setUpdate = $("#setUpdate");
-            
+
             if (setUpdate.val() == 0) {
                 console.log(setUpdate.val());
                 childrensPlants.select2('val', '');
@@ -6840,25 +6840,70 @@ angular.module('seipModule.controllers', [])
                 });
             }
 
-            //30-Gráfico tipo Piramide 3D Seccionada
-            $scope.chargeChartPyramid3DSectioned = function (indicatorId, render, width, height) {
-                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId});                
+            //30-Gráfico tipo Piramide 3D Seccionada Real
+            $scope.chargeChartRealPyramid3DSectioned = function (indicatorId, render, width, height) {
+                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId, type: 'real'});
                 $http.get(getDataPyramid3DSectioned).success(function (data) {
                     FusionCharts.ready(function () {
 //                        console.log(data.dataSource.data);
                         var pyramid3DSectioned = new FusionCharts({
                             "type": 'pyramid',
-                            "renderAt": render,                            
-                            "width": width+ "%",
+                            "renderAt": render,
+                            "width": width + "%",
                             "height": height,
                             "dataFormat": 'json',
-                            dataSource: {
+                            "dataSource": {
                                 "chart": data.dataSource.chart,
                                 "data": data.dataSource.data
                             }
                         });
                         pyramid3DSectioned.setTransparent(true);
                         pyramid3DSectioned.render();
+                    });
+                });
+            }
+            //31-Gráfico tipo Piramide 3D Seccionada Plan
+            $scope.chargeChartPlanPyramid3DSectioned = function (indicatorId, render, width, height) {
+                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId, type: 'plan'});
+                $http.get(getDataPyramid3DSectioned).success(function (data) {
+                    FusionCharts.ready(function () {
+//                        console.log(data.dataSource.data);
+                        var pyramid3DSectioned = new FusionCharts({
+                            "type": 'pyramid',
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": 'json',
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.data
+                            }
+                        });
+                        pyramid3DSectioned.setTransparent(true);
+                        pyramid3DSectioned.render();
+                    });
+                });
+            }
+
+            //32- GRAFICO DE COLUMNA APILADA QUE MUESTRA EL PLAN/REAL DE TODAS LAS VARIABLES DEL INDICADOR
+            $scope.chargeChartStackedColumn3DbyIndicator = function (indicatorId, render, width, height) {
+                var getDataChartProductionReportTemplateByDate = Routing.generate("getDataStackedColumn3DbyIndicator", {id: indicatorId});
+                $http.get(getDataChartProductionReportTemplateByDate).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartProductionReportTemplateByDate = new FusionCharts({
+                            "type": 'stackedcolumn3d',
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": 'json',
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartProductionReportTemplateByDate.setTransparent(true);
+                        revenueChartProductionReportTemplateByDate.render();
                     });
                 });
             }
