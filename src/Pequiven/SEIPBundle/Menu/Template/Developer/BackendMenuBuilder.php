@@ -451,7 +451,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $this->addMenuResults($child, $section);
         }
 
-        if ($this->isGranted('ROLE_SEIP_PLANNING_LIST_*')) {
+        if ($this->isGranted('ROLE_SEIP_PLANNING_*')) {
 
             $visualize = $this->factory->createItem('planning.visualize', $this->getSubLevelOptions(array(
                                 'labelAttributes' => array('icon' => ''),

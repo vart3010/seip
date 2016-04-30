@@ -161,7 +161,22 @@ abstract class Chart
     /**
      * Gráfico tipo multiseries de línea, con un trendline de forma horizontal
      */
-    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL = 29;
+    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL = 29;    
+    
+    /**
+     * Gráfico tipo Pirámide 3D Seccionada REAL
+     */
+    const TYPE_CHART_REAL_PYRAMID_3D_SECTIONED = 30;
+    
+    /**
+     * Gráfico tipo Pirámide 3D Seccionada PLAN
+     */
+    const TYPE_CHART_PLAN_PYRAMID_3D_SECTIONED = 31;
+    
+    /**
+     * Gráfico tipo Cilindro Apilado
+     */
+    const TYPE_CHART_STACKED_COLUMN_3D_BY_INDICATOR = 32;
     
     const TYPE_EXAMPLE = 100;
        
@@ -194,7 +209,7 @@ abstract class Chart
         return $this;
     }
     
-    /**
+    /** 
      * Retorna las etiquetas de cada tipo de gráfico que existe en el sistema
      * @return type
      */
@@ -231,6 +246,9 @@ abstract class Chart
             self::TYPE_CHART_PROGRESS_PROJECTS_BY_FREQUENCY_NOTIFICATION => 'chart.type.typeChartProgressProjectsByFrequencyNotification',
             self::TYPE_CHART_COLUMN_REAL_PLAN_BY_DIFFERENT_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsVariablesRealPlanByDifferentFrequencyNotification',
             self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL => 'chart.type.indicatorWithTrendlineHorizontal',
+            self::TYPE_CHART_REAL_PYRAMID_3D_SECTIONED => 'Pirámide 3D REAL/COSTOS',
+            self::TYPE_CHART_PLAN_PYRAMID_3D_SECTIONED => 'Pirámide 3D PLAN/COSTOS',
+            self::TYPE_CHART_STACKED_COLUMN_3D_BY_INDICATOR => 'Columna Apilada de Variables de Indicador',             
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

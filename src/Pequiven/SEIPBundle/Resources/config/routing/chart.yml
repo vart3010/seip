@@ -369,6 +369,31 @@ getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal:
     methods: [GET]
     options:
         expose: true
+        
+#30 Y 31
+getDataPyramid3DSectioned:
+    path: /getDataPyramid3DSectioned/{id}/{type}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataPyramid3DSectionedAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true       
+        
+#32
+getDataStackedColumn3DbyIndicator:
+    path: /getDataStackedColumn3DbyIndicator/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataStackedColumn3DbyIndicatorAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true       
+        
 
 #PRO_RT_PQV
 getDataChartProductionReportTemplateByDate:

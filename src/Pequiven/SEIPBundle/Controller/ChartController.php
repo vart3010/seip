@@ -292,7 +292,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 14-Función que retorna la data para un gráfico tipo columna 3d para mostrar el resultado real/plan de la ecuación para gráficos de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación
      * @return JsonResponse
@@ -312,7 +312,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 15-Función que retorna la data para un gráfico tipo stacked column 3d para mostrar el resultado , de acuerdo a la frecuencia de notificación de las variables asociadas a la fórmula del indicador, con el total acumulado por variables al final
      * @return JsonResponse
@@ -332,7 +332,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 16-Función que retorna la data para un gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados, con el total acumulado al final
      * @return JsonResponse
@@ -353,7 +353,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 17-Función que retorna la data para un gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
      * @return JsonResponse
@@ -374,7 +374,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 18-Función que retorna la data para un gráfico tipo multiseries de línea, para las lesiones personales con tiempo, acumulados, sólo del indicador (período actual y anterior)
      * @return JsonResponse
@@ -394,7 +394,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 19-Función que retorna la data para un gráfico tipo multiseries de línea, para las lesiones personales sin tiempo, sólo del indicador (período actual y anterior)
      * @return JsonResponse
@@ -414,7 +414,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 20-Función que retorna la data para un gráfico tipo multiseries de línea, para las lesiones personales con y sin tiempo, acumulados, de los hijos del indicador
      * @return JsonResponse
@@ -434,7 +434,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 21-Función que retorna la data para un gráfico tipo multiseries de línea, para los días perdidos, sólo del indicador (período actual y anterior)
      * @return JsonResponse
@@ -448,13 +448,13 @@ class ChartController extends SEIPController {
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorLostDaysAccumulatedTime' => true, 'variables' => array("dias_perdidos" => true,"dias_perdidos_severidad" => true), 'path_array' => 'resultIndicatorLostDaysAccumulatedTime')); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorLostDaysAccumulatedTime' => true, 'variables' => array("dias_perdidos" => true, "dias_perdidos_severidad" => true), 'path_array' => 'resultIndicatorLostDaysAccumulatedTime')); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
         return $response;
     }
-    
+
     /**
      * 22-Función que retorna la data para un gráfico tipo multiseries columna 3d, para mostrar el resultado de una suma de variables de los indicadores hijos (lesionados con tiempo perdidoa, sin tiempo perdido y días perdidos), según sea el caso del período actual y anterior
      * @return JsonResponse
@@ -474,7 +474,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 23-Función que retorna la data para un gráfico tipo multiseries columna 3d, para mostrar el resultado de una suma de variables de los indicadores hijos (lesionados con tiempo perdidoa, sin tiempo perdido y días perdidos), según sea el caso del período actual y anterior
      * @return JsonResponse
@@ -494,7 +494,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 24-Función que retorna la data para un gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de las lesiones con tiempo perdido por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
      * @return JsonResponse
@@ -514,7 +514,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 25-Función que retorna la data para un gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de las lesiones sin tiempo perdido por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
      * @return JsonResponse
@@ -534,7 +534,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-   
+
     /**
      * 26-Función que retorna la data para un gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de los días perdidos por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
      * @return JsonResponse
@@ -548,13 +548,13 @@ class ChartController extends SEIPController {
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated' => true, 'variables' => array("dias_perdidos" => true,"dias_perdidos_severidad" => true), 'path_array' => 'resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated' => true, 'variables' => array("dias_perdidos" => true, "dias_perdidos_severidad" => true), 'path_array' => 'resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
         return $response;
     }
-   
+
     /**
      * 27-Función que retorna la data para un gráfico sólo para avances de proyectos por frecuencia de notificación.
      * @return JsonResponse
@@ -574,7 +574,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 28-Función que retorna la data para un gráfico de tipo columna y con 2 ejes verticales. Sólo para un indicador con fórmula real/plan (automático o a partir de ecuación)
      * @return JsonResponse
@@ -594,7 +594,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 29-Función que retorna la data para un gráfico tipo multiseries de línea, con un trendline horizontal
      * @return JsonResponse
@@ -614,7 +614,57 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-   
+
+    /**
+     * 30 y 31-Función que retorna la data para un gráfico de piramide seccionada basada en el real o plan
+     * @return JsonResponse
+     * @author Gilbert C. <glavrjk@gmail.com>
+     */
+    public function getDataPyramid3DSectionedAction(Request $request) {
+
+        $response = new JsonResponse();
+        $idIndicator = $request->get('id');
+        $type = $request->get('type');
+        $options = array('type' => $type);
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+        $dataChart = $indicatorService->getDataPyramid3DSectioned($indicator, $options); //Obtenemos la data del gráfico de acuerdo al indicador
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+
+    /**
+     * 32-Función que retorna un cilindro apilado con los valores plan y real de las variables de un indicador
+     * @return JsonResponse
+     * @author Gilbert C. <glavrjk@gmail.com>
+     */
+    public function getDataStackedColumn3DbyIndicatorAction(Request $request) {
+
+        $response = new JsonResponse();
+        $idIndicator = $request->get('id');
+        $options = array(
+            "colors" => array(
+                1 => "BDBDBD",
+                2 => "CB3D3A",
+                3 => "FF8F26",
+                4 => "3C7BCF",
+                5 => "9BC348",
+                6 => "FFFFCC",
+                7 => "FFFFFF",
+                8 => "FFFFFF",
+                9 => "FFFFFF",
+                10 => "FFFFFF",
+            )
+        );
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+        $dataChart = $indicatorService->getDataStackedColumn3DbyIndicator($indicator, $options); //Obtenemos la data del gráfico de acuerdo al indicador
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+
     /**
      * Función que retorna la data para un gráfico que muestre la producción por las plantas de un reportTemplate (Día, Mes y Año)
      * @return JsonResponse
@@ -635,7 +685,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-   
+
     /**
      * Función que retorna la data para un gráfico que muestre la producción por las plantas de un grupo de reportTemplate por Día, de acuerdo al tipo de compañía asociado
      * @return JsonResponse
@@ -647,16 +697,16 @@ class ChartController extends SEIPController {
         $dateSearch = $request->get('dateSearch');
 
         $reportTemplateService = $this->getReportTemplateService(); //Obtenemos el servicio del ReportTemplate
-        
+
         $reportTemplate = new \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate();
 
-        $dataChart = $reportTemplateService->getDataChartMultiSeriesColumn3D($reportTemplate ,array('consolidateByTypeCompany' => true, 'dateSearch' => $dateSearch, 'typeCompany' => $typeCompany)); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $reportTemplateService->getDataChartMultiSeriesColumn3D($reportTemplate, array('consolidateByTypeCompany' => true, 'dateSearch' => $dateSearch, 'typeCompany' => $typeCompany)); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
         return $response;
     }
-   
+
     /**
      * Función que retorna la data para un gráfico que muestre la producción por las plantas de un grupo de reportTemplate por Día de la corporación
      * @return JsonResponse
@@ -668,20 +718,20 @@ class ChartController extends SEIPController {
         $typeView = $request->get('typeView');
 
         $reportTemplateService = $this->getReportTemplateService(); //Obtenemos el servicio del ReportTemplate
-        
+
         $reportTemplate = new \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate();
-        
-        if($typeView == \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_STATUS_CHARGE){
-            $dataChart = $reportTemplateService->getDataChartMultiSeriesColumn3D($reportTemplate ,array('consolidateCorporationStatusCharge' => true, 'dateSearch' => $dateSearch));
-        } elseif($typeView == \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE){
-            $dataChart = $reportTemplateService->getDataChartMultiSeriesDualAxis($reportTemplate ,array('consolidateCorporationCompliance' => true, 'dateSearch' => $dateSearch));
+
+        if ($typeView == \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_STATUS_CHARGE) {
+            $dataChart = $reportTemplateService->getDataChartMultiSeriesColumn3D($reportTemplate, array('consolidateCorporationStatusCharge' => true, 'dateSearch' => $dateSearch));
+        } elseif ($typeView == \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE) {
+            $dataChart = $reportTemplateService->getDataChartMultiSeriesDualAxis($reportTemplate, array('consolidateCorporationCompliance' => true, 'dateSearch' => $dateSearch));
         }
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
         return $response;
     }
-    
+
     /**
      * Función que retorna la data para un gráfico que muestre la producción por las plantas de un grupo de reportTemplate por Día de la corporación
      * @return JsonResponse
@@ -695,20 +745,20 @@ class ChartController extends SEIPController {
         $reportTemplateId = $request->get('reportTemplateId');
 
         $reportTemplateService = $this->getReportTemplateService(); //Obtenemos el servicio del ReportTemplate
-        
+
         $reportTemplate = $this->get('pequiven.repository.report_template')->find($reportTemplateId); //Obtenemos el ReportTemplate
-        
-        if($typeView == \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_STATUS_CHARGE){
-            $dataChart = $reportTemplateService->getDataChartMultiSeriesColumn3D($reportTemplate ,array('reportTemplateByDateStatusCharge' => true, 'dateSearch' => $dateSearch, 'typeDate' => $typeDate));
-        } elseif($typeView == \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE){
-            $dataChart = $reportTemplateService->getDataChartMultiSeriesDualAxis($reportTemplate ,array('reportTemplateByDateCompliance' => true, 'dateSearch' => $dateSearch, 'typeDate' => $typeDate));
+
+        if ($typeView == \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_STATUS_CHARGE) {
+            $dataChart = $reportTemplateService->getDataChartMultiSeriesColumn3D($reportTemplate, array('reportTemplateByDateStatusCharge' => true, 'dateSearch' => $dateSearch, 'typeDate' => $typeDate));
+        } elseif ($typeView == \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE) {
+            $dataChart = $reportTemplateService->getDataChartMultiSeriesDualAxis($reportTemplate, array('reportTemplateByDateCompliance' => true, 'dateSearch' => $dateSearch, 'typeDate' => $typeDate));
         }
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
         return $response;
     }
-   
+
     /**
      * Servicio de los Indicadores
      * @return \Pequiven\IndicatorBundle\Service\IndicatorService
@@ -724,7 +774,7 @@ class ChartController extends SEIPController {
     public function getResultService() {
         return $this->container->get('seip.service.result');
     }
-    
+
     /**
      * Servicio de los ReportTemplates (Producción)
      * @return \Pequiven\SEIPBundle\Service\DataLoad\ReportTemplateService
@@ -732,6 +782,5 @@ class ChartController extends SEIPController {
     public function getReportTemplateService() {
         return $this->container->get('data_load.service.report_template');
     }
-    
 
 }

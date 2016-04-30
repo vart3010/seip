@@ -538,7 +538,7 @@ angular.module('seipModule.controllers', [])
             var entity = angular.element('#pequiven_seipbundle_dataload_plantreport_group_entity');
             var childrensPlants = angular.element('#pequiven_seipbundle_dataload_plantreport_group_childrensGroup');
             var setUpdate = $("#setUpdate");
-            
+
             if (setUpdate.val() == 0) {
                 console.log(setUpdate.val());
                 childrensPlants.select2('val', '');
@@ -1509,7 +1509,7 @@ angular.module('seipModule.controllers', [])
                 $scope.initFormTrend(resource);
                 if (isInit == false) {
                     isInit = true;
-                }                           
+                }
 
                 $scope.templateOptions.setParameterCallBack(resource);
 
@@ -1525,7 +1525,7 @@ angular.module('seipModule.controllers', [])
                 $scope.initFormActionAdd(resource);
                 if (isInit == false) {
                     isInit = true;
-                }                
+                }
                 $scope.templateOptions.setParameterCallBack(resource);
 
                 if (resource) {
@@ -2533,8 +2533,8 @@ angular.module('seipModule.controllers', [])
             };
 
             $scope.loadNotify = function (resource) {
-                $scope.initFormNotify(resource);                
-                $scope.openModalAuto();                
+                $scope.initFormNotify(resource);
+                $scope.openModalAuto();
             };
 
             //Removiendo 
@@ -2655,7 +2655,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_sig_monitoring_notification', {id: $scope.dataNotify, type: $scope.type, idObject: $scope.id_managementSystem});                    
+                    var url = Routing.generate('pequiven_sig_monitoring_notification', {id: $scope.dataNotify, type: $scope.type, idObject: $scope.id_managementSystem});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2664,11 +2664,11 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
-                    notificationBarService.getLoadStatus().done();                    
+                    notificationBarService.getLoadStatus().done();
                     location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
@@ -2683,7 +2683,7 @@ angular.module('seipModule.controllers', [])
                     }
                     notificationBarService.getLoadStatus().done();
                     return false;
-                });                
+                });
             };
 
             $scope.templateOptions.setVar('addStandardization', addStandardization);
@@ -2699,10 +2699,10 @@ angular.module('seipModule.controllers', [])
                 });
                 return true;
             };
-            
-            $scope.templateOptions.setVar('addNotify', addNotify);            
+
+            $scope.templateOptions.setVar('addNotify', addNotify);
             var confirmCallBackNotify = function () {
-                addNotify(true, function (data) {                   
+                addNotify(true, function (data) {
                 });
                 return true;
             };
@@ -3991,11 +3991,6 @@ angular.module('seipModule.controllers', [])
                 }
                 );
             }
-
-
-
-
-
         })
         .controller('FeeStructureController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
@@ -6841,6 +6836,74 @@ angular.module('seipModule.controllers', [])
                         });
                         revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontal.setTransparent(true);
                         revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontal.render();
+                    });
+                });
+            }
+
+            //30-Gráfico tipo Piramide 3D Seccionada Real
+            $scope.chargeChartRealPyramid3DSectioned = function (indicatorId, render, width, height) {
+                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId, type: 'real'});
+                $http.get(getDataPyramid3DSectioned).success(function (data) {
+                    FusionCharts.ready(function () {
+//                        console.log(data.dataSource.data);
+                        var pyramid3DSectioned = new FusionCharts({
+                            "type": 'pyramid',
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": 'json',
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.data
+                            }
+                        });
+                        pyramid3DSectioned.setTransparent(true);
+                        pyramid3DSectioned.render();
+                    });
+                });
+            }
+            //31-Gráfico tipo Piramide 3D Seccionada Plan
+            $scope.chargeChartPlanPyramid3DSectioned = function (indicatorId, render, width, height) {
+                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId, type: 'plan'});
+                $http.get(getDataPyramid3DSectioned).success(function (data) {
+                    FusionCharts.ready(function () {
+//                        console.log(data.dataSource.data);
+                        var pyramid3DSectioned = new FusionCharts({
+                            "type": 'pyramid',
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": 'json',
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.data
+                            }
+                        });
+                        pyramid3DSectioned.setTransparent(true);
+                        pyramid3DSectioned.render();
+                    });
+                });
+            }
+
+            //32- GRAFICO DE COLUMNA APILADA QUE MUESTRA EL PLAN/REAL DE TODAS LAS VARIABLES DEL INDICADOR
+            $scope.chargeChartStackedColumn3DbyIndicator = function (indicatorId, render, width, height) {
+                var getDataChartProductionReportTemplateByDate = Routing.generate("getDataStackedColumn3DbyIndicator", {id: indicatorId});
+                $http.get(getDataChartProductionReportTemplateByDate).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartProductionReportTemplateByDate = new FusionCharts({
+                            "type": 'stackedcolumn3d',
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": 'json',
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartProductionReportTemplateByDate.setTransparent(true);
+                        revenueChartProductionReportTemplateByDate.render();
                     });
                 });
             }
