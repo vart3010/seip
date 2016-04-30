@@ -382,7 +382,10 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $totalDay = $totalMonth = $totalYear = 0.0;
 
         $unrealizedProductions = $this->getUnrealizedProductionsSortByMonth();
+        
         foreach ($unrealizedProductions as $monthDetail => $detail) {
+            //var_dump($detail);
+            
             $totalYear = $totalYear + $detail->getTotal();
 
             if ($monthDetail > $month) {
@@ -414,8 +417,14 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
 
         $totalDay = $totalMonth = $totalYear = 0.0;
 
-        $unrealizedProductions = $this->getUnrealizedProductionsSortByMonthWithOutProduction();
+        //$unrealizedProductions = $this->getUnrealizedProductionsSortByMonthWithOutProduction($failService);
+        $unrealizedProductions = $this->getUnrealizedProductionsSortByMonth();
+        
+        //Obtener el array [total_day] [total_month] y [total_year] de la PNR por causa SOBRE PRODUCCIÓN
+        
+        
         foreach ($unrealizedProductions as $monthDetail => $detail) {
+            
             $totalYear = $totalYear + $detail->getTotal();
 
             if ($monthDetail > $month) {
@@ -428,6 +437,10 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
                 $totalMonth = $totalMonth + $detail->getTotal();
             }
         }
+        
+        //$totalYear = $totalYear - $totalOverProduction[year]
+        //$totalMonth = $totalMonth - $totalOverProduction[month]
+        //$totalDay = $totalDay - $totalOverProduction[day]
 
         $total = array(
             'total_day' => $totalDay,
