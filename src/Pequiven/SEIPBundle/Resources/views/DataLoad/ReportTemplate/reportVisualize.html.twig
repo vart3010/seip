@@ -12,7 +12,7 @@
     {#    {{ showInventory }}#}
     {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
     <form id="frmFilter" action="{{ path("pequiven_report_template_vizualice") }}" method="POST">
-        <input id="exportToPdf" type="hidden" name="exportToPdf" value="0" />
+        <input id="exportToPdf" type="text" name="exportToPdf" value="0" />
         {{ form_errors(form) }}
         <fieldset class="fieldset">
             <legend class="legend">Busqueda</legend>
@@ -219,6 +219,7 @@
 
                 var plantReport = $("#form_plantReport");
                 $("#btnExportToPdf").on("click", function (e) {
+                    alert("reporte");
                     e.preventDefault();
                     $("#exportToPdf").val("1");
                     eventChange();
