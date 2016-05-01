@@ -2433,7 +2433,7 @@ class ReportTemplateController extends SEIPController {
                                     //$unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
                                     $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($timeNormal, $productReport);
 
-                                    $arrayUnrealizedProduction[$productReportId]["total"] += $unrealizedProduction["total_day"] -  $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
+                                    $arrayUnrealizedProduction[$productReportId]["total"] += $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
 
                                     $i += 86400; //VOY RECORRIENDO DIA POR DIA
                                 }
