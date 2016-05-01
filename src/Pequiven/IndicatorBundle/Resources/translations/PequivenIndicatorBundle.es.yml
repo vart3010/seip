@@ -347,3 +347,4 @@ action:
 'Complejo Dashboard Specific': Complejo dónde se mostrará en el dashboard
 'Show By Dashboard Specific': ¿El indicador será mostrado en un dashboard específico? (Omitiendo el de los Indicadores Estratégicos)
 'Type Detail Value': Tipo de Detalle del valor obtenido de los módulos de estadística
+'Number Value Indicator To Force': Resultado hasta el cuál se forzará el resultado del indicador

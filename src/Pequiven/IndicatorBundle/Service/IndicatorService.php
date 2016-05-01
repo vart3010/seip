@@ -1892,6 +1892,7 @@ class IndicatorService implements ContainerAwareInterface {
             unset($options[$options['resultIndicatorWithTrendlineHorizontalOnlyResult']]);
 
             $arrayVariables = array();
+            $maxValue = 0.0;
 
             $numberResults = $indicator->getNumberValueIndicatorToForce() > 0 ? $indicator->getNumberValueIndicatorToForce() : $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
 //            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotificationWithoutValidation($indicator);
@@ -1912,6 +1913,9 @@ class IndicatorService implements ContainerAwareInterface {
             foreach($indicatorValues as $indicatorValue){
                 if($cont <= $numberResults){
                     $arrayVariables[$indicator->getId()]['data'][] = array('value' => number_format($indicatorValue->getValueOfIndicator(),2,',','.'), 'showValue' => 1);
+                    if($indicatorValue->getValueOfIndicator() > $maxValue){
+                        $maxValue = $indicatorValue->getValueOfIndicator();
+                    }
                 }
                 $cont++;
             }
@@ -1927,6 +1931,13 @@ class IndicatorService implements ContainerAwareInterface {
             } elseif($tendency->getRef() == \Pequiven\MasterBundle\Entity\Tendency::TENDENCY_MIN){
                 $valueGoal = $arrangementRange->getRankBottomBasic();
             }
+            
+            
+            if($valueGoal > $maxValue){
+                $maxValue = $valueGoal + 1.0;
+            }
+            
+            $chart["yAxisMaxValue"] = number_format($maxValue,2,',','.');
             
             $line = array();
             $line[] = array("startvalue" => number_format($valueGoal,2,',','.'), "color" => "#088A08", "valueOnRight" => "1", "displayvalue" => "Meta", "thickness" => "3");
