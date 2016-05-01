@@ -64,6 +64,8 @@ pequiven_indicator:
         unrealized_production: Producción No Realizada
         raw_material: Materia Prima
         services: Servicios
+        service_factor: Factor de Servicio
+        gas_flow: Flujo de Gas
     type_detail:
         none: Ninguno
         daily_load_production: Producción diaria

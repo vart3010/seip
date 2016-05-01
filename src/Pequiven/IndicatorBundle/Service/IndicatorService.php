@@ -540,6 +540,28 @@ class IndicatorService implements ContainerAwareInterface {
                 }
             }
             $results[$varRealName] = $value / $totalServices;
+        } elseif ($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_SERVICE_FACTOR) {
+            if ($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12) {
+                if (!$valueIndicator->getId()) {
+                    $month = count($indicator->getValuesIndicator()) + 1;
+                } else {
+                    $month = $this->getOrderOfValueIndicator($indicator, $valueIndicator);
+                }
+            }
+            $value = 0.0;
+            foreach ($productsReports as $productReport) {
+                $planReport = $productReport->getPlantReport();
+                $servicesFactors = $planReport->getConsumerPlanningServiceFactor();
+
+                foreach ($servicesFactors as $serviceFactor) {
+                    $detailServiceByMonth = $serviceFactor->getDetailsByMonth();
+                    $valueReal = array_key_exists($month, $detailServiceByMonth) == true ? $detailServiceByMonth[$month]->getTotalReal() : 0;
+                    $valuePlan = array_key_exists($month, $detailServiceByMonth) == true ? $detailServiceByMonth[$month]->getTotalPlan() : 0;
+                    $results[$varRealName] = $results[$varRealName] + $valueReal;
+                    $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
+                }
+            }
+            
         }
 
         return $results;
