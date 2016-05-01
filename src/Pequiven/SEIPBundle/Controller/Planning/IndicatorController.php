@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Controlador de los indicadores (Planificacion)
@@ -567,8 +568,16 @@ class IndicatorController extends ResourceController {
         $indicator = $this->get('pequiven.repository.indicator')->find($id); //Obtenemos el indicador
 
         $rs = $indicatorService->isGrantToEdit($indicator, $index);
-
-        return $rs;
+        
+        $response = new JsonResponse();
+        $data = array();
+        $data["data"] = $rs;
+        $response->setData($data);
+        return $response;
+        
+//        var_dump($rs);die();
+//
+//        return $rs;
     }
 
     /**
@@ -642,12 +651,20 @@ class IndicatorController extends ResourceController {
         $valueIndicator = $em->getRepository("\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator")->find($request->get("id"));
 
         $archivo = $valueIndicator->getValueIndicatorFile();
-
+        $flag = true;
+        
         if ($archivo) {
-            return true;
+            $flag = true;
         } else {
-            return false;
+            $flag = false;
         }
+        
+        $response = new JsonResponse();
+        $data = array();
+        $data["data"] = $flag;
+        $response->setData($data);
+        return $response;
+        
     }
 
     /**

@@ -561,7 +561,25 @@ class IndicatorService implements ContainerAwareInterface {
                     $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
                 }
             }
-            
+        } elseif ($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_GAS_FLOW) {
+            if ($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12) {
+                if (!$valueIndicator->getId()) {
+                    $month = count($indicator->getValuesIndicator()) + 1;
+                } else {
+                    $month = $this->getOrderOfValueIndicator($indicator, $valueIndicator);
+                }
+            }
+            $value = 0.0;
+            foreach ($productsReports as $productReport) {
+                $planReport = $productReport->getPlantReport();
+                $gasFlows = $planReport->getConsumerPlanningGasFlow();
+
+                foreach ($gasFlows as $gasFlow) {
+                    $detailGasFlowByMonth = $gasFlow->getDetailsByMonth();
+                    $value = array_key_exists($month, $detailGasFlowByMonth) == true ? $value + $detailGasFlowByMonth[$month]->getPercentage() : $value;
+                }
+            }
+            $results[$varRealName] = $value;
         }
 
         return $results;

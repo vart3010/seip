@@ -7174,7 +7174,7 @@ angular.module('seipModule.controllers', [])
                 $http.get(getdataBarsArea).success(function (data) {
                     //console.log(index+"->"+data);
                     //console.log(data);
-                    if (data == "1") {
+                    if (data.data == "1") {
                         $("div#target_" + index).show();
                     }
                 });
@@ -7196,7 +7196,7 @@ angular.module('seipModule.controllers', [])
                 var getValidLoad = Routing.generate("showButtonDownload", {id: valueIndicatorId});
                 $http.get(getValidLoad).success(function (data) {
                     console.log(data);
-                    if (data != "true") {
+                    if (data.data != "true") {
                         $("span#open_" + valueIndicatorId).hide();
                     }
                 });
