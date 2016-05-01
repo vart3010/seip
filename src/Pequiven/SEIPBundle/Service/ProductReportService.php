@@ -464,6 +464,24 @@ class ProductReportService implements ContainerAwareInterface {
         return json_encode($data);
     }
 
+
+    /**
+    * retorna el datetime por mes mes
+    */
+    public function getTimeNowMonth($month,$unrealizedProduction) {
+        $dayMonth = $unrealizedProduction->getDaysPerMonth($month,"2016");
+        //$s = "31/01/2016 00:00:00";
+        $s = $dayMonth.'-'.$month.'-'.date("Y");
+        //var_dump($s);
+        $fecha = \DateTime::createFromFormat('d-m-Y', $s);
+        #$fecha = DateTime::createFromFormat('j-M-Y', '15-Feb-2009');
+        #echo $fecha->format('Y-m-d');
+        #var_dump($fecha);
+        return $fecha;
+
+        
+    }
+
     /**
      * Shortcut to return the Doctrine Registry service.
      *

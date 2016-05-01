@@ -22,11 +22,21 @@
             </thead>
             {% set colspan = 6 %}
             {% set totals = product_report.getTotalToDayUnrealizedProductions %}
+            
+
+            {# $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $productReport);#}
+            {# {% set excludePnr = productReportService.getArrayByDateFromInternalCausesPnr(dateNow, product_report) %}
+            {{ dump(excludePnr) }} #}
 
             {% set productUnit = product_report.product.productUnit %}
             {% set unitToConvert =  factorConversionService.unitToFactorConversion(product_report) %}
             <tbody>
                 {% for unrealizedProduction in product_report.getUnrealizedProductionsSortByMonth %}
+                    {% set dateMonth = productReportService.getTimeNowMonth(loop.index,unrealizedProduction) %}
+                    {% set excludePnr = productReportService.getArrayByDateFromInternalCausesPnr(dateMonth, product_report) %}
+                    {% set overProductionMonth = excludePnr[0].total.month %}
+                    {# {{ dump(excludePnr[0].total.month) }} #}                  
+
                     <tr>
                         <td>{{ loop.index }} - 
                             <a href="{{ path("pequiven_unrealized_production_show",{id: unrealizedProduction.id,productReportId:product_report.id }) }}">
@@ -34,7 +44,7 @@
                             </a>
                         </td>
                         <td align="right" scope="row">
-                            {{ unrealizedProduction.total|myNumberFormat }}&nbsp;{{ productUnit }}
+                            {{ (unrealizedProduction.total - overProductionMonth)|myNumberFormat }}&nbsp;{{ productUnit }}
                         </td>
                         {% if factor %}
                             <td align="right" scope="row">
