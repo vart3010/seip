@@ -1894,7 +1894,10 @@ class IndicatorService implements ContainerAwareInterface {
             $arrayVariables = array();
             $maxValue = 0.0;
 
-            $numberResults = $indicator->getNumberValueIndicatorToForce() > 0 ? $indicator->getNumberValueIndicatorToForce() : $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
+            $indicatorValues = $indicator->getValuesIndicator();
+            $totalValueIndicators = count($indicatorValues);
+            //$numberResults = $indicator->getNumberValueIndicatorToForce() > 0 ? $indicator->getNumberValueIndicatorToForce() : $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
+            $numberResults = $indicator->getNumberValueIndicatorToForce() > 0 ? $indicator->getNumberValueIndicatorToForce() : $totalValueIndicators;
 //            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotificationWithoutValidation($indicator);
             $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
 
@@ -1906,7 +1909,6 @@ class IndicatorService implements ContainerAwareInterface {
                 $category[] = $label;
             }
             
-            $indicatorValues = $indicator->getValuesIndicator();
             $arrayVariables[$indicator->getId()] = array('seriesname' => $indicator->getSummary(), 'data' => array());
             
             $cont = 1;
