@@ -476,6 +476,7 @@ class IndicatorService implements ContainerAwareInterface {
                 }
             }
         } elseif ($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_UNREALIZED_PRODUCTION) {
+            $productReportService = $this->getProductReportService();
             if ($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12) {
                 if (!$valueIndicator->getId()) {
                     $month = count($indicator->getValuesIndicator()) + 1;
@@ -486,7 +487,11 @@ class IndicatorService implements ContainerAwareInterface {
             foreach ($productsReports as $productReport) {
                 $unrealizedProductionMonths = $productReport->getUnrealizedProductionsSortByMonth();
                 $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
-                $valueReal = array_key_exists($month, $unrealizedProductionMonths) == true ? $unrealizedProductionMonths[$month]->getTotal() : 0;
+                
+                $dateConsulting = $productReportService->getTimeNowMonth($month,$unrealizedProductionMonths[$month]);
+                $dataOverProduction = $productReportService->getArrayByDateFromInternalCausesPnr($dateConsulting,$productReport);
+
+                $valueReal = array_key_exists($month, $unrealizedProductionMonths) == true ? $unrealizedProductionMonths[$month]->getTotal()-$dataOverProduction[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['Sobre Producción']['month'] : 0;
                 $valuePlan = array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalGrossPlan() : 0;
                 $results[$varRealName] = $results[$varRealName] + $valueReal;
                 $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
@@ -5028,6 +5033,10 @@ class IndicatorService implements ContainerAwareInterface {
 
     protected function getSecurityService() {
         return $this->container->get('seip.service.security');
+    }
+    
+    protected function getProductReportService() {
+        return $this->container->get('seip.service.productReport');
     }
 
 }
