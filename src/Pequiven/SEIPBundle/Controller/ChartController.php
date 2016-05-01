@@ -664,6 +664,26 @@ class ChartController extends SEIPController {
 
         return $response;
     }
+    
+    /**
+     * 29-Función que retorna la data para un gráfico tipo multiseries de línea, con un trendline horizontal
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResultAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorWithTrendlineHorizontalOnlyResult' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
 
     /**
      * Función que retorna la data para un gráfico que muestre la producción por las plantas de un reportTemplate (Día, Mes y Año)

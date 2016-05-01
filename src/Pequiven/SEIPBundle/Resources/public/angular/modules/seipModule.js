@@ -6908,6 +6908,30 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
+            
+            //33-Gráfico tipo multiseries de línea, con un trendline de forma horizontal y el valor de los resultados
+            $scope.chargeChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = function (indicatorId, render, width, height) {
+                var getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = Routing.generate("getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult", {id: indicatorId});
+                $http.get(getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = new FusionCharts({
+                            "type": "msline",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset,
+                                "trendlines": data.dataSource.trendlines
+                            }
+                        });
+                        revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult.setTransparent(true);
+                        revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult.render();
+                    });
+                });
+            }
 
             //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
             $scope.chargeChartProductionReportTemplateByDate = function (reportTemplateId, dateSearch, render, width, height) {

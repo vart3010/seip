@@ -178,6 +178,13 @@ abstract class Chart
      */
     const TYPE_CHART_STACKED_COLUMN_3D_BY_INDICATOR = 32;
     
+    /**
+     * Gráfico tipo Cilindro Apilado
+     */
+    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL_AND_ONLY_RESULT = 33;
+    
+    
+    
     const TYPE_EXAMPLE = 100;
        
     /**
@@ -246,9 +253,10 @@ abstract class Chart
             self::TYPE_CHART_PROGRESS_PROJECTS_BY_FREQUENCY_NOTIFICATION => 'chart.type.typeChartProgressProjectsByFrequencyNotification',
             self::TYPE_CHART_COLUMN_REAL_PLAN_BY_DIFFERENT_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsVariablesRealPlanByDifferentFrequencyNotification',
             self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL => 'chart.type.indicatorWithTrendlineHorizontal',
-            self::TYPE_CHART_REAL_PYRAMID_3D_SECTIONED => 'Pirámide 3D REAL/COSTOS',
-            self::TYPE_CHART_PLAN_PYRAMID_3D_SECTIONED => 'Pirámide 3D PLAN/COSTOS',
-            self::TYPE_CHART_STACKED_COLUMN_3D_BY_INDICATOR => 'Columna Apilada de Variables de Indicador',             
+            self::TYPE_CHART_REAL_PYRAMID_3D_SECTIONED => 'chart.type.indicatorPyramidRealSection',
+            self::TYPE_CHART_PLAN_PYRAMID_3D_SECTIONED => 'chart.type.indicatorPyramidPlanSection',
+            self::TYPE_CHART_STACKED_COLUMN_3D_BY_INDICATOR => 'chart.type.stackedColumn3dByIndicator',
+            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL_AND_ONLY_RESULT => 'chart.type.indicatorWithTrendlineHorizontalOnlyResult',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

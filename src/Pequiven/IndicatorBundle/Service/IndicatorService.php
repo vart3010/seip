@@ -1888,6 +1888,49 @@ class IndicatorService implements ContainerAwareInterface {
 //                    }
 //                ]
             }
+        } elseif ((isset($options['resultIndicatorWithTrendlineHorizontalOnlyResult']) && array_key_exists('resultIndicatorWithTrendlineHorizontalOnlyResult', $options))) {
+            unset($options[$options['resultIndicatorWithTrendlineHorizontalOnlyResult']]);
+
+            $arrayVariables = array();
+
+            $numberResults = $indicator->getNumberValueIndicatorToForce() > 0 ? $indicator->getNumberValueIndicatorToForce() : $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
+//            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotificationWithoutValidation($indicator);
+            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+
+            //Añadimos los valores, por frecuencia de notificación
+            for ($i = 0; $i < $numberResults; $i++) {
+                $label = array();
+                $label["label"] = $labelsFrequencyNotificationArray[($i + 1)];
+
+                $category[] = $label;
+            }
+            
+            $indicatorValues = $indicator->getValuesIndicator();
+            $arrayVariables[$indicator->getId()] = array('seriesname' => $indicator->getSummary(), 'data' => array());
+            
+            $cont = 1;
+            foreach($indicatorValues as $indicatorValue){
+                if($cont <= $numberResults){
+                    $arrayVariables[$indicator->getId()]['data'][] = array('value' => number_format($indicatorValue->getValueOfIndicator(),2,',','.'), 'showValue' => 1);
+                }
+                $cont++;
+            }
+            
+            $dataSetValues[$indicator->getId()] = array('seriesname' => $arrayVariables[$indicator->getId()]['seriesname'], 'data' => $arrayVariables[$indicator->getId()]['data'], 'color' => "#0174DF");
+            $data['dataSource']['dataset'][] = $dataSetValues[$indicator->getId()];
+            
+            $valueGoal = 0.0;
+            $tendency = $indicator->getTendency();
+            $arrangementRange = $indicator->getArrangementRange();
+            if($tendency->getRef() == \Pequiven\MasterBundle\Entity\Tendency::TENDENCY_MAX){
+                $valueGoal = $arrangementRange->getRankTopBasic();
+            } elseif($tendency->getRef() == \Pequiven\MasterBundle\Entity\Tendency::TENDENCY_MIN){
+                $valueGoal = $arrangementRange->getRankBottomBasic();
+            }
+            
+            $line = array();
+            $line[] = array("startvalue" => number_format($valueGoal,2,',','.'), "color" => "#088A08", "valueOnRight" => "1", "displayvalue" => "Meta", "thickness" => "3");
+            $data['dataSource']['trendlines'][] = array("line" => $line);
         }
 
         $data['dataSource']['chart'] = $chart;
