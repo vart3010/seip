@@ -2575,7 +2575,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_sig_monitoring_add', {id: $scope.id_managementSystem});
+                    var url = Routing.generate('pequiven_sig_monitoring_add', {id: $scope.id_managementSystem, type: $scope.type});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2719,6 +2719,7 @@ angular.module('seipModule.controllers', [])
 
                 var parameters = {
                     id: $scope.id_managementSystem,
+                    type: $scope.type,
                     _dc: numero
                 };
                 if (resource) {
