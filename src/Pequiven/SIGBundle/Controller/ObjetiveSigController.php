@@ -28,9 +28,7 @@ class ObjetiveSigController extends EvolutionController
      *
      */
     public function evlutionAction(Request $request){
-        //return $this->render('PequivenSIGBundle:Objetives:evolution.html.twig');  
-        $resource = $this->findOr404($request);
-        
+        $resource = $this->findOr404($request);        
         
         $id     = $request->get('id');
         $month  = $request->get('month');
@@ -43,7 +41,18 @@ class ObjetiveSigController extends EvolutionController
                 ->setData(array(
                 'typeObject' => 3,
                 'month'      => $month,
-                'entity'     => $objetive,
+                'entity'     => $objetive,                
+                'data'                => null,
+                'dataCause'           => null,
+                'trend'               => null,                
+                'analysis'            => null,
+                'cause'               => null,
+                'sumCause'            => null,                
+                'dataAction'          => 0,                
+                'verification'        => null,                
+                'id'                  => null,
+                'cloning'             => null,
+                'route'               => "pequiven_seip_arrangementprogram_evolution_sig",//Ruta para carga de Archivo
                 $this->config->getResourceName() => $resource,                
         ));
 
