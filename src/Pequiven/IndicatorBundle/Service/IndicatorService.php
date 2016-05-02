@@ -581,10 +581,31 @@ class IndicatorService implements ContainerAwareInterface {
 
                 foreach ($gasFlows as $gasFlow) {
                     $detailGasFlowByMonth = $gasFlow->getDetailsByMonth();
-                    $value = array_key_exists($month, $detailGasFlowByMonth) == true ? $value + $detailGasFlowByMonth[$month]->getPercentage() : $value;
+                    $valueReal = array_key_exists($month, $detailGasFlowByMonth) == true ? $detailGasFlowByMonth[$month]->getPercentage() : 0;
+                    $valuePlan = array_key_exists($month, $detailGasFlowByMonth) == true ? $detailGasFlowByMonth[$month]->getPlanFlow() : 0;
+                    $results[$varRealName] = $results[$varRealName] + $valueReal;
+                    $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
                 }
             }
-            $results[$varRealName] = $value;
+            
+//            if ($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12) {
+//                if (!$valueIndicator->getId()) {
+//                    $month = count($indicator->getValuesIndicator()) + 1;
+//                } else {
+//                    $month = $this->getOrderOfValueIndicator($indicator, $valueIndicator);
+//                }
+//            }
+//            $value = 0.0;
+//            foreach ($productsReports as $productReport) {
+//                $planReport = $productReport->getPlantReport();
+//                $gasFlows = $planReport->getConsumerPlanningGasFlow();
+//
+//                foreach ($gasFlows as $gasFlow) {
+//                    $detailGasFlowByMonth = $gasFlow->getDetailsByMonth();
+//                    $value = array_key_exists($month, $detailGasFlowByMonth) == true ? $value + $detailGasFlowByMonth[$month]->getPercentage() : $value;
+//                }
+//            }
+//            $results[$varRealName] = $value;
         }
 
         return $results;
@@ -1221,9 +1242,9 @@ class IndicatorService implements ContainerAwareInterface {
                 $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
             }
 
-            $dataSetPlan["seriesname"] = $arrayVariables['descriptionPlan'];
+            $dataSetPlan["seriesname"] = isset($arrayVariables['descriptionPlan']) ? $arrayVariables['descriptionPlan'] : 'Plan';
             $dataSetPlan["showValues"] = "1";
-            $dataSetReal["seriesname"] = $arrayVariables['descriptionReal'];
+            $dataSetReal["seriesname"] = isset($arrayVariables['descriptionReal']) ? $arrayVariables['descriptionReal'] : 'Real';
             $dataSetReal["renderas"] = "area";
 
             $totalValueIndicators = count($indicator->getValuesIndicator());
@@ -1233,7 +1254,7 @@ class IndicatorService implements ContainerAwareInterface {
                     $resultNumbers = $i + 1;
                 }
             }
-
+            
             for ($i = 0; $i < $resultNumbers; $i++) {
                 $label = $dataReal = $dataPlan = $dataMedition = array();
                 $label["label"] = $i;
