@@ -1548,14 +1548,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if($indicator->getPlanIsNotAccumulative()){
                 if (($plan != 0 || $real != 0)) {
                     $numberResultsValids++;
+                    $totalPlan = $plan;
                 }
-                $totalPlan = $plan;
             }
         }
         
         if($indicator->getPlanIsNotAccumulative()){
             $totalReal = $totalReal/$numberResultsValids;
         }
+        
 //        die;
         $value = $totalReal;
         $indicator
