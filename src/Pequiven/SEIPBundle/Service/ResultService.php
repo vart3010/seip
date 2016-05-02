@@ -1527,7 +1527,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $numberResultsValids = 0;
         foreach ($valuesIndicator as $valueIndicator) {
             $i++;
-            $numberResultsValids++;
             $formulaParameters = $valueIndicator->getFormulaParameters();
             $plan = $formulaParameters[$variableToPlanValueName];
             $real = $formulaParameters[$variableToRealValueName];
@@ -1547,6 +1546,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $totalReal += $real;
             
             if($indicator->getPlanIsNotAccumulative()){
+                if (($plan != 0 || $real != 0)) {
+                    $numberResultsValids++;
+                }
                 $totalPlan = $plan;
             }
         }
