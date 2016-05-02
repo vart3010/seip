@@ -309,7 +309,7 @@ class ReportEvolutionController extends ResourceController
         }
 
         $apiDataUrl = $this->generateUrl($route, $routeParameters);
-        $apiDataUrl = "http://".$_SERVER['HTTP_HOST'].$apiDataUrl;
+        //$apiDataUrl = "http://".$_SERVER['HTTP_HOST'].$apiDataUrl;
         //Añadiendo responsables
         for ($i=0; $i < $catnRes; $i++) { 
             //if($reponsibles[$i] != ''){
@@ -357,6 +357,7 @@ class ReportEvolutionController extends ResourceController
             }
         }
         $this->get('session')->getFlashBag()->add('success', "Plan de Acción Cargado Exitosamente");
+        die();
     
     }
 
