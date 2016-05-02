@@ -1527,7 +1527,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $numberResultsValids = 0;
         foreach ($valuesIndicator as $valueIndicator) {
             $i++;
-            $numberResultsValids++;
             $formulaParameters = $valueIndicator->getFormulaParameters();
             $plan = $formulaParameters[$variableToPlanValueName];
             $real = $formulaParameters[$variableToRealValueName];
@@ -1535,6 +1534,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($details) {
                 if ($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID) {
                     if (($plan != 0 || $real != 0)) {
+                        $numberResultsValids++;
                         $totalPlan = $plan;
                         $totalReal = $real;
                     }
