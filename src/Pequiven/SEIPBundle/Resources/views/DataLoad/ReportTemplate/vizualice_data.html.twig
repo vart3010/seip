@@ -37,7 +37,7 @@
 
 
 </style>
-{% if productsReport is not empty %}
+{% if production is not empty %}
     {#<br>
     <div class="title">Reporte de Producción</div>
     <br>#}
@@ -80,7 +80,7 @@
                 </thead>
                 <tbody>
 
-                    {% for productDay in producction["day"] %} 
+                    {% for productDay in production["day"] %} 
                         <tr>
                             <td scope="col" width="40%" class="product">{{ productDay.nameProduct|upper}}</td>
                             <td scope="col" width="15%" class="values">{{ productDay.plan}}</td>
@@ -93,7 +93,7 @@
                 <tfoot>
                     <tr class="header-tr">
                         <th scope="col" width="40%" class="header-product">TOTALES</th>
-                            {% for  totals in totalProducction["day"] %}    
+                            {% for  totals in totalProduction["day"] %}    
                             <th scope="col" width="15%" class="header-values">{{ totals }}</th>                                   
                             {% endfor %}
                     </tr>
@@ -117,7 +117,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for productDay in producction["month"] %} 
+                    {% for productDay in production["month"] %} 
                         <tr>
                             <td scope="col" width="25%" class="product">{{ productDay.nameProduct|upper }}</td>
                             <td scope="col" width="15%" class="values">{{ productDay.plan_month}}</td>
@@ -131,7 +131,7 @@
                 <tfoot>
                     <tr class="header-tr">
                         <th scope="col" width="25%" class="header-product">TOTALES</th>
-                            {% for  totals in totalProducction["month"] %}    
+                            {% for  totals in totalProduction["month"] %}    
                             <th scope="col" width="15%" class="header-values">{{ totals }}</th> 
                             {% endfor %}
                     </tr>
@@ -155,7 +155,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for productDay in producction["year"] %} 
+                    {% for productDay in production["year"] %} 
                         <tr>
                             <td scope="col" width="25%" class="product">{{ productDay.nameProduct|upper}}</td>
                             <td scope="col" width="15%" class="values">{{ productDay.plan_year}}</td>
@@ -169,7 +169,7 @@
                 <tfoot>
                     <tr class="header-tr">
                         <th scope="col" width="25%" class="header-product">TOTALES</th>
-                            {% for  totals in totalProducction["year"] %}    
+                            {% for  totals in totalProduction["year"] %}    
                             <th scope="col" width="15%" class="header-values">{{ totals }}</th>
                             {% endfor %}
                     </tr>
@@ -296,14 +296,14 @@
                     </tr>
                 {% endfor %}
             </tbody>
-            <tfoot>
+            {#<tfoot>
                 <tr class="header-tr">
                     <th scope="col" width="22%" class="header-product">TOTALES</th>
                         {% for totalConsumerService in totalConsumerServices  %}
                         <th scope="col" width="13%" class="header-values">{{ totalConsumerService|myNumberFormat }}</th>
                         {% endfor %}
                 </tr>
-            </tfoot>
+            </tfoot>#}
         </table>
     {% endif %}
     <br><br>
@@ -342,14 +342,14 @@
                     </tr>                
                 {% endfor %}
             </tbody>
-            <tfoot>
+            {#<tfoot>
                 <tr class="header-tr">
                     <th scope="col" width="40%" class="header-product">TOTALES</th>
                         {% for totals in totalUnrealizedProduction %}
                         <th scope="col" width="20%" class="header-values">{{ totals|myNumberFormat }}</th>
                         {% endfor %}
                 </tr>
-            </tfoot>
+            </tfoot>#}
         </table>
     {% endif %}
     <table style=" page-break-before: always;"></table>
@@ -377,7 +377,7 @@
                     </tr>
                 {% endfor %}
             </tbody>
-            <tfoot>
+            {#<tfoot>
                 <tr class="header-tr">
                     <th scope="col" width="40%" class="header-product">TOTALES</th>
                         {% for totals in totalInventorys %}
@@ -385,7 +385,7 @@
                         {% endfor %}
                     <th scope="col" width="20%" class="header-values">-</th>
                 </tr>
-            </tfoot>
+            </tfoot>#}
         </table>
     {% endif %}
     <br><br>

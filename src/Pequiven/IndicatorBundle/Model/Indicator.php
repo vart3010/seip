@@ -55,9 +55,17 @@ abstract class Indicator implements IndicatorInterface {
      */
     const TYPE_RESULT_SECTION_RAW_MATERIAL = 4;
     /**
-     * Sección Materia Prima
+     * Sección Servicios
      */
     const TYPE_RESULT_SECTION_SERVICES = 5;
+    /**
+     * Sección Factor de Servicio
+     */
+    const TYPE_RESULT_SECTION_SERVICE_FACTOR = 6;
+    /**
+     * Sección Flujo de Gas
+     */
+    const TYPE_RESULT_SECTION_GAS_FLOW = 7;
     
 
     /**
@@ -450,6 +458,8 @@ abstract class Indicator implements IndicatorInterface {
             self::TYPE_RESULT_SECTION_UNREALIZED_PRODUCTION => 'pequiven_indicator.type_result_section.unrealized_production',
             self::TYPE_RESULT_SECTION_RAW_MATERIAL => 'pequiven_indicator.type_result_section.raw_material',
             self::TYPE_RESULT_SECTION_SERVICES => 'pequiven_indicator.type_result_section.services',
+            self::TYPE_RESULT_SECTION_SERVICE_FACTOR => 'pequiven_indicator.type_result_section.service_factor',
+            self::TYPE_RESULT_SECTION_GAS_FLOW => 'pequiven_indicator.type_result_section.gas_flow',
         );
         return $typesOfResultSection;
     }

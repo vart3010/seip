@@ -476,6 +476,7 @@ class IndicatorService implements ContainerAwareInterface {
                 }
             }
         } elseif ($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_UNREALIZED_PRODUCTION) {
+            $productReportService = $this->getProductReportService();
             if ($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12) {
                 if (!$valueIndicator->getId()) {
                     $month = count($indicator->getValuesIndicator()) + 1;
@@ -486,7 +487,11 @@ class IndicatorService implements ContainerAwareInterface {
             foreach ($productsReports as $productReport) {
                 $unrealizedProductionMonths = $productReport->getUnrealizedProductionsSortByMonth();
                 $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
-                $valueReal = array_key_exists($month, $unrealizedProductionMonths) == true ? $unrealizedProductionMonths[$month]->getTotal() : 0;
+                
+                $dateConsulting = $productReportService->getTimeNowMonth($month,$unrealizedProductionMonths[$month]);
+                $dataOverProduction = $productReportService->getArrayByDateFromInternalCausesPnr($dateConsulting,$productReport);
+
+                $valueReal = array_key_exists($month, $unrealizedProductionMonths) == true ? $unrealizedProductionMonths[$month]->getTotal()-$dataOverProduction[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['Sobre Producción']['month'] : 0;
                 $valuePlan = array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalGrossPlan() : 0;
                 $results[$varRealName] = $results[$varRealName] + $valueReal;
                 $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
@@ -540,6 +545,46 @@ class IndicatorService implements ContainerAwareInterface {
                 }
             }
             $results[$varRealName] = $value / $totalServices;
+        } elseif ($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_SERVICE_FACTOR) {
+            if ($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12) {
+                if (!$valueIndicator->getId()) {
+                    $month = count($indicator->getValuesIndicator()) + 1;
+                } else {
+                    $month = $this->getOrderOfValueIndicator($indicator, $valueIndicator);
+                }
+            }
+            $value = 0.0;
+            foreach ($productsReports as $productReport) {
+                $planReport = $productReport->getPlantReport();
+                $servicesFactors = $planReport->getConsumerPlanningServiceFactor();
+
+                foreach ($servicesFactors as $serviceFactor) {
+                    $detailServiceByMonth = $serviceFactor->getDetailsByMonth();
+                    $valueReal = array_key_exists($month, $detailServiceByMonth) == true ? $detailServiceByMonth[$month]->getTotalReal() : 0;
+                    $valuePlan = array_key_exists($month, $detailServiceByMonth) == true ? $detailServiceByMonth[$month]->getTotalPlan() : 0;
+                    $results[$varRealName] = $results[$varRealName] + $valueReal;
+                    $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
+                }
+            }
+        } elseif ($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_GAS_FLOW) {
+            if ($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12) {
+                if (!$valueIndicator->getId()) {
+                    $month = count($indicator->getValuesIndicator()) + 1;
+                } else {
+                    $month = $this->getOrderOfValueIndicator($indicator, $valueIndicator);
+                }
+            }
+            $value = 0.0;
+            foreach ($productsReports as $productReport) {
+                $planReport = $productReport->getPlantReport();
+                $gasFlows = $planReport->getConsumerPlanningGasFlow();
+
+                foreach ($gasFlows as $gasFlow) {
+                    $detailGasFlowByMonth = $gasFlow->getDetailsByMonth();
+                    $value = array_key_exists($month, $detailGasFlowByMonth) == true ? $value + $detailGasFlowByMonth[$month]->getPercentage() : $value;
+                }
+            }
+            $results[$varRealName] = $value;
         }
 
         return $results;
@@ -1843,6 +1888,62 @@ class IndicatorService implements ContainerAwareInterface {
 //                    }
 //                ]
             }
+        } elseif ((isset($options['resultIndicatorWithTrendlineHorizontalOnlyResult']) && array_key_exists('resultIndicatorWithTrendlineHorizontalOnlyResult', $options))) {
+            unset($options[$options['resultIndicatorWithTrendlineHorizontalOnlyResult']]);
+
+            $arrayVariables = array();
+            $maxValue = 0.0;
+
+            $indicatorValues = $indicator->getValuesIndicator();
+            $totalValueIndicators = count($indicatorValues);
+            //$numberResults = $indicator->getNumberValueIndicatorToForce() > 0 ? $indicator->getNumberValueIndicatorToForce() : $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
+            $numberResults = $indicator->getNumberValueIndicatorToForce() > 0 ? $indicator->getNumberValueIndicatorToForce() : $totalValueIndicators;
+//            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotificationWithoutValidation($indicator);
+            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+
+            //Añadimos los valores, por frecuencia de notificación
+            for ($i = 0; $i < $numberResults; $i++) {
+                $label = array();
+                $label["label"] = $labelsFrequencyNotificationArray[($i + 1)];
+
+                $category[] = $label;
+            }
+            
+            $arrayVariables[$indicator->getId()] = array('seriesname' => $indicator->getSummary(), 'data' => array());
+            
+            $cont = 1;
+            foreach($indicatorValues as $indicatorValue){
+                if($cont <= $numberResults){
+                    $arrayVariables[$indicator->getId()]['data'][] = array('value' => number_format($indicatorValue->getValueOfIndicator(),2,',','.'), 'showValue' => 1);
+                    if($indicatorValue->getValueOfIndicator() > $maxValue){
+                        $maxValue = $indicatorValue->getValueOfIndicator();
+                    }
+                }
+                $cont++;
+            }
+            
+            $dataSetValues[$indicator->getId()] = array('seriesname' => $arrayVariables[$indicator->getId()]['seriesname'], 'data' => $arrayVariables[$indicator->getId()]['data'], 'color' => "#0174DF");
+            $data['dataSource']['dataset'][] = $dataSetValues[$indicator->getId()];
+            
+            $valueGoal = 0.0;
+            $tendency = $indicator->getTendency();
+            $arrangementRange = $indicator->getArrangementRange();
+            if($tendency->getRef() == \Pequiven\MasterBundle\Entity\Tendency::TENDENCY_MAX){
+                $valueGoal = $arrangementRange->getRankTopBasic();
+            } elseif($tendency->getRef() == \Pequiven\MasterBundle\Entity\Tendency::TENDENCY_MIN){
+                $valueGoal = $arrangementRange->getRankBottomBasic();
+            }
+            
+            
+            if($valueGoal > $maxValue){
+                $maxValue = $valueGoal + 1.0;
+            }
+            
+            $chart["yAxisMaxValue"] = number_format($maxValue,2,',','.');
+            
+            $line = array();
+            $line[] = array("startvalue" => number_format($valueGoal,2,',','.'), "color" => "#088A08", "valueOnRight" => "1", "displayvalue" => "Meta", "thickness" => "3");
+            $data['dataSource']['trendlines'][] = array("line" => $line);
         }
 
         $data['dataSource']['chart'] = $chart;
@@ -4989,6 +5090,10 @@ class IndicatorService implements ContainerAwareInterface {
 
     protected function getSecurityService() {
         return $this->container->get('seip.service.security');
+    }
+    
+    protected function getProductReportService() {
+        return $this->container->get('seip.service.productReport');
     }
 
 }

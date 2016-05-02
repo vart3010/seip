@@ -139,7 +139,7 @@
                         {{ form_errors(form.showObservation) }}&nbsp;
                         {{ form_label(form.showObservation) }}
                     </div>
-                    <div class="four-columns" >
+                    <div class="four-columns" id="groupPerPlants" >
                         {{ form_widget(form.showGroupsPlants) }}
                         {{ form_errors(form.showGroupsPlants) }}&nbsp;
                         {{ form_label(form.showGroupsPlants) }}
@@ -219,6 +219,7 @@
 
                 var plantReport = $("#form_plantReport");
                 $("#btnExportToPdf").on("click", function (e) {
+                    //alert("reporte");
                     e.preventDefault();
                     $("#exportToPdf").val("1");
                     eventChange();
@@ -296,9 +297,11 @@
                     if ($(this).is(':checked')) {
                         $("#byDateReport").hide();
                         $(".byRange").show();
+                        $("#groupPerPlants").hide();
                     } else {
                         $("#byDateReport").show();
                         $(".byRange").hide();
+                        $("#groupPerPlants").show();
                     }
                     $("#byDateReport").removeClass("hidden");
                     $(".byRange").removeClass("hidden");

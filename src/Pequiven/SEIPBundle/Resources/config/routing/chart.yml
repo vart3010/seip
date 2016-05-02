@@ -380,13 +380,25 @@ getDataPyramid3DSectioned:
         _format: "json|xml"
     methods: [GET]
     options:
-        expose: true       
+        expose: true
         
 #32
 getDataStackedColumn3DbyIndicator:
     path: /getDataStackedColumn3DbyIndicator/{id}
     defaults:
         _controller: pequiven.controller.seipchart:getDataStackedColumn3DbyIndicatorAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#33
+getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult:
+    path: /getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResultAction
         _format: json
     requirements:
         _format: "json|xml"

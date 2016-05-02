@@ -647,6 +647,11 @@ chart:
         indicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated: Días perdidos del indicador, con los valores del mes además del período actual y del período anterior (línea) y del acumulado por período (columna).
         typeChartProgressProjectsByFrequencyNotification: Avance de los proyectos por frecuencia de notificación
         indicatorsVariablesRealPlanByDifferentFrequencyNotification: Real, plan y resultado de medición del Indicador de acuerdo a una frecuencia de notificación diferente a la del indicador
+        indicatorWithTrendlineHorizontal: Indicador con una línea horizontal
+        indicatorPyramidRealSection: Pirámide 3D REAL/COSTOS
+        indicatorPyramidPlanSection: Pirámide 3D PLAN/COSTOS
+        stackedColumn3dByIndicator: Columna Apilada de Variables de Indicador
+        indicatorWithTrendlineHorizontalOnlyResult: Indicador con una línea horizontal para comparar el valor de los resultados con algún valor fijo
         example: Ejemplo
         
     

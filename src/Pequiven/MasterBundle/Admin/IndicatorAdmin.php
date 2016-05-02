@@ -201,6 +201,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('textValueFromVariablePlan', null, array(
                     'required' => false,
                 ))
+                ->add('numberValueIndicatorToForce')
                 ->end()
                 ->end()
         ;
