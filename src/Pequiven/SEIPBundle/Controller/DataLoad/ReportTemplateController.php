@@ -4957,6 +4957,7 @@ class ReportTemplateController extends SEIPController {
 
     public function getDataUnrealizedProduction($productsReport, $dateReport) {
 
+        $productReportService = $this->getProductReportService();
         $productos = array();
         $totalDay = array();
         $totalMonth = array();
@@ -4964,11 +4965,20 @@ class ReportTemplateController extends SEIPController {
 
         foreach ($productsReport as $rs) {
             $productos[] = $rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
+            
+            $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $rs);
+            //$unrealizedProduction["total_day"] = $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
+            //$unrealizedProduction["total_month"] = $unrealizedProduction["total_month"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'];
+            //$unrealizedProduction["total_year"] = ($unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year']);
             //$productos[] = $rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
             //$productos[] = $rs->$name;
-            array_push($totalDay, $rs->getSummaryUnrealizedProductions($dateReport)["total_day"]);
-            array_push($totalMonth, $rs->getSummaryUnrealizedProductions($dateReport)["total_month"]);
-            array_push($totalYear, $rs->getSummaryUnrealizedProductions($dateReport)["total_year"]);
+            $valueDay = $rs->getSummaryUnrealizedProductions($dateReport)["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
+            $valueMonth = $rs->getSummaryUnrealizedProductions($dateReport)["total_month"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'];
+            $valueYear = $rs->getSummaryUnrealizedProductions($dateReport)["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year'];
+            
+            array_push($totalDay, $valueDay);
+            array_push($totalMonth, $valueMonth);
+            array_push($totalYear, $valueYear);
             //var_dump($rawMaterialConsumption->getSummary($dateReport));
             $idsPlanta[] = $rs->getPlantReport()->getPlant()->getId();
         }
