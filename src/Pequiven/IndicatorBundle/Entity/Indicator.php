@@ -746,6 +746,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $indicatorGroup;
 
     /**
+     * @var boolean
+     * @ORM\Column(name="showIndicatorGroups", type="boolean")
+     */
+    private $showIndicatorGroups = false;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -2936,6 +2942,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
 
     function getIndicatorGroup() {
         return $this->indicatorGroup;
+    }
+
+    function getShowIndicatorGroups() {
+        return $this->showIndicatorGroups;
+    }
+
+    function setShowIndicatorGroups($showIndicatorGroups) {
+        $this->showIndicatorGroups = $showIndicatorGroups;
     }
 
 }

@@ -21,6 +21,10 @@ class IndicatorGroupController extends SEIPController {
             $indicator = $this->container->get('pequiven.repository.indicator')->findOneById($indicatorId);
             $groups = $indicator->getIndicatorGroup();
 
+            if (count($groups) == 1) {
+                $groups = $groups[0]->getchildrens();
+            }
+
             $data = array(
                 'lineStrategic' => $lineStrategic,
                 'indicator' => $indicator,
@@ -35,7 +39,7 @@ class IndicatorGroupController extends SEIPController {
             $lineStrategic = $this->container->get('pequiven.repository.linestrategic')->findOneBy(array('deletedAt' => null, 'id' => $idLineStrategicId));
             $group = $this->container->get('pequiven.repository.indicatorgroup')->findOneById($this->getRequest()->get('idGroup'));
 
-            if (count($group->getchildrens())>0) {
+            if (count($group->getchildrens()) > 1) {
                 $groupsChild = $group->getchildrens();
                 $data = array(
                     'lineStrategic' => $lineStrategic,
@@ -43,10 +47,12 @@ class IndicatorGroupController extends SEIPController {
                     'indicator' => null,
                     'groups' => $groupsChild,
                     'boxRender' => $boxRender
-                );                
+                );
+            } else if (count($group->getchildrens()) == 1) {
+                $groupsChild = $group->getchildrens();
+                return $this->redirect($this->generateUrl('pequiven_line_strategic_show', array('IndicatorGroup' => $groupsChild[0]->getId(), 'id' => $idLineStrategicId)));
             } else {
-                return $this->redirect($this->generateUrl('pequiven_line_strategic_show', array('IndicatorGroup' => $this->getRequest()->get('idGroup'),'id'=> $idLineStrategicId)));
-                
+                return $this->redirect($this->generateUrl('pequiven_line_strategic_show', array('IndicatorGroup' => $this->getRequest()->get('idGroup'), 'id' => $idLineStrategicId)));
             }
         }
 

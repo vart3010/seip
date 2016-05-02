@@ -99,7 +99,7 @@ class IndicatorGroup {
      * @ORM\ManyToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="indicatorGroup")     
      */
     private $indicators;
-    
+
     public function __toString() {
         return $this->description;
     }
