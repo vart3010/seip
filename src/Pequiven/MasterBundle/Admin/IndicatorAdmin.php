@@ -139,6 +139,17 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'multiple' => true,
                     'required' => false,
                 ))
+                ->add('indicatorGroup', 'sonata_type_model_autocomplete', array(
+                    'property' => array('description'),
+                    'multiple' => true,
+                    'required' => false,
+                    'label' => 'Grupos de Indicadores'
+                ))
+                ->add('showIndicatorGroups', null, array(
+                    'label' => 'Mostrar si Tiene Grupo de Indicadores en el Dashboard',
+                    'required' => false,
+                        )
+                )
                 ->add('childrens', 'sonata_type_model_autocomplete', $childrensParameters)
         ;
         $form

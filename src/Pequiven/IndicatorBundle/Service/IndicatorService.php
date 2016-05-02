@@ -3093,7 +3093,7 @@ class IndicatorService implements ContainerAwareInterface {
                 "value" => $value,
                 "color" => $colorItem,
                 "type" => $indicatorPadre->getIndicatorLevel()->getDescription(),
-                "tooltext" => "boo",
+                "tooltext" => $indicatorPadre->getIndicatorLevel()->getDescription(),
                 "link" => $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorPadre->getId())),
             );
 
@@ -3145,6 +3145,7 @@ class IndicatorService implements ContainerAwareInterface {
                     "value" => $value,
                     "color" => $colorItem,
                     "type" => $temp->getIndicatorLevel()->getDescription(),
+                    "tooltext" => $indicatorPadre->getIndicatorLevel()->getDescription(),
                     "link" => $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $temp->getId())),
                 );
 
