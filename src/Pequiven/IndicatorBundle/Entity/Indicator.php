@@ -750,6 +750,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="showIndicatorGroups", type="boolean")
      */
     private $showIndicatorGroups = false;
+    
+    /**
+     * ¿El Valor Plan del Indicador no acumula?
+     * @var boolean
+     * @ORM\Column(name="planIsNotAccumulative",type="boolean")
+     */
+    private $planIsNotAccumulative = false;
 
     /**
      * Constructor
@@ -2950,6 +2957,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
 
     function setShowIndicatorGroups($showIndicatorGroups) {
         $this->showIndicatorGroups = $showIndicatorGroups;
+    }
+    
+    function getPlanIsNotAccumulative() {
+        return $this->planIsNotAccumulative;
+    }
+
+    function setPlanIsNotAccumulative($planIsNotAccumulative) {
+        $this->planIsNotAccumulative = $planIsNotAccumulative;
     }
 
 }

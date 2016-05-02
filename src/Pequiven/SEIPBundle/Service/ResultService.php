@@ -1543,6 +1543,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }
             $totalPlan += $plan;
             $totalReal += $real;
+            
+            if($indicator->getPlanIsNotAccumulative()){
+                $totalPlan = $plan;
+            }
         }
 //        die;
         $value = $totalReal;
