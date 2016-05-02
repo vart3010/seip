@@ -3,15 +3,30 @@
 {% set classColor = 'red-gradient' %}
 {% for t in tree %}
     {% set lineStrategic = t['parent'] %}
-        {% for indicator in t['child'] %}
-			{% if indicator.notshowIndicatorNoEvaluateInPeriod != true %}
-	            <div class="three-columns six-columns-tablet twelve-columns-mobile new-row-mobile" style="display: inline-block;" ng-controller="DashboardController" ng-init="renderWidgetIndicatorStrategic('{{ indicator.ref }}',{{ data[lineStrategic.ref][indicator.ref]|json_encode() }},'100%','150px')" {#ng-init="{% if indicator.evaluateInPeriod == true %} renderChartAngularGauge('{{ indicator.ref }}',{{ data[lineStrategic.ref][indicator.ref]|json_encode() }},'100%','150px') {% else %} renderWidgetIndicatorStrategic('{{ indicator.ref }}',{{ data[lineStrategic.ref][indicator.ref]|json_encode() }},'100%','150px') {% endif %}"#}>
-	                
-	{#                <a target="_blank" href="{{ path('pequiven_indicator_show',{id:indicator.id}) }}"><span title="{{ indicator.description }}"><p style="text-align: center;margin-bottom: -5px;"><b>{{ indicator.description|truncate(20) }}</b></p></span></a>#}
-	                <a target="_blank" href="{{ path('pequiven_indicator_show',{id:indicator.id}) }}"><span title="{{ indicator.description }}">
-	                	<p style="text-align: center;margin-bottom: -2px;"><b>{{ indicator.summary }}</b></p></span></a>
-	                <span id="{{ indicator.ref }}"></span>
-	            </div>
-			{% endif %}
-        {% endfor %}
+    {% for indicator in t['child'] %}
+        {% if indicator.notshowIndicatorNoEvaluateInPeriod != true %}
+            <div class="three-columns six-columns-tablet twelve-columns-mobile new-row-mobile" style="display: inline-block;" ng-controller="DashboardController" ng-init="renderWidgetIndicatorStrategic('{{ indicator.ref }}',{{ data[lineStrategic.ref][indicator.ref]|json_encode() }},'100%','150px')" {#ng-init="{% if indicator.evaluateInPeriod == true %} renderChartAngularGauge('{{ indicator.ref }}',{{ data[lineStrategic.ref][indicator.ref]|json_encode() }},'100%','150px') {% else %} renderWidgetIndicatorStrategic('{{ indicator.ref }}',{{ data[lineStrategic.ref][indicator.ref]|json_encode() }},'100%','150px') {% endif %}"#}>	                                                        
+                {#                <a target="_blank" href="{{ path('pequiven_indicator_show',{id:indicator.id}) }}"><span title="{{ indicator.description }}"><p style="text-align: center;margin-bottom: -5px;"><b>{{ indicator.description|truncate(20) }}</b></p></span></a>#}
+                {#<a target="_blank" href="{{ path('pequiven_indicator_show',{id:indicator.id}) }}">
+                    <span title="{{ indicator.description }}"></span>
+                </a>#}
+                <div class="twelve-columns" style="text-align: center; margin-bottom: -2px; font-weight: bold">
+                    <a target="_blank" href="{{ path('pequiven_indicator_show',{id:indicator.id}) }}">
+                        {{ indicator.summary }}                            
+                    </a>  
+
+                    {% if ((indicator.indicatorGroup|length)>0) %}
+                        &nbsp;
+                        <a target="_self" href="{{ path('pequiven_groupindicators',{idLineStrategic:lineStrategic.id, IndicatorId:indicator.id}) }}" style="font-size: 20px; color: green">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                        </a>  
+                    {%endif%}
+                </div>                    
+                <div class="new-row twelve-columns">
+                    <span id="{{ indicator.ref }}"></span>                
+                </div>
+
+            </div>                    
+        {% endif %}
+    {% endfor %}
 {% endfor %}

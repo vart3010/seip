@@ -139,6 +139,12 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'multiple' => true,
                     'required' => false,
                 ))
+                ->add('indicatorGroup', 'sonata_type_model_autocomplete', array(
+                    'property' => array('description'),
+                    'multiple' => true,
+                    'required' => false,
+                    'label' => 'Grupos de Indicadores'
+                ))
                 ->add('childrens', 'sonata_type_model_autocomplete', $childrensParameters)
         ;
         $form
@@ -218,7 +224,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('orderShowFromParent')
                 ->add('showByDashboardSpecific', null, array(
                     'required' => false,
-                ))
+                ))        
                 ->end();
         $form
                 ->with('Esferas')
