@@ -2372,10 +2372,12 @@ class ReportTemplateController extends SEIPController {
                                     } else {
                                         $rs["pnr"] = 0.0;
                                     }
+                                    //var_dump($rs["observation"]);
+                                    
 
                                     //Verifica si va a exportar y obvia las observaciones vacías.
                                     if ($exportToPdf) {
-                                        if ($rs["observation"] != "") {
+                                        if ($rs["observation"] != "" || is_null($rs["observation"])) {
                                             $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
                                         }
                                     } else {
@@ -2562,7 +2564,7 @@ class ReportTemplateController extends SEIPController {
                         }//END INVENTARIO
                     } //END PLANT REPORT RANGE
                 } //END REPORT TEMPLATE RANGE
-
+                
 
                 $reportService = $this->getProductReportService();
                 $graphicProducctionRange = $reportService->generateColumn3dLineryPerRange(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $arrayProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd));
@@ -2600,7 +2602,11 @@ class ReportTemplateController extends SEIPController {
                     'graphicRange' => $graphicProducctionRange
                 );
 
+
                 if ($exportToPdf == "1") {
+                    //var_dump("report pdf");
+                
+                
                     $pdf = new \Pequiven\SEIPBundle\Model\PDF\NewSeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
                     $pdf->setPrintLineFooter(false);
                     $pdf->setContainer($this->container);
@@ -2648,6 +2654,7 @@ class ReportTemplateController extends SEIPController {
         //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
                     $pdf->Output('Reporte de Produccion' . '.pdf', 'D');
                 } else if ($exportToPdf == "2") {
+
                     if ($byRange) {
                         $production = array(
                             "production" => $arrayProduction,
