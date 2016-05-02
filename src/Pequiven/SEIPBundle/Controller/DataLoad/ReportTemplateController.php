@@ -1797,8 +1797,8 @@ class ReportTemplateController extends SEIPController {
                                 }
                             }//FIN PNR
                             //INVENTARIO
-                            $productReportsObjects = $plantReport->getProductsReport();
                             foreach ($plantReport->getProductsReport() as $productReport) {
+                            $productReportsObjects[] = $productReport;
                                 if (!$productReport->getIsGroup()) {
                                     $productId = $productReport->getProduct()->getId();
                                     $Inventory = $productReport->getSummaryInventory($dateReport);
@@ -3274,6 +3274,7 @@ class ReportTemplateController extends SEIPController {
                 $productsReport = new \Doctrine\Common\Collections\ArrayCollection();
                 $consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
                 $rawMaterialConsumptionPlannings = new \Doctrine\Common\Collections\ArrayCollection();
+                $productReportsObjects = new \Doctrine\Common\Collections\ArrayCollection();
 
                 $productsReportByIdProduct = $consumerPlanningServicesByIdService = $rawMaterialConsumptionPlanningsById = array();
                 foreach ($plantReports as $plantReport) {
@@ -3840,7 +3841,7 @@ class ReportTemplateController extends SEIPController {
 //                        }
                     }
                 }
-                die();
+                //die();
             }//fin else
         }
 
