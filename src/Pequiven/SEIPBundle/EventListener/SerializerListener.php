@@ -399,19 +399,20 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $user = $this->getUser();
         if($details->getNotificationInProgressByUser() != null){
 //            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 9))){
-            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 35) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 35))){
+            //if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 35) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 35))){
+            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 24) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 24))){
                 $data['januaryReal']['isEnabled'] = true;
                 $data['februaryReal']['isEnabled'] = true;
                 $data['marchReal']['isEnabled'] = true;
-                $data['aprilReal']['isEnabled'] = true;
-                $data['mayReal']['isEnabled'] = true;
-                $data['juneReal']['isEnabled'] = true;
-                $data['julyReal']['isEnabled'] = false;
-                $data['augustReal']['isEnabled'] = false;
-                $data['septemberReal']['isEnabled'] = false;
-                $data['octoberReal']['isEnabled'] = false;
-                $data['novemberReal']['isEnabled'] = false;
-                $data['decemberReal']['isEnabled'] = false;
+                //$data['aprilReal']['isEnabled'] = true;
+                //$data['mayReal']['isEnabled'] = true;
+                //$data['juneReal']['isEnabled'] = true;
+                //$data['julyReal']['isEnabled'] = false;
+                //$data['augustReal']['isEnabled'] = false;
+                //$data['septemberReal']['isEnabled'] = false;
+                //$data['octoberReal']['isEnabled'] = false;
+                //$data['novemberReal']['isEnabled'] = false;
+                //$data['decemberReal']['isEnabled'] = false;
             }
         }
 
