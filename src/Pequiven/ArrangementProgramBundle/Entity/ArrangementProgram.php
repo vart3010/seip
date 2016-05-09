@@ -259,14 +259,6 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     /**
      * Analisis de Tendencia del Programa
      * 
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend
-     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend",mappedBy="arrangementProgram",cascade={"persist","remove"})
-     */
-    protected $arrangementProgramTrend;
-
-    /**
-     * Analisis de Tendencia del Programa
-     * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause",mappedBy="arrangementProgram",cascade={"persist","remove"})
      */
@@ -301,7 +293,6 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->arrangementProgramTrend = new \Doctrine\Common\Collections\ArrayCollection();
         $this->arrangementProgramCauses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->arrangementProgramCausesAnalysis = new \Doctrine\Common\Collections\ArrayCollection();
         $this->arrangementProgramVerification = new \Doctrine\Common\Collections\ArrayCollection();
@@ -514,37 +505,6 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getUpdatedAt() {
         return $this->updatedAt;
-    }
-
-    /**
-     * Add arrangementProgramTrend
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $arrangementProgramTrend
-     * @return Indicator
-     */
-    public function addArrangementProgramTrend(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $arrangementProgramTrend) {
-
-        $this->arrangementProgramTrend->add($arrangementProgramTrend);
-
-        return $this;
-    }
-
-    /**
-     * Remove arrangementProgramTrend
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $arrangementProgramTrend
-     */
-    public function removeArrangementProgramTrend(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $arrangementProgramTrend) {
-        $this->arrangementProgramTrend->removeElement($arrangementProgramTrend);
-    }
-
-    /**
-     * Get arrangementProgramTrend
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getArrangementProgramTrend() {
-        return $this->arrangementProgramTrend;
     }
 
     /**

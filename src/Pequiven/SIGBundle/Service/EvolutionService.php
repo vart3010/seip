@@ -20,6 +20,25 @@ class EvolutionService implements ContainerAwareInterface {
 	private $container;
 
 	/**
+     * Buscamos las entidades consultadas
+     * @param Request $request
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauses
+     * @throws type
+     */
+    public function getObjectEntity($id, $typeObject) { 
+
+        if ($typeObject == 1) {
+            $result = $this->container->get('pequiven.repository.indicator')->find($id);
+        } elseif ($typeObject == 2) {
+            $result = $this->container->get('pequiven_seip.repository.arrangementprogram')->find($id);
+        }elseif ($typeObject == 3) {
+            $result = $this->container->get('pequiven.repository.objetive')->find($id);
+        }
+
+        return $result;
+    }   
+
+    /**
      * Buscamos las acciones de las causas
      * @param Request $request
      * @return \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauses
@@ -27,7 +46,6 @@ class EvolutionService implements ContainerAwareInterface {
      */
     public function findEvolutionCause($object, $request, $typeObject) {        
         $id = $object->getId();
-
         //Mes Consultado       
         $month = $request->get('month');
 
@@ -35,27 +53,20 @@ class EvolutionService implements ContainerAwareInterface {
         $opc = false;
         $idAction = $actionResult = 0;
         $idCons = [0];
-
-        //$results = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $idIndicator,'month'=> $month));
-        if ($typeObject == 1) {
-            $results = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $id));
-        } elseif ($typeObject == 2) {
-            $results = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('arrangementProgram' => $id));
-        }
-
-        $cause = array();
+        
+        $object = $this->getObjectEntity($id, $typeObject);        
+        $results = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $object->getId(), 'typeObject' => $typeObject));
+        $cause = [];
         if ($results) {
             foreach ($results as $value) {
                 $idCause = $value->getId();
                 $cause[] = $idCause;
-            }
+            }                        
             $action = $this->container->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause));
-        }
-
-        if (!$results) {
+        }else{
             $action = null;
         }
-
+        
         //Carga de las acciones para sacar la verificaciones realizadas
         if ($action) {
             foreach ($action as $value) {
@@ -79,12 +90,9 @@ class EvolutionService implements ContainerAwareInterface {
         if ($opc = false) {
             $idAction = null;
         }
-        if ($typeObject == 1) {
-            $verification = $this->container->get('pequiven.repository.sig_action_verification')->findBy(array('indicator' => $id, 'month' => $month));
-        } elseif ($typeObject == 2) {
-            $verification = $this->container->get('pequiven.repository.sig_action_verification')->findBy(array('arrangementProgram' => $id, 'month' => $month));
-        }
-
+        
+        $verification = $this->container->get('pequiven.repository.sig_action_verification')->findBy(array('idObject' => $id, 'month' => $month, 'typeObject' => $typeObject));
+        
         //Carga de array con la data
         $data = [
             'action'        => $actionResult, //Pasando la data de las acciones si las hay
@@ -147,23 +155,10 @@ class EvolutionService implements ContainerAwareInterface {
         //Carga de Nombres de Labels
         $dataSetCause["seriesname"] = "Causas";
         $monthCause = (int)$month;
-        
-        switch ($typeObject) {
-            case '1':
-                $query = $object->getindicatorCause();
-                break;
-            case '2':
-                $query = $object->getArrangementProgramCauses();
-                break;
-            case '3':
-                $query = 0;
-                break;            
-            default:
-                $query = 0;
-                break;
-        }            
 
-        foreach ($query as $value) {                
+        $causes = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $object->getId(), 'month' => $month, 'typeObject' => $typeObject));
+        
+        foreach ($causes as $value) {                
             if ($value->getMonth() === $monthCause) {                
                 $label["label"] = $value->getCauses();                    
                 $contCause = $contCause + 1;
@@ -171,7 +166,7 @@ class EvolutionService implements ContainerAwareInterface {
             }
         }
         
-        foreach ($query as $value) {                
+        foreach ($causes as $value) {                
             if ($value->getMonth() === $monthCause) {                                    
                 $dataCause["value"] = $value->getvalueOfCauses();
                 $dataSetCause["data"][] = $dataCause;                
