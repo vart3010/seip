@@ -497,7 +497,7 @@ class ArrangementProgramRepository extends EntityRepository {
                 ->addSelect('to_g')
                 ->addSelect('oo')
                 ->addSelect('gs')
-                ->addSelect('ms')
+                //->addSelect('ms')
         ;
 
         $queryBuilder
