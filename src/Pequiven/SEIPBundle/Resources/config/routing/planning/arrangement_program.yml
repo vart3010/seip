@@ -24,3 +24,11 @@ pequiven_seip_sig_arrangementprogram_all:
     requirements:
         _format: html|json|xml
     methods: [GET]
+pequiven_seip_sig_arrangementprogram_all_managementSystem:
+    path: /sig-management/.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:listSigManagementAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
