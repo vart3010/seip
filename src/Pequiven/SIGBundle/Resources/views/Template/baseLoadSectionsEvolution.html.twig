@@ -1,13 +1,4 @@
-<div class="columns with-padding"> 
-    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 82%;" align="center">                
-        <div class="nine-columns twelve-columns-mobile" id="chartContainerResult"></div>   
-        <input id='exportpng' type='hidden' value='Exportar Informe' />
-    </div>  
-</div> 
-
-{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}              
-    <br/><br/>{% include 'PequivenSIGBundle:Indicator:show/analysis_trend.html.twig' %} &nbsp;     
-{% endif %}
+{% include 'PequivenSIGBundle:Template:baseChartEvolutionAndCauses.html.twig' %}     
 
 {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CAUSE') %}    
     <br/><br/> {% include 'PequivenSIGBundle:Indicator:show/causes_list.html.twig' %}         
@@ -15,7 +6,7 @@
 {% endif %}
 
 {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION') %}    
-        <br/><br/> {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %} &nbsp;
+    <br/><br/> {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %} &nbsp;
     {% if dataAction["values"] and is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION_VERIFICATION')%}  
         {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
     {% endif %}        

@@ -84,7 +84,7 @@ class ReportEvolutionTrendController extends ResourceController
             $em->persist($trend);
             $em->flush(); 
             $this->get('session')->getFlashBag()->add('success', "Analisis de Tendencia Añadido Exitosamente");                        
-            return true;
+            //return true;
         }     
         die();
     }

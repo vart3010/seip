@@ -1,7 +1,8 @@
+{% if typeObject == 1 %}
 {# Chart Evolution #}
 <div class="columns with-padding"> 
     <h4 align="center">Gráfica de Datos y Tendencia de Proceso</h4>                
-        <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }},'{{ urlExportFromChart }}')" style="width: 95%;" align="center">
+        <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">
             {# señalización tendencia #}
             <div class="position">
                 {{ font["text"]}}
@@ -22,6 +23,14 @@
             {% endif %}
         </div>  
 </div> 
+{% else %}
+<div class="columns with-padding"> 
+    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 82%;" align="center">                
+        <div class="nine-columns twelve-columns-mobile" id="chartContainerResult"></div>   
+        <input id='exportpng' type='hidden' value='Exportar Informe' />
+    </div>  
+</div> 
+{% endif %}
 {# trend #}
 {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}              
     <br/><br/>{% include 'PequivenSIGBundle:Indicator:show/analysis_trend.html.twig' %} &nbsp;     
@@ -29,16 +38,9 @@
 {# chart causes #}
 <div class="columns with-padding">
     <h4 align="center">Causas de Desviación</h4>                
-    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode()}},'{{ urlExportFromChart }}')" style="width: 95%; height:55%;" align="center">
+    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode()}})" style="width: 95%; height:55%;" align="center">
         <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs"></div>
         <input id='export_causespng' type='hidden' value='Exportar Informe' />
     </div>
 </div> 
-<br>        
-<div class="columns with-padding">         
-    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 82%; height:55%;" align="center">
-        <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs"></div>
-        <input id='export_causespng' type='hidden' value='Exportar Informe' />
-    </div>
-</div>
 {# Fin de Graficos #}
