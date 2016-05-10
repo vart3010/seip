@@ -912,7 +912,7 @@ class ArrangementProgramController extends SEIPController {
      * Edits an existing ArrangementProgram entity.
      *
      */
-    public function updateAction(Request $request) {
+    public function updateAction(Request $request) {        
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
 
@@ -970,10 +970,10 @@ class ArrangementProgramController extends SEIPController {
         }
 
         $data = array(
-            'entity' => $entity,
-            'edit_form' => $editForm->createView(),
+            'entity'     => $entity,
+            'edit_form'  => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'mov' => $MovementEmployee,
+            'mov'        => $MovementEmployee            
         );
 
         $view = $this->view($data);

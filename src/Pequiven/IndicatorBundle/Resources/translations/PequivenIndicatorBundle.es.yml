@@ -64,6 +64,8 @@ pequiven_indicator:
         unrealized_production: Producción No Realizada
         raw_material: Materia Prima
         services: Servicios
+        service_factor: Factor de Servicio
+        gas_flow: Flujo de Gas
     type_detail:
         none: Ninguno
         daily_load_production: Producción diaria
@@ -72,6 +74,7 @@ pequiven_indicator:
         average_based_number_children: Promedio en base a número de hijos
         average_plan_real_children: Promedio de las variables plan y real en base a número de hijos
         weighted_average_result_children: Promedio ponderado de los resultadosa de los hijos
+        equation_of_partial_variables: Variables parciales se obtienes a partir de ecuaciones
     results: Resultado(s)
     value_indicator:
         enter_values_variables: Ingrese los valores de las variables
@@ -344,3 +347,4 @@ action:
 'Complejo Dashboard Specific': Complejo dónde se mostrará en el dashboard
 'Show By Dashboard Specific': ¿El indicador será mostrado en un dashboard específico? (Omitiendo el de los Indicadores Estratégicos)
 'Type Detail Value': Tipo de Detalle del valor obtenido de los módulos de estadística
+'Number Value Indicator To Force': Resultado hasta el cuál se forzará el resultado del indicador

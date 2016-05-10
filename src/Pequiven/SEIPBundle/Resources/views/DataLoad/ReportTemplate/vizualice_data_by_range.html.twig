@@ -48,9 +48,9 @@
         <tr>
             <th width="20%" style="font-weight: bold; font-size: 9pt; text-align: left;">Complejo:</th>            
             <td width="80%" style="font-size: 8pt; text-align: left;">
-                {% for plant in plantsNames%}
+               {#} {% for plant in plantsNames %}
                     {{ plant }}.<br>
-                {% endfor %}
+                {% endfor %} #}
             </td>
         </tr>        
     </table>
@@ -100,6 +100,7 @@
         {% endif %}
     {% endif %}
     <br><br>
+    
     {% if showRawMaterial %}
 
         <table width="100%">
@@ -260,6 +261,7 @@
         </table>
     {% endif %}
     <br><br>
+    {# //SE QUITO POR QUE SON MUCHAS OBSERVACIONES Y SE QUEDA COLGADO POR MAX_EXECUTION TIME
     {% if showObservation %}
         <table width="100%">
             <thead>
@@ -286,6 +288,7 @@
             </tbody>
         </table>        
     {% endif %}
+    #}
 {% else %}
     <h2 class="text-center">{{ "Select the plant"|trans }}</h2>
 {% endif %}

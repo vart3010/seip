@@ -1,6 +1,8 @@
-pequiven_sig_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: PequivenSIGBundle:Default:index }
+#Ruta de informe de Evolucion de Objetivos
+pequiven_sig_objetive_evolution_show:
+    path: /objetive/{id}/evolution/{month}
+    defaults:
+        _controller: pequiven.controller.managementsystem_sig_objetives:evlutionAction           
 #Listado general de objetivos marcados con magementsystem
 pequiven_objetives_list_sig:
     path: /sig/{level}/list.{_format}
@@ -74,7 +76,7 @@ pequiven_sig_monitoring_export:
         _format: html    
     methods: [GET]
 pequiven_sig_monitoring_add:
-    path: /{id}/get-monitoring.{_format}
+    path: /{id}/{type}/get-monitoring.{_format}
     defaults:
         _controller: pequiven.controller.monitoring_sig:addAction
         _format: html

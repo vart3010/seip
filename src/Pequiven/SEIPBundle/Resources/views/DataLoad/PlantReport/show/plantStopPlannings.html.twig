@@ -3,7 +3,7 @@
 <div class="block">
     <div class="block-title">
         <h3> {{ 'pequiven_seip.plant_report.plant_stop_planning'|trans }}&nbsp;
-            {% if(plant_report.plant.childrens|length>0) %}
+            {% if(plant_report.getchildrensGroup|length>0) %}
                 ({{ stopPlanning|length }})
             {% else  %}
                 ({{ plant_report.plantStopPlannings|length }})
@@ -29,7 +29,7 @@
             </thead>
             {% set colspan = 6 %}
             <tbody>
-                {% if(plant_report.plant.childrens|length>0) %}
+                {% if(plant_report.getchildrensGroup|length>0) %}
                     {% for stop in stopPlanning %}
                         <tr>
                             <td>{{ stop.month }}</td>
@@ -42,32 +42,35 @@
 
                     {% set totalStops = 0 %}
                     {% set totalHours = 0 %}
-                    {% for plantStopPlanning in plant_report.plantStopPlannings %}
-                        <tr>
-                            <td>{{ loop.index }} - 
-                                {{ generateLink(plantStopPlanning) }}
-                            </td>
-                            <td scope="row" align="left">
-                                {{ plantStopPlanning.totalStops }}&nbsp;{{ "pequiven_seip.days"|trans }}
-                                {% set totalStops = totalStops + plantStopPlanning.totalStops %}
-                            </td>
-                            <td align="right">
-                                {{ plantStopPlanning.totalHours }}&nbsp;h
-                                {% set totalHours = totalHours + plantStopPlanning.totalHours %}
-                            </td>
-                            <td class="low-padding align-center">
-                                {% if periodService().isAllowPlanningReport %}
-                                    <a href="{{ path("pequiven_plant_stop_planning_update",{id: plantStopPlanning.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr >
-                            <td colspan="{{ colspan }}" class="empty_row">
-                                {{ "empty.plant_stop_planning"|trans }}
-                            </td>
-                        </tr>
+                    {% for plantReport in plant_report.getchildrensGroup %}
+                        {% for plantStopPlanning in plantReport.plantStopPlannings %}
+                            <tr>
+                                <td>{{ loop.index }} - 
+                                    {{ generateLink(plantStopPlanning) }}
+                                </td>
+                                <td scope="row" align="left">
+                                    {{ plantStopPlanning.totalStops }}&nbsp;{{ "pequiven_seip.days"|trans }}
+                                    {% set totalStops = totalStops + plantStopPlanning.totalStops %}
+                                </td>
+                                <td align="right">
+                                    {{ plantStopPlanning.totalHours }}&nbsp;h
+                                    {% set totalHours = totalHours + plantStopPlanning.totalHours %}
+                                </td>
+                                <td class="low-padding align-center">
+                                    {% if periodService().isAllowPlanningReport %}
+                                        <a href="{{ path("pequiven_plant_stop_planning_update",{id: plantStopPlanning.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr >
+                                <td colspan="{{ colspan }}" class="empty_row">
+                                    {{ "empty.plant_stop_planning"|trans }}
+                                </td>
+                            </tr>
+                        {% endfor %}
                     {% endfor %}
+                    
                 {% endif %}
             </tbody>
             {# <tfoot>

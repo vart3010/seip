@@ -142,7 +142,7 @@ class MonitoringController extends ResourceController
 
     public function addAction(Request $request){
         
-        $id = $request->get('id');  
+        $id = $request->get('id');          
         $period = $this->getPeriodService()->getPeriodActive();
         $standardization = new standardization();
         $form  = $this->createForm(new StandardizationType($period), $standardization);
@@ -195,7 +195,7 @@ class MonitoringController extends ResourceController
             );
 
             $apiDataUrl = $this->generateUrl('pequiven_sig_monitoring_show', $routeParameters);
-            $apiDataUrl = "http://".$_SERVER['HTTP_HOST'].$apiDataUrl;
+            //$apiDataUrl = "http://".$_SERVER['HTTP_HOST'].$apiDataUrl;
 
             for ($i=0; $i < $catnRes; $i++) { 
                 $user = $this->get('pequiven_seip.repository.user')->find($responsibles[$i]);

@@ -50,7 +50,7 @@ pequiven_seip:
     #Login
     sign_in: Ingresar
     remind_me: Recuerdame
-    login: Iniciar sesión
+#    login: Iniciar sesión
     group_roles: Roles
     lost_password: Recuperar contraseña
     username: Nombre de usuario
@@ -441,6 +441,24 @@ pequiven_seip:
     consumer_planning_service:
         consumer_planning_service: Consumo de servicios
         details_consumer_planning_service: Detalle de consumo de servicios
+    consumer_planning_gasflow:
+        consumer_planning_gasflow: Consumo de flujo de gas
+        details_consumer_planning_gasflow: Detalle de consumo de flujo de gas
+        question:
+            delete: Desea eliminar este detalle de consumo de flujo de gas
+    gasflow_consumption_planning:
+        gasflow_consumption_planning: Presupuesto de consumo de flujo de gas
+        question:
+            delete: Desea eliminar este detalle de consumo de flujo de gas
+    consumer_planning_servicefactor:
+        consumer_planning_servicefactor: Consumo de factor de servicio
+        details_consumer_planning_servicefactor: Detalle de consumo de factor de servicio
+        question:
+            delete: Desea eliminar este detalle de consumo de factor de servicio
+    servicefactor_consumption_planning:
+        servicefactor_consumption_planning: Presupuesto de consumo de factor de servicio
+        question:
+            delete: Desea eliminar este detalle de consumo de factor de servicio
 
     month:
         1: Enero
@@ -531,7 +549,7 @@ principal:
         indicatorPorc: % Carga
         
 result:
-    recalculate: Recalcular resultados
+    recalculate: Recalcular Resultados
     list:
         titleObjetiveOperative: Resultados Objetivos
         columnLocation: Localidad
@@ -556,6 +574,7 @@ pequiven_seip_box_genericdashboardbox: Bienvenida general a los usuarios.
 pequiven_seip_box_dashboard_planningdashboard: Bienvenida para los trabajadores de planificación
 pequiven_seip_box_linestrategic_icons_indicator_dashboard: Indcadores Estratégicos (Íconos)
 pequiven_seip_box_linestrategic_icons_indicator_by_line_dashboard: Indicadores Estratégicos por Línea Estratégica
+pequiven_seip_box_group_indicator_by_indicatorid: Grupos de Indicadores
 pequiven_seip_box_linestrategic_icons_dashboard: Línea Estratégicas (Íconos)
 pequiven_seip_box_linestrategic_iconsnavbar : Línea Estratégicas (Barra de Navegación)
 pequiven_indicator_box_iconssummary: Indicadores Estratégicos (Librito)
@@ -581,7 +600,11 @@ empty:
     plant_stop_planning: No hay planificación de paradas.
     no_service: Sin servicios.
     consumer_planning_services: No hay servicios.
+    consumer_planning_gas_flow: No hay consumo de flujo de gas.
+    consumer_planning_service_factor: No hay consumo de factor de servicio.
     no_details_service: No hay detalles del consumo de servicios.
+    no_details_gasflow: No hay detalles del consumo de flujo de gas.
+    no_details_servicefactor: No hay detalles del consumo de factor de servicio.
     inventorys: No hay detalles de inventario.
     unrealized_productions: No hay detalles de producción no realizada.
     day_stops: No hay detalles de paradas.
@@ -624,6 +647,11 @@ chart:
         indicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated: Días perdidos del indicador, con los valores del mes además del período actual y del período anterior (línea) y del acumulado por período (columna).
         typeChartProgressProjectsByFrequencyNotification: Avance de los proyectos por frecuencia de notificación
         indicatorsVariablesRealPlanByDifferentFrequencyNotification: Real, plan y resultado de medición del Indicador de acuerdo a una frecuencia de notificación diferente a la del indicador
+        indicatorWithTrendlineHorizontal: Indicador con una línea horizontal
+        indicatorPyramidRealSection: Pirámide 3D REAL/COSTOS
+        indicatorPyramidPlanSection: Pirámide 3D PLAN/COSTOS
+        stackedColumn3dByIndicator: Columna Apilada de Variables de Indicador
+        indicatorWithTrendlineHorizontalOnlyResult: Indicador con una línea horizontal para comparar el valor de los resultados con algún valor fijo
         example: Ejemplo
         
     
@@ -663,6 +691,8 @@ nro: "#"
 "Plant report": Reporte de planta
 "Day stops": Dias de parada
 "Services": Servicios
+"GasFlow": Flujo de Gas
+"ServiceFactor": Factor de Servicio
 "Service": Servicio
 'Stop time': Tiempo de parada
 'Other time': Otro
@@ -704,3 +734,6 @@ Unit: Unidad
 'Show observation': Puntos de Atención
 'Show pnr': PNR
 'production_line': Linea de Producto
+'Name group' : Nombre de Grupo
+'Childrens group': Sub Plantas
+'Show groups plants': Agrupar por Plantas

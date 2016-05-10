@@ -1,0 +1,24 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% set message = ("pequiven_seip.gasflow_consumption_planning.question.delete"|trans) %}
+
+<h3 class="thin underline">{{ 'pequiven_seip.consumer_planning_gasflow.details_consumer_planning_gasflow'|trans }}</h3>
+
+{% set detailGasFlowConsumptions = consumer_planning_gasflow.detailConsumerPlanningGasFlow %}
+<div class="standard-tabs margin-bottom" id="add-tabs">
+    <ul class="tabs">
+        {% for detail in detailGasFlowConsumptions %}
+            <li class="{{ loop.first ? "active" : "" }}"><a href="#tab-{{ loop.index }}">{{ detail.getMonthLabel|trans }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <div class="tabs-content">
+        {% for detail in detailGasFlowConsumptions %}
+            <div id="tab-{{ loop.index }}" class="with-padding">
+                {% include 'PequivenSEIPBundle:DataLoad/GasFlow/ConsumerPlanningGasFlow:show/details.html.twig' %}
+            </div>
+        {% endfor %}
+    </div>
+</div>

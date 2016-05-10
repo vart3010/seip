@@ -59,7 +59,7 @@ userAuxList:
             method: createPaginatorUserAux
 
 pequiven_seip_user_show:
-    path: /{id}.{_format}
+    path: /{id}/.{_format}
     defaults:
         _controller: pequiven_seip.controller.user:showAction
         _format: html

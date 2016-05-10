@@ -1,0 +1,70 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.plant_report.plant_report'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.reportTemplate) }}
+        {{ form_widget(form.reportTemplate) }}
+        {{ form_errors(form.reportTemplate) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.company) }}
+        {{ form_widget(form.company) }}
+        {{ form_errors(form.company) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.location) }}
+        {{ form_widget(form.location) }}
+        {{ form_errors(form.location) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.entity) }}
+        {{ form_widget(form.entity) }}
+        {{ form_errors(form.entity) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.nameGroup) }}
+        {{ form_widget(form.nameGroup) }}
+        {{ form_errors(form.nameGroup) }}
+    </div>
+
+    <div class="field-block button-height">
+        {{ form_label(form.childrensGroup) }}
+        {{ form_widget(form.childrensGroup) }}
+        {{ form_errors(form.childrensGroup) }}
+{#        <select name="pequiven_seipbundle_dataload_plantreport_group_childrensGroup" id="pequiven_seipbundle_dataload_plantreport_group_childrensGroup"></select>#}
+    </div>
+
+    <div class="field-block button-height">
+        {{ form_label(form.currentCapacity) }}
+        {{ form_widget(form.currentCapacity) }}
+        {{ form_errors(form.currentCapacity) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.enabled) }}
+        {{ form_widget(form.enabled) }}
+        {{ form_errors(form.enabled) }}
+    </div>
+</fieldset>
+{#        {{ dump(_context|keys) }}#}
+<script type="text/javascript">
+    var dateFormat = "dd-mm-yy";
+    $(document).ready(function () {
+
+        var selectEntity = $("#pequiven_seipbundle_dataload_plantreport_entity");
+        var selectPlant = $("#pequiven_seipbundle_dataload_plantreport_plant");
+
+        var urlGetPlant = "{{ path("pequiven_seip_plant_by_entity") }}";
+
+        ajaxToSelect.formaterData = function (response) {
+            return response.name;
+        };
+        selectEntity.on("change", function () {
+            ajaxToSelect2(urlGetPlant, selectPlant, {entity: selectEntity.val()});
+        });
+    {% if plant_report.id <= 0 %}
+            selectPlant.empty();
+            selectPlant.select2('disable');
+    {% endif  %}
+        });
+</script>

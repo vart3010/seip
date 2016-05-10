@@ -1,0 +1,29 @@
+## YAML Template.
+---
+pequiven_consumer_planning_gasflow_create:
+    path: /{plantReport}/create
+    defaults:
+        _controller: pequiven.controller.consumer_planning_gasflow:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_gasflow_consumerplanninggasflow
+    methods: [GET|POST]
+    
+pequiven_consumer_planning_gasflow_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.consumer_planning_gasflow:showAction
+    methods: [GET]
+    
+pequiven_consumer_planning_gasflow_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.consumer_planning_gasflow:updateAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_gasflow_consumerplanninggasflow
+    methods: [GET|POST|PUT]
+    
+pequiven_consumer_planning_gasflow_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.consumer_planning_gasflow:deleteAction
+    methods: [GET|DELETE]

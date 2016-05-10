@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\IndicatorBundle\Model\Indicator as ModelIndicator;
 use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
+use Pequiven\IndicatorBundle\Entity\IndicatorGroup;
 
 /**
  * Indicator
@@ -449,15 +450,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $status = self::STATUS_DRAFT;
 
     /**
-     * Charts
-     * 
-     * @var \Pequiven\SEIPBundle\Entity\Chart
-     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Chart", inversedBy="indicators")
-     * @ORM\JoinTable(name="seip_indicators_charts")
-     */
-    private $charts;
-
-    /**
      * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="indicators", cascade={"persist","remove"})
      * @ORM\JoinTable(name="seip_indicators_management_systems")
      */
@@ -709,6 +701,64 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $loadFiles = false;
 
     /**
+     * Número del resultado para forzar
+     * @var integer
+     * @ORM\Column(name="numberValueIndicatorToForce",type="integer", nullable=true)
+     */
+    private $numberValueIndicatorToForce = 1;
+
+    /**
+     * ¿Mostrar grafico de barras hasta mes consultado o global?
+     * @var boolean
+     *  @ORM\Column(name="viewDataChartIndicatorEvolution",type="boolean")
+     */
+    private $viewDataChartEvolutionConsultedMonth = false;
+
+    /**
+     * Decimales en Gráfica de Informe de Evolución
+     * @var integer
+     *  @ORM\Column(name="decimalsToChartEvolution",type="integer")
+     */
+    private $decimalsToChartEvolution = 0;
+
+    /**
+     * ¿Se puede mostrar el rango?
+     * @var boolean
+     * @ORM\Column(name="showResultWithoutPercentageInDashboard",type="boolean", nullable=true)
+     */
+    private $showResultWithoutPercentageInDashboard = true;
+
+    /**
+     * Charts
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Chart
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Chart", inversedBy="indicators")
+     * @ORM\JoinTable(name="seip_indicators_charts")
+     */
+    private $charts;
+
+    /**
+     * Grupo     
+     * @var IndicatorGroup
+     * @ORM\ManyToMany(targetEntity="Pequiven\IndicatorBundle\Entity\IndicatorGroup",inversedBy="indicators")     
+     * @ORM\JoinTable(name="seip_indicatorgroup_indicator")     
+     */
+    private $indicatorGroup;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="showIndicatorGroups", type="boolean")
+     */
+    private $showIndicatorGroups = false;
+    
+    /**
+     * ¿El Valor Plan del Indicador no acumula?
+     * @var boolean
+     * @ORM\Column(name="planIsNotAccumulative",type="boolean")
+     */
+    private $planIsNotAccumulative = false;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -726,6 +776,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->indicatorCause = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorCauseAnalisys = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorTrend = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->indicatorGroup = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -2152,36 +2203,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     }
 
     /**
-     * Add charts
-     *
-     * @param \Pequiven\SEIPBundle\Entity\Chart $charts
-     * @return Indicator
-     */
-    public function addChart(\Pequiven\SEIPBundle\Entity\Chart $charts) {
-        $this->charts[] = $charts;
-
-        return $this;
-    }
-
-    /**
-     * Remove charts
-     *
-     * @param \Pequiven\SEIPBundle\Entity\Chart $charts
-     */
-    public function removeChart(\Pequiven\SEIPBundle\Entity\Chart $charts) {
-        $this->charts->removeElement($charts);
-    }
-
-    /**
-     * Get charts
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCharts() {
-        return $this->charts;
-    }
-
-    /**
      * Set showCharts
      *
      * @param boolean $showCharts
@@ -2864,6 +2885,86 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
 
     function setLoadFiles($loadFiles) {
         $this->loadFiles = $loadFiles;
+    }
+
+    function getNumberValueIndicatorToForce() {
+        return $this->numberValueIndicatorToForce;
+    }
+
+    function setNumberValueIndicatorToForce($numberValueIndicatorToForce) {
+        $this->numberValueIndicatorToForce = $numberValueIndicatorToForce;
+    }
+
+    function getViewDataChartEvolutionConsultedMonth() {
+        return $this->viewDataChartEvolutionConsultedMonth;
+    }
+
+    function setViewDataChartEvolutionConsultedMonth($viewDataChartEvolutionConsultedMonth) {
+        $this->viewDataChartEvolutionConsultedMonth = $viewDataChartEvolutionConsultedMonth;
+    }
+
+    function getDecimalsToChartEvolution() {
+        return $this->decimalsToChartEvolution;
+    }
+
+    function setDecimalsToChartEvolution($decimalsToChartEvolution) {
+        $this->decimalsToChartEvolution = $decimalsToChartEvolution;
+    }
+
+    function getShowResultWithoutPercentageInDashboard() {
+        return $this->showResultWithoutPercentageInDashboard;
+    }
+
+    function setShowResultWithoutPercentageInDashboard($showResultWithoutPercentageInDashboard) {
+        $this->showResultWithoutPercentageInDashboard = $showResultWithoutPercentageInDashboard;
+    }
+
+    /**
+     * Add charts
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Chart $charts
+     * @return Indicator
+     */
+    public function addChart(\Pequiven\SEIPBundle\Entity\Chart $charts) {
+        $this->charts[] = $charts;
+        return $this;
+    }
+
+    public function removeChart(\Pequiven\SEIPBundle\Entity\Chart $charts) {
+        $this->charts->removeElement($charts);
+    }
+
+    public function getCharts() {
+        return $this->charts;
+    }
+
+    public function addIndicatorGroup(IndicatorGroup $indicatorGroup) {
+        $this->indicatorGroup[] = $indicatorGroup;
+        return $this;
+    }
+
+    public function removeIndicatorGroup(IndicatorGroup $indicatorGroup) {
+        $this->indicatorGroup->removeElement($indicatorGroup);
+    }
+
+    function getIndicatorGroup() {
+        return $this->indicatorGroup;
+    }
+
+    function getShowIndicatorGroups() {
+        return $this->showIndicatorGroups;
+    }
+
+    function setShowIndicatorGroups($showIndicatorGroups) {
+        $this->showIndicatorGroups = $showIndicatorGroups;
+    }
+    
+    function getPlanIsNotAccumulative() {
+        return $this->planIsNotAccumulative;
+    }
+
+    function setPlanIsNotAccumulative($planIsNotAccumulative) {
+        $this->planIsNotAccumulative = $planIsNotAccumulative;
     }
 
 }

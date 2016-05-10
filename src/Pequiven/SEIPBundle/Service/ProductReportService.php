@@ -5,7 +5,7 @@ namespace Pequiven\SEIPBundle\Service;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class productReportService implements ContainerAwareInterface {
+class ProductReportService implements ContainerAwareInterface {
 
     private $container;
 
@@ -33,6 +33,99 @@ class productReportService implements ContainerAwareInterface {
         }
 
         return $rs;
+    }
+
+    public function getArrayByDateFromInternalCausesPnr(\DateTime $dateReport, \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productReport) {
+        $day = date_format($dateReport, 'j');
+        $month = date_format($dateReport, 'n');
+        $monthWithZero = date_format($dateReport, 'm');
+        $year = date_format($dateReport, 'Y');
+
+        $em = $this->getDoctrine()->getManager();
+        $causeFailService = $this->getCauseFailService();
+
+        $rawMaterials = array(
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP => array(),
+        );
+
+        $methodTypeCausesIntExt = array(
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL => "TYPE_FAIL_INTERNAL",
+        );
+
+        $result = array();
+
+        //Seteamos el total por tipo de causa de PNR
+        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = 0.0;
+        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = 0.0;
+        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = 0.0;
+
+        //Obtenemos la plantilla del reporte
+//        $reportTemplateId = $options['idReportTemplate'];
+//        $reportTemplate = $this->container->get('pequiven.repository.report_template')->findOneBy(array('id' => $reportTemplateId));
+        //Obtenemos el producto
+//        $product = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Product")->find($options["idProduct"]);
+        //Obtenemos el Reporte del Producto
+//        $productReportId = $options['idProductReport'];
+//        $productReport = $this->container->get('pequiven.repository.product_report')->find($productReportId);
+        //Obtenemos las producciones no realizadas, asociadas al Reporte del Producto
+        $unrealizedProductions = $productReport->getUnrealizedProductions();
+
+        //Obtenemos las categorías de las causas de PNR por fallas por tipo Interna y Externa
+        $failsInternal = $causeFailService->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL);
+
+        //Seteamos en el arreglo, la sección Causas Internas
+        foreach ($failsInternal as $failInternal) {
+            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['day'] = 0.0;
+            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] = 0.0;
+            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = 0.0;
+        }
+
+        //Recorremos las producciones no realizadas
+        foreach ($unrealizedProductions as $unrealizedProduction) {
+            $monthUnrealizedProduction = $unrealizedProduction->getMonth();
+
+            //Seteamos el valor dia y mes
+            if ($month == $unrealizedProduction->getMonth()) {
+                $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
+                foreach ($failsInternal as $failInternal) {
+                    if ($failInternal->getName() == 'Sobre Producción') {
+                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['day'] = $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
+                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
+                    }
+                    for ($dayMonth = 1; $dayMonth <= $day; $dayMonth++) {
+                        if ($failInternal->getName() == 'Sobre Producción') {
+                            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                        }
+                    }
+                }
+            }
+
+
+            //Seteamos el valor año
+            if ($monthUnrealizedProduction <= $month) {
+                $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
+                foreach ($failsInternal as $failInternal) {
+                    for ($dayMonth = 1; $dayMonth <= \Pequiven\SEIPBundle\Model\Common\CommonObject::getDaysPerMonth($monthUnrealizedProduction, $year); $dayMonth++) {
+                        if ($month == $monthUnrealizedProduction) {
+                            if ($dayMonth <= $day) {
+                                if ($failInternal->getName() == 'Sobre Producción') {
+                                    $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                                    $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                                }
+                            }
+                        } else {
+                            if ($failInternal->getName() == 'Sobre Producción') {
+                                $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                                $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function generatePie($data) {
@@ -369,6 +462,43 @@ class productReportService implements ContainerAwareInterface {
         //var_dump(json_encode($data["dataSource"]["dataset"]));
 
         return json_encode($data);
+    }
+
+
+    /**
+    * retorna el datetime por mes mes
+    */
+    public function getTimeNowMonth($month,$unrealizedProduction) {
+        $dayMonth = $unrealizedProduction->getDaysPerMonth($month,"2016");
+        //$s = "31/01/2016 00:00:00";
+        $s = $dayMonth.'-'.$month.'-'.date("Y");
+        //var_dump($s);
+        $fecha = \DateTime::createFromFormat('d-m-Y', $s);
+        #$fecha = DateTime::createFromFormat('j-M-Y', '15-Feb-2009');
+        #echo $fecha->format('Y-m-d');
+        #var_dump($fecha);
+        return $fecha;
+
+        
+    }
+
+    /**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * @return Registry
+     *
+     * @throws LogicException If DoctrineBundle is not available
+     */
+    public function getDoctrine() {
+        if (!$this->container->has('doctrine')) {
+            throw new LogicException('The DoctrineBundle is not registered in your application.');
+        }
+
+        return $this->container->get('doctrine');
+    }
+
+    protected function getCauseFailService() {
+        return $this->container->get('seip.service.causefail');
     }
 
 }

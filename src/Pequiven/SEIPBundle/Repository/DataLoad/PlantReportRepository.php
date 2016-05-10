@@ -31,7 +31,19 @@ class PlantReportRepository extends SeipEntityRepository
 
         return $queryBuilder;
     }
+    
+    public function findPlantReportByEntityPeriod($period,$entity) 
+    {
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+            ->select('pr')
+            ->andWhere('pr.period = :period')
+            ->setParameter('period',2)
+            ;
 
+        return $queryBuilder;
+    }
+    
     public function findInnerProductsReport($plantReport,$productsReport) 
     {
         $qb = $this->getQueryBuilder();

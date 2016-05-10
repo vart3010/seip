@@ -1,0 +1,156 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block body %}
+
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.plant_report.plant_report'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.report_template.report_template'|trans }}</label>
+                    {{ generateLink(plant_report.reportTemplate) }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Plant'|trans }}</label>
+                    {{ plant_report.plant }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Enabled'|trans }}</label>
+                    {{ plant_report.enabled|render_yes_no }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Company'|trans }}</label>
+                    {{ plant_report.company }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Location'|trans }}</label>
+                    {{ plant_report.location }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Entity'|trans }}</label>
+                    {{ plant_report.entity }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                {#                {{ dump(plant_report.getchildrensGroup|length) }}#}
+                <p class="inline-label">
+                    <label class="label">{{ 'Services'|trans }}</label>
+                    {% for plantReport in plant_report.getchildrensGroup %}
+                        {% for service in plantReport.plant.services %}
+                            {{ service }}{% if loop.last %}.{% else %},{% endif %}
+                        {% else %}
+                            <span class="tag ">{{ "empty.no_service"|trans }}</span>
+                        {% endfor %}
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Design capacity'|trans }}</label>
+
+                    {% if (plant_report.getchildrensGroup|length  >0) %}
+                        {% set totalDesignCap = 0 %}
+                        {% for plantReport in plant_report.getchildrensGroup %}
+                            {% for childrens in plantReport.plant.childrens %}
+                                {% set totalDesignCap = childrens.designCapacity  %}
+                            {% endfor %}
+                        {% endfor %}
+                        {{ totalDesignCap | myNumberFormat }}
+
+                    {% else %}
+                        {{ plant_report.plant.designCapacity|myNumberFormat }}
+                    {% endif %}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Current capacity'|trans }}</label>
+                    {% if(plant_report.getchildrensGroup|length>0) %}
+                        {% set totalCurrentCap = 0 %}
+                        {% for plantReport in plant_report.getchildrensGroup %}
+                            {% for childrens in plantReport.plant.childrens %}
+                                {% for plantReport in childrens.plantReport %}
+                                    {% set totalCurrentCap = plantReport.currentCapacity  %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endfor %}
+                        {{ totalCurrentCap|myNumberFormat }}
+                        {#                     {{ plant_report.currentCapacity|myNumberFormat }}#}
+                    {% else %}
+                        {{ plant_report.currentCapacity|myNumberFormat }}
+                    {% endif %}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Percentage current capacity'|trans }}</label>
+                    {% if(plant_report.getchildrensGroup|length>0) %}
+                        {% set percentajeCap = 0 %}
+                        {% for plantReport in plant_report.getchildrensGroup %}
+                            {% for childrens in plantReport.plant.childrens %}
+                                {% for plantReport in childrens.plantReport %}
+                                    {% set percentajeCap = plantReport.percentageCurrentCapacity  %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endfor %}
+                        {{ percentajeCap|myNumberFormat }}%
+                    {% else %}
+                        {{ plant_report.percentageCurrentCapacity | myNumberFormat }}%
+                    {% endif %}
+                    {#                    {{ plant_report.percentageCurrentCapacity|myNumberFormat }}%#}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Periodo'|trans }}</label>
+                    {{ plant_report.period }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+    
+        {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/plantStopPlannings.html.twig' %}
+        <br /><br />
+        {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/products.html.twig' %}
+        <br /><br />
+    
+       {# {% if(plant_report.plant.permitGroupProduct) %}
+            <br /><br />
+            {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/groupsProducts.html.twig' %}
+            <br /><br />
+        {% endif %}
+            {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/services.html.twig' %}
+        <br /><br />
+            {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/gasFlow.html.twig' %}
+        <br /><br />
+        {% if(plant_report.plant.childrens|length==0) %}
+            <p class="button-height align-right">
+                {% if periodService().isAllowPlanningReport %}
+                    {{ buttons.generic_confirm(path("pequiven_plant_report_run",{ id: plant_report.id }),"pequiven_seip.buttons.run_plant",{
+                    content: ("pequiven_seip.question.want_create_plant_from_planning"|trans),
+                    translation_domain: "PequivenSEIPBundle",
+                    icon: "icon-extract"
+                    }) 
+                    }}
+                    &nbsp;
+                    {{ buttons.generic(path('pequiven_plant_report_update', { 'id': plant_report.id }),('pequiven.edit'|trans({},'messages'))) }}
+                    &nbsp;
+                    {{ buttons.delete(path('pequiven_plant_report_delete', { 'id': plant_report.id })) }}
+                {% endif %}
+            </p>
+        {% endif %}#}
+{% endblock %}

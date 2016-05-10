@@ -382,7 +382,10 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $totalDay = $totalMonth = $totalYear = 0.0;
 
         $unrealizedProductions = $this->getUnrealizedProductionsSortByMonth();
+        
         foreach ($unrealizedProductions as $monthDetail => $detail) {
+            //var_dump($detail);
+            
             $totalYear = $totalYear + $detail->getTotal();
 
             if ($monthDetail > $month) {
@@ -395,6 +398,49 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
                 $totalMonth = $totalMonth + $detail->getTotal();
             }
         }
+
+        $total = array(
+            'total_day' => $totalDay,
+            'total_month' => $totalMonth,
+            'total_year' => $totalYear,
+        );
+        return $total;
+    }
+    /**
+     * FILTRO POR CAUSA
+     * @param \DateTime $date
+     * @return type
+     */
+    public function getSummaryUnrealizedProductionsFilterCause(\DateTime $date) {
+        $month = (int) $date->format("m");
+        $day = (int) $date->format("d");
+
+        $totalDay = $totalMonth = $totalYear = 0.0;
+
+        //$unrealizedProductions = $this->getUnrealizedProductionsSortByMonthWithOutProduction($failService);
+        $unrealizedProductions = $this->getUnrealizedProductionsSortByMonth();
+        
+        //Obtener el array [total_day] [total_month] y [total_year] de la PNR por causa SOBRE PRODUCCIÓN
+        
+        
+        foreach ($unrealizedProductions as $monthDetail => $detail) {
+            
+            $totalYear = $totalYear + $detail->getTotal();
+
+            if ($monthDetail > $month) {
+                continue;
+            }
+
+            if ($month == $monthDetail) {
+                $totalDayName = 'getDay' . $day;
+                $totalDay = $detail->$totalDayName();
+                $totalMonth = $totalMonth + $detail->getTotal();
+            }
+        }
+        
+        //$totalYear = $totalYear - $totalOverProduction[year]
+        //$totalMonth = $totalMonth - $totalOverProduction[month]
+        //$totalDay = $totalDay - $totalOverProduction[day]
 
         $total = array(
             'total_day' => $totalDay,

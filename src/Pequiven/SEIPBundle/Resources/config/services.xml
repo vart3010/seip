@@ -333,11 +333,20 @@
         <service id="pequiven.form.plant_report" class="Pequiven\SEIPBundle\Form\DataLoad\PlantReportType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_plantreport" />
         </service>
+        <service id="pequiven.form.plant_report_group" class="Pequiven\SEIPBundle\Form\DataLoad\PlantReportGroupType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_plantreport_group" />
+        </service>
         <service id="pequiven.form.plant_stop_planning" class="Pequiven\SEIPBundle\Form\DataLoad\Plant\PlantStopPlanningType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_plant_plantstopplanning" />
         </service>
         <service id="pequiven.form.consumer_planning_service" class="Pequiven\SEIPBundle\Form\DataLoad\Service\ConsumerPlanningServiceType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_service_consumerplanningservice" />
+        </service>
+        <service id="pequiven.form.consumer_planning_gasflow" class="Pequiven\SEIPBundle\Form\DataLoad\GasFlow\ConsumerPlanningGasFlowType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_gasflow_consumerplanninggasflow" />
+        </service>
+        <service id="pequiven.form.consumer_planning_servicefactor" class="Pequiven\SEIPBundle\Form\DataLoad\ServiceFactor\ConsumerPlanningServiceFactorType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_servicefactor_consumerplanningservicefactor" />
         </service>
         <service id="pequiven.form.inventory" class="Pequiven\SEIPBundle\Form\DataLoad\Inventory\InventoryType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_inventory_inventory" />
@@ -347,6 +356,12 @@
         </service>
         <service id="pequiven.form.detail_consumer_planning_service" class="Pequiven\SEIPBundle\Form\DataLoad\Service\DetailConsumerPlanningServiceType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_service_detailconsumerplanningservice" />
+        </service>
+        <service id="pequiven.form.detail_consumer_planning_gasflow" class="Pequiven\SEIPBundle\Form\DataLoad\GasFlow\DetailConsumerPlanningGasFlowType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_gasflow_detailconsumerplanninggasflow" />
+        </service>
+        <service id="pequiven.form.detail_consumer_planning_servicefactor" class="Pequiven\SEIPBundle\Form\DataLoad\ServiceFactor\DetailConsumerPlanningServiceFactorType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_servicefactor_detailconsumerplanningservicefactor" />
         </service>
         <service id="pequiven_seip.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
             <call method="setContainer">

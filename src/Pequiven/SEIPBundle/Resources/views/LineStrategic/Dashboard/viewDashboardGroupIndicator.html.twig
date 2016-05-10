@@ -1,0 +1,90 @@
+{% extends "PequivenSEIPBundle:Template:Developer/layoutGestion.html.twig" %}
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/icons.css') }}">
+{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("Grupos de Indicadores")
+    ) }}
+
+    <style>
+        .esfera{
+            border-radius: 200px 200px 200px 200px;
+            -moz-border-radius: 200px 200px 200px 200px;
+            -webkit-border-radius: 200px 200px 200px 200px;
+            border: 1px solid #0a0a0a;
+            display: inline-block; 
+            align-items: center; 
+            align-content: center;
+            height: 190px;
+            position: relative;
+            font-size: 120px;
+            vertical-align: middle;
+            width: 100%;
+            background-color: #9C1200;
+
+        }
+    </style>
+
+{% endblock %}
+
+
+{% block body %}    
+
+    {{ boxRender.renderBox('pequiven_seip_box_linestrategic_iconsnavbar')|raw }}
+    <hr class="hr-linestrategic-icons" />
+    <br><br>
+{#    {% if (indicator) %}
+        <div class="twelve-columns">
+            {{ indicator.ref }}-{{ indicator.description }}
+        </div>
+    {% endif %}#}
+    <div class="with-padding">
+        <div class="columns">            
+            {% if (groups)%}
+                {% for grupo in groups %}                
+                    <div class="two-columns" style="text-align: center;">                        
+
+                        {%if ((grupo.getIndicators|length)>0) %}
+                            {% set ref= path('pequiven_groupindicators',{idGroup:grupo.id, idLineStrategic:lineStrategic.id}) %}
+                            {% set color= "" %}
+                        {%else%}
+                            {% set ref= "" %}
+                            {% set color= "background-color: #BCBCBC" %}
+                        {%endif%}
+
+                        <div class="esfera twelve-columns" style="{{color}}">
+                            <a target="_self" style="color: {{ grupo.color }}; vertical-align: middle;" href="{{ref}}">
+                                <br>
+                                <i class="fa {{ grupo.logo }}" aria-hidden="true"></i>
+                            </a> 
+                        </div>
+                        <br><br>
+                        <b>{{grupo.description}}</b>
+                    </div>
+                {% endfor %}            
+            {%endif%}
+
+        </div>
+    </div>
+{% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+    </script>
+{% endblock %}
