@@ -147,6 +147,7 @@ app:
                                 find: Hallazgo SIG
                             visualize:
                                 main: Visualizar
+                                listManegementSystem: Lista Asignados a Sistemas de Gestión
                                 listAll: Lista
                                 assigned: Asignados
                                 pending: Pendientes
