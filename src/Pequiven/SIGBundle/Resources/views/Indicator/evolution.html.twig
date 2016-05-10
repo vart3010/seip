@@ -59,7 +59,7 @@
     </div>
     {% endif %}
 
-   <br>
+<br>
 <fieldset class="fieldset">
     <legend class="legend">{{ indicator_sig }}&nbsp;</legend>
         <div class="columns">
@@ -111,27 +111,27 @@
   
     {% include 'PequivenSIGBundle:Template:baseLoadSectionsEvolution.html.twig' %}     
      
-    <p class="button-height align-right">          
-        <div style="text-align: left; margin-left:15px;">
-            <a class="button"  id="showItems"  href="javascript:void(0)">
-                <span class="button-icon left-side red-gradient">
-                    <span class="fa fa-history fa-1"></span>
-                </span>
-                <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
-                <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
-            </a>        
-            {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}                       
-                {# Descarga de Informe de Evolución#}
-                {% set typeObj = 1 %}
-                &nbsp;  {{ buttons.generic_download }}        
-            {% endif %}
-        </div>
-    </p>
-    {# Box historico informe de Evolución #}
-    <div id="evolutionItems" style="display: none;">
-        {% set data = indicator_sig.id %}             
-            {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}            
-    </div>  
+<p class="button-height align-right">          
+    <div style="text-align: left; margin-left:15px;">
+        <a class="button"  id="showItems"  href="javascript:void(0)">
+            <span class="button-icon left-side red-gradient">
+                <span class="fa fa-history fa-1"></span>
+            </span>
+            <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
+            <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
+        </a>        
+        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}                       
+            {# Descarga de Informe de Evolución#}
+            {% set typeObj = 1 %}
+            &nbsp;  {{ buttons.generic_download }}        
+        {% endif %}
+    </div>
+</p>
+{# Box historico informe de Evolución #}
+<div id="evolutionItems" style="display: none;">
+    {% set data = indicator_sig.id %}             
+        {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}            
+</div>  
 {% endblock body %}
 {% block stylesheets %}
   {{ parent() }}    

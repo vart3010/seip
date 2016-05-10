@@ -40,7 +40,9 @@ class ObjetiveSigController extends EvolutionController
         $object = $this->container->get('pequiven.repository.objetive')->find($idObject);
         //Url export
         $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export_chart', array('id' => $request->get("id"), 'month' => $month, 'typeObj' => 1));
-        
+        //Grafica de Evolución
+        $dataChart = $evolutionService->getDataChartOfObjetiveEvolution($object, $urlExportFromChart, $month); //Obtenemos la data del gráfico de acuerdo al indicador
+
         //Carga de los datos de la grafica de las Causas de Desviación
         $dataCause = $evolutionService->getDataChartOfCausesEvolution($object, $urlExportFromChart, $month, $typeObject); //Obtenemos la data del grafico de las causas de desviación
         

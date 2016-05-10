@@ -105,6 +105,16 @@ class EvolutionService implements ContainerAwareInterface {
     }   
 
     /**
+     *
+     *
+     *
+     */
+    public  function getDataChartOfObjetiveEvolution(){
+        $data = 0;
+        return $data;
+    }
+
+    /**
      * 
      * Gráfico de Columna para Causas de Desviación
      * @return type
