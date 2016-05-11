@@ -232,6 +232,14 @@ class OnePerTenService {
         return $profileItemsAvailables;
     }
     
+    /**
+     * 
+     * @param OnePerTen $onePerTen
+     * @param type $profileItemsWithWeight
+     * @param type $members
+     * @param type $type
+     * @return type
+     */
     public function obtainProfileItemsWithResult(OnePerTen $onePerTen,$profileItemsWithWeight = array(), $members, $type = 'array'){
         $profileItemsWithResult = $profileItemsWithWeight;
         $supportAssemblyElections = array();
@@ -415,12 +423,24 @@ class OnePerTenService {
         return $profileItemsWithResult;
     }
     
+    /**
+     * 
+     * @param OnePerTen $onePerTen
+     * @param array $profileItemsWithResult
+     * @return type
+     */
     public function evaluateResultWithCompresionFormula(OnePerTen $onePerTen,$profileItemsWithResult = array()){
         $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] = round(0.5*(1+(($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result']/0.5)-1)*0.85),2);
         
         return $profileItemsWithResult;
     }
     
+    /**
+     * 
+     * @param OnePerTen $onePerTen
+     * @param type $profileItemsWithResult
+     * @return string
+     */
     public function evaluateProfileResult(OnePerTen $onePerTen,$profileItemsWithResult = array()){
         //RANGO VIEJO: -1: x >= 95 -2: 95 > x >= 85 -3: 85 > x >= 70 -4: 70 > x >= 50 -5: x < 50
         //RANGO VIEJO: -1: x >= 80 -2: 80 > x >= 60 -3: 60 > x >= 40 -4: 40 > x >= 20 -5: x < 20
@@ -462,6 +482,12 @@ class OnePerTenService {
         return $profileItemsWithResult;
     }
     
+    /**
+     * 
+     * @param type $members
+     * @param type $type
+     * @return string
+     */
     public function obtainEfficiencyOnePerTen($members, $type='array'){
         
         $efectividad = number_format(0, 2, ',', '.') . '%';
@@ -481,7 +507,11 @@ class OnePerTenService {
         return $efectividad;
     }
     
-    
+    /**
+     * 
+     * @param OnePerTen $onePerTen
+     * @return boolean
+     */
     public function obtainWhichSupportAssemblyElections(OnePerTen $onePerTen){
         $supportAssemblyElections = array();
         $supportAssemblyElections['cutl']['evaluate'] = false;
@@ -551,7 +581,34 @@ class OnePerTenService {
         
         return $supportAssemblyElections;
     }
+    
+    public function refreshProfileValue(OnePerTen $onePerTen){
+        $members = array();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $profileItemsAvailables = $this->obtainProfileItemsAvailables($onePerTen);
+        $profileItemsWithWeight = $this->obtainProfileItemsWithWeight($onePerTen, $profileItemsAvailables);
+        $profileItemsWithResult = $this->obtainProfileItemsWithResult($onePerTen, $profileItemsWithWeight,$members);
+        $onePerTen->setRealProfileValue($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue']);
+        
+        if($onePerTen->getMarkedStatus()){
+            $onePerTen->setProfileValue(5);
+        } else{
+            $onePerTen->setProfileValue($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue']);
+        }
+        
+        $onePerTen->updateLastDateCalculateProfile();
+        
+        $em->persist($onePerTen);
+        $em->flush();
+    }
 
+    /**
+     * 
+     * @return type
+     * @throws LogicException
+     */
     public function getDoctrine() {
         if (!$this->container->has('doctrine')) {
             throw new LogicException('The DoctrineBundle is not registered in your application.');

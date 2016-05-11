@@ -431,8 +431,11 @@ class ResultController extends ResourceController {
                 } elseif ($type == 3) {
                     $evaluationDetailsService = $this->getEvaluationDetailsService();
                     $resource = $userRepository->findBy(array('id' => $id));
-//                    $resource = $userRepository->find($id);
                     $evaluationDetailsService->refreshValueEvaluation($resource[0], $period->getParent());
+                } elseif ($type == 4) {
+                    $onePerTenService = $this->getOnePerTenService();
+                    $resource = $onePerTenRepository->find($id);
+                    $onePerTenService->refreshProfileValue($resource);
                 }
                 $data['success'] = true;
             } catch (\Exception $exc) {
@@ -771,6 +774,14 @@ class ResultController extends ResourceController {
      */
     private function getUserManager() {
         return $this->get('seip.user_manager');
+    }
+    
+    /**
+    * @return \Pequiven\SEIPBundle\Service\Sip\OnePerTenService
+    */
+    protected function getOnePerTenService()
+    {
+        return $this->get('seip.service.onePerTen');
     }
 
 }
