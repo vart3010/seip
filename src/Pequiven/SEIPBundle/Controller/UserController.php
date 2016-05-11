@@ -292,6 +292,53 @@ class UserController extends baseController {
 
         return $response;
     }
+    
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
+    public function updateAction(Request $request)
+    {
+        $saveAndClose = $request->get("save_and_close");
+        
+        $resource = $this->findOr404($request);
+        $form = $this->getForm($resource);
+
+        $objectUser = $this->get('pequiven_seip.repository.user')->findOneById($resource->getId());
+        $arrayRoles = array();
+        foreach ($objectUser->getGroups() as $group){
+            if($group->getLevel() == 7000 || $group->getLevel() == 8000){
+                $arrayRoles[] = $group;
+            }
+        }
+        if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->submit($request)->isValid()) {
+            
+            foreach($arrayRoles as $rol){
+                $resource->addGroup($rol);
+            }
+            $this->domainManager->update($resource);
+
+            if($saveAndClose !== null){
+                return $this->redirectHandler->redirectTo($resource);
+            }
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('update.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
+        ;
+
+        return $this->handleView($view);
+    }
 
     function addConfigurationAction(Request $request) {
         $resource = $this->findOr404($request);
