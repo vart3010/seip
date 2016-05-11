@@ -36,7 +36,7 @@ class OnePerTen extends modelOnePerTen {
     private $cedula;
 
     /**
-     * Creado por
+     * Usuario con 1x10
      * @var \Pequiven\SEIPBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
@@ -310,6 +310,12 @@ class OnePerTen extends modelOnePerTen {
      * @ORM\Column(name="markedStatus", type="integer", nullable=true)
      */
     private $markedStatus = 0;
+    
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="lastDateCalculateProfile", type="datetime",nullable=true)
+     */
+    private $lastDateCalculateProfile;
 
     public function __construct() {
         $this->ten = new \Doctrine\Common\Collections\ArrayCollection();
@@ -608,6 +614,14 @@ class OnePerTen extends modelOnePerTen {
 
     function setMarkedStatus($markedStatus) {
         $this->markedStatus = $markedStatus;
+    }
+    
+    function getLastDateCalculateProfile() {
+        return $this->lastDateCalculateProfile;
+    }
+
+    function setLastDateCalculateProfile(\DateTime $lastDateCalculateProfile) {
+        $this->lastDateCalculateProfile = $lastDateCalculateProfile;
     }
 
 }
