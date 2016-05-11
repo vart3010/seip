@@ -257,7 +257,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
             //Label Promedio o Acumunlado
             $labelp["label"] = $labelProm;//Label del Prom
             $category[] = $labelp;//Label del Prom
-
+            
             //Data Prom
             $dataSetReal["showvalues"] = "1";
             $dataAcum["value"] = $ArrangementProgram->getResult();//Pasando data a data prom
@@ -269,7 +269,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
             $category[] = $labelo;//Label del ObjAcum
 
             //Pasando Objetivo Acum
-            $dataObj["value"] = 75;//Pasando data a Dataobj
+            $dataObj["value"] = 100;//Pasando data a Dataobj
             $dataObj["color"] = '#087505';            
             $dataSetReal["data"][] = $dataObj;//Acumulado
 

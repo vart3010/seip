@@ -51,6 +51,7 @@ class EvolutionController extends ResourceController
         
         $idObject = $request->get('id'); //id         
         $typeObject = $request->get('typeObj'); //Tipo de objeto (1 = Indicador/2 = Programa G.) 
+        $month = $request->get('month'); //El mes pasado por parametro
         
         $em = $this->getDoctrine()->getManager();
         
@@ -101,7 +102,6 @@ class EvolutionController extends ResourceController
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
         $dataAction = $evolutionService->findEvolutionCause($result, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
 
-        $month = $request->get('month'); //El mes pasado por parametro
         
         $font = "";
         if ($typeObject == 1) {            
@@ -120,26 +120,20 @@ class EvolutionController extends ResourceController
             $objRel = 0;
         }
         
+        $trendDescription = "No se ha Cargando el Analisis de Tendencia";
+        $causeA = "No se ha Cargando el Analisis de Causas";
         
         //Carga el analisis de la tendencia
-        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
+        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findOneBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
         if ($trend) {
-            foreach ($trend as $value) {
-                $trendDescription = $value->getDescription(); //Tendencia
-            }
-        } else {
-            $trendDescription = "No se ha Cargando el Analisis de Tendencia";
+            $trendDescription = $trend->getDescription(); //Tendencia
         }
-
+        
         //Carga del analisis de las causas
-        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
+        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findOneBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
         if ($causeAnalysis) {
-            foreach ($causeAnalysis as $value) {
-                $causeA = $value->getDescription();
-            }
-        } else {
-            $causeA = "No se ha Cargando el Analisis de Causas";
-        }
+            $causeA = $causeAnalysis->getDescription();
+        }            
 
         //Verificación
         $verification = $this->get('pequiven.repository.sig_action_verification')->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
