@@ -222,7 +222,7 @@
                                     </a>
 
                                 </th>
-                                <td scope="col" width="40%" class="text-right">{{ unrealized.total|number_format(2, ',', '.') }}</td>
+                                <td scope="col" width="40%" class="text-right">{{ validPnr(unrealized.total)|number_format(2, ',', '.') }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
