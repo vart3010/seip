@@ -245,9 +245,9 @@
                 <tbody>
                     {% for  rawMaterial in rawMaterials  %}
                         <tr>
-                            <th width="22%" class="header">{{ rawMaterial.nameGroup|upper }}</th>
+                            <th width="22%" class="header">{{ rawMaterial.productName|upper }}</th>
                                 {%  if showDay %}
-                                <td scope="col" width="13%" class="text-right">{{ rawMaterial.plan }}</td>
+                                <td scope="col" width="13%" class="text-right">{{ rawMaterial.plan  }}</td>
                                 <td scope="col" width="13%" class="text-right">{{ rawMaterial.real }}</td>
                             {% endif %}
                             {%  if showMonth %}
@@ -318,16 +318,16 @@
                         <tr style="text-align: center;"> 
                             <th width="22%" class="header">{{ consumerService.productName|upper}} </th>
                                 {%  if showDay %}
-                                <td scope="col" width="15%" class="text-right">{{ consumerService.plan|myNumberFormat }}</td>
-                                <td scope="col" width="15%" class="text-right">{{ consumerService.real|myNumberFormat }}</td>
+                                <td scope="col" width="15%" class="text-right">{{ consumerService.plan | myNumberFormat }}</td>
+                                <td scope="col" width="15%" class="text-right">{{ consumerService.real | myNumberFormat }}</td>
                             {% endif %}
                             {%  if showMonth %}
-                                <td scope="col" width="15%" class="text-right">{{ consumerService.plan_month|myNumberFormat }}</td>
-                                <td scope="col" width="15%" class="text-right">{{ consumerService.real_month|myNumberFormat }}</td>
+                                <td scope="col" width="15%" class="text-right">{{ consumerService.plan_month | myNumberFormat }}</td>
+                                <td scope="col" width="15%" class="text-right">{{ consumerService.real_month | myNumberFormat }}</td>
                             {% endif %}
                             {%  if showYear %}
-                                <td scope="col" width="15%" class="text-right">{{ consumerService.plan_year|myNumberFormat }}</td>
-                                <td scope="col" width="15%" class="text-right">{{ consumerService.real_year|myNumberFormat }}</td>
+                                <td scope="col" width="15%" class="text-right">{{ consumerService.plan_year | myNumberFormat }}</td>
+                                <td scope="col" width="15%" class="text-right">{{ consumerService.real_year | myNumberFormat }}</td>
                             {% endif %}
                         </tr>
                     {% endfor %}
@@ -377,7 +377,7 @@
                                   idProductReport: (unrealizedProduction.productId),dateReport: (dateReport|date('d/m/Y'))}) }}">
                                       {{ unrealizedProduction.productName|upper }}
                                   </a>#}
-                                {{ unrealizedProduction.productName|upper }}
+                                {{ unrealizedProduction.nameGroup|upper }}
                             </th>
                             {%  if showDay %}
                                 <td scope="col" width="20%" class="text-right">{{ unrealizedProduction.day|myNumberFormat }}</td>
