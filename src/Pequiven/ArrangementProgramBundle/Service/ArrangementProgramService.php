@@ -138,7 +138,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
         $dataSetAnt["seriesname"]  = "2014";
         $labelAntper               = "2014";
         $labelProm                 = "Promedio o Acumulado";
-        $labelobj                  = "Objetivo 2015";
+        $labelobj                  = "Objetivo ".$ArrangementProgram->getPeriod()->getName();
 
     	$real = array();
         $planned = array();
@@ -244,7 +244,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
                     $dataSetReal["data"][] = $dataReal;
                     
                     //Carga de la Data Plan
-                    $dataPlan["value"] = $planned[$cont];
+                    $dataPlan["value"] = 100;
                     $dataSetPlan["data"][] = $dataPlan;
 
                     //creacion de la tendencia
@@ -254,10 +254,11 @@ class ArrangementProgramService implements ContainerAwareInterface {
                 }
                     $cont++;
             }
+            
             //Label Promedio o Acumunlado
             $labelp["label"] = $labelProm;//Label del Prom
             $category[] = $labelp;//Label del Prom
-
+            
             //Data Prom
             $dataSetReal["showvalues"] = "1";
             $dataAcum["value"] = $ArrangementProgram->getResult();//Pasando data a data prom
@@ -269,7 +270,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
             $category[] = $labelo;//Label del ObjAcum
 
             //Pasando Objetivo Acum
-            $dataObj["value"] = 75;//Pasando data a Dataobj
+            $dataObj["value"] = 100;//Pasando data a Dataobj
             $dataObj["color"] = '#087505';            
             $dataSetReal["data"][] = $dataObj;//Acumulado
 

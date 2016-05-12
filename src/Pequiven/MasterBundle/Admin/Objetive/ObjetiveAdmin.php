@@ -78,16 +78,6 @@ class ObjetiveAdmin extends Admin
                 ->end()
             ->end()
             ->tab('Details')
-                    ->add('managementSystems','sonata_type_model_autocomplete',array(
-                        'property' => array('description'),
-                        'multiple' => true,
-                        'required' => false,
-                    ))
-                    ->add('processManagementSystem','sonata_type_model_autocomplete',array(
-                        'property' => array('description'),
-                        'multiple' => true,
-                        'required' => false,
-                    ))
                     ->add('evalObjetive',null,array(
                         'required' => false,
                     ))
@@ -114,6 +104,21 @@ class ObjetiveAdmin extends Admin
                         'translation_domain' => 'PequivenObjetiveBundle'
                     ))
                 ->end()
+                    ->with('SIG')
+                    ->add('managementSystems','sonata_type_model_autocomplete',array(
+                        'property' => array('description'),
+                        'multiple' => true,
+                        'required' => false,
+                    ))
+                    ->add('processManagementSystem','sonata_type_model_autocomplete',array(
+                        'property' => array('description'),
+                        'multiple' => true,
+                        'required' => false,
+                    ))
+                    ->add('showEvolutionView',null,array(                        
+                        'required' => false,
+                    ))
+                    ->end()
             ->end()
         ;
         if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){

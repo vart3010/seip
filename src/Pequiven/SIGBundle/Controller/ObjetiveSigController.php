@@ -27,15 +27,44 @@ class ObjetiveSigController extends EvolutionController
      *  Metodo informe de evolución
      *
      */
-    public function evlutionAction(Request $request){
-        //return $this->render('PequivenSIGBundle:Objetives:evolution.html.twig');  
-        $resource = $this->findOr404($request);
+    public function evolutionAction(Request $request){
+        $resource = $this->findOr404($request);        
         
+        $idObject = $request->get('id');
+        $typeObject = 3;
+        $month    = $request->get('month');
+        $sumCause = 0;
         
-        $id     = $request->get('id');
-        $month  = $request->get('month');
+        $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
 
-        $objetive = $this->get('pequiven.repository.objetive')->find($id); //Obtenemos el indicador   
+        $object = $this->container->get('pequiven.repository.objetive')->find($idObject);
+        //Url export
+        $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export_chart', array('id' => $request->get("id"), 'month' => $month, 'typeObj' => 1));
+        //Grafica de Evolución
+        $dataChartEvolution = $evolutionService->getDataChartOfObjetiveEvolution($object, $urlExportFromChart, $month); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        //Carga de los datos de la grafica de las Causas de Desviación
+        $dataChartCause = $evolutionService->getDataChartOfCausesEvolution($object, $urlExportFromChart, $month, $typeObject); //Obtenemos la data del grafico de las causas de desviación
+        
+        $objetive = $this->get('pequiven.repository.objetive')->find($idObject); //Obtenemos el Objetivo 
+        //Carga el analisis de la tendencia
+        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
+        //Carga del analisis de las causas
+        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
+        //Carga de Causa de Objeto
+        $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
+        
+        $data = $evolutionService->findEvolutionCause($object, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
+        
+        foreach ($causes as $value) {
+            $dataCa = $value->getValueOfCauses();
+            $sumCause = $sumCause + $dataCa;
+        }
+        
+        $dataAction = [
+            'action' => $data["action"],
+            'values' => $data["actionValue"]
+        ];
 
         $view = $this
                 ->view()
@@ -43,7 +72,18 @@ class ObjetiveSigController extends EvolutionController
                 ->setData(array(
                 'typeObject' => 3,
                 'month'      => $month,
-                'entity'     => $objetive,
+                'entity'     => $objetive,                
+                'data'                => $dataChartEvolution,
+                'dataCause'           => $dataChartCause,
+                'trend'               => $trend,                
+                'analysis'            => $causeAnalysis,
+                'cause'               => $causes,
+                'sumCause'            => $sumCause,                
+                'dataAction'          => $dataAction,                
+                'verification'        => $data["verification"],                
+                'id'                  => null,
+                'cloning'             => null,
+                'route'               => "pequiven_seip_arrangementprogram_evolution_sig",//Ruta para carga de Archivo
                 $this->config->getResourceName() => $resource,                
         ));
 
@@ -505,6 +545,14 @@ class ObjetiveSigController extends EvolutionController
         exit;
         
     }
+
+    /**
+     * 
+     * @return \Pequiven\SIGBundle\Service\EvolutionService
+     */
+    protected function getEvolutionService() {
+        return $this->container->get('seip.service.evolution');
+    } 
 
     /**
      * 

@@ -2,7 +2,7 @@
 pequiven_sig_objetive_evolution_show:
     path: /objetive/{id}/evolution/{month}
     defaults:
-        _controller: pequiven.controller.managementsystem_sig_objetives:evlutionAction           
+        _controller: pequiven.controller.managementsystem_sig_objetives:evolutionAction           
 #Listado general de objetivos marcados con magementsystem
 pequiven_objetives_list_sig:
     path: /sig/{level}/list.{_format}
