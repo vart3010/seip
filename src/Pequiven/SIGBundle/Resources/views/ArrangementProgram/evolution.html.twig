@@ -101,10 +101,9 @@
     </div>
 </p>
     {# Box historico de informe de evolución #}
-    {#<div id="evolutionItems" style="display: none;">
-        {% set data = ArrangementProgram.id %}             
-        {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}            
-    </div> #}
+    <div id="evolutionItems" style="display: none;">        
+        {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION_ARRANGEMENT')) }}            
+    </div>
 {% endblock %}
 {% block stylesheets %}
   {{ parent() }}    

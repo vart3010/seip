@@ -138,7 +138,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
         $dataSetAnt["seriesname"]  = "2014";
         $labelAntper               = "2014";
         $labelProm                 = "Promedio o Acumulado";
-        $labelobj                  = "Objetivo 2015";
+        $labelobj                  = "Objetivo ".$ArrangementProgram->getPeriod()->getName();
 
     	$real = array();
         $planned = array();
