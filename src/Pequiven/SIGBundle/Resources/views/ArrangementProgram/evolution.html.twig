@@ -81,60 +81,29 @@
     {% include 'PequivenSIGBundle:Template:base_month.html.twig' %} 
 </fieldset>
 
-<div class="columns with-padding"> 
-    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 82%;" align="center">                
-        <div class="nine-columns twelve-columns-mobile" id="chartContainerResult"></div>   
-        <input id='exportpng' type='hidden' value='Exportar Informe' />
-    </div>  
-</div> 
+{% include 'PequivenSIGBundle:Template:baseLoadSectionsEvolution.html.twig' %}     
 
-{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}             
-    <br/><br/>{% include 'PequivenSIGBundle:Indicator:show/analysis_trend.html.twig' %} &nbsp; 
-{% endif %}
-
-<div class="columns with-padding">         
-    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 82%; height:55%;" align="center">
-        <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs"></div>
-        <input id='export_causespng' type='hidden' value='Exportar Informe' />
+<p class="button-height align-right">          
+    <div style="text-align: left; margin-left:15px;">
+        <a class="button"  id="showItems"  href="javascript:void(0)">
+            <span class="button-icon left-side red-gradient">
+                <span class="fa fa-history fa-1"></span>
+            </span>
+            <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
+            <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
+        </a>        
+    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}
+        {# Descarga de Informe de Evolución#}
+        {% set typeObj = 2 %}
+        &nbsp;
+        {{ buttons.generic_download }}       
+    {% endif %}
     </div>
-</div> 
-<br>        
-        
-{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CAUSE') %}    
-    <br/><br/> {% include 'PequivenSIGBundle:Indicator:show/causes_list.html.twig' %}         
-    <br/><br/> {% include 'PequivenSIGBundle:Indicator:show/analysis_cause.html.twig' %} &nbsp;           
-{% endif %}  
-
-{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION') %}    
-    <br/><br/> {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %} &nbsp;
-{% if dataAction["values"] and is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION_VERIFICATION')%}  
-    {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
-{% endif %}        
-&nbsp;
-{% endif %} 
-
-    <p class="button-height align-right">          
-        <div style="text-align: left; margin-left:15px;">
-            <a class="button"  id="showItems"  href="javascript:void(0)">
-                <span class="button-icon left-side red-gradient">
-                    <span class="fa fa-history fa-1"></span>
-                </span>
-                <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
-                <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
-            </a>        
-        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}
-            {# Descarga de Informe de Evolución#}
-            {% set typeObj = 2 %}
-            &nbsp;
-            {{ buttons.generic_download }}       
-        {% endif %}
-        </div>
-    </p>
-        {# Box historico de informe de evolución #}
-        {#<div id="evolutionItems" style="display: none;">
-            {% set data = ArrangementProgram.id %}             
-            {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}            
-        </div> #}
+</p>
+    {# Box historico de informe de evolución #}
+    <div id="evolutionItems" style="display: none;">        
+        {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION_ARRANGEMENT')) }}            
+    </div>
 {% endblock %}
 {% block stylesheets %}
   {{ parent() }}    

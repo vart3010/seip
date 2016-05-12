@@ -11,12 +11,12 @@
                     </span>            
                 </div>  
                 {# form carga de archivo #}
-                <div ng-controller="ToolsController">
+                {#<div ng-controller="ToolsController">
                     <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path(route,{id: id, month:month, cause:dataAnalysis, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">                    
                        <input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ idCause $}" type="file">
                        <input type="hidden" name="valueCauseId" id="field_{$ idCause $}" value="">
                     </form>
-                </div> 
+                </div> #}
                 {# end form #}
                 {# Descarga #}
                 {% if data.valueCauseFile %}

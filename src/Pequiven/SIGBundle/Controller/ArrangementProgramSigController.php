@@ -55,7 +55,7 @@ class ArrangementProgramSigController extends ResourceController
         $analysis = $sumCause = 0;
 
         //Carga de las Causas
-        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('arrangementProgram' => $id,'month' => $month, 'typeObject' => 2));
+        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $id,'month' => $month, 'typeObject' => $typeObject));
         
         foreach ($results as $value) {
             $dataCa = $value->getValueOfCauses();
@@ -63,10 +63,10 @@ class ArrangementProgramSigController extends ResourceController
         }
 
         //Carga el analisis de la tendencia
-        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('arrangementProgram' => $id, 'month' => $month, 'typeObject' => 2));
+        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('idObject' => $id, 'month' => $month, 'typeObject' => $typeObject));
        
         //Carga el analisis de Causas
-        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('arrangementProgram'=> $id, 'month' => $month, 'typeObject'=> 2));
+        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('idObject'=> $id, 'month' => $month, 'typeObject'=> $typeObject));
         
 
         $dataAction = [

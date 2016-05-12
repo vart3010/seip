@@ -8,14 +8,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-use Pequiven\IndicatorBundle\Entity\Indicator;
-
-use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause;
-use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionCauseType;
-
-use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend;
-use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionTrendType;
-
 #Acciones y Valores
 use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction;
 use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionValue;
@@ -32,118 +24,9 @@ use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionVerification
  * @author Maximo Sojo <maxsojo13@gmail.com>
  */
 
-class ReportEvolutionController extends ResourceController
+class ReportEvolutionActionController extends ResourceController
 {   
     
-    /**
-     * Retorna el formulario del analisis de la tendencia
-     * 
-     * @param Request $request
-     * @return type
-     */
-    function getFormTrendAction(Request $request)
-    {
-        
-        $id = $request->get('idObject');
-
-        $typeObject = $request->get('typeObj');
-        if ($typeObject == 1) {            
-            $result = $this->get('pequiven.repository.indicator')->find($id);
-        }elseif($typeObject == 2){            
-            $repository = $this->get('pequiven_seip.repository.arrangementprogram');
-            $result = $repository->find($id); 
-        }
-        
-        $trend = new EvolutionTrend();
-        $form  = $this->createForm(new EvolutionTrendType(), $trend);
-        
-        $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('form/form_trend.html'))
-            ->setTemplateVar($this->config->getPluralResourceName())
-            ->setData(array(
-                'indicator' => $result,
-                'form'      => $form->createView(),                
-                'period'        => $result->getPeriod()->getName()
-            ))
-        ;
-        $view->getSerializationContext()->setGroups(array('id','api_list'));
-        return $view;
-    }
-
-    /**
-     * Añade la tendencia 
-     * 
-     * @param Request $request
-     * @return type
-     */
-    public function addTrendAction(Request $request)
-    {   
-        $result = $request->get('idObject');
-
-        $typeObject = $request->get('typeObj');
-        
-        $month = $request->get('set_data')['month'];//Carga de Mes pasado
-        
-        $user = $this->getUser();
-        
-        $trend = new EvolutionTrend();
-        $form  = $this->createForm(new EvolutionTrendType(), $trend);
-        
-        if ($typeObject == 1) {
-
-            $repository = $this->get('pequiven.repository.sig_indicator');
-            $results = $repository->find($result);            
-            
-            $trend->setIndicator($results);
-
-        }elseif ($typeObject == 2) {
-
-            $repository = $this->get('pequiven_seip.repository.arrangementprogram');
-            $results = $repository->find($result);            
-            
-            $trend->setArrangementProgram($results);            
-        }        
-        
-        $trend->setCreatedBy($user);
-        $trend->setMonth($month);
-        $trend->setTypeObject($typeObject);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
-            
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($trend);
-            $em->flush(); 
-
-            $this->get('session')->getFlashBag()->add('success', "Analisis de Tendencia Añadido Exitosamente");                        
-        }     
-    }
-
-    /**
-     * Elimina el analisis de la tendencia
-     * 
-     * @param Request $request
-     * @return type
-     */
-    public function deletetrendAction(Request $request)
-    {   
-        $id = $request->get('id');
-        
-        $em = $this->getDoctrine()->getManager();
-        $results = $this->get('pequiven.repository.sig_trend_report_evolution')->find($id);
-        
-        if($results){
-
-            $em->remove($results);
-            $em->flush();            
-
-            $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteTrend', array(), 'PequivenSIGBundle'));
-            return true;
-        }  
-    }
-
     /**
      * Retorna el formulario del plan de acción
      * 
@@ -152,16 +35,12 @@ class ReportEvolutionController extends ResourceController
      */
     function getFormPlanAction(Request $request)
     {
-        $id = $request->get('idObject');
-
-        $typeObject = $request->get('typeObj');//Tipo de objeto Indicador o PG
-
-        if ($typeObject == 1) {            
-            $result = $this->get('pequiven.repository.indicator')->find($id);
-        }elseif($typeObject == 2){            
-            $result = $this->get('pequiven_seip.repository.arrangementprogram')->find($id);            
-        }
+        $idObject = $request->get('idObject');
+        $typeObject = $request->get('typeObj');//Tipo de objeto Indicador, PG u Objetivo
         
+        $evolutionService = $this->getEvolutionService();            
+        $result = $evolutionService->getObjectEntity($idObject, $typeObject);
+
         $user = $this->getUser();//Carga de usuario
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
         $data = $evolutionService->findEvolutionCause($result, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
@@ -201,14 +80,10 @@ class ReportEvolutionController extends ResourceController
     function getFormPlanAddAction(Request $request)
     {   
         $id = $request->get('idObject');
-
         $typeObject = $request->get('typeObj');
 
-        if ($typeObject == 1) {            
-            $result = $this->get('pequiven.repository.indicator')->find($id);
-        }elseif($typeObject == 2){            
-            $result = $this->get('pequiven_seip.repository.arrangementprogram')->find($id);            
-        }
+        $evolutionService = $this->getEvolutionService();            
+        $result = $evolutionService->getObjectEntity($idObject, $typeObject);
 
         $user = $this->getUser();//Carga de usuario
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
@@ -246,20 +121,27 @@ class ReportEvolutionController extends ResourceController
     public function addAction(Request $request)
     {   
         $em = $this->getDoctrine()->getManager();
-        $id = $request->get('idObject');
+        $idObject = $request->get('idObject');
+        $typeObject = $this->getRequest()->get('typeObj');
         
-        if ($request->get('typeObj') == 1) {
-            $object =  $this->get('pequiven.repository.indicator')->find($id);
-            $objectName = "Indicador";
-        }else{
-            $object = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($request->get('idObject'));
-            $objectName = "Programa de Gestión";
+        $evolutionService = $this->getEvolutionService();            
+        $object = $evolutionService->getObjectEntity($idObject, $typeObject);
+
+        switch ($request->get('typeObj')) {
+            case 1:
+                $objectName = "Indicador";
+                $route = "pequiven_indicator_evolution";
+                break;
+            case 2:
+                $objectName = "Programa de Gestión";
+                $route = "pequiven_seip_arrangementprogram_evolution_sig";
+                break;
+            case 3:
+                $objectName = "Objetivo";    
+                $route = "pequiven_sig_objetive_evolution_show";            
+                break;
         }
         
-        $em = $this->getDoctrine()->getManager();
-
-        $id = $this->getRequest()->get('idObject');
-        $typeObject = $this->getRequest()->get('typeObj');
         
         $user = $this->getUser();
         
@@ -288,7 +170,7 @@ class ReportEvolutionController extends ResourceController
             
         $em->getConnection()->beginTransaction();
         $action = new EvolutionAction();
-        $form  = $this->createForm(new EvolutionActionType($id, $typeObject), $action);
+        $form  = $this->createForm(new EvolutionActionType($idObject, $typeObject), $action);
         
         $form->handleRequest($request);
         
@@ -298,25 +180,16 @@ class ReportEvolutionController extends ResourceController
         $catnRes = count($reponsibles);
         //Creación de url
         $routeParameters = array(
-            'id'    => $id,
+            'id'    => $idObject,
             'month' => $monthSet
         );
         
-        if ($typeObject == 1) {
-            $route = "pequiven_indicator_evolution";
-        }else{
-            $route = "pequiven_seip_arrangementprogram_evolution_sig";
-        }
-
-        $apiDataUrl = $this->generateUrl($route, $routeParameters);
-        //$apiDataUrl = "http://".$_SERVER['HTTP_HOST'].$apiDataUrl;
+        $apiDataUrl = $this->generateUrl($route, $routeParameters);        
         //Añadiendo responsables
-        for ($i=0; $i < $catnRes; $i++) { 
-            //if($reponsibles[$i] != ''){
-                $user = $this->get('pequiven_seip.repository.user')->find($reponsibles[$i]);
-                $notification = $this->getNotificationService()->setDataNotification("Informe de Evolución", "Ha sido asignado como responsable a un Plan de Acción en el Informe de Evolucion del ".$objectName." ". $object->getRef() ." con fecha de incio: ".$dateStart." y fecha de cierre: ".$dateEnd.", el cual presenta un avance de inicio de ".$AcValue."%.", 6 , 1, $apiDataUrl, $user);                        
-                $action->addResponsible($user);
-            //}
+        for ($i=0; $i < $catnRes; $i++) {             
+            $user = $this->get('pequiven_seip.repository.user')->find($reponsibles[$i]);
+            $notification = $this->getNotificationService()->setDataNotification("Informe de Evolución", "Ha sido asignado como responsable a un Plan de Acción en el Informe de Evolucion del ".$objectName." ". $object->getRef() ." con fecha de incio: ".$dateStart." y fecha de cierre: ".$dateEnd.", el cual presenta un avance de inicio de ".$AcValue."%.", 6 , 1, $apiDataUrl, $user);                        
+            $action->addResponsible($user);            
         }
         
         $action->setRef($ref);//referencia
@@ -325,7 +198,6 @@ class ReportEvolutionController extends ResourceController
         $action->setMonth($data);//Carga de Mes(var month)
         $action->setTypeObject($typeObject);//Tipo de Objeto        
 
-        //if ($form->isSubmitted()) {                
         $em->persist($action);
         $em->flush();                
         
@@ -335,8 +207,7 @@ class ReportEvolutionController extends ResourceController
         } catch (Exception $e) {
             $em->getConnection()->rollback();
         throw $e;
-        }
-        //} 
+        }        
 
         $idAction = $action->getId();               
         if ($idAction) {
@@ -537,7 +408,7 @@ class ReportEvolutionController extends ResourceController
      */
     private function findEvolutionActionRef(Request $request, $monthSet, $causeAction)
     {
-        $id = $request->get('idObject');
+        $idObject = $request->get('idObject');
         $typeObject = $request->get('typeObj');
         $cont = 1; 
         $posCause = 1;        
@@ -546,31 +417,36 @@ class ReportEvolutionController extends ResourceController
         $monthActual = date("m");
         //Mes Consultado       
         $month = $request->get('month'); 
+        $complejo = "S/C-";
+        $gerencia = "S/G-";
+
+        $evolutionService = $this->getEvolutionService();            
+        $object = $evolutionService->getObjectEntity($idObject, $typeObject);
+        
+        
+        $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $idObject, 'month' => $monthSet, 'typeObject' => $typeObject));
+                
+        $cause = array();
+        if ($causes) {
+            foreach ($causes as $value) {
+                $idCause = $value->getId();
+                $cause[] = $idCause;
+                if ($idCause == $causeAction) {
+                    $posCause = $cont;
+                }
+                $cont++; 
+            }
+            $action = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause));
+        }
+        if (!isset($action)) {
+            $this->get('session')->getFlashBag()->add('error', "Plan de Acción no Cargado! Ha seleccionado un mes que no posee Causas Cargadas"); 
+            die();                                           
+        }
+        $cantAction = count($action) + 1;
+        $cantAction = str_pad($cantAction, 2, "0", STR_PAD_LEFT);        
+        $cantAction = $cantAction.''."-";                
         
         if ($typeObject == 1) {            
-            $result = $this->get('pequiven.repository.indicator')->find($id);             
-            //Causa
-            $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $id, 'month' => $monthSet));
-                
-                $cause = array();
-                if ($causes) {
-                    foreach ($causes as $value) {
-                        $idCause = $value->getId();
-                        $cause[] = $idCause;
-                        if ($idCause == $causeAction) {
-                            $posCause = $cont;
-                        }
-                        $cont++; 
-                    }
-                    $action = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause));
-                }
-                if (!isset($action)) {
-                    $this->get('session')->getFlashBag()->add('error', "Plan de Acción no Cargado! Ha seleccionado un mes que no posee Causas Cargadas"); 
-                    die();                                           
-                }
-                $cantAction = count($action) + 1;
-                $cantAction = "0".''.$cantAction.''."-";                
-
             foreach ($result->getObjetives() as $value) {                
                 $compData = $value->getComplejo();//Consultando si tiene complejo
                 $gerData = $value->getGerencia();//Si tiene gerencia
@@ -578,28 +454,19 @@ class ReportEvolutionController extends ResourceController
                 if($compData){
                     $complejo = $compData->getRef().''."-";
                     $complejo = strtoupper($complejo);
-                }else{
-                    $complejo = "S/C-";                    
                 }
                 if ($gerData) {                
                     $gerencia = $gerData->getAbbreviation().''."-"; 
                     $gerencia = strtoupper($gerencia);
-                }else{
-                    $gerencia = "S/G-";                 
                 }
             }
-            
-        }elseif($typeObject == 2){            
-            $result = $this->get('pequiven_seip.repository.arrangementprogram')->find($id);            
-            //Causas
-            $cause = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('arrangementProgram' => $id));
-            $complejo = "S/C-";
-            $gerencia = "S/G-";
-            $cantAction = 0;
         }
-
+           
+        $monthSet = str_pad($monthSet, 2, "0", STR_PAD_LEFT);
         $monthSet = $monthSet.''."-";
-        $posCause = "0".''.$posCause;
+        
+        $posCause = str_pad($posCause, 2, "0", STR_PAD_LEFT);
+        $posCause = $posCause;
         $ref = $complejo.''.$gerencia.''.$monthSet.''.$cantAction.''.$posCause;
         //Carga de array con la data
         $data = [

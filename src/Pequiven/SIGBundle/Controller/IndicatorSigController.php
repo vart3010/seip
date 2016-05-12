@@ -191,16 +191,16 @@ class IndicatorSigController extends EvolutionController {
         //Carga de los datos de la grafica de las Causas de Desviación
         $dataCause = $evolutionService->getDataChartOfCausesEvolution($indicator, $urlExportFromChart, $month, $typeObject); //Obtenemos la data del grafico de las causas de desviación
         
-        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $idIndicator, 'month' => $month));
-        foreach ($results as $value) {
+        $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $idIndicator, 'month' => $month, 'typeObject' => $typeObject));
+        foreach ($causes as $value) {
             $dataCa = $value->getValueOfCauses();
             $sumCause = $sumCause + $dataCa;
         }
 
         //Carga el analisis de la tendencia
-        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('indicator' => $indicator, 'month' => $month, 'typeObject' => 1));
+        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('idObject' => $idIndicator, 'month' => $month, 'typeObject' => $typeObject));
         //Carga del analisis de las causas
-        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator' => $indicator, 'month' => $month));
+        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('idObject' => $idIndicator, 'month' => $month, 'typeObject' => $typeObject));
         //Carga de la señalización de la tendencia de la grafica        
         $tendency = $indicator->getTendency()->getId();
         $font = array();
@@ -243,11 +243,11 @@ class IndicatorSigController extends EvolutionController {
             'data' => $dataChart,
             'verification' => $data["verification"],
             'dataCause'  => $dataCause,
-            'sumCause'   => $sumCause,
-            'cause'      => $results,
+            'analysis'   => $causeAnalysis,//Analisis de Causas
+            'cause'      => $causes,//Causas
+            'sumCause'   => $sumCause,//suma de causas
             'month'      => $month,
             'dataAction' => $dataAction,
-            'analysis'   => $causeAnalysis,
             'trend'      => $trend,
             'font'       => $font,
             'typeObject' => $typeObject,

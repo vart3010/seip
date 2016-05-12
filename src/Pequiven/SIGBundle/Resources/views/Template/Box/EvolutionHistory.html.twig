@@ -4,14 +4,13 @@
 
 <div class="">
     <div class="">
-        <div class="">
-           
+        <div class="">           
                 <h3 class="thin underline text-center">Historico Informe de Evolución</h3>
                 <fieldset class="fieldset">
                     {% set month = "now"|date("m") %}
                     
                     {# Carga del tipo de objeto para setear la ruta del historico #}
-                    {% set typeObjet = typeObject %}
+                    {% set typeObjet = typeObject %}                        
                     {% if typeObjet == 1 %}
                         {% set route = "pequiven_indicator_evolution" %}
                     {% elseif typeObject == 2 %}
