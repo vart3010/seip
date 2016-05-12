@@ -97,33 +97,40 @@ class GenericDataController extends SEIPController {
         $criteria = $request->get('filter', $this->config->getCriteria());
         
         $dataArray = array();
-        $objects = new \stdClass();
-        $objects->id = 1;
-        $objects->description = 'Perfil 1';
-        $dataArray[] = $objects;
-        $objects->id = 2;
-        $objects->description = 'Perfil 2';
-        $dataArray[] = $objects;
-        $objects->id = 3;
-        $objects->description = 'Perfil 3';
-        $dataArray[] = $objects;
-        $objects->id = 4;
-        $objects->description = 'Perfil 5';
-        $dataArray[] = $objects;
-        $objects->id = 5;
-        $objects->description = 'Perfil 5';
-        $dataArray[] = $objects;
+//        $objects = new \stdClass();
+//        $objects->id = 1;
+//        $objects->description = 'Perfil 1';
+//        $dataArray[] = $objects;
+//        $objects = new \stdClass();
+//        $objects->id = 2;
+//        $objects->description = 'Perfil 2';
+//        $dataArray[] = $objects;
+//        $objects = new \stdClass();
+//        $objects->id = 3;
+//        $objects->description = 'Perfil 3';
+//        $dataArray[] = $objects;
+//        $objects = new \stdClass();
+//        $objects->id = 4;
+//        $objects->description = 'Perfil 4';
+//        $dataArray[] = $objects;
+//        $objects = new \stdClass();
+//        $objects->id = 5;
+//        $objects->description = 'Perfil 5';
+//        $dataArray[] = $objects;
         
-/*        $dataArray[] = array('id' => 1,'description' => 'Perfil 1');
+        $dataArray[] = array('id' => 1,'description' => 'Perfil 1');
         $dataArray[] = array('id' => 2,'description' => 'Perfil 2');
         $dataArray[] = array('id' => 3,'description' => 'Perfil 3');
         $dataArray[] = array('id' => 4,'description' => 'Perfil 4');
-        $dataArray[] = array('id' => 5,'description' => 'Perfil 5');*/
+        $dataArray[] = array('id' => 5,'description' => 'Perfil 5');
+        
+//        var_dump($dataArray);
+//        die();
         
         //$results->setData($dataArray);
         $view = $this->view();
         $view->setData($dataArray);
-        $view->getSerializationContext()->setGroups(array('id', 'description'));
+        //$view->getSerializationContext()->setGroups(array('id', 'description'));
         return $this->handleView($view);
     }
 

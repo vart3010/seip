@@ -5462,25 +5462,25 @@ angular.module('seipModule.controllers', [])
             };
             
             //Busca los Perfiles de Evaluación Política
-            $scope.getProfilesPoliticEvaluation = function () {
-                var parameters = {
-                    filter: {}
-                };
-                $http.get(Routing.generate('pequiven_seip_profiles_politic_evaluation', parameters))
-                        .success(function (data) {
-                            $scope.data.profiles_politic_evaluation = data;
-                            if ($scope.model.profilesPoliticEvaluation != null) {
-                                $scope.setValueSelect2("profilesPoliticEvaluation", $scope.model.profilesPoliticEvaluation, $scope.data.profiles_politic_evaluation, function (selected) {
-                                    $scope.model.profilesPoliticEvaluation = selected;
-                                });
-                            }
-                        });
-            };
+//            $scope.getProfilesPoliticEvaluation = function () {
+//                var parameters = {
+//                    filter: {}
+//                };
+//                $http.get(Routing.generate('pequiven_seip_profiles_politic_evaluation', parameters))
+//                        .success(function (data) {
+//                            $scope.data.profiles_politic_evaluation = data;
+//                            if ($scope.model.profilesPoliticEvaluation != null) {
+//                                $scope.setValueSelect2("profilesPoliticEvaluation", $scope.model.profilesPoliticEvaluation, $scope.data.profiles_politic_evaluation, function (selected) {
+//                                    $scope.model.profilesPoliticEvaluation = selected;
+//                                });
+//                            }
+//                        });
+//            };
 
             $scope.getComplejos();
             $scope.getFirstLineManagement();
             $scope.getWorkStudyCircle();
-            $scope.getProfilesPoliticEvaluation();
+//            $scope.getProfilesPoliticEvaluation();
 
             //Scope de Localidad
             $scope.$watch("model.complejo", function (newParams, oldParams) {
