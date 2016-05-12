@@ -72,3 +72,22 @@ $(function() {
             }).width(width - horizontalPadding).height(heigth - verticalPadding);
         });
 });
+
+//Tabs
+$(document).ready(function(){
+    $(this).find('div.standard-tabs').parent('div')
+    .prepend('<div class="tabs-arrows" style="font-size: 1.543em; margin-top: -16px; height: 16px;"><a class="move-tab" href="#!" style="float: left;">&#65513;</a><a class="move-tab" href="#!" style="float: right;">&#65515;</a></div>')
+    .on('click', 'a.move-tab', function(e){
+        var act_tab = $(document).find('ul.tabs li.active');
+        switch($(this).css('float')){
+            case 'left':
+                if(act_tab.prev().length)
+                    act_tab = act_tab.prev()
+                break;
+            case 'right':
+                if(act_tab.next().length)
+                    act_tab = act_tab.next()
+                break;
+        } $('a[href="'+act_tab.children('a').attr('href')+'"]').click();
+    });
+});
