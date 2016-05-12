@@ -1374,6 +1374,7 @@ class ReportTemplateController extends SEIPController {
                 ->add('showGroupsPlants', 'checkbox', [
                     'label_attr' => array('class' => 'label bold'),
                     'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
                     'data' => false,
                 ])
                 ->add('overProduction', 'choice', array(

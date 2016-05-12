@@ -331,13 +331,13 @@
                     <tr>
                         <td scope="col" width="40%" class="product">{{ unrealizedProduction.productName|upper }}</td>
                         {%  if showDay %}
-                            <td scope="col" width="20%" class="values">{{ unrealizedProduction.day|myNumberFormat }}</td>
+                            <td scope="col" width="20%" class="values">{{ validPnr(unrealizedProduction.day)|myNumberFormat }}</td>
                         {% endif %}
                         {%  if showMonth %}
-                            <td scope="col" width="20%" class="values">{{ unrealizedProduction.month|myNumberFormat }}</td>
+                            <td scope="col" width="20%" class="values">{{ validPnr(unrealizedProduction.month)|myNumberFormat }}</td>
                         {% endif %}
                         {%  if showYear %}
-                            <td scope="col" width="20%" class="values">{{ unrealizedProduction.year|myNumberFormat }}</td>
+                            <td scope="col" width="20%" class="values">{{validPnr(unrealizedProduction.year)|myNumberFormat }}</td>
                         {% endif %}
                     </tr>                
                 {% endfor %}
