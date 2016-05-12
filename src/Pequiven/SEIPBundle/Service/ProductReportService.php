@@ -263,11 +263,13 @@ class ProductReportService implements ContainerAwareInterface {
             $arrayCategories[] = array("label" => $production["nameGroup"]);
             $plan[] = array("value" => $production[$fieldPlan]);
             $real[] = array("value" => $production[$fieldReal]);
+
             if($production[$fieldReal]==0) { 
                 $p = 0.0;
             } else {
-                $p = (($production[$fieldPlan] * 100) / $production[$fieldReal]);
+                $p = (($production[$fieldReal] * 100) / $production[$fieldPlan]);
             }
+
             $perc[] = array("value"=> number_format( $p, 2, ',', '.'));
         }
         $data["dataSource"]["categories"][]["category"] = $arrayCategories;
