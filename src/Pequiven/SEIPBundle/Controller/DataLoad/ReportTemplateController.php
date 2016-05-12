@@ -1877,9 +1877,6 @@ class ReportTemplateController extends SEIPController {
                     $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
 
 
-
-
-
                     $data = array(
                         'productsReport' => "",
                         'dateReport' => $dateReport,
@@ -2375,6 +2372,7 @@ class ReportTemplateController extends SEIPController {
                 $graphicsMonth = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM","range"=>$byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd),"month", "plan_acumulated", "real_acumulated");
 
                 $graphicsYear = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM","range"=>$byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd),"year", "plan_acumulated", "real_acumulated");
+
 
 
                 $data = array(

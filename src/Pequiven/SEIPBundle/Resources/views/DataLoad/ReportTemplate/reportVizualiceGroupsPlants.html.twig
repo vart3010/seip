@@ -247,16 +247,16 @@
                         <tr>
                             <th width="22%" class="header">{{ rawMaterial.productName|upper }}</th>
                                 {%  if showDay %}
-                                <td scope="col" width="13%" class="text-right">{{ rawMaterial.plan  }}</td>
-                                <td scope="col" width="13%" class="text-right">{{ rawMaterial.real }}</td>
+                                <td scope="col" width="13%" class="text-right">{{ rawMaterial.plan|myNumberFormat  }}</td>
+                                <td scope="col" width="13%" class="text-right">{{ rawMaterial.real|myNumberFormat }}</td>
                             {% endif %}
                             {%  if showMonth %}
-                                <td scope="col" width="13%" class="text-right">{{ rawMaterial.plan_month }}</td>
-                                <td scope="col" width="13%" class="text-right">{{ rawMaterial.real_month }}</td>
+                                <td scope="col" width="13%" class="text-right">{{ rawMaterial.plan_month|myNumberFormat}}</td>
+                                <td scope="col" width="13%" class="text-right">{{ rawMaterial.real_month|myNumberFormat }}</td>
                             {% endif %}
                             {%  if showYear %}
-                                <td scope="col" width="13%" class="text-right">{{ rawMaterial.plan_year }}</td>
-                                <td scope="col" width="13%" class="text-right">{{ rawMaterial.real_year }}</td>
+                                <td scope="col" width="13%" class="text-right">{{ rawMaterial.plan_year|myNumberFormat }}</td>
+                                <td scope="col" width="13%" class="text-right">{{ rawMaterial.real_year|myNumberFormat }}</td>
                             {% endif %}
                         </tr>
                     {% endfor %}
