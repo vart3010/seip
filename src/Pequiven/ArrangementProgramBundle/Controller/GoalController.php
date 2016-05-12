@@ -114,8 +114,7 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController {
      *
      * @Template("PequivenArrangementProgramBundle:Goal:_form.html.twig")
      */
-    public function getFormAction($typeForm)
-    {
+    public function getFormAction($typeForm) {
         $entity = new Goal();
         $form = $this->createCreateForm($entity, $typeForm);
         $form->remove('responsibles');
@@ -172,7 +171,7 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController {
 
         $form = $this->createForm(new GoalType(), $entity, array(
             'action' => $this->generateUrl('goal_update', array('id' => $entity->getId())),
-            'method' => 'PUT',            
+            'method' => 'PUT',
         ));
 
         $form->add('submit', 'submit', array('label' => 'Update'));
@@ -257,6 +256,21 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController {
      */
     protected function getPeriodService() {
         return $this->container->get('pequiven_seip.service.period');
+    }
+
+    public function searchValuebyUserAction($idGoal, $idUser) {
+        $em = $this->getDoctrine()->getManager();
+
+        $userobj = $this->get('pequiven.repository.user')->findOneById($idUser);
+        $goalobj = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findOneById($idGoal);
+        $searchCriteria = array('goalDetails' => $goalobj->getGoalDetails(), 'user' => $userobj);
+        $goalInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy($searchCriteria);
+
+        if ($goalInd) {
+            return $goalInd->getResultReal();
+        } else {
+            return $goalobj->getAdvance();
+        }
     }
 
 }

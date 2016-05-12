@@ -62,12 +62,10 @@ class RestArrangementProgramController extends FOSRestController {
         foreach ($list as $goal) {
             if ($user != 0) {
                 $searchCriteria = array('goalDetails' => $goal->getGoalDetails(), 'user' => $userobj);
-
                 $obj = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy($searchCriteria);
 
                 if ($obj) {
-                    //SI HAY NOTIFICACIONES INDIVIDUALES SUSTITUYO EL VALOR GRUPAL POR EL INDIVIDUAL
-                    //CABLE DESESPERADO. TODA META INDIVIDUAL TENDRA UN VALOR NEGATIVO Y SUPERIOR A 1000
+                    //SI HAY NOTIFICACIONES INDIVIDUALES SUSTITUYO EL VALOR GRUPAL POR EL INDIVIDUAL                    
                     if (($obj->getJanuaryReal()) != null) {
                         $goal->getGoalDetails()->setJanuaryReal($obj->getJanuaryReal());
                     }
@@ -148,15 +146,28 @@ class RestArrangementProgramController extends FOSRestController {
         if ($request->get('user') != 0) {
             $entityInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneby(array('goalDetails' => $entity));
             $user = $request->get('user');
-
+            $usernotific = $user;
             if (!$entityInd) {
                 $entityInd = new GoalDetailsInd();
             }
-            //AFECTA A LA ENTIDAD DE NOTIFICACION DE METAS INDIVIDUAL
+            //AFECTA A LA ENTIDAD DE NOTIFICACION DE METAS INDIVIDUAL    
+            $entityInd->setJanuaryPlanned($entity->getJanuaryPlanned());
+            $entityInd->setFebruaryPlanned($entity->getFebruaryPlanned());
+            $entityInd->setMarchPlanned($entity->getMarchPlanned());
+            $entityInd->setAprilPlanned($entity->getAprilPlanned());
+            $entityInd->setMayPlanned($entity->getMayPlanned());
+            $entityInd->setJunePlanned($entity->getJunePlanned());
+            $entityInd->setJulyPlanned($entity->getJulyPlanned());
+            $entityInd->setAugustPlanned($entity->getAugustPlanned());
+            $entityInd->setSeptemberPlanned($entity->getSeptemberPlanned());
+            $entityInd->setOctoberPlanned($entity->getOctoberPlanned());
+            $entityInd->setNovemberPlanned($entity->getNovemberPlanned());
+            $entityInd->setDecemberPlanned($entity->getDecemberPlanned());
             $form = $this->createForm(new GoalDetailsIndType(), $entityInd);
         } else {
             //AFECTA A LA ENTIDAD DE NOTIFICACION DE METAS GLOBAL
             $form = $this->createForm(new GoalDetailsType(), $entity);
+            $usernotific = null;
         }
 
         $arrangementProgram = $entity->getGoal()->getTimeline()->getArrangementProgram();
@@ -280,7 +291,8 @@ class RestArrangementProgramController extends FOSRestController {
             'data' => $entity,
             'success' => $success,
             'total' => 1,
-            'messages' => 'Exitooooo'
+            'messages' => 'Exitooooo',
+            'user' => $usernotific
         );
 
         $view->setData($result);

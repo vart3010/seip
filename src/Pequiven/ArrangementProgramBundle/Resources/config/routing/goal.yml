@@ -87,3 +87,11 @@ movement_delete:
     methods: [GET|POST]
     options:
         expose: true
+        
+individual_value:
+    path: /searchValue/{idGoal}/{idUser}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram_goal:searchValuebyUserAction
+    methods: [GET|POST]
+    options:
+        expose: true

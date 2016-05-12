@@ -79,7 +79,11 @@
                     <td>{$ goal.weight $}%</td>
                     <td>
                         <span ng-repeat="responsible in goal.responsibles">
-                            {$ responsible.firstname + " "+ responsible.lastname $} <small class="tag">{$ " ("+responsible.username+")" $}</small><span ng-if="!$last"></span><span ng-if="$last"></span>
+                            {$ responsible.firstname + " "+ responsible.lastname $}
+                            <small class="tag">{$ " ("+responsible.username+")" $}</small>
+                            <span ng-if="!$last"></span>
+                            <span ng-if="$last"></span>
+                            {$ getGoalValuebyResponsible(goal.id, responsible.id) $}
                             <br>
                         </span>
                     </td>

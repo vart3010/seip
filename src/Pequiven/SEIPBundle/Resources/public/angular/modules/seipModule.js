@@ -240,6 +240,15 @@ angular.module('seipModule.controllers', [])
 
             };
 
+            $scope.getGoalValuebyResponsible = function (idGoal, idUser) {
+                var url = Routing.generate("individual_value", {responsibles: idGoal, gerencia: idUser});
+                //$http.get(url).success(function (data) {                        
+                    //    console.log(data);
+                 //   });
+                
+                //return value;
+            };
+
             $scope.getUrlMovement = function (idGoal, url) {
 
                 var redirect = url + "?idGoal=" + idGoal;
@@ -6897,10 +6906,10 @@ angular.module('seipModule.controllers', [])
                             "renderAt": render,
                             "width": width + "%",
                             "height": height,
-                            "dataFormat": 'json',                            
+                            "dataFormat": 'json',
                             "dataSource": {
                                 "chart": data.dataSource.chart,
-                                "categories": data.dataSource.categories,                                
+                                "categories": data.dataSource.categories,
                                 "dataset": data.dataSource.dataset
                             }
                         });
@@ -6909,7 +6918,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //33-Gráfico tipo multiseries de línea, con un trendline de forma horizontal y el valor de los resultados
             $scope.chargeChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = function (indicatorId, render, width, height) {
                 var getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = Routing.generate("getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult", {id: indicatorId});

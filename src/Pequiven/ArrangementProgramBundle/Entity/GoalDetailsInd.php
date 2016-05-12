@@ -272,6 +272,14 @@ class GoalDetailsInd {
      */
     private $resultBeforepenalty = 0;
 
+    /**
+     * Resultado
+     * @var float
+     *
+     * @ORM\Column(name="resultreal", type="float", nullable=true)
+     */
+    private $resultReal = 0;
+
     function getId() {
         return $this->id;
     }
@@ -526,6 +534,14 @@ class GoalDetailsInd {
 
     function setResultBeforepenalty($resultBeforepenalty) {
         $this->resultBeforepenalty = $resultBeforepenalty;
+    }
+
+    function getResultReal() {
+        return $this->resultReal;
+    }
+
+    function setResultReal($resultReal) {
+        $this->resultReal = $resultReal;
     }
 
     public function __toString() {
