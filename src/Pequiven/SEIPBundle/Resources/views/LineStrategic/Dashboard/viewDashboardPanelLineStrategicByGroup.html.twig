@@ -1,0 +1,69 @@
+{% extends "PequivenSEIPBundle:Template:Developer/layoutGestion.html.twig" %}
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/icons.css') }}">
+{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('')
+    ) }}  
+{% endblock %}
+
+
+{% block body %}    
+    {#{{ boxRender.renderBox('pequiven_seip_box_linestrategic_iconsnavbar')|raw }}#}
+    <br>
+    <br>
+
+    <div class="ten-columns">         
+        <h2>
+            {%if (group.color!=null) %}                            
+                {% set color= group.color %}
+            {%else%}                
+                {% set color= "#BCBCBC" %}
+            {%endif%}
+            <i class="fa {{ group.logo }}" style="color: {{color}}; font-size: 50px;" aria-hidden="true"></i>
+            {{group.description}}
+        </h2>
+    </div>
+    <hr class="hr-linestrategic-icons" />
+    <br>
+    <br>
+    {% for key, line in lineStrategics %}
+        {% set styleIcon= 'background: none' %}
+        <div class="four-columns align-center" style="display:inline-block;">
+            <a href="{{ path('pequiven_groupindicators',{tablero:1, idGroup:group.id, idLineStrategic: line.id}) }}">
+                <div class="button" style="height: 150px; width: 250px;">
+                    <span>
+                        <img class="icon-strategic" src="{{ asset(iconsLineStrategic[line.id]) }}" style='margin: 5%'>                
+                    </span>  
+                </div>
+                <br>
+                <div class="button red-gradient" style="height: auto; width: 250px;">                    
+                    <p class="title-icon-strategic" style="font-size: 15px; font-weight: bold;">
+                        {{line.description}}
+                    </p>                    
+                </div>
+            </a>
+        </div>
+    {%endfor%}
+{% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+    </script>
+{% endblock %}

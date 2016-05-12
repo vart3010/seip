@@ -1,0 +1,92 @@
+{% extends "PequivenSEIPBundle:Template:Developer/layoutGestion.html.twig" %}
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/icons.css') }}">
+{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('')
+    ) }}
+
+
+
+{% endblock %}
+
+{% block body %}    
+    <br>
+    <br>
+
+    <div class="ten-columns">         
+        <h2>
+            {%if (group.color!=null) %}                            
+                {% set color= group.color %}
+            {%else%}                
+                {% set color= "#BCBCBC" %}
+            {%endif%}
+            <i class="fa {{ group.logo }}" style="color: {{color}}; font-size: 50px;" aria-hidden="true"></i>
+            {{group.description}}
+        </h2>
+    </div>
+    <hr class="hr-linestrategic-icons" />
+    <br>
+    <br>
+    {% set classColor = 'red-gradient' %}
+    {% for t in tree %}
+        {% set lineStrategic = t['parent'] %}        
+        <div class="twelve-columns twelve-columns-tablet twelve-columns-mobile new-row-mobile" {#style="{{ style[lineStrategic.ref] }}"#}
+             <!-- Línea Estratégica -->
+             <div class="with-padding">
+                <div class="columns">
+                    <div class="four-columns align-center" style="display:inline-block;">
+                        <span>
+                            <img class="icon-strategic" src="{{ asset(iconsLineStrategic[lineStrategic.level]) }}">
+                        </span>
+                        <br>
+                        <p class="title-icon-strategic">{{ lineStrategic.description }}</p>
+                    </div>
+                    <div class="eight-columns" style="display:inline-block;">
+                        <!-- Indicadores de la Línea Estratégica -->
+                        {% for indicator in t['child'] %}
+                            {% if indicator.notshowIndicatorNoEvaluateInPeriod != true %}
+                                <div class="four-columns twelve-columns-mobile new-row-mobile" style="display: inline-block;" ng-controller="DashboardController" ng-init="renderWidgetIndicatorStrategic('{{ indicator.ref }}',{{ data[lineStrategic.ref][indicator.ref]|json_encode() }},'100%','150px')">
+                                    <a target="_blank" href="{{ path('pequiven_indicator_show',{id:indicator.id}) }}">
+                                        <span title="{{ indicator.description }}">
+                                            <p style="text-align: center;margin-bottom: -5px;">
+                                                <b>
+                                                    <i class="fa {{ group.logo }}" aria-hidden="true"></i>
+                                                    &nbsp;-&nbsp;
+                                                    {{ indicator.summary }}
+                                                </b>
+                                            </p>
+                                        </span>
+                                    </a>
+                                    <span id="{{ indicator.ref }}">
+                                    </span>                            
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+    </script>
+{% endblock %}
