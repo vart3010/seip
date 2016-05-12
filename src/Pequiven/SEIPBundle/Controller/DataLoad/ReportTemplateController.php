@@ -1786,8 +1786,9 @@ class ReportTemplateController extends SEIPController {
                                         "idProduct" => $productId
                                     );
                                     // }
+                                    $unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
                                     if($overProduction==1) {
-                                        $unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
+                                        
                                         $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $productReport);
                                         //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]);
                                         //var_dump($unrealizedProduction["total_day"]);
@@ -1799,7 +1800,7 @@ class ReportTemplateController extends SEIPController {
                                         $unrealizedProduction["total_year"] = ($unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year']);
 
                                     } else if($overProduction==2) { 
-                                        $unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
+                                        #$unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
                                         $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $productReport);
                                         //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]);
                                         //var_dump($unrealizedProduction["total_day"]);
