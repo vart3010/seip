@@ -1,0 +1,46 @@
+{% if typeObject == 1 %}
+{# Chart Evolution #}
+<div class="columns with-padding"> 
+    <h4 align="center">Gráfica de Datos y Tendencia de Proceso</h4>                
+        <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">
+            {# señalización tendencia #}
+            <div class="position">
+                {{ font["text"]}}
+                <i class="fa fa-{{ font["icon"] }} fa-2x position"> &nbsp;</i>
+            </div>
+            <div class="nine-columns twelve-columns-mobile" id="chartContainerResult"></div>                                
+            <input id='exportpng' type='hidden' value='Exportar Informe' />
+            {# Configuracion de medicion del indicador #}
+            {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CONFIG') %}                
+                <div ng-controller="EvolutionIndicatorConfig"> 
+                    <div class="button-group button-config">
+                            <a class="button icon-list-add" href="" ng-click="loadTemplateConfig()" title="">{{ 'pequiven_indicator.config'|trans({},'PequivenSIGBundle')  }}</a>
+                        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CLONING') and level != 3 %}                
+                            <a class="button icon-pages" href="" ng-click="loadTemplateCloning()" title="">Clonar</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>  
+</div> 
+{% else %}
+<div class="columns with-padding"> 
+    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 82%;" align="center">                
+        <div class="nine-columns twelve-columns-mobile" id="chartContainerResult"></div>   
+        <input id='exportpng' type='hidden' value='Exportar Informe' />
+    </div>  
+</div> 
+{% endif %}
+{# trend #}
+{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}              
+    <br/><br/>{% include 'PequivenSIGBundle:Indicator:show/analysis_trend.html.twig' %} &nbsp;     
+{% endif %}
+{# chart causes #}
+<div class="columns with-padding">
+    <h4 align="center">Causas de Desviación</h4>                
+    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode()}})" style="width: 95%; height:55%;" align="center">
+        <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs"></div>
+        <input id='export_causespng' type='hidden' value='Exportar Informe' />
+    </div>
+</div> 
+{# Fin de Graficos #}

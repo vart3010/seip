@@ -4626,11 +4626,11 @@ class IndicatorService implements ContainerAwareInterface {
         $periodInvalid = 2;
         $periodInicator = $indicator->getPeriod()->getId();
         $periodCharge = $periodInicator - 1;
-
-        $periods = [
-            1 => "2014",
-            2 => "2015"
-        ];
+        
+        $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
+        
+        $dataPeriods = $evolutionService->getLastPeriods($periodInicator); //Obtenemos la data del gráfico de acuerdo al indicador
+        $periods = $dataPeriods['periods'];
 
         $valuesLastPeriod = $this->chargeLastPeriod($indicator, $periods);
 
@@ -4705,17 +4705,10 @@ class IndicatorService implements ContainerAwareInterface {
         $dataSetAcum["seriesname"] = "Acumulado";
         $dataSetAnt["seriesname"] = "Periodo";
 
-        foreach ($periods as $key => $value) {
-            $arrayLabelAnt[] = $value;
-        }
-
         $labelProm = $medition;
         $labelobj = "Objetivo " . $indicator->getPeriod()->getName();
-
-        for ($i = 0; $i < $periodCharge; $i++) {
-            $labelAnt["label"] = $arrayLabelAnt[$i]; //Label de periodos anteriores
-            $category[] = $labelAnt; //Label de periodos anteriores            
-        }
+        
+        $category = $dataPeriods['category'];
 
         if ($totalNumValues > 0) {
             $indicatorValues = $indicator->getValuesIndicator();
@@ -5112,6 +5105,14 @@ class IndicatorService implements ContainerAwareInterface {
             return false;
         }
     }
+    
+    /**
+     * 
+     * @return \Pequiven\SIGBundle\Service\EvolutionService
+     */
+    protected function getEvolutionService() {
+        return $this->container->get('seip.service.evolution');
+    } 
 
     protected function getSecurityService() {
         return $this->container->get('seip.service.security');

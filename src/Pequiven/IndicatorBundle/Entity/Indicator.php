@@ -589,38 +589,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $resultsAdditionalInDashboardColumn = false;
 
     /**
-     * Causas de Desviación
-     * 
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause
-     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause",mappedBy="indicator",cascade={"persist","remove"})
-     */
-    protected $indicatorCause;
-
-    /**
-     * Analisis de las Causas de Desviación
-     * 
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis
-     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis",mappedBy="indicator",cascade={"persist","remove"})
-     */
-    protected $indicatorCauseAnalysis;
-
-    /**
-     * Tendencia del indicador
-     * 
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend
-     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend",mappedBy="indicator",cascade={"persist","remove"})
-     */
-    protected $indicatorTrend;
-
-    /**
-     * Causas de Desviación
-     * 
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause
-     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification",mappedBy="indicator",cascade={"persist","remove"})
-     */
-    protected $indicatorVerification;
-
-    /**
      * ¿En los gráficos de columna, se mostrará una columna plan, al final y con el valor de 'plan anual' que es el mismo?
      * @var boolean
      *  @ORM\Column(name="showColumnPlanAtTheEnd",type="boolean")
@@ -772,10 +740,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->featuresIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->charts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->indicatorVerification = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->indicatorCause = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->indicatorCauseAnalisys = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->indicatorTrend = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorGroup = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -1219,130 +1183,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getValuesIndicator() {
         return $this->valuesIndicator;
-    }
-
-    /**
-     * Add indicatorCause
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause $indicatorCause
-     * @return Indicator
-     */
-    public function addIndicatorCause(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause $indicatorCause) {
-
-        $this->indicatorCause->add($indicatorCause);
-
-        return $this;
-    }
-
-    /**
-     * Remove indicatorCause
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause $indicatorCause
-     */
-    public function removeIndicatorCause(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause $indicatorCause) {
-        $this->indicatorCauses->removeElement($indicatorCause);
-    }
-
-    /**
-     * Get indicatorCause
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getIndicatorCause() {
-        return $this->indicatorCause;
-    }
-
-    /**
-     * Add indicatorVerification
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $indicatorVerification
-     * @return Indicator
-     */
-    public function addIndicatorVerification(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $indicatorVerification) {
-
-        $this->indicatorVerification->add($indicatorVerification);
-
-        return $this;
-    }
-
-    /**
-     * Remove indicatorVerification
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $indicatorCause
-     */
-    public function removeIndicatorVerification(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $indicatorVerification) {
-        $this->indicatorCauses->removeElement($indicatorCause);
-    }
-
-    /**
-     * Get indicatorVerification
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getIndicatorVerification() {
-        return $this->indicatorVerification;
-    }
-
-    /**
-     * Add indicatorCauseAnalysis
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis $indicatorCauseAnalysis
-     * @return Indicator
-     */
-    public function addIndicatorCauseAnalysis(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis $indicatorCauseAnalysis) {
-
-        $this->indicatorCauseAnalysis->add($indicatorCauseAnalysis);
-
-        return $this;
-    }
-
-    /**
-     * Remove indicatorCauseAnalysis
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis $indicatorCauseAnalysis
-     */
-    public function removeIndicatorCauseAnalysis(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis $indicatorCauseAnalysis) {
-        $this->indicatorCauseAnalysis->removeElement($indicatorCauseAnalysis);
-    }
-
-    /**
-     * Get indicatorCauseAnalysis
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getIndicatorCauseAnalysis() {
-        return $this->indicatorCauseAnalysis;
-    }
-
-    /**
-     * Add indicatorTrend
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $indicatorTrend
-     * @return Indicator
-     */
-    public function addIndicatorTrend(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $indicatorTrend) {
-
-        $this->indicatorTrend->add($indicatorTrend);
-
-        return $this;
-    }
-
-    /**
-     * Remove indicatorTrend
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $indicatorTrend
-     */
-    public function removeIndicatorTrend(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $indicatorTrend) {
-        $this->indicatorTrend->removeElement($indicatorTrend);
-    }
-
-    /**
-     * Get indicatorTrend
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getIndicatorTrend() {
-        return $this->indicatorTrend;
     }
 
     /**
