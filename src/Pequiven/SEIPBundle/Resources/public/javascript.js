@@ -71,14 +71,13 @@ $(function() {
             }
         }).width(width - horizontalPadding).height(heigth - verticalPadding);
     });
-});
-
-//Tabs
-$(document).ready(function(){
-    $(this).find('div.standard-tabs').parent('div')
-    .prepend('<div class="tabs-arrows" style="font-size: 1.543em; margin-top: -16px; height: 16px;"><a class="move-tab" href="#!" style="float: left;">&#65513;</a><a class="move-tab" href="#!" style="float: right;">&#65515;</a></div>')
+    
+    //Tabs
+    $(this).find('ul.tabs li.active').css('font-weight', 'bold').end().find('div.standard-tabs').parent('div')
+    .prepend('<div class="tabs-arrows" style="font-size: 1.543em; margin-top: -16px; height: 16px;"><a class="move-tab" href="#!" style="float: left; visibility: hidden;">&#65513;</a><a class="move-tab" href="#!" style="float: right;">&#65515;</a></div>')
     .on('click', 'a.move-tab', function(e){
         var tabsWidth = 0;
+        $('a.move-tab').css('visibility', 'visible');
         $('ul.tabs li').each(function(index) {
             tabsWidth += parseInt($(this).width(), 10);
         });
@@ -91,6 +90,8 @@ $(document).ready(function(){
                         act_tab.next().next().css('display','none');
                         act_tab.prev().prev().css('display','inherit');
                     } act_tab = act_tab.prev()
+                } if(!act_tab.prev().length) {
+                    $(this).css('visibility', 'hidden');
                 }
                 break;
             case 'right':
@@ -99,8 +100,12 @@ $(document).ready(function(){
                         act_tab.prev().prev().css('display','none');
                         act_tab.next().next().css('display','inherit');
                     } act_tab = act_tab.next()
+                } if(!act_tab.next().length) {
+                    $(this).css('visibility', 'hidden');
                 }
                 break;
         } $('a[href="'+act_tab.children('a').attr('href')+'"]').click();
+        $('ul.tabs li').css('font-weight', "");
+        $('ul.tabs li.active').css('font-weight', 'bold');
     });
 });
