@@ -74,7 +74,7 @@ $(function() {
     
     //Tabs
     $(this).find('ul.tabs li.active').css('font-weight', 'bold').end().find('div.standard-tabs').parent('div')
-    .prepend('<div class="tabs-arrows" style="font-size: 1.543em; margin-top: -16px; height: 16px;"><a class="move-tab" href="#!" style="float: left; visibility: hidden;">&#65513;</a><a class="move-tab" href="#!" style="float: right;">&#65515;</a></div>')
+    .prepend('<div class="tabs-arrows" style="font-size: 2.147em; margin-top: -16px; height: 16px;"><a class="move-tab" href="#!" style="float: left; visibility: hidden;">&#65513;</a><a class="move-tab" href="#!" style="float: right;">&#65515;</a></div>')
     .on('click', 'a.move-tab', function(e){
         var tabsWidth = 0;
         $('a.move-tab').css('visibility', 'visible');
