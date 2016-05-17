@@ -188,6 +188,118 @@ class ProductReportService implements ContainerAwareInterface {
         //return $pie;
     }
 
+    public function generateColumn3dLineryPerPlantGroups($titles, $summaryProduction, $range, $methodFrecuency, $fieldPlan, $fieldReal,$division = 1) {
+
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(),
+                'dataset' => array(),
+            ),
+        );
+
+        $chart = array();
+        
+         if ($range["range"]) {
+            $chart["caption"] = "Producción desde " . $range["dateFrom"]->format("d-m-Y") . " hasta " . $range["dateEnd"]->format("d-m-Y");
+        } else {
+            $chart["caption"] = $titles["caption"];
+        }
+        $chart["subCaption"] = $titles["subCaption"];
+        //        $chart["xAxisName"] = "Indicador";
+        if ($division == 1) {
+            $chart["pYAxisName"] = "Cantidad (TM)";
+        } else if ($division == 1000) {
+            $chart["pYAxisName"] = "Cantidad (MTM)";
+        }
+        $chart["sYAxisName"] = "% Ejecucion";
+        $chart["sNumberSuffix"] = "%";
+        $chart["sYAxisMaxValue"] = "100";
+        $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valueFontColor"] = "#000000";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "1";
+        $chart["placeValuesInside"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "14";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        $chart["decimals"] = "2";
+
+        $chart["exportenabled"] = "1";
+        $chart["exportatclient"] = "0";
+        $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
+        $chart["exportFileName"] = "Grafico Resultados ";
+
+        $data["dataSource"]["chart"] = $chart;
+        #var_dump($summaryProduction);
+
+        $arrayCategories = array();
+
+        $perc = array();
+        $plan = array();
+        $real = array();
+
+
+
+        foreach ($summaryProduction[$methodFrecuency] as $production) {
+            $arrayCategories[] = array("label" => $production["nameGroup"]);
+            $plan[] = array("value" => $production[$fieldPlan]);
+            $real[] = array("value" => $production[$fieldReal]);
+
+            if($production[$fieldReal]==0) { 
+                $p = 0.0;
+            } else {
+                $p = (($production[$fieldReal] * 100) / $production[$fieldPlan]);
+            }
+
+            $perc[] = array("value"=> number_format( $p, 2, ',', '.'));
+        }
+        $data["dataSource"]["categories"][]["category"] = $arrayCategories;
+        $data["dataSource"]["dataset"][] = array(
+            "seriesname" => "Plan",
+            "data" => $plan
+        );
+        $data["dataSource"]["dataset"][] = array(
+            "seriesname" => "Real",
+            "data" => $real
+        );
+     
+        $data["dataSource"]["dataset"][] = array(
+            "seriesname" => "Porcentaje",
+            "renderAs" => "line",
+            "parentYAxis" => "S",
+            "showValues" => "0",
+            "data" => $perc
+        );
+        //var_dump(json_encode($data["dataSource"]["dataset"]));
+
+        
+
+
+        #var_dump($data["dataSource"]["dataset"]);
+        #die();
+
+        return json_encode($data);
+    }
+
     public function generateColumn3dLinery($titles, $productReport, $range, $dateReport, $typeReport, $methodFrecuency, $plan, $real, $division = 1) {
         $data = array(
             'dataSource' => array(

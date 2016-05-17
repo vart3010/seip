@@ -223,7 +223,7 @@
                     {% set totalPnr = totalPnr + unrealized.total %}
                     <tr>
                         <td scope="col" width="60%" class="product">{{ unrealized.productName|upper }}</td>
-                        <td scope="col" width="40%" class="values">{{ unrealized.total|number_format(2, ',', '.') }}</td>
+                        <td scope="col" width="40%" class="values">{{ validPnr(unrealized.total)|number_format(2, ',', '.') }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -244,7 +244,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
                     $dataSetReal["data"][] = $dataReal;
                     
                     //Carga de la Data Plan
-                    $dataPlan["value"] = $planned[$cont];
+                    $dataPlan["value"] = 100;
                     $dataSetPlan["data"][] = $dataPlan;
 
                     //creacion de la tendencia
@@ -254,6 +254,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
                 }
                     $cont++;
             }
+            
             //Label Promedio o Acumunlado
             $labelp["label"] = $labelProm;//Label del Prom
             $category[] = $labelp;//Label del Prom
