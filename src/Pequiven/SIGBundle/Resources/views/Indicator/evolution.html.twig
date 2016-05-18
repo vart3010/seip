@@ -128,9 +128,8 @@
     </div>
 </p>
 {# Box historico informe de Evolución #}
-<div id="evolutionItems" style="display: none;">
-    {% set data = indicator_sig.id %}             
-        {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}            
+<div id="evolutionItems" style="display: none;">               
+    {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}            
 </div>  
 {% endblock body %}
 {% block stylesheets %}
@@ -178,14 +177,14 @@
     <script src="{{  asset('bundles/pequivensig/js/loadFiles.js') }}"></script> 
 
     <script type="text/javascript">        
-        /*$(document).ready(function () {
+        $(document).ready(function () {
             $("a#showItems").click(function () {
                 $("#evolutionItems").toggle("slow");
                 $("a#showItems span.title ").toggle();
             });
         });
 
-        //Carga de Archivo pdf
+        /*//Carga de Archivo pdf
         function uploadFilePdf(id) {
             $("input#indicatorFilePdf_" + id).click();
             console.log(id);

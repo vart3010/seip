@@ -64,6 +64,21 @@ class EvolutionService implements ContainerAwareInterface {
         }
 
         return $result;
+    }  
+
+    /**
+     * Buscamos las entidades consultadas
+     * @param Request $request
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauses
+     * @throws type
+     */
+    public function getObjectLoadFile($id, $typeObject) { 
+
+        if ($typeObject == 1) {
+            $result = $this->container->get('pequiven.repository.sig_causes_analysis')->find($id);
+        }
+
+        return $result;
     }   
 
     /**
