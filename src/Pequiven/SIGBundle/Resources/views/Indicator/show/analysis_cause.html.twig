@@ -6,9 +6,8 @@
         {% if analysis and not cloning %}
             {% for data in analysis %}                
                 {% if data.file %}
-                    <div class="button-group absolute-right compact">
-                        <span class=" button icon-download" href="{{ path('pequiven_sig_monitoring_show_download', {'id':data.id})}}" target="_blank" title="Descargar Analisis Causa Raiz" download="{{ data.file }}">{{ "pequiven.actions.download_file"|trans({},"messages") }}
-                        </span>
+                    <div class="button-group absolute-right compact">                        
+                        <a class=" button icon-download" href="{{ path('pequiven_sig_evolution_download_file', {'typeObject':1,'idObject':data.id})}}" target="_blank" title="Descargar Analisis Causa Raiz" download="{{ data.file }}">{{ "pequiven.actions.download_file"|trans({},"messages") }}</a>
                     </div>
                 {% else %}
                 <div class="button-group absolute-right compact">

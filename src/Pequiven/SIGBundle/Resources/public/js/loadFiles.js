@@ -39,7 +39,7 @@ $(':button').click(function(){
     var formData = [];
     var formData = new FormData($(".formulario")[0]);
     var message = ""; 
-    console.log(formData);
+
     $.ajax({
         url: urlLoadFile,  
         type: 'POST',
@@ -61,6 +61,9 @@ $(':button').click(function(){
             $('#subir').hide();      
             showMessage(message);
             $('#fileName').val(data);                    
+            if (data == 1) {
+                location.reload();               
+            };
         },
         //si ha ocurrido un error
         error: function(){

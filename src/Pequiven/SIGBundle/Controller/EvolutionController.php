@@ -36,7 +36,7 @@ class EvolutionController extends ResourceController
             $em->flush();         
 
             sleep(3);            
-            $response->setData($nameFile);
+            $response->setData(1);
             return $response;            
         }else{
             throw new Exception("Error Processing Request", 1);   
