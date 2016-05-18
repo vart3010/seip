@@ -36,9 +36,10 @@ $(':file').change(function()
 
 //Enviando formulario
 $(':button').click(function(){            
+    var formData = [];
     var formData = new FormData($(".formulario")[0]);
     var message = ""; 
-    
+    console.log(formData);
     $.ajax({
         url: urlLoadFile,  
         type: 'POST',

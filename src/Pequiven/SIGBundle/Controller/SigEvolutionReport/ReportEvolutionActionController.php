@@ -421,7 +421,7 @@ class ReportEvolutionActionController extends ResourceController
         $gerencia = "S/G-";
 
         $evolutionService = $this->getEvolutionService();            
-        $object = $evolutionService->getObjectEntity($idObject, $typeObject);
+        $result = $evolutionService->getObjectEntity($idObject, $typeObject);
         
         
         $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $idObject, 'month' => $monthSet, 'typeObject' => $typeObject));

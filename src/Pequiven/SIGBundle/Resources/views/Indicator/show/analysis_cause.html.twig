@@ -4,11 +4,19 @@
         <div class="block-title">
         <h3 class="ng-binding">{{ 'sig.analysis_causes'|trans ({}, 'messages') }}</h3>
         {% if analysis and not cloning %}
-            {% for data in analysis %}
-                {% set dataAnalysis = data.id %}
+            {% for data in analysis %}                
                 <div class="button-group absolute-right compact">
-                    <span ng-app class="button icon-outbox" onClick="uploadFilePdf(this.id)" id="{$ data.id $}" >{{ "pequiven.actions.upload_file"|trans({},"messages") }}
-                    </span>            
+                    {#<span ng-app class="button icon-outbox" onClick="uploadFilePdf(this.id)" id="{$ data.id $}" >{{ "pequiven.actions.upload_file"|trans({},"messages") }}
+                    </span> #}           
+                    <span class="messages"></span>
+                    <form enctype="multipart/form-data" class="formulario"> 
+                        <p class="button-height">
+                            <input id="idObject" name="idObject" value="{{data.id}}" type="hidden">
+                            <input id="typeObject" name="typeObject" value="1" type="hidden">
+                            <input type="file" name="archivo" id="imagen" value="" class="file" multiple>
+                            <input class="button icon-outbox" type="button" id="subir" value="Subir archivo"/>
+                        </p>                                           
+                    </form>                
                 </div>  
                 {# form carga de archivo #}
                 {#<div ng-controller="ToolsController">
@@ -20,10 +28,10 @@
                 {# end form #}
                 {# Descarga #}
                 {% if data.valueCauseFile %}
-                    <div class="button-group absolute-right compact">
+                    {#<div class="button-group absolute-right compact">
                         <span ng-app ng-init="validLoad()" class=" button icon-download" onClick="openFile(this.id)" id="open_{{ data.id }}">{{ "pequiven.actions.download_file"|trans({},"messages") }}
                         </span>
-                    </div>
+                    </div>#}
                 {% endif %}
             {% endfor %}
         {% elseif not cloning %}

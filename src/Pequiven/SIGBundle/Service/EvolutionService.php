@@ -274,7 +274,7 @@ class EvolutionService implements ContainerAwareInterface {
 
         $category = $dataSetReal = $dataSetPlan = $dataSetAcum = array();
         $label = $dataReal = $dataPlan = $dataAcum = $dataMedition = array();
-        $cantData = 0;
+        $cantData = $dataTendency = 0;
         //Carga de Nombres de Labels
         $dataSetReal["seriesname"] = "Real";
         $dataSetPlan["seriesname"] = "Plan";
@@ -295,8 +295,9 @@ class EvolutionService implements ContainerAwareInterface {
         $dataSetTend["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
         //$dataSetTend["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
         
-        $dataTendency = $ArrangementProgramService->ArrangementCalculateTendency($real, $cantData);//Calculo de Tendencia en servicio de Programas de Gestión
-        
+        if ($cantData >= 3) {                    
+            $dataTendency = $ArrangementProgramService->ArrangementCalculateTendency($real, $cantData);//Calculo de Tendencia en servicio de Programas de Gestión
+        }
         for ($i=0; $i < count($real); $i++) {                 
             if ($real[$cont] != NULL) {                                                 
                 $month = $ArrangementProgramService->getMonthsArrangementProgram($cont);//Carga de labels de los meses
@@ -310,10 +311,11 @@ class EvolutionService implements ContainerAwareInterface {
                 //Carga de la Data Plan
                 $dataPlan["value"] = $object->getResultOfObjetive();//$planned[$cont];
                 $dataSetPlan["data"][] = $dataPlan;
-
+                
                 //creacion de la tendencia
                 $dataRealTendency["value"] = $dataTendency['a'] + ($dataTendency['b'] * $cont);
                 $dataSetTend["data"][] = $dataRealTendency; //Data Real Tendencia                
+                
             }
                 $cont++;
         }
