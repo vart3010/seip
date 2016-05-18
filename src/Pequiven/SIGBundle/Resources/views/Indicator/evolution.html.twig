@@ -128,9 +128,8 @@
     </div>
 </p>
 {# Box historico informe de Evolución #}
-<div id="evolutionItems" style="display: none;">
-    {% set data = indicator_sig.id %}             
-        {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}            
+<div id="evolutionItems" style="display: none;">               
+    {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}            
 </div>  
 {% endblock body %}
 {% block stylesheets %}
@@ -175,6 +174,7 @@
     {{ parent() }}
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/pequivensig/js/loadFiles.js') }}"></script> 
 
     <script type="text/javascript">        
         $(document).ready(function () {
@@ -184,7 +184,7 @@
             });
         });
 
-        //Carga de Archivo pdf
+        /*//Carga de Archivo pdf
         function uploadFilePdf(id) {
             $("input#indicatorFilePdf_" + id).click();
             console.log(id);
@@ -217,7 +217,12 @@
             $("#field_" + valueCauseId[1]).val(valueCauseId[1]);
             $("#form_" + valueCauseId[1]).submit();
         }
-        
+        //fin file*/
+
+        //url file
+        var urlFiles = "{{ path("pequiven_sig_evolution_load_file") }}";
+        setUrlFiles(urlFiles); 
+        //end url file
         //Carga de Evento de Descarga de Grafica de Indicador
         function downloadEvolution(){            
             var button = document.getElementById("exportpng");

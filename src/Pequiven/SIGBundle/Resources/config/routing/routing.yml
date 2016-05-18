@@ -1,3 +1,16 @@
+#ruta de Carga de Archivos generales de informe de evolución
+pequiven_sig_evolution_load_file:
+    path: /load-files-evolution/upload
+    defaults:
+        _controller: pequiven.controller.evolution:uploadAction
+        _format: html    
+    methods: [GET|POST]
+pequiven_sig_evolution_download_file:
+    path: /download-files-evolution/{typeObject}/{idObject}
+    defaults:
+        _controller: pequiven.controller.evolution:downloadAction
+        _format: html    
+    methods: [GET|POST]
 #Ruta de informe de Evolucion de Objetivos
 pequiven_sig_objetive_evolution_show:
     path: /objetive/{id}/evolution/{month}

@@ -13,7 +13,54 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  * @author Maximo Sojo <maxsojo13@gmail.com>
  */
 class EvolutionController extends ResourceController
-{
+{   
+    public function uploadAction(Request $request){
+        $idObject = $request->get('idObject');
+        $typeObject = $request->get('typeObject');//typos 1:analisis de causas
+        
+        //Evolution Service para retorno de objeto
+        $evolutionService = $this->getEvolutionService();            
+        $object = $evolutionService->getObjectLoadFile($idObject, $typeObject);
+        
+        $response = new JsonResponse();    
+        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') 
+        {   
+            $nameFile = $typeObject."-".sha1(date('d-m-Y : h:m:s').$idObject);
+            
+            foreach ($request->files as $file) {
+                $file->move($this->container->getParameter("kernel.root_dir") . '/../web/uploads/documents/evolution_files/', $nameFile);
+                $fileUploaded = $file->isValid();                
+            }   
+            $em = $this->getDoctrine()->getManager();
+            $object->setFile($nameFile);            
+            $em->flush();         
+
+            sleep(3);            
+            $response->setData(1);
+            return $response;            
+        }else{
+            throw new Exception("Error Processing Request", 1);   
+        }
+    }
+
+     public function downloadAction(Request $request){
+        $idObject = $request->get('idObject');
+        $typeObject = $request->get('typeObject');//typos 1:analisis de causas
+
+        $em = $this->getDoctrine()->getManager();                        
+        
+        $evolutionService = $this->getEvolutionService();            
+        $object = $evolutionService->getObjectLoadFile($idObject, $typeObject);
+
+        $pathfile = $this->container->getParameter("kernel.root_dir") . '/../web/uploads/documents/evolution_files/'.$object->getFile();
+        
+        $mi_pdf = $pathfile;
+        header('Content-type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$mi_pdf.'"');
+        readfile($mi_pdf);
+        die();
+
+    }
     
     /**
      *
@@ -47,8 +94,7 @@ class EvolutionController extends ResourceController
      * Exportar informe de Evolución
      *
      */
-    public function exportAction(Request $request) {
-        
+    public function exportAction(Request $request) {        
         $idObject = $request->get('id'); //id         
         $typeObject = $request->get('typeObj'); //Tipo de objeto (1 = Indicador/2 = Programa G.) 
         $month = $request->get('month'); //El mes pasado por parametro
@@ -101,7 +147,6 @@ class EvolutionController extends ResourceController
 
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
         $dataAction = $evolutionService->findEvolutionCause($result, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
-
         
         $font = "";
         if ($typeObject == 1) {            

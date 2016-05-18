@@ -64,9 +64,7 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
         return 'Muestra los diferentes Historicos del Informe de Evolution';
     }
 
-    public function getTemplateName() {
-
-        
+    public function getTemplateName() {        
         return 'PequivenSIGBundle:Template:Box\EvolutionHistory.html.twig';
     }
 
