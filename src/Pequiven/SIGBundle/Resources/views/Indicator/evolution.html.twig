@@ -175,9 +175,10 @@
     {{ parent() }}
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/pequivensig/js/loadFiles.js') }}"></script> 
 
     <script type="text/javascript">        
-        $(document).ready(function () {
+        /*$(document).ready(function () {
             $("a#showItems").click(function () {
                 $("#evolutionItems").toggle("slow");
                 $("a#showItems span.title ").toggle();
@@ -217,7 +218,12 @@
             $("#field_" + valueCauseId[1]).val(valueCauseId[1]);
             $("#form_" + valueCauseId[1]).submit();
         }
-        
+        //fin file*/
+
+        //url file
+        var urlFiles = "{{ path("pequiven_sig_monitoring_show_upload") }}";
+        setUrlFiles(urlFiles); 
+        //end url file
         //Carga de Evento de Descarga de Grafica de Indicador
         function downloadEvolution(){            
             var button = document.getElementById("exportpng");
