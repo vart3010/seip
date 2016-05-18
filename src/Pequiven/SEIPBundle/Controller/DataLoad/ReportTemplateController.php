@@ -1877,9 +1877,6 @@ class ReportTemplateController extends SEIPController {
                     $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
 
 
-
-
-
                     $data = array(
                         'productsReport' => "",
                         'dateReport' => $dateReport,
@@ -2368,9 +2365,14 @@ class ReportTemplateController extends SEIPController {
                 $summaryProduction["month"] = $summaryMonthGroups;
                 $summaryProduction["year"] = $summaryYearGroups;
 
-                #$reportService = $this->getProductReportService();
-                #$graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
-                
+                $reportService = $this->getProductReportService();
+
+                $graphicsDays = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM","range"=>$byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd),"day", "plan", "real");
+
+                $graphicsMonth = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM","range"=>$byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd),"month", "plan_acumulated", "real_acumulated");
+
+                $graphicsYear = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM","range"=>$byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd),"year", "plan_acumulated", "real_acumulated");
+
 
 
                 $data = array(
@@ -2380,12 +2382,9 @@ class ReportTemplateController extends SEIPController {
                     'totalProduction' => $totalsProduction,
                     'observations' => $observations,
                     'rawMaterials' => $arrayRawMaterial,
-                    //'totalRawMaterial' => $arrayRawMaterialTotals,
                     'consumerServices' => $arrayConsumerServices,
                     'unrealizedProductions' => $arrayUnrealizedProduction,
                     'inventorys' => $arrayInventory,
-                    //'observation' => $arrayObservation,
-                    //'plantsNames' => $plants,
                     'typeReport' => $typeReport,
                     'plantReportId' => $plantReportId,
                     'form' => $form->createView(),
@@ -2399,17 +2398,16 @@ class ReportTemplateController extends SEIPController {
                     'showService' => $showService,
                     'showInventory' => $showInventory,
                     'showObservation' => $showObservation,
-                    //'withDetails' => $withDetails,
                     'dateFrom' => $dateFrom,
                     'dateEnd' => $dateEnd,
                     'typeReport' => $typeReport,
-                    //"graphicRange" => $graphicProducctionRange,
                     "securityService" => $this->getSecurityService(),
-                    //"plant" => $plant,
-                    //"tools" => $tools,
                     "startDatePeriod" => $startDatePeriod,
                     "endDatePeriod" => $endDatePeriod,
-                    "groupsPlants" => $groupsPlants
+                    "groupsPlants" => $groupsPlants,
+                    "graphicsDays"=>$graphicsDays,
+                    "graphicsMonth"=>$graphicsMonth,
+                    "graphicsYear"=>$graphicsYear
                 );
                 
                 $view = $this

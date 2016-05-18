@@ -5363,6 +5363,7 @@ angular.module('seipModule.controllers', [])
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
             var selectSecondLineManagement = angular.element("#selectSecondLineManagement");
             var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
+            var selectProfilesPoliticEvaluation = angular.element("#selectProfilesPoliticEvaluation");
 
 
             $scope.data = {
@@ -5370,6 +5371,7 @@ angular.module('seipModule.controllers', [])
                 first_line_managements: null,
                 second_line_managements: null,
                 work_study_circles: null,
+                profiles_politic_evaluation: null,
             };
 
             $scope.model = {
@@ -5377,6 +5379,7 @@ angular.module('seipModule.controllers', [])
                 firstLineManagement: null,
                 secondLineManagement: null,
                 workStudyCircle: null,
+                profilesPoliticEvaluation: null,
             };
 
             //Busca las localidades
@@ -5457,10 +5460,27 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
+            
+            //Busca los Perfiles de Evaluación Política
+//            $scope.getProfilesPoliticEvaluation = function () {
+//                var parameters = {
+//                    filter: {}
+//                };
+//                $http.get(Routing.generate('pequiven_seip_profiles_politic_evaluation', parameters))
+//                        .success(function (data) {
+//                            $scope.data.profiles_politic_evaluation = data;
+//                            if ($scope.model.profilesPoliticEvaluation != null) {
+//                                $scope.setValueSelect2("profilesPoliticEvaluation", $scope.model.profilesPoliticEvaluation, $scope.data.profiles_politic_evaluation, function (selected) {
+//                                    $scope.model.profilesPoliticEvaluation = selected;
+//                                });
+//                            }
+//                        });
+//            };
 
             $scope.getComplejos();
             $scope.getFirstLineManagement();
             $scope.getWorkStudyCircle();
+//            $scope.getProfilesPoliticEvaluation();
 
             //Scope de Localidad
             $scope.$watch("model.complejo", function (newParams, oldParams) {
@@ -5503,8 +5523,6 @@ angular.module('seipModule.controllers', [])
                 }
             });
 
-
-
             //Scope de Círculo de Estudio de Trabajo
             $scope.$watch("model.workStudyCircle", function (newParams, oldParams) {
                 if ($scope.model.workStudyCircle != null && $scope.model.workStudyCircle.id != undefined) {
@@ -5514,6 +5532,18 @@ angular.module('seipModule.controllers', [])
                     });
                 } else {
                     $scope.tableParams.$params.filter['workStudyCircle'] = null;
+                }
+            });
+
+            //Scope de Perfiles de Evaluación Política
+            $scope.$watch("model.profilesPoliticEvaluation", function (newParams, oldParams) {
+                if ($scope.model.profilesPoliticEvaluation != null && $scope.model.profilesPoliticEvaluation.id != undefined) {
+                    $scope.tableParams.$params.filter['profilesPoliticEvaluation'] = $scope.model.profilesPoliticEvaluation.id;
+                    //Al cambiar el círculo de estudio de trabajo
+                    selectProfilesPoliticEvaluation.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['profilesPoliticEvaluation'] = null;
                 }
             });
 
