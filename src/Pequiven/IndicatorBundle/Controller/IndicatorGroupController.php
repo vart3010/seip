@@ -120,24 +120,29 @@ class IndicatorGroupController extends SEIPController {
 
         $group = $this->container->get('pequiven.repository.indicatorgroup')->findOneById($this->getRequest()->get('idGroup'));
         $iconsLineStrategic = LineStrategic::getIcons();
-        $data = array();
         $indicatorService = $this->getIndicatorService();
         $lineStrategics = array();
+        $alllineStrategic = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null));
 
-        foreach ($group->getIndicators() as $indicator) {
-
-            foreach ($indicator->getLineStrategics() as $ls) {
-                if (!isset($lineStrategics[$ls->getId()])) {
-                    $lineStrategics[$ls->getId()] = $ls;
+        if ($group->getIndicators()==null) {
+            $this->get('session')->getFlashBag()->add('error', "El Tablero NO Posee Indicadores Asociados");            
+        } else {
+            foreach ($group->getIndicators() as $indicator) {
+                foreach ($indicator->getLineStrategics() as $ls) {
+                    if (!isset($lineStrategics[$ls->getId()])) {
+                        $lineStrategics[$ls->getId()] = $ls;
+                    }
                 }
             }
         }
+
 
         $data = array(
             'iconsLineStrategic' => $iconsLineStrategic,
             'indicatorService' => $indicatorService,
             'lineStrategics' => $lineStrategics,
             'group' => $group,
+            'alllineStrategic' => $alllineStrategic
         );
 
         $view = $this

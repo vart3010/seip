@@ -14,42 +14,50 @@
 
 
 {% block body %}    
-    {#{{ boxRender.renderBox('pequiven_seip_box_linestrategic_iconsnavbar')|raw }}#}
-    <br>
-    <br>
-
-    <div class="ten-columns">         
-        <h2>
-            {%if (group.color!=null) %}                            
-                {% set color= group.color %}
-            {%else%}                
-                {% set color= "#BCBCBC" %}
-            {%endif%}
-            <i class="fa {{ group.logo }}" style="color: {{color}}; font-size: 50px;" aria-hidden="true"></i>
-            {{group.description}}
-        </h2>
-    </div>
-    <hr class="hr-linestrategic-icons" />
-    <br>
-    <br>
-    {% for key, line in lineStrategics %}
-        {% set styleIcon= 'background: none' %}
-        <div class="four-columns align-center" style="display:inline-block;">
-            <a href="{{ path('pequiven_groupindicators',{tablero:1, idGroup:group.id, idLineStrategic: line.id}) }}">
-                <div class="button" style="height: 150px; width: 250px;">
-                    <span>
-                        <img class="icon-strategic" src="{{ asset(iconsLineStrategic[line.id]) }}" style='margin: 5%'>                
-                    </span>  
-                </div>
-                <br>
-                <div class="button red-gradient" style="height: auto; width: 250px;">                    
-                    <p class="title-icon-strategic" style="font-size: 15px; font-weight: bold;">
-                        {{line.description}}
-                    </p>                    
-                </div>
-            </a>
+    {#{{ boxRender.renderBox('pequiven_seip_box_linestrategic_iconsnavbar')|raw }}#}   
+    <br><br>
+        <div class="ten-columns">         
+            <h2>
+                {%if (group.color!=null) %}                            
+                    {% set color= group.color %}
+                {%else%}                
+                    {% set color= "#BCBCBC" %}
+                {%endif%}
+                <i class="fa {{ group.logo }}" style="color: {{color}}; font-size: 50px;" aria-hidden="true"></i>
+                {{group.description}}
+            </h2>
         </div>
-    {%endfor%}
+        <hr class="hr-linestrategic-icons" />       
+        <br>
+
+        {% for key, line in alllineStrategic %}
+            {% set styleIcon= 'background: none' %}
+            <div class="four-columns new-row-mobile new-row-mobile-landscape new-row-mobile-portrait new-row-tablet align-center" style="min-height: 300px; display:inline-block; vertical-align: top; align-items: center;">
+                {% if(lineStrategics[line.id] is defined) %}
+                    <a href="{{ path('pequiven_groupindicators',{tablero:1, idGroup:group.id, idLineStrategic: line.id}) }}">
+                        <div class="button" style="height: 180px; width: 300px;">                    
+                            <img class="icon-strategic" src="{{ asset(iconsLineStrategic[line.id]) }}" style="margin: 5%;">  
+                            <br>
+                            <div class="button red-gradient" style="height: auto; width: 250px; position: inherit;">                    
+                                <p class="title-icon-strategic" style="font-size: 13px; font-weight: bold;">
+                                    {{line.description}}
+                                </p>                    
+                            </div>
+                        </div>
+                    </a>
+                {%else%}
+                    <div class="button disabled" style="height: 180px; width: 300px;">                    
+                        <img class="icon-strategic" src="{{ asset(iconsLineStrategic[line.id]) }}" style="margin: 5%;">  
+                        <br>
+                        <div class="button disabled red-gradient" style="height: auto; width: 250px; position: inherit;">                    
+                            <p class="title-icon-strategic" style="font-size: 13px; font-weight: bold;">
+                                {{line.description}}
+                            </p>                    
+                        </div>
+                    </div>            
+                {% endif %}
+            </div>
+        {%endfor%}   
 {% endblock body %}
 
 {% block stylesheets %}

@@ -3185,33 +3185,26 @@ class IndicatorService implements ContainerAwareInterface {
 
 //CARGO LAS CONFIGURACIONES DEL GRAFICO
         $chart["dataSource"]["chart"] = array(
+            "palette" => "2",
+            "bgColor" => "#FFFFFF",
             "caption" => $indicator->getDescription(),
             "captionOnTop" => "1",
             "captionPadding" => "25",
             "captionFontSize" => "16",
             "yAxisName" => "Bs./TM",
-            "bgColor" => "#ffffff",
-            "borderAlpha" => "20",
-            "showCanvasBorder" => "0",
-            "plotBorderAlpha" => "10",
-            "legendBorderAlpha" => "0",
-            "legendShadow" => "1",
-            "showXAxisLine" => "1",
-            "xAxisLineColor" => "#999999",
-            "divlineColor" => "#999999",
-            "divLineIsDashed" => "1",
-            "useRoundEdges" => "1",
-            "showSum" => "0",
-            "thousandSeparator" => ".",
-            "decimalSeparator" => ",",
-            "decimals" => "0",
-            "formatNumberScale" => "0",
-            "valueFontColor" => "000000",
+            "showlabels" => "1",
+            "showvalues" => "1",            
+            "showsum" => "0",
+            "valueFontColor" => "#000000",
             "valueFontBold" => "0",
             "valueFontSize" => "10",
-            "forceDecimals" => "1",
-            "showPlotBorder" => "0",
-            "usePlotGradientColor" => "0",
+            "thousandSeparator" => ".",
+            "decimalSeparator" => ",",
+            "formatNumberScale" => "0",
+            "decimals" => "0",
+            "useroundedges" => "1",
+            "legendborderalpha" => "0",
+            "showborder" => "0"
         );
 
 //TRAIGO LOS VALORES PLAN Y REAL DE LAS VARIABLES
@@ -3221,8 +3214,8 @@ class IndicatorService implements ContainerAwareInterface {
 //CATEGORIAS DEL ARRAY
         $chart["dataSource"]["categories"][] = array(
             "category" => array(
-                array("label" => "Presupuesto"),
-                array("label" => "Real")
+                array("label" => "PRESUPUESTO"),
+                array("label" => "REAL")
             )
         );
 
@@ -3258,18 +3251,21 @@ class IndicatorService implements ContainerAwareInterface {
             $value = array(
                 array(
                     "value" => $valoresP[$i],
-                    "color" => $color,
-                    "link" => $link
+//                    "color" => $color,
+                    "link" => $link,
+                    "label" => $labels[$i]
                 ),
                 array(
                     "value" => $valoresR[$i],
-                    "color" => $color,
-                    "link" => $link
+//                    "color" => $color,
+                    "link" => $link,
+                    "label" => $labels[$i]
                 ),
             );
 
             $datos[] = array(
                 'seriesname' => $labels[$i],
+                'color' => $color,
                 'data' => $value
             );
         }
@@ -4626,9 +4622,9 @@ class IndicatorService implements ContainerAwareInterface {
         $periodInvalid = 2;
         $periodInicator = $indicator->getPeriod()->getId();
         $periodCharge = $periodInicator - 1;
-        
+
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
-        
+
         $dataPeriods = $evolutionService->getLastPeriods($periodInicator); //Obtenemos la data del gráfico de acuerdo al indicador
         $periods = $dataPeriods['periods'];
 
@@ -4707,7 +4703,7 @@ class IndicatorService implements ContainerAwareInterface {
 
         $labelProm = $medition;
         $labelobj = "Objetivo " . $indicator->getPeriod()->getName();
-        
+
         $category = $dataPeriods['category'];
 
         if ($totalNumValues > 0) {
@@ -5105,14 +5101,14 @@ class IndicatorService implements ContainerAwareInterface {
             return false;
         }
     }
-    
+
     /**
      * 
      * @return \Pequiven\SIGBundle\Service\EvolutionService
      */
     protected function getEvolutionService() {
         return $this->container->get('seip.service.evolution');
-    } 
+    }
 
     protected function getSecurityService() {
         return $this->container->get('seip.service.security');

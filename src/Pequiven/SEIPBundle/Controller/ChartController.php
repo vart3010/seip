@@ -646,8 +646,8 @@ class ChartController extends SEIPController {
         $options = array(
             "colors" => array(
                 1 => "BDBDBD",
-                2 => "CB3D3A",
-                3 => "FF8F26",
+                2 => "da2f2a",
+                3 => "e58123",
                 4 => "3C7BCF",
                 5 => "9BC348",
                 6 => "FFFFCC",
@@ -664,7 +664,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 29-Función que retorna la data para un gráfico tipo multiseries de línea, con un trendline horizontal
      * @return JsonResponse

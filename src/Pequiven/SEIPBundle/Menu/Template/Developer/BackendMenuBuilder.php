@@ -1055,18 +1055,44 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                     'route' => 'pequiven_line_strategic_view_dashboard_complejo',
                                     //'route' => 'pequiven_line_strategic_indicators_specific',
                                     'routeParameters' => array('complejo' => $idC),
-                                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.' . $refC, $section)));
+                            'labelAttributes' => array('icon' => 'fa fa-industry',),
+                                ))->setLabel($this->translate(sprintf(strtoupper($refC), $section)));
                         $complejos->addChild($itemStrategicsIndicators);
                     }
                 }
 
-                //if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_RRHH')) {
-                    $itemsTableros = $this->factory->createItem('results.visualize.tableros.' . $refC, array(
+                if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_RRHH')) {
+                    $itemsTableros = $this->factory->createItem('results.visualize.tableros.rrhh', array(
                                 'route' => 'pequiven_dasboard_linestrategicbygroup',
                                 'routeParameters' => array('idGroup' => 5),
-                            ))->setLabel($this->translate(sprintf('RRHH', $section)));
+                                'labelAttributes' => array('icon' => 'fa fa-users',),
+                            ))->setLabel($this->translate(sprintf('Recursos Humanos', $section)));
                     $complejos->addChild($itemsTableros);
-                //}
+                }
+                if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_FINANZAS')) {
+                    $itemsTableros = $this->factory->createItem('results.visualize.tableros.finanzas', array(
+                                'route' => 'pequiven_dasboard_linestrategicbygroup',
+                                'routeParameters' => array('idGroup' => 6),
+                                'labelAttributes' => array('icon' => 'fa fa-money',),
+                            ))->setLabel($this->translate(sprintf('Finanzas', $section)));
+                    $complejos->addChild($itemsTableros);
+                }
+                if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_SHA')) {
+                    $itemsTableros = $this->factory->createItem('results.visualize.tableros.sha', array(
+                                'route' => 'pequiven_dasboard_linestrategicbygroup',
+                                'routeParameters' => array('idGroup' => 7),
+                                'labelAttributes' => array('icon' => 'fa fa-leaf',),
+                            ))->setLabel($this->translate(sprintf('SHA', $section)));
+                    $complejos->addChild($itemsTableros);
+                }
+                if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_SALUD')) {
+                    $itemsTableros = $this->factory->createItem('results.visualize.tableros.salud', array(
+                                'route' => 'pequiven_dasboard_linestrategicbygroup',
+                                'routeParameters' => array('idGroup' => 8),
+                                'labelAttributes' => array('icon' => 'fa fa-user-md',),
+                            ))->setLabel($this->translate(sprintf('Salud', $section)));
+                    $complejos->addChild($itemsTableros);
+                }
             }
 
             $visualize->addChild($complejos);

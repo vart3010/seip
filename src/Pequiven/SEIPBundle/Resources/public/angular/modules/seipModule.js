@@ -6922,8 +6922,7 @@ angular.module('seipModule.controllers', [])
                 $http.get(getDataStackedColumn3DbyIndicator).success(function (data) {
                     FusionCharts.ready(function () {
                         var ChartStackedColumn3DbyIndicator = new FusionCharts({
-                            "type": 'stackedcolumn3d',
-                            "theme": "fint",
+                            "type": 'stackedcolumn2d',                            
                             "renderAt": render,
                             "width": width + "%",
                             "height": height,
