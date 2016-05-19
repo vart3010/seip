@@ -59,7 +59,7 @@
     </div>
     {% endif %}
 
-   <br>
+<br>
 <fieldset class="fieldset">
     <legend class="legend">{{ indicator_sig }}&nbsp;</legend>
         <div class="columns">
@@ -109,74 +109,28 @@
             {% include 'PequivenSIGBundle:Template:base_month.html.twig' %}                         
 </fieldset>
   
-{# Graficos #}
-<div class="columns with-padding"> 
-    <h4 align="center">Gráfica de Datos y Tendencia de Proceso</h4>                
-        <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }},'{{ urlExportFromChart }}')" style="width: 95%;" align="center">
-            {# señalización tendencia #}
-            <div class="position">
-                {{ font["text"]}}
-                <i class="fa fa-{{ font["icon"] }} fa-2x position"> &nbsp;</i>
-            </div>
-            <div class="nine-columns twelve-columns-mobile" id="chartContainerResult"></div>                                
-            <input id='exportpng' type='hidden' value='Exportar Informe' />
-            {# Configuracion de medicion del indicador #}
-            {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CONFIG') %}                
-                <div ng-controller="EvolutionIndicatorConfig"> 
-                    <div class="button-group button-config">
-                            <a class="button icon-list-add" href="" ng-click="loadTemplateConfig()" title="">{{ 'pequiven_indicator.config'|trans({},'PequivenSIGBundle')  }}</a>
-                        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CLONING') and level != 3 %}                
-                            <a class="button icon-pages" href="" ng-click="loadTemplateCloning()" title="">Clonar</a>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endif %}
-        </div>  
-</div>  
-    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}              
-        <br/><br/>{% include 'PequivenSIGBundle:Indicator:show/analysis_trend.html.twig' %} &nbsp;     
-    {% endif %}
-<div class="columns with-padding">
-    <h4 align="center">Causas de Desviación</h4>                
-    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode()}},'{{ urlExportFromChart }}')" style="width: 95%; height:55%;" align="center">
-        <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs"></div>
-        <input id='export_causespng' type='hidden' value='Exportar Informe' />
+    {% include 'PequivenSIGBundle:Template:baseLoadSectionsEvolution.html.twig' %}     
+     
+<p class="button-height align-right">          
+    <div style="text-align: left; margin-left:15px;">
+        <a class="button"  id="showItems"  href="javascript:void(0)">
+            <span class="button-icon left-side red-gradient">
+                <span class="fa fa-history fa-1"></span>
+            </span>
+            <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
+            <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
+        </a>        
+        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}                       
+            {# Descarga de Informe de Evolución#}
+            {% set typeObj = 1 %}
+            &nbsp;  {{ buttons.generic_download }}        
+        {% endif %}
     </div>
-</div> 
-<br>        
-{# Fin de Graficos #}
-    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CAUSE') %}    
-        <br/><br/> {% include 'PequivenSIGBundle:Indicator:show/causes_list.html.twig' %}         
-        <br/><br/> {% include 'PequivenSIGBundle:Indicator:show/analysis_cause.html.twig' %} &nbsp;           
-    {% endif %}    
-    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION') %}    
-            <br /><br /> {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %} &nbsp;
-        {% if dataAction["values"] and is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION_VERIFICATION')%}  
-            {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
-        {% endif %}        
-        &nbsp;
-    {% endif %}    
-    <p class="button-height align-right">          
-        <div style="text-align: left; margin-left:15px;">
-            <a class="button"  id="showItems"  href="javascript:void(0)">
-                <span class="button-icon left-side red-gradient">
-                    <span class="fa fa-history fa-1"></span>
-                </span>
-                <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
-                <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
-            </a>        
-            {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}                       
-                {# Descarga de Informe de Evolución#}
-                {% set typeObj = 1 %}
-                &nbsp;  {{ buttons.generic_download }}        
-            {% endif %}
-        </div>
-    </p>
-    {# Box historico informe de Evolución #}
-    <div id="evolutionItems" style="display: none;">
-        {% set data = indicator_sig.id %}             
-            {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}            
-    </div>  
+</p>
+{# Box historico informe de Evolución #}
+<div id="evolutionItems" style="display: none;">               
+    {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}            
+</div>  
 {% endblock body %}
 {% block stylesheets %}
   {{ parent() }}    
@@ -220,6 +174,7 @@
     {{ parent() }}
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/pequivensig/js/loadFiles.js') }}"></script> 
 
     <script type="text/javascript">        
         $(document).ready(function () {
@@ -229,7 +184,7 @@
             });
         });
 
-        //Carga de Archivo pdf
+        /*//Carga de Archivo pdf
         function uploadFilePdf(id) {
             $("input#indicatorFilePdf_" + id).click();
             console.log(id);
@@ -262,7 +217,12 @@
             $("#field_" + valueCauseId[1]).val(valueCauseId[1]);
             $("#form_" + valueCauseId[1]).submit();
         }
-        
+        //fin file*/
+
+        //url file
+        var urlFiles = "{{ path("pequiven_sig_evolution_load_file") }}";
+        setUrlFiles(urlFiles); 
+        //end url file
         //Carga de Evento de Descarga de Grafica de Indicador
         function downloadEvolution(){            
             var button = document.getElementById("exportpng");

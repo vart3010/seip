@@ -9,8 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
-use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionCauseType;
@@ -35,15 +33,11 @@ class ReportEvolutionCausesController extends ResourceController
      */
     function getFormAnalysisAction(Request $request)
     {
-        $typeObj = $request->get('typeObj');//tipo de Objeto
-        $id = $request->get('idObject');// Id generico pero debo cambiar que diga id indicator
+        $idObject = $request->get('idObject');// Id generico pero debo cambiar
+        $typeObject  = $request->get('typeObj');//tipo de Objeto
         
-        if ($typeObj == 1) {
-            $result = $this->get('pequiven.repository.indicator')->find($id);
-        }elseif ($typeObj == 2) {
-            $repository = $this->get('pequiven_seip.repository.arrangementprogram');
-            $result = $repository->find($id); 
-        }
+        $evolutionService = $this->getEvolutionService();            
+        $result = $evolutionService->getObjectEntity($idObject, $typeObject);
         
         $causeAnalysis = new EvolutionCauseAnalysis();
         $form  = $this->createForm(new EvolutionCauseAnalysisType(), $causeAnalysis);
@@ -54,8 +48,8 @@ class ReportEvolutionCausesController extends ResourceController
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(
                 'indicator' => $result,
-                'form' => $form->createView(),
-                'period'        => $result->getPeriod()->getName()                
+                'form'      => $form->createView(),
+                'period'    => $result->getPeriod()->getName()                
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -70,31 +64,15 @@ class ReportEvolutionCausesController extends ResourceController
      */
     public function addCauseAnalysisAction(Request $request)
     {   
-        $result = $request->get('idObject');//Id
-
+        $idObject = $request->get('idObject');//Id
         $typeObject = $request->get('typeObj');//Tipo de Objeto
-
         $month = $request->get('set_data')['month'];//Carga de Mes pasado
 
         $user = $this->getUser();        
         $causeAnalysis = new EvolutionCauseAnalysis();
         $form  = $this->createForm(new EvolutionCauseAnalysisType(), $causeAnalysis);
 
-        if ($typeObject == 1) {
-
-            $repository = $this->get('pequiven.repository.sig_indicator');
-            $results = $repository->find($result);            
-            
-            $causeAnalysis->setIndicator($results);
-
-        }elseif ($typeObject == 2) {
-
-            $repository = $this->get('pequiven_seip.repository.arrangementprogram');
-            $results = $repository->find($result);            
-            
-            $causeAnalysis->setArrangementProgram($results);            
-        }    
-        
+        $causeAnalysis->setIdObject($idObject);
         $causeAnalysis->setCreatedBy($user);
         $causeAnalysis->setMonth($month);
         $causeAnalysis->setTypeObject($typeObject);        
@@ -106,8 +84,29 @@ class ReportEvolutionCausesController extends ResourceController
             $em = $this->getDoctrine()->getManager();
             $em->persist($causeAnalysis);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', "Analisis de Causas Cargado Correctamente");            
+            $this->get('session')->getFlashBag()->add('success', "Analisis de Causas Cargado Correctamente");  
+            //return true;          
         }     
+        die();
+    }
+
+    /**
+     * Elimina el analisis de Causas
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function deleteAnalysisCAction(Request $request)
+    {   
+        $id = $request->get('id');
+        
+        $em = $this->getDoctrine()->getManager();
+        $results = $this->get('pequiven.repository.sig_causes_analysis')->find($id);        
+        if($results){
+            $em->remove($results);
+            $em->flush();            
+            $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteCauseAnalysis', array(), 'PequivenSIGBundle'));
+        }  
     }
 
     /**
@@ -119,17 +118,14 @@ class ReportEvolutionCausesController extends ResourceController
     function getFormCausesAction(Request $request)
     {
         
-        $typeObj = $request->get('typeObj');//tipo de Objeto
-        $id = $request->get('idObject');// Id generico pero debo cambiar que diga id indicator
+        $typeObject = $request->get('typeObj');//tipo de Objeto
+        $idObject = $request->get('idObject');// Id generico pero debo cambiar que diga id indicator
         
-        if ($typeObj == 1) {
-            $result = $this->get('pequiven.repository.indicator')->find($id);
-            $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $id, 'month' => $request->get('month')));
-        }elseif ($typeObj == 2) {
-            $repository = $this->get('pequiven_seip.repository.arrangementprogram');
-            $result = $repository->find($id); 
-            $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('arrangementProgram' => $id, 'month' => $request->get('month')));
-        }        
+        $evolutionService = $this->getEvolutionService();            
+        $result = $evolutionService->getObjectEntity($idObject, $typeObject);
+
+        $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $idObject, 'month' => $request->get('month'), 'typeObject' => $typeObject));
+
         $sumCause = 0;
         foreach ($causes as $valueCauses) {
             $sumCause = $sumCause + $valueCauses->getValueOfCauses();            
@@ -144,7 +140,7 @@ class ReportEvolutionCausesController extends ResourceController
             ->setData(array(
                 'form'           => $form->createView(),
                 'indicator'      => $result,
-                'id'             => $id,
+                'id'             => $idObject,
                 'period'         => $result->getPeriod()->getName(),
                 'sumCause'       => $sumCause
             ))
@@ -162,44 +158,28 @@ class ReportEvolutionCausesController extends ResourceController
      */
     public function addCausesAction(Request $request)
     {   
-        $result = $request->get('idObject');
-
-        $typeObject = $request->get('typeObj');
-        
+        $idObject = $request->get('idObject');
+        $typeObject = $request->get('typeObj');        
         $month = $request->get('set_data')['month'];//Carga de Mes pasado
         
         $user = $this->getUser();
         $cause = new EvolutionCause();
         $form  = $this->createForm(new EvolutionCauseType(), $cause);
         
-        if ($typeObject == 1) {
-
-            $repository = $this->get('pequiven.repository.sig_indicator');
-            $results = $repository->find($result);            
-            
-            $cause->setIndicator($results);
-
-        }elseif ($typeObject == 2) {
-
-            $repository = $this->get('pequiven_seip.repository.arrangementprogram');
-            $results = $repository->find($result);            
-            
-            $cause->setArrangementProgram($results);            
-        } 
-
+        $cause->setIdObject($idObject);
         $cause->setCreatedBy($user);
         $cause->setMonth($month);  
         $cause->setTypeObject($typeObject);      
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $month != 0) {
-            
+        if ($form->isSubmitted() && $month != 0) {            
             $em = $this->getDoctrine()->getManager();
             $em->persist($cause);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', "Causa Cargada Correctamente");
         }     
+        die();
     }
 
      /**
@@ -209,44 +189,27 @@ class ReportEvolutionCausesController extends ResourceController
      * @return type
      */
     public function deleteCauseAction(Request $request)
-    {   
-        
+    {           
         $causeId = $request->get('id');
-        
-        $em = $this->getDoctrine()->getManager();
-        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeId);
-        
-        if($results){
 
+        $em = $this->getDoctrine()->getManager();
+        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeId);        
+        if($results){
             $em->remove($results);
             $em->flush();
-
             $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteCause', array(), 'PequivenSIGBundle'));
             return true;
         }  
     }
 
     /**
-     * Elimina el analisis de Causas
      * 
-     * @param Request $request
-     * @return type
+     * @return \Pequiven\SIGBundle\Service\EvolutionService
      */
-    public function deleteAnalysisCAction(Request $request)
-    {   
-        $id = $request->get('id');
-        
-        $em = $this->getDoctrine()->getManager();
-        $results = $this->get('pequiven.repository.sig_causes_analysis')->find($id);
-        
-        if($results){
+    protected function getEvolutionService() {
+        return $this->container->get('seip.service.evolution');
+    } 
 
-            $em->remove($results);
-            $em->flush();
-            
-            $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteCauseAnalysis', array(), 'PequivenSIGBundle'));
-        }  
-    }
 
     /**
      * 

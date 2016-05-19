@@ -367,7 +367,7 @@
                     </tr>
                 </thead>
                 <tbody>
-
+                    
                     {% for unrealizedProduction in unrealizedProductions %}
                         <tr>
                             <th scope="col" width="40%" class="header">
@@ -379,13 +379,13 @@
                                 </a>
                             </th>
                             {%  if showDay %}
-                                <td scope="col" width="20%" class="text-right">{{ unrealizedProduction.day|myNumberFormat }}</td>
+                                <td scope="col" width="20%" class="text-right">{{ validPnr(unrealizedProduction.day)|myNumberFormat }}</td>
                             {% endif %}
                             {%  if showMonth %}
-                                <td scope="col" width="20%" class="text-right">{{ unrealizedProduction.month|myNumberFormat }}</td>
+                                <td scope="col" width="20%" class="text-right">{{ validPnr(unrealizedProduction.month)|myNumberFormat }}</td>
                             {% endif %}
                             {%  if showYear %}
-                                <td scope="col" width="20%" class="text-right">{{ unrealizedProduction.year|myNumberFormat }}</td>
+                                <td scope="col" width="20%" class="text-right">{{ validPnr(unrealizedProduction.year)|myNumberFormat }}</td>
                             {% endif %}
                         </tr>
                     {% endfor %}

@@ -27,10 +27,10 @@ class EvolutionCauseAnalysis extends Model {
      */
     private $id;
 
-     /**
-     * @var integer
-     * @ORM\ManyToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="indicatorCauseAnalysis")
-     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id", nullable=true)
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="indicator_id", type="integer", nullable=true)
      */
     private $indicator;
 
@@ -76,13 +76,12 @@ class EvolutionCauseAnalysis extends Model {
      */
     private $deletedAt;
 
-     /**
-     * Relacion de las fichas cargadas de la acciones
-     * 
-     * @var Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseFile
-     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseFile",inversedBy="valueCause")
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="file", type="string", nullable=true)
      */
-    private $valueCauseFile;
+    private $file = null;
 
     /**
      * @var integer
@@ -92,11 +91,11 @@ class EvolutionCauseAnalysis extends Model {
     private $typeObject; 
 
     /**
-     * @var integer
-     * @ORM\ManyToOne(targetEntity="\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram", inversedBy="arrangementProgramCausesAnalysis")
-     * @ORM\JoinColumn(name="arrangementProgram_id", referencedColumnName="id", nullable=true)
-     */
-    private $arrangementProgram; 
+     * @var text
+     *
+     * @ORM\Column(name="idObject", type="integer")
+     */    
+    private $idObject; 
 
 
     /**
@@ -116,49 +115,27 @@ class EvolutionCauseAnalysis extends Model {
     }
     
     /**
-     * Set indicator
+     * Set idObject
      *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
-     * @return Indicator
+     * @param $idObject
+     * @return idObject
      */
-    public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator) {
+    public function setIdObject($idObject) {
         
-        $this->indicator = $indicator;
+        $this->idObject = $idObject;
 
         return $this;
     }
 
     /**
-     * Get indicator
+     * Get idObject
      *
-     * @return Pequiven\IndicatorBundle\Entity\Indicator
+     * @return idObject
      */
-    public function getIndicator() {
-        return $this->indicator;
+    public function getIdObject() {
+        return $this->idObject;
     }
-
-    /**
-     * Set arrangementProgram
-     *
-     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram
-     * @return arrangementProgram
-     */
-    public function setArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram) {
-        
-        $this->arrangementProgram = $arrangementProgram;
-
-        return $this;
-    }
-
-    /**
-     * Get arrangementProgram
-     *
-     * @return \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
-     */
-    public function getArrangementProgram() {
-        return $this->arrangementProgram;
-    }
-
+    
     /**
      * 
      * @param type $typeObject
@@ -300,12 +277,12 @@ class EvolutionCauseAnalysis extends Model {
         return $this->deletedAt;
     }  
 
-    function getValueCauseFile() {
-        return $this->valueCauseFile;
+    function getFile() {
+        return $this->file;
     }
 
-    function setValueCauseFile($valueCauseFile) {
-        $this->valueCauseFile = $valueCauseFile;
+    function setFile($file) {
+        $this->file = $file;
         return $this;
     }
     

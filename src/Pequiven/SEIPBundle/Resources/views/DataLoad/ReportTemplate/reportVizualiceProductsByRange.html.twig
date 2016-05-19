@@ -222,7 +222,7 @@
                                     </a>
 
                                 </th>
-                                <td scope="col" width="40%" class="text-right">{{ unrealized.total|number_format(2, ',', '.') }}</td>
+                                <td scope="col" width="40%" class="text-right">{{ validPnr(unrealized.total)|number_format(2, ',', '.') }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -319,7 +319,7 @@
                 {{ "pequiven_seip.buttons.export_pdf"|trans }}
         </a>
     </p>
-{#}
+
     {% if is_granted(['ROLE_SEIP_OPERATION_EXPORT_EXCEL_PRODUCTION']) %}
         <p class="button-height float-right">
             <a id="btnExportToExcel" href="#" class="button">
@@ -327,7 +327,7 @@
                     {{ "pequiven_seip.buttons.export_xls"|trans }}
             </a>
         </p>
-    {% endif %}#}
+    {% endif %}
 
 {% else %}
     <h2 class="text-center">{{ "Select the plant"|trans }}</h2>

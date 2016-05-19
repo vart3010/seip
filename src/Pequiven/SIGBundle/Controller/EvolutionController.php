@@ -13,7 +13,54 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  * @author Maximo Sojo <maxsojo13@gmail.com>
  */
 class EvolutionController extends ResourceController
-{
+{   
+    public function uploadAction(Request $request){
+        $idObject = $request->get('idObject');
+        $typeObject = $request->get('typeObject');//typos 1:analisis de causas
+        
+        //Evolution Service para retorno de objeto
+        $evolutionService = $this->getEvolutionService();            
+        $object = $evolutionService->getObjectLoadFile($idObject, $typeObject);
+        
+        $response = new JsonResponse();    
+        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') 
+        {   
+            $nameFile = $typeObject."-".sha1(date('d-m-Y : h:m:s').$idObject);
+            
+            foreach ($request->files as $file) {
+                $file->move($this->container->getParameter("kernel.root_dir") . '/../web/uploads/documents/evolution_files/', $nameFile);
+                $fileUploaded = $file->isValid();                
+            }   
+            $em = $this->getDoctrine()->getManager();
+            $object->setFile($nameFile);            
+            $em->flush();         
+
+            sleep(3);            
+            $response->setData(1);
+            return $response;            
+        }else{
+            throw new Exception("Error Processing Request", 1);   
+        }
+    }
+
+     public function downloadAction(Request $request){
+        $idObject = $request->get('idObject');
+        $typeObject = $request->get('typeObject');//typos 1:analisis de causas
+
+        $em = $this->getDoctrine()->getManager();                        
+        
+        $evolutionService = $this->getEvolutionService();            
+        $object = $evolutionService->getObjectLoadFile($idObject, $typeObject);
+
+        $pathfile = $this->container->getParameter("kernel.root_dir") . '/../web/uploads/documents/evolution_files/'.$object->getFile();
+        
+        $mi_pdf = $pathfile;
+        header('Content-type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$mi_pdf.'"');
+        readfile($mi_pdf);
+        die();
+
+    }
     
     /**
      *
@@ -47,8 +94,16 @@ class EvolutionController extends ResourceController
      * Exportar informe de Evolución
      *
      */
-    public function exportAction(Request $request) {
+    public function exportAction(Request $request) {        
+        $idObject = $request->get('id'); //id         
+        $typeObject = $request->get('typeObj'); //Tipo de objeto (1 = Indicador/2 = Programa G.) 
+        $month = $request->get('month'); //El mes pasado por parametro
+        
         $em = $this->getDoctrine()->getManager();
+        
+        $evolutionService = $this->getEvolutionService();            
+        $result = $evolutionService->getObjectEntity($idObject, $typeObject);
+
         $routing = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/temp/*.png";
         
         //$fileSVG = $this->exportChrat($request);        
@@ -75,11 +130,9 @@ class EvolutionController extends ResourceController
             $cont ++;
         }        
         
-        $id = $request->get('id'); //id         
-        $typeObject = $request->get('typeObj'); //Tipo de objeto (1 = Indicador/2 = Programa G.) 
         //si el indicador es clonado
         if ($typeObject == 1) { 
-            $indicator = $this->get('pequiven.repository.indicator')->find($id); //Obtenemos el indicador
+            $indicator = $this->get('pequiven.repository.indicator')->find($idObject); //Obtenemos el indicador
             $indicatorBase = $indicator;
             if ($indicator->getParentCloning()) {
                 $id = $indicator->getParentCloning()->getId();            
@@ -90,73 +143,45 @@ class EvolutionController extends ResourceController
                     $indicator = $indicator->getParentCloning();
                 }
             }
-        }else{
-            $indicator = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
         }
 
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
-        $dataAction = $evolutionService->findEvolutionCause($indicator, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
-
-        $month = $request->get('month'); //El mes pasado por parametro
+        $dataAction = $evolutionService->findEvolutionCause($result, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
         
         $font = "";
         if ($typeObject == 1) {            
             $name = $indicatorBase->getRef() . ' ' . $indicatorBase->getDescription(); //Nombre del Indicador
-            $type = "indicator";
             //Relación - Objetivo
             foreach ($indicator->getObjetives() as $value) {
                 $objRel = $value->getDescription();
-            }
-            $routingTendency = "/../web/bundles/pequivensig/images/";//Ruta de la Tendencia
-            $tendency = $indicator->getTendency()->getId();
-            switch ($tendency) {
-                case 0:
-                    $font = "";
-                    break;
-                case 1:
-                    $font = "1.png";
-                    break;
-                case 2:
-                    $font = "2.png";
-                    break;
-                case 3:
-                    $font = "3.png";
-                    break;
-            }
-            $font = $routing.$routingTendency.$font;            
+            }           
             $formula = $indicator->getFormula();
-
         } elseif ($typeObject == 2) {
-            $ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
-            $type = "arrangementProgram";
-            $name = $ArrangementProgram->getRef() . '' . $ArrangementProgram->getDescription();
-            //Relacion
+            $ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($idObject);
+            $name = $ArrangementProgram->getRef() . '' . $ArrangementProgram->getDescription();            
             $objRel = $ArrangementProgram->getTacticalObjective()->getDescription();
+        } elseif ($typeObject == 3) {
+            $name = "Pruebas";            
+            $objRel = 0;
         }
         
+        $trendDescription = "No se ha Cargando el Analisis de Tendencia";
+        $causeA = "No se ha Cargando el Analisis de Causas";
         
         //Carga el analisis de la tendencia
-        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array($type => $id, 'month' => $month));
+        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findOneBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
         if ($trend) {
-            foreach ($trend as $value) {
-                $trendDescription = $value->getDescription(); //Tendencia
-            }
-        } else {
-            $trendDescription = "No se ha Cargando el Analisis de Tendencia";
+            $trendDescription = $trend->getDescription(); //Tendencia
         }
-
+        
         //Carga del analisis de las causas
-        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array($type => $id, 'month' => $month));
+        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findOneBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
         if ($causeAnalysis) {
-            foreach ($causeAnalysis as $value) {
-                $causeA = $value->getDescription();
-            }
-        } else {
-            $causeA = "No se ha Cargando el Analisis de Causas";
-        }
+            $causeA = $causeAnalysis->getDescription();
+        }            
 
         //Verificación
-        $verification = $this->get('pequiven.repository.sig_action_verification')->findBy(array($type => $id, 'month' => $month));
+        $verification = $this->get('pequiven.repository.sig_action_verification')->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
 
         //Periodo
         $period = $this->getPeriodService()->getPeriodActive();

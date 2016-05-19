@@ -69,6 +69,21 @@
                                 </select>
                             </div>
                         </div>
+
+                        <!-- Filtro Perfiles de Evaluación Política -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.profiles_politic_evaluation'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectProfilesPoliticEvaluation" ng-model="model.profilesPoliticEvaluation" ng-options="value as value.description for (key,value) in data.profilesPoliticEvaluation" >
+                                    <option value=''></option>
+                                </select>
+                                {#<select class="select2 input-xlarge" id="selectProfilesPoliticEvaluation" ng-model="model.profilesPoliticEvaluation" ng-options="value as value.description for (key,value) in data.profilesPoliticEvaluation">
+                                    <option value=''></option>
+                                </select>#}
+                            </div>
+                        </div>
+                            
                         {#<!-- Filtro de Centros Completos -->
                         <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
                             <label class="bold">Cargados</label>
@@ -85,7 +100,7 @@
             </details>
 
 
-            <div loading-container="tableParams.settings().$loading">
+            <div loading-container="tableParams.settings().$loading" ng-init="data.profilesPoliticEvaluation = {{ profilesPoliticEvaluation|serialize }}">
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header"
                        api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
                     <tbody> 

@@ -26,13 +26,13 @@ class EvolutionTrend extends Model {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-     /**
-     * @var integer
-     * @ORM\ManyToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="indicatorTrend")
-     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id", nullable=true)
+    
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="indicator_id", type="integer", nullable=true)
      */
-    private $indicator;
+     private $indicator;
 
     /**
      * @var integer
@@ -84,11 +84,11 @@ class EvolutionTrend extends Model {
     private $typeObject;   
 
     /**
-     * @var integer
-     * @ORM\ManyToOne(targetEntity="\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram", inversedBy="arrangementProgramTrend")
-     * @ORM\JoinColumn(name="arrangementProgram_id", referencedColumnName="id", nullable=true)
-     */
-    private $arrangementProgram; 
+     * @var text
+     *
+     * @ORM\Column(name="idObject", type="integer")
+     */    
+    private $idObject; 
 
 
     /**
@@ -108,47 +108,25 @@ class EvolutionTrend extends Model {
     }
     
     /**
-     * Set indicator
+     * Set idObject
      *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
-     * @return Indicator
+     * @param $idObject
+     * @return idObject
      */
-    public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator) {
+    public function setIdObject($idObject) {
         
-        $this->indicator = $indicator;
+        $this->idObject = $idObject;
 
         return $this;
     }
 
     /**
-     * Get indicator
+     * Get idObject
      *
-     * @return Pequiven\IndicatorBundle\Entity\Indicator
+     * @return idObject
      */
-    public function getIndicator() {
-        return $this->indicator;
-    }
-
-    /**
-     * Set arrangementProgram
-     *
-     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram
-     * @return arrangementProgram
-     */
-    public function setArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram) {
-        
-        $this->arrangementProgram = $arrangementProgram;
-
-        return $this;
-    }
-
-    /**
-     * Get arrangementProgram
-     *
-     * @return \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
-     */
-    public function getArrangementProgram() {
-        return $this->arrangementProgram;
+    public function getIdObject() {
+        return $this->idObject;
     }
 
     /**

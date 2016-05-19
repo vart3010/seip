@@ -183,7 +183,7 @@
                 <p class="button-height align-right">
 
                     {# Visualizacion de Indice de evolucion #}
-                    {% include 'PequivenSIGBundle:Template:base_evolution_nav.html.twig' %}
+                    {% include 'PequivenSIGBundle:Template:base_evolution_nav.html.twig' with {'typeObject': 1, 'id': indicator.id, 'route': 'pequiven_indicator_evolution'} %}
                     {# end #}
                 </p>
             </div>

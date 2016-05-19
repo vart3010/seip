@@ -160,9 +160,9 @@ class IndicatorSigController extends EvolutionController {
         }
 
         //Cargando el Archivo
-        $uploadFile = $request->get("uploadFile"); //Recibiendo archivo
+        //uploadFile = $request->get("uploadFile"); //Recibiendo archivo
         //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
-        if ($uploadFile != null) {
+        /*if ($uploadFile != null) {
             $band = false;
             //VALIDACION QUE SEA UN ARCHIVO PERMITIDO
             foreach ($request->files as $file) {
@@ -176,7 +176,7 @@ class IndicatorSigController extends EvolutionController {
                 $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
                 $this->redirect($this->generateUrl("pequiven_indicator_evolution", array("id" => $request->get("id"), "month" => $month)));
             }
-        }
+        }*/
 
         //Url export
         $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export_chart', array('id' => $request->get("id"), 'month' => $month, 'typeObj' => 1));
@@ -191,16 +191,16 @@ class IndicatorSigController extends EvolutionController {
         //Carga de los datos de la grafica de las Causas de Desviación
         $dataCause = $evolutionService->getDataChartOfCausesEvolution($indicator, $urlExportFromChart, $month, $typeObject); //Obtenemos la data del grafico de las causas de desviación
         
-        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $idIndicator, 'month' => $month));
-        foreach ($results as $value) {
+        $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $idIndicator, 'month' => $month, 'typeObject' => $typeObject));
+        foreach ($causes as $value) {
             $dataCa = $value->getValueOfCauses();
             $sumCause = $sumCause + $dataCa;
         }
 
         //Carga el analisis de la tendencia
-        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('indicator' => $indicator, 'month' => $month, 'typeObject' => 1));
+        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('idObject' => $idIndicator, 'month' => $month, 'typeObject' => $typeObject));
         //Carga del analisis de las causas
-        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator' => $indicator, 'month' => $month));
+        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('idObject' => $idIndicator, 'month' => $month, 'typeObject' => $typeObject));
         //Carga de la señalización de la tendencia de la grafica        
         $tendency = $indicator->getTendency()->getId();
         $font = array();
@@ -243,11 +243,11 @@ class IndicatorSigController extends EvolutionController {
             'data' => $dataChart,
             'verification' => $data["verification"],
             'dataCause'  => $dataCause,
-            'sumCause'   => $sumCause,
-            'cause'      => $results,
+            'analysis'   => $causeAnalysis,//Analisis de Causas
+            'cause'      => $causes,//Causas
+            'sumCause'   => $sumCause,//suma de causas
             'month'      => $month,
             'dataAction' => $dataAction,
-            'analysis'   => $causeAnalysis,
             'trend'      => $trend,
             'font'       => $font,
             'typeObject' => $typeObject,
@@ -261,7 +261,7 @@ class IndicatorSigController extends EvolutionController {
         return $this->handleView($view);
     }
 
-    public function createValueCauseFile(Indicator $indicator, Request $request) {
+   /* public function createValueCauseFile(Indicator $indicator, Request $request) {
 
         $EvolutionCauseFile = new Indicator\EvolutionIndicator\EvolutionCauseFile();
 
@@ -303,21 +303,21 @@ class IndicatorSigController extends EvolutionController {
             $request->request->set("uploadFile", "");
             $this->redirect($this->generateUrl("pequiven_indicator_evolution", array("id" => $request->get("id"), "month" => $month)));
         }
-    }
+    }*/
 
     /**
      *
      * Generate URL files
      * 
      */
-    public function generateUrlFile(Request $request) {
+    /*public function generateUrlFile(Request $request) {
 
         $response = new JsonResponse();
         $data = array();
         $data["url"] = $this->generateUrl("pequiven_indicator_vizualice_file", array("id" => $request->get("id")));
         $response->setData($data);
         return $response;
-    }
+    }*/
 
     /**
      * Retorna el formulario de la relacion del indicador con periodo Anterior
