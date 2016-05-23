@@ -91,12 +91,9 @@
             </span>
             <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
             <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
-        </a>        
-    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}
-        {# Descarga de Informe de Evolución#}
-        {% set typeObj = 2 %}
-        &nbsp;
-        {{ buttons.generic_download }}       
+        </a>                
+    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}        
+        &nbsp; {{ buttons.generic_download }}       
     {% endif %}
     </div>
 </p>
@@ -145,6 +142,7 @@
     {{ parent() }}
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/pequivensig/js/loadFiles.js') }}"></script> 
 
     <script type="text/javascript">        
         $(document).ready(function () {
@@ -154,38 +152,8 @@
             });
         });
 
-        //Carga de Archivo pdf
-        function uploadFilePdf(id) {
-            $("input#indicatorFilePdf_" + id).click();
-            console.log(id);
-        }
-
-        //Visualización
-        function openFile(valueCauseId) {
-            valueCauseId = valueCauseId.split("_");
-            var data = {
-                id: valueCauseId[1]
-            };
-            $.ajax({
-                type: 'get',
-                url: '{{ path("pequiven_cause_vizualice_file") }}',
-                data: data,
-                success: function (data) {
-                    window.open(data["url"]);
-                }
-            });
-        }
-        //set url
-        function getUrl(data) {            
-            var rs;
-            return rs;
-        }
-        //envio
-        function submitUploadFile(valueCauseId) {
-            valueCauseId = valueCauseId.split("_");
-            $("#field_" + valueCauseId[1]).val(valueCauseId[1]);
-            $("#form_" + valueCauseId[1]).submit();
-        }
+        var urlFiles = "{{ path("pequiven_sig_evolution_load_file") }}";
+        setUrlFiles(urlFiles); 
 
         //Carga de Evento de Descarga de Grafica de Indicador
         function downloadEvolution(){            

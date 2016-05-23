@@ -4633,10 +4633,9 @@ class IndicatorService implements ContainerAwareInterface {
         $em = $this->getDoctrine();
         $prePlanningItemCloneObject = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array('idCloneObject' => $indicator->getId(), 'typeObject' => \Pequiven\SEIPBundle\Model\PrePlanning\PrePlanningTypeObject::TYPE_OBJECT_INDICATOR));
 
+        $indicatorParent = 0;
         if ($periodInicator != $periodInvalid AND $prePlanningItemCloneObject) {
             $indicatorParent = $this->container->get('pequiven.repository.indicator')->find($prePlanningItemCloneObject->getIdSourceObject());
-        } else {
-            $indicatorParent = 0;
         }
 
         $data = array(
@@ -4689,10 +4688,9 @@ class IndicatorService implements ContainerAwareInterface {
         $label = $dataReal = $dataPlan = $dataAcum = $dataMedition = array();
 
 //Promedio o Acumulado
+        $medition = "Promedio";
         if ($indicator->getIndicatorSigMedition() == 0) {
             $medition = "Acumulado";
-        } else {
-            $medition = "Promedio";
         }
 
 //Carga de Nombres de Labels
@@ -4779,12 +4777,9 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["data"][] = $dataObj; //Acumulado
 //Carga de Tendencia
             $cantValue = count($dataSetTend['data']);
+            $dataSetValues['tendencia'] = 0;
             if ($cantValue >= 4 and $resultNumbers > 2) {
                 $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetTend['data']);
-            } elseif (!$cantValue) {
-                $dataSetValues['tendencia'] = 0;
-            } else {
-                $dataSetValues['tendencia'] = 0;
             }
         } else {
             $dataSetValues['tendencia'] = 0;
