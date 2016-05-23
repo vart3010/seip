@@ -2527,6 +2527,21 @@ angular.module('seipModule.controllers', [])
                 }
             };
 
+            $scope.loadTemplateMaintenanceVerification = function (resource) {
+                $scope.initFormMaintenaceVerification(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+
             $scope.loadTemplateMaintenanceShow = function (resource) {
                 $scope.initFormMaintenaceShow(resource);
                 $scope.openModalAuto();
@@ -2647,6 +2662,46 @@ angular.module('seipModule.controllers', [])
                 });
             };
 
+            //Añadir Verification
+            var addMaintenanceVerification = function (save, successCallBack) {
+                var formConfig = angular.element('#form_verification_add');
+                var formData = formConfig.serialize();
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_sig_monitoring_maintenance_verification', {id: $scope.id_maintenance});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    //$timeout(callAtTimeout, 3000);
+                    location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
+
             //Añadir
             var addNotify = function (save, successCallBack) {
                 var formConfig = angular.element('#form_notify_add');
@@ -2696,6 +2751,13 @@ angular.module('seipModule.controllers', [])
             $scope.templateOptions.setVar('addMaintenance', addMaintenance);
             var confirmCallBackMaintenace = function () {
                 addMaintenance(true, function (data) {
+                });
+                return true;
+            };
+
+            $scope.templateOptions.setVar('addMaintenanceVerification', addMaintenanceVerification);
+            var confirmCallBackMaintenaceVerification = function () {
+                addMaintenanceVerification(true, function (data) {
                 });
                 return true;
             };
@@ -2797,6 +2859,26 @@ angular.module('seipModule.controllers', [])
                         name: 'Notificación de Usuario',
                         url: url,
                         confirmCallBack: confirmCallBackNotify,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+            //Formulario Verificación
+            $scope.initFormMaintenaceVerification = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(300);
+                //$scope.setWidth(800);
+                var parameters = {
+                    id: $scope.id_maintenance,
+                    _dc: numero
+                };
+                var url = Routing.generate('pequiven_sig_monitoring_maintenance_verification', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Mantenimiento',
+                        url: url,
+                        confirmCallBack: confirmCallBackMaintenaceVerification,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
