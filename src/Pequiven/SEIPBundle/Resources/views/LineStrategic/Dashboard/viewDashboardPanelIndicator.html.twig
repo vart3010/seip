@@ -1,0 +1,111 @@
+{% extends "PequivenSEIPBundle:Template:Developer/layoutGestion.html.twig" %}
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/icons.css') }}">
+{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('')
+    ) }}
+{% endblock %}
+
+{% block body %}    
+    <br>
+    <br>
+    <div class="ten-columns">         
+        <h2>
+            {%if (group.color!=null) %}                            
+                {% set color= group.color %}
+            {%else%}                
+                {% set color= "#BCBCBC" %}
+            {%endif%}
+            <i class="fa {{ group.logo }}" style="color: {{color}}; font-size: 40px;" aria-hidden="true"></i>
+            {{group.description}}
+        </h2>
+    </div>
+    <hr class="hr-linestrategic-icons" />
+    <br>    
+    {% set classColor = 'red-gradient' %}
+    {% for t in tree %}
+        {% set lineStrategic = t['parent'] %}     
+        <table width="100%">
+            <tr>
+                <td width="15%" class="text-center" style="vertical-align: middle;">
+                    <span>
+                        <img class="icon-strategic" src="{{ asset(iconsLineStrategic[lineStrategic.level]) }}">
+                    </span>
+                    <br>
+                    <p class="title-icon-strategic bold">{{ lineStrategic.description }}</p>
+                </td>
+                <td width="85%" class="text-center" style="vertical-align: middle;">                    
+                    <div class="standard-tabs at-bottom margin-bottom margin-top tabs-active tabs-animated tab-opened" id="add-tabs"> 
+                        {% set maxPerTag= 6%}
+                        {% if (t['child']|length>maxPerTag) %}
+                            {% set tabs= (t['child']|length)/maxPerTag %}
+                        {% else %}
+                            {%set tabs = 1%}
+                        {% endif %}
+
+                        <ul class="tabs">
+                            <li class="active">
+                                <a href="#tab-1">1</a>
+                            </li>
+                            {% if (t['child']|length>maxPerTag) %}
+                                {% for i in 2..tabs|round(0, 'floor') %}                                    
+                                    <li>
+                                        <a href="#tab-{{i}}">{{i}}</a>
+                                    </li>                                
+                                    {% set i=i+1%}
+                                {%endfor%}
+                            {%endif%}
+                        </ul>                                
+                        <div style="" class="tabs-content">
+                            <span class="tabs-back with-left-arrow top-bevel-on-light dark-text-bevel">Back</span>
+                            <div style="display: block; min-height: 400px;" id="tab-1" class="with-padding tab-active">
+                                <!-- Indicadores de la Línea Estratégica -->
+                                {% for indicator in t['child'] %}                                        
+                                    {% if indicator.notshowIndicatorNoEvaluateInPeriod != true %}
+                                        <div class="four-columns six-columns-mobile" style="display: inline-block;" ng-controller="DashboardController" ng-init="renderWidgetIndicatorStrategic('{{ indicator.ref }}',{{ data[lineStrategic.ref][indicator.ref]|json_encode() }},'100%','150px')">
+                                            <a target="_blank" href="{{ path('pequiven_indicator_show',{id:indicator.id}) }}">
+                                                <span title="{{ indicator.description }}">
+                                                    <p style="text-align: center;margin-bottom: -5px;">
+                                                        <b>
+                                                            <i class="fa {{ group.logo }}" aria-hidden="true"></i>
+                                                            &nbsp;-&nbsp;
+                                                            {{ indicator.summary }}
+                                                        </b>
+                                                    </p>
+                                                </span>
+                                            </a>
+                                            <span id="{{ indicator.ref }}">
+                                            </span>                            
+                                        </div>
+                                    {% endif %}                                                                            
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div> 
+                </td>
+            </tr>
+        </table>        
+    {% endfor %}
+{% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+    </script>
+{% endblock %}
