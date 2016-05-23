@@ -129,12 +129,16 @@ class LineStrategicController extends SEIPController {
     public function showResultsByComplejoAction(Request $request) {
         $resource = $this->findOr404($request);
         $boxRender = $this->get('tecnocreaciones_box.render');
-
+        $idComplejo = $request->get('idComplejo');
+        $labelsSummary = \Pequiven\MasterBundle\Entity\Complejo::getLabelsSummary();
+        $labelsSummary = $labelsSummary[$idComplejo];
+                
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('Dashboard/viewResultsByComplejo.html'))
                 ->setData(array(
-            'boxRender' => $boxRender,
+                'boxRender' => $boxRender,
+                'labelsSummary' => $labelsSummary,
             $this->config->getResourceName() => $resource
         ));
 
