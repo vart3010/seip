@@ -138,6 +138,16 @@ pequiven_sig_monitoring_maintenance_show:
     methods: [GET|POST]
     options:
         expose: true
+pequiven_sig_monitoring_maintenance_verification:
+    path: /set-verification.{_format}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig_maintenance:addVerificationAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
 pequiven_sig_monitoring_auto_verification:
     path: /sig/verification/auto/{id}
     defaults:

@@ -55,9 +55,16 @@ class Maintenance
     /**
      * statusVerification
      * @var integer
-     * @ORM\Column(name="statusVerification",type="integer")
+     * @ORM\Column(name="statusVerification",type="integer", nullable=true)
      */
-    private $statusVerification = 0;
+    private $statusVerification;
+
+    /**
+     * statusVerification
+     * @var datetime
+     * @ORM\Column(name="dateVerification",type="datetime", nullable=true)
+     */
+    private $dateVerification;
 
     /**
      * Date created
@@ -204,6 +211,29 @@ class Maintenance
     public function getStatusVerification()
     {
         return $this->statusVerification;
+    }
+
+    /**
+     * Set dateVerification
+     *
+     * @param string $dateVerification
+     * @return 
+     */
+    public function setDateVerification($dateVerification)
+    {
+        $this->dateVerification = $dateVerification;
+
+        return $this;
+    }
+
+    /**
+     * Get dateVerification
+     *
+     * @return string 
+     */
+    public function getDateVerification()
+    {
+        return $this->dateVerification;
     }
 
     /**
