@@ -109,6 +109,7 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            
     sonata.admin.result:
         class: Pequiven\MasterBundle\Admin\Result\ResultAdmin
         tags:
@@ -143,7 +144,7 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [PequivenIndicatorBundle]]            
-            - [ setContainer, [@service_container]]
+            - [ setContainer, [@service_container]]            
             
     sonata.admin.indicator.indicator:
         class: Pequiven\MasterBundle\Admin\IndicatorAdmin

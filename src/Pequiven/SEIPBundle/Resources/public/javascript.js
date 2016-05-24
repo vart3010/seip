@@ -50,25 +50,62 @@ var myNumberFormat = function(numberToFormat,limit){
 };
 
 $(function() {
-        $('a.showPopup').click(function(e) {
-            e.preventDefault();
-            var $this = $(this);
-            var horizontalPadding = 10;
-            var verticalPadding = 10;
-            var width = 1200;
-            var heigth = 600;
-            $('<iframe id="site" src="' + this.href + '" style="padding:0"/>').dialog({
-                title: ($this.attr('title')) ? $this.attr('title') : 'Site',
-                autoOpen: true,
-                width: width,
-                height: heigth,
-                modal: true,
-                resizable: true,
-                autoResize: true,
-                overlay: {
-                    opacity: 0.5,
-                    background: "black"
-                }
-            }).width(width - horizontalPadding).height(heigth - verticalPadding);
+    $('a.showPopup').click(function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        var horizontalPadding = 10;
+        var verticalPadding = 10;
+        var width = 1200;
+        var heigth = 600;
+        $('<iframe id="site" src="' + this.href + '" style="padding:0"/>').dialog({
+            title: ($this.attr('title')) ? $this.attr('title') : 'Site',
+            autoOpen: true,
+            width: width,
+            height: heigth,
+            modal: true,
+            resizable: true,
+            autoResize: true,
+            overlay: {
+                opacity: 0.5,
+                background: "black"
+            }
+        }).width(width - horizontalPadding).height(heigth - verticalPadding);
+    });
+    
+    //Tabs
+    $(this).find('ul.tabs li.active').css('font-weight', 'bold').end().find('div.standard-tabs').parent('div')
+    .prepend('<div class="tabs-arrows" style="font-size: 2.147em; margin-top: -16px; height: 16px;"><a class="move-tab" href="#!" style="float: left; visibility: hidden;">&#65513;</a><a class="move-tab" href="#!" style="float: right;">&#65515;</a></div>')
+    .on('click', 'a.move-tab', function(e){
+        var tabsWidth = 0;
+        $('a.move-tab').css('visibility', 'visible');
+        $('ul.tabs li').each(function(index) {
+            tabsWidth += parseInt($(this).width(), 10);
         });
+        var act_tab = $(document).find('ul.tabs li.active'),
+            mov_tab = tabsWidth > $('div.standard-tabs').innerWidth();
+        switch($(this).css('float')){
+            case 'left':
+                if(act_tab.prev().length){
+                    if(mov_tab){
+                        act_tab.next().next().css('display','none');
+                        act_tab.prev().prev().css('display','inherit');
+                    } act_tab = act_tab.prev()
+                } if(!act_tab.prev().length) {
+                    $(this).css('visibility', 'hidden');
+                }
+                break;
+            case 'right':
+                if(act_tab.next().length){
+                    if(mov_tab){
+                        act_tab.prev().prev().css('display','none');
+                        act_tab.next().next().css('display','inherit');
+                    } act_tab = act_tab.next()
+                } if(!act_tab.next().length) {
+                    $(this).css('visibility', 'hidden');
+                }
+                break;
+        } $('a[href="'+act_tab.children('a').attr('href')+'"]').click();
+        $('ul.tabs li').css('font-weight', "");
+        $('ul.tabs li.active').css('font-weight', 'bold');
+    });
 });

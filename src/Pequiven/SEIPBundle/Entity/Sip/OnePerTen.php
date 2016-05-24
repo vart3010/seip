@@ -36,7 +36,7 @@ class OnePerTen extends modelOnePerTen {
     private $cedula;
 
     /**
-     * Creado por
+     * Usuario con 1x10
      * @var \Pequiven\SEIPBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
@@ -310,6 +310,28 @@ class OnePerTen extends modelOnePerTen {
      * @ORM\Column(name="markedStatus", type="integer", nullable=true)
      */
     private $markedStatus = 0;
+    
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="lastDateCalculateProfile", type="datetime",nullable=true)
+     */
+    private $lastDateCalculateProfile;
+    
+    /**
+     * Valor del perfil del usuario
+     * profileValue
+     * @var integer
+     * @ORM\Column(name="profileValue", type="integer", nullable=true)
+     */
+    private $profileValue;
+    
+    /**
+     * Valor real del perfil del usuario
+     * profileValue
+     * @var integer
+     * @ORM\Column(name="realProfileValue", type="integer", nullable=true)
+     */
+    private $realProfileValue;
 
     public function __construct() {
         $this->ten = new \Doctrine\Common\Collections\ArrayCollection();
@@ -608,6 +630,35 @@ class OnePerTen extends modelOnePerTen {
 
     function setMarkedStatus($markedStatus) {
         $this->markedStatus = $markedStatus;
+    }
+    
+    function getLastDateCalculateProfile() {
+        return $this->lastDateCalculateProfile;
+    }
+
+    function setLastDateCalculateProfile(\DateTime $lastDateCalculateProfile) {
+        $this->lastDateCalculateProfile = $lastDateCalculateProfile;
+    }
+    
+    public function updateLastDateCalculateProfile() 
+    {
+        $this->lastDateCalculateProfile = new \DateTime();
+    }
+    
+    function getProfileValue() {
+        return $this->profileValue;
+    }
+
+    function setProfileValue($profileValue) {
+        $this->profileValue = $profileValue;
+    }
+    
+    function getRealProfileValue() {
+        return $this->realProfileValue;
+    }
+
+    function setRealProfileValue($realProfileValue) {
+        $this->realProfileValue = $realProfileValue;
     }
 
 }

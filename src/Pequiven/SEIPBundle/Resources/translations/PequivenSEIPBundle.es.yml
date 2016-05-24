@@ -248,6 +248,7 @@ pequiven_seip:
         user_selection: Selecione Usuario
         coordinators: Coordinadores
         work_study_circle: Círculo de estudio de trabajo
+        profiles_politic_evaluation: Perfiles de Evaluación
         line_strategic: Línea Estratégica
         categoryFile: Categorias de Archivo
     tooltips:
@@ -736,4 +737,5 @@ Unit: Unidad
 'production_line': Linea de Producto
 'Name group' : Nombre de Grupo
 'Childrens group': Sub Plantas
+'Sum over production ': Sobre Producción
 'Show groups plants': Agrupar por Plantas

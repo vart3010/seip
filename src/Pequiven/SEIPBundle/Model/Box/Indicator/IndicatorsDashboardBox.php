@@ -40,45 +40,50 @@ class IndicatorsDashboardBox extends GenericBox {
         ksort($labelsMonths);
 //        var_dump($labelsMonths);
 //        die();
-        
-        if($indicatorService->isIndicatorHasParents($indicator)){
 
-        //Comparamos el nivel del indicador y asi obtener el id de la Línea Estratégica a la cual esta alineada el mismo
-        if ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {
-            foreach ($indicator->getLineStrategics() as $lineStrategic) {
-                $idLineStrategic = $lineStrategic->getId();
-                if (count($lineStrategic->getIndicators()) > 0) {
+        if ($indicatorService->isIndicatorHasParents($indicator)) {
+
+            //Comparamos el nivel del indicador y asi obtener el id de la Línea Estratégica a la cual esta alineada el mismo
+            if ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {                
+                if ($this->getRequest()->get('idGroup')) {
+                    $group = $this->container->get('pequiven.repository.indicatorgroup')->findOneById($this->getRequest()->get('idGroup'));
+                    $indicatorsGroup = $group->getIndicators();                    
+                } else {
+                    foreach ($indicator->getLineStrategics() as $lineStrategic) {
+                        $idLineStrategic = $lineStrategic->getId();
+                        if (count($lineStrategic->getIndicators()) > 0) {
 //                    $indicatorsGroup = $lineStrategic->getIndicators();
-                    $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByLineStrategicAndOrderShowFromParent($lineStrategic->getId());
-                }
-            }
-            if (count($indicator->getChildrens()) == 0) {
-                $seeTagIndicators = true;
-            }
-        } elseif (($indicatorParent = $indicator->getParent()) != NULL) {
-            $flagParent = false;
-            $cont = 1;
-            while (!$flagParent) {
-                if ($indicatorParent->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {//En caso de que estemos en el indicador Táctico
-                    $flagParent = true;
-                    if ($cont == 1) {//En caso de que se este viendo un indicador táctico
-//                        $indicatorsGroup = $indicatorParent->getChildrens();
-                        $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicatorParent->getId());
-                        if (count($indicator->getChildrens()) == 0) {
-                            $seeTagIndicators = true;
+                            $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByLineStrategicAndOrderShowFromParent($lineStrategic->getId());
                         }
                     }
-                    foreach ($indicatorParent->getLineStrategics() as $lineStrategic) {
-                        $idLineStrategic = $lineStrategic->getId();
-                    }
-                } else {
-                    $cont++;
+                }
+                if (count($indicator->getChildrens()) == 0) {
+                    $seeTagIndicators = true;
+                }
+            } elseif (($indicatorParent = $indicator->getParent()) != NULL) {
+                $flagParent = false;
+                $cont = 1;
+                while (!$flagParent) {
+                    if ($indicatorParent->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {//En caso de que estemos en el indicador Táctico
+                        $flagParent = true;
+                        if ($cont == 1) {//En caso de que se este viendo un indicador táctico
+//                        $indicatorsGroup = $indicatorParent->getChildrens();
+                            $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicatorParent->getId());
+                            if (count($indicator->getChildrens()) == 0) {
+                                $seeTagIndicators = true;
+                            }
+                        }
+                        foreach ($indicatorParent->getLineStrategics() as $lineStrategic) {
+                            $idLineStrategic = $lineStrategic->getId();
+                        }
+                    } else {
+                        $cont++;
 //                    $indicatorsGroup = $indicatorParent->getChildrens();//En caso de que se este viendo un indicador operativo, obtenemos los indicadores asociados al táctico, antes de actualizar el objeto indicadorPadre
-                    $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicatorParent->getId()); //En caso de que se este viendo un indicador operativo, obtenemos los indicadores asociados al táctico, antes de actualizar el objeto indicadorPadre
-                    $indicatorParent = $indicatorParent->getParent();
+                        $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicatorParent->getId()); //En caso de que se este viendo un indicador operativo, obtenemos los indicadores asociados al táctico, antes de actualizar el objeto indicadorPadre
+                        $indicatorParent = $indicatorParent->getParent();
+                    }
                 }
             }
-        }
         }
 
         //Obtenemos la data para los widget en forma de bulbo de la barra lateral izquierda
@@ -108,14 +113,14 @@ class IndicatorsDashboardBox extends GenericBox {
         $arrayIdProduccion[] = 1043;
 
         if ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO) {
-            if($indicator->getParent() != null){
+            if ($indicator->getParent() != null) {
                 if (in_array($indicator->getParent()->getId(), $arrayIdProduccion)) {
                     $seeInColumn = true;
                     $dataChartColumn = $indicatorService->getChartColumnLineDualAxis($indicator);
                 }
             }
         } elseif ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO) {
-            if($indicator->getParent() != null){
+            if ($indicator->getParent() != null) {
                 if (count($indicator->getParent()->getParent()) > 0) {
                     if (in_array($indicator->getParent()->getParent()->getId(), $arrayIdProduccion)) {
                         $seeInColumn = true;
@@ -141,7 +146,7 @@ class IndicatorsDashboardBox extends GenericBox {
             'indicatorsGroup' => $indicatorsGroup,
             'dataWidget' => $dataWidget,
             'indicator' => $indicator,
-            'chartest'=>$rs,
+            'chartest' => $rs,
 //            'dataMultiLevelPie' => $dataMultiLevelPie,
             'dataChart' => $dataChart,
             'indicatorService' => $indicatorService,
@@ -153,7 +158,7 @@ class IndicatorsDashboardBox extends GenericBox {
     }
 
     public function hasPermission() {
-        return $this->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX', 'ROLE_WORKER_PLANNING','ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL'));
+        return $this->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX', 'ROLE_WORKER_PLANNING', 'ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL'));
     }
 
     public function getTemplateName() {

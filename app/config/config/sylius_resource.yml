@@ -275,6 +275,13 @@ sylius_resource:
                 repository: Pequiven\SIGBundle\Repository\PoliticManagementSystemRepository
        
         #IndicatorSIG
+        pequiven.evolution:
+            driver: doctrine/orm            
+            templates: PequivenSIGBundle:Indicator/
+            classes:
+                controller: Pequiven\SIGBundle\Controller\EvolutionController
+                model: Pequiven\IndicatorBundle\Entity\Indicator
+                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
         pequiven.indicator_sig:
             driver: doctrine/orm            
             templates: PequivenSIGBundle:Indicator/
@@ -332,7 +339,9 @@ sylius_resource:
         #Plan de Acción de las Causas de Desviación del indicador
         pequiven.sig_action_indicator:
             driver: doctrine/orm
+            templates: PequivenSIGBundle:Indicator/            
             classes:
+                controller: Pequiven\SIGBundle\Controller\SigEvolutionReport\ReportEvolutionActionController                                
                 model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
                 repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionActionRepository
         #Valor de las Acciones
@@ -346,7 +355,7 @@ sylius_resource:
             driver: doctrine/orm
             templates: PequivenSIGBundle:Indicator/
             classes:
-                controller: Pequiven\SIGBundle\Controller\SigEvolutionReport\ReportEvolutionController                
+                controller: Pequiven\SIGBundle\Controller\SigEvolutionReport\ReportEvolutionTrendController                
                 model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend
                 repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionTrendRepository
         #Analisis de las causas de desviación

@@ -12,10 +12,13 @@
 {% endblock %} 
 
 {% block body %}
+<div class="block_id" ng-init="idObject='{{ entity.id }}'"></div>
+<div class="block_id" ng-init="typeObj='{{ typeObject }}'"></div>   
+
 <fieldset class="fieldset">
     <legend class="legend">{{ entity }}</legend>
     <div class="inline-label">
-            <label class="label">{{ entity.parents|length > 1 ? 'pequiven_objetive.objetiveTactics'|trans : 'pequiven_objetive.objetive_tactic'|trans }}</label>
+         {#    <label class="label">{{ entity.parents|length > 1 ? 'pequiven_objetive.objetiveTactics'|trans : 'pequiven_objetive.objetive_tactic'|trans }}</label>
             <ul class="fa-ul">
             {% for parent in entity.parents %}
                 <li>{{ generateLink(parent) }}</li>
@@ -71,12 +74,132 @@
         <p class="inline-label">
             <label class="label">{{ 'pequiven_objetive.evalByArrangementProgram'|trans({},'PequivenObjetiveBundle') }}</label>
             {{ entity.arrangementPrograms|length > 0 ? 'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans({},'PequivenObjetiveBundle') }}
-{#            {{ entity.evalArrangementProgram ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}#}
-        </p>
+{#            {{ entity.evalArrangementProgram ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }} #}
+        {#</p>
         {% include 'PequivenObjetiveBundle:Common:arrangementPrograms.html.twig' %}
-        {% include 'PequivenObjetiveBundle:Common:results.html.twig' %}
+        {% include 'PequivenObjetiveBundle:Common:results.html.twig' %}#}
 
     {% include 'PequivenSIGBundle:Template:base_month.html.twig' %} 
 </fieldset>
 
+{% include 'PequivenSIGBundle:Template:baseLoadSectionsEvolution.html.twig' %}     
+
+<p class="button-height align-right">          
+    <div style="text-align: left; margin-left:15px;">
+        <a class="button"  id="showItems"  href="javascript:void(0)">
+            <span class="button-icon left-side red-gradient">
+                <span class="fa fa-history fa-1"></span>
+            </span>
+            <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
+            <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
+        </a>        
+        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}                                   
+            {% set typeObj = 3 %}
+            &nbsp;  {{ buttons.generic_download }}        
+        {% endif %}
+    </div>
+</p>
+
+{% endblock %}
+{% block stylesheets %}
+  {{ parent() }}    
+<style type="text/css">    
+    .position{        
+        margin-right: 20px;
+        margin-top: 20px;
+        color: #1d1c1c;
+        float: right;
+        font-size: 150%;
+    }
+    .button-config{
+        margin-right: 20px;
+        margin-top: 0px;
+        margin-bottom: 15px;
+        color: #1d1c1c;
+        float: right;
+        /*font-size: 150%;*/
+    }
+
+    /* dashboard sig */
+    .dashboard_sig {
+        padding: 75px;
+        position: relative;
+        zoom: 1;
+        color: white;
+        border-top: 1px solid #666666;
+        border-bottom: 1px solid #666666;
+        border-color: #000000;
+    }
+    .dashboard_sig a {
+        color: white;
+    }    
+
+</style>
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+
+    <script type="text/javascript">        
+        $(document).ready(function () {
+            $("a#showItems").click(function () {
+                $("#evolutionItems").toggle("slow");
+                $("a#showItems span.title ").toggle();
+            });
+        });
+
+        //Carga de Archivo pdf
+        function uploadFilePdf(id) {
+            $("input#indicatorFilePdf_" + id).click();
+            console.log(id);
+        }
+
+        //Visualización
+        function openFile(valueCauseId) {
+            valueCauseId = valueCauseId.split("_");
+            var data = {
+                id: valueCauseId[1]
+            };
+            $.ajax({
+                type: 'get',
+                url: '{{ path("pequiven_cause_vizualice_file") }}',
+                data: data,
+                success: function (data) {
+                    window.open(data["url"]);
+                }
+            });
+
+        }
+        //set url
+        function getUrl(data) {            
+            var rs;
+            return rs;
+        }
+        //envio
+        function submitUploadFile(valueCauseId) {
+            valueCauseId = valueCauseId.split("_");
+            $("#field_" + valueCauseId[1]).val(valueCauseId[1]);
+            $("#form_" + valueCauseId[1]).submit();
+        }
+        
+        //Carga de Evento de Descarga de Grafica de Indicador
+        function downloadEvolution(){            
+            var button = document.getElementById("exportpng");
+            if (button){
+               button.click();   
+               window.setTimeout(downloadCause,1000);
+               //downloadCause();               
+            }            
+        }
+        //Carga de Evento de Descarga de Grafica de Causas del Indicador
+        function downloadCause(){
+            var button_cause = document.getElementById("export_causespng");
+            if (button_cause){
+                button_cause.click();                
+            }
+        }
+
+    </script>    
 {% endblock %}

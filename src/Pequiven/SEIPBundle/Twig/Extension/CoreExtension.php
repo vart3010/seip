@@ -26,6 +26,7 @@ class CoreExtension extends \Twig_Extension {
             new \Twig_SimpleFunction('call_static_method', array($this, 'call_static_method')),
             new \Twig_SimpleFunction('periodService', array($this, 'getPeriodService'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('get_next_item', array($this, 'getNextItem')),
+            new \Twig_SimpleFunction('validPnr', array($this, 'validPnr')),
         );
     }
 
@@ -172,6 +173,16 @@ class CoreExtension extends \Twig_Extension {
     function myNumberFormat($value, $decimals = 2) {
         return number_format($value, $decimals, ',', '.');
     }
+
+
+    function validPnr($value) {
+        if($value<0) {
+            return 0;
+        } else {
+            return $value;
+        }
+    }
+
 
     /**
      * Filtro para Mayusculas en Cada palabra de un String.

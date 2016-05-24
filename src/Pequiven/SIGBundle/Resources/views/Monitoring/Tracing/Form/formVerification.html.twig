@@ -1,0 +1,17 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
+
+{% block body %}
+<form method="POST" id="form_verification_add">
+    <fieldset class="fieldset fields-list">
+        <legend class="legend">Verificación</legend>                        
+                <div class="field-block button-height" >            
+                    <label class="label">Verificación:</label>
+                    <select class="input-xlarge select2" name="verification" id="verification">
+                        <option value="1">Eficaz</option>
+                        <option value="2">No Eficaz</option>
+                    </select>
+                </div> 
+    </fieldset>    
+</form>   
+<script type="text/javascript"></script> 
+{% endblock %}

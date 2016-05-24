@@ -1,0 +1,14 @@
+{% include 'PequivenSIGBundle:Template:baseChartEvolutionAndCauses.html.twig' %}     
+
+{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CAUSE') %}    
+    <br/><br/> {% include 'PequivenSIGBundle:Indicator:show/causes_list.html.twig' %}         
+    <br/><br/> {% include 'PequivenSIGBundle:Indicator:show/analysis_cause.html.twig' %} &nbsp;           
+{% endif %}
+
+{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION') %}    
+    <br/><br/> {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %} &nbsp;
+    {% if dataAction["values"] and is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION_VERIFICATION')%}  
+        {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
+    {% endif %}        
+    &nbsp;
+{% endif %}  
