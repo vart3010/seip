@@ -28,7 +28,8 @@ class EvolutionService implements ContainerAwareInterface {
 
         $periods = [
             1 => "2014",
-            2 => "2015"
+            2 => "2015",
+            3 => "2016"
         ];
 
         foreach ($periods as $key => $value) {
@@ -61,6 +62,21 @@ class EvolutionService implements ContainerAwareInterface {
             $result = $this->container->get('pequiven_seip.repository.arrangementprogram')->find($id);
         }elseif ($typeObject == 3) {
             $result = $this->container->get('pequiven.repository.objetive')->find($id);
+        }
+
+        return $result;
+    }  
+
+    /**
+     * Buscamos las entidades consultadas
+     * @param Request $request
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauses
+     * @throws type
+     */
+    public function getObjectLoadFile($id, $typeObject) { 
+
+        if ($typeObject == 1) {
+            $result = $this->container->get('pequiven.repository.sig_causes_analysis')->find($id);
         }
 
         return $result;
@@ -226,10 +242,9 @@ class EvolutionService implements ContainerAwareInterface {
         $valuePorcen = 100;
         $arrangementprogram = $object->getArrangementPrograms();
         $periodCharge = $object->getPeriod()->getId();
-        
         $dataPeriods = $this->getLastPeriods($periodCharge);        
         $periods = $dataPeriods['periods'];
-
+        
         $data = [];
         foreach ($arrangementprogram as $value) {            
             $data[] = $this->getGoalsArrangementProgram($value);            
@@ -280,7 +295,7 @@ class EvolutionService implements ContainerAwareInterface {
         $dataSetPlan["seriesname"] = "Plan";
         $dataSetAcum["seriesname"] = "Acumulado";        
         $labelProm                 = "Promedio";
-        $labelobj                  = "Objetivo 2015";
+        $labelobj                  = $periods[$periodCharge];
 
         $category = $dataPeriods['category'];        
         
@@ -288,12 +303,15 @@ class EvolutionService implements ContainerAwareInterface {
         $cantData = (int)$month;          
 
         $cont = 1;
+        if ($periodCharge > 2) {
+            $dataSetReal["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
+            $dataSetPlan["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
+            $dataSetTend["data"][] = array( 'value' => '' );//Data vacia para saltar 2014            
+        }
+        
         $dataSetReal["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
-        //$dataSetReal["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
         $dataSetPlan["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
-        //$dataSetPlan["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
         $dataSetTend["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
-        //$dataSetTend["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
         
         if ($cantData >= 3) {                    
             $dataTendency = $ArrangementProgramService->ArrangementCalculateTendency($real, $cantData);//Calculo de Tendencia en servicio de Programas de Gestión
@@ -345,26 +363,17 @@ class EvolutionService implements ContainerAwareInterface {
         $cantValue = count($dataSetTend['data']);
         
 
+        $dataSetValues['tendencia'] = 0;                
         if ($cantValue >= 4) {
             $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetTend['data']);                
-        }elseif(!$cantValue) {
-            $dataSetValues['tendencia'] = 0;                
-        }
-        else{
-            $dataSetValues['tendencia'] = 0;
         }
 
-        //Data 2014
-        $dataAnt["value"] = 0;
-        $dataAnt["color"] = '#f2c500';            
-        $dataSetAnt["showvalues"] = "1";            
-        $dataSetAnt["data"][] = $dataAnt;//2014
-
-        //Data 2014
-        $dataAnt["value"] = 15;
-        $dataAnt["color"] = '#f2c500';            
-        $dataSetAnt["showvalues"] = "1";            
-        $dataSetAnt["data"][] = $dataAnt;//2014
+        for ($i = 1; $i < $periodCharge; $i++) {            
+            $dataAnt["value"] = 0;
+            $dataAnt["color"] = '#f2c500';
+            $dataSetAnt["showvalues"] = "1";
+            $dataSetAnt["data"][] = $dataAnt;
+        }
         
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['categories'][]["category"] = $category;

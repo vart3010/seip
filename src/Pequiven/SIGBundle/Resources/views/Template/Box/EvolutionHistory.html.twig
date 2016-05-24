@@ -15,6 +15,8 @@
                         {% set route = "pequiven_indicator_evolution" %}
                     {% elseif typeObject == 2 %}
                         {% set route = "pequiven_seip_arrangementprogram_evolution_sig" %}
+                    {% elseif typeObject == 3 %}
+                        {% set route = "pequiven_sig_objetive_evolution_show" %}
                     {% endif %}
                         
                         {% for data in listMonth %} 

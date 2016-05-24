@@ -18,23 +18,48 @@ class EvolutionController extends ResourceController
         $idObject = $request->get('idObject');
         $typeObject = $request->get('typeObject');//typos 1:analisis de causas
         
+        //Evolution Service para retorno de objeto
+        $evolutionService = $this->getEvolutionService();            
+        $object = $evolutionService->getObjectLoadFile($idObject, $typeObject);
+        
         $response = new JsonResponse();    
         if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') 
         {   
             $nameFile = $typeObject."-".sha1(date('d-m-Y : h:m:s').$idObject);
-            var_dump($nameFile);
-            die();
+            
             foreach ($request->files as $file) {
                 $file->move($this->container->getParameter("kernel.root_dir") . '/../web/uploads/documents/evolution_files/', $nameFile);
                 $fileUploaded = $file->isValid();                
-            }            
+            }   
+            $em = $this->getDoctrine()->getManager();
+            $object->setFile($nameFile);            
+            $em->flush();         
 
             sleep(3);            
-            $response->setData($nameFile);
+            $response->setData(1);
             return $response;            
         }else{
             throw new Exception("Error Processing Request", 1);   
         }
+    }
+
+     public function downloadAction(Request $request){
+        $idObject = $request->get('idObject');
+        $typeObject = $request->get('typeObject');//typos 1:analisis de causas
+
+        $em = $this->getDoctrine()->getManager();                        
+        
+        $evolutionService = $this->getEvolutionService();            
+        $object = $evolutionService->getObjectLoadFile($idObject, $typeObject);
+
+        $pathfile = $this->container->getParameter("kernel.root_dir") . '/../web/uploads/documents/evolution_files/'.$object->getFile();
+        
+        $mi_pdf = $pathfile;
+        header('Content-type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$mi_pdf.'"');
+        readfile($mi_pdf);
+        die();
+
     }
     
     /**

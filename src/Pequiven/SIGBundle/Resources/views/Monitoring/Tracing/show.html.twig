@@ -42,11 +42,15 @@
                                         <td width="8%"><B>{{ status[dataStandardization.status] }}</B></td>
                                         <td width="10%">
                                             {% set cont = 0 %}
-                                            {% set statusCharge = 0 %}                                                
+                                            {% set idMaintenance = 0 %}                                                
+                                            {% set verification  = 0 %}                                                
+                                            {% set statusCharge  = 0 %}                                                
                                             {% if dataStandardization.maintenance | length > 0 %}
                                                 {% for dataMaintenance in dataStandardization.maintenance %}
                                                     {% if cont == 0 %}
-                                                        {% set statusCharge = dataMaintenance.status %}
+                                                        {% set idMaintenance = dataMaintenance.id %}
+                                                        {% set verification  = dataMaintenance.statusVerification %}
+                                                        {% set statusCharge  = dataMaintenance.status %}
                                                         {{ statusMaintanence[statusCharge] }}                  
                                                     {% endif %}                                                    
                                                     {% set cont = cont + 1 %}
@@ -61,6 +65,8 @@
                                                 <a href ng-click="removeStandardization(dataMonitoring='{{ dataStandardization.id }}')" class="button icon-trash with-tooltip confirm" title="Eliminar"></a>
                                             {% elseif statusCharge == 1 or statusCharge == 0 %}
                                                 <a href ng-click="loadTemplateMaintenance(id_standardization='{{ dataStandardization.id }}')" class="button icon-pencil">Cargar</a>
+                                            {% elseif statusCharge >= 2 and verification == null %}
+                                                <a href ng-click="loadTemplateMaintenanceVerification(id_maintenance='{{idMaintenance}}')" class="button icon-pencil">Verificar</a>
                                             {% endif %}
                                         </th>                        
                                     </tr>                                    
