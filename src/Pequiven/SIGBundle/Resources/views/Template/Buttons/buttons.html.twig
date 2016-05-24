@@ -71,3 +71,35 @@
     </a>
 
 {% endmacro %}
+
+{# Revisión #}
+{% macro generic_check(url, message='generic', icon = 'fa fa-pencil-square-o fa-1', parameters = {}) %}
+    {% set gradient = 'red-gradient' %}
+    {% set translation_domain = 'messages' %}
+    {% if parameters['translation_domain'] is defined %}
+        {% set translation_domain = parameters['translation_domain'] %}
+    {% endif  %}
+    {% if parameters['gradient'] is defined %}
+        {% set gradient = parameters['gradient'] %}
+    {% endif  %}
+    <a href="{{ url }}" class="button">
+        <span class="button-icon left-side {{ gradient }}"><span class="{{ icon }}"></span></span>
+        Revisar
+    </a>
+{% endmacro %}
+
+{# Aprobación #}
+{% macro generic_approve(url, message='generic', icon = 'fa fa-thumbs-o-up fa-1', parameters = {}) %}
+    {% set gradient = 'green-gradient' %}
+    {% set translation_domain = 'messages' %}
+    {% if parameters['translation_domain'] is defined %}
+        {% set translation_domain = parameters['translation_domain'] %}
+    {% endif  %}
+    {% if parameters['gradient'] is defined %}
+        {% set gradient = parameters['gradient'] %}
+    {% endif  %}
+    <a href="{{ url }}" class="button">
+        <span class="button-icon left-side {{ gradient }}"><span class="{{ icon }}"></span></span>
+        Aprobar
+    </a>
+{% endmacro %}

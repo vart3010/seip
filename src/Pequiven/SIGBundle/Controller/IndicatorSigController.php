@@ -149,6 +149,8 @@ class IndicatorSigController extends EvolutionController {
         $month = $request->get('month'); //El mes pasado por parametro
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
         $data = $evolutionService->findEvolutionCause($indicator, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
+        
+        $data = $evolutionService->findToCheckApproveEvolution($indicator, $typeObject, $month); //Carga la data de las causas y sus acciones relacionadas
        
         //Validación de que el mes pasado este entre los validos
         if ($month > 12) {
@@ -158,25 +160,6 @@ class IndicatorSigController extends EvolutionController {
             $this->get('session')->getFlashBag()->add('error', "El mes consultado no es un mes valido!");
             $month = 01;
         }
-
-        //Cargando el Archivo
-        //uploadFile = $request->get("uploadFile"); //Recibiendo archivo
-        //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
-        /*if ($uploadFile != null) {
-            $band = false;
-            //VALIDACION QUE SEA UN ARCHIVO PERMITIDO
-            foreach ($request->files as $file) {
-                if (in_array($file->guessExtension(), \Pequiven\IndicatorBundle\Model\Indicator\ValueIndicatorFile::getTypesFile())) {
-                    $band = true;
-                }
-            }
-            if ($band) {
-                $this->createValueCauseFile($resource, $request);
-            } else {
-                $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
-                $this->redirect($this->generateUrl("pequiven_indicator_evolution", array("id" => $request->get("id"), "month" => $month)));
-            }
-        }*/
 
         //Url export
         $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export_chart', array('id' => $request->get("id"), 'month' => $month, 'typeObj' => 1));
@@ -260,64 +243,6 @@ class IndicatorSigController extends EvolutionController {
 
         return $this->handleView($view);
     }
-
-   /* public function createValueCauseFile(Indicator $indicator, Request $request) {
-
-        $EvolutionCauseFile = new Indicator\EvolutionIndicator\EvolutionCauseFile();
-
-        $fileUploaded = false;
-
-        $month = date("m"); //Carga del mes de Creación de la causa "Automatico"  
-
-        $causeAnalysis = $request->get('cause');
-
-        $causeData = $this->get('pequiven.repository.sig_causes_analysis')->find($causeAnalysis);
-
-        if ($causeData->getId() == $causeAnalysis) {
-
-            $EvolutionCauseFile->setValueCause($causeData);
-            foreach ($request->files as $file) {
-                //VALIDA QUE EL ARCHIVO SEA UN PDF
-                //SE GUARDAN LOS CAMPOS EN BD
-                $EvolutionCauseFile->setCreatedBy($this->getUser());
-                $EvolutionCauseFile->setNameFile($file->getClientOriginalName());
-                $EvolutionCauseFile->setPath(Indicator\EvolutionIndicator\EvolutionCauseFile::getUploadDir());
-                $EvolutionCauseFile->setExtensionFile($file->guessExtension());
-
-                //SE MUEVE EL ARCHIVO AL SERVIDOR
-                $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . Indicator\EvolutionIndicator\EvolutionCauseFile::getUploadDir(), Indicator\ValueIndicator\ValueIndicatorFile::NAME_FILE . $causeData->getId());
-                $fileUploaded = $file->isValid();
-            }
-        }
-
-        if (!$fileUploaded) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $em->persist($EvolutionCauseFile);
-            $em->flush();
-
-            $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.saveFileSuccess', array(), 'PequivenIndicatorBundle'));
-            $request->request->set("uploadFile", "");
-            $this->redirect($this->generateUrl("pequiven_indicator_evolution", array("id" => $request->get("id"), "month" => $month)));
-        } else {
-            $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.errorFileUpload', array(), 'PequivenIndicatorBundle'));
-            $request->request->set("uploadFile", "");
-            $this->redirect($this->generateUrl("pequiven_indicator_evolution", array("id" => $request->get("id"), "month" => $month)));
-        }
-    }*/
-
-    /**
-     *
-     * Generate URL files
-     * 
-     */
-    /*public function generateUrlFile(Request $request) {
-
-        $response = new JsonResponse();
-        $data = array();
-        $data["url"] = $this->generateUrl("pequiven_indicator_vizualice_file", array("id" => $request->get("id")));
-        $response->setData($data);
-        return $response;
-    }*/
 
     /**
      * Retorna el formulario de la relacion del indicador con periodo Anterior

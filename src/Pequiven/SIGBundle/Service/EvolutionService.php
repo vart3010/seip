@@ -81,6 +81,46 @@ class EvolutionService implements ContainerAwareInterface {
 
         return $result;
     }   
+    /**
+     *
+     *  Metodo de Validación de Estatus del Informe de Evolución
+     *
+     */
+    public function findToCheckApproveEvolution($object, $typeObject, $month){
+        $validStatus = 'check';
+        $em = $this->getDoctrine();
+        $result = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionApprove')->findBy(array('idObject' => $object->getId(),'month' => $month, 'typeObject' => $typeObject));
+        if (count($result)) {
+            foreach ($result as $key => $value) {
+                //$check = $value->getStatusCheck();
+                //$approve = $value->getStatusApprove();
+                if ($value->getStatusCheck()) {
+                    $validStatus = 'approve';                                        
+                }
+            }
+        }        
+
+        switch ($validStatus) {
+            case 'check':
+                $button = $validStatus;
+                break;
+            case 'approve':
+                $button = $validStatus;                
+                break;
+            default:
+                # code...
+                break;
+        }
+
+        $data = [
+            'button' => $validStatus            
+        ];
+
+        var_dump($data);
+        
+        die();
+        return $data;
+    }
 
     /**
      * Buscamos las acciones de las causas
