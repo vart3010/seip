@@ -197,12 +197,12 @@ class IndicatorGroup {
         $this->color = $color;
     }
 
-    public function addIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators) {
+    public function addIndicator(Indicator $indicators) {
         $this->indicators[] = $indicators;
         return $this;
     }
 
-    public function removeIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators) {
+    public function removeIndicator(Indicator $indicators) {
         $this->indicators->removeElement($indicators);
     }
 
