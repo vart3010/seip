@@ -122,8 +122,11 @@
         </a>        
         {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}            
             &nbsp;  {{ buttons.generic_download }}        
-            &nbsp;  {{ buttons.generic_check }}        
-            &nbsp;  {{ buttons.generic_approve }}        
+            {% if approve['button'] == "check" %}                
+                &nbsp;{{ buttons.generic_approve(path('pequiven_evolution_check_to_approve', { 'id': indicator_sig.id,'month':month,'type':1, 'typeObj':typeObject }),{'message':'Revisado', 'icon':'fa fa-pencil-square-o fa-1','gradient':'red-gradient'} ) }}       
+            {% elseif approve['button'] == "approve" %}
+                &nbsp;{{ buttons.generic_approve(path('pequiven_evolution_check_to_approve', { 'id': indicator_sig.id,'month':month,'type':2, 'typeObj':typeObject}),{'message':'Aprobar','icon':'fa fa-thumbs-o-up fa-1','gradient':'green-gradient'}) }}             
+            {% endif %}
         {% endif %}
     </div>
 </p>
@@ -184,43 +187,8 @@
             });
         });
 
-        /*//Carga de Archivo pdf
-        function uploadFilePdf(id) {
-            $("input#indicatorFilePdf_" + id).click();
-            console.log(id);
-        }
-
-        //Visualización
-        function openFile(valueCauseId) {
-            valueCauseId = valueCauseId.split("_");
-            var data = {
-                id: valueCauseId[1]
-            };
-            $.ajax({
-                type: 'get',
-                url: '{{ path("pequiven_cause_vizualice_file") }}',
-                data: data,
-                success: function (data) {
-                    window.open(data["url"]);
-                }
-            });
-
-        }
-        //set url
-        function getUrl(data) {            
-            var rs;
-            return rs;
-        }
-        //envio
-        function submitUploadFile(valueCauseId) {
-            valueCauseId = valueCauseId.split("_");
-            $("#field_" + valueCauseId[1]).val(valueCauseId[1]);
-            $("#form_" + valueCauseId[1]).submit();
-        }
-        //fin file*/
-
         //url file
-        var urlFiles = "{{ path("pequiven_sig_evolution_load_file") }}";
+        var urlFiles = "{{ path('pequiven_sig_evolution_load_file') }}";
         setUrlFiles(urlFiles); 
         //end url file
         //Carga de Evento de Descarga de Grafica de Indicador

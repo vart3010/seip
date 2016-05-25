@@ -150,7 +150,7 @@ class IndicatorSigController extends EvolutionController {
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
         $data = $evolutionService->findEvolutionCause($indicator, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
         
-        $data = $evolutionService->findToCheckApproveEvolution($indicator, $typeObject, $month); //Carga la data de las causas y sus acciones relacionadas
+        $approve = $evolutionService->findToCheckApproveEvolution($indicator, $typeObject, $month); //Carga la data de las causas y sus acciones relacionadas
        
         //Validación de que el mes pasado este entre los validos
         if ($month > 12) {
@@ -218,7 +218,7 @@ class IndicatorSigController extends EvolutionController {
             'action' => $data["action"],
             'values' => $data["actionValue"]
         ];
-
+        
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('evolution.html'))
@@ -238,6 +238,7 @@ class IndicatorSigController extends EvolutionController {
             'lastPeriod' => $indicator->getIndicatorLastPeriod(),
             'route'      => "pequiven_indicator_evolution", //Ruta para carga de Archivo
             'urlExportFromChart' => $urlExportFromChart,
+            'approve'    => $approve,
             $this->config->getResourceName() => $resource,            
         ));
 

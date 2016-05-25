@@ -261,7 +261,20 @@ class EvolutionController extends ResourceController
         shell_exec("rm $imgCause");//Eliminamos
 
     }
-
+    /**
+     *
+     *  Metodo de Revisión y Aprobación de Informe de Evolución
+     *
+     */
+    public function checkToEvolutionAction(Request $request){
+        
+        $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
+        $approve = $evolutionService->updateToCheckApproveEvolution($request->get('id'), $request->get('typeObj'), $request->get('month')); //Carga la data de las causas y sus acciones relacionadas
+        var_dump($approve);
+        die();
+        $this->get('session')->getFlashBag()->add('success', 'Informe de Evolución Revisado Exitosamente.');
+        return $this->redirect($this->generateUrl("pequiven_indicator_evolution", array("id" => $request->get('id'), "month" => $request->get('month'))));
+    }
     /**
      * 
      * @return \Pequiven\SIGBundle\Service\EvolutionService

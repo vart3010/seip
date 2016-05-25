@@ -81,6 +81,7 @@ class EvolutionService implements ContainerAwareInterface {
 
         return $result;
     }   
+
     /**
      *
      *  Metodo de Validación de Estatus del Informe de Evolución
@@ -88,6 +89,7 @@ class EvolutionService implements ContainerAwareInterface {
      */
     public function findToCheckApproveEvolution($object, $typeObject, $month){
         $validStatus = 'check';
+        $status = 1;
         $em = $this->getDoctrine();
         $result = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionApprove')->findBy(array('idObject' => $object->getId(),'month' => $month, 'typeObject' => $typeObject));
         if (count($result)) {
@@ -95,30 +97,53 @@ class EvolutionService implements ContainerAwareInterface {
                 //$check = $value->getStatusCheck();
                 //$approve = $value->getStatusApprove();
                 if ($value->getStatusCheck()) {
-                    $validStatus = 'approve';                                        
+                    $validStatus = 'approve';
+                    $status = 2;
                 }
             }
         }        
 
-        switch ($validStatus) {
-            case 'check':
-                $button = $validStatus;
-                break;
-            case 'approve':
-                $button = $validStatus;                
-                break;
-            default:
-                # code...
-                break;
-        }
-
         $data = [
-            'button' => $validStatus            
+            'button' => $validStatus,
+            'status' => $status           
         ];
 
-        var_dump($data);
-        
+        return $data;
+    }
+
+    /**
+     *
+     *  Metodo de Validación de Estatus del Informe de Evolución
+     *
+     */
+    public function updateToCheckApproveEvolution($id, $typeObject, $month){
+        $validStatus = 'check';
+        $status = 1;
+        $user = $this->getUser(); 
+        $em = $this->getDoctrine();
+        $result = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionApprove')->findBy(array('idObject' => $id,'month' => $month, 'typeObject' => $typeObject));
+        if (count($result)) {
+            foreach ($result as $key => $value) {
+                //$check = $value->getStatusCheck();
+                //$approve = $value->getStatusApprove();
+                if ($value->getStatusCheck()) {
+                    $validStatus = 'approve';
+                    $status = 2;
+                }
+            }
+        }else{
+            $result->setStatusCheck(1);
+            $result->setUserCheck($user);
+            $em->flush();
+            //var_dump("no esta revisado");
+        }        
         die();
+
+        $data = [
+            'button' => $validStatus,
+            'status' => $status           
+        ];
+
         return $data;
     }
 
@@ -525,7 +550,7 @@ class EvolutionService implements ContainerAwareInterface {
 	public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
     }
-	
+	   
 	/**
      * Shortcut to return the Doctrine Registry service.
      *
@@ -539,5 +564,30 @@ class EvolutionService implements ContainerAwareInterface {
         }
 
         return $this->container->get('doctrine');
+    }
+
+    /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws LogicException If SecurityBundle is not available
+     *
+     * @see TokenInterface::getUser()
+     */
+    public function getUser() {
+        if (!$this->container->has('security.context')) {
+            throw new LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        if (null === $token = $this->container->get('security.context')->getToken()) {
+            return;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return;
+        }
+
+        return $user;
     }
 }

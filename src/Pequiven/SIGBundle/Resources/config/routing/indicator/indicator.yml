@@ -283,3 +283,14 @@ pequiven_responsibles_to_plan:
     methods: [GET|POST]
     options:
         expose: true
+#Revisión y Aprobación de informe de Evolución
+pequiven_evolution_check_to_approve:
+    path: /evolution/{id}/{month}/{type}/{typeObj}
+    defaults:
+        _controller: pequiven.controller.evolution:checkToEvolutionAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
