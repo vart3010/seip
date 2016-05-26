@@ -55,7 +55,6 @@ class EvolutionService implements ContainerAwareInterface {
      * @throws type
      */
     public function getObjectEntity($id, $typeObject) { 
-
         if ($typeObject == 1) {
             $result = $this->container->get('pequiven.repository.indicator')->find($id);
         } elseif ($typeObject == 2) {
@@ -74,11 +73,9 @@ class EvolutionService implements ContainerAwareInterface {
      * @throws type
      */
     public function getObjectLoadFile($id, $typeObject) { 
-
         if ($typeObject == 1) {
             $result = $this->container->get('pequiven.repository.sig_causes_analysis')->find($id);
         }
-
         return $result;
     }   
 
@@ -94,11 +91,15 @@ class EvolutionService implements ContainerAwareInterface {
         $result = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionApprove')->findBy(array('idObject' => $object->getId(),'month' => $month, 'typeObject' => $typeObject));
         if (count($result)) {
             foreach ($result as $key => $value) {
-                //$check = $value->getStatusCheck();
-                //$approve = $value->getStatusApprove();
-                if ($value->getStatusCheck()) {
+                if (!$value->getStatusCheck()) {
+                    $validStatus = 'check';
+                    $status = 1;
+                }elseif (!$value->getStatusApprove()) {
                     $validStatus = 'approve';
                     $status = 2;
+                }else{
+                    $validStatus = '';
+                    $status = 3;
                 }
             }
         }        
@@ -120,28 +121,26 @@ class EvolutionService implements ContainerAwareInterface {
         $validStatus = 'check';
         $status = 1;
         $user = $this->getUser(); 
-        $em = $this->getDoctrine();
-        $result = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionApprove')->findBy(array('idObject' => $id,'month' => $month, 'typeObject' => $typeObject));
-        if (count($result)) {
-            foreach ($result as $key => $value) {
-                //$check = $value->getStatusCheck();
-                //$approve = $value->getStatusApprove();
-                if ($value->getStatusCheck()) {
-                    $validStatus = 'approve';
-                    $status = 2;
-                }
-            }
-        }else{
-            $result->setStatusCheck(1);
-            $result->setUserCheck($user);
+        $em = $this->getDoctrine()->getManager();        
+        $result = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionApprove')->findOneBy(array('idObject' => $id,'month' => $month, 'typeObject' => $typeObject));
+        
+        if (count($result) != 0) {            
+            if (!$result->getStatusCheck()) {
+                $result->setStatusCheck(1);
+                $result->setUserCheck($user);
+                $message = "Revisado";                
+            }else{
+                $result->setStatusApprove(1);
+                $result->setUserApprove($user);                                
+                $message = "Aprobado";
+            }            
             $em->flush();
-            //var_dump("no esta revisado");
-        }        
-        die();
+        }     
 
         $data = [
-            'button' => $validStatus,
-            'status' => $status           
+            'button'  => $validStatus,
+            'status'  => $status,
+            'message' => $message
         ];
 
         return $data;

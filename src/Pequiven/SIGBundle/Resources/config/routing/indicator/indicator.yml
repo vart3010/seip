@@ -77,7 +77,7 @@ pequiven_causes_analysis_get_form:
         expose: true
 #Carga de formulario de la verificación del indicador
 pequiven_verification_get_form:
-    path: /{idObject}/{typeObj}/get-form_verification.{_format}
+    path: /{idObject}/{typeObj}/get-form-verification.{_format}
     defaults:
         _controller: pequiven.controller.sig_trend_report_evolution:getFormVerificationAction
         _format: html
