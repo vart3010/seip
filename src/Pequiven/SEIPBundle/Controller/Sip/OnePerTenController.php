@@ -54,10 +54,19 @@ class OnePerTenController extends SEIPController {
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
+        
+        $profilesPoliticEvaluation = array();
+        $profilesPoliticEvaluation[] = array('id' => 1,'description' => 'Perfil 1');
+        $profilesPoliticEvaluation[] = array('id' => 2,'description' => 'Perfil 2');
+        $profilesPoliticEvaluation[] = array('id' => 3,'description' => 'Perfil 3');
+        $profilesPoliticEvaluation[] = array('id' => 4,'description' => 'Perfil 4');
+        $profilesPoliticEvaluation[] = array('id' => 5,'description' => 'Perfil 5');
+        
         if ($request->get('_format') == 'html') {
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
                 $this->config->getPluralResourceName() => $resources,
+                'profilesPoliticEvaluation' => $profilesPoliticEvaluation,
             );
             $view->setData($data);
         } else {

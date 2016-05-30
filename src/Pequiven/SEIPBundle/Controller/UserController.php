@@ -241,12 +241,18 @@ class UserController extends baseController {
         //Si tiene el rol para ver la gestiòn de todos (preferiblemente ROLE_SEIP_PLANNING_VIEW_ALL_MANAGEMENT_USER) no envias el levelUser
         if (!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_ALL_MANAGEMENT_USER_ITEMS')) {
             $levelUser = $user->getLevelRealByGroup();
+            if($securityService->isGranted('ROLE_SEIP_RESULT_MANAGEMENT_CONSULTING_ALL_GERENCIA_FIRST')){
+                $levelUser = \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO;
+            }
             $criteria['levelUser'] = $levelUser;
             if ($levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_FIRST || $levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO) {
                 $criteria['idGerenciaUser'] = $this->getUser()->getGerencia()->getId();
             } elseif ($levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_SECOND) {
                 $criteria['idGerenciaUser'] = $this->getUser()->getGerencia()->getId();
                 $criteria['idGerenciaSecondUser'] = $this->getUser()->getGerenciaSecond()->getId();
+            }
+            if(!isset($criteria['idGerenciaUser'])){
+                
             }
             $results = $this->get('pequiven_seip.repository.user')->searchUserByCriteriaUnder($criteria);
         } else {

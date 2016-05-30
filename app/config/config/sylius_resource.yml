@@ -275,6 +275,13 @@ sylius_resource:
                 repository: Pequiven\SIGBundle\Repository\PoliticManagementSystemRepository
        
         #IndicatorSIG
+        pequiven.evolution:
+            driver: doctrine/orm            
+            templates: PequivenSIGBundle:Indicator/
+            classes:
+                controller: Pequiven\SIGBundle\Controller\EvolutionController
+                model: Pequiven\IndicatorBundle\Entity\Indicator
+                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
         pequiven.indicator_sig:
             driver: doctrine/orm            
             templates: PequivenSIGBundle:Indicator/

@@ -7,29 +7,23 @@ namespace Pequiven\SEIPBundle\Model\Box\EvolutionHistory;
  *
  * @author Maximo Sojo
  */
-class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox {
+class EvolutionHistoryItemsObjetiveBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox {
 
     public function getName() {
-        return 'pequiven_seip_box_evolution_items';
+        return 'pequiven_seip_box_evolution_items_objetive';
     }
 
     public function getParameters() {
         
-        $idIndicator = $this->getRequest()->get('id');
+        $object = $this->getRequest()->get('id');
         
         $em = $this->getDoctrine()->getManager();
-        $ind = $em->getRepository("\Pequiven\IndicatorBundle\Entity\Indicator")->find($idIndicator);
         
         $month = date("m");//Carga del mes "Automatico"
         $mesData = date("F");//Data mes
         
-        if ($ind->getPeriod()->getId() == 2) {
-            $year = 2015;            
-            $month = "12";
-        }else{
-            $year = 2016;
-        }        
-        
+        $year = 2016;
+
         $labelMonth = $this->getMonths();       
         $count = 1;
         
@@ -38,20 +32,17 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
               $count = $count + 1;
         }  
         
-        $frequency = $ind->getFrequencyNotificationIndicator()->getId();        
-        $indicator = $idIndicator;
         $listMonth = $setMonth;
         $boxmonth =  $month;
-        $typeObject = 1;
+        $typeObject = 3;
         
         return array(
-            'Box_indicator' => $indicator,
+            'Box_indicator' => $object,
             'Box_month'     => $boxmonth,
             'listMonth'     => $listMonth,
             'labelsMonths'  => $labelMonth,
             'typeObject'    => $typeObject,
-            'year'          => $year,
-            'frequency'    => $frequency
+            'year'          => $year,            
             );
         
     }
@@ -64,7 +55,8 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
         return 'Muestra los diferentes Historicos del Informe de Evolution';
     }
 
-    public function getTemplateName() {        
+    public function getTemplateName() {
+        
         return 'PequivenSIGBundle:Template:Box\EvolutionHistory.html.twig';
     }
 

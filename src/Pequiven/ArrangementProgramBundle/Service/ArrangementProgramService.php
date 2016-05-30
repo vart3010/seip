@@ -130,7 +130,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
 
         $category = $dataSetReal = $dataSetPlan = $dataSetAcum = array();
         $label = $dataReal = $dataPlan = $dataAcum = $dataMedition = array();
-        $cantData = 0;
+        $cantData = $dataTendency = 0;
         //Carga de Nombres de Labels
         $dataSetReal["seriesname"] = "Real";
         $dataSetPlan["seriesname"] = "Plan";
@@ -229,9 +229,9 @@ class ArrangementProgramService implements ContainerAwareInterface {
             $dataSetReal["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
             $dataSetPlan["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
             $dataSetTend["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
-            
-            $dataTendency = $this->ArrangementCalculateTendency($real, $cantData);
-            
+            if ($cantData >= 3) { 
+                $dataTendency = $this->ArrangementCalculateTendency($real, $cantData);
+            }
             for ($i=0; $i < $cantData; $i++) {                 
                 if ($real[$cont] != NULL) {                                                 
                     $month = $this->getMonthsArrangementProgram($cont);//Carga de labels de los meses

@@ -160,9 +160,9 @@ class IndicatorSigController extends EvolutionController {
         }
 
         //Cargando el Archivo
-        $uploadFile = $request->get("uploadFile"); //Recibiendo archivo
+        //uploadFile = $request->get("uploadFile"); //Recibiendo archivo
         //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
-        if ($uploadFile != null) {
+        /*if ($uploadFile != null) {
             $band = false;
             //VALIDACION QUE SEA UN ARCHIVO PERMITIDO
             foreach ($request->files as $file) {
@@ -176,7 +176,7 @@ class IndicatorSigController extends EvolutionController {
                 $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
                 $this->redirect($this->generateUrl("pequiven_indicator_evolution", array("id" => $request->get("id"), "month" => $month)));
             }
-        }
+        }*/
 
         //Url export
         $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export_chart', array('id' => $request->get("id"), 'month' => $month, 'typeObj' => 1));
@@ -261,7 +261,7 @@ class IndicatorSigController extends EvolutionController {
         return $this->handleView($view);
     }
 
-    public function createValueCauseFile(Indicator $indicator, Request $request) {
+   /* public function createValueCauseFile(Indicator $indicator, Request $request) {
 
         $EvolutionCauseFile = new Indicator\EvolutionIndicator\EvolutionCauseFile();
 
@@ -303,21 +303,21 @@ class IndicatorSigController extends EvolutionController {
             $request->request->set("uploadFile", "");
             $this->redirect($this->generateUrl("pequiven_indicator_evolution", array("id" => $request->get("id"), "month" => $month)));
         }
-    }
+    }*/
 
     /**
      *
      * Generate URL files
      * 
      */
-    public function generateUrlFile(Request $request) {
+    /*public function generateUrlFile(Request $request) {
 
         $response = new JsonResponse();
         $data = array();
         $data["url"] = $this->generateUrl("pequiven_indicator_vizualice_file", array("id" => $request->get("id")));
         $response->setData($data);
         return $response;
-    }
+    }*/
 
     /**
      * Retorna el formulario de la relacion del indicador con periodo Anterior

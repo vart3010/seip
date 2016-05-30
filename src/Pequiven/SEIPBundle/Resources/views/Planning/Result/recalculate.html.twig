@@ -22,13 +22,17 @@
         var resultsArrangementprogram = {{ resultsArrangementprogram|json_encode()|raw }};
         var resultsIndicator = {{ resultsIndicator|json_encode()|raw }};
         var resultsUserEvaluationDetails = {{ resultsUserEvaluationDetails|json_encode()|raw }};
-        var resultsOnePerTen = {{ resultsOnePerTen|json_encode()|raw }};
+        {% if isAllowPolitic %}
+            var resultsOnePerTen = {{ resultsOnePerTen|json_encode()|raw }};
+        {% endif %}
         var cancelAjax = false;
         $(document).ready(function(){
             $('#spanArrangementprogram').html("#"+resultsArrangementprogram.length);
             $('#spanIndicator').html("#"+resultsIndicator.length);
             $('#spanUserEvaluationDetails').html("#"+resultsUserEvaluationDetails.length);
-            $('#spanOnePerTen').html("#"+resultsOnePerTen.length);
+            {% if isAllowPolitic %}
+                $('#spanOnePerTen').html("#"+resultsOnePerTen.length);
+            {% endif %}
         });
         function recalculateArrangementprogram()
         {

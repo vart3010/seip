@@ -71,6 +71,13 @@ class OnePerTenRepository extends EntityRepository {
             ;
         }
         
+        if (($profileValue = $criteria->remove('profilesPoliticEvaluation'))) {
+            $queryBuilder
+                    ->andWhere('opt.profileValue = :profileValue')
+                    ->setParameter('profileValue', $profileValue)
+            ;
+        }
+        
         if (($voto = $criteria->remove('voto'))) {
             $numVoto = 0;
             if($voto == 'SI'){
