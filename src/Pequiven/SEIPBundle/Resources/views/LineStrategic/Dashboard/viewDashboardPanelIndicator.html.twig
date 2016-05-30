@@ -15,8 +15,8 @@
 {% block body %}    
     <br>
     <br>
-    <div class="ten-columns">         
-        <h2>
+    <div class="twelve-columns">         
+        <h1 class="thin breadcrumb">
             {%if (group.color!=null) %}                            
                 {% set color= group.color %}
             {%else%}                
@@ -24,7 +24,7 @@
             {%endif%}
             <i class="fa {{ group.logo }}" style="color: {{color}}; font-size: 40px;" aria-hidden="true"></i>
             {{group.description}}
-        </h2>
+        </h1>
     </div>
     <hr class="hr-linestrategic-icons" />
     <br>    
