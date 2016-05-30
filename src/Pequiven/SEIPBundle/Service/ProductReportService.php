@@ -264,7 +264,7 @@ class ProductReportService implements ContainerAwareInterface {
             $plan[] = array("value" => $production[$fieldPlan]);
             $real[] = array("value" => $production[$fieldReal]);
 
-            if($production[$fieldReal]==0) { 
+            if($production[$fieldPlan]==0) { 
                 $p = 0.0;
             } else {
                 $p = (($production[$fieldReal] * 100) / $production[$fieldPlan]);
