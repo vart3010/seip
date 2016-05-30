@@ -11,15 +11,15 @@
     {% set tipoProd='(PRODUCCIÓN BRUTA)'%}
 {% endif %}
 
-<!--<div class="columns">
+<div class="columns">
     <div class="twelve-columns twelve-columns-mobile">
         <h3 class="thin underline text-center">Gráficas</h3>
     </div>
-</div>-->
+</div>
 
 
 <div class="columns">
-    <!--<div class="twelve-columns twelve-columns-mobile">
+    <div class="twelve-columns twelve-columns-mobile">
         <div class="standard-tabs margin-bottom" id="add-tabs">
 
             <ul class="tabs">
@@ -31,16 +31,16 @@
                 <div id="tab-1" class="with-padding">
                     <div class="columns">
                         <div class="twelve-columns"> 
-                            {#<div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicDay',{{ graphicsDays }},'100','500')">
-                                <span id="graphicDay"></span>
-                            </div>#}
+                            <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicRange',{{ graphicRange }},'100','500')">
+                                <span id="graphicRange"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
         </div>
-    </div>-->
+    </div>
 </div>
 {% if showProduction %}
     <div class="columns">

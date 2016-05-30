@@ -1158,10 +1158,12 @@ class ReportTemplateController extends SEIPController {
             }
 
             //ME TRAIGO LAS OBSERVACIONES 
-            $observations[] = array(
-                "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
-                "obs" => $summaryDay["observation"]
-            );
+            if($summaryDay["observation"] !="")  { 
+                $observations[] = array(
+                    "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
+                    "obs" => $summaryDay["observation"]
+                );
+            }      
 
             if ($summaryDay["plan"] > 0) {
                 $ejecutionDay = ($summaryDay["real"] * 100) / $summaryDay["plan"];
@@ -1558,10 +1560,13 @@ class ReportTemplateController extends SEIPController {
                                     
                                     
                                     //ME TRAIGO LAS OBSERVACIONES 
-                                    $observations[] = array(
-                                        "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
-                                        "obs" => $summaryDay["observation"]
-                                    );
+                                    if($summaryDay["observation"] !="")  { 
+                                        $observations[] = array(
+                                            "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
+                                            "obs" => $summaryDay["observation"]
+                                        );
+                                    }
+
 
                                     if ($summaryDay["plan"] - $summaryDay["real"] < 0) {
                                         $var = 0;
@@ -2134,10 +2139,12 @@ class ReportTemplateController extends SEIPController {
 
 
                                             //ME TRAIGO LAS OBSERVACIONES 
-                                            $observations[] = array(
-                                                "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
-                                                "obs" => $summaryDay["observation"]
-                                            );
+                                            if($summaryDay["observation"] !="")  { 
+                                                $observations[] = array(
+                                                    "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
+                                                    "obs" => $summaryDay["observation"]
+                                                );
+                                            }
 
                                             //SUMMARY MONTH
                                             $summaryMonth = $productReport->getSummaryMonth($dateReport, $typeReport);
@@ -2958,8 +2965,14 @@ class ReportTemplateController extends SEIPController {
                 
                 
 
-                #$reportService = $this->getProductReportService();
-               # $graphicProducctionRange = $reportService->generateColumn3dLineryPerRange(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $arrayProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd));
+                $reportService = $this->getProductReportService();
+                $graphicProducctionRange = $reportService->generateColumn3dLineryPerRange(
+                    array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), 
+                    $summaryProduction,
+                    array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd),
+                    1,
+                    true
+                );
 
 
                 $data = array(
@@ -2992,7 +3005,7 @@ class ReportTemplateController extends SEIPController {
                     'dateFrom' => $dateFrom,
                     'dateEnd' => $dateEnd,
                     'groupsPlants'=>$groupsPlants,
-                    'graphicRange' => null
+                    'graphicRange' => $graphicProducctionRange
                 );
 
 
