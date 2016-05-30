@@ -120,9 +120,7 @@
             <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
             <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
         </a>        
-        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}                       
-            {# Descarga de Informe de Evolución#}
-            {% set typeObj = 1 %}
+        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}            
             &nbsp;  {{ buttons.generic_download }}        
         {% endif %}
     </div>
