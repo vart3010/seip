@@ -71,7 +71,7 @@
                     {% endif %}
                 </p>
             </div>#}
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <div class="new-row-mobile new-row six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">¿Reportó Voto Elecciones Asamblea Nacional 2015?</label>
                     {% set textoVoto = 'No' %}
@@ -87,13 +87,21 @@
                     {{ textWorkStudyCircle }}
                 </p>
             </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <div class="new-row-mobile new-row six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">¿Es Coordinador de su CET?</label>
                     {{ isCoordinator }}
                 </p>
             </div>
-            <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile {{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['class'] }}" align="center">
+            {% if onePerTen.markedStatus == 1 %}
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Perfil Real</label>
+                        <b>{{ onePerTen.realProfileValue }}</b>
+                    </p>
+                </div>
+            {% endif %}
+            <div class="new-row-mobile new-row twelve-columns twelve-columns-tablet twelve-columns-mobile {{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['class'] }}" align="center">
                 <h1>Perfil Político:
                     {#{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['profileValue'] }}</h1>#}
                     {{ onePerTen.profileValue }}</h1>
