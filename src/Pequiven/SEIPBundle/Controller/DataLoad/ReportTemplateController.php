@@ -1555,18 +1555,19 @@ class ReportTemplateController extends SEIPController {
                                     $dayPlan+=$summaryDay["plan"];
                                     $dayReal+=$summaryDay["real"];
 
-                                    if ($summaryDay["plan"] - $summaryDay["real"] < 0) {
-                                        $var = 0;
-                                    } else {
-                                        $var = $summaryDay["plan"] - $summaryDay["real"];
-                                    }
-                                    //var_dump($productReport->getProduct());
+                                    
+                                    
                                     //ME TRAIGO LAS OBSERVACIONES 
                                     $observations[] = array(
                                         "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
                                         "obs" => $summaryDay["observation"]
                                     );
 
+                                    if ($summaryDay["plan"] - $summaryDay["real"] < 0) {
+                                        $var = 0;
+                                    } else {
+                                        $var = $summaryDay["plan"] - $summaryDay["real"];
+                                    }
 
                                     if ($summaryDay["plan"] > 0) {
                                         $ejecutionDay = ($summaryDay["real"] * 100) / $summaryDay["plan"];
@@ -1592,8 +1593,8 @@ class ReportTemplateController extends SEIPController {
                                     //TOTALES SECCION DIA
                                     $summaryProductionTotals["day"]["ppto"] +=$summaryDay["plan"];
                                     $summaryProductionTotals["day"]["real"] +=$summaryDay["real"];
-                                    $summaryProductionTotals["day"]["ejec"] +=$ejecutionDay;
-                                    $summaryProductionTotals["day"]["var"] +=$var;
+                                    #$summaryProductionTotals["day"]["ejec"] +=$ejecutionDay;
+                                    #$summaryProductionTotals["day"]["var"] +=$var;
 
 
 
@@ -1629,8 +1630,8 @@ class ReportTemplateController extends SEIPController {
                                     $summaryProductionTotals["month"]["ppto"] +=$summaryMonth["plan_month"];
                                     $summaryProductionTotals["month"]["pptoAcumulado"] +=$summaryMonth["plan_acumulated"];
                                     $summaryProductionTotals["month"]["realAcumulado"] +=$summaryMonth["real_acumulated"];
-                                    $summaryProductionTotals["month"]["ejec"] +=$ejecutionMonth;
-                                    $summaryProductionTotals["month"]["var"] +=$varMonth;
+                                    #$summaryProductionTotals["month"]["ejec"] +=$ejecutionMonth;
+                                    #$summaryProductionTotals["month"]["var"] +=$varMonth;
 
 
                                     //PRODUCCTION YEAR
@@ -1666,8 +1667,8 @@ class ReportTemplateController extends SEIPController {
                                     $summaryProductionTotals["year"]["ppto"] +=$summaryYear["plan_year"];
                                     $summaryProductionTotals["year"]["pptoAcumulado"] +=$summaryYear["plan_acumulated"];
                                     $summaryProductionTotals["year"]["realAcumulado"] +=$summaryYear["real_acumulated"];
-                                    $summaryProductionTotals["year"]["ejec"] +=$ejecutionYear;
-                                    $summaryProductionTotals["year"]["var"] +=$varYear;
+                                    #$summaryProductionTotals["year"]["ejec"] +=$ejecutionYear;
+                                    #$summaryProductionTotals["year"]["var"] +=$varYear;
 
                                     $cont = 0;
 
@@ -1722,6 +1723,20 @@ class ReportTemplateController extends SEIPController {
                                     }//RAW MATERIAL
                                 }
                             } //PRODUCT REPORT
+
+
+                            $summaryProductionTotals["day"]["ejec"] = $this->getEjecution($summaryProductionTotals["day"]["ppto"],$summaryProductionTotals["day"]["real"],false);
+                            $summaryProductionTotals["day"]["var"] = $this->getVariation($summaryProductionTotals["day"]["ppto"],$summaryProductionTotals["day"]["real"],false);
+
+                            $summaryProductionTotals["month"]["ejec"] = $this->getEjecution($summaryProductionTotals["month"]["pptoAcumulado"],$summaryProductionTotals["month"]["realAcumulado"],false);
+                            $summaryProductionTotals["month"]["var"] = $this->getVariation($summaryProductionTotals["month"]["pptoAcumulado"],$summaryProductionTotals["month"]["realAcumulado"],false);
+
+                            $summaryProductionTotals["year"]["ejec"] = $this->getEjecution($summaryProductionTotals["year"]["pptoAcumulado"],$summaryProductionTotals["year"]["realAcumulado"],false);
+                            $summaryProductionTotals["year"]["var"] = $this->getVariation($summaryProductionTotals["year"]["pptoAcumulado"],$summaryProductionTotals["year"]["realAcumulado"],false);
+
+
+
+
                             //CONSUMO DE SERVICIOS 
                             foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
                             $consumerPlanningServiceObjects[] = $consumerPlanningService;
@@ -2126,7 +2141,7 @@ class ReportTemplateController extends SEIPController {
 
                                             //SUMMARY MONTH
                                             $summaryMonth = $productReport->getSummaryMonth($dateReport, $typeReport);
-                                            //var_dump($summaryMonth);
+                                            
 
                                             $MonthPlan+=$summaryMonth["plan_month"];
                                             $MonthPlanAcumulated+=$summaryMonth["plan_acumulated"];
@@ -2135,7 +2150,7 @@ class ReportTemplateController extends SEIPController {
 
                                             //SUMMARY YEAR
                                             $summaryYear = $productReport->getSummaryYear($dateReport, $typeReport);
-                                            //var_dump($summaryYear);
+                                            
                                             $yearPlan+=$summaryYear["plan_year"];
                                             $yearPlanAcumulated+=$summaryYear["plan_acumulated"];
                                             $yearRealAcumualated+=$summaryYear["real_acumulated"];
@@ -2343,6 +2358,7 @@ class ReportTemplateController extends SEIPController {
                         }
                     }
                 }   
+
                 
                 //DIA
                 $totalsProduction["day"]["ejec"] = $this->getEjecution($totalsProduction["day"]["plan"],$totalsProduction["day"]["real"],false);
@@ -2415,6 +2431,7 @@ class ReportTemplateController extends SEIPController {
                
                 //return $this->handleView($view);
             } else {
+                //FILTRO POR RANGO SIN GRUPO DE PLANTAS
 
                 if (!$groupsPlants) {
                     //FILTRO POR RANGO 
@@ -2932,11 +2949,11 @@ class ReportTemplateController extends SEIPController {
                         }
                     }
                     $summaryProductionTotals = array(
-                    "plan"=>$this->setNumberFormat($totalPlanProd),
-                    "real"=>$this->setNumberFormat($totalRealProd),
-                    "ejec"=>0.0,
-                    "var"=>0.0
-                );
+                        "plan"=>$this->setNumberFormat($totalPlanProd),
+                        "real"=>$this->setNumberFormat($totalRealProd),
+                        "ejec"=>$this->getEjecution($totalPlanProd,$totalRealProd),
+                        "var"=>$this->getVariation($totalPlanProd,$totalRealProd)
+                    );
                 }
                 
                 
