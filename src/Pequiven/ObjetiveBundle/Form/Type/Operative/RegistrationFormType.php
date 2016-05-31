@@ -93,7 +93,7 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
             
             //Rango de Gestión Alto
             $selectRangeTypeTop = $em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findBy(array('description' => array($rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC],$rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_TOP_MIXED])));
-            $builder->add('arrangementRangeTypeTop','entity',array('label' => 'form.arrangementRangeTypeTop','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:ArrangementRangeType','empty_value' => false, 'required' => false,'choices' => $selectRangeTypeTop,'mapped' => false,'data' => '1'));
+            $builder->add('arrangementRangeTypeTop','entity',array('label' => 'form.arrangementRangeTypeTop','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:ArrangementRangeType','empty_value' => false, 'required' => false,'choices' => $selectRangeTypeTop,'mapped' => false,'data' => $selectRangeTypeTop[0]));
             $builder->add('typeArrangementRangeTypeTop','hidden',array('data' => '','mapped' => false));
             //Rango Alto Básico
                 $builder->add('rankTopBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8','class' => 'input'), 'required' => false,'mapped' => false, 'data' => 1));
