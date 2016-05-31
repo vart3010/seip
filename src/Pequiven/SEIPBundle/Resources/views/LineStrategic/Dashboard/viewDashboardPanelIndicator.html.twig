@@ -33,16 +33,20 @@
         {% set lineStrategic = t['parent'] %}     
         <table width="100%">
             <tr>
-                <td width="15%" class="text-center" style="vertical-align: middle;">
+                <td width="20%" class="text-center" style="vertical-align: middle;">
                     <span>
                         <img class="icon-strategic" src="{{ asset(iconsLineStrategic[lineStrategic.level]) }}">
                     </span>
                     <br>
-                    <p class="title-icon-strategic bold">{{ lineStrategic.description }}</p>
+                    <p class="title-icon-strategic bold" style="font-size: 20px;">{{ lineStrategic.description }}</p>
+                    <br>                    
+                    <a href="{{ path('pequiven_dasboard_linestrategicbygroup',{idGroup:group.id}) }}" class="align-left button red-gradient glossy">
+                        <li class="icon-previous icon-size2" title="icon-replay-all"> Líneas Estratégicas
+                        </li>
+                    </a>
                 </td>
-                <td width="85%" class="text-center" style="vertical-align: middle;">                    
-                    <div class="standard-tabs at-bottom margin-bottom margin-top tabs-active tabs-animated tab-opened" id="add-tabs">                        
-
+                <td width="80%" class="text-center" style="vertical-align: middle;">                       
+                    <div class="standard-tabs at-bottom margin-bottom margin-top tabs-active tabs-animated tab-opened" id="add-tabs">
                         <ul class="tabs">
                             <li class="active">
                                 <a href="#tab-1">1</a>
