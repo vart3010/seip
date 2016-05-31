@@ -1065,7 +1065,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     $itemsTableros = $this->factory->createItem('results.visualize.tableros.rrhh', array(
                                 'route' => 'pequiven_dasboard_linestrategicbygroup',
                                 'routeParameters' => array('idGroup' => 5),
-                                'labelAttributes' => array('icon' => 'fa fa-users',),
+                                'labelAttributes' => array('icon' => 'fa fa-cubes',),
                             ))->setLabel($this->translate(sprintf('Recursos Humanos', $section)));
                     $complejos->addChild($itemsTableros);
                 }
@@ -1073,7 +1073,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     $itemsTableros = $this->factory->createItem('results.visualize.tableros.finanzas', array(
                                 'route' => 'pequiven_dasboard_linestrategicbygroup',
                                 'routeParameters' => array('idGroup' => 6),
-                                'labelAttributes' => array('icon' => 'fa fa-money',),
+                                'labelAttributes' => array('icon' => 'fa fa-cubes',),
                             ))->setLabel($this->translate(sprintf('Finanzas', $section)));
                     $complejos->addChild($itemsTableros);
                 }
@@ -1081,7 +1081,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     $itemsTableros = $this->factory->createItem('results.visualize.tableros.sha', array(
                                 'route' => 'pequiven_dasboard_linestrategicbygroup',
                                 'routeParameters' => array('idGroup' => 7),
-                                'labelAttributes' => array('icon' => 'fa fa-leaf',),
+                                'labelAttributes' => array('icon' => 'fa fa-cubes',),
                             ))->setLabel($this->translate(sprintf('SHA', $section)));
                     $complejos->addChild($itemsTableros);
                 }
@@ -1089,7 +1089,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     $itemsTableros = $this->factory->createItem('results.visualize.tableros.salud', array(
                                 'route' => 'pequiven_dasboard_linestrategicbygroup',
                                 'routeParameters' => array('idGroup' => 8),
-                                'labelAttributes' => array('icon' => 'fa fa-user-md',),
+                                'labelAttributes' => array('icon' => 'fa fa-cubes',),
                             ))->setLabel($this->translate(sprintf('Salud', $section)));
                     $complejos->addChild($itemsTableros);
                 }
