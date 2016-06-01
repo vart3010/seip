@@ -1371,6 +1371,7 @@ class IndicatorService implements ContainerAwareInterface {
 
             $arrayVariables = array();
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('withVariablesMarkedRealPlanByFrequencyNotificationColumnMultiSeries' => true));
+            $showDataExtra = false;
 
 //$result[indicator.id][real][numero_resultado] = valor
             $result = array();
@@ -1399,8 +1400,14 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetPlan["showValues"] = "1";
             $dataSetReal["seriesname"] = $arrayVariables['descriptionReal'];
             $dataSetReal["showValues"] = "1";
+            
+            if(in_array($indicator->getId(),$result)){
+                $showDataExtra = true;
+            }
+            
             $dataSetExtra = array();
-            if ($indicator->getResultsAdditionalInDashboardColumn()) {
+            
+            if ($indicator->getResultsAdditionalInDashboardColumn() && $showDataExtra == true) {
                 $dataSetExtra["seriesname"] = 'Costo Unitario + Otros Ingresos/Gastos';
                 $dataSetExtra["showValues"] = '1';
                 $dataSetExtra["color"] = '#DF1D3A';
@@ -1418,7 +1425,7 @@ class IndicatorService implements ContainerAwareInterface {
             for ($i = 0; $i < $resultNumbers; $i++) {
                 $label = $dataReal = $dataPlan = $dataMedition = $dataExtra = array();
                 $label["label"] = $i;
-                if ($indicator->getResultsAdditionalInDashboardColumn()) {
+                if ($indicator->getResultsAdditionalInDashboardColumn() && $showDataExtra == true) {
                     if ($i == 0) {
                         $dataExtra['showValue'] = '1';
                         $dataExtra['displayValue'] = '*';
@@ -1430,12 +1437,16 @@ class IndicatorService implements ContainerAwareInterface {
                 $dataPlan["value"] = number_format($arrayVariables['valuePlan'][$i], 2, ',', '.');
 
                 $category[] = $label;
-                $dataSetExtra["data"][] = $dataExtra;
+                if($showDataExtra == true){
+                    $dataSetExtra["data"][] = $dataExtra;
+                }
                 $dataSetReal["data"][] = $dataReal;
                 $dataSetPlan["data"][] = $dataPlan;
             }
 
-            $data['dataSource']['dataset'][] = $dataSetExtra;
+            if($showDataExtra == true){
+                $data['dataSource']['dataset'][] = $dataSetExtra;
+            }
             $data['dataSource']['dataset'][] = $dataSetReal;
             $data['dataSource']['dataset'][] = $dataSetPlan;
         } elseif (isset($options['withVariablesRealPlanFromDashboardEquationFromChildrens']) && array_key_exists('withVariablesRealPlanFromDashboardEquationFromChildrens', $options)) {
