@@ -319,27 +319,34 @@ class ObjetiveSigController extends EvolutionController
                             $rowIniOpe = $row;//Fila Inicial del Objetivo Operativo
                             $indicatorsOperatives = $objetiveOperative->getIndicators();//Indicadores de Obj Operativos
                             $totalIndicatorOperatives = count($indicatorsOperatives);//Cantidad de Indicadores
-                            
+
                             if($totalIndicatorOperatives > 0){//Si el objetivo operativo tiene indicadores operativos
                                 foreach($indicatorsOperatives as $indicatorOperative){
-                                    foreach ($indicatorOperative->getManagementSystems() as $dataManagement) {
-                                        if ($dataManagement->getId() == $managementSystemId) {
-                                            $activeSheet->setCellValue('J'.$row, $indicatorOperative->getRef().' '.$indicatorOperative->getDescription());//Seteamos el Indicador Operativo
-                                            $activeSheet->setCellValue('K'.$row, $indicatorOperative->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Operativo
-                                            $activeSheet->setCellValue('M'.$row, $indicatorOperative->getWeight());//Seteamos el Peso del Indicador Operativo
-                                            $activeSheet->setCellValue('N'.$row, $indicatorOperative->getFrequencyNotificationIndicator());//Seteamos la frecuencia de medicion Operativo                                            
-                                            $row++;                                
-                                            $contResult++;                            
-                                        };                                        
+                                    if (count($indicatorOperative->getManagementSystems()) != 0) {                                                                                      
+                                        foreach ($indicatorOperative->getManagementSystems() as $dataManagement) {
+                                            if ($dataManagement->getId() == $managementSystemId) {
+                                                $activeSheet->setCellValue('J'.$row, $indicatorOperative->getRef().' '.$indicatorOperative->getDescription());//Seteamos el Indicador Operativo
+                                                $activeSheet->setCellValue('K'.$row, $indicatorOperative->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Operativo
+                                                $activeSheet->setCellValue('M'.$row, $indicatorOperative->getWeight());//Seteamos el Peso del Indicador Operativo
+                                                $activeSheet->setCellValue('N'.$row, $indicatorOperative->getFrequencyNotificationIndicator());//Seteamos la frecuencia de medicion Operativo                                            
+                                                $row++;                                
+                                                $contResult++;                            
+                                            }
+                                        }
+                                    }else{//En caso de que el objetivo operativo no tenga indicadores operativos
+                                        $activeSheet->setCellValue('J'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                                        $activeSheet->setCellValue('K'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                                        $activeSheet->setCellValue('M'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                                        $activeSheet->setCellValue('N'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                                        $row++;
+                                        $contResult++;
                                     }
-                                }    
+                                }
                             } else{//En caso de que el objetivo operativo no tenga indicadores operativos
                                 $activeSheet->setCellValue('J'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                                 $activeSheet->setCellValue('K'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                                 $activeSheet->setCellValue('M'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                                $activeSheet->setCellValue('N'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                                
-                                //$activeSheet->mergeCells(sprintf('S%s:T%s',($row),($row)));                            
+                                $activeSheet->setCellValue('N'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado                                
                                 $row++;
                                 $contResult++;
                             }
@@ -382,8 +389,7 @@ class ObjetiveSigController extends EvolutionController
                             
                             if($totalObjetiveOperatives = $contTotalObjOperatives){
                                 $lastRowOpe = $rowIniOpe;
-                            }
-                
+                            }                
                         }//if de managementsystems            
                     }
                 }
