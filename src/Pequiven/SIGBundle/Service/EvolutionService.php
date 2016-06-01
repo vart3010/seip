@@ -359,7 +359,7 @@ class EvolutionService implements ContainerAwareInterface {
         $dataSetPlan["seriesname"] = "Plan";
         $dataSetAcum["seriesname"] = "Acumulado";        
         $labelProm                 = "Promedio";
-        $labelobj                  = $periods[$periodCharge];
+        $labelobj                  = "Objetivo ".$periods[$periodCharge];
 
         $category = $dataPeriods['category'];        
         
