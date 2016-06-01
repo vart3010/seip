@@ -44,21 +44,24 @@ class IndicatorGroupAdmin extends Admin {
                 ->add('color', 'sonata_type_color_selector', array(
                     'required' => false,
                 ))
+//                ->add('indicators', 'sonata_type_model_autocomplete', array(                    
+//                    'property' => array('ref', 'description'),
+//                    'multiple' => true,
+//                    'required' => false,
+//                    'label' => 'Indicadores Asociados'
+//                ))
                 ->add('parent', 'sonata_type_model_autocomplete', array(
                     'class' => 'Pequiven\IndicatorBundle\Entity\IndicatorGroup',
                     'property' => array('description'),
                     'multiple' => false,
                     "required" => false,
+                    'label' => 'Grupo de Indicadores Padre',
                     'attr' => array('class' => 'input input-large'),
                 ))
+                
                 ->add('enabled', null, array(
                     "required" => false,
                 ))
-//                ->add('indicators', 'sonata_type_model_autocomplete', array(
-//                    //'property' => array('alias', 'description'),
-//                    'multiple' => true,
-//                    'required' => false,
-//                ))
         ;
     }
 

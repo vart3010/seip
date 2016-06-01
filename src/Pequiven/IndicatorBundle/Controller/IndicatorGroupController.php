@@ -76,6 +76,11 @@ class IndicatorGroupController extends SEIPController {
                 $group = $this->container->get('pequiven.repository.indicatorgroup')->findOneById($this->getRequest()->get('idGroup'));
                 $idLineStrategic = $this->getRequest()->get('idLineStrategic');
 
+                $maxPerTag = 9;
+                $cont = 1;
+                $tag = 1;
+                $totalInd = 0;
+
                 foreach ($group->getIndicators() as $indicator) {
                     foreach ($indicator->getLineStrategics() as $lineStrategic) {
                         if ($lineStrategic->getId() == $idLineStrategic) {
@@ -85,14 +90,23 @@ class IndicatorGroupController extends SEIPController {
                                     'child' => array(),
                                 );
                             }
-                            $tree[(string) $lineStrategic]['child'][(string) $indicator] = $indicator;
-                            //$data[(string)$lineStrategic->getRef()][(string)$indicator->getRef()] = $indicator->getEvaluateInPeriod() == true ? $indicatorService->getDataWidgetAngularGauge($indicator) : $indicatorService->getDataDashboardWidgetBulb($indicator);
-                            if ($indicator->getNotShowIndicatorNoEvaluateInPeriod() != true) {
-                                $data[(string) $lineStrategic->getRef()][(string) $indicator->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicator);
+
+                            $tree[(string) $lineStrategic]['child'][$tag][(string) $indicator] = $indicator;
+                            $data[(string) $lineStrategic->getRef()][(string) $indicator->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicator);
+                            //var_dump('tag=' . $tag . ' / cont=' . $cont);
+                            $totalInd++;
+                            if ($cont == $maxPerTag) {
+                                $tag++;
+                                $cont = 1;
+                            } else {
+                                $cont++;
                             }
                         }
                     }
                 }
+
+                
+//                die();
 
                 $data = array(
                     'indicators' => $group->getIndicators(),
@@ -102,6 +116,7 @@ class IndicatorGroupController extends SEIPController {
                     'tree' => $tree,
                     'data' => $data,
                     'style' => $style,
+                    'tags' => ceil($totalInd / $maxPerTag),
                     'indicatorService' => $indicatorService
                 );
 
@@ -124,8 +139,8 @@ class IndicatorGroupController extends SEIPController {
         $lineStrategics = array();
         $alllineStrategic = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null));
 
-        if ($group->getIndicators()==null) {
-            $this->get('session')->getFlashBag()->add('error', "El Tablero NO Posee Indicadores Asociados");            
+        if ($group->getIndicators() == null) {
+            $this->get('session')->getFlashBag()->add('error', "El Tablero NO Posee Indicadores Asociados");
         } else {
             foreach ($group->getIndicators() as $indicator) {
                 foreach ($indicator->getLineStrategics() as $ls) {

@@ -264,7 +264,7 @@ class ProductReportService implements ContainerAwareInterface {
             $plan[] = array("value" => $production[$fieldPlan]);
             $real[] = array("value" => $production[$fieldReal]);
 
-            if($production[$fieldReal]==0) { 
+            if($production[$fieldPlan]==0) { 
                 $p = 0.0;
             } else {
                 $p = (($production[$fieldReal] * 100) / $production[$fieldPlan]);
@@ -485,7 +485,7 @@ class ProductReportService implements ContainerAwareInterface {
         return json_encode($data);
     }
 
-    public function generateColumn3dLineryPerRange($titles, $production, $range, $division = 1) {
+    public function generateColumn3dLineryPerRange($titles, $production, $range, $division = 1,$group=false) {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -547,10 +547,17 @@ class ProductReportService implements ContainerAwareInterface {
         $categoriesGraphic = $valuesPlan = $valuesReal = $percentaje = array();
 
         foreach ($production as $prod) {
-            $categoriesGraphic[] = array("label" => $prod["productName"]);
-            $valuesReal[] = array("value" => number_format($prod["real"], 2, ',', '.'));
-            $valuesPlan[] = array("value" => number_format($prod["plan"], 2, ',', '.'));
-            $percentaje[] = array("value" => number_format($prod["percentage"], 2, ',', '.'));
+            if(!$group) { 
+                $categoriesGraphic[] = array("label" => $prod["productName"]);
+                $valuesReal[] = array("value" => number_format($prod["real"], 2, ',', '.'));
+                $valuesPlan[] = array("value" => number_format($prod["plan"], 2, ',', '.'));
+                $percentaje[] = array("value" => number_format($prod["percentage"], 2, ',', '.'));
+            } else {
+                $categoriesGraphic[] = array("label" => $prod["nameGroup"]);
+                $valuesReal[] = array("value" => $prod["real"]);
+                $valuesPlan[] = array("value" =>$prod["plan"]);
+                $percentaje[] = array("value" => "0.0");
+            }
         }
 
 

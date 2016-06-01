@@ -167,7 +167,11 @@
 {% if production %}
     <div class="with-padding">
         {% if byRange %}
-            {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:reportVizualiceProductsByRange.html.twig' %}
+            {% if groupsPlants %}
+                {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:reportVizualiceGroupsPlantsByRange.html.twig' %}
+            {% else %}
+                {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:reportVizualiceProductsByRange.html.twig' %}
+            {% endif %}
         {% else %}
             {% if groupsPlants %}
                 {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:reportVizualiceGroupsPlants.html.twig' %}
@@ -305,11 +309,11 @@
                     if ($(this).is(':checked')) {
                         $("#byDateReport").hide();
                         $(".byRange").show();
-                        $("#groupPerPlants").hide();
+                        //$("#groupPerPlants").hide();
                     } else {
                         $("#byDateReport").show();
                         $(".byRange").hide();
-                        $("#groupPerPlants").show();
+                        //$("#groupPerPlants").show();
                     }
                     $("#byDateReport").removeClass("hidden");
                     $(".byRange").removeClass("hidden");
