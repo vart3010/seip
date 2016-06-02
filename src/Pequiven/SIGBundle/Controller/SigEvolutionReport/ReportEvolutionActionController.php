@@ -75,7 +75,7 @@ class ReportEvolutionActionController extends ResourceController
      */
     function getFormPlanAddAction(Request $request)
     {   
-        $id = $request->get('idObject');
+        $idObject = $request->get('idObject');
         $typeObject = $request->get('typeObj');
 
         $evolutionService = $this->getEvolutionService();            
@@ -159,7 +159,7 @@ class ReportEvolutionActionController extends ResourceController
         $monthStart = explode("/", $dateStart);//Sacando el mes de inicio
         $monthEnd   = explode("/", $dateEnd);//Sacando el mes de cierre        
         
-        $dStart = $monthStart[1];//Pasando mes de Inicio
+        $dStart = $monthSet;//$monthStart[1];//Pasando mes de Inicio
         $dEnd   = $monthEnd[1];//Pasando el mes de Cierre
         
         $count = 0; $data = (int)$dStart;
@@ -286,7 +286,8 @@ class ReportEvolutionActionController extends ResourceController
                 }
             }
         }
-        $this->get('session')->getFlashBag()->add('success', "Avance Cargado Exitosamente");                        
+        $this->get('session')->getFlashBag()->add('success', "Avance Cargado Exitosamente");    
+        die();                    
     }    
 
     /**

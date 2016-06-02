@@ -122,11 +122,11 @@
         </a>        
         {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}            
             &nbsp;  {{ buttons.generic_download }}        
-            {% if approve['button'] == "check" %}                
+            {#{% if approve['button'] == "check" %}                
                 &nbsp;{{ buttons.generic_approve(path('pequiven_evolution_check_to_approve', { 'id': indicator_sig.id,'month':month,'type':1, 'typeObj':typeObject }),{'message':'Revisado', 'icon':'fa fa-pencil-square-o fa-1','gradient':'red-gradient'} ) }}       
             {% elseif approve['button'] == "approve" %}
                 &nbsp;{{ buttons.generic_approve(path('pequiven_evolution_check_to_approve', { 'id': indicator_sig.id,'month':month,'type':2, 'typeObj':typeObject}),{'message':'Aprobar','icon':'fa fa-thumbs-o-up fa-1','gradient':'green-gradient'}) }}             
-            {% endif %}
+            {% endif %}#}
         {% endif %}
     </div>
 </p>

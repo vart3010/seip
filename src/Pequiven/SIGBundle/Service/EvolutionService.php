@@ -156,14 +156,15 @@ class EvolutionService implements ContainerAwareInterface {
         $id = $object->getId();
         //Mes Consultado       
         $month = $request->get('month');
-
         //Carga de variable base
+        $action = null;
         $opc = false;
         $idAction = $actionResult = 0;
         $idCons = [0];
         
         $object = $this->getObjectEntity($id, $typeObject);        
         $results = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $object->getId(), 'typeObject' => $typeObject));
+
         $cause = [];
         if ($results) {
             foreach ($results as $value) {
@@ -171,10 +172,8 @@ class EvolutionService implements ContainerAwareInterface {
                 $cause[] = $idCause;
             }                        
             $action = $this->container->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause));
-        }else{
-            $action = null;
         }
-        
+
         //Carga de las acciones para sacar la verificaciones realizadas
         if ($action) {
             foreach ($action as $value) {
@@ -183,12 +182,11 @@ class EvolutionService implements ContainerAwareInterface {
                     $monthAction = $value->getMonth();
                     $monthGet = (int) $month;
                     if ($monthAction === $monthGet) {
-
                         $idAction = $value->getActionValue()->getId();
                         $idCons[] = $idAction;
                     }
                 }
-            }
+            }            
             $actionResult = $this->container->get('pequiven.repository.sig_action_indicator')->findBy(array('id' => $idCons));
         }
 //        $actionsValues = EvolutionActionValue::getActionValues($idCons, $month);          
@@ -208,7 +206,7 @@ class EvolutionService implements ContainerAwareInterface {
             'actionValue'   => $actionsValues,
             'cant'          => $cant
         ];
-
+        
         return $data;
     }   
 
