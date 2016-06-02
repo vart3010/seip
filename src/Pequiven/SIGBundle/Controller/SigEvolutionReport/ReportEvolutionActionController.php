@@ -228,11 +228,10 @@ class ReportEvolutionActionController extends ResourceController
                     $relactionValue->setActionValue($action);
 
                     $em->persist($relactionValue);
-                    $em->flush();
-                    
+                    $em->flush();                    
+                }                
                     $count = $count + 1;
                     $data = $dStart + $count;
-                }                
             }
         }
         $this->get('session')->getFlashBag()->add('success', "Plan de Acción Cargado Exitosamente");

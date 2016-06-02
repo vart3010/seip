@@ -4,7 +4,7 @@
     <div ng-controller="IndicatorSigEvolutionController"> 
         <div class="block-title">
             <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'form.messages.action_plan'|trans({},'PequivenSIGBundle') }}</h3> 
-            {% if not cloning %}            
+            {% if not cloning and sumCause == 100 %}            
                 <div class="button-group absolute-right compact">
                     <a class="button icon-list-add " href="" ng-click="loadTemplateActionEvolution()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
                 </div>       
