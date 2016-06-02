@@ -159,7 +159,7 @@ class ReportEvolutionActionController extends ResourceController
         $monthStart = explode("/", $dateStart);//Sacando el mes de inicio
         $monthEnd   = explode("/", $dateEnd);//Sacando el mes de cierre        
         
-        $dStart = $monthSet;//$monthStart[1];//Pasando mes de Inicio
+        $dStart = $monthStart[1];//Pasando mes de Inicio
         $dEnd   = $monthEnd[1];//Pasando el mes de Cierre
         
         $count = 0; $data = (int)$dStart;
@@ -205,10 +205,22 @@ class ReportEvolutionActionController extends ResourceController
         throw $e;
         }        
 
-        $idAction = $action->getId();               
+        $idAction = $action->getId();   
         if ($idAction) {
-            for ($i=$dStart; $i <= $dEnd; $i++) {                 
-                    $action = $this->get('pequiven.repository.sig_action_indicator')->find($idAction);
+            $action   = $this->get('pequiven.repository.sig_action_indicator')->find($idAction);
+
+            $relactionValue = new EvolutionActionValue();
+            $relactionValue->setAdvance($AcValue);
+            $relactionValue->setObservations($AcObservation);
+            $relactionValue->setMonth($monthSet);
+            $relactionValue->setActionValue($action);
+
+            $em->persist($relactionValue);
+            $em->flush();
+
+            for ($i=$dStart; $i <= $dEnd; $i++) { 
+                if ($data != $monthSet) {                             
+                    $AcObservation = null;                    
                     $relactionValue = new EvolutionActionValue();
                     $relactionValue->setAdvance($AcValue);
                     $relactionValue->setObservations($AcObservation);
@@ -216,11 +228,10 @@ class ReportEvolutionActionController extends ResourceController
                     $relactionValue->setActionValue($action);
 
                     $em->persist($relactionValue);
-                    $em->flush();
-
-                $count = $count + 1;
-                $data = $dStart + $count;
-                $AcObservation = null;                    
+                    $em->flush();                    
+                }                
+                    $count = $count + 1;
+                    $data = $dStart + $count;
             }
         }
         $this->get('session')->getFlashBag()->add('success', "Plan de Acción Cargado Exitosamente");
