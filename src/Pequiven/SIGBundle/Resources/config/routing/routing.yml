@@ -26,6 +26,15 @@ pequiven_objetives_list_sig:
         _format: html|json|xml
         level: 1|2|3
     methods: [GET]
+#lista de objetivos con informes de evolución
+pequiven_objetives_list_sig_evolution:
+    path: /sig-evolution.{_format}
+    defaults:
+        _controller: pequiven.controller.managementsystem_sig_objetives:ObjetiveslistEvolutionAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]
 #listado de matriz de objetivos
 pequiven_objetives_gerencia_list_sig:
     path: /adminMaster/list/sig.{_format}

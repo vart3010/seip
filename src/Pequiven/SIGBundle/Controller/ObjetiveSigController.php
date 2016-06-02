@@ -171,6 +171,67 @@ class ObjetiveSigController extends EvolutionController
     }
 
     /**
+     * Lista de Objetivos con Informe de Evolución
+     * Filtrados por managementSystems 
+     * @param Request $request
+     * @return type
+     */
+    function ObjetiveslistEvolutionAction(Request $request) {
+        
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+        $repository = $this->container->get('pequiven.repository.managementsystem_sig_objetives');
+        
+        $criteria['applyPeriodCriteria'] = false;
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorByLevelSIGEvolution', array($criteria, $sorting)
+            );        
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+        $routeParameters = array(
+            '_format' => 'json'            
+        );
+        $apiDataUrl = $this->generateUrl('pequiven_objetives_list_sig_evolution', $routeParameters);
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('listEvolution.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'valuesIndicator','managementSystems','api_details', 'sonata_api_read', 'formula'));
+        if ($request->get('_format') == 'html') {
+            
+            $data = array(
+                'apiDataUrl' => $apiDataUrl,
+                $this->config->getPluralResourceName() => $resources                
+            );
+            $view->setData($data);
+
+        } else {
+            $formatData = $request->get('_formatData', 'default');
+
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+        return $this->handleView($view);
+
+    }
+
+    /**
      * Lista de matriz
      *
      * @param Request $request
