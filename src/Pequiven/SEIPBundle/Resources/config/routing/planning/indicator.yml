@@ -175,9 +175,27 @@ loadFile:
     
 #Vista de los Grupos de Indicadores
 pequiven_groupindicators:
-    path: /dashboardGroup/{idLineStrategic}/{_format}
+    path: /dashboardGroup/{idLineStrategic}/{indicatorId}/{_format}
     defaults:
-        _controller: pequiven.controller.indicatorgroup:showDashboardAction
+        _controller: pequiven.controller.indicatorgroup:showDashboardIndicatorsGroupAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
+pequiven_indicatorsfromgroup:
+    path: /dashboardGroup/{idLineStrategic}/{indicatorId}/{idGroup}/{_format}
+    defaults:
+        _controller: pequiven.controller.indicatorgroup:showDashboardIndicatorsFromGroupAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
+pequiven_dashboardgerencias:
+    path: /boards/{idGroup}/{_format}
+    defaults:
+        _controller: pequiven.controller.indicatorgroup:showDashboardGerenciasAction
         _format: html
     requirements:
         _format: html|json|xml

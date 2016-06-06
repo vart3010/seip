@@ -39,25 +39,6 @@ class LineStrategicController extends SEIPController {
     }
 
     /**
-     * Retorna el Tablero con los Grupos de Indicadores
-     * @param Request $request
-     * @return type
-     */
-    public function viewDashboardGroupAction(Request $request) {
-        $boxRender = $this->get('tecnocreaciones_box.render');
-
-        $view = $this
-                ->view()
-                ->setTemplate($this->config->getTemplate('Dashboard/viewDashboardGroupIndicator.html'))
-                ->setData(array(
-            'boxRender' => $boxRender
-                ))
-        ;
-
-        return $this->handleView($view);
-    }
-
-    /**
      * Retorna el Tablero con los indicadores estratégicos definidos en el SEIP De acuerdo al Complejo Seleccionado
      * @param Request $request
      * @return type

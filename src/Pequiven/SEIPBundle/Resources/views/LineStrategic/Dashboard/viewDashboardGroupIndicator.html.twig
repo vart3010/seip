@@ -8,25 +8,23 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("Grupos de Indicadores")
+        {("#"):("Grupos de Indicadores")},(indicator.summary)
     ) }}
 
     <style>
         .esfera{
-            border-radius: 200px 200px 200px 200px;
-            -moz-border-radius: 200px 200px 200px 200px;
-            -webkit-border-radius: 200px 200px 200px 200px;
+            border-radius: 0px 50px 50px 50px;
+            -moz-border-radius: 0px 50px 50px 50px;
+            -webkit-border-radius: 0px 50px 50px 50px;
             border: 1px solid #0a0a0a;
             display: inline-block; 
             align-items: center; 
             align-content: center;
-            height: 190px;
+            height: 150px;
             position: relative;
-            font-size: 120px;
+            font-size: 100px;
             vertical-align: middle;
-            width: 100%;
-            background-color: #9C1200;
-
+            width: 90%;
         }
     </style>
 
@@ -35,42 +33,72 @@
 
 {% block body %}    
 
-    {{ boxRender.renderBox('pequiven_seip_box_linestrategic_iconsnavbar')|raw }}
+    {# {{ boxRender.renderBox('pequiven_seip_box_linestrategic_iconsnavbar')|raw }}#}    
     <hr class="hr-linestrategic-icons" />
     <br><br>
-{#    {% if (indicator) %}
-        <div class="twelve-columns">
-            {{ indicator.ref }}-{{ indicator.description }}
-        </div>
-    {% endif %}#}
-    <div class="with-padding">
-        <div class="columns">            
-            {% if (groups)%}
-                {% for grupo in groups %}                
-                    <div class="two-columns" style="text-align: center;">                        
+    <table width="100%">
+        <tr>
+            <td width="30%" class="text-center" style="vertical-align: middle; min-height: 400px;">
+                <div style="display: inline-block; width: 100%; height: 100%" ng-controller="DashboardController" ng-init="renderWidgetIndicatorStrategic('{{ indicator.ref }}',{{ data|json_encode() }},'100%','150px')">
+                    <a target="_blank" href="{{ path('pequiven_indicator_show',{id:indicator.id}) }}">
+                        <span title="{{ indicator.description }}">
+                            <p style="text-align: center;margin-bottom: -5px;">
+                                <b>{{ indicator.summary }}</b>
+                            </p>
+                        </span>
+                    </a>
+                    <span id="{{ indicator.ref }}">
+                    </span>                            
+                </div> 
+            </td>
+            <td width="70%" class="text-center" style="vertical-align: middle; min-height: 495px;"> 
+                <fieldset class="fieldset" style="width: 80%; min-height: 490px;">
+                    <legend class="legend">
+                        <h3 class="thin breadcrumb align-left bold">
+                            Grupos Asociados
+                        </h3>
+                    </legend>
 
-                        {%if ((grupo.getIndicators|length)>0) %}
-                            {% set ref= path('pequiven_groupindicators',{idGroup:grupo.id, idLineStrategic:lineStrategic.id}) %}
-                            {% set color= "" %}
-                        {%else%}
-                            {% set ref= "" %}
-                            {% set color= "background-color: #BCBCBC" %}
-                        {%endif%}
+                    <div class="with-padding">
+                        <div class="columns"> 
+                            {% if (groups)%}
+                                {% for grupo in groups %} 
+                                    {%if ((grupo.ShowInLineStrategicDashboard|length)==1) %}
+                                        <div class="four-columns" style="text-align: center;">         
+                                            {%if ((grupo.getIndicators|length)>0) %}
+                                                {%if (board==1) %}    
+                                                    {% set ref= path('pequiven_indicatorsfromgroup',{idLineStrategic:lineStrategic.id, indicatorId:indicator.id,idGroup:grupo.id, board:1}) %}                                                 
+                                                {%else%}
+                                                    {% set ref= path('pequiven_indicatorsfromgroup',{idLineStrategic:lineStrategic.id, indicatorId:indicator.id,idGroup:grupo.id}) %}                                                 
+                                                {%endif%}
+                                                {% set color= "" %}
+                                            {%else%}
+                                                {% set ref= "" %}
+                                                {% set color= "disabled" %}
+                                            {%endif%}
+                                            <a href="{{ ref }}" class="align-left {{color}} button red-gradient glossy esfera">
+                                                <br>
+                                                <i class="fa {{ grupo.logo }}" aria-hidden="true"></i>
+                                            </a>
+                                            <br><br>
+                                            <b>{{grupo.description}}</b>
+                                        </div>
+                                    {%endif%}
+                                {% endfor %}            
+                            {%endif%}
 
-                        <div class="esfera twelve-columns" style="{{color}}">
-                            <a target="_self" style="color: {{ grupo.color }}; vertical-align: middle;" href="{{ref}}">
-                                <br>
-                                <i class="fa {{ grupo.logo }}" aria-hidden="true"></i>
-                            </a> 
                         </div>
-                        <br><br>
-                        <b>{{grupo.description}}</b>
                     </div>
-                {% endfor %}            
-            {%endif%}
+                </fieldset>
+            </td>
+        </tr>
+    </table>
+    {#    {% if (indicator) %}
+            <div class="twelve-columns">
+                {{ indicator.ref }}-{{ indicator.description }}
+            </div>
+        {% endif %}#}
 
-        </div>
-    </div>
 {% endblock body %}
 
 {% block stylesheets %}
