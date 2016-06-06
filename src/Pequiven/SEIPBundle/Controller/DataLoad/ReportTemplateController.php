@@ -2727,6 +2727,11 @@ class ReportTemplateController extends SEIPController {
                         $summaryProductionTotals["var"] +=$varRange;
 
                     } //END REPORT TEMPLATE RANGE
+                    
+                    $reportService = $this->getProductReportService();
+                    $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
+
+
                 } else {
                     ////
                     //POR RANGO Y POR GRUPO DE PLANTAS
@@ -2961,19 +2966,23 @@ class ReportTemplateController extends SEIPController {
                         "ejec"=>$this->getEjecution($totalPlanProd,$totalRealProd),
                         "var"=>$this->getVariation($totalPlanProd,$totalRealProd)
                     );
+
+
+                    $reportService = $this->getProductReportService();
+                    $graphicProducctionRange = $reportService->generateColumn3dLineryPerRange(
+                        array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), 
+                        $summaryProduction,
+                        array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd),
+                        1,
+                        true
+                    );
+
+
                 }
                 
                 
 
-                $reportService = $this->getProductReportService();
-                $graphicProducctionRange = $reportService->generateColumn3dLineryPerRange(
-                    array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), 
-                    $summaryProduction,
-                    array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd),
-                    1,
-                    true
-                );
-
+                
 
                 $data = array(
                     'productsReport' => "",
