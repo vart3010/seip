@@ -1043,8 +1043,15 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             /*             * COMPLEJOS */
             if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_*')) {
-                $complejos = $this->factory->createItem('results.visualize.complejo', $this->getSubLevelOptions())
+                $tableros = $this->factory->createItem('results.visualize.complejo', $this->getSubLevelOptions())
                         ->setLabel($this->translate(sprintf('Tableros de Indicadores', $section)));
+
+                $complejos = $this->factory->createItem('tableros_complejos', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                            'labelAttributes' => array('icon' => 'fa fa-industry',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Complejos Petroquímicos', $section)));
 
                 $em = $this->getDoctrine()->getManager();
                 $complejos_sql = $em->getRepository('PequivenMasterBundle:Complejo')->findAll();
@@ -1064,6 +1071,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         $complejos->addChild($itemStrategicsIndicators);
                     }
                 }
+                $tableros->addChild($complejos);
+
+                 $gerencias = $this->factory->createItem('tableros_gerencias', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                            'labelAttributes' => array('icon' => 'fa fa-cubes',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Gerencias Corporativas', $section)));
 
                 if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_RRHH')) {
                     $itemsTableros = $this->factory->createItem('results.visualize.tableros.rrhh', array(
@@ -1071,7 +1086,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 'routeParameters' => array('idGroup' => 5),
                                 'labelAttributes' => array('icon' => 'fa fa-cubes',),
                             ))->setLabel($this->translate(sprintf('Recursos Humanos', $section)));
-                    $complejos->addChild($itemsTableros);
+                    $gerencias->addChild($itemsTableros);
                 }
                 if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_FINANZAS')) {
                     $itemsTableros = $this->factory->createItem('results.visualize.tableros.finanzas', array(
@@ -1079,7 +1094,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 'routeParameters' => array('idGroup' => 6),
                                 'labelAttributes' => array('icon' => 'fa fa-cubes',),
                             ))->setLabel($this->translate(sprintf('Finanzas', $section)));
-                    $complejos->addChild($itemsTableros);
+                    $gerencias->addChild($itemsTableros);
                 }
                 if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_SHA')) {
                     $itemsTableros = $this->factory->createItem('results.visualize.tableros.sha', array(
@@ -1087,7 +1102,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 'routeParameters' => array('idGroup' => 7),
                                 'labelAttributes' => array('icon' => 'fa fa-cubes',),
                             ))->setLabel($this->translate(sprintf('SHA', $section)));
-                    $complejos->addChild($itemsTableros);
+                    $gerencias->addChild($itemsTableros);
                 }
                 if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_SALUD')) {
                     $itemsTableros = $this->factory->createItem('results.visualize.tableros.salud', array(
@@ -1095,15 +1110,25 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 'routeParameters' => array('idGroup' => 8),
                                 'labelAttributes' => array('icon' => 'fa fa-cubes',),
                             ))->setLabel($this->translate(sprintf('Salud', $section)));
-                    $complejos->addChild($itemsTableros);
+                    $gerencias->addChild($itemsTableros);
                 }
+                $tableros->addChild($gerencias);
+
+
+                $comercializadoras = $this->factory->createItem('tableros_comercializadoras', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                            'labelAttributes' => array('icon' => 'fa fa-cube',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Comercializadoras', $section)));
+
                 if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_UNFER')) {
                     $itemsTableros = $this->factory->createItem('results.visualize.tableros.unfer', array(
                                 'route' => 'pequiven_dasboard_linestrategicbygroup',
                                 'routeParameters' => array('idGroup' => 9),
                                 'labelAttributes' => array('icon' => 'fa fa-cube',),
                             ))->setLabel($this->translate(sprintf('UNFER', $section)));
-                    $complejos->addChild($itemsTableros);
+                    $comercializadoras->addChild($itemsTableros);
                 }
                 if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_UNPI')) {
                     $itemsTableros = $this->factory->createItem('results.visualize.tableros.unpi', array(
@@ -1111,7 +1136,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 'routeParameters' => array('idGroup' => 10),
                                 'labelAttributes' => array('icon' => 'fa fa-cube',),
                             ))->setLabel($this->translate(sprintf('UNPI', $section)));
-                    $complejos->addChild($itemsTableros);
+                    $comercializadoras->addChild($itemsTableros);
                 }
                 if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_UNOP')) {
                     $itemsTableros = $this->factory->createItem('results.visualize.tableros.unop', array(
@@ -1119,11 +1144,12 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 'routeParameters' => array('idGroup' => 11),
                                 'labelAttributes' => array('icon' => 'fa fa-cube',),
                             ))->setLabel($this->translate(sprintf('UNOP', $section)));
-                    $complejos->addChild($itemsTableros);
+                    $comercializadoras->addChild($itemsTableros);
                 }
+                $tableros->addChild($comercializadoras);
             }
 
-            $visualize->addChild($complejos);
+            $visualize->addChild($tableros);
 
 
 
