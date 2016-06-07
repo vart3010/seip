@@ -197,13 +197,13 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         'route' => 'pequiven_objetives_gerencia_list_sig',
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
-            //Lista de Informe de Evolución Consolidado
-            $visualize->addChild('planning.visualize.objetives.consolid', array(
-                'route' => 'pequiven_objetives_list_sig_evolution',                
-            ))->setLabel($this->translate(sprintf('Informe de Evolución Consolidado', $section)));
-
+            if ($this->isGranted('ROLE_SEIP_SIG_EVOLUTION_OBJETIVE')) {
+                //Lista de Informe de Evolución Consolidado
+                $visualize->addChild('planning.visualize.objetives.consolid', array(
+                    'route' => 'pequiven_objetives_list_sig_evolution',                
+                ))->setLabel($this->translate(sprintf('Informe de Evolución Consolidado', $section)));
+            }
             $objective->addChild($visualize);
-
             $menuSig->addChild($objective);
         }
         if ($this->isGranted('ROLE_SEIP_SIG_INDICATOR')) {
