@@ -393,7 +393,6 @@ class ProductReportService implements ContainerAwareInterface {
 
 
             foreach ($productReport as $product) {
-
                 if ($product->getProduct()->getIsCheckToReportProduction()) {
                     $sumPlan = 0;
                     $sumReal = 0;
@@ -414,6 +413,7 @@ class ProductReportService implements ContainerAwareInterface {
             }
         }
 
+        
 
         $cont = 0;
         $desplazamiento = 0;
