@@ -1097,6 +1097,30 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             ))->setLabel($this->translate(sprintf('Salud', $section)));
                     $complejos->addChild($itemsTableros);
                 }
+                if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_UNFER')) {
+                    $itemsTableros = $this->factory->createItem('results.visualize.tableros.unfer', array(
+                                'route' => 'pequiven_dasboard_linestrategicbygroup',
+                                'routeParameters' => array('idGroup' => 9),
+                                'labelAttributes' => array('icon' => 'fa fa-cube',),
+                            ))->setLabel($this->translate(sprintf('UNFER', $section)));
+                    $complejos->addChild($itemsTableros);
+                }
+                if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_UNPI')) {
+                    $itemsTableros = $this->factory->createItem('results.visualize.tableros.unpi', array(
+                                'route' => 'pequiven_dasboard_linestrategicbygroup',
+                                'routeParameters' => array('idGroup' => 10),
+                                'labelAttributes' => array('icon' => 'fa fa-cube',),
+                            ))->setLabel($this->translate(sprintf('UNPI', $section)));
+                    $complejos->addChild($itemsTableros);
+                }
+                if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_UNOP')) {
+                    $itemsTableros = $this->factory->createItem('results.visualize.tableros.unop', array(
+                                'route' => 'pequiven_dasboard_linestrategicbygroup',
+                                'routeParameters' => array('idGroup' => 11),
+                                'labelAttributes' => array('icon' => 'fa fa-cube',),
+                            ))->setLabel($this->translate(sprintf('UNOP', $section)));
+                    $complejos->addChild($itemsTableros);
+                }
             }
 
             $visualize->addChild($complejos);
