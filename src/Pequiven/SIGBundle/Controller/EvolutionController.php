@@ -156,13 +156,28 @@ class EvolutionController extends ResourceController
                 $objRel = $value->getDescription();
             }           
             $formula = $indicator->getFormula();
+            //tendencia
+            $tendency = $indicator->getTendency()->getId();
+            switch ($tendency) {
+                case 1:
+                    $font = "1.png";
+                    break;
+                case 2:
+                    $font = "2.png";
+                    break;
+                case 3:
+                    $font = "3.png";
+                    break;
+            }
+            $font = $this->generateAsset('bundles/pequivensig/images/'.$font);
         } elseif ($typeObject == 2) {
             $ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($idObject);
             $name = $ArrangementProgram->getRef() . '' . $ArrangementProgram->getDescription();            
             $objRel = $ArrangementProgram->getTacticalObjective()->getDescription();
-        } elseif ($typeObject == 3) {
-            $name = "Pruebas";            
-            $objRel = 0;
+        } elseif ($typeObject == 3) {            
+            $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->find($idObject);
+            $name     = $objetive->getRef() . '' . $objetive->getDescription();
+            $objRel   = $objetive->getRef() . '' . $objetive->getDescription();
         }
         
         $trendDescription = "No se ha Cargando el Analisis de Tendencia";
@@ -215,6 +230,7 @@ class EvolutionController extends ResourceController
         $pdf->setTitle('INFORME DE EVOLUCIÓN');
         $pdf->SetSubject('Resultados SIG');
         $pdf->SetKeywords('PDF, SIG, Resultados');
+        //$pdf->setImagenTrend($data['font']);
 
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
@@ -235,7 +251,7 @@ class EvolutionController extends ResourceController
 
         // add a page        
         $pdf->AddPage('L');
-
+        
         // set some text to print 
         $html = $this->renderView('PequivenSIGBundle:Indicator:viewPdf.html.twig', $data);
 
@@ -261,6 +277,7 @@ class EvolutionController extends ResourceController
         shell_exec("rm $imgCause");//Eliminamos
 
     }
+
     /**
      *
      *  Metodo de Revisión y Aprobación de Informe de Evolución
@@ -272,6 +289,18 @@ class EvolutionController extends ResourceController
         $this->get('session')->getFlashBag()->add('success', 'Informe de Evolución '.$approve['message'].' Exitosamente.');                        
         return $this->redirect($this->generateUrl("pequiven_indicator_evolution", array("id" => $request->get('id'), "month" => $request->get('month'))));
     }
+
+    /**
+     * Servicio para generar los assets
+     * @param type $path
+     * @param type $packageName
+     * @return type
+     */
+    protected function generateAsset($path,$packageName = null){
+        return $this->container->get('templating.helper.assets')
+               ->getUrl($path, $packageName);
+    }
+
     /**
      * 
      * @return \Pequiven\SIGBundle\Service\EvolutionService

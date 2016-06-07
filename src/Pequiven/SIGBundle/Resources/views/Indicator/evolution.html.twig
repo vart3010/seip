@@ -1,10 +1,4 @@
-{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
-{% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
-
-{% block javascripts_base %}
-    {{ parent() }}
-    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
-{% endblock javascripts_base %}
+{% extends 'PequivenSIGBundle:Template:baseLayoutEvolution.html.twig' %}
 
 {% trans_default_domain 'PequivenSIGBundle' %}
 
@@ -107,106 +101,13 @@
         {% endif %}
         </div>            
             {% include 'PequivenSIGBundle:Template:base_month.html.twig' %}                         
-</fieldset>
-  
+</fieldset>  
     {% include 'PequivenSIGBundle:Template:baseLoadSectionsEvolution.html.twig' %}     
-     
-<p class="button-height align-right">          
-    <div style="text-align: left; margin-left:15px;">
-        <a class="button"  id="showItems"  href="javascript:void(0)">
-            <span class="button-icon left-side red-gradient">
-                <span class="fa fa-history fa-1"></span>
-            </span>
-            <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
-            <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
-        </a>        
-        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}            
-            &nbsp;  {{ buttons.generic_download }}        
-            {#{% if approve['button'] == "check" %}                
-                &nbsp;{{ buttons.generic_approve(path('pequiven_evolution_check_to_approve', { 'id': indicator_sig.id,'month':month,'type':1, 'typeObj':typeObject }),{'message':'Revisado', 'icon':'fa fa-pencil-square-o fa-1','gradient':'red-gradient'} ) }}       
-            {% elseif approve['button'] == "approve" %}
-                &nbsp;{{ buttons.generic_approve(path('pequiven_evolution_check_to_approve', { 'id': indicator_sig.id,'month':month,'type':2, 'typeObj':typeObject}),{'message':'Aprobar','icon':'fa fa-thumbs-o-up fa-1','gradient':'green-gradient'}) }}             
-            {% endif %}#}
-        {% endif %}
-    </div>
-</p>
-{# Box historico informe de Evolución #}
-<div id="evolutionItems" style="display: none;">               
-    {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}            
-</div>  
-{% endblock body %}
-{% block stylesheets %}
-  {{ parent() }}    
-<style type="text/css">
-    
-    .position{        
-        margin-right: 20px;
-        margin-top: 20px;
-        color: #1d1c1c;
-        float: right;
-        font-size: 150%;
-    }
-    .button-config{
-        margin-right: 20px;
-        margin-top: 0px;
-        margin-bottom: 15px;
-        color: #1d1c1c;
-        float: right;
-        /*font-size: 150%;*/
-    }
-
-    /* dashboard sig */
-    .dashboard_sig {
-        padding: 20px;
-        position: relative;
-        zoom: 1;
-        color: white;
-        border-top: 1px solid #666666;
-        border-bottom: 1px solid #666666;
-        border-color: #000000;
-    }
-    .dashboard_sig a {
-        color: white;
-    }    
-
-</style>
-
-{% endblock stylesheets %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
-    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
-    <script src="{{  asset('bundles/pequivensig/js/loadFiles.js') }}"></script> 
-
-    <script type="text/javascript">        
-        $(document).ready(function () {
-            $("a#showItems").click(function () {
-                $("#evolutionItems").toggle("slow");
-                $("a#showItems span.title ").toggle();
-            });
-        });
-
-        //url file
-        var urlFiles = "{{ path('pequiven_sig_evolution_load_file') }}";
-        setUrlFiles(urlFiles); 
-        //end url file
-        //Carga de Evento de Descarga de Grafica de Indicador
-        function downloadEvolution(){            
-            var button = document.getElementById("exportpng");
-            if (button){
-               button.click();   
-               window.setTimeout(downloadCause,1000);
-               //downloadCause();               
-            }            
-        }
-        //Carga de Evento de Descarga de Grafica de Causas del Indicador
-        function downloadCause(){
-            var button_cause = document.getElementById("export_causespng");
-            if (button_cause){
-                button_cause.click();                
-            }
-        }
-
-    </script>    
+    {% block buttons %}
+        {{ parent() }}        
+        {# Box historico informe de Evolución #}
+        <div id="evolutionItems" style="display: none;">               
+            {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}            
+        </div>  
+    {% endblock %}
 {% endblock %}

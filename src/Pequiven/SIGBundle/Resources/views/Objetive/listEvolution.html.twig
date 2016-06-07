@@ -4,9 +4,20 @@
 
 {% block title %}- Objetivos SIG{% endblock %}
 
+{% set levelStrategic = constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_ESTRATEGICO') %}
+{% set levelTactic = constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_TACTICO') %}
+{% set levelOperative = constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_OPERATIVO') %}
+
+{% set labelHeader = {
+        (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_ESTRATEGICO')):'pequiven_objetive.objetive_strategic',
+        (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_TACTICO')):'pequiven_objetive.objetive_tactic',
+        (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_OPERATIVO')):'pequiven_objetive.objetive_operative',
+    } %}
+
 {% block before_body %}
     {{ contentHeader(
         (('Objetivos Informe de Evolución')|trans),
+        ((labelHeader[level])|trans),
         ('pequiven_indicator.list'|trans)
     ) }}
 {% endblock %}
