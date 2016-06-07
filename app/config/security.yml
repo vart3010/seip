@@ -196,6 +196,7 @@ security:
             - ROLE_SEIP_SIG_MONITORING_SHOW
             - ROLE_SEIP_SIG_EVOLUTION_CONFIG  
             - ROLE_SEIP_SIG_EVOLUTION_CLONING  
+            - ROLE_SEIP_SIG_EVOLUTION_OBJETIVE  
             
             # PRODUCCIÓN
             - ROLE_SEIP_OPERATION_LIST_REPORT_PRODUCTION
