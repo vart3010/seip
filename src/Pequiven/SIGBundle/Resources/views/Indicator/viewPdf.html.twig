@@ -147,9 +147,11 @@
         </tr>
         <tr>
             <td border="1">
-                <h5 align="right">MEJOR HACIA... 
-               {#<img src="{{ font }}" width="15px" height="15px">#}
-                </h5>
+                {% if font != "" %}
+                    <h5 align="right">MEJOR HACIA...
+                        <img src="{{font}}" width="25px" height="25px">
+                    </h5>
+                {% endif %}
                 <h5 align="left">Fórmula de Medición: {{ formula }}</h5>                
                 <img src="{{ nameSVG }}" width="430px" height="220px">
             </td>

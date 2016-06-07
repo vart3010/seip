@@ -65,7 +65,7 @@ class ObjetiveSigController extends EvolutionController
             'action' => $data["action"],
             'values' => $data["actionValue"]
         ];
-
+        
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('evolution.html'))
@@ -84,6 +84,7 @@ class ObjetiveSigController extends EvolutionController
                 'id'                  => null,
                 'cloning'             => null,
                 'route'               => "pequiven_seip_arrangementprogram_evolution_sig",//Ruta para carga de Archivo
+                'level'               => $objetive->getObjetiveLevel()->getId(),
                 $this->config->getResourceName() => $resource,                
         ));
 
@@ -177,11 +178,24 @@ class ObjetiveSigController extends EvolutionController
      * @return type
      */
     function ObjetiveslistEvolutionAction(Request $request) {
+        $level = $request->get('level'); 
         
+        $rol = null;
+        $roleByLevel = array(
+            ObjetiveLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_SIG_OBJECTIVE_VIEW'),
+            ObjetiveLevel::LEVEL_TACTICO => array('ROLE_SEIP_SIG_OBJECTIVE_VIEW'),
+            ObjetiveLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_SIG_OBJECTIVE_VIEW')
+        );
+        
+        if (isset($roleByLevel[$level])) {
+            $rol = $roleByLevel[$level];
+        }
+
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->container->get('pequiven.repository.managementsystem_sig_objetives');
         
+        $criteria['objetiveLevel'] = $level;        
         $criteria['applyPeriodCriteria'] = false;
 
         if ($this->config->isPaginated()) {
@@ -204,7 +218,8 @@ class ObjetiveSigController extends EvolutionController
             );
         }
         $routeParameters = array(
-            '_format' => 'json'            
+            '_format' => 'json',
+            'level' => $level                        
         );
         $apiDataUrl = $this->generateUrl('pequiven_objetives_list_sig_evolution', $routeParameters);
         $view = $this
@@ -218,7 +233,8 @@ class ObjetiveSigController extends EvolutionController
             
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
-                $this->config->getPluralResourceName() => $resources                
+                $this->config->getPluralResourceName() => $resources,
+                'level' => $level                                
             );
             $view->setData($data);
 

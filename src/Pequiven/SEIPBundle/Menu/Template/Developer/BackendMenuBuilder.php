@@ -197,13 +197,33 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         'route' => 'pequiven_objetives_gerencia_list_sig',
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
+            $objective->addChild($visualize);
+
             if ($this->isGranted('ROLE_SEIP_SIG_EVOLUTION_OBJETIVE')) {
                 //Lista de Informe de Evolución Consolidado
-                $visualize->addChild('planning.visualize.objetives.consolid', array(
-                    'route' => 'pequiven_objetives_list_sig_evolution',                
-                ))->setLabel($this->translate(sprintf('Informe de Evolución Consolidado', $section)));
+                $evolution = $this->factory->createItem('sig.evolution.visualize', $this->getSubLevelOptions(array(
+                                'uri' => 'null',
+                                'labelAttributes' => array('icon' => '',),
+                            ))
+                    )->setLabel($this->translate(sprintf('Informe de Evolución', $section)));                
+                //Nivel 3
+                $evolution->addChild('planning.visualize.objetives.strategico', array(
+                    'route' => 'pequiven_objetives_list_sig_evolution',
+                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.strategic', $section)));
+
+                $evolution->addChild('planning.visualize.objetives.tactico', array(
+                    'route' => 'pequiven_objetives_list_sig_evolution',
+                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.tactic', $section)));
+
+                $evolution->addChild('planning.visualize.objetives.operativo', array(
+                    'route' => 'pequiven_objetives_list_sig_evolution',
+                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));                
+                
+                $objective->addChild($evolution);
             }
-            $objective->addChild($visualize);
             $menuSig->addChild($objective);
         }
         if ($this->isGranted('ROLE_SEIP_SIG_INDICATOR')) {
