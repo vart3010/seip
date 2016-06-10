@@ -406,15 +406,15 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
                 $data['januaryReal']['isEnabled'] = true;
                 $data['februaryReal']['isEnabled'] = true;
                 $data['marchReal']['isEnabled'] = true;
-                $data['aprilReal']['isEnabled'] = true;
-                $data['mayReal']['isEnabled'] = true;
-                $data['juneReal']['isEnabled'] = true;
-                $data['julyReal']['isEnabled'] = true;
-                $data['augustReal']['isEnabled'] = true;
-                $data['septemberReal']['isEnabled'] = true;
-                $data['octoberReal']['isEnabled'] = true;
-                $data['novemberReal']['isEnabled'] = true;
-                $data['decemberReal']['isEnabled'] = true;
+                //$data['aprilReal']['isEnabled'] = true;
+                //$data['mayReal']['isEnabled'] = true;
+                //$data['juneReal']['isEnabled'] = true;
+                //$data['julyReal']['isEnabled'] = true;
+                //$data['augustReal']['isEnabled'] = true;
+                //$data['septemberReal']['isEnabled'] = true;
+                //$data['octoberReal']['isEnabled'] = true;
+                //$data['novemberReal']['isEnabled'] = true;
+                //$data['decemberReal']['isEnabled'] = true;
             }
         }
 
