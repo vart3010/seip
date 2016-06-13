@@ -25,7 +25,7 @@
 </div> 
 {% else %}
 <div class="columns with-padding"> 
-    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 82%;" align="center">                
+    <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">
         <div class="nine-columns twelve-columns-mobile" id="chartContainerResult"></div>   
         <input id='exportpng' type='hidden' value='Exportar Informe' />
     </div>  

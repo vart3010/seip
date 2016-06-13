@@ -7932,7 +7932,7 @@ angular.module('seipModule.controllers', [])
                         "type": "mscolumnline3d",
                         "renderAt": id,
                         "width": "95%",
-                        "height": "300%",
+                        //"height": "300%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "Gráfico Evolución Indicador",
                         "exporthandler": urlExportFromChart,

@@ -93,17 +93,9 @@
 <br /><br />
 
 <p class="button-height align-right">
-    {% if entity.showEvolutionView %}
-        {% set month = "now"|date("m") %}
-        &nbsp;
-            {{ buttons.generic_ext(path('pequiven_sig_objetive_evolution_show', { 'id': entity.id , 'month': month }),('pequiven.evolution'|trans({},'messages'))) }}
-        &nbsp;
-    {% endif %}
-    
     {% set redirectUrl = (path("pequiven_objetive_menu_list_operative")) %}
     {% set urlUpdateResulReferral = (path('objetiveOperative_show',{id:entity.id})) %}
-    {% include 'PequivenObjetiveBundle:Common:buttons.html.twig' %}
-    
+    {% include 'PequivenObjetiveBundle:Common:buttons.html.twig' %}    
 </p>
 
 {% endblock %}

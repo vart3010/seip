@@ -67,7 +67,7 @@ class IconsBoxByComplejo extends GenericBox
     }
     
     public function hasPermission() {
-        return $this->isGranted(array('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA'));
+        return $this->isGranted(array('ROLE_DIRECTIVE','ROLE_WORKER_PLANNING','ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL','ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA','ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPAMC','ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPHC'));
     }
     
     public function getTemplateName() {

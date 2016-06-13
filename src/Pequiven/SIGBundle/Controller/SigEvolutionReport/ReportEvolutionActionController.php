@@ -14,10 +14,6 @@ use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionType;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionValueType;
 
-#Verification
-use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification;
-use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionVerificationType;
-
 /**
  * Controlador de los distintos modulos del infome de evolucion
  *
@@ -79,7 +75,7 @@ class ReportEvolutionActionController extends ResourceController
      */
     function getFormPlanAddAction(Request $request)
     {   
-        $id = $request->get('idObject');
+        $idObject = $request->get('idObject');
         $typeObject = $request->get('typeObj');
 
         $evolutionService = $this->getEvolutionService();            
@@ -209,10 +205,22 @@ class ReportEvolutionActionController extends ResourceController
         throw $e;
         }        
 
-        $idAction = $action->getId();               
+        $idAction = $action->getId();   
         if ($idAction) {
-            for ($i=$dStart; $i <= $dEnd; $i++) {                 
-                    $action = $this->get('pequiven.repository.sig_action_indicator')->find($idAction);
+            $action   = $this->get('pequiven.repository.sig_action_indicator')->find($idAction);
+
+            $relactionValue = new EvolutionActionValue();
+            $relactionValue->setAdvance($AcValue);
+            $relactionValue->setObservations($AcObservation);
+            $relactionValue->setMonth($monthSet);
+            $relactionValue->setActionValue($action);
+
+            $em->persist($relactionValue);
+            $em->flush();
+
+            for ($i=$dStart; $i <= $dEnd; $i++) { 
+                if ($data != $monthSet) {                             
+                    $AcObservation = null;                    
                     $relactionValue = new EvolutionActionValue();
                     $relactionValue->setAdvance($AcValue);
                     $relactionValue->setObservations($AcObservation);
@@ -220,11 +228,10 @@ class ReportEvolutionActionController extends ResourceController
                     $relactionValue->setActionValue($action);
 
                     $em->persist($relactionValue);
-                    $em->flush();
-
-                $count = $count + 1;
-                $data = $dStart + $count;
-                $AcObservation = null;                    
+                    $em->flush();                    
+                }                
+                    $count = $count + 1;
+                    $data = $dStart + $count;
             }
         }
         $this->get('session')->getFlashBag()->add('success', "Plan de Acción Cargado Exitosamente");
@@ -290,114 +297,8 @@ class ReportEvolutionActionController extends ResourceController
                 }
             }
         }
-        $this->get('session')->getFlashBag()->add('success', "Avance Cargado Exitosamente");                        
-    }    
-
-    /**
-     * Retorna el formulario de Verificación del Plan de Acción
-     * 
-     * @param Request $request
-     * @return type
-     */
-    function getFormVerificationAction(Request $request)
-    {
-        $id = $request->get('id');        
-        $typeObject = $request->get('typeObj');
-        
-        $month = $request->get('evolutiontrend')['month'];//Carga de Mes pasado
-        
-        $user = $this->getUser();        
-        
-        $verification = new EvolutionActionVerification();
-        $form  = $this->createForm(new EvolutionActionVerificationType($id, $typeObject), $verification);        
-        $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('form/form_action_verification.html'))
-            ->setTemplateVar($this->config->getPluralResourceName())
-            ->setData(array(
-                'indicator' => $id,
-                'form' => $form->createView(),
-            ))
-        ;
-        $view->getSerializationContext()->setGroups(array('id','api_list'));
-        return $view;
-    }
-
-    /**
-     * Añade la Verificacion de Plan de Acción y Seguimiento
-     * 
-     * @param Request $request
-     * @return type
-     */
-    public function addVerificationAction(Request $request)
-    {   
-        $id = $request->get('idObject');//Carga de indicador
-        $typeObject = $request->get('typeObj');
-        $month = $request->get('month');;//Mes
-        $user = $this->getUser();
-
-        $verification = new EvolutionActionVerification();
-        $form  = $this->createForm(new EvolutionActionVerificationType(), $verification);
-        
-        if ($typeObject == 1) {            
-            $repository = $this->get('pequiven.repository.sig_indicator');
-            $results = $repository->find($id);            
-            $verification->setIndicator($results);            
-        }elseif($typeObject == 2){            
-            $repository = $this->get('pequiven_seip.repository.arrangementprogram');
-            $results = $repository->find($id); 
-            $verification->setArrangementProgram($results);            
-        }
-
-        $action = $request->get('actionVerification')['actionPlan'];
-        $idVerification = $request->get('actionVerification')['typeVerification'];
-        
-        //Consulta del tipo de Verificación para el plan de acción
-        $ver = $this->get('pequiven.repository.managementsystem_sig_verification')->find($idVerification);
-        $statusAction = $ver->getStatus();//Status 0/1 para el plan 
-
-        //Acción
-        $actionVer = $this->get('pequiven.repository.sig_action_indicator')->find($action);
-        
-        $verification->setCreatedBy($user);
-        $verification->setActionPlan($actionVer);
-        $verification->setMonth($month);
-        $verification->setTypeObject($typeObject);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {            
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($verification);
-            $em->flush();
-        }    
-        
-        if($actionVer){//Si existe la acción le cambio el status segun sea el caso
-            $actionVer->setStatus($statusAction);
-            $em->flush();  
-        }  
-        $this->get('session')->getFlashBag()->add('success', "Verificación Cargada Exitosamente");                                
-    }
-
-    /**
-     *  Delete verification
-     *  
-     * @param Request $request
-     * @return type
-     */
-    public function deleteVerificationAction(Request $request)
-    {
-        $id = $request->get('id');//id Verification        
-        
-        $em = $this->getDoctrine()->getManager();
-        $verification = $this->get('pequiven.repository.sig_action_verification')->find($id);
-        
-        if($verification){
-            $em->remove($verification);
-            $em->flush(); 
-            $this->get('session')->getFlashBag()->add('success', "Verificación Eliminada Exitosamente");                        
-        }
-
+        $this->get('session')->getFlashBag()->add('success', "Avance Cargado Exitosamente");    
+        die();                    
     }    
 
     /**
