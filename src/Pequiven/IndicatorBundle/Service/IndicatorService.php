@@ -4542,23 +4542,26 @@ class IndicatorService implements ContainerAwareInterface {
         return $results;
     }
 
-    public function IndicatorCalculateTendency($indicator) {
+    public function IndicatorCalculateTendency($indicator,$resultNumbers) {
         $cont = 1;
         $values = count($indicator->getValuesIndicator());
 
         $dataX = $dataY = $dataXY = $dataXX = [];
         $dataTendency = 0;
 
-        if ($values != 0) {
+        if ($values != 0 and $resultNumbers >= 3) {
             foreach ($indicator->getValuesIndicator() as $value) {
                 $data = $value->getValueOfIndicator();
-
-                $dataX[] = $cont; //X
-                $dataY[] = $data; //Y
-                $dataXY[] = $data * $cont; //X*Y
-                $dataXX[] = $cont * $cont; //X^2
-                $cont++;
+                //var_dump($data);
+                if ($cont <= $resultNumbers) {
+                    $dataX[] = $cont; //X
+                    $dataY[] = $data; //Y
+                    $dataXY[] = $data * $cont; //X*Y
+                    $dataXX[] = $cont * $cont; //X^2
+                }
+                $cont++;                                        
             }
+            
 //echo "X"; var_dump($dataX);                    
 //echo "Cantidad"; var_dump(count($dataX));                    
 //echo "Y"; var_dump($dataY);
@@ -4691,7 +4694,7 @@ class IndicatorService implements ContainerAwareInterface {
 //Número de indicadores asociados
         $totalNumValues = count($indicator->getValuesIndicator());
         if ($totalNumValues >= 3) {
-            $dataTendency = $this->IndicatorCalculateTendency($indicator);
+            $dataTendency = $this->IndicatorCalculateTendency($indicator,$resultNumbers);
         }
 
 //Inicialización
