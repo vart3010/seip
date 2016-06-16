@@ -1,0 +1,47 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block body %}
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+        <form method="POST" id="">
+            <fieldset class="fieldset fields-list" open="">
+                <legend class="legend">Edición Plan de Acción</legend>                              
+                {% if editGeneral == true %}                        
+                    <div class="field-block button-height" >
+                        <label class="label required" for="actionResults_action">Ref</label>
+                        <input type="text" id="actionResults_ref" name="actionResults[ref]" required="required" class="input input-large " value="{{action.ref}}" disabled/>
+                    </div>
+                    <div class="field-block button-height" >
+                        <label class="label required" for="actionResults_action">Acción</label>
+                        <input type="text" id="actionResults_action" name="actionResults[action]" required="required" class="input input-large " value="{{action.action}}"/>
+                    </div>
+                    <div class="field-block button-height" >
+                        <label class="label required" for="actionResults_indicatorAction">Tipo de Acción</label>
+                        <input type="text" id="actionResults_typeaction" name="actionResults[typeAction]" required="required" class="input input-large " value="{{action.indicatorAction.description}}" disabled/>                        
+                    </div>
+                    <div class="field-block button-height" >
+                        <label class="label required" for="actionResults_dateStart">Fecha de Inicio</label>
+                        <input type="text" id="actionResults_dateStart" name="actionResults[dateStart]" required="required" class="input input-large" value="{{action.dateStart | date("d/m/Y")}}" disabled/>
+                    </div>
+                    <div class="field-block button-height" >
+                        <label class="label required" for="actionResults_dateEnd">Fecha de Cierre</label>
+                        <input type="text" id="actionResults_dateEnd" name="actionResults[dateEnd]" required="required" class="input input-large" value="{{action.dateEnd | date("d/m/Y")}}" disabled/>
+                    </div>                
+                {% endif %}    
+
+                <div class="field-block button-height" >                    
+                    <label class="label required" for="actionValue_advance">Avance %</label>        
+                    <input type="text" id="actionValue_advance" name="actionValue[advance]" required="required" class="input input-large " maxlength="3" value="{{values['advance']}}" />
+                </div>
+                <div class="field-block button-height" >                    
+                    <label class="label required" for="actionValue_observations">Observaciones</label>                        
+                    <textarea id="actionValue_observations" name="actionValue[observations]" required="required" class="input input-large " value="{{values['observation']}}"></textarea>
+                </div>                                        
+            </form>       
+        </fieldset>        
+    </details> 
+{% endblock %}

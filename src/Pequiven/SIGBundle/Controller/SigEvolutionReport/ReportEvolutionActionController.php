@@ -408,6 +408,43 @@ class ReportEvolutionActionController extends ResourceController
         return $this->handleView($view);
     }
     
+    /** 
+     *  
+     *  Metodo de edición de plan de acción
+     *
+     */
+    public function getFormPlanEditAction(Request $request){
+        $editGeneral = false;
+        $idAction = $request->get('idAction');
+        
+        $action = $this->get('pequiven.repository.sig_action_indicator')->find($idAction);
+        $actionValues = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue'=> $idAction, 'month' => $request->get('month')));
+        if ($action->getMonth() == $request->get('month')) { $editGeneral = true; }
+        foreach ($actionValues as $value) {
+            $id = $value->getId();
+            $advance = $value->getAdvance();
+            $observation = $value->getObservations();
+        }
+        $actionValues = [
+            'id'  => $id,
+            'advance' => $advance,
+            'observation' => $observation
+        ];
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('form/formAction/formActionEdit.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+            ->setData(array(
+                'action'     => $action,                
+                'values'     => $actionValues,
+                'editGeneral'=> $editGeneral
+            ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
+    }
+
     /**
      * 
      * @return \Pequiven\SIGBundle\Service\EvolutionService

@@ -1550,6 +1550,21 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
+            //Carga del formulario para edición de acciones
+            $scope.loadEditToAction = function (resource) {
+                $scope.initFormEditAction(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setParameterCallBack(resource);
+
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
             //Carga el formulario de las Causas de Desviacion
             $scope.loadTemplateCausesDesviation = function (resource) {
                 $scope.initFormCausesAdd(resource);
@@ -1825,6 +1840,30 @@ angular.module('seipModule.controllers', [])
                 $scope.templates = [
                     {
                         name: 'Carga de Avance y Observaciones',
+                        url: url,
+                        confirmCallBack: confirmCallBackActionValues,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+            //Carga del fomrulario la edicion de acciones
+            $scope.initFormEditAction = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(750);
+
+                var parameters = {
+                    idAction: $scope.action_data,
+                    month: $scope.month,                    
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_indicator_action_add_get_form_edit', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Edición de Acciones',
                         url: url,
                         confirmCallBack: confirmCallBackActionValues,
                     }
