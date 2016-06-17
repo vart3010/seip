@@ -435,7 +435,12 @@ class ReportEvolutionActionController extends ResourceController
         ];
 
         if ($request->isMethod('POST')) {            
-            //var_dump($request->get('actionResults'));
+            if ($request->get('actionResults')['action']) {            
+                $action->setAction($request->get('actionResults')['action']);
+                $em = $this->getDoctrine()->getManager();
+                $em->flush();                                   
+            }
+            die();
             $AcValue = $request->get('actionValue')['advance'];
             $observation = $request->get('actionValue')['observations'];
             
