@@ -7,7 +7,7 @@
 
 {% block body %}
 {% trans_default_domain 'PequivenIndicatorBundle' %}
-        <form method="POST" id="">
+        <form method="POST" id="form_edit_action_evolution">
             <fieldset class="fieldset fields-list" open="">
                 <legend class="legend">Edición Plan de Acción</legend>                              
                 {% if editGeneral == true %}                        
@@ -39,7 +39,7 @@
                 </div>
                 <div class="field-block button-height" >                    
                     <label class="label required" for="actionValue_observations">Observaciones</label>                        
-                    <textarea id="actionValue_observations" name="actionValue[observations]" required="required" class="input input-large " value="{{values['observation']}}"></textarea>
+                    <textarea id="actionValue_observations" name="actionValue[observations]" required="required" class="input input-large ">{{values['observation']}}</textarea>
                 </div>                                        
             </form>       
         </fieldset>        

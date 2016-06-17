@@ -416,28 +416,51 @@ class ReportEvolutionActionController extends ResourceController
     public function getFormPlanEditAction(Request $request){
         $editGeneral = false;
         $idAction = $request->get('idAction');
-        
+        $month = $request->get('month');
+
         $action = $this->get('pequiven.repository.sig_action_indicator')->find($idAction);
-        $actionValues = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue'=> $idAction, 'month' => $request->get('month')));
-        if ($action->getMonth() == $request->get('month')) { $editGeneral = true; }
+        $actionValues = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue'=> $idAction, 'month' => $month));
+        //se valida el mes de edición
+        if ($action->getMonth() == $month) { $editGeneral = true; }
         foreach ($actionValues as $value) {
-            $id = $value->getId();
-            $advance = $value->getAdvance();
+            $id          = $value->getId();
+            $advance     = $value->getAdvance();
             $observation = $value->getObservations();
         }
-        $actionValues = [
-            'id'  => $id,
-            'advance' => $advance,
+        
+        $actionValuesData = [
+            'id'          => $id,
+            'advance'     => $advance,
             'observation' => $observation
         ];
-        
+
+        if ($request->isMethod('POST')) {            
+            //var_dump($request->get('actionResults'));
+            $AcValue = $request->get('actionValue')['advance'];
+            $observation = $request->get('actionValue')['observations'];
+            
+            $actionGeneral = $this->get('pequiven.repository.sig_action_value_indicator')->findOneBy(array('actionValue'=> $idAction, 'month' => $action->getMonth()));
+            $actionSet = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue'=> $idAction));            
+            foreach ($actionSet as $value) {                               
+                if ($value->getMonth() >= $month) {
+                    $sumAdvance = $actionGeneral->getAdvance() + $AcValue;                
+                    $value->setAdvance($sumAdvance);
+                    $value->setObservations($observation);                        
+                    $em = $this->getDoctrine()->getManager();
+                    $em->flush();                   
+                    $month = $month + 1;//Carga de los meses tantas veces sean para la consulta
+                    $observation = null;//                    
+                }
+            }
+        }
+
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('form/formAction/formActionEdit.html'))
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(
                 'action'     => $action,                
-                'values'     => $actionValues,
+                'values'     => $actionValuesData,
                 'editGeneral'=> $editGeneral
             ))
         ;
