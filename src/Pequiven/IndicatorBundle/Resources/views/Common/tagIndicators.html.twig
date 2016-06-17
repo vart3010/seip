@@ -2,30 +2,53 @@
     {% if indicator.showTagsInTwoColumns == true %}
         {% set tagsIndicator = indicatorService.getTagIndicatorByOrder(indicator) %}
         {% for tagIndicator in tagsIndicator %}
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <ul {#class="fa-ul"#}>
                     {% if (tagIndicator.showTag == true) %}
-                    <li class="inline-label">
-                        <label class="label">{{ tagIndicator.description }}:</label>{% if tagIndicator.typeTag == constant('Pequiven\\IndicatorBundle\\Entity\\Indicator\\TagIndicator::TAG_TYPE_NUMERIC') %} {{ tagIndicator.valueOfTag|myNumberFormat }} {% else %} {{ tagIndicator.textOfTag }} {% endif %}
-                        {% if tagIndicator.unitResult != "" %}{{ tagIndicator.getUnitResultValue|upper }}{% endif %}
-                    </li>
+                        <li class="label">
+                            <div class="six-columns">
+                                <label class="label bold">
+                                    {{ tagIndicator.description }}:
+                                </label>                            
+                                {% if tagIndicator.typeTag == constant('Pequiven\\IndicatorBundle\\Entity\\Indicator\\TagIndicator::TAG_TYPE_NUMERIC') %} 
+                                    {{ tagIndicator.valueOfTag|myNumberFormat }} 
+                                {% else %} 
+                                    {{ tagIndicator.textOfTag }} 
+                                {% endif %}
+                                {% if tagIndicator.unitResult != "" %}
+                                    {{ tagIndicator.getUnitResultValue|upper }}
+                                {% endif %}
+                            </div>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
         {% endfor  %}
     {% else %}
-        <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
+        <div class="new-row new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
             <ul {#class="fa-ul"#}>
-            {% set tagsIndicator = indicatorService.getTagIndicatorByOrder(indicator) %}
-            {% for tagIndicator in tagsIndicator %}
-                {% if (tagIndicator.showTag == true) %}
-                <li class="inline-label">
-                    <label class="label">{{ tagIndicator.description }}:</label>{% if tagIndicator.typeTag == constant('Pequiven\\IndicatorBundle\\Entity\\Indicator\\TagIndicator::TAG_TYPE_NUMERIC') %} {{ tagIndicator.valueOfTag|myNumberFormat }} {% else %} {{ tagIndicator.textOfTag }} {% endif %}
-                    {% if tagIndicator.unitResult != "" %}{{ tagIndicator.getUnitResultValue|upper }}{% endif %}
-            {#        {{ generateLink(indicator) }}{% if indicator.weight > 0 %}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ indicator.weight }}%){% endif %} - {{ indicatorService.resultWithArrangementRangeColor(indicator)|raw }}#}    
-                </li>
-                {% endif %}
-            {% endfor  %}
+                {% set tagsIndicator = indicatorService.getTagIndicatorByOrder(indicator) %}
+                {% for tagIndicator in tagsIndicator %}
+                    {% if (tagIndicator.showTag == true) %}
+                        <li class="label">
+                            <div class="new-row twelve-columns padding-20">
+                                <label class="label bold">
+                                    {{ tagIndicator.description }}:   
+                                </label>
+                                {% if tagIndicator.typeTag == constant('Pequiven\\IndicatorBundle\\Entity\\Indicator\\TagIndicator::TAG_TYPE_NUMERIC') %} 
+                                    {{ tagIndicator.valueOfTag|myNumberFormat }} 
+                                {% else %} 
+                                    {{ tagIndicator.textOfTag }} 
+                                {% endif %}
+
+                                {% if tagIndicator.unitResult != "" %}
+                                    {{ tagIndicator.getUnitResultValue|upper }}
+                                {% endif %}
+                                {#        {{ generateLink(indicator) }}{% if indicator.weight > 0 %}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ indicator.weight }}%){% endif %} - {{ indicatorService.resultWithArrangementRangeColor(indicator)|raw }}#}                                    
+                            </div>                            
+                        </li>
+                    {% endif %}
+                {% endfor  %}
             </ul>
         </div>
     {% endif %}

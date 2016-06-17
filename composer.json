@@ -61,11 +61,11 @@
     "repositories": [
         {
             "type": "vcs",
-            "url":  "git@172.20.124.26:sonata-project/admin-bundle.git"
+            "url":  "git@172.20.124.26:carlitoxenlaweb/admin-bundle.git"
         },
         {
             "type": "vcs",
-            "url":  "git@172.20.124.26:sonata-project/doctrine-orm-admin-bundle.git"
+            "url":  "git@172.20.124.26:carlitoxenlaweb/doctrine-orm-admin-bundle.git"
         }
     ],  
     "scripts": {

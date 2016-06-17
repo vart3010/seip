@@ -418,6 +418,7 @@ class OnePerTenService {
 //        $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] = round(($profileItemsWithResult[OnePerTen::TYPE_COMPROMISO]['totalResult']*$profileItemsWithResult[OnePerTen::TYPE_COMPROMISO]['weightGlobal'])/100,2)+round(($profileItemsWithResult[OnePerTen::TYPE_ELECCIONES]['totalResult']*$profileItemsWithResult[OnePerTen::TYPE_ELECCIONES]['weightGlobal'])/100,2);
         //Obtenemos el Puntaje del Perfil
         $profileItemsWithResult = $this->evaluateResultWithCompresionFormula($onePerTen,$profileItemsWithResult);
+        $profileItemsWithResult = $this->evaluateRealProfileResult($onePerTen,$profileItemsWithResult);
         $profileItemsWithResult = $this->evaluateProfileResult($onePerTen,$profileItemsWithResult);
         
         return $profileItemsWithResult;
@@ -439,26 +440,44 @@ class OnePerTenService {
      * 
      * @param OnePerTen $onePerTen
      * @param type $profileItemsWithResult
+     */
+    public function evaluateRealProfileResult(OnePerTen $onePerTen,$profileItemsWithResult = array()){
+        if($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] >= 80){
+            $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['realProfileValue'] = 1;
+        } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] < 80 && $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] >= 60){
+            $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['realProfileValue'] = 2;
+        } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] < 60 && $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] >= 40){
+            $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['realProfileValue'] = 3;
+        } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] < 40 && $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] >= 20){
+            $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['realProfileValue'] = 4;
+        } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] < 20){
+            $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['realProfileValue'] = 5;
+        }
+        
+        return $profileItemsWithResult;
+    }
+    
+    /**
+     * 
+     * @param OnePerTen $onePerTen
+     * @param type $profileItemsWithResult
      * @return string
      */
     public function evaluateProfileResult(OnePerTen $onePerTen,$profileItemsWithResult = array()){
         //RANGO VIEJO: -1: x >= 95 -2: 95 > x >= 85 -3: 85 > x >= 70 -4: 70 > x >= 50 -5: x < 50
         //RANGO VIEJO: -1: x >= 80 -2: 80 > x >= 60 -3: 60 > x >= 40 -4: 40 > x >= 20 -5: x < 20
         
+        
         if($onePerTen->getMarkedStatus() == 0){
+            $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue'] = $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['realProfileValue'];
             if($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] >= 80){
-                $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue'] = 1;
             } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] < 80 && $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] >= 60){
-                $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue'] = 2;
                 $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['class'] = 'anthracite-bg';
             } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] < 60 && $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] >= 40){
-                $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue'] = 3;
                 $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['class'] = 'grey-bg';
             } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] < 40 && $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] >= 20){
-                $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue'] = 4;
                 $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['class'] = 'orange-bg';
             } elseif($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['result'] < 20){
-                $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue'] = 5;
                 $profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['class'] = 'blue-bg';
             }
         } else{
@@ -590,10 +609,10 @@ class OnePerTenService {
         $profileItemsAvailables = $this->obtainProfileItemsAvailables($onePerTen);
         $profileItemsWithWeight = $this->obtainProfileItemsWithWeight($onePerTen, $profileItemsAvailables);
         $profileItemsWithResult = $this->obtainProfileItemsWithResult($onePerTen, $profileItemsWithWeight,$members);
-        $onePerTen->setRealProfileValue($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue']);
+        $onePerTen->setRealProfileValue($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['realProfileValue']);
         
-        if($onePerTen->getMarkedStatus()){
-            $onePerTen->setProfileValue(5);
+        if($onePerTen->getMarkedStatus() > 0){
+            $onePerTen->setProfileValue($onePerTen->getMarkedStatus());
         } else{
             $onePerTen->setProfileValue($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue']);
         }

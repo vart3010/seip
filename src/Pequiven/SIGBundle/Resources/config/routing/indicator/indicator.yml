@@ -77,7 +77,7 @@ pequiven_causes_analysis_get_form:
         expose: true
 #Carga de formulario de la verificación del indicador
 pequiven_verification_get_form:
-    path: /{idObject}/{typeObj}/get-form_verification.{_format}
+    path: /{idObject}/{typeObj}/get-form-verification.{_format}
     defaults:
         _controller: pequiven.controller.sig_trend_report_evolution:getFormVerificationAction
         _format: html
@@ -280,6 +280,17 @@ pequiven_responsibles_to_plan:
         _format: json
     requirements:
         _format: json
+    methods: [GET|POST]
+    options:
+        expose: true
+#Revisión y Aprobación de informe de Evolución
+pequiven_evolution_check_to_approve:
+    path: /evolution/{id}/{month}/{type}/{typeObj}
+    defaults:
+        _controller: pequiven.controller.evolution:checkToEvolutionAction
+        _format: html
+    requirements:
+        _format: html|json
     methods: [GET|POST]
     options:
         expose: true

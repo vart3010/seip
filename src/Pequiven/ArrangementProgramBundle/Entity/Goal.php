@@ -405,7 +405,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
     public function prePersist() {
         if ($this->getTimeline()->getArrangementProgram()) {
             $this->setPeriod($this->getTimeline()->getArrangementProgram()->getPeriod());
-        }
+        } 
         if ($this->goalDetails == null) {
             $this->goalDetails = new GoalDetails();
         }

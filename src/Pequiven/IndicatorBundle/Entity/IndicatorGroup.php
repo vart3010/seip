@@ -89,6 +89,20 @@ class IndicatorGroup {
     protected $parent = null;
 
     /**
+     * ¿Se mostrará en los Dashboard de Lineas Estrategicas?
+     * @var boolean
+     * @ORM\Column(name="showInLineStrategicDashboard",type="boolean")
+     */
+    private $showInLineStrategicDashboard = false;
+
+    /**
+     * ¿Se mostrará en los Tableros de Indicadores?
+     * @var boolean
+     * @ORM\Column(name="showInGerenciaDashboard",type="boolean")
+     */
+    private $showInGerenciaDashboard = false;
+
+    /**
      * @var IndicatorGroup
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\IndicatorGroup",mappedBy="parent",cascade={"persist"}))
      */
@@ -208,6 +222,22 @@ class IndicatorGroup {
 
     public function getIndicators() {
         return $this->indicators;
+    }
+
+    function getShowInLineStrategicDashboard() {
+        return $this->showInLineStrategicDashboard;
+    }
+
+    function getShowInGerenciaDashboard() {
+        return $this->showInGerenciaDashboard;
+    }
+
+    function setShowInLineStrategicDashboard($showInLineStrategicDashboard) {
+        $this->showInLineStrategicDashboard = $showInLineStrategicDashboard;
+    }
+
+    function setShowInGerenciaDashboard($showInGerenciaDashboard) {
+        $this->showInGerenciaDashboard = $showInGerenciaDashboard;
     }
 
 }

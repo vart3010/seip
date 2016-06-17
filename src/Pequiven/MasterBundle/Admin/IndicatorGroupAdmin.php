@@ -58,9 +58,14 @@ class IndicatorGroupAdmin extends Admin {
                     'label' => 'Grupo de Indicadores Padre',
                     'attr' => array('class' => 'input input-large'),
                 ))
-                
                 ->add('enabled', null, array(
                     "required" => false,
+                ))
+                ->add('showInLineStrategicDashboard', null, array(
+                    'label' => 'Se Mostrara en el Dashboard de Líneas Estratégicas'
+                ))
+                ->add('showInGerenciaDashboard', null, array(
+                    'label' => 'Se Mostrara en los Tableros de Indicadores'
                 ))
         ;
     }

@@ -141,11 +141,21 @@ class ObjetiveRepository extends EntityRepository {
      * @param array $orderBy
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    function createPaginatorByLevelSIG(array $criteria = null, array $orderBy = null) {
-        
+    function createPaginatorByLevelSIG(array $criteria = null, array $orderBy = null) {        
         $criteria['for_viewsig'] = true;
-        $orderBy['o.ref'] = 'ASC';
-        
+        $orderBy['o.ref'] = 'ASC';        
+        return $this->createPaginator($criteria, $orderBy);
+    }
+
+    /**
+     * Crea un paginador para los objetivos con permiso para carga de informe de evolución
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorByLevelSIGEvolution(array $criteria = null, array $orderBy = null) {        
+        $criteria['for_view_evolution'] = true;
+        $orderBy['o.ref'] = 'ASC';        
         return $this->createPaginator($criteria, $orderBy);
     }
 
@@ -155,19 +165,42 @@ class ObjetiveRepository extends EntityRepository {
         //Visualización SIG
         if(($forviewSig = $criteria->remove('for_viewsig')) != null){
             //$queryBuilder->addSelect('ms');
-
             $queryBuilder
                 ->andWhere('o.deletedAt IS NULL')
-                ->innerJoin('o.managementSystems', 'ms');
+                ->innerJoin('o.managementSystems', 'ms')
+            ;
 
             //Filtro de Sistemas de Gestión
             if(($managementSystems = $criteria->remove('managementSystems')) != null){
                 $queryBuilder  
                     ->andWhere('ms.id = :managementSystems')
                     ->setParameter('managementSystems', $managementSystems)
-                    ;
+                ;
             }
         }  
+
+        //Visualización SIG
+        if(($forviewSig = $criteria->remove('for_view_evolution')) != null){
+            $queryBuilder
+                ->andWhere('o.showEvolutionView = :show')
+                ->setParameter('show', true)
+            ;
+
+            //Filtro de Sistemas de Gestión
+            if (($managementSystems = $criteria->remove('managementSystems')) != null) {
+                $queryBuilder
+                        ->andWhere('ms.id = :managementSystems')
+                        ->innerJoin('o.managementSystems', 'ms')
+                        ->setParameter('managementSystems', $managementSystems)
+                ;
+            }
+        }  
+
+        if (isset($criteria['description'])) {
+            $description = $criteria['description'];
+            unset($criteria['description']);
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%" . $description . "%'"), $queryBuilder->expr()->like('o.ref', "'%" . $description . "%'")));
+        } 
 
         //Filtro Gerencia 1ra Línea
         if(($gerencia =  $criteria->remove('firstLineManagement')) !== null){
