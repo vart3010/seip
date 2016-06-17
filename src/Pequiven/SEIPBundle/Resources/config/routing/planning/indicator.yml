@@ -201,6 +201,15 @@ pequiven_dashboardgerencias:
         _format: html|json|xml
     methods: [GET]
     
+pequiven_indicator_showdashboardtablero:
+    path: /boards/dashboard/{id}/{_format}
+    defaults:
+        _controller: pequiven.controller.indicatorgroup:showIndicatorDashboardAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
 pequiven_dasboard_linestrategicbygroup:
     path: /dashboardLineStrategicByGroup/{idGroup}/{_format}
     defaults:

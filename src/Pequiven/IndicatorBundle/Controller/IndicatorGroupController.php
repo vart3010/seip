@@ -5,6 +5,7 @@ namespace Pequiven\IndicatorBundle\Controller;
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
 use Pequiven\MasterBundle\Model\LineStrategic;
+use Pequiven\IndicatorBundle\Model\IndicatorLevel;
 
 /**
  * Grupos de Indicadores
@@ -31,7 +32,7 @@ class IndicatorGroupController extends SEIPController {
             $groups = $groups[0]->getchildrens();
         }
 
-        //SI VIENE DE UN TABLERO DE INDICADORES
+        //SI VIENE DE UN TABLERO DE INDICADORES POR GERENCIA
         if ($this->getRequest()->get('board')) {
             $board = 1;
         } else {
@@ -131,6 +132,8 @@ class IndicatorGroupController extends SEIPController {
 
         if ($this->getRequest()->get('idLineStrategic')) {
             $idLineStrategic = $this->getRequest()->get('idLineStrategic');
+        } else {
+            $idLineStrategic = null;
         }
 
         $maxPerTag = 9;
@@ -148,10 +151,15 @@ class IndicatorGroupController extends SEIPController {
                         );
                     }
 
-                    $tree[(string) $lineStrategic]['child'][$tag][(string) $indicator] = $indicator;
-                    $data[(string) $lineStrategic->getRef()][(string) $indicator->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicator);
+                    $options = array(
+                        "url" => 'pequiven_indicator_showdashboardtablero',
+                        "urlParameters" => array('id' => $indicator->getId())
+                    );
 
+                    $tree[(string) $lineStrategic]['child'][$tag][(string) $indicator] = $indicator;
+                    $data[(string) $lineStrategic->getRef()][(string) $indicator->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicator, 12, $options);
                     $totalInd++;
+
                     if ($cont == $maxPerTag) {
                         $tag++;
                         $cont = 1;
@@ -169,6 +177,7 @@ class IndicatorGroupController extends SEIPController {
             'group' => $group,
             'tree' => $tree,
             'data' => $data,
+            'board' => 1,
             'style' => $style,
             'tags' => ceil($totalInd / $maxPerTag),
             'indicatorService' => $indicatorService
@@ -177,6 +186,161 @@ class IndicatorGroupController extends SEIPController {
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('Dashboard/viewDashboardPanelIndicator.html'))
+                ->setData($data)
+        ;
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * FUNCION QUE RETORNA LOS GRAFICOS (DASHBOARD) DE UN INDICADOR ESPECIFICO
+     * @return type
+     */
+    public function showIndicatorDashboardAction() {
+
+        $em = $this->getDoctrine()->getManager();
+        $seeTagIndicators = false; //Bandera para saber si se muestran o no las etiquetas del indicador
+        $boxRender = $this->get('tecnocreaciones_box.render'); //Servicio para llamar los boxes
+        $idIndicator = $this->getRequest()->get('id'); //Obtenemos el id del indicador a visualizar
+        $indicator = $this->container->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador que se esta visualizando
+        $idLineStrategic = ''; //Id de la Línea Estratégica
+        $indicatorsGroup = $dataWidget = array(); //Grupo de Indicadores a mostrar en la barra lateral izquierda de la plantilla
+        $indicatorService = $this->getIndicatorService();
+        $labelsMonths = array();
+        foreach (\Pequiven\SEIPBundle\Model\Common\CommonObject::getLabelsMonths() as $key => $value) {
+            $labelsMonths[$key] = array(
+                'id' => $key,
+                'description' => $value,
+            );
+        }
+
+        ksort($labelsMonths);
+
+        $options = array(
+            "url" => 'pequiven_indicator_showdashboardtablero',
+            "urlParameters" => array('id' => $indicator->getId())
+        );
+
+        if ($indicatorService->isIndicatorHasParents($indicator)) {
+
+            //Comparamos el nivel del indicador y asi obtener el id de la Línea Estratégica a la cual esta alineada el mismo
+            if ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {
+                if ($this->getRequest()->get('idGroup')) {
+                    $group = $this->container->get('pequiven.repository.indicatorgroup')->findOneById($this->getRequest()->get('idGroup'));
+                    $indicatorsGroup = $group->getIndicators();
+                } else {
+                    foreach ($indicator->getLineStrategics() as $lineStrategic) {
+                        $idLineStrategic = $lineStrategic->getId();
+                        if (count($lineStrategic->getIndicators()) > 0) {
+//                    $indicatorsGroup = $lineStrategic->getIndicators();
+                            $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByLineStrategicAndOrderShowFromParent($lineStrategic->getId());
+                        }
+                    }
+                }
+                if (count($indicator->getChildrens()) == 0) {
+                    $seeTagIndicators = true;
+                }
+            } elseif (($indicatorParent = $indicator->getParent()) != NULL) {
+                $flagParent = false;
+                $cont = 1;
+                while (!$flagParent) {
+                    if ($indicatorParent->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {//En caso de que estemos en el indicador Táctico
+                        $flagParent = true;
+                        if ($cont == 1) {//En caso de que se este viendo un indicador táctico
+//                        $indicatorsGroup = $indicatorParent->getChildrens();
+                            $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicatorParent->getId());
+                            if (count($indicator->getChildrens()) == 0) {
+                                $seeTagIndicators = true;
+                            }
+                        }
+                        foreach ($indicatorParent->getLineStrategics() as $lineStrategic) {
+                            $idLineStrategic = $lineStrategic->getId();
+                        }
+                    } else {
+                        $cont++;
+//                    $indicatorsGroup = $indicatorParent->getChildrens();//En caso de que se este viendo un indicador operativo, obtenemos los indicadores asociados al táctico, antes de actualizar el objeto indicadorPadre
+                        $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicatorParent->getId()); //En caso de que se este viendo un indicador operativo, obtenemos los indicadores asociados al táctico, antes de actualizar el objeto indicadorPadre
+                        $indicatorParent = $indicatorParent->getParent();
+                    }
+                }
+            }
+        }
+
+        //Obtenemos la data para los widget en forma de bulbo de la barra lateral izquierda
+        foreach ($indicatorsGroup as $indicatorGroup) {
+            $dataWidget[(string) $indicatorGroup->getRef()] = $indicatorGroup->getEvaluateInPeriod() == true ? $indicatorService->getDataWidgetAngularGauge($indicatorGroup) : $indicatorService->getDataDashboardWidgetBulb($indicatorGroup, \Pequiven\SEIPBundle\Model\Common\CommonObject::OPEN_URL_SAME_WINDOW);
+        }
+
+        $iconsLineStrategic = LineStrategic::getIcons();
+        $linesStrategics = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null));
+
+        //Esta sección es para los distintos tipos de gráficos del indicador
+
+        if (count($indicator->getCharts()) == 0) {//En caso de que el indicador no tenga ningín gráfico asociado
+            $seeTagIndicators = true;
+        } else {
+            $charts = $indicator->getCharts(); //Obtenemos los gráficos que están disponibles para el dashboard del indicador
+        }
+
+        $dataChart = $indicatorService->getDataDashboardWidgetDoughnut($indicator, $options);
+
+        $dataChartColumn = array();
+        $seeInColumn = false;
+        $seeInColumnSingleAxis = false;
+
+        $arrayIdProduccion = array();
+        $arrayIdProduccion[] = 1;
+        $arrayIdProduccion[] = 1043;
+
+        if ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO) {
+            if ($indicator->getParent() != null) {
+                if (in_array($indicator->getParent()->getId(), $arrayIdProduccion)) {
+                    $seeInColumn = true;
+                    $dataChartColumn = $indicatorService->getChartColumnLineDualAxis($indicator, $options);
+                }
+            }
+        } elseif ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO) {
+            if ($indicator->getParent() != null) {
+                if (count($indicator->getParent()->getParent()) > 0) {
+                    if (in_array($indicator->getParent()->getParent()->getId(), $arrayIdProduccion)) {
+                        $seeInColumn = true;
+                        $seeInColumnSingleAxis = true;
+                        $dataChartColumn = $indicatorService->getDataChartOfResultIndicator($indicator, $options);
+                    }
+                }
+            }
+        }
+
+        $rs = array();
+        $type = $indicator->getCharts();
+//        foreach ($type as $t) {
+//            array_push($rs, $t->);
+//        }
+
+        $data = array(
+            'iconsLineStrategic' => $iconsLineStrategic,
+            'linesStrategics' => $linesStrategics,
+            'idLineStrategic' => $idLineStrategic,
+            'seeTagIndicators' => $seeTagIndicators,
+            'boxRender' => $boxRender,
+            'indicatorsGroup' => $indicatorsGroup,
+            'dataWidget' => $dataWidget,
+            'indicator' => $indicator,
+            'chartest' => $rs,
+//            'dataMultiLevelPie' => $dataMultiLevelPie,
+            'dataChart' => $dataChart,
+            'indicatorService' => $indicatorService,
+            'seeInColumn' => $seeInColumn,
+            'seeInColumnSingleAxis' => $seeInColumnSingleAxis,
+            'dataChartColumn' => $dataChartColumn,
+            'labelsMonths' => $labelsMonths,
+            'data' => $indicatorService->getDataDashboardWidgetBulb($indicator),
+            'options' => $options
+        );
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('Dashboard/viewIndicatorDashboard.html'))
                 ->setData($data)
         ;
 

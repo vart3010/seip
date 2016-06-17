@@ -15,7 +15,7 @@
                         {{ indicator.summary }}                            
                     </a>  
 
-                    {% if (((indicator.indicatorGroup|length)>0)and(indicator.showIndicatorGroups)) %}
+                    {% if (((indicator.getIndicatorGroup|length)>0)and(indicator.showIndicatorGroups==1)) %}
                         &nbsp;
                         <a target="_self" href="{{ path('pequiven_groupindicators',{idLineStrategic:lineStrategic.id, indicatorId:indicator.id}) }}" style="font-size: 20px; color: green">
                             <i class="fa fa-plus-square" aria-hidden="true"></i>
