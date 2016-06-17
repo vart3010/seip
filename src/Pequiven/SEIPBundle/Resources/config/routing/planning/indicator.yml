@@ -152,8 +152,6 @@ getIsGrantEditButton:
     options:
         expose: true
         
-        
-        
 showButtonDownload:
     path: /showButtonDownload/{id}
     defaults:
@@ -164,8 +162,6 @@ showButtonDownload:
     methods: [GET]
     options:
         expose: true
-        
-             
        
 loadFile:
     path: /{id}/loadFile
@@ -176,3 +172,49 @@ loadFile:
         _format: html|json|xml
         id: \d+
     methods: [GET|POST]
+    
+#Vista de los Grupos de Indicadores
+pequiven_groupindicators:
+    path: /dashboardGroup/{idLineStrategic}/{indicatorId}/{_format}
+    defaults:
+        _controller: pequiven.controller.indicatorgroup:showDashboardIndicatorsGroupAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
+pequiven_indicatorsfromgroup:
+    path: /dashboardGroup/{idLineStrategic}/{indicatorId}/{idGroup}/{_format}
+    defaults:
+        _controller: pequiven.controller.indicatorgroup:showDashboardIndicatorsFromGroupAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
+pequiven_dashboardgerencias:
+    path: /boards/{idGroup}/{_format}
+    defaults:
+        _controller: pequiven.controller.indicatorgroup:showDashboardGerenciasAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
+pequiven_indicator_showdashboardtablero:
+    path: /boards/dashboard/{id}/{_format}
+    defaults:
+        _controller: pequiven.controller.indicatorgroup:showIndicatorDashboardAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
+pequiven_dasboard_linestrategicbygroup:
+    path: /dashboardLineStrategicByGroup/{idGroup}/{_format}
+    defaults:
+        _controller: pequiven.controller.indicatorgroup:showLineStrategicByGroupAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]

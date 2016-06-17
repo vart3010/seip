@@ -15,6 +15,15 @@ pequiven_plant_report_create:
             form: pequiven_seipbundle_dataload_plantreport
     methods: [GET|POST]
     
+pequiven_plant_report_group_create:
+    path: /{reportTemplate}/createGroup
+    defaults:
+        _controller: pequiven.controller.plant_report:createGroupAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_plantreport_group
+    methods: [GET|POST]
+    
+    
 pequiven_plant_report_show:
     path: /{id}/show
     defaults:
@@ -31,6 +40,12 @@ pequiven_plant_report_update:
     path: /{id}/update
     defaults:
         _controller: pequiven.controller.plant_report:updateAction
+
+        
+pequiven_plant_report_group_update:
+    path: /{id}/updateGroup
+    defaults:
+        _controller: pequiven.controller.plant_report:updateGroupAction
         
     methods: [GET|POST|PUT]
     
@@ -45,3 +60,14 @@ pequiven_plant_report_run:
     defaults:
         _controller: pequiven.controller.plant_report:runAction
     methods: [GET]
+    
+pequiven_entity_load_data_group:
+    path: /entity-load.{_format}
+    defaults: 
+        _controller: pequiven.controller.plant_report:getGroupLoadAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

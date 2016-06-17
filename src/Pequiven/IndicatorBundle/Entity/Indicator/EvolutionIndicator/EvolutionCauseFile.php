@@ -83,13 +83,6 @@ class EvolutionCauseFile extends Model {
     private $deletedAt;
 
     /**
-     * ValueIndicator
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis
-     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis",mappedBy="valueCauseFile")
-     */
-    private $valueCause;
-
-    /**
      * Get id
      *
      * @return integer 

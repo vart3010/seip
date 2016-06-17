@@ -61,7 +61,7 @@ pequiven_chart:
     resource: "@PequivenSEIPBundle/Resources/config/routing/chart.yml"
     prefix:   /chart
     
-pequiven_data_load:
+pequiven_data_load_main:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/main.yml"
     prefix:   /data-load
     

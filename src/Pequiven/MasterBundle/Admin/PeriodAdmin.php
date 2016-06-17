@@ -97,13 +97,14 @@ class PeriodAdmin extends Admin {
                     ->setDateEndLoadWorkStudyCircle($dateEnd)
             ;
         }
+
         if ($object != null && $object->getId() !== null) {
             $childrensParameters['query_builder'] = function(\Pequiven\SEIPBundle\Repository\PeriodRepository $repository) use ($object) {
                 $qb = $repository->createQueryBuilder('p');
                 $qb
-                        ->leftJoin('p.child', 'p_c')
+                        ->leftJoin('p.child', 'p_c')    
                 ;
-                $xor = $qb->expr()->orX($qb->expr()->isNull('p_c'));
+                $xor = $qb->expr()->orX($qb->expr()->isNull('p_c.id'));
                 if ($object != null && $object->getId() !== null) {
                     $qb
                             ->andWhere('p.id != :period')
@@ -111,9 +112,7 @@ class PeriodAdmin extends Admin {
                     ;
                     $xor->add($qb->expr()->andX('p_c.id = :period'));
                 }
-                $qb
-                        ->andWhere($xor)
-                ;
+                $qb->andWhere($xor);
                 return $qb;
             };
         }

@@ -23,68 +23,76 @@ pequiven_seip:
         delete: Plantilla de programa de gestión eliminado.
 pequiven:
     objetive:
-        create: El objetivo se creo correctamente.
-        update: El objetivo se actualizo correctamente.
-        delete: El objetivo se elimino correctamente.
-        approved: El objetivo se aprobo correctamente.
+        create: El objetivo se creó correctamente.
+        update: El objetivo se actualizó correctamente.
+        delete: El objetivo se eliminó correctamente.
+        approved: El objetivo se aprobó correctamente.
     indicator:
-        create: El indicador se creo correctamente.
-        update: El indicador se actualizo correctamente.
-        delete: El indicador se elimino correctamente.
-        approved: El indicador se aprobo correctamente.
+        create: El indicador se creó correctamente.
+        update: El indicador se actualizó correctamente.
+        delete: El indicador se eliminó correctamente.
+        approved: El indicador se aprobó correctamente.
     value_indicator_config:
-        create: El indicador se configuro correctamente.
-        update: La configuración del indicador se actualizo correctamente.
-        delete: La configuración del indicador se elimino correctamente.
+        create: El indicador se configuró correctamente.
+        update: La configuración del indicador se actualizó correctamente.
+        delete: La configuración del indicador se eliminó correctamente.
     report_template:
-        create: El reporte se creo de correctamente.
-        update: El reporte se actualizo correctamente.
-        delete: El reporte se elimino correctamente.
+        create: El reporte se creó de correctamente.
+        update: El reporte se actualizó correctamente.
+        delete: El reporte se eliminó correctamente.
     product_report:
-        create: El producto se agrego de correctamente.
-        update: El producto se actualizo correctamente.
-        delete: El producto se elimino correctamente.
+        create: El producto se agregó de correctamente.
+        update: El producto se actualizó correctamente.
+        delete: El producto se eliminó correctamente.
     product_planning:
-        create: La planificación del producto se agrego de correctamente.
-        update: La planificación del producto se actualizo correctamente.
-        delete: La planificación del producto se elimino correctamente.
+        create: La planificación del producto se agregó de correctamente.
+        update: La planificación del producto se actualizó correctamente.
+        delete: La planificación del producto se eliminó correctamente.
     range:
-        create: El rango de distribución se agrego de correctamente.
-        update: El rango de distribución se actualizo correctamente.
-        delete: El rango de distribución se elimino correctamente.
+        create: El rango de distribución se agregó de correctamente.
+        update: El rango de distribución se actualizó correctamente.
+        delete: El rango de distribución se eliminó correctamente.
     product_detail_daily_month:
-        create: El detalle de produccion se agrego de correctamente.
-        update: El detalle de produccion se actualizo correctamente.
-        delete: El detalle de produccion se elimino correctamente.
+        create: El detalle de produccion se agregó de correctamente.
+        update: El detalle de produccion se actualizó correctamente.
+        delete: El detalle de produccion se eliminó correctamente.
     raw_material_consumption_planning:
-        create: La materia prima se agrego de correctamente.
-        update: La materia prima se actualizo correctamente.
-        delete: La materia prima se elimino correctamente.
+        create: La materia prima se agregó de correctamente.
+        update: La materia prima se actualizó correctamente.
+        delete: La materia prima se eliminó correctamente.
     detail_raw_material_consumption:
-        create: El detalle de consumo de materia prima se agrego de correctamente.
-        update: El detalle de consumo de materia prima se actualizo correctamente.
-        delete: El detalle de consumo de materia prima se elimino correctamente.
+        create: El detalle de consumo de materia prima se agregó de correctamente.
+        update: El detalle de consumo de materia prima se actualizó correctamente.
+        delete: El detalle de consumo de materia prima se eliminó correctamente.
     plant_stop_planning:
-        create: La planificación de parada se agrego de correctamente.
-        update: La planificación de parada se actualizo correctamente.
-        delete: La planificación de parada se elimino correctamente.
+        create: La planificación de parada se agregó de correctamente.
+        update: La planificación de parada se actualizó correctamente.
+        delete: La planificación de parada se eliminó correctamente.
     plant_report:
-        create: El reporte de la planta se creo correctamente.
-        update: El reporte de la planta se actualizo correctamente.
-        delete: El reporte de la planta se elimino correctamente.
+        create: El reporte de la planta se creó correctamente.
+        update: El reporte de la planta se actualizó correctamente.
+        delete: El reporte de la planta se eliminó correctamente.
     inventory:
-        create: El inventario de agrego correctamente.
-        update: El inventario de actualizo correctamente.
-        delete: El inventario de elimino correctamente.
+        create: El inventario de agregó correctamente.
+        update: El inventario de actualizó correctamente.
+        delete: El inventario de eliminó correctamente.
     unrealized_production:
-        create: La producción no realizada se agrego correctamente.
-        update: La producción no realizada se actualizo correctamente.
-        delete: La producción no realizada se elimino correctamente.
+        create: La producción no realizada se agregó correctamente.
+        update: La producción no realizada se actualizó correctamente.
+        delete: La producción no realizada se eliminó correctamente.
     detail_consumer_planning_service:
-        create: El detalle de consumo de servicio se agrego correctamente.
-        update: El detalle de consumo de servicio se actualizo correctamente.
-        delete: El detalle de consumo de servicio se elimino correctamente.
+        create: El detalle de consumo de servicio se agregó correctamente.
+        update: El detalle de consumo de servicio se actualizó correctamente.
+        delete: El detalle de consumo de servicio se eliminó correctamente.
     consumer_planning_service:
-        create: El consumo de servicio se agrego correctamente.
-        update: El consumo de servicio se actualizo correctamente.
-        delete: El consumo de servicio se elimino correctamente.
+        create: El consumo de servicio se agregó correctamente.
+        update: El consumo de servicio se actualizó correctamente.
+        delete: El consumo de servicio se eliminó correctamente.
+    consumer_planning_gasflow:
+        create: El consumo de flujo de gas se agregó correctamente.
+        update: El consumo de flujo de gas se actualizó correctamente.
+        delete: El consumo de flujo de gas se eliminó correctamente.
+    detail_consumer_planning_gasflow:
+        create: El detalle de consumo de flujo de gas se agregó correctamente.
+        update: El detalle de consumo de flujo de gas se actualizó correctamente.
+        delete: El detalle de consumo de flujo de gas se eliminó correctamente.

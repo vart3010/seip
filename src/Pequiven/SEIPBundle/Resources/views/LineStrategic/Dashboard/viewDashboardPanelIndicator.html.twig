@@ -1,0 +1,117 @@
+{% extends "PequivenSEIPBundle:Template:Developer/layoutGestion.html.twig" %}
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/icons.css') }}">
+{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('')
+    ) }}
+{% endblock %}
+
+{% block body %}   
+    {#TABLERO DE INDICADORES#}
+    <br>
+    <br>
+    <div class="twelve-columns">         
+        <h1 class="thin breadcrumb">
+            {%if (group.color!=null) %}                            
+                {% set color= group.color %}
+            {%else%}                
+                {% set color= "#BCBCBC" %}
+            {%endif%}
+            <i class="fa {{ group.logo }}" style="color: {{color}}; font-size: 40px;" aria-hidden="true"></i>
+            {{group.description}}
+        </h1>
+    </div>
+    <hr class="hr-linestrategic-icons" />
+    <br>    
+    {% set classColor = 'red-gradient' %}
+    {% for t in tree %}
+        {% set lineStrategic = t['parent'] %}     
+        <table width="100%">
+            <tr>
+                <td width="20%" class="text-center" style="vertical-align: middle;">
+                    <span>
+                        <img class="icon-strategic" src="{{ asset(iconsLineStrategic[lineStrategic.level]) }}">
+                    </span>
+                    <br>
+                    <p class="title-icon-strategic bold" style="font-size: 20px;">{{ lineStrategic.description }}</p>
+                    <br>                                         
+                    <a href="javascript:history.back()" class="align-left button red-gradient glossy">
+                        <li class="icon-previous icon-size2" title="icon-replay-all"> Regresar
+                        </li>
+                    </a>
+                </td>
+                <td width="80%" class="text-center" style="vertical-align: middle;">                       
+                    <div class="standard-tabs at-bottom margin-bottom margin-top tabs-active tabs-animated tab-opened" id="add-tabs">
+                        <ul class="tabs">
+                            <li class="active">
+                                <a href="#tab-1">1</a>
+                            </li>
+                            {% if (tags>1) %}
+                                {% for i in 2..tags|round(0, 'ceil') %}                                    
+                                    <li>
+                                        <a href="#tab-{{i}}">{{i}}</a>
+                                    </li>                                
+                                    {% set i=i+1%}
+                                {%endfor%}
+                            {%endif%}
+                        </ul>                                
+                        <div style="" class="tabs-content">
+                            <span class="tabs-back with-left-arrow top-bevel-on-light dark-text-bevel"><-</span>
+                            {% for i in 1..tags|round(0, 'ceil') %}                                    
+                                <div style="display: block; min-height: 495px;" id="tab-{{i}}" class="with-padding tab-active">    
+                                    <!-- Indicadores de la Línea Estratégica -->
+                                    {% for indicator in t['child'][i] %}   
+                                        <div class="four-columns six-columns-mobile" style="display: inline-block;" ng-controller="DashboardController" ng-init="renderWidgetIndicatorStrategic('{{ indicator.ref }}',{{ data[lineStrategic.ref][indicator.ref]|json_encode() }},'100%','150px')">
+                                            <div class="twelve-columns" style="text-align: center; margin-bottom: -2px; font-weight: bold">                                                
+                                                <a target="_blank" href="">
+                                                    <span class="link-black" title="{{ indicator.description }}">
+                                                        {#<p style="text-align: center;margin-bottom: -5px;">#}
+                                                        <b>
+                                                            <i class="fa {{ group.logo }}" aria-hidden="true"></i>
+                                                            &nbsp;-&nbsp;
+                                                            {{ indicator.summary }}
+                                                        </b>
+                                                        {#</p>#}
+                                                    </span>
+                                                </a>
+                                                {% if (((indicator.indicatorGroup|length)>0)and(indicator.showIndicatorGroups)) %}
+                                                    &nbsp;
+                                                    <a target="_self" href="{{ path('pequiven_groupindicators',{idLineStrategic:lineStrategic.id, indicatorId:indicator.id, board:1}) }}" style="font-size: 20px; color: green">
+                                                        <i class="fa fa-plus-square" aria-hidden="true"></i>
+                                                    </a>  
+                                                {%endif%}
+                                                <span id="{{ indicator.ref }}"></span>                            
+                                            </div>
+                                        </div>                                        
+                                    {% endfor %}
+                                </div>    
+                            {% endfor %}
+                        </div>
+                    </div> 
+                </td>
+            </tr>
+        </table>        
+    {% endfor %}
+{% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+    </script>
+{% endblock %}

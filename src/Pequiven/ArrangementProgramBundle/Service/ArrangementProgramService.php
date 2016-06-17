@@ -60,12 +60,47 @@ class ArrangementProgramService implements ContainerAwareInterface {
         return $month;        
     }
 
+    public function ArrangementCalculateTendency($real, $cantData) {
+        $cont = 1;
+        $values = count($real);
+        
+        $dataX = $dataY = $dataXY = $dataXX = [];
+        $dataTendency = 0;
+
+        if ($values != 0) {
+            for ($i=0; $i <$cantData; $i++) {             
+                $data = $real[$cont];
+
+                $dataX[] = $cont; //X
+                $dataY[] = $data; //Y
+                $dataXY[] = $data * $cont; //X*Y
+                $dataXX[] = $cont * $cont; //X^2
+                $cont++;
+            }
+
+            $sumaX = array_sum($dataX);
+            $sumaY = array_sum($dataY);
+
+            $d = ((count($dataX) * array_sum($dataXY)) - (array_sum($dataX) * array_sum($dataY)));
+            $c = ((count($dataX) * array_sum($dataXX)) - (array_sum($dataX) * array_sum($dataX)));
+            $b = $d / $c;
+
+            $a = (($sumaY / count($dataY))) - ($b * ($sumaX / count($dataX)));
+
+            $dataTendency = [
+                'a' => $a,
+                'b' => $b
+            ];
+        }
+        return $dataTendency;
+    }
+
 	/**
      * Gráfico de Columna para informe de Evolución
      * @param ArrangementProgram $ArrangementProgram
      * @return type
      */
-    public function getDataChartOfArrangementProgramEvolution($ArrangementProgram, $urlExportFromChart) {
+    public function getDataChartOfArrangementProgramEvolution($ArrangementProgram, $urlExportFromChart, $month) {
     	
     	$data = array(
             'dataSource' => array(
@@ -95,7 +130,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
 
         $category = $dataSetReal = $dataSetPlan = $dataSetAcum = array();
         $label = $dataReal = $dataPlan = $dataAcum = $dataMedition = array();
-        $cantData = 0;
+        $cantData = $dataTendency = 0;
         //Carga de Nombres de Labels
         $dataSetReal["seriesname"] = "Real";
         $dataSetPlan["seriesname"] = "Plan";
@@ -103,16 +138,14 @@ class ArrangementProgramService implements ContainerAwareInterface {
         $dataSetAnt["seriesname"]  = "2014";
         $labelAntper               = "2014";
         $labelProm                 = "Promedio o Acumulado";
-        $labelobj                  = "Objetivo 2015";
+        $labelobj                  = "Objetivo ".$ArrangementProgram->getPeriod()->getName();
 
     	$real = array();
         $planned = array();
         $em = $this->getDoctrine()->getManager();
         $timeline = $ArrangementProgram->getTimeline();
 
-
         foreach ($timeline->getGoals() as $timeline_goals) {
-
             //ENERO
             $sump = $timeline_goals->getGoalDetails()->getJanuaryPlanned();
             $sumr = $timeline_goals->getGoalDetails()->getJanuaryReal();
@@ -189,42 +222,43 @@ class ArrangementProgramService implements ContainerAwareInterface {
             $labelAnt["label"] = $labelAntper;//Label del 2014
             $category[] = $labelAnt;//Label del 2014
             
-            $cantData = count($real);           
-
+            //$cantData = count($real);          
+            $cantData = (int)$month;          
 
             $cont = 1;
             $dataSetReal["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
             $dataSetPlan["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
             $dataSetTend["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
-            
-            for ($i=0; $i < $cantData; $i++) { 
-                
-                if ($real[$cont] != NULL) {             
-                    
+            if ($cantData >= 3) { 
+                $dataTendency = $this->ArrangementCalculateTendency($real, $cantData);
+            }
+            for ($i=0; $i < $cantData; $i++) {                 
+                if ($real[$cont] != NULL) {                                                 
                     $month = $this->getMonthsArrangementProgram($cont);//Carga de labels de los meses
 
                     $label["label"] = $month;
                     $category[] = $label;
-
                 
                     //Carga de la data Real
-	        		$dataReal["value"] = $real[$cont];
-					$dataSetReal["data"][] = $dataReal;
-	        		
-	        		//Carga de la Data Plan
-					$dataPlan["value"] = $planned[$cont];
-					$dataSetPlan["data"][] = $dataPlan;
+                    $dataReal["value"] = $real[$cont];
+                    $dataSetReal["data"][] = $dataReal;
+                    
+                    //Carga de la Data Plan
+                    $dataPlan["value"] = 100;
+                    $dataSetPlan["data"][] = $dataPlan;
 
-					$dataSetTend["data"][] = $dataReal;
-	        		
-        		}
-	        		$cont++;
-        	}
-
-        	//Label Promedio o Acumunlado
-        	$labelp["label"] = $labelProm;//Label del Prom
+                    //creacion de la tendencia
+                    $dataRealTendency["value"] = $dataTendency['a'] + ($dataTendency['b'] * $cont);
+                    $dataSetTend["data"][] = $dataRealTendency; //Data Real Tendencia
+                    
+                }
+                    $cont++;
+            }
+            
+            //Label Promedio o Acumunlado
+            $labelp["label"] = $labelProm;//Label del Prom
             $category[] = $labelp;//Label del Prom
-
+            
             //Data Prom
             $dataSetReal["showvalues"] = "1";
             $dataAcum["value"] = $ArrangementProgram->getResult();//Pasando data a data prom
@@ -236,7 +270,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
             $category[] = $labelo;//Label del ObjAcum
 
             //Pasando Objetivo Acum
-            $dataObj["value"] = 75;//Pasando data a Dataobj
+            $dataObj["value"] = 100;//Pasando data a Dataobj
             $dataObj["color"] = '#087505';            
             $dataSetReal["data"][] = $dataObj;//Acumulado
 
@@ -244,6 +278,8 @@ class ArrangementProgramService implements ContainerAwareInterface {
             $dataSetPlan['data'] = array('seriesname' => 'Plan', 'parentyaxis' => 'S', 'renderas' => 'Line', 'data' => $dataSetPlan['data']);
             //Carga de Tendencia
             $cantValue = count($dataSetTend['data']);
+            
+
             if ($cantValue >= 4) {
                 $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetTend['data']);                
             }elseif(!$cantValue) {
@@ -267,91 +303,6 @@ class ArrangementProgramService implements ContainerAwareInterface {
 			$data['dataSource']['dataset'][] = $dataSetPlan['data'];
         	
         //return json_encode($data);
-        return $data;
-    }
-
-
-    /**
-     * Gráfico de Columna para Causas de Desviación
-     * @param ArrangementProgram $ArrangementProgram
-     * @return type
-     */
-    public function getDataChartOfCausesEvolution($ArrangementProgram, $month, $urlExportFromChart) {
-        
-        $data = array(
-            'dataSource' => array(
-                'chart' => array(),
-                'categories' => array(
-                ),
-                'dataset' => array(
-                ),
-            ),
-        );
-        
-        $chart = array();
-        $chart["valueFontColor"] = "#000000";
-        $chart["showvalues"] = "1";
-        $chart["showSum"] = "1";
-        $chart["numberSuffix"] = "%";
-        $chart["bgalpha"] = "0,0";
-        $chart["baseFontColor"] = "#ffffff";
-        $chart["bgColor"] = "#ffffff";
-        $chart["legendBgColor"] = "#ffffff";
-        $chart["legendItemFontSize"] = "10";
-        $chart["legendItemFontColor"] = "#666666";
-        $chart["toolTipColor"] = "#ffffff";
-        $chart["outCnvBaseFontColor"] = "#000000";
-        $chart["visible"] = "1";
-        $chart["theme"] = "fint";
-        //$chart["rotateValues"] = "0";
-        $chart["snumbersuffix"] = "%";
-        $chart["decimals"] = "0";
-        $chart["setadaptiveymin"] = "1";
-        $chart["setadaptivesymin"] = "1";
-        //$chart["sYAxisMaxValue"] = "150";
-        //$chart["pYAxisMaxValue"] = "150";
-        $chart["linethickness"] = "5";
-        $chart["showborder"] = "0";
-        $chart["exportenabled"] = "1";
-        $chart["exportatclient"] = "0";
-        $chart["exportFormats"] = "PNG= Exportar Informe de Evolución PDF";
-        $chart["exportFileName"] = "Grafico Resultados ";
-        $chart["exporthandler"] = $urlExportFromChart;
-
-        //Inicialización
-        $category = $dataSetCause = array();
-        $label = $dataCause = array();
-        $contCause = 1;
-        //Carga de Nombres de Labels
-        $dataSetCause["seriesname"] = "Causas";
-        $monthCause = (int)$month;
-            //
-            foreach ($ArrangementProgram->getArrangementProgramCauses() as $value) {
-                
-                if ($value->getMonth() === $monthCause) {
-                
-                    $label["label"] = $value->getCauses();                    
-                    $contCause = $contCause + 1;
-                    $category[] = $label;
-
-                }
-            }
-            
-            foreach ($ArrangementProgram->getArrangementProgramCauses() as $value) {
-                //Carga de los Valores de la causa
-                if ($value->getMonth() === $monthCause) {                
-                    
-                    $dataCause["value"] = $value->getvalueOfCauses();
-                    $dataSetCause["data"][] = $dataCause;
-                
-                }                
-            }
-        
-           
-        $data['dataSource']['chart'] = $chart;
-        $data['dataSource']['categories'][]["category"] = $category;
-        $data['dataSource']['dataset'][] = $dataSetCause;
-
         return $data;
     }
 

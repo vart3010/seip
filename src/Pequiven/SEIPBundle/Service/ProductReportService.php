@@ -5,7 +5,7 @@ namespace Pequiven\SEIPBundle\Service;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class productReportService implements ContainerAwareInterface {
+class ProductReportService implements ContainerAwareInterface {
 
     private $container;
 
@@ -33,6 +33,99 @@ class productReportService implements ContainerAwareInterface {
         }
 
         return $rs;
+    }
+
+    public function getArrayByDateFromInternalCausesPnr(\DateTime $dateReport, \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productReport) {
+        $day = date_format($dateReport, 'j');
+        $month = date_format($dateReport, 'n');
+        $monthWithZero = date_format($dateReport, 'm');
+        $year = date_format($dateReport, 'Y');
+
+        $em = $this->getDoctrine()->getManager();
+        $causeFailService = $this->getCauseFailService();
+
+        $rawMaterials = array(
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP => array(),
+        );
+
+        $methodTypeCausesIntExt = array(
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL => "TYPE_FAIL_INTERNAL",
+        );
+
+        $result = array();
+
+        //Seteamos el total por tipo de causa de PNR
+        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = 0.0;
+        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = 0.0;
+        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = 0.0;
+
+        //Obtenemos la plantilla del reporte
+//        $reportTemplateId = $options['idReportTemplate'];
+//        $reportTemplate = $this->container->get('pequiven.repository.report_template')->findOneBy(array('id' => $reportTemplateId));
+        //Obtenemos el producto
+//        $product = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Product")->find($options["idProduct"]);
+        //Obtenemos el Reporte del Producto
+//        $productReportId = $options['idProductReport'];
+//        $productReport = $this->container->get('pequiven.repository.product_report')->find($productReportId);
+        //Obtenemos las producciones no realizadas, asociadas al Reporte del Producto
+        $unrealizedProductions = $productReport->getUnrealizedProductions();
+
+        //Obtenemos las categorías de las causas de PNR por fallas por tipo Interna y Externa
+        $failsInternal = $causeFailService->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL);
+
+        //Seteamos en el arreglo, la sección Causas Internas
+        foreach ($failsInternal as $failInternal) {
+            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['day'] = 0.0;
+            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] = 0.0;
+            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = 0.0;
+        }
+
+        //Recorremos las producciones no realizadas
+        foreach ($unrealizedProductions as $unrealizedProduction) {
+            $monthUnrealizedProduction = $unrealizedProduction->getMonth();
+
+            //Seteamos el valor dia y mes
+            if ($month == $unrealizedProduction->getMonth()) {
+                $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
+                foreach ($failsInternal as $failInternal) {
+                    if ($failInternal->getName() == 'Sobre Producción') {
+                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['day'] = $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
+                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
+                    }
+                    for ($dayMonth = 1; $dayMonth <= $day; $dayMonth++) {
+                        if ($failInternal->getName() == 'Sobre Producción') {
+                            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                        }
+                    }
+                }
+            }
+
+
+            //Seteamos el valor año
+            if ($monthUnrealizedProduction <= $month) {
+                $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
+                foreach ($failsInternal as $failInternal) {
+                    for ($dayMonth = 1; $dayMonth <= \Pequiven\SEIPBundle\Model\Common\CommonObject::getDaysPerMonth($monthUnrealizedProduction, $year); $dayMonth++) {
+                        if ($month == $monthUnrealizedProduction) {
+                            if ($dayMonth <= $day) {
+                                if ($failInternal->getName() == 'Sobre Producción') {
+                                    $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                                    $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                                }
+                            }
+                        } else {
+                            if ($failInternal->getName() == 'Sobre Producción') {
+                                $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                                $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function generatePie($data) {
@@ -93,6 +186,118 @@ class productReportService implements ContainerAwareInterface {
 
         return json_encode($chart);
         //return $pie;
+    }
+
+    public function generateColumn3dLineryPerPlantGroups($titles, $summaryProduction, $range, $methodFrecuency, $fieldPlan, $fieldReal,$division = 1) {
+
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(),
+                'dataset' => array(),
+            ),
+        );
+
+        $chart = array();
+        
+         if ($range["range"]) {
+            $chart["caption"] = "Producción desde " . $range["dateFrom"]->format("d-m-Y") . " hasta " . $range["dateEnd"]->format("d-m-Y");
+        } else {
+            $chart["caption"] = $titles["caption"];
+        }
+        $chart["subCaption"] = $titles["subCaption"];
+        //        $chart["xAxisName"] = "Indicador";
+        if ($division == 1) {
+            $chart["pYAxisName"] = "Cantidad (TM)";
+        } else if ($division == 1000) {
+            $chart["pYAxisName"] = "Cantidad (MTM)";
+        }
+        $chart["sYAxisName"] = "% Ejecucion";
+        $chart["sNumberSuffix"] = "%";
+        $chart["sYAxisMaxValue"] = "100";
+        $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valueFontColor"] = "#000000";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "1";
+        $chart["placeValuesInside"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "14";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        $chart["decimals"] = "2";
+
+        $chart["exportenabled"] = "1";
+        $chart["exportatclient"] = "0";
+        $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
+        $chart["exportFileName"] = "Grafico Resultados ";
+
+        $data["dataSource"]["chart"] = $chart;
+        #var_dump($summaryProduction);
+
+        $arrayCategories = array();
+
+        $perc = array();
+        $plan = array();
+        $real = array();
+
+
+
+        foreach ($summaryProduction[$methodFrecuency] as $production) {
+            $arrayCategories[] = array("label" => $production["nameGroup"]);
+            $plan[] = array("value" => $production[$fieldPlan]);
+            $real[] = array("value" => $production[$fieldReal]);
+
+            if($production[$fieldPlan]==0) { 
+                $p = 0.0;
+            } else {
+                $p = (($production[$fieldReal] * 100) / $production[$fieldPlan]);
+            }
+
+            $perc[] = array("value"=> number_format( $p, 2, ',', '.'));
+        }
+        $data["dataSource"]["categories"][]["category"] = $arrayCategories;
+        $data["dataSource"]["dataset"][] = array(
+            "seriesname" => "Plan",
+            "data" => $plan
+        );
+        $data["dataSource"]["dataset"][] = array(
+            "seriesname" => "Real",
+            "data" => $real
+        );
+     
+        $data["dataSource"]["dataset"][] = array(
+            "seriesname" => "Porcentaje",
+            "renderAs" => "line",
+            "parentYAxis" => "S",
+            "showValues" => "0",
+            "data" => $perc
+        );
+        //var_dump(json_encode($data["dataSource"]["dataset"]));
+
+        
+
+
+        #var_dump($data["dataSource"]["dataset"]);
+        #die();
+
+        return json_encode($data);
     }
 
     public function generateColumn3dLinery($titles, $productReport, $range, $dateReport, $typeReport, $methodFrecuency, $plan, $real, $division = 1) {
@@ -188,7 +393,6 @@ class productReportService implements ContainerAwareInterface {
 
 
             foreach ($productReport as $product) {
-
                 if ($product->getProduct()->getIsCheckToReportProduction()) {
                     $sumPlan = 0;
                     $sumReal = 0;
@@ -209,6 +413,7 @@ class productReportService implements ContainerAwareInterface {
             }
         }
 
+        
 
         $cont = 0;
         $desplazamiento = 0;
@@ -280,7 +485,7 @@ class productReportService implements ContainerAwareInterface {
         return json_encode($data);
     }
 
-    public function generateColumn3dLineryPerRange($titles, $production, $range, $division = 1) {
+    public function generateColumn3dLineryPerRange($titles, $production, $range, $division = 1,$group=false) {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -342,10 +547,17 @@ class productReportService implements ContainerAwareInterface {
         $categoriesGraphic = $valuesPlan = $valuesReal = $percentaje = array();
 
         foreach ($production as $prod) {
-            $categoriesGraphic[] = array("label" => $prod["productName"]);
-            $valuesReal[] = array("value" => number_format($prod["real"], 2, ',', '.'));
-            $valuesPlan[] = array("value" => number_format($prod["plan"], 2, ',', '.'));
-            $percentaje[] = array("value" => number_format($prod["percentage"], 2, ',', '.'));
+            if(!$group) { 
+                $categoriesGraphic[] = array("label" => $prod["productName"]);
+                $valuesReal[] = array("value" => number_format($prod["real"], 2, ',', '.'));
+                $valuesPlan[] = array("value" => number_format($prod["plan"], 2, ',', '.'));
+                $percentaje[] = array("value" => number_format($prod["percentage"], 2, ',', '.'));
+            } else {
+                $categoriesGraphic[] = array("label" => $prod["nameGroup"]);
+                $valuesReal[] = array("value" => $prod["real"]);
+                $valuesPlan[] = array("value" =>$prod["plan"]);
+                $percentaje[] = array("value" => "0.0");
+            }
         }
 
 
@@ -369,6 +581,43 @@ class productReportService implements ContainerAwareInterface {
         //var_dump(json_encode($data["dataSource"]["dataset"]));
 
         return json_encode($data);
+    }
+
+
+    /**
+    * retorna el datetime por mes mes
+    */
+    public function getTimeNowMonth($month,$unrealizedProduction) {
+        $dayMonth = $unrealizedProduction->getDaysPerMonth($month,"2016");
+        //$s = "31/01/2016 00:00:00";
+        $s = $dayMonth.'-'.$month.'-'.date("Y");
+        //var_dump($s);
+        $fecha = \DateTime::createFromFormat('d-m-Y', $s);
+        #$fecha = DateTime::createFromFormat('j-M-Y', '15-Feb-2009');
+        #echo $fecha->format('Y-m-d');
+        #var_dump($fecha);
+        return $fecha;
+
+        
+    }
+
+    /**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * @return Registry
+     *
+     * @throws LogicException If DoctrineBundle is not available
+     */
+    public function getDoctrine() {
+        if (!$this->container->has('doctrine')) {
+            throw new LogicException('The DoctrineBundle is not registered in your application.');
+        }
+
+        return $this->container->get('doctrine');
+    }
+
+    protected function getCauseFailService() {
+        return $this->container->get('seip.service.causefail');
     }
 
 }

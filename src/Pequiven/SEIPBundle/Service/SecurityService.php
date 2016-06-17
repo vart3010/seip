@@ -683,7 +683,7 @@ class SecurityService implements ContainerAwareInterface
             \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_OPERATIVO => "ROLE_SEIP_INDICATOR_EDIT_OPERATIVE"
         );
        
-        $value = $indicatorService->isIndicatorHasParentsEstrategic($indicator);//Llamando al metodo
+        $value = $indicatorService->isIndicatorHasParents($indicator);//Llamando al metodo
         
         $result = false;
         if($indicator->getPeriod()->getParent() == null){

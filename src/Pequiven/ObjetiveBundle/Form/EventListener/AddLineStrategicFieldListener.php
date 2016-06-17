@@ -58,7 +58,7 @@ class AddLineStrategicFieldListener implements EventSubscriberInterface {
         if(null === $object){
             return $this->addLineStrategicForm($form);
         }
-        
+
         $this->addLineStrategicForm($form, $object->getLineStrategics());
     }
     

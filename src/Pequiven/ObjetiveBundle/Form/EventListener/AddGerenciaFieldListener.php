@@ -89,6 +89,7 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
         //Si el usuario tiene rol Gerente General Complejo
         if($this->securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
             $complejoId = $this->user->getComplejo()->getId();
+
             $formOptions['query_builder'] = function (EntityRepository $er) use ($complejoId){
                 $qb = $er->createQueryBuilder('gerencia')
                          ->andWhere('gerencia.complejo = :complejoId')

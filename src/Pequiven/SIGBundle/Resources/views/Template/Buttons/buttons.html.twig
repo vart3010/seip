@@ -71,3 +71,11 @@
     </a>
 
 {% endmacro %}
+
+{# Revisión / Aprobación #}
+{% macro generic_approve(url, parameters) %}    
+    <a href="{{ url }}" class="button">
+        <span class="button-icon left-side {{ parameters['gradient'] }}"><span class="{{ parameters['icon'] }}"></span></span>
+        {{parameters['message']}}
+    </a>
+{% endmacro %}

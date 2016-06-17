@@ -12,7 +12,7 @@ use Pequiven\MasterBundle\Model\Rol as modelRol;
  * Rol
  *
  * @ORM\Table(name="seip_c_rol")
- * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Model\RolRepository")
+ * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\RolRepository") 
  */
 class Rol extends modelRol
 {   

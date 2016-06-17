@@ -1,0 +1,47 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.consumer_planning_servicefactor.consumer_planning_servicefactor"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    {% set plantReport = consumer_planning_servicefactor.plantReport %}
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.consumer_planning_servicefactor.consumer_planning_servicefactor'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.plant_report.plant_report'|trans }}</label>
+                    {{ generateLink(plantReport) }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'ServiceFactor'|trans }}</label>
+                    Factor de Servicio
+                </p>
+            </div>
+        </div>
+    </fieldset>
+                
+    <br /><br />
+    {% include 'PequivenSEIPBundle:DataLoad/ServiceFactor/ConsumerPlanningServiceFactor:show/detail_servicefactor_consumptions.html.twig' %}
+    <br /><br />
+    {% set details = consumer_planning_servicefactor.getDetailsByMonth %}
+    {% set title_top = ('pequiven_seip.consumer_planning_servicefactor.details_consumer_planning_servicefactor'|trans) %}
+    {% include 'PequivenSEIPBundle:DataLoad/ServiceFactor/ConsumerPlanningServiceFactor:show/detail_tabs_servicefactor_consumptions.html.twig' %}
+    <br /><br />
+    <p class="button-height align-right">
+        {% if periodService().isAllowPlanningReport %}
+            {{ buttons.generic(path('pequiven_consumer_planning_servicefactor_update', { 'id': consumer_planning_servicefactor.id }),('pequiven.edit'|trans({},'messages'))) }}
+            &nbsp;
+            {{ buttons.delete(path('pequiven_consumer_planning_servicefactor_delete', { 'id': consumer_planning_servicefactor.id })) }}
+        {% endif %}
+    </p>
+{% endblock %}

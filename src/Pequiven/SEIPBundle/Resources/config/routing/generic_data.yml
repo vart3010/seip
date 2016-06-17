@@ -197,6 +197,17 @@ pequiven_seip_work_study_circle:
     options:
         expose: true
         
+pequiven_seip_profiles_politic_evaluation:
+    path: /profile-politic-evaluation.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getProfilesPoliticEvaluationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
 pequiven_seip_line_strategic:
     path: /line-strategic.{_format}
     defaults: 

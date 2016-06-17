@@ -30,7 +30,7 @@ class PrePlanningConfigurationController extends ResourceController
             $resource->setConfiguration($user->getConfiguration());
             $resource = $this->domainManager->create($resource);
 
-            return $this->redirect($this->generateUrl('pequiven_seip_user_show',array('id' => $user->getId())));
+            return $this->redirect($this->generateUrl('pequiven_user_update',array('id' => $user->getId())));
         }
         
         if ($this->config->isApiRequest()) {
@@ -58,7 +58,7 @@ class PrePlanningConfigurationController extends ResourceController
 
             $this->domainManager->update($resource);
             $user = $resource->getConfiguration()->getUser();
-            return $this->redirect($this->generateUrl('pequiven_seip_user_show',array('id' => $user->getId())));
+            return $this->redirect($this->generateUrl('pequiven_user_update',array('id' => $user->getId())));
         }
 
         if ($this->config->isApiRequest()) {

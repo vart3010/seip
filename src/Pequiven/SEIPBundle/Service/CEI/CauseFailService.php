@@ -82,32 +82,32 @@ class CauseFailService implements ContainerAwareInterface {
                     $flag = false;
                     if ($typeSearch == 'RANGE') {
                         //Obtenciòn del dìa del
-                        $array = explode('getDay',$methodName);
-                        $array2 = explode('Details',$array[1]);
-                        $dayDetail = (int)$array2[0];
+                        $array = explode('getDay', $methodName);
+                        $array2 = explode('Details', $array[1]);
+                        $dayDetail = (int) $array2[0];
                         if ($month == $startMonth && $month == $endMonth) {
                             //Recorrer desde diaIni hasta diaFin
-                            if($dayDetail >= $startDay && $dayDetail <= $endDay){
+                            if ($dayDetail >= $startDay && $dayDetail <= $endDay) {
                                 $flag = true;
                             }
                         } elseif ($month == $startMonth) {
                             //Recorrer desde diaInicial hasta finde mes
-                            if($dayDetail >= $startDay && $dayDetail <= $daysMonth){
+                            if ($dayDetail >= $startDay && $dayDetail <= $daysMonth) {
                                 $flag = true;
                             }
                         } elseif ($month == $endMonth) {
                             //Recorrer desde dia 1 hasta el dinFin
-                            if($dayDetail >= 1 && $dayDetail <= $endDay){
+                            if ($dayDetail >= 1 && $dayDetail <= $endDay) {
                                 $flag = true;
                             }
-                        } else{
+                        } else {
                             $flag = true;
                         }
-                    } else{
+                    } else {
                         $flag = true;
                     }
-                    
-                    if($flag){
+
+                    if ($flag) {
                         foreach ($methodTypeCauses as $key) { //RECORRE EL ARRAY DE CAUSAS
                             foreach ($unrealizedProductionDay->$key() as $fails) {
                                 if ($key == "getInternalCausesMp") {
@@ -182,7 +182,6 @@ class CauseFailService implements ContainerAwareInterface {
 
 //        var_dump($mp);
 //        die();
-        
         //Obtenemos nuestra matriz [tipo_pnr_mp][producto][dia]
         $cont = 1;
         foreach ($methods as $m) {
@@ -445,9 +444,7 @@ class CauseFailService implements ContainerAwareInterface {
                 $cont++;
             }
         }
-        //var_dump($causes_array_rs);
-//        var_dump($regs);
-//        die();
+        
         return $regs;
     }
 

@@ -35,31 +35,36 @@ class IndicatorsIconsBox extends GenericBox
         $resultService = $this->getResultService();
         
         foreach($linesStrategics as $lineStrategic){
-//            $indicators = $lineStrategic->getIndicators();
-//            $indicators = $this->container->get('pequiven.repository.linestrategic')->findIndicatorsByOrderToShow($lineStrategic->getId());
-            $indicators = $this->container->get('pequiven.repository.indicator')->findByLineStrategicAndOrderShowFromParent($lineStrategic->getId());
-//            $indicators = $this->container->get('pequiven.repository.indicator')->findBy(array('deletedAt' => null,'lineStrategics' => $lineStrategic),array('orderShowFromParent' => 'ASC'));
-            $valueIndicators = $indicatorService->calculateSimpleAverage($lineStrategic,2);
-            $type = $resultService->evaluateRangeByTotal($valueIndicators,count($indicators));
-            
-            if($type == CommonObject::TYPE_RANGE_GOOD){
-                $style[(string)$lineStrategic->getRef()] = 'background: rgba(88,181,63,0.25);';
-            } elseif($type == CommonObject::TYPE_RANGE_MIDDLE){
-                $style[(string)$lineStrategic->getRef()] = 'background: rgba(202,202,73,0.25);';
-            } elseif($type == CommonObject::TYPE_RANGE_BAD){
-                $style[(string)$lineStrategic->getRef()] = 'background: rgba(210,148,129,0.25);';
-            }
-            
-            foreach ($indicators as $indicator) {
-                if(!isset($tree[(string)$lineStrategic])){
-                    $tree[(string)$lineStrategic] = array(
-                        'parent' => $lineStrategic,
-                        'child' => array(),
-                    );
-                }
-                $tree[(string)$lineStrategic]['child'][(string)$indicator] = $indicator;
-                $data[(string)$lineStrategic->getRef()][(string)$indicator->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicator);                
-            }
+//            $refLinea = $lineStrategic->getRef();
+//            $roles_lineas = "ROLE_SEIP_RESULT_VIEW_BY_LINE_" . $refLinea;
+//            if($this->permisosLineasEstrategicas($roles_lineas)){
+                //$indicators = $lineStrategic->getIndicators();
+                //$indicators = $this->container->get('pequiven.repository.linestrategic')->findIndicatorsByOrderToShow($lineStrategic->getId());
+                $indicators = $this->container->get('pequiven.repository.indicator')->findByLineStrategicAndOrderShowFromParent($lineStrategic->getId());
+                //$indicators = $this->container->get('pequiven.repository.indicator')->findBy(array('deletedAt' => null,'lineStrategics' => $lineStrategic),array('orderShowFromParent' => 'ASC'));
+                $valueIndicators = $indicatorService->calculateSimpleAverage($lineStrategic,2);
+                $type = $resultService->evaluateRangeByTotal($valueIndicators,count($indicators));
+
+                if($type == CommonObject::TYPE_RANGE_GOOD){
+                    $style[(string)$lineStrategic->getRef()] = 'background: rgba(88,181,63,0.25);';
+                  } elseif($type == CommonObject::TYPE_RANGE_MIDDLE){
+                      $style[(string)$lineStrategic->getRef()] = 'background: rgba(202,202,73,0.25);';
+                  } elseif($type == CommonObject::TYPE_RANGE_BAD){
+                      $style[(string)$lineStrategic->getRef()] = 'background: rgba(210,148,129,0.25);';
+                  }
+
+                 foreach ($indicators as $indicator) {
+                      if(!isset($tree[(string)$lineStrategic])){
+                          $tree[(string)$lineStrategic] = array(
+                              'parent' => $lineStrategic,
+                              'child' => array(),
+                          );
+                      }
+                      $tree[(string)$lineStrategic]['child'][(string)$indicator] = $indicator;
+                      $data[(string)$lineStrategic->getRef()][(string)$indicator->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicator);                
+                  }
+                  
+//             }
         }        
         
         return array(
@@ -74,6 +79,10 @@ class IndicatorsIconsBox extends GenericBox
     
     public function hasPermission() {
         return $this->isGranted(array('ROLE_DIRECTIVE','ROLE_WORKER_PLANNING','ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL'));
+    }
+    
+    public function permisosLineasEstrategicas($roles_lineas) {
+        return $this->isGranted($roles_lineas);
     }
     
     public function getTemplateName() {

@@ -166,6 +166,38 @@ class MaintenanceController extends ResourceController
         $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $view;
     }
+    
+    /**
+     *
+     *  Metodo de Verificación
+     *  1 Eficaz, 2 No Eficaz
+     */
+    public function addVerificationAction(Request $request){
+        $id = $request->get('id');
+        $em = $this->getDoctrine()->getManager();                        
+        $maintenance = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Maintenance")->find($id);
+        
+        if ($request->isMethod('POST')) { 
+            $date = date("Y-m-d H:i");
+            $date = date_create_from_format("Y-m-d H:i", $date);
+            
+            $maintenance->setStatusVerification($request->get('verification'));            
+            $maintenance->setDateVerification($date);
+            $em->persist($maintenance);            
+            $em->flush();                                
+
+            $this->get('session')->getFlashBag()->add('success', "Verificación Realizada Exitosamente");
+            die();
+        }    
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('Tracing/Form/formVerification.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
+    }
 
     /**
      *  Notification

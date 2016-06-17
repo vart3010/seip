@@ -16,6 +16,20 @@ class OnePerTenRepository extends EntityRepository {
         $criteria['for_one'] = true;
         return $this->createPaginator($criteria, $orderBy);
     }
+    
+    /*
+     * Query que retorna los usuarios que se les debe recalcular el perfil
+     */
+
+    public function findQueryWithResultNull(\Pequiven\SEIPBundle\Entity\Period $period) {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin('opt.user', 'u')
+                ->andWhere($qb->expr()->isNull('opt.lastDateCalculateProfile'))
+        ;
+
+        return $qb;
+    }
 
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
@@ -54,6 +68,13 @@ class OnePerTenRepository extends EntityRepository {
             $queryBuilder
                     ->andWhere('u.workStudyCircle = :workStudyCircle')
                     ->setParameter('workStudyCircle', $workStudyCircle)
+            ;
+        }
+        
+        if (($profileValue = $criteria->remove('profilesPoliticEvaluation'))) {
+            $queryBuilder
+                    ->andWhere('opt.profileValue = :profileValue')
+                    ->setParameter('profileValue', $profileValue)
             ;
         }
         

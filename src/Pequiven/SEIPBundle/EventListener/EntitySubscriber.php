@@ -88,6 +88,7 @@ class EntitySubscriber extends BaseEventListerner
     
     public function onProductRangePreCreate(\Sylius\Bundle\ResourceBundle\Event\ResourceEvent $event)
     {
+        var_dump('epa');die();
         $entity = $event->getSubject();
         $request = $this->getRequest();
         $productPlanningId = $request->get("productPlanning");

@@ -17,7 +17,7 @@ use Pequiven\SEIPBundle\Entity\User;
  * Servicios para las notificaciones
  * 
  * 
- * @author Máxmimo Sojo <maxsojo13@gmail.com>
+ * @author Máximo Sojo <maxsojo13@gmail.com>
  */
 class NotificationService implements ContainerAwareInterface {
 
@@ -57,10 +57,6 @@ class NotificationService implements ContainerAwareInterface {
         $dataNotification = $user->getNotify() + 1;            
     	$user->setNotify($dataNotification);
         $em->flush();               	        
-
-    }
-
-    public function getUserNotificationStandardization(){
 
     }
 

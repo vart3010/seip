@@ -1,0 +1,24 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% set message = ("pequiven_seip.servicefactor_consumption_planning.question.delete"|trans) %}
+
+<h3 class="thin underline">{{ 'pequiven_seip.consumer_planning_servicefactor.details_consumer_planning_servicefactor'|trans }}</h3>
+
+{% set detailServiceFactorConsumptions = consumer_planning_servicefactor.detailConsumerPlanningServiceFactor %}
+<div class="standard-tabs margin-bottom" id="add-tabs">
+    <ul class="tabs">
+        {% for detail in detailServiceFactorConsumptions %}
+            <li class="{{ loop.first ? "active" : "" }}"><a href="#tab-{{ loop.index }}">{{ detail.getMonthLabel|trans }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <div class="tabs-content">
+        {% for detail in detailServiceFactorConsumptions %}
+            <div id="tab-{{ loop.index }}" class="with-padding">
+                {% include 'PequivenSEIPBundle:DataLoad/ServiceFactor/ConsumerPlanningServiceFactor:show/details.html.twig' %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
