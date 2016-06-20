@@ -12,7 +12,8 @@
     ) }}
 {% endblock %}
 
-{% block body %}    
+{% block body %}   
+    {#TABLERO DE INDICADORES#}
     <br>
     <br>
     <div class="twelve-columns">         
@@ -39,9 +40,9 @@
                     </span>
                     <br>
                     <p class="title-icon-strategic bold" style="font-size: 20px;">{{ lineStrategic.description }}</p>
-                    <br>                    
-                    <a href="{{ path('pequiven_dasboard_linestrategicbygroup',{idGroup:group.id}) }}" class="align-left button red-gradient glossy">
-                        <li class="icon-previous icon-size2" title="icon-replay-all"> Líneas Estratégicas
+                    <br>                                         
+                    <a href="javascript:history.back()" class="align-left button red-gradient glossy">
+                        <li class="icon-previous icon-size2" title="icon-replay-all"> Regresar
                         </li>
                     </a>
                 </td>
@@ -65,21 +66,28 @@
                             {% for i in 1..tags|round(0, 'ceil') %}                                    
                                 <div style="display: block; min-height: 495px;" id="tab-{{i}}" class="with-padding tab-active">    
                                     <!-- Indicadores de la Línea Estratégica -->
-                                    {% for indicator in t['child'][i] %}                                         
+                                    {% for indicator in t['child'][i] %}   
                                         <div class="four-columns six-columns-mobile" style="display: inline-block;" ng-controller="DashboardController" ng-init="renderWidgetIndicatorStrategic('{{ indicator.ref }}',{{ data[lineStrategic.ref][indicator.ref]|json_encode() }},'100%','150px')">
-                                            <a target="_blank" href="{{ path('pequiven_indicator_show',{id:indicator.id}) }}">
-                                                <span title="{{ indicator.description }}">
-                                                    <p style="text-align: center;margin-bottom: -5px;">
+                                            <div class="twelve-columns" style="text-align: center; margin-bottom: -2px; font-weight: bold">                                                
+                                                <a target="_blank" href="">
+                                                    <span class="link-black" title="{{ indicator.description }}">
+                                                        {#<p style="text-align: center;margin-bottom: -5px;">#}
                                                         <b>
                                                             <i class="fa {{ group.logo }}" aria-hidden="true"></i>
                                                             &nbsp;-&nbsp;
                                                             {{ indicator.summary }}
                                                         </b>
-                                                    </p>
-                                                </span>
-                                            </a>
-                                            <span id="{{ indicator.ref }}">
-                                            </span>                            
+                                                        {#</p>#}
+                                                    </span>
+                                                </a>
+                                                {% if (((indicator.indicatorGroup|length)>0)and(indicator.showIndicatorGroups)) %}
+                                                    &nbsp;
+                                                    <a target="_self" href="{{ path('pequiven_groupindicators',{idLineStrategic:lineStrategic.id, indicatorId:indicator.id, board:1}) }}" style="font-size: 20px; color: green">
+                                                        <i class="fa fa-plus-square" aria-hidden="true"></i>
+                                                    </a>  
+                                                {%endif%}
+                                                <span id="{{ indicator.ref }}"></span>                            
+                                            </div>
                                         </div>                                        
                                     {% endfor %}
                                 </div>    
