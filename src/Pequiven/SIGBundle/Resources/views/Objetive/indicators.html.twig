@@ -1,0 +1,18 @@
+<ul class="fa-ul">
+{% if childrens is not defined %}
+    {% set childrens = entity.indicators %}
+{% endif %}
+{% for indicator in childrens %}
+    <li>
+        {{ loop.index|str_pad(2,'0') }}&nbsp-&nbsp;
+        {% set avancedUsed = indicator.getResult %}
+        {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+        {% if indicatorWeight is defined %}
+            {% set weight = indicator.indicatorWeight %}
+        {% else %}
+            {% set weight = indicator.weight %}
+        {% endif %}
+        {{ generateLink(indicator) }}{% if weight > 0 %}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ weight }}%){% endif %} - {{ indicatorService.resultWithArrangementRangeColor(indicator)|raw }}
+    </li>
+{% endfor  %}
+</ul>

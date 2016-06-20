@@ -1,0 +1,108 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenObjetiveBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block before_body %}
+    {{ contentHeader(
+        { ( path('pequiven_objetive_menu_list_strategic') ): ('pequiven_objetive.objetive_strategic'|trans ) },
+         ('pequiven.show'|trans({},'messages'))
+    ) }}
+{% endblock %}
+
+{% block body -%}        
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_objetive.objetive_strategic'|trans }} {{ entity.ref }}</legend>
+
+        {% include 'PequivenObjetiveBundle:Common:percentajeBar.html.twig' %}
+        <!-- Línea Estratégica que sigue el Objetivo Estratégico -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.lineStrategic'|trans }}</label>
+            {{ entity.lineStrategics[0].ref }} {{ entity.lineStrategics[0].description }} 
+        </p>
+
+        <!-- Enunciado del Objetivo Estratégico -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.statementStrategic'|trans }}</label>
+            {{ entity.description }}
+        </p>
+
+        <!-- Status del Objetivo Operativo -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.status.status'|trans }}</label>
+            {% set status = entity.status %}
+            {% set className = '' %}
+            {% if status == constant('Pequiven\\ObjetiveBundle\\Entity\\Objetive::STATUS_DRAFT') %}
+                {% set className = 'blue-bg' %}
+            {% elseif  status == constant('Pequiven\\ObjetiveBundle\\Entity\\Objetive::STATUS_APPROVED') %}
+                {% set className = 'green-bg' %}
+            {% endif %}
+            <small class="tag {{ className }}">{{ entity.getLabelStatus | trans({},'PequivenObjetiveBundle') }}</small>
+        </p>
+
+        <!-- Período del Objetivo Estratégico -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_seip.period'|trans({},'PequivenSEIPBundle') }}</label>
+            {{ entity.period }}
+        </p>
+
+        <!-- ¿Evaluación por Objetivo Táctico? -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.evalByObjetiveTactic'|trans }}</label>
+            {{ entity.childrens|length > 0 ? 'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
+        </p>
+
+        <!-- Objetivos Tácticos Asociados al Objetivo Estratégico -->
+        {% if entity.childrens|length > 0 %}
+            <div class="inline-label">
+                <label class="label">{{ 'pequiven_objetive.objetiveTactics'|trans }}</label>
+                {% include 'PequivenObjetiveBundle:Common:childrens.html.twig' %}
+            </div>
+            <br>
+        {% endif %}
+
+        <!-- ¿Evaluación por Indicadores Estratégicos? -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.evalByIndicatorStrategic'|trans }}</label>
+            {{ entity.indicators|length > 0 ? 'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
+        </p>
+
+        <!-- Indicadores Estratégicos Asociados al Objetivo Estratégico -->
+        {% if entity.indicators|length > 0 %}
+            <div class="inline-label">
+                <label class="label">{{ 'pequiven_objetive.indicatorStrategics'|trans }}</label>
+                {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
+            </div>
+            <br>
+        {% endif %}
+
+        {% include 'PequivenObjetiveBundle:Common:results.html.twig' %}
+    </fieldset>    
+
+   <div class="new-row align-right">
+        {% set redirectUrl = (path("pequiven_objetive_menu_list_strategic")) %}
+        {% set urlUpdateResulReferral = (path('objetiveStrategic_show',{id:entity.id})) %}
+        {% include 'PequivenObjetiveBundle:Common:buttons.html.twig' %}
+   
+        {% set routeObj = path('objetiveStrategic_Export',{id:entity.id}) %}
+        {{ buttons.generic(
+                    (routeObj),
+                    ('Exportar a PDF'),
+                    'icon-download'
+                 ) 
+        }}
+    </p>
+
+
+
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+        {#$('.tables-extras').tablesorter();#}
+            });
+    </script>
+{% endblock javascript %}

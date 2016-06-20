@@ -18,7 +18,7 @@ pequiven_sig_objetive_evolution_show:
         _controller: pequiven.controller.managementsystem_sig_objetives:evolutionAction           
 #Listado general de objetivos marcados con magementsystem
 pequiven_objetives_list_sig:
-    path: /sig/{level}/list.{_format}
+    path: /sig/objetive/{level}.{_format}
     defaults:
         _controller: pequiven.controller.managementsystem_sig_objetives:ObjetiveslistAction
         _format: html
@@ -26,6 +26,12 @@ pequiven_objetives_list_sig:
         _format: html|json|xml
         level: 1|2|3
     methods: [GET]
+#Show de Objetivos pertenecientes a sistemas de calidad
+pequiven_objetives_list_sig_show:
+    path: /sig/objetive/show/{id}
+    defaults:
+        _controller: pequiven.controller.managementsystem_sig_objetives:showAction
+        _format: html    
 #lista de objetivos con informes de evolución
 pequiven_objetives_list_sig_evolution:
     path: /sig-evolution-{level}.{_format}

@@ -91,7 +91,7 @@
                     <tbody>
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
                             <td data-title="'{{ (labelHeader[level])|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
-                                <a href="{$ result._links.self.href $}">{$ result.ref+result.description $} </a>
+                                <a href="show/{$ result.id $}">{$ result.ref+result.description $} </a>
                             </td>                            
                         </tr>
                     </tbody>

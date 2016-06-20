@@ -17,11 +17,67 @@ use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
  */
 class ObjetiveSigController extends EvolutionController
 {
-    public function strategicAction()
+    /**
+     * Finds and displays a Objetive entity of level Operative by Id.
+     *
+     */
+    public function showAction(Request $request)
     {
-        return $this->render('PequivenSIGBundle:Objetives:list.html.twig');
+        $resource = $this->findOr404($request);
+        switch ($resource->getObjetiveLevel()->getId()) {
+            case 1:
+                $dataObject = [
+                    'route' => 'Strategic',
+                    'rol' => 'STRATEGIC'
+                ];
+                break;
+            case 2:
+                $dataObject = [
+                    'route' => 'Tactic',
+                    'rol' => 'TACTIC'
+                ];
+                break;
+            case 3:
+                $dataObject = [
+                    'route' => 'Operative',
+                    'rol' => 'OPERATIVE'
+                ];
+                break;
+        }
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_'.$dataObject['rol'],'ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_'.$dataObject['rol'],'ROLE_SEIP_SIG_OBJECTIVE_VIEW_'.$dataObject['rol']));
+        
+        if(!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_'.$dataObject['rol'])){
+            if(!$securityService->isGranted('ROLE_SEIP_SIG_OBJECTIVE_VIEW_'.$dataObject['rol'])){
+                $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_'.$dataObject['rol'],$resource);
+            } else{
+                $securityService->checkSecurity('ROLE_SEIP_SIG_OBJECTIVE_VIEW_'.$dataObject['rol'],$resource);
+            }
+        }
+        $indicatorService = $this->getIndicatorService();
+        
+        //TODO: Colocar la validación de si el objetivo táctico está aprobado
+        $hasPermissionToApproved = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_APPROVED_".$dataObject['rol'],$resource);
+        $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_".$dataObject['rol'],$resource);
+        $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_".$dataObject['rol'],$resource);
+        
+        $view = $this
+            ->view()
+            ->setTemplate('PequivenSIGBundle:Objetive:'.$dataObject['route'].'/show.html.twig')
+            ->setTemplateVar('entity')
+            ->setData(array(
+                'entity' => $resource,
+                'indicatorService' => $indicatorService,
+                'hasPermissionToUpdate' => $hasPermissionToUpdate,
+                'hasPermissionToApproved' => $hasPermissionToApproved,
+                'isAllowToDelete' => $isAllowToDelete,
+            ))
+        ;
+        $groups = array_merge(array('id','api_list','gerencia','gerenciaSecond'), $request->get('_groups',array()));
+        $view->getSerializationContext()->setGroups($groups);
+        return $this->handleView($view);
     }
-    
+
     /**
      *
      *  Metodo informe de evolución
@@ -612,6 +668,14 @@ class ObjetiveSigController extends EvolutionController
         exit;
         
     }
+
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    protected function getIndicatorService() {
+        return $this->container->get('pequiven_indicator.service.inidicator');
+    }     
 
     /**
      * 

@@ -1,0 +1,108 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenObjetiveBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block before_body %}
+    {{ contentHeader(
+        { ( path('pequiven_objetive_menu_list_operative') ): ('pequiven_objetive.objetive_operative'|trans ) },
+         ('pequiven.show'|trans({},'messages'))
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_objetive.objetive_operative'|trans }} {{ entity.ref }}</legend>
+
+        {% include 'PequivenObjetiveBundle:Common:percentajeBar.html.twig' %}
+        <!-- Objetivo Tácticos al cual o a los cuales esta Asociado el Objetivo Operativo -->
+        <div class="inline-label">
+            <label class="label">{{ entity.parents|length > 1 ? 'pequiven_objetive.objetiveTactics'|trans : 'pequiven_objetive.objetive_tactic'|trans }}</label>
+            <ul class="fa-ul">
+            {% for parent in entity.parents %}
+                <li>{{ generateLink(parent) }}</li>
+            {% endfor  %}
+            </ul>
+        </div>
+        <br>
+        
+        <!-- Enunciado del Objetivo Operativo -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.statementOperative'|trans }}</label>
+            {{ entity.description }}
+        </p>
+        
+        <!-- Status del Objetivo Operativo -->
+        <p class="inline-label">
+           <label class="label">{{ 'pequiven_objetive.status.status'|trans }}</label>
+           {% set status = entity.status %}
+            {% set className = '' %}
+            {% if status == constant('Pequiven\\ObjetiveBundle\\Entity\\Objetive::STATUS_DRAFT') %}
+                {% set className = 'blue-bg' %}
+            {% elseif  status == constant('Pequiven\\ObjetiveBundle\\Entity\\Objetive::STATUS_APPROVED') %}
+                {% set className = 'green-bg' %}
+            {% endif %}
+            <small class="tag {{ className }}">{{ entity.getLabelStatus | trans({},'PequivenObjetiveBundle') }}</small>
+       </p>
+        
+        <!-- Meta del Objetivo Operativo -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.goalObjetiveOperative'|trans }}</label>
+            {{ entity.goal|number_format(2,',','.') }}%
+        </p>
+        
+        <!-- Período del Objetivo Operativo -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_seip.period'|trans({},'PequivenSEIPBundle') }}</label>
+            {{ entity.period }}
+        </p>
+        
+        <!-- Gerencia 2da Línea a la cual impacta el Objetivo Operativo -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.gerenciaSecond'|trans }}</label>
+            {{ entity.gerenciaSecond.description }}
+        </p>
+        
+        <!-- ¿Evaluación por Indicadores Operativos? -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.evalByIndicatorOperative'|trans }}</label>
+            {{ entity.indicators|length > 0 ? 'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
+        </p>
+        
+        <!-- Indicadores Operativos Asociados al Objetivo Operativo -->
+        {% if entity.indicators|length > 0 %}
+            <div class="inline-label">
+                <label class="label">{{ 'pequiven_objetive.indicatorOperatives'|trans }}</label>
+                {% include 'PequivenSIGBundle:Objetive:indicators.html.twig' %}
+            </div>
+            <br>
+        {% endif %}
+                
+        <!-- ¿Evaluación por Programas de Gestión? -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.evalByArrangementProgram'|trans }}</label>
+            {{ entity.arrangementPrograms|length > 0 ? 'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
+{#            {{ entity.evalArrangementProgram ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}#}
+        </p>
+        {% include 'PequivenObjetiveBundle:Common:arrangementPrograms.html.twig' %}
+        {% include 'PequivenObjetiveBundle:Common:results.html.twig' %}
+        <br>
+        <!-- ManagementSystems -->
+        <p class="inline-label">
+            <label class="label">Sistema de Gestión del Objetivo</label>
+            {% for managementSystem in entity.managementSystems %}            
+                {{ managementSystem.description }}<br>
+            {% endfor %}
+        </p>
+    </fieldset>
+
+<br /><br />
+
+<p class="button-height align-right">
+    {% set redirectUrl = (path("pequiven_objetive_menu_list_operative")) %}
+    {% set urlUpdateResulReferral = (path('objetiveOperative_show',{id:entity.id})) %}
+    {% include 'PequivenObjetiveBundle:Common:buttons.html.twig' %}    
+</p>
+
+{% endblock %}
