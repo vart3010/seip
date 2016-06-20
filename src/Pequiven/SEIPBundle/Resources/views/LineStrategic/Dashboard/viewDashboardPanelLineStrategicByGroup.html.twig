@@ -29,35 +29,36 @@
     </div>
     <hr class="hr-linestrategic-icons" />       
     <br>
-
-    {% for key, line in alllineStrategic %}
-        {% set styleIcon= 'background: none' %}
-        <div class="four-columns new-row-mobile new-row-mobile-landscape new-row-mobile-portrait new-row-tablet align-center" style="min-height: 300px; display:inline-block; vertical-align: top; align-items: center;">
-            {% if(lineStrategics[line.id] is defined) %}
-                <a href="{{ path('pequiven_groupindicators',{tablero:1, idGroup:group.id, idLineStrategic: line.id}) }}">
-                    <div class="button" style="height: 180px; width: 300px;">                    
+    <div class="new-row twelve-columns">
+        {% for key, line in alllineStrategic %}
+            {% set styleIcon= 'background: none' %}
+            <div class="four-columns new-row-mobile new-row-mobile new-row-mobile new-row-tablet align-center" style="min-height: 240px; display:inline-block; vertical-align: top; align-items: center;">
+                {% if(lineStrategics[line.id] is defined) %}
+                    <a href="{{ path('pequiven_dashboardgerencias',{idGroup:group.id, idLineStrategic: line.id}) }}">
+                        <div class="button" style="height: 160px; width: 300px;">                    
+                            <img class="icon-strategic" src="{{ asset(iconsLineStrategic[line.id]) }}" style="margin: 5%;">  
+                            <br>
+                            <div class="button red-gradient glossy" style="height: auto; width: 300px; position: inherit;">                    
+                                <p class="title-icon-strategic" style="font-size: 13px; font-weight: bold;">
+                                    {{line.description}}
+                                </p>                    
+                            </div>
+                        </div>
+                    </a>
+                {%else%}
+                    <div class="button disabled" style="height: 160px; width: 300px;">                    
                         <img class="icon-strategic" src="{{ asset(iconsLineStrategic[line.id]) }}" style="margin: 5%;">  
                         <br>
-                        <div class="button red-gradient glossy" style="height: auto; width: 300px; position: inherit;">                    
+                        <div class="button disabled red-gradient glossy" style="height: auto; width: 300px; position: inherit;">                    
                             <p class="title-icon-strategic" style="font-size: 13px; font-weight: bold;">
                                 {{line.description}}
                             </p>                    
                         </div>
-                    </div>
-                </a>
-            {%else%}
-                <div class="button disabled" style="height: 180px; width: 300px;">                    
-                    <img class="icon-strategic" src="{{ asset(iconsLineStrategic[line.id]) }}" style="margin: 5%;">  
-                    <br>
-                    <div class="button disabled red-gradient glossy" style="height: auto; width: 300px; position: inherit;">                    
-                        <p class="title-icon-strategic" style="font-size: 13px; font-weight: bold;">
-                            {{line.description}}
-                        </p>                    
-                    </div>
-                </div>            
-            {% endif %}
-        </div>
-    {%endfor%}   
+                    </div>            
+                {% endif %}
+            </div>
+        {%endfor%}   
+    </div>
 {% endblock body %}
 
 {% block stylesheets %}
