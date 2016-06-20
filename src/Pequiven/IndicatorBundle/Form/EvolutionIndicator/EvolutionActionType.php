@@ -18,8 +18,7 @@ class EvolutionActionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {   
         $id = $this->id;
-        $typeObject = $this->typeObject;
-
+        $typeObject = $this->typeObject;        
         $builder
             ->add('action', 'text', array(
                 'label' => 'Acción',
@@ -48,7 +47,7 @@ class EvolutionActionType extends AbstractType
                 ))                        
             ->add('evolutionCause', null, array(
                     'query_builder' => function(\Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionCauseRepository $repository) use($id, $typeObject) {
-                        return $repository->getCausesByIndicator($id, $typeObject);
+                        return $repository->getCausesByObject($id, $typeObject);
                     },                               
                     'label' => 'Causa del Plan',
                     'label_attr' => array('class' => 'label'),
@@ -59,20 +58,6 @@ class EvolutionActionType extends AbstractType
                     'empty_value' => 'Seleccione...',
                     'required' => true,
                 ))
-            /*->add('responsible', null, array(
-                    'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $repository) {
-                        return $repository->findQueryUsersByCriteria();
-                    },                               
-                    'label' => 'Responsable del Plan',
-                    'label_attr' => array('class' => 'label'),
-                    'attr' => array(
-                        'class' => "input-large select2",                        
-                        'style' => 'width: 270px',
-                        //'multiple' => 'multiple'
-                    ),
-                    'empty_value' => 'Seleccione...',
-                    'required' => true,
-                ))*/
         ;
     }
     
@@ -82,10 +67,8 @@ class EvolutionActionType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {   
-        $resolver->setDefaults(array(
-            
+        $resolver->setDefaults(array(            
             'data_class' => 'Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction',            
-
         ));
     }
 

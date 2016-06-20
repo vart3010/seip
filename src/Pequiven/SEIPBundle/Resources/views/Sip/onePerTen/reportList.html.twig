@@ -110,7 +110,8 @@
                         </div>
                         <div class="six-columns">
                             <label class="label">Resultado Perfil Político </label>
-                            {{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['profileValue'] }}
+{#                            {{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['profileValue'] }}#}
+                            {{ object.profileValue }}
                         </div>
                     </td>
                 </tr>
@@ -171,15 +172,18 @@
         </table>
     </div>
 </div>
-<br>
-<div class="title">Análisis</div>
-<table style="border-style:solid;border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px;border-color:red;border-radius: 10px;">
-    <tr>
-        <td>
-            {{ object.analisis }}
-        </td>
-    </tr>
-</table>
+{% if object.analisis|length > 0 %}
+    <div class="title">Análisis</div>
+    <table style="border-style:solid;border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px;border-color:red;border-radius: 10px;">
+        <tr>
+            <td>
+                {{ object.analisis }}
+            </td>
+        </tr>
+    </table>
+{% else %}
+    <div class="title">No tiene Análisis</div>
+{% endif %}
 <br>
 <div class="title">Perfil Político</div>
 <br>

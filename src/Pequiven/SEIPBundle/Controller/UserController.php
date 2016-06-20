@@ -241,12 +241,18 @@ class UserController extends baseController {
         //Si tiene el rol para ver la gestiòn de todos (preferiblemente ROLE_SEIP_PLANNING_VIEW_ALL_MANAGEMENT_USER) no envias el levelUser
         if (!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_ALL_MANAGEMENT_USER_ITEMS')) {
             $levelUser = $user->getLevelRealByGroup();
+            if($securityService->isGranted('ROLE_SEIP_RESULT_MANAGEMENT_CONSULTING_ALL_GERENCIA_FIRST')){
+                $levelUser = \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO;
+            }
             $criteria['levelUser'] = $levelUser;
             if ($levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_FIRST || $levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO) {
                 $criteria['idGerenciaUser'] = $this->getUser()->getGerencia()->getId();
             } elseif ($levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_SECOND) {
                 $criteria['idGerenciaUser'] = $this->getUser()->getGerencia()->getId();
                 $criteria['idGerenciaSecondUser'] = $this->getUser()->getGerenciaSecond()->getId();
+            }
+            if(!isset($criteria['idGerenciaUser'])){
+                
             }
             $results = $this->get('pequiven_seip.repository.user')->searchUserByCriteriaUnder($criteria);
         } else {
@@ -291,6 +297,53 @@ class UserController extends baseController {
         $response->setData($gerenciaSecondChildren);
 
         return $response;
+    }
+    
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
+    public function updateAction(Request $request)
+    {
+        $saveAndClose = $request->get("save_and_close");
+        
+        $resource = $this->findOr404($request);
+        $form = $this->getForm($resource);
+
+        $objectUser = $this->get('pequiven_seip.repository.user')->findOneById($resource->getId());
+        $arrayRoles = array();
+        foreach ($objectUser->getGroups() as $group){
+            if($group->getLevel() == 7000 || $group->getLevel() == 8000){
+                $arrayRoles[] = $group;
+            }
+        }
+        if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->submit($request)->isValid()) {
+            
+            foreach($arrayRoles as $rol){
+                $resource->addGroup($rol);
+            }
+            $this->domainManager->update($resource);
+
+            if($saveAndClose !== null){
+                return $this->redirectHandler->redirectTo($resource);
+            }
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('update.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
+        ;
+
+        return $this->handleView($view);
     }
 
     function addConfigurationAction(Request $request) {

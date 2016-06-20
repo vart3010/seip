@@ -217,12 +217,8 @@
 <p class="button-height align-right">
 
     {# Informe de Evolution #}
-
     {% if entity.showEvolutionView %}
-        {% set month = "now"|date("m") %}
-        &nbsp;
-            {{ buttons.generic_ext(path('pequiven_seip_arrangementprogram_evolution_sig', { 'id': entity.id , 'month': month }),('pequiven.evolution'|trans({},'messages'))) }}
-        &nbsp;
+    {% include 'PequivenSIGBundle:Template:base_evolution_nav.html.twig' with {'typeObject': 2, 'id': entity.id, 'route': 'pequiven_seip_arrangementprogram_evolution_sig'} %}        
     {% endif %}
 
     {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans) ~ '" required="required" cols="28" rows="10" ></textarea>' %}

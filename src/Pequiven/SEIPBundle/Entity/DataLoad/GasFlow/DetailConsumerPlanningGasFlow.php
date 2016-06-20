@@ -54,6 +54,13 @@ class DetailConsumerPlanningGasFlow extends Detail
      * @ORM\JoinColumn(nullable=true)
      */
     private $period;
+    
+    /**
+     * Plan x
+     * @var float
+     * @ORM\Column(name="plan_flow",type="float")
+     */
+    protected $planFlow = 0;
 
     /**
      * Constructor
@@ -183,4 +190,14 @@ class DetailConsumerPlanningGasFlow extends Detail
     {
         return $this->period;
     }
+    
+    function getPlanFlow() {
+        return $this->planFlow;
+    }
+
+    function setPlanFlow($planFlow) {
+        $this->planFlow = $planFlow;
+    }
+
+
 }

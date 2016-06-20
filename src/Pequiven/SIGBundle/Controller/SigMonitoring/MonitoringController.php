@@ -142,7 +142,7 @@ class MonitoringController extends ResourceController
 
     public function addAction(Request $request){
         
-        $id = $request->get('id');  
+        $id = $request->get('id');          
         $period = $this->getPeriodService()->getPeriodActive();
         $standardization = new standardization();
         $form  = $this->createForm(new StandardizationType($period), $standardization);
@@ -195,7 +195,7 @@ class MonitoringController extends ResourceController
             );
 
             $apiDataUrl = $this->generateUrl('pequiven_sig_monitoring_show', $routeParameters);
-            $apiDataUrl = "http://".$_SERVER['HTTP_HOST'].$apiDataUrl;
+            //$apiDataUrl = "http://".$_SERVER['HTTP_HOST'].$apiDataUrl;
 
             for ($i=0; $i < $catnRes; $i++) { 
                 $user = $this->get('pequiven_seip.repository.user')->find($responsibles[$i]);
@@ -442,9 +442,19 @@ class MonitoringController extends ResourceController
                     $activeSheet->setCellValue('P'.$row, $leyens[$valueMaintenance->getStatus()]);//Seteamos estatus
                     $activeSheet->getStyle(sprintf('P%s:P%s',$row,$row))->applyFromArray($styleFont);//Aplicación de estilos
                     $activeSheet->getStyle(sprintf('P%s:P%s',$row, $row))->applyFromArray($styleArray[$valueMaintenance->getStatus()]);
+                    
+                    $verificationEstatus = $verificationDate = "Sin Verificación Realizada";
+                    $model = [ 1 => 'Eficaz', 2 => 'No Eficaz'];
+                    if ($valueMaintenance->getStatusVerification() != NULL) { 
+                        $dateVerification = $valueMaintenance->getDateVerification();
+                        $dateVerification->setTimestamp((int)$dateVerification->format('U'));                        
+                        $verificationEstatus = $model[$valueMaintenance->getStatusVerification()];
+                        $verificationDate = $dateVerification->format('d-m-Y');
+                    }
+                    
+                    $activeSheet->setCellValue('Q'.$row, $verificationEstatus);//Seteamos
+                    $activeSheet->setCellValue('R'.$row, $verificationDate);//Seteamos                        
 
-                    //$activeSheet->setCellValue('Q'.$row, $valueMaintenance->getStatus());//Seteamos
-                    //$activeSheet->setCellValue('R'.$row, $valueMaintenance->getStatus());//Seteamos
                     $activeSheet->setCellValue('S'.$row, $dataObservations);//Seteamos
                 }                
             }else{
@@ -460,7 +470,7 @@ class MonitoringController extends ResourceController
             $contResult++; 
             $contRow++;
         }
-
+        
         $row = 10;//Fila Inicial del skeleton
         $contRow = ($contRow + $row) - 2;
         $rowLeyend = $contRow + 2;

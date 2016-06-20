@@ -1,0 +1,223 @@
+{% extends "PequivenSEIPBundle:Template:Developer/layoutGestion.html.twig" %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/icons.css') }}">
+{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader(
+        {("#"):(indicator.ref)},('Gráficos Asociados al Indicador')
+    ) }}
+
+    <style>
+        .esfera{
+            border-radius: 0px 50px 50px 50px;
+            -moz-border-radius: 0px 50px 50px 50px;
+            -webkit-border-radius: 0px 50px 50px 50px;
+            border: 1px solid #0a0a0a;
+            display: inline-block; 
+            align-items: center; 
+            align-content: center;
+            height: 150px;
+            position: relative;
+            font-size: 100px;
+            vertical-align: middle;
+            width: 90%;
+        }
+    </style>
+
+{% endblock %}
+
+
+
+{% block body %}   
+    <br>
+    <hr class="hr-linestrategic-icons" />
+    <table width="100%">
+        <tr>
+            <td width="30%" style="vertical-align: middle; min-height: 495px;">
+                <div style="display: inline-block; width: 100%; height: 100%" ng-controller="DashboardController" ng-init="renderWidgetIndicatorStrategic('{{ indicator.ref }}',{{ data|json_encode() }},'100%','150px')">
+                    <a target="_blank" href="{{ path('pequiven_indicator_show',{id:indicator.id}) }}">
+                        <span title="{{ indicator.description }}">
+                            <p style="text-align: center;margin-bottom: -5px;">
+                                <b>{{ indicator.summary }}</b>
+                                <br>
+                            </p>
+                        </span>
+                    </a>
+                    <span id="{{ indicator.ref }}">
+                    </span>  
+                    <br>
+                    <center>
+                        <a href="javascript:history.back()" class="text-center button red-gradient glossy">
+                            <li class="icon-previous icon-size2" title="icon-replay-all"> Regresar
+                            </li>
+                        </a>
+                    </center>
+
+                    {% if indicator.showTags %}
+                        {% if indicator.tagsIndicator|length > 0 and indicator.showTags == true%}
+                            <br><br>
+                            <p style="text-align: justify;">
+                                <b>Etiquetas:</b>
+                                <br>
+                                {% include 'PequivenIndicatorBundle:Common:tagIndicators.html.twig' %}
+                            </p>
+                        {% endif %}                        
+                    {% endif %}    
+                </div> 
+            </td>
+            <td width="70%" class="text-center" style="vertical-align: bottom; min-height: 495px;">                 
+                <div class="with-padding">
+                    <div class="columns"> 
+                        <!-- Sección Central -->
+                        <div class="twelve-columns">
+                            {#            {% if indicatorService.isIndicatorHasParents(indicator) == true %}#}
+                            {#{{ indicatorService.getArrowOfIndicator(indicator)|raw }}#}
+                            {#            {% endif %}#}
+
+                            {% if indicator.showCharts %}{# En caso de que sólo se necesite ver el gráfico #}
+                                <div ng-controller="ChartsDashboardController">
+                                    {% set Charts = indicator.getCharts %}
+                                    {% set indicatorsChartDetailsByOrderShow = indicatorService.obtainIndicatorChartDetailsByOrderShow(indicator) %}
+                                    <div class="standard-tabs margin-bottom" {#style="height: 600px;"#}>
+                                        <ul class="tabs">
+                                            {% set cont = 1 %}
+                                            {% if indicatorsChartDetailsByOrderShow|length > 0 %}
+                                                {% for indicatorChartDetailsByOrderShow in indicatorsChartDetailsByOrderShow %}
+                                                    {% set showChart = false %}
+                                                    {% for chart in Charts %}
+                                                        {% if chart.id == indicatorChartDetailsByOrderShow.chart.id %}
+                                                            {% set showChart = true %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if showChart == true %}
+                                                        {% set chart = indicatorChartDetailsByOrderShow.chart %}
+                                                        {% set description = chart.shortDescription %}
+                                                        {% set indicatorChartDetails = indicatorService.obtainIndicatorChartDetails(indicator,chart) %}
+                                                        {% if indicatorChartDetails != null %}
+                                                            {% if indicatorChartDetails.description != null %}
+                                                                {% set description = indicatorChartDetails.description %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                        {% set grafico = "grafico"~loop.index %}
+                                                        <li {% if cont == 1 %} class="active" {% endif %}>
+                                                            <a style="color: #000000;" href="#tab-{{ grafico }}">{{ description }} </a>
+                                                        </li>
+                                                        {% set cont = cont + 1 %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                                {% for chart in Charts %}
+                                                    {% set description = chart.shortDescription %}
+                                                    {% set indicatorChartDetails = indicatorService.obtainIndicatorChartDetails(indicator,chart) %}
+                                                    {% if indicatorChartDetails != null %}
+                                                        {% if indicatorChartDetails.description != null %}
+                                                            {% set description = indicatorChartDetails.description %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    {% set grafico = "grafico"~loop.index %}
+                                                    <li {% if cont == 1 %} class="active" {% endif %}>
+                                                        <a style="color: #000000;" href="#tab-{{ grafico }}">{{ description }} </a>
+                                                    </li>
+                                                    {% set cont = cont + 1 %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </ul>
+                                        <div class="tabs-content" {#style="min-height: 500px;"#}>
+                                            {% if indicatorsChartDetailsByOrderShow|length > 0 %}
+                                                {% for indicatorChartDetailsByOrderShow in indicatorsChartDetailsByOrderShow %}
+                                                    {% set showChart = false %}
+                                                    {% for chart in Charts %}
+                                                        {% if chart.id == indicatorChartDetailsByOrderShow.chart.id %}
+                                                            {% set showChart = true %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if showChart == true %}
+                                                        {% set chart = indicatorChartDetailsByOrderShow.chart %}
+                                                        {% set grafico = "grafico"~loop.index %}
+                                                        {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH') or chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH') %}
+                                                            <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ "now"|date("n") }}','{{ grafico }}','100','500')">
+                                                            {% else %}
+                                                                <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ grafico }}','100','500')">
+                                                                {% endif %}
+                                                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH')  %}
+                                                                    <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
+                                                                        <select id='month' class="select2 input-xlarge" ng-model="model.months" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'value.id'" ng-init="model.months = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth({{ indicator.id }},model.months.id,'{{ grafico }}','100','500')">
+                                                                            <option value='0'>Seleccione un mes</option>
+                                                                        </select>
+                                                                    </div>
+                                                                {% endif %}
+                                                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH')  %}
+                                                                    <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
+                                                                        <select id='monthsGroupByCompany' class="select2 input-xlarge" ng-model="model.monthsGroupByCompany" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'id'" ng-init="model.monthsGroupByCompany = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth({{ indicator.id }},model.monthsGroupByCompany.id,'{{ grafico }}','100','500')">
+                                                                            <option value='0'>Seleccione un mes</option>
+                                                                        </select>
+                                                                    </div>
+                                                                {% endif %}
+                                                                <span id="{{ grafico }}"></span>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% for chart in Charts %}
+                                                        {% set grafico = "grafico"~loop.index %}
+                                                        <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ grafico }}','100','500')">
+                                                            {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH')  %}
+                                                                <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
+                                                                    <select id='month' class="select2 input-xlarge" ng-model="model.months" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'value.id'" ng-init="model.months = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth({{ indicator.id }},model.months.id,'{{ grafico }}','100','500')">
+                                                                        <option value='0'>Seleccione un mes</option>
+                                                                    </select>
+                                                                </div>
+                                                            {% endif %}
+                                                            {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH')  %}
+                                                                <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
+                                                                    <select id='monthsGroupByCompany' class="select2 input-xlarge" ng-model="model.monthsGroupByCompany" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'id'" ng-init="model.monthsGroupByCompany = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth({{ indicator.id }},model.monthsGroupByCompany.id,'{{ grafico }}','100','500')">
+                                                                        <option value='0'>Seleccione un mes</option>
+                                                                    </select>
+                                                                </div>
+                                                            {% endif %}
+                                                            <span id="{{ grafico }}"></span>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}                                
+                                {# <br /><br />
+                                 <p class="button-height align-right">
+                                      Visualizacion de Indice de evolucion 
+                                     {% include 'PequivenSIGBundle:Template:base_evolution_nav.html.twig' with {'typeObject': 1, 'id': indicator.id, 'route': 'pequiven_indicator_evolution'} %}
+                                      end 
+                                 </p>
+                                 #}
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </td>
+        </tr>
+    </table>
+{% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+    </script>
+{% endblock %}

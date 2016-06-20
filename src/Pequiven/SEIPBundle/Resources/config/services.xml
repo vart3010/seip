@@ -270,6 +270,14 @@
         <service id="pequiven_seip_box_evolution_items" class="Pequiven\SEIPBundle\Model\Box\EvolutionHistory\EvolutionHistoryItemsBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+
+        <service id="pequiven_seip_box_evolution_items_objetive" class="Pequiven\SEIPBundle\Model\Box\EvolutionHistory\EvolutionHistoryItemsObjetiveBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+
+        <service id="pequiven_seip_box_evolution_items_arrangement" class="Pequiven\SEIPBundle\Model\Box\EvolutionHistory\EvolutionHistoryItemsArrangementBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
         
         
         <!-- Servicio de USER -->

@@ -4,26 +4,23 @@
         <div class="block-title">
         <h3 class="ng-binding">{{ 'sig.analysis_causes'|trans ({}, 'messages') }}</h3>
         {% if analysis and not cloning %}
-            {% for data in analysis %}
-                {% set dataAnalysis = data.id %}
-                <div class="button-group absolute-right compact">
-                    <span ng-app class="button icon-outbox" onClick="uploadFilePdf(this.id)" id="{$ data.id $}" >{{ "pequiven.actions.upload_file"|trans({},"messages") }}
-                    </span>            
-                </div>  
-                {# form carga de archivo #}
-                <div ng-controller="ToolsController">
-                    <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path(route,{id: id, month:month, cause:dataAnalysis, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">                    
-                       <input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ idCause $}" type="file">
-                       <input type="hidden" name="valueCauseId" id="field_{$ idCause $}" value="">
-                    </form>
-                </div> 
-                {# end form #}
-                {# Descarga #}
-                {% if data.valueCauseFile %}
-                    <div class="button-group absolute-right compact">
-                        <span ng-app ng-init="validLoad()" class=" button icon-download" onClick="openFile(this.id)" id="open_{{ data.id }}">{{ "pequiven.actions.download_file"|trans({},"messages") }}
-                        </span>
+            {% for data in analysis %}                
+                {% if data.file %}
+                    <div class="button-group absolute-right compact">                        
+                        <a class=" button icon-download" href="{{ path('pequiven_sig_evolution_download_file', {'typeObject':1,'idObject':data.id})}}" target="_blank" title="Descargar Analisis Causa Raiz" download="{{ data.file }}">{{ "pequiven.actions.download_file"|trans({},"messages") }}</a>
                     </div>
+                {% else %}
+                <div class="button-group absolute-right compact">
+                    <span class="messages"></span>
+                    <form enctype="multipart/form-data" class="formulario"> 
+                        <p class="button-height">
+                            <input id="idObject" name="idObject" value="{{data.id}}" type="hidden">
+                            <input id="typeObject" name="typeObject" value="1" type="hidden">
+                            <input type="file" name="archivo" id="imagen" value="" class="file" multiple>
+                            <input class="button icon-outbox" type="button" id="subir" value="Subir archivo"/>
+                        </p>                                           
+                    </form>                
+                </div>  
                 {% endif %}
             {% endfor %}
         {% elseif not cloning %}

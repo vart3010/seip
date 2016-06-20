@@ -86,7 +86,9 @@
         <div class="six-columns six-columns-tablet twelve-columns-mobile">
             <fieldset class="fieldset" style='display:none;' id="loadCr">
                 <legend class="legend">Analisis Causa Raiz</legend>                
-                <form enctype="multipart/form-data" class="formulario">                    
+                <form enctype="multipart/form-data" class="formulario">  
+                    <input id="idObject" name="idObject" value="0" type="hidden">
+                    <input id="typeObject" name="typeObject" value="4" type="hidden">                  
                     <input name="archivo" type="file" id="imagen"/>
                     <input type="button" id="subir" value="Subir archivo"/>
                 </form>                

@@ -151,17 +151,18 @@ class IndicatorStrategicController extends baseController {
         $this->getPeriodService()->checkIsOpen();
         
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_CREATE_STRATEGIC');
-        
+
         $form = $this->createForm($this->get('pequiven_indicator.strategic.registration.form.type'));
-        $lastId = '';
-
-        $em = $this->getDoctrine()->getManager();
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-
-        $em->getConnection()->beginTransaction();
 
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
+            $lastId = '';
+
+            $em = $this->getDoctrine()->getManager();
+            $securityContext = $this->container->get('security.context');
+            $user = $securityContext->getToken()->getUser();
+
+            $em->getConnection()->beginTransaction();
+
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_indicator_strategic_registration");
             $object->setSummary($data['description']);
@@ -172,7 +173,7 @@ class IndicatorStrategicController extends baseController {
             //Obtenemos y seteamos el nivel del indicador
             $indicatorLevel = $em->getRepository('PequivenIndicatorBundle:IndicatorLevel')->findOneBy(array('level' => IndicatorLevel::LEVEL_ESTRATEGICO));
             $object->setIndicatorLevel($indicatorLevel);
-
+            
             //Obtenemos y seteamos la refParent del Objetivo Estratégico al que pertenece
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parents'][0]));
             $object->setRefParent($objetive->getRef());

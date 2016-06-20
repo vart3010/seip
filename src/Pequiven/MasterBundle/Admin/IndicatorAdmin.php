@@ -139,6 +139,17 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'multiple' => true,
                     'required' => false,
                 ))
+                ->add('indicatorGroup', 'sonata_type_model_autocomplete', array(
+                    'property' => array('description'),
+                    'multiple' => true,
+                    'required' => false,
+                    'label' => 'Grupos de Indicadores'
+                ))
+                ->add('showIndicatorGroups', null, array(
+                    'label' => 'Mostrar si Tiene Grupo de Indicadores en el Dashboard',
+                    'required' => false,
+                        )
+                )
                 ->add('childrens', 'sonata_type_model_autocomplete', $childrensParameters)
         ;
         $form
@@ -195,6 +206,10 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('textValueFromVariablePlan', null, array(
                     'required' => false,
                 ))
+                ->add('planIsNotAccumulative', null, array(
+                    'required' => false,
+                ))
+                ->add('numberValueIndicatorToForce')
                 ->end()
                 ->end()
         ;
@@ -217,6 +232,12 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ))
                 ->add('orderShowFromParent')
                 ->add('showByDashboardSpecific', null, array(
+                    'required' => false,
+                ))
+                ->end();
+        $form
+                ->with('Esferas')
+                ->add('showResultWithoutPercentageInDashboard', null, array(
                     'required' => false,
                 ))
                 ->end()

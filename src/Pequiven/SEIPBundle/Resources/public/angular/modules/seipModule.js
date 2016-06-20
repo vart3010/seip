@@ -538,7 +538,7 @@ angular.module('seipModule.controllers', [])
             var entity = angular.element('#pequiven_seipbundle_dataload_plantreport_group_entity');
             var childrensPlants = angular.element('#pequiven_seipbundle_dataload_plantreport_group_childrensGroup');
             var setUpdate = $("#setUpdate");
-            
+
             if (setUpdate.val() == 0) {
                 console.log(setUpdate.val());
                 childrensPlants.select2('val', '');
@@ -1509,7 +1509,7 @@ angular.module('seipModule.controllers', [])
                 $scope.initFormTrend(resource);
                 if (isInit == false) {
                     isInit = true;
-                }                           
+                }
 
                 $scope.templateOptions.setParameterCallBack(resource);
 
@@ -1525,7 +1525,7 @@ angular.module('seipModule.controllers', [])
                 $scope.initFormActionAdd(resource);
                 if (isInit == false) {
                     isInit = true;
-                }                
+                }
                 $scope.templateOptions.setParameterCallBack(resource);
 
                 if (resource) {
@@ -2527,14 +2527,29 @@ angular.module('seipModule.controllers', [])
                 }
             };
 
+            $scope.loadTemplateMaintenanceVerification = function (resource) {
+                $scope.initFormMaintenaceVerification(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+
             $scope.loadTemplateMaintenanceShow = function (resource) {
                 $scope.initFormMaintenaceShow(resource);
                 $scope.openModalAuto();
             };
 
             $scope.loadNotify = function (resource) {
-                $scope.initFormNotify(resource);                
-                $scope.openModalAuto();                
+                $scope.initFormNotify(resource);
+                $scope.openModalAuto();
             };
 
             //Removiendo 
@@ -2575,7 +2590,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_sig_monitoring_add', {id: $scope.id_managementSystem});
+                    var url = Routing.generate('pequiven_sig_monitoring_add', {id: $scope.id_managementSystem, type: $scope.type});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2647,15 +2662,15 @@ angular.module('seipModule.controllers', [])
                 });
             };
 
-            //Añadir
-            var addNotify = function (save, successCallBack) {
-                var formConfig = angular.element('#form_notify_add');
+            //Añadir Verification
+            var addMaintenanceVerification = function (save, successCallBack) {
+                var formConfig = angular.element('#form_verification_add');
                 var formData = formConfig.serialize();
                 if (save == undefined) {
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_sig_monitoring_notification', {id: $scope.dataNotify, type: $scope.type, idObject: $scope.id_managementSystem});                    
+                    var url = Routing.generate('pequiven_sig_monitoring_maintenance_verification', {id: $scope.id_maintenance});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2664,11 +2679,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
-                    notificationBarService.getLoadStatus().done();                    
+                    notificationBarService.getLoadStatus().done();
+                    //$timeout(callAtTimeout, 3000);
                     location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
@@ -2683,7 +2699,46 @@ angular.module('seipModule.controllers', [])
                     }
                     notificationBarService.getLoadStatus().done();
                     return false;
-                });                
+                });
+            };
+
+            //Añadir
+            var addNotify = function (save, successCallBack) {
+                var formConfig = angular.element('#form_notify_add');
+                var formData = formConfig.serialize();
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_sig_monitoring_notification', {id: $scope.dataNotify, type: $scope.type, idObject: $scope.id_managementSystem});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
             };
 
             $scope.templateOptions.setVar('addStandardization', addStandardization);
@@ -2699,10 +2754,17 @@ angular.module('seipModule.controllers', [])
                 });
                 return true;
             };
-            
-            $scope.templateOptions.setVar('addNotify', addNotify);            
+
+            $scope.templateOptions.setVar('addMaintenanceVerification', addMaintenanceVerification);
+            var confirmCallBackMaintenaceVerification = function () {
+                addMaintenanceVerification(true, function (data) {
+                });
+                return true;
+            };
+
+            $scope.templateOptions.setVar('addNotify', addNotify);
             var confirmCallBackNotify = function () {
-                addNotify(true, function (data) {                   
+                addNotify(true, function (data) {
                 });
                 return true;
             };
@@ -2719,6 +2781,7 @@ angular.module('seipModule.controllers', [])
 
                 var parameters = {
                     id: $scope.id_managementSystem,
+                    type: $scope.type,
                     _dc: numero
                 };
                 if (resource) {
@@ -2796,6 +2859,26 @@ angular.module('seipModule.controllers', [])
                         name: 'Notificación de Usuario',
                         url: url,
                         confirmCallBack: confirmCallBackNotify,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+            //Formulario Verificación
+            $scope.initFormMaintenaceVerification = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(300);
+                //$scope.setWidth(800);
+                var parameters = {
+                    id: $scope.id_maintenance,
+                    _dc: numero
+                };
+                var url = Routing.generate('pequiven_sig_monitoring_maintenance_verification', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Mantenimiento',
+                        url: url,
+                        confirmCallBack: confirmCallBackMaintenaceVerification,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
@@ -3991,11 +4074,6 @@ angular.module('seipModule.controllers', [])
                 }
                 );
             }
-
-
-
-
-
         })
         .controller('FeeStructureController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
@@ -5367,6 +5445,7 @@ angular.module('seipModule.controllers', [])
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
             var selectSecondLineManagement = angular.element("#selectSecondLineManagement");
             var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
+            var selectProfilesPoliticEvaluation = angular.element("#selectProfilesPoliticEvaluation");
 
 
             $scope.data = {
@@ -5374,6 +5453,7 @@ angular.module('seipModule.controllers', [])
                 first_line_managements: null,
                 second_line_managements: null,
                 work_study_circles: null,
+                profiles_politic_evaluation: null,
             };
 
             $scope.model = {
@@ -5381,6 +5461,7 @@ angular.module('seipModule.controllers', [])
                 firstLineManagement: null,
                 secondLineManagement: null,
                 workStudyCircle: null,
+                profilesPoliticEvaluation: null,
             };
 
             //Busca las localidades
@@ -5461,10 +5542,27 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
+            
+            //Busca los Perfiles de Evaluación Política
+//            $scope.getProfilesPoliticEvaluation = function () {
+//                var parameters = {
+//                    filter: {}
+//                };
+//                $http.get(Routing.generate('pequiven_seip_profiles_politic_evaluation', parameters))
+//                        .success(function (data) {
+//                            $scope.data.profiles_politic_evaluation = data;
+//                            if ($scope.model.profilesPoliticEvaluation != null) {
+//                                $scope.setValueSelect2("profilesPoliticEvaluation", $scope.model.profilesPoliticEvaluation, $scope.data.profiles_politic_evaluation, function (selected) {
+//                                    $scope.model.profilesPoliticEvaluation = selected;
+//                                });
+//                            }
+//                        });
+//            };
 
             $scope.getComplejos();
             $scope.getFirstLineManagement();
             $scope.getWorkStudyCircle();
+//            $scope.getProfilesPoliticEvaluation();
 
             //Scope de Localidad
             $scope.$watch("model.complejo", function (newParams, oldParams) {
@@ -5507,8 +5605,6 @@ angular.module('seipModule.controllers', [])
                 }
             });
 
-
-
             //Scope de Círculo de Estudio de Trabajo
             $scope.$watch("model.workStudyCircle", function (newParams, oldParams) {
                 if ($scope.model.workStudyCircle != null && $scope.model.workStudyCircle.id != undefined) {
@@ -5518,6 +5614,18 @@ angular.module('seipModule.controllers', [])
                     });
                 } else {
                     $scope.tableParams.$params.filter['workStudyCircle'] = null;
+                }
+            });
+
+            //Scope de Perfiles de Evaluación Política
+            $scope.$watch("model.profilesPoliticEvaluation", function (newParams, oldParams) {
+                if ($scope.model.profilesPoliticEvaluation != null && $scope.model.profilesPoliticEvaluation.id != undefined) {
+                    $scope.tableParams.$params.filter['profilesPoliticEvaluation'] = $scope.model.profilesPoliticEvaluation.id;
+                    //Al cambiar el círculo de estudio de trabajo
+                    selectProfilesPoliticEvaluation.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['profilesPoliticEvaluation'] = null;
                 }
             });
 
@@ -6845,6 +6953,98 @@ angular.module('seipModule.controllers', [])
                 });
             }
 
+            //30-Gráfico tipo Piramide 3D Seccionada Real
+            $scope.chargeChartRealPyramid3DSectioned = function (indicatorId, render, width, height) {
+                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId, type: 'real'});
+                $http.get(getDataPyramid3DSectioned).success(function (data) {
+                    FusionCharts.ready(function () {
+//                        console.log(data.dataSource.data);
+                        var pyramid3DSectioned = new FusionCharts({
+                            "type": 'pyramid',
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": 'json',
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.data
+                            }
+                        });
+                        pyramid3DSectioned.setTransparent(true);
+                        pyramid3DSectioned.render();
+                    });
+                });
+            }
+            //31-Gráfico tipo Piramide 3D Seccionada Plan
+            $scope.chargeChartPlanPyramid3DSectioned = function (indicatorId, render, width, height) {
+                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId, type: 'plan'});
+                $http.get(getDataPyramid3DSectioned).success(function (data) {
+                    FusionCharts.ready(function () {
+//                        console.log(data.dataSource.data);
+                        var pyramid3DSectioned = new FusionCharts({
+                            "type": 'pyramid',
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": 'json',
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.data
+                            }
+                        });
+                        pyramid3DSectioned.setTransparent(true);
+                        pyramid3DSectioned.render();
+                    });
+                });
+            }
+
+            //32- GRAFICO DE COLUMNA APILADA QUE MUESTRA EL PLAN/REAL DE TODAS LAS VARIABLES DEL INDICADOR
+            $scope.chargeChartStackedColumn3DbyIndicator = function (indicatorId, render, width, height) {
+                var getDataStackedColumn3DbyIndicator = Routing.generate("getDataStackedColumn3DbyIndicator", {id: indicatorId});
+                $http.get(getDataStackedColumn3DbyIndicator).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var ChartStackedColumn3DbyIndicator = new FusionCharts({
+                            "type": 'stackedcolumn2d',                            
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": 'json',                            
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,                                
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        ChartStackedColumn3DbyIndicator.setTransparent(true);
+                        ChartStackedColumn3DbyIndicator.render();
+                    });
+                });
+            }
+            
+            //33-Gráfico tipo multiseries de línea, con un trendline de forma horizontal y el valor de los resultados
+            $scope.chargeChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = function (indicatorId, render, width, height) {
+                var getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = Routing.generate("getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult", {id: indicatorId});
+                $http.get(getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = new FusionCharts({
+                            "type": "msline",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset,
+                                "trendlines": data.dataSource.trendlines
+                            }
+                        });
+                        revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult.setTransparent(true);
+                        revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult.render();
+                    });
+                });
+            }
+
             //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
             $scope.chargeChartProductionReportTemplateByDate = function (reportTemplateId, dateSearch, render, width, height) {
                 var dateParse = $scope.parseDate(dateSearch);
@@ -7110,7 +7310,7 @@ angular.module('seipModule.controllers', [])
                 $http.get(getdataBarsArea).success(function (data) {
                     //console.log(index+"->"+data);
                     //console.log(data);
-                    if (data == "1") {
+                    if (data.data == "1") {
                         $("div#target_" + index).show();
                     }
                 });
@@ -7132,7 +7332,7 @@ angular.module('seipModule.controllers', [])
                 var getValidLoad = Routing.generate("showButtonDownload", {id: valueIndicatorId});
                 $http.get(getValidLoad).success(function (data) {
                     console.log(data);
-                    if (data != "true") {
+                    if (data.data != "true") {
                         $("span#open_" + valueIndicatorId).hide();
                     }
                 });
@@ -7732,7 +7932,7 @@ angular.module('seipModule.controllers', [])
                         "type": "mscolumnline3d",
                         "renderAt": id,
                         "width": "95%",
-                        "height": "300%",
+                        //"height": "300%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "Gráfico Evolución Indicador",
                         "exporthandler": urlExportFromChart,

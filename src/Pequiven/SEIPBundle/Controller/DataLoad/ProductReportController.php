@@ -42,9 +42,11 @@ class ProductReportController extends SEIPController {
                 ->setTemplate($this->config->getTemplate('show.html'))
                 ->setTemplateVar($this->config->getResourceName())
                 ->setData([
-            $this->config->getResourceName() => $this->findOr404($request),
-            'isAllowPlanningReport' => $periodService->isAllowPlanningReport(),
-            'factorConversionService' => $factorConversionService
+                $this->config->getResourceName() => $this->findOr404($request),
+                    'isAllowPlanningReport' => $periodService->isAllowPlanningReport(),
+                    'factorConversionService' => $factorConversionService,
+                    'productReportService'=>$this->getProductReportService(),
+                    'dateNow'=>  new \DateTime(date("Y-m-d", strtotime("-1 day")))
                 ])
         ;
 
@@ -505,6 +507,10 @@ class ProductReportController extends SEIPController {
      */
     protected function getFactorConversionService() {
         return $this->container->get('pequiven_factorConversion.service.factorConversion');
+    }
+
+    protected function getProductReportService() {
+        return $this->container->get('seip.service.productReport');
     }
 
 }

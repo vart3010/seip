@@ -77,6 +77,15 @@ class BoxDefaultAdapter extends BoxBaseAdapter {
         $boxActive->setArea(AreasBox::ITEMS_EVOLUTION, array('position' => 0));
         $boxActives[] = $boxActive;
 
+        $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
+        $boxActive->setBoxName('pequiven_seip_box_evolution_items_arrangement');
+        $boxActive->setArea(AreasBox::ITEMS_EVOLUTION_ARRANGEMENT, array('position' => 0));
+        $boxActives[] = $boxActive;
+
+        $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
+        $boxActive->setBoxName('pequiven_seip_box_evolution_items_objetive');
+        $boxActive->setArea(AreasBox::ITEMS_EVOLUTION_OBJETIVE, array('position' => 0));
+        $boxActives[] = $boxActive;
 
         return $boxActives;
     }

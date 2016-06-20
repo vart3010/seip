@@ -12,28 +12,19 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
 class EvolutionCauseRepository extends SeipEntityRepository {
 
 
-    function getCausesByIndicator($id, $typeObject) {
+    function getCausesByObject($id, $typeObject) {
         
         $queryBuilder = $this->getQueryBuilder();
 
-        if ($typeObject == 1) {            
-            $queryBuilder
-
-                    ->addSelect('ec')                
-                    ->where('ec.indicator = :indic')
-                    ->orderBy('ec.causes')
-                    ->setParameter('indic', $id)
-            ;        
-        }elseif ($typeObject == 2) {
-            $queryBuilder
-
-                    ->addSelect('ec')                
-                    ->where('ec.arrangementProgram = :arrangement')
-                    ->orderBy('ec.causes')
-                    ->setParameter('arrangement', $id)
-            ;        
-        }
-
+        $queryBuilder
+                ->addSelect('ec')                
+                ->where('ec.idObject = :id')
+                ->andWhere('ec.typeObject = :typeObj')
+                ->orderBy('ec.causes')
+                ->setParameter('id', $id)
+                ->setParameter('typeObj', $typeObject)
+        ;        
+        
         return $queryBuilder;
     }
 
