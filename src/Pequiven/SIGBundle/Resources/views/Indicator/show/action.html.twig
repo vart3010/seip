@@ -90,9 +90,12 @@
                                         <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                                         <span class="select-arrow"></span>
                                         <span class="drop-down">
-                                            <a href ng-click="removeActionEvolution(action_data='{{ action.actionValue.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                            <a href ng-click="loadEditToAction(action_data='{{ action.actionValue.id }}')" class="button icon-pencil">Editar</a>
+                                            {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION_DELETE')%}  
+                                                <a href ng-click="removeActionEvolution(action_data='{{ action.actionValue.id }}')" class="button icon-cross-round">Eliminar</a>
+                                            {% endif %}
                                             {% if action.observations == null and action.advance < 100 %}
-                                                <a href ng-click="loadTemplateActionAdd(idAction='{{ action.actionValue.id }}',month='{{ month }}')" class="button icon-pencil">{{ "pequiven_indicator.upload_data"|trans({},"PequivenSIGBundle") }}</a>
+                                                <a href ng-click="loadTemplateActionAdd(idAction='{{ action.actionValue.id }}',month='{{ month }}')" class="button icon-extract">{{ "pequiven_indicator.upload_data"|trans({},"PequivenSIGBundle") }}</a>
                                             {% endif %}
                                         </span>
                                     </span>
