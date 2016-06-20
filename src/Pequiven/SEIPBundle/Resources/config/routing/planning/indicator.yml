@@ -218,3 +218,12 @@ pequiven_dasboard_linestrategicbygroup:
     requirements:
         _format: html|json|xml
     methods: [GET]
+    
+pequiven_dasboard_subgroupindicatorbygroup:
+    path: /dashboardSubGroupIndicatorByGroup/{idGroup}/{_format}
+    defaults:
+        _controller: pequiven.controller.indicatorgroup:showSubIndicatorGroupsByGroupAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]

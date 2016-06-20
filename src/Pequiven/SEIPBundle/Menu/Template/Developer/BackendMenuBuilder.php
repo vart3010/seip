@@ -202,10 +202,10 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             if ($this->isGranted('ROLE_SEIP_SIG_EVOLUTION_OBJETIVE')) {
                 //Lista de Informe de Evolución Consolidado
                 $evolution = $this->factory->createItem('sig.evolution.visualize', $this->getSubLevelOptions(array(
-                                'uri' => 'null',
-                                'labelAttributes' => array('icon' => '',),
-                            ))
-                    )->setLabel($this->translate(sprintf('Informe de Evolución', $section)));                
+                                    'uri' => 'null',
+                                    'labelAttributes' => array('icon' => '',),
+                                ))
+                        )->setLabel($this->translate(sprintf('Informe de Evolución', $section)));
                 //Nivel 3
                 $evolution->addChild('planning.visualize.objetives.strategico', array(
                     'route' => 'pequiven_objetives_list_sig_evolution',
@@ -220,8 +220,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $evolution->addChild('planning.visualize.objetives.operativo', array(
                     'route' => 'pequiven_objetives_list_sig_evolution',
                     'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));                
-                
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));
+
                 $objective->addChild($evolution);
             }
             $menuSig->addChild($objective);
@@ -1067,11 +1067,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ->setLabel($this->translate(sprintf('Tableros de Indicadores', $section)));
 
                 $complejos = $this->factory->createItem('tableros_complejos', $this->getSubLevelOptions(array(
-                            'uri' => null,
-                            'labelAttributes' => array('icon' => 'fa fa-industry',),
-                        ))
-                )
-                ->setLabel($this->translate(sprintf('Complejos Petroquímicos', $section)));
+                                    'uri' => null,
+                                    'labelAttributes' => array('icon' => 'fa fa-industry',),
+                                ))
+                        )
+                        ->setLabel($this->translate(sprintf('Complejos Petroquímicos', $section)));
 
                 $em = $this->getDoctrine()->getManager();
                 $complejos_sql = $em->getRepository('PequivenMasterBundle:Complejo')->findAll();
@@ -1086,19 +1086,27 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                     'route' => 'pequiven_line_strategic_view_dashboard_complejo',
                                     //'route' => 'pequiven_line_strategic_indicators_specific',
                                     'routeParameters' => array('complejo' => $idC),
-                            'labelAttributes' => array('icon' => 'fa fa-industry',),
+                                    'labelAttributes' => array('icon' => 'fa fa-industry',),
                                 ))->setLabel($this->translate(sprintf(strtoupper($refC), $section)));
                         $complejos->addChild($itemStrategicsIndicators);
                     }
                 }
+
+//                $itemStrategicsIndicators = $this->factory->createItem('results.visualize.tableros.cpjaa', array(
+//                            'route' => 'pequiven_dasboard_subgroupindicatorbygroup',
+//                            'routeParameters' => array('idGroup' => 9),
+//                            'labelAttributes' => array('icon' => 'fa fa-industry',),
+//                        ))->setLabel($this->translate(sprintf('CPJAA', $section)));
+//                $complejos->addChild($itemStrategicsIndicators);
+//
                 $tableros->addChild($complejos);
 
-                 $gerencias = $this->factory->createItem('tableros_gerencias', $this->getSubLevelOptions(array(
-                            'uri' => null,
-                            'labelAttributes' => array('icon' => 'fa fa-cubes',),
-                        ))
-                )
-                ->setLabel($this->translate(sprintf('Gerencias Corporativas', $section)));
+                $gerencias = $this->factory->createItem('tableros_gerencias', $this->getSubLevelOptions(array(
+                                    'uri' => null,
+                                    'labelAttributes' => array('icon' => 'fa fa-cubes',),
+                                ))
+                        )
+                        ->setLabel($this->translate(sprintf('Gerencias Corporativas', $section)));
 
                 if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_RRHH')) {
                     $itemsTableros = $this->factory->createItem('results.visualize.tableros.rrhh', array(
@@ -1136,11 +1144,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
 
                 $comercializadoras = $this->factory->createItem('tableros_comercializadoras', $this->getSubLevelOptions(array(
-                            'uri' => null,
-                            'labelAttributes' => array('icon' => 'fa fa-cube',),
-                        ))
-                )
-                ->setLabel($this->translate(sprintf('Comercializadoras', $section)));
+                                    'uri' => null,
+                                    'labelAttributes' => array('icon' => 'fa fa-cube',),
+                                ))
+                        )
+                        ->setLabel($this->translate(sprintf('Comercializadoras', $section)));
 
                 if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_UNFER')) {
                     $itemsTableros = $this->factory->createItem('results.visualize.tableros.unfer', array(

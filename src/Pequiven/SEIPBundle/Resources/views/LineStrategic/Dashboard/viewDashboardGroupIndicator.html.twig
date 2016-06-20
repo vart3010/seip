@@ -83,12 +83,24 @@
                                                     {% set ref= "" %}
                                                     {% set color= "disabled" %}
                                                 {%endif%}
-                                                <a href="{{ ref }}" class="align-left {{color}} button red-gradient glossy esfera">
+                                                <a href="{{ref}}">
+                                                    <div class="button {{color}}" style="height: 160px; width: 100%;">   
+                                                        <i class="fa {{ grupo.logo }}" style="color: {{grupo.color}}; font-size: 115px; margin: 5%" aria-hidden="true"></i>
+                                                        {#<img class="icon-strategic" src="{{ asset(iconsLineStrategic[line.id]) }}" style="margin: 5%;">  #}
+                                                        <br>
+                                                        <div class="button red-gradient glossy" style="height: auto; width: 100%; position: inherit;">                    
+                                                            <p class="title-icon-strategic" style="font-size: 12px; font-weight: bold;">
+                                                                {{grupo.description}}
+                                                            </p>                    
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                {#<a href="{{ ref }}" class="align-left {{color}} button red-gradient glossy esfera">
                                                     <br>
                                                     <i class="fa {{ grupo.logo }}" aria-hidden="true"></i>
                                                 </a>
                                                 <br><br>
-                                                <b>{{grupo.description}}</b>
+                                                <b>{{grupo.description}}</b>#}
                                             </div>
                                         {%endif%}
                                     {%else%}
@@ -102,12 +114,24 @@
                                                     {% set ref= "" %}
                                                     {% set color= "disabled" %}
                                                 {%endif%}
-                                                <a href="{{ ref }}" class="align-left {{color}} button red-gradient glossy esfera">
+                                                <a href="{{ref}}">
+                                                    <div class="button {{color}}" style="height: 160px; width: 100%;">   
+                                                        <i class="fa {{ grupo.logo }}" style="color: {{grupo.color}}; font-size: 115px; margin: 5%" aria-hidden="true"></i>
+                                                        {#<img class="icon-strategic" src="{{ asset(iconsLineStrategic[line.id]) }}" style="margin: 5%;">  #}
+                                                        <br>
+                                                        <div class="button red-gradient glossy" style="height: auto; width: 100%; position: inherit;">                    
+                                                            <p class="title-icon-strategic" style="font-size: 12px; font-weight: bold;">
+                                                                {{grupo.description}}
+                                                            </p>                    
+                                                        </div>
+                                                    </div>
+                                                </a> 
+                                                {#<a href="{{ ref }}" class="align-left {{color}} button red-gradient glossy esfera">
                                                     <br>
                                                     <i class="fa {{ grupo.logo }}" aria-hidden="true"></i>
                                                 </a>
                                                 <br><br>
-                                                <b>{{grupo.description}}</b>
+                                                <b>{{grupo.description}}</b>#}
                                             </div>
                                         {%endif%}
                                     {%endif%}
