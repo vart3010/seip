@@ -15,6 +15,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class CategoryFile {
 
+    const SECTION_CET = 1;
+    const SECTION_EXP = 2;
+
     /**
      * @var integer
      *
@@ -67,14 +70,24 @@ class CategoryFile {
      */
     private $meetingFile;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile", mappedBy="categoryFile", cascade={"persist","remove"})
+     * @ORM\JoinTable(name="seip_oneperten_category_file")
+     */
+    private $onePerTenFile;
+    
+    /**
+     * @ORM\Column(name="sectionFile", type="integer")
+     */
+    private $sectionFile;
+
     public function __construct() {
-        $this->meetingFile= new \Doctrine\Common\Collections\ArrayCollection();
+        $this->meetingFile = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->onePerTenFile = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function addMeetingFile(MeetingFile $meetingFile) {
-        //$meetingFile->add($this);
         $this->meetingFile->add($meetingFile);
-
         return $this;
     }
 
@@ -128,6 +141,41 @@ class CategoryFile {
 
     function setDescription($description) {
         $this->description = $description;
+    }
+    
+    function getSectionFile() {
+        return $this->sectionFile;
+    }
+
+    function setSectionFile($sectionFile) {
+        $this->sectionFile = $sectionFile;
+    }
+    
+    public function addOnePerTenFile(\Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile $onePerTenFile) {
+        $this->onePerTenFile->add($onePerTenFile);
+        return $this;
+    }
+
+    public function removeOnePerTenFile(\Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile $onePerTenFile) {
+        $this->onePerTenFile->removeElement($onePerTenFile);
+    }
+
+    public function getOnePerTenFile() {
+        return $this->onePerTenFile;
+    }
+    
+        /**
+     * Retorna los tipos de calculo disponible de los indicadores y sus etiquetas.
+     * 
+     * @staticvar array $typesOfCalculation
+     * @return array
+     */
+    static function getTypesOfSection() {
+        static $typesOfCalculation = array(
+            self::SECTION_CET => 'sip.section_file_cet',
+            self::SECTION_EXP => 'sip.section_file_exp',
+        );
+        return $typesOfCalculation;
     }
 
 }

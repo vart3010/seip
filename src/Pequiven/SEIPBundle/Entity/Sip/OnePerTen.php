@@ -332,9 +332,19 @@ class OnePerTen extends modelOnePerTen {
      * @ORM\Column(name="realProfileValue", type="integer", nullable=true)
      */
     private $realProfileValue;
+    
+        
+    /**
+     * Relacion expedientes asociados a un usuario
+     * 
+     * @var Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile",mappedBy="onePerTen")
+     */
+    private $onePerTenFile;
 
     public function __construct() {
         $this->ten = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->onePerTenFile = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -659,6 +669,32 @@ class OnePerTen extends modelOnePerTen {
 
     function setRealProfileValue($realProfileValue) {
         $this->realProfileValue = $realProfileValue;
+    }
+    
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile $onePerTenFile
+     * @return \Pequiven\SEIPBundle\Entity\Sip\OnePerTen
+     */
+    public function addOnePerTenFile(OnePerTenFile $onePerTenFile) {
+        $this->onePerTenFile->add($onePerTenFile);
+        return $this;
+    }
+    
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Sip\OnePerTenFileFile $onePerTenFile
+     */
+    public function removeOnePerTenFile(OnePerTenFileFile $onePerTenFile) {
+        $this->onePerTenFile->removeElement($onePerTenFile);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getOnePerTenFile() {
+        return $this->onePerTenFile;
     }
 
 }
