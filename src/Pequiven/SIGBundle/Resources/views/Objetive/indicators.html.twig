@@ -2,7 +2,7 @@
 {% if childrens is not defined %}
     {% set childrens = entity.indicators %}
 {% endif %}
-{% for indicator in childrens %}
+{% for indicator in indicators %}
     <li>
         {{ loop.index|str_pad(2,'0') }}&nbsp-&nbsp;
         {% set avancedUsed = indicator.getResult %}

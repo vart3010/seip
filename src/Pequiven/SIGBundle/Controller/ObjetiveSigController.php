@@ -61,16 +61,31 @@ class ObjetiveSigController extends EvolutionController
         $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_".$dataObject['rol'],$resource);
         $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_".$dataObject['rol'],$resource);
         
+        $idManagements = [];
+        $indicators   = [];
+        foreach ($resource->getManagementSystems() as $managementsystems) {
+            $idManagements[] = $managementsystems->getId();
+        }
+        
+        foreach ($resource->getIndicators() as $dataIndicators) {
+            foreach ($dataIndicators->getManagementSystems() as $indicatorsManagement) {
+                if (in_array($indicatorsManagement->getId(), $idManagements)) {
+                    $indicators[] = $dataIndicators;
+                }
+            }
+        }
+
         $view = $this
             ->view()
             ->setTemplate('PequivenSIGBundle:Objetive:'.$dataObject['route'].'/show.html.twig')
             ->setTemplateVar('entity')
             ->setData(array(
-                'entity' => $resource,
-                'indicatorService' => $indicatorService,
-                'hasPermissionToUpdate' => $hasPermissionToUpdate,
+                'entity'            => $resource,
+                'indicators'        => $indicators,
+                'indicatorService'  => $indicatorService,
+                'hasPermissionToUpdate'   => $hasPermissionToUpdate,
                 'hasPermissionToApproved' => $hasPermissionToApproved,
-                'isAllowToDelete' => $isAllowToDelete,
+                'isAllowToDelete'         => $isAllowToDelete,
             ))
         ;
         $groups = array_merge(array('id','api_list','gerencia','gerenciaSecond'), $request->get('_groups',array()));
