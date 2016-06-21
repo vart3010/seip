@@ -198,8 +198,6 @@ class ObjetiveSigController extends EvolutionController
             $resources = $this->resourceResolver->getResource(
                     $repository, 'createPaginatorByLevelSIG', array($criteria, $sorting)
             );
-        
-
             $maxPerPage = $this->config->getPaginationMaxPerPage();
             if (($limit = $request->query->get('limit')) && $limit > 0) {
                 if ($limit > 100) {
@@ -226,8 +224,7 @@ class ObjetiveSigController extends EvolutionController
         ;
         
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'valuesIndicator','managementSystems','api_details', 'sonata_api_read', 'formula'));
-        if ($request->get('_format') == 'html') {
-            
+        if ($request->get('_format') == 'html') {            
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
                 $this->config->getPluralResourceName() => $resources,
@@ -237,7 +234,6 @@ class ObjetiveSigController extends EvolutionController
 
         } else {
             $formatData = $request->get('_formatData', 'default');
-
             $view->setData($resources->toArray('', array(), $formatData));
         }
         return $this->handleView($view);
