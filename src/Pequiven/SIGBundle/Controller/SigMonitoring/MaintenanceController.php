@@ -30,6 +30,7 @@ class MaintenanceController extends ResourceController
         $period = $this->getPeriodService()->getPeriodActive();
 
         $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($id);
+        $createdBy = $standardization->getCreatedBy();
         
         foreach ($standardization->getMaintenance() as $valueMaintenance) {            
             $idMaintenance = $valueMaintenance->getId();            
@@ -57,6 +58,7 @@ class MaintenanceController extends ResourceController
             if ($valueCharge == 0 ) {
                 $maintenance->addStandardization($standardization);            
                 $maintenance->setAnalysis($request->get('sig_maintenance')['analysis']);
+                $maintenance->setCreatedBy($this->getUser());
                 $em->persist($maintenance);            
                 $em->flush();                
                 $idMaintenance = $maintenance->getId();
@@ -73,11 +75,16 @@ class MaintenanceController extends ResourceController
 
             $maintenanceAdvance->setMaintenance($maintenanceData);
             $maintenanceAdvance->setAdvance($advance);
+            $maintenanceAdvance->setCreatedBy($this->getUser());
             $maintenanceAdvance->setObservations($request->get('sig_maintenance_advance')['observations']);
 
             $em->persist($maintenanceAdvance);            
             $em->flush();
-
+            
+            //Notificacion a estandarizacion
+            $apiDataUrl = "";
+            $notification = $this->getNotificationService()->setDataNotification("Mantenimiento", "Ha sido cargada la data de por parte de mantenimiento en el Seguimiento y Eficacia que usted cargo anteriormente, puede verificar.", 4 , 1, $apiDataUrl, $createdBy);                                        
+            
             $this->get('session')->getFlashBag()->add('success', "Datos Cargados Exitosamente");
             die();
         }    

@@ -157,6 +157,7 @@ class MonitoringController extends ResourceController
             }
             $standardization->setTypeObject($request->get('type'));
             $standardization->setRelationObject($id);
+            $standardization->setCreatedBy($this->getUser());
             $em->persist($standardization);            
             $em->flush();
 
