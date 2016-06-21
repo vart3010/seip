@@ -62,19 +62,21 @@ class ObjetiveSigController extends EvolutionController
         $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_".$dataObject['rol'],$resource);
         
         $idManagements = [];
-        $indicators   = [];
+        $indicators    = [];
+        $idIndicators  = [];
         foreach ($resource->getManagementSystems() as $managementsystems) {
             $idManagements[] = $managementsystems->getId();
         }
         
-        foreach ($resource->getIndicators() as $dataIndicators) {
+        foreach ($resource->getIndicators() as $dataIndicators) {            
             foreach ($dataIndicators->getManagementSystems() as $indicatorsManagement) {
-                if (in_array($indicatorsManagement->getId(), $idManagements)) {
-                    $indicators[] = $dataIndicators;
+                if (in_array($indicatorsManagement->getId(), $idManagements)) {                        
+                    $indicators[] = $dataIndicators;                
                 }
             }
         }
-
+        $indicators = array_unique($indicators);
+        
         $view = $this
             ->view()
             ->setTemplate('PequivenSIGBundle:Objetive:'.$dataObject['route'].'/show.html.twig')
