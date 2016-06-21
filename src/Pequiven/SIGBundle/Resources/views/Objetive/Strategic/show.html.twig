@@ -6,7 +6,7 @@
 
 {% block before_body %}
     {{ contentHeader(
-        { ( path('pequiven_objetive_menu_list_strategic') ): ('pequiven_objetive.objetive_strategic'|trans ) },
+        { ( path('pequiven_objetives_list_sig',{'level':1}) ): ('pequiven_objetive.objetive_strategic'|trans ) },
          ('pequiven.show'|trans({},'messages'))
     ) }}
 {% endblock %}
