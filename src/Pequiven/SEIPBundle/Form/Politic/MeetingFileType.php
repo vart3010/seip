@@ -23,16 +23,31 @@ class MeetingFileType extends AbstractType {
                     'mapped' => false,
                     'attr' => array('class' => 'input input-xlarge')))
                 
-                ->add('meeting', 'entity', array(
-                    'label' => 'Categorias',
+//                ->add('meeting', 'entity', array(
+//                    'label' => 'Categorias',
+//                    'label_attr' => array('class' => 'label'),
+//                    'class' => 'Pequiven\SEIPBundle\Entity\Politic\CategoryFile',
+//                    'property' => 'description',
+//                    'empty_value' => 'Seleccione',
+//                    'required' => true,
+//                    'multiple' => true,
+//                    'attr' => array(
+//                        'class' => 'select2 input-large form-control',)))
+                ->add('meeting', null, array(
+                    'query_builder' => function(\Pequiven\SEIPBundle\Repository\Politic\MeetingRepository $repository) {
+                        return $repository->findQueryUsersByNoWorkStudyCircle();
+                    },
+                    'label' => 'Categorías',
                     'label_attr' => array('class' => 'label'),
-                    'class' => 'Pequiven\SEIPBundle\Entity\Politic\CategoryFile',
-                    'property' => 'description',
+                    'attr' => array(
+                        'class' => "input-large select2",
+//                        'ng-options' => 'value as (value.firstname + " "+ value.lastname + " ("+value.numPersonal+")") for (key,value) in data.responsibleGoals',
+                        'style' => 'width: 270px',
+                        'multiple' => 'multiple'
+                    ),
                     'empty_value' => 'Seleccione',
                     'required' => true,
-                    'multiple' => true,
-                    'attr' => array(
-                        'class' => 'select2 input-large form-control',)))
+                ))
         ;
     }
 
