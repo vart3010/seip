@@ -84,6 +84,7 @@ class IndicatorGroupController extends SEIPController {
                 return $this->redirect($this->generateUrl('pequiven_line_strategic_show', array('IndicatorGroup' => $group->getId(), 'id' => $lineStrategicId)));
             }
         } else {
+
             //MUESTRO UNA VISTA IGUAL A LA DE showDashboardIndicatorsGroupAction SOLO QUE AHORA MUESTRA A SU HIJO COMO PRINCIPAL
             if (count($childGroups) == 1) {
                 $childGroups = $childGroups[0]->getchildrens();
@@ -382,6 +383,46 @@ class IndicatorGroupController extends SEIPController {
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('Dashboard/viewDashboardPanelLineStrategicByGroup.html'))
+                ->setData($data)
+        ;
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * FUNCION PARA DESPLEGAS LOS GRUPOS DE INDICADORES HIJOS DE UN GRUPO (TABLEROS DE INDICADORES CPJAA)
+     * @return type
+     */
+    public function showSubIndicatorGroupsByGroupAction(Request $request) {
+
+        $groupParent = $this->container->get('pequiven.repository.indicatorgroup')->findOneById($this->getRequest()->get('idGroup'));
+        $indicatorService = $this->getIndicatorService();
+        $indicators = array();
+
+        $groups = $groupParent->getchildrens();
+
+        if ($groupParent->getchildrens() == null) {
+            $this->get('session')->getFlashBag()->add('error', "El Tablero NO Posee Indicadores Asociados");
+        } else {
+            foreach ($groups as $groupChild) {
+                foreach ($groupChild->getIndicators() as $ind) {
+                    if (!isset($indicators[$ind->getId()])) {
+                        $indicators[$ind->getId()] = $ind;
+                    }
+                }
+            }
+        }
+
+        $data = array(            
+            'indicatorService' => $indicatorService,
+            'indicators' => $indicators,
+            'groups' => $groups  ,
+            'group' => $groupParent
+        );
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('Dashboard/viewDashboardPanelSubGroupIndicatorByGroup.html'))
                 ->setData($data)
         ;
 

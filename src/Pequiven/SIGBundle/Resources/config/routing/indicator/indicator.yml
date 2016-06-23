@@ -42,6 +42,17 @@ pequiven_indicator_action_add_get_form:
     methods: [GET]
     options:
         expose: true
+#carga de formulario plan de acción para edicion
+pequiven_indicator_action_add_get_form_edit:
+    path: /{idAction}/{month}/get-form-edit.{_format}
+    defaults:
+        _controller: pequiven.controller.sig_action_indicator:getFormPlanEditAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
 #Carga de formulario de causas de evolution
 pequiven_indicatorcauses_get_form:
     path: /{idObject}/{typeObj}/get-form_causes.{_format}
