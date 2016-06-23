@@ -33,9 +33,9 @@ class MeetingFileType extends AbstractType {
 //                    'multiple' => true,
 //                    'attr' => array(
 //                        'class' => 'select2 input-large form-control',)))
-                ->add('meeting', null, array(
-                    'query_builder' => function(\Pequiven\SEIPBundle\Repository\Politic\MeetingRepository $repository) {
-                        return $repository->findQueryUsersByNoWorkStudyCircle();
+                ->add('categoryFile', null, array(
+                    'query_builder' => function(\Pequiven\SEIPBundle\Repository\Politic\CategoryFileRepository $repository) {
+                        return $repository->findQueryCategoriesCET();
                     },
                     'label' => 'Categorías',
                     'label_attr' => array('class' => 'label'),
