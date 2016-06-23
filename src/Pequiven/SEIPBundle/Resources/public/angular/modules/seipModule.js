@@ -4075,6 +4075,88 @@ angular.module('seipModule.controllers', [])
                 );
             }
         })
+        
+        .controller('OnePerTenController', function ($scope, $http) {
+            var formFile = angular.element('form#formFile');
+            $scope.idOnePerTen = null;
+            var isInit = false;
+
+            $scope.loadUploadFileOnePerTen = function (resource) {
+                $scope.initFormUpload(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.setHeight(350);
+
+                $scope.templateOptions.setParameterCallBack(resource);
+
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+
+            var addFile = function (save, successCallBack) {
+                $("#saveFile").click();
+                console.log(formFile);
+            };
+
+            $scope.templateOptions.setVar('addFile', addFile);
+
+            var confirmCallBack = function () {
+                addFile(true, function (data) {
+                    idOnePerTen: $scope.idOnePerTen;
+                });
+                return true;
+            };
+
+            $scope.initFormUpload = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+
+                var parameters = {
+                    idOnePerTen: $scope.idOnePerTen,
+                    _dc: numero
+                };
+
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_onePerTen_upload_form', parameters);
+
+                $scope.templates = [
+                    {
+                        name: 'Cargar Archivos',
+                        url: url,
+                        confirmCallBack: confirmCallBack
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+
+            $scope.renderPie3dDocuments = function (id, data, width, height) {
+                FusionCharts.ready(function () {
+                    var pie3dDocument = new FusionCharts({
+                        type: 'pie3d',
+                        renderAt: id,
+                        width: width,
+                        height: height,
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": data.dataSource.chart,
+                            "data": data.dataSource.dataset
+                        }
+                    });
+                    pie3dDocument.setTransparent(true);
+                    pie3dDocument.render();
+                }
+                );
+            }
+        })
+        
         .controller('FeeStructureController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
             var isInit = false;

@@ -683,9 +683,9 @@ class OnePerTen extends modelOnePerTen {
     
     /**
      * 
-     * @param \Pequiven\SEIPBundle\Entity\Sip\OnePerTenFileFile $onePerTenFile
+     * @param \Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile $onePerTenFile
      */
-    public function removeOnePerTenFile(OnePerTenFileFile $onePerTenFile) {
+    public function removeOnePerTenFile(OnePerTenFile $onePerTenFile) {
         $this->onePerTenFile->removeElement($onePerTenFile);
     }
 

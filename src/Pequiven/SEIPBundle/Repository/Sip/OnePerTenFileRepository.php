@@ -18,30 +18,7 @@ class OnePerTenFileRepository extends SeipEntityRepository {
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
 
-        $queryBuilder->innerJoin('optf.meeting', 'm');
-
-        //Filtro Localidad
-        if (($complejo = $criteria->remove('complejo')) !== null) {
-            $queryBuilder
-                    ->andWhere('wsc.complejo = :complejo')
-                    ->setParameter('complejo', $complejo)
-            ;
-        }
-
-        if (($gerencia = $criteria->remove('firstLineManagement'))) {
-            $queryBuilder
-                    ->innerJoin('wsc.gerencias', 'g')
-                    ->andWhere('g.id = :gerencia')
-                    ->setParameter('gerencia', $gerencia)
-            ;
-        }
-
-        if (($workStudyCircle = $criteria->remove('workStudyCircle'))) {
-            $queryBuilder
-                    ->andWhere('wsc.id = :workStudyCircle')
-                    ->setParameter('workStudyCircle', $workStudyCircle)
-            ;
-        }
+        $queryBuilder->innerJoin('optf.onePerTen', 'opt');
         
         if (($categoryFile = $criteria->remove('categoryFile'))) {
             $queryBuilder

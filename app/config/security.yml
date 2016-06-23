@@ -268,6 +268,7 @@ security:
             - ROLE_SEIP_SIP_ONEPERTEN
             - ROLE_SEIP_SIP_ONEPERTEN_EXPORT
             - ROLE_SEIP_SIP_ONEPERTEN_LIST
+            - ROLE_SEIP_SIP_DOCUMENTS_UPLOAD
             - ROLE_SEIP_SIP_CENTRO
             - ROLE_SEIP_SIP_CUTL
             - ROLE_SEIP_SIP_REQ
@@ -282,7 +283,7 @@ security:
             - ROLE_SEIP_SIP_MONITOR_ONLY_ANZOATEGUI
             - ROLE_SEIP_SIP_MONITOR_ONLY_CARABOBO
             - ROLE_SEIP_SIP_MONITOR_ONLY_CIRCUITO5
-            - ROLE_SEIP_SIP_SEACH_EMPLOYEES           
+            - ROLE_SEIP_SIP_SEACH_EMPLOYEES
             - ROLE_SEIP_VIEW_ALL_PERIODS
                 
             

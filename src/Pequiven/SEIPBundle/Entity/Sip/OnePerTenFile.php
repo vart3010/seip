@@ -101,7 +101,7 @@ class OnePerTenFile extends Model {
      * @param \Pequiven\SEIPBundle\Entity\Politic\CategoryFile $categoryFile
      * @return \Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile
      */
-    public function addCategoryFile(CategoryFile $categoryFile) {
+    public function addCategoryFile(\Pequiven\SEIPBundle\Entity\Politic\CategoryFile $categoryFile) {
         $this->categoryFile->add($categoryFile);
         return $this;
     }
@@ -109,7 +109,7 @@ class OnePerTenFile extends Model {
      * 
      * @param \Pequiven\SEIPBundle\Entity\Politic\CategoryFile $categoryFile
      */
-    public function removeCategoryFile(CategoryFile $categoryFile) {
+    public function removeCategoryFile(\Pequiven\SEIPBundle\Entity\Politic\CategoryFile $categoryFile) {
         $this->categoryFile->removeElement($categoryFile);
     }
     /**
