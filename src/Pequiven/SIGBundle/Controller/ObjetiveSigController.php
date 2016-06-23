@@ -468,7 +468,7 @@ class ObjetiveSigController extends EvolutionController
 
                             if($totalIndicatorOperatives > 0){//Si el objetivo operativo tiene indicadores operativos
                                 foreach($indicatorsOperatives as $indicatorOperative){
-                                    if (count($indicatorOperative->getManagementSystems()) != 0) {                                                                                      
+                                    if (count($indicatorOperative->getManagementSystems()) != 0) {
                                         foreach ($indicatorOperative->getManagementSystems() as $dataManagement) {
                                             if ($dataManagement->getId() == $managementSystemId) {
                                                 $activeSheet->setCellValue('J'.$row, $indicatorOperative->getRef().' '.$indicatorOperative->getDescription());//Seteamos el Indicador Operativo
@@ -479,7 +479,7 @@ class ObjetiveSigController extends EvolutionController
                                                 $contResult++;                            
                                             }
                                         }
-                                    }else{//En caso de que el objetivo operativo no tenga indicadores operativos
+                                    }elseif($totalIndicatorOperatives == 1){//En caso de que tenga solo un indicador operativo
                                         $activeSheet->setCellValue('J'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                                         $activeSheet->setCellValue('K'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                                         $activeSheet->setCellValue('M'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
@@ -496,7 +496,7 @@ class ObjetiveSigController extends EvolutionController
                                 $row++;
                                 $contResult++;
                             }
-
+                            //var_dump($row);
                             $rowFinOpe = $row - 1;//Fila Final del Objetivo Operativo
                             $rowFinTac = $row - 1;//Fila Final del Objetivo Táctico
                             //Sección Programas de Gestión Operativos
@@ -526,11 +526,14 @@ class ObjetiveSigController extends EvolutionController
                             }                            
                             $activeSheet->setCellValue('H'.$rowIniOpe, $dataProcess);//Seteamos el proceso                                 
                             $activeSheet->setCellValue('I'.$rowIniOpe, $objetiveOperative->getRef().' '.$objetiveOperative->getDescription());//Seteamos el Objetivo Operativo                        
-                            $activeSheet->setCellValue('L'.$rowIniOpe, $objetiveOperative->getGoal());//Seteamos el Peso del Objetivo Operativo                            
-                            $activeSheet->mergeCells(sprintf('O%s:O%s',($rowIniOpe),($rowFinOpe)));
-                            $activeSheet->mergeCells(sprintf('H%s:H%s',($rowIniOpe),($rowFinOpe)));                        
-                            $activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniOpe),($rowFinOpe)));
-                            $activeSheet->mergeCells(sprintf('L%s:L%s',($rowIniOpe),($rowFinOpe)));
+                            $activeSheet->setCellValue('L'.$rowIniOpe, $objetiveOperative->getGoal());//Seteamos el Peso del Objetivo Operativo    
+
+                            //$activeSheet->mergeCells(sprintf('O%s:O%s',($rowIniOpe),($rowFinOpe)));
+                            //$activeSheet->mergeCells(sprintf('H%s:H%s',($rowIniOpe),($rowFinOpe))); 
+                            //if (($rowIniOpe - $rowFinOpe) > 0) {                            
+                                //$activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniOpe),($rowFinOpe)));                                
+                            //}
+                            //$activeSheet->mergeCells(sprintf('L%s:L%s',($rowIniOpe),($rowFinOpe)));
                             $contTotalObjOperatives++;
                             
                             if($totalObjetiveOperatives = $contTotalObjOperatives){
@@ -539,7 +542,7 @@ class ObjetiveSigController extends EvolutionController
                         }//if de managementsystems            
                     }
                 }
-
+                
                 if($totalIndicatorTactics > 0){//Si el Objetivo Táctico tiene Indicadores Táctico
                     $rowsSectionOperative = $row - $rowIniTac;
                     $rowIndTac = $rowIniTac;
@@ -557,22 +560,23 @@ class ObjetiveSigController extends EvolutionController
                         }
                         $rowIndTac++;
                     }
+                    
                     if($totalIndicatorTactics > $rowsSectionOperative){                                                        
-                            $activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniOpe),($rowFinTac)));
+                            /*$activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniOpe),($rowFinTac)));
                             $activeSheet->mergeCells(sprintf('J%s:J%s',($rowIniOpe),($rowFinTac)));
                             $activeSheet->mergeCells(sprintf('L%s:L%s',($rowIniOpe),($rowFinTac)));
                             $activeSheet->mergeCells(sprintf('R%s:R%s',($rowIniOpe),($rowFinTac)));
                             $activeSheet->mergeCells(sprintf('M%s:M%s',($rowIniOpe),($rowFinTac)));
-                            $activeSheet->mergeCells(sprintf('O%s:O%s',($rowIniOpe),($rowFinTac)));
+                            $activeSheet->mergeCells(sprintf('O%s:O%s',($rowIniOpe),($rowFinTac)));*/
                     }
                 } else{//En caso de que el Objetivo Táctico no tenga Indicadores Tácticos
                     $activeSheet->setCellValue('D'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                     $activeSheet->setCellValue('E'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                     $activeSheet->setCellValue('F'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado                    $activeSheet->mergeCells(sprintf('E%s:E%s',($rowIniTac),($rowIniTac)));
                     
-                    $activeSheet->mergeCells(sprintf('D%s:D%s',($rowIniTac),($rowFinTac)));
-                    $activeSheet->mergeCells(sprintf('E%s:E%s',($rowIniTac),($rowFinTac)));
-                    $activeSheet->mergeCells(sprintf('F%s:F%s',($rowIniTac),($rowFinTac)));
+                    //$activeSheet->mergeCells(sprintf('D%s:D%s',($rowIniTac),($rowFinTac)));este
+                    //$activeSheet->mergeCells(sprintf('E%s:E%s',($rowIniTac),($rowFinTac)));este
+                    //$activeSheet->mergeCells(sprintf('F%s:F%s',($rowIniTac),($rowFinTac)));este
                 }
 
             } else{//En caso de que el objetivo táctico no tenga objetivos operativos
@@ -627,10 +631,10 @@ class ObjetiveSigController extends EvolutionController
             if($rowFinTac < $rowIniTac){
                 $rowFinTac = $row - 1;
             }
-            
-            $activeSheet->mergeCells(sprintf('B%s:B%s',($rowIniTac),($rowFinTac)));
-            $activeSheet->mergeCells(sprintf('C%s:C%s',($rowIniTac),($rowFinTac)));
-            $activeSheet->mergeCells(sprintf('G%s:G%s',($rowIniTac),($rowFinTac)));
+
+            //$activeSheet->mergeCells(sprintf('B%s:B%s',($rowIniTac),($rowFinTac)));
+            //$activeSheet->mergeCells(sprintf('C%s:C%s',($rowIniTac),($rowFinTac)));
+            //$activeSheet->mergeCells(sprintf('G%s:G%s',($rowIniTac),($rowFinTac)));
             
             //Pasando la politica del Sistema de la Calidad
             if ($contTac == 1) {
@@ -644,12 +648,12 @@ class ObjetiveSigController extends EvolutionController
                 
             }
             
-            $activeSheet->mergeCells(sprintf('B%s:B%s',($rowIniTac),($rowFinTac)));
+           // $activeSheet->mergeCells(sprintf('B%s:B%s',($rowIniTac),($rowFinTac)));
             
             $rowIniTac = $row;//Actualizamos la fila inicial del nivel Táctico
             $contTac++;
         }
-        
+        //die();
         $row = 7;//Fila Inicial del skeleton
         for($i=$row;$i<=$rowFinTac;$i++){//Recorremos toda la matriz para setear el alto y los bordes en cada celda
             $activeSheet->getRowDimension($i)->setRowHeight($rowHeight);
