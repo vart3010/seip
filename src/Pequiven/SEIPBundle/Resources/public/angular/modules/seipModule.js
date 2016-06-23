@@ -1550,6 +1550,21 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
+            //Carga del formulario para edición de acciones
+            $scope.loadEditToAction = function (resource) {
+                $scope.initFormEditAction(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setParameterCallBack(resource);
+
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
             //Carga el formulario de las Causas de Desviacion
             $scope.loadTemplateCausesDesviation = function (resource) {
                 $scope.initFormCausesAdd(resource);
@@ -1693,6 +1708,47 @@ angular.module('seipModule.controllers', [])
                     location.reload();
                 }
             };
+            //Añadir el formulario de edición de acción
+            var editAction = function (save, successCallBack) {
+                var formValueIndicator = angular.element('#form_edit_action_evolution');
+                var formData = formValueIndicator.serialize();                
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {                    
+                    var url = Routing.generate('pequiven_indicator_action_add_get_form_edit', {idAction: $scope.action_data, month: $scope.month});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    //$timeout(callAtTimeout, 3000);
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+                function callAtTimeout() {
+                    location.reload();
+                }
+            };
             //añade el analisis de la tendencia del indicador
             var addTrendEvolution = function (save, successCallBack) {
                 var formValueIndicator = angular.element('#form_trend_evolution');
@@ -1739,24 +1795,25 @@ angular.module('seipModule.controllers', [])
             $scope.templateOptions.setVar('addAction', addAction);
             $scope.templateOptions.setVar('addActionValues', addActionValues);
             $scope.templateOptions.setVar('addTrendEvolution', addTrendEvolution);
+            $scope.templateOptions.setVar('editAction', editAction);
             var confirmCallBackCauses = function () {
-                addCause(true, function (data) {
-                });
+                addCause(true, function (data) {});
                 return true;
             };
             var confirmCallBackAction = function () {
-                addAction(true, function (data) {
-                });
+                addAction(true, function (data) {});
                 return true;
             };
             var confirmCallBackActionValues = function () {
-                addActionValues(true, function (data) {
-                });
+                addActionValues(true, function (data) {});
+                return true;
+            };
+            var confirmCallBackeditAction = function () {
+                editAction(true, function (data) {});
                 return true;
             };
             var confirmCallBackTrend = function () {
-                addTrendEvolution(true, function (data) {
-                });
+                addTrendEvolution(true, function (data) {});
                 return true;
             };
             //Formulario Analisis de la tendencia
@@ -1827,6 +1884,30 @@ angular.module('seipModule.controllers', [])
                         name: 'Carga de Avance y Observaciones',
                         url: url,
                         confirmCallBack: confirmCallBackActionValues,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+            //Carga del fomrulario la edicion de acciones
+            $scope.initFormEditAction = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(750);
+
+                var parameters = {
+                    idAction: $scope.action_data,
+                    month: $scope.month,                    
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_indicator_action_add_get_form_edit', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Edición de Acciones',
+                        url: url,
+                        confirmCallBack: confirmCallBackeditAction,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);

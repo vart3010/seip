@@ -1545,8 +1545,8 @@ class ReportTemplateController extends SEIPController {
                             foreach ($plantReport->getProductsReport() as $productReport) {
                                 
                                 //VALIDA Q SEAN PLANTS REPORTS HIJOS
-                                if ($productReport->getProduct()->isEnabled()) { 
-                                    if ($productReport->getIsGroup() == 0) {
+                                if ($productReport->getIsGroup() == 0) {
+                                    if ($productReport->getProduct()->isEnabled()) { 
 
                                         if (!$dataProductsReports->contains($productReport)) {
                                             $dataProductsReports->add($productReport);
@@ -2486,8 +2486,8 @@ class ReportTemplateController extends SEIPController {
 
                             //PRODUCTS REPORTS
                             foreach ($plantReport->getProductsReport() as $productReport) {
-                                if ($productReport->getProduct()->isEnabled()) { 
-                                    if (!$productReport->getIsGroup()) {
+                                if (!$productReport->getIsGroup()) {
+                                    if ($productReport->getProduct()->isEnabled()) { 
 
                                         if (!$dataProductsReports->contains($productReport)) {
                                             $dataProductsReports->add($productReport);

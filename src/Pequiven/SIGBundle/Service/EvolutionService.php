@@ -300,19 +300,53 @@ class EvolutionService implements ContainerAwareInterface {
      *
      *
      */
+    public function getValuesOfIndicators($indicator){
+        $cont = 1;
+        $planned = $real = [];
+        foreach ($indicator->getValuesIndicator() as $value) {
+            $real[$cont] = $value->getValueOfIndicator();
+            $cont++;
+        }
+        
+        $data = [
+            'planned' => $planned,
+            'real'    => $real
+        ];
+        return $data;
+    }
+
+    /**
+     *
+     *
+     *
+     */
     public  function getDataChartOfObjetiveEvolution($object, $urlExportFromChart, $month){
         $valuePorcen = 100;
-        $arrangementprogram = $object->getArrangementPrograms();
         $periodCharge = $object->getPeriod()->getId();
         $dataPeriods = $this->getLastPeriods($periodCharge);        
         $periods = $dataPeriods['periods'];
+        $IndicatorService = $this->getIndicatorService(); //Obtenemos el servicio de los programas            
         
         $data = [];
-        foreach ($arrangementprogram as $value) {            
-            $data[] = $this->getGoalsArrangementProgram($value);            
+        if (count($object->getIndicators()) != 0) {
+            $indicators = $object->getIndicators();  
+            foreach ($indicators as $value) {
+                $labelsFrequencyNotificationArray = $IndicatorService->getLabelsByIndicatorFrequencyNotification($value);
+                $data[] = $this->getValuesOfIndicators($value);                            
+            }                        
+            $objectCons = 1;
+            $contReal = count($labelsFrequencyNotificationArray);            
+        }elseif(count($object->getArrangementPrograms()) != 0){
+            $arrangementprogram = $object->getArrangementPrograms();
+            foreach ($arrangementprogram as $value) {            
+                $data[] = $this->getGoalsArrangementProgram($value);            
+            }
+            $objectCons = 2;
+            $contReal = 12;
         }
+
         $real = [];
-        for ($i=0; $i < 12; $i++) { 
+        for ($i=0; $i < $contReal; $i++) {         
             for ($j=0; $j < count($data); $j++) {                 
                 if ($data[$j]['real']) {                    
                     $dataReal = $data[$j]['real'][$i+1];                                        
@@ -358,11 +392,12 @@ class EvolutionService implements ContainerAwareInterface {
         $dataSetAcum["seriesname"] = "Acumulado";        
         $labelProm                 = "Promedio";
         $labelobj                  = "Objetivo ".$periods[$periodCharge];
-
         $category = $dataPeriods['category'];        
         
-        //$cantData = count($real);          
         $cantData = (int)$month;          
+        if ($cantData > count($real)) {
+            $cantData = count($real);
+        }
 
         $cont = 1;
         if ($periodCharge > 2) {
@@ -378,9 +413,13 @@ class EvolutionService implements ContainerAwareInterface {
         if ($cantData >= 3) {                    
             $dataTendency = $ArrangementProgramService->ArrangementCalculateTendency($real, $cantData);//Calculo de Tendencia en servicio de Programas de Gestión
         }
-        for ($i=0; $i < count($real); $i++) {                 
-            if ($real[$cont] != NULL) {                                                 
-                $month = $ArrangementProgramService->getMonthsArrangementProgram($cont);//Carga de labels de los meses
+        for ($i=0; $i < $cantData; $i++) {                 
+            if ($real[$cont] != NULL) { 
+                if ($objectCons == 1) {
+                    $month = $labelsFrequencyNotificationArray[$cont];
+                }else{
+                    $month = $ArrangementProgramService->getMonthsArrangementProgram($cont);//Carga de labels de los meses                    
+                }
                 
                 $label["label"] = $month;
                 $category[] = $label;            
@@ -522,6 +561,15 @@ class EvolutionService implements ContainerAwareInterface {
 
         return $data;
     }
+
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    protected function getIndicatorService() {
+        return $this->container->get('pequiven_indicator.service.inidicator');
+    }    
+
 
     /**
      * 

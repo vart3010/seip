@@ -17,11 +17,84 @@ use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
  */
 class ObjetiveSigController extends EvolutionController
 {
-    public function strategicAction()
+    /**
+     * Finds and displays a Objetive entity of level Operative by Id.
+     *
+     */
+    public function showAction(Request $request)
     {
-        return $this->render('PequivenSIGBundle:Objetives:list.html.twig');
+        $resource = $this->findOr404($request);
+        switch ($resource->getObjetiveLevel()->getId()) {
+            case 1:
+                $dataObject = [
+                    'route' => 'Strategic',
+                    'rol' => 'STRATEGIC'
+                ];
+                break;
+            case 2:
+                $dataObject = [
+                    'route' => 'Tactic',
+                    'rol' => 'TACTIC'
+                ];
+                break;
+            case 3:
+                $dataObject = [
+                    'route' => 'Operative',
+                    'rol' => 'OPERATIVE'
+                ];
+                break;
+        }
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_'.$dataObject['rol'],'ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_'.$dataObject['rol'],'ROLE_SEIP_SIG_OBJECTIVE_VIEW_'.$dataObject['rol']));
+        
+        if(!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_'.$dataObject['rol'])){
+            if(!$securityService->isGranted('ROLE_SEIP_SIG_OBJECTIVE_VIEW_'.$dataObject['rol'])){
+                $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_'.$dataObject['rol'],$resource);
+            } else{
+                $securityService->checkSecurity('ROLE_SEIP_SIG_OBJECTIVE_VIEW_'.$dataObject['rol'],$resource);
+            }
+        }
+        $indicatorService = $this->getIndicatorService();
+        
+        //TODO: Colocar la validación de si el objetivo táctico está aprobado
+        $hasPermissionToApproved = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_APPROVED_".$dataObject['rol'],$resource);
+        $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_".$dataObject['rol'],$resource);
+        $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_".$dataObject['rol'],$resource);
+        
+        $idManagements = [];
+        $indicators    = [];
+        $idIndicators  = [];
+        foreach ($resource->getManagementSystems() as $managementsystems) {
+            $idManagements[] = $managementsystems->getId();
+        }
+        
+        foreach ($resource->getIndicators() as $dataIndicators) {            
+            foreach ($dataIndicators->getManagementSystems() as $indicatorsManagement) {
+                if (in_array($indicatorsManagement->getId(), $idManagements)) {                        
+                    $indicators[] = $dataIndicators;                
+                }
+            }
+        }
+        $indicators = array_unique($indicators);
+        
+        $view = $this
+            ->view()
+            ->setTemplate('PequivenSIGBundle:Objetive:'.$dataObject['route'].'/show.html.twig')
+            ->setTemplateVar('entity')
+            ->setData(array(
+                'entity'            => $resource,
+                'indicators'        => $indicators,
+                'indicatorService'  => $indicatorService,
+                'hasPermissionToUpdate'   => $hasPermissionToUpdate,
+                'hasPermissionToApproved' => $hasPermissionToApproved,
+                'isAllowToDelete'         => $isAllowToDelete,
+            ))
+        ;
+        $groups = array_merge(array('id','api_list','gerencia','gerenciaSecond'), $request->get('_groups',array()));
+        $view->getSerializationContext()->setGroups($groups);
+        return $this->handleView($view);
     }
-    
+
     /**
      *
      *  Metodo informe de evolución
@@ -125,8 +198,6 @@ class ObjetiveSigController extends EvolutionController
             $resources = $this->resourceResolver->getResource(
                     $repository, 'createPaginatorByLevelSIG', array($criteria, $sorting)
             );
-        
-
             $maxPerPage = $this->config->getPaginationMaxPerPage();
             if (($limit = $request->query->get('limit')) && $limit > 0) {
                 if ($limit > 100) {
@@ -153,8 +224,7 @@ class ObjetiveSigController extends EvolutionController
         ;
         
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'valuesIndicator','managementSystems','api_details', 'sonata_api_read', 'formula'));
-        if ($request->get('_format') == 'html') {
-            
+        if ($request->get('_format') == 'html') {            
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
                 $this->config->getPluralResourceName() => $resources,
@@ -164,7 +234,6 @@ class ObjetiveSigController extends EvolutionController
 
         } else {
             $formatData = $request->get('_formatData', 'default');
-
             $view->setData($resources->toArray('', array(), $formatData));
         }
         return $this->handleView($view);
@@ -399,7 +468,7 @@ class ObjetiveSigController extends EvolutionController
 
                             if($totalIndicatorOperatives > 0){//Si el objetivo operativo tiene indicadores operativos
                                 foreach($indicatorsOperatives as $indicatorOperative){
-                                    if (count($indicatorOperative->getManagementSystems()) != 0) {                                                                                      
+                                    if (count($indicatorOperative->getManagementSystems()) != 0) {
                                         foreach ($indicatorOperative->getManagementSystems() as $dataManagement) {
                                             if ($dataManagement->getId() == $managementSystemId) {
                                                 $activeSheet->setCellValue('J'.$row, $indicatorOperative->getRef().' '.$indicatorOperative->getDescription());//Seteamos el Indicador Operativo
@@ -410,7 +479,7 @@ class ObjetiveSigController extends EvolutionController
                                                 $contResult++;                            
                                             }
                                         }
-                                    }else{//En caso de que el objetivo operativo no tenga indicadores operativos
+                                    }elseif($totalIndicatorOperatives == 1){//En caso de que tenga solo un indicador operativo
                                         $activeSheet->setCellValue('J'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                                         $activeSheet->setCellValue('K'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                                         $activeSheet->setCellValue('M'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
@@ -427,7 +496,7 @@ class ObjetiveSigController extends EvolutionController
                                 $row++;
                                 $contResult++;
                             }
-
+                            //var_dump($row);
                             $rowFinOpe = $row - 1;//Fila Final del Objetivo Operativo
                             $rowFinTac = $row - 1;//Fila Final del Objetivo Táctico
                             //Sección Programas de Gestión Operativos
@@ -457,11 +526,14 @@ class ObjetiveSigController extends EvolutionController
                             }                            
                             $activeSheet->setCellValue('H'.$rowIniOpe, $dataProcess);//Seteamos el proceso                                 
                             $activeSheet->setCellValue('I'.$rowIniOpe, $objetiveOperative->getRef().' '.$objetiveOperative->getDescription());//Seteamos el Objetivo Operativo                        
-                            $activeSheet->setCellValue('L'.$rowIniOpe, $objetiveOperative->getGoal());//Seteamos el Peso del Objetivo Operativo                            
-                            $activeSheet->mergeCells(sprintf('O%s:O%s',($rowIniOpe),($rowFinOpe)));
-                            $activeSheet->mergeCells(sprintf('H%s:H%s',($rowIniOpe),($rowFinOpe)));                        
-                            $activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniOpe),($rowFinOpe)));
-                            $activeSheet->mergeCells(sprintf('L%s:L%s',($rowIniOpe),($rowFinOpe)));
+                            $activeSheet->setCellValue('L'.$rowIniOpe, $objetiveOperative->getGoal());//Seteamos el Peso del Objetivo Operativo    
+
+                            //$activeSheet->mergeCells(sprintf('O%s:O%s',($rowIniOpe),($rowFinOpe)));
+                            //$activeSheet->mergeCells(sprintf('H%s:H%s',($rowIniOpe),($rowFinOpe))); 
+                            //if (($rowIniOpe - $rowFinOpe) > 0) {                            
+                                //$activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniOpe),($rowFinOpe)));                                
+                            //}
+                            //$activeSheet->mergeCells(sprintf('L%s:L%s',($rowIniOpe),($rowFinOpe)));
                             $contTotalObjOperatives++;
                             
                             if($totalObjetiveOperatives = $contTotalObjOperatives){
@@ -470,7 +542,7 @@ class ObjetiveSigController extends EvolutionController
                         }//if de managementsystems            
                     }
                 }
-
+                
                 if($totalIndicatorTactics > 0){//Si el Objetivo Táctico tiene Indicadores Táctico
                     $rowsSectionOperative = $row - $rowIniTac;
                     $rowIndTac = $rowIniTac;
@@ -488,22 +560,23 @@ class ObjetiveSigController extends EvolutionController
                         }
                         $rowIndTac++;
                     }
+                    
                     if($totalIndicatorTactics > $rowsSectionOperative){                                                        
-                            $activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniOpe),($rowFinTac)));
+                            /*$activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniOpe),($rowFinTac)));
                             $activeSheet->mergeCells(sprintf('J%s:J%s',($rowIniOpe),($rowFinTac)));
                             $activeSheet->mergeCells(sprintf('L%s:L%s',($rowIniOpe),($rowFinTac)));
                             $activeSheet->mergeCells(sprintf('R%s:R%s',($rowIniOpe),($rowFinTac)));
                             $activeSheet->mergeCells(sprintf('M%s:M%s',($rowIniOpe),($rowFinTac)));
-                            $activeSheet->mergeCells(sprintf('O%s:O%s',($rowIniOpe),($rowFinTac)));
+                            $activeSheet->mergeCells(sprintf('O%s:O%s',($rowIniOpe),($rowFinTac)));*/
                     }
                 } else{//En caso de que el Objetivo Táctico no tenga Indicadores Tácticos
                     $activeSheet->setCellValue('D'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                     $activeSheet->setCellValue('E'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                     $activeSheet->setCellValue('F'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado                    $activeSheet->mergeCells(sprintf('E%s:E%s',($rowIniTac),($rowIniTac)));
                     
-                    $activeSheet->mergeCells(sprintf('D%s:D%s',($rowIniTac),($rowFinTac)));
-                    $activeSheet->mergeCells(sprintf('E%s:E%s',($rowIniTac),($rowFinTac)));
-                    $activeSheet->mergeCells(sprintf('F%s:F%s',($rowIniTac),($rowFinTac)));
+                    //$activeSheet->mergeCells(sprintf('D%s:D%s',($rowIniTac),($rowFinTac)));este
+                    //$activeSheet->mergeCells(sprintf('E%s:E%s',($rowIniTac),($rowFinTac)));este
+                    //$activeSheet->mergeCells(sprintf('F%s:F%s',($rowIniTac),($rowFinTac)));este
                 }
 
             } else{//En caso de que el objetivo táctico no tenga objetivos operativos
@@ -558,10 +631,10 @@ class ObjetiveSigController extends EvolutionController
             if($rowFinTac < $rowIniTac){
                 $rowFinTac = $row - 1;
             }
-            
-            $activeSheet->mergeCells(sprintf('B%s:B%s',($rowIniTac),($rowFinTac)));
-            $activeSheet->mergeCells(sprintf('C%s:C%s',($rowIniTac),($rowFinTac)));
-            $activeSheet->mergeCells(sprintf('G%s:G%s',($rowIniTac),($rowFinTac)));
+
+            //$activeSheet->mergeCells(sprintf('B%s:B%s',($rowIniTac),($rowFinTac)));
+            //$activeSheet->mergeCells(sprintf('C%s:C%s',($rowIniTac),($rowFinTac)));
+            //$activeSheet->mergeCells(sprintf('G%s:G%s',($rowIniTac),($rowFinTac)));
             
             //Pasando la politica del Sistema de la Calidad
             if ($contTac == 1) {
@@ -575,12 +648,12 @@ class ObjetiveSigController extends EvolutionController
                 
             }
             
-            $activeSheet->mergeCells(sprintf('B%s:B%s',($rowIniTac),($rowFinTac)));
+           // $activeSheet->mergeCells(sprintf('B%s:B%s',($rowIniTac),($rowFinTac)));
             
             $rowIniTac = $row;//Actualizamos la fila inicial del nivel Táctico
             $contTac++;
         }
-        
+        //die();
         $row = 7;//Fila Inicial del skeleton
         for($i=$row;$i<=$rowFinTac;$i++){//Recorremos toda la matriz para setear el alto y los bordes en cada celda
             $activeSheet->getRowDimension($i)->setRowHeight($rowHeight);
@@ -612,6 +685,14 @@ class ObjetiveSigController extends EvolutionController
         exit;
         
     }
+
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    protected function getIndicatorService() {
+        return $this->container->get('pequiven_indicator.service.inidicator');
+    }     
 
     /**
      * 

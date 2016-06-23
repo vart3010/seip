@@ -25,7 +25,7 @@ class MaintenanceType extends AbstractType
                 'attr' => array('class' => 'input input-large')               
                 ))
             ->add('dateEnd', 'date', array(
-                'label'=>'Fecha Cierre',
+                'label'=>'Fecha Fin',
                 'label_attr' => array('class' => 'label'),
                 'format' => 'd/M/y',
                 'widget' => 'single_text',
