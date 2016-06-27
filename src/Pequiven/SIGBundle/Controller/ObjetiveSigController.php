@@ -111,6 +111,11 @@ class ObjetiveSigController extends EvolutionController
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
 
         $object = $this->container->get('pequiven.repository.objetive')->find($idObject);
+        //Validación para Visualizar informe de Evolución
+        if (!$object->getShowEvolutionView()) {
+            $this->get('session')->getFlashBag()->add('success', 'Objetivo no Habilitado para Visualizar Informe de Evolución');
+            return $this->redirect($this->generateUrl("pequiven_seip_default_index"));         
+        }
         //Url export
         $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export_chart', array('id' => $request->get("id"), 'month' => $month, 'typeObj' => 3));
         //Grafica de Evolución
