@@ -611,3 +611,40 @@ pequiven_sip_show_oneperten_pqv:
     requirements:
         _format: html|json|xml
     methods: [GET]
+    
+pequiven_onePerTen_get_url_file:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven.controller.oneperten:generateUrlFileAction 
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
+pequiven_onePerTen_download_file:
+    path: /showDocument
+    defaults:
+        _controller: pequiven.controller.oneperten:downloadFileAction 
+        expose: true
+        
+pequiven_onePerTen_upload_form:
+    path: /{idOnePerTen}/formFile.{_format}
+    defaults:
+        _controller: pequiven.controller.oneperten:uploadFilesAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+        
+pequiven_onePerTen_upload:
+    path: /{idOnePerTen}/upload.{_format}
+    defaults:
+        _controller: pequiven.controller.oneperten:uploadAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true

@@ -34,5 +34,7 @@ sip:
         menu: Menu
         list: Lista
         generate: Generar
+    section_file_cet: Círculo de Estudio y Trabajo
+    section_file_exp: Expediente
 
 

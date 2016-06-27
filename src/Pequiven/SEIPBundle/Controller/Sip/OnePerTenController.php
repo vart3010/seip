@@ -491,6 +491,27 @@ class OnePerTenController extends SEIPController {
             $isAllowToAddAnalisis = true;
         }
         
+        
+        //CUANDO CARGA UN ARCHIVO
+        if (count($request->files) > 0) {
+            $categoryFilesSelected = $request->get("onePerTenFile_data");
+
+
+            $band = false;
+            //VALIDACION QUE SEA UN ARCHIVO PERMITIDO
+            foreach ($request->files as $file) {
+                if (in_array($file["nameFile"]->guessExtension(), \Pequiven\SEIPBundle\Model\Sip\OnePerTenFile::getTypesFile())) {
+                    $band = true;
+                }
+            }
+            if ($band) {
+                $this->createOnePerTenFile($onePerTen, $request->files, $categoryFilesSelected["categoryFile"]);
+            } else {
+                $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
+            }
+        }
+        $files = $onePerTen->getOnePerTenFile();
+        
         $formSearchOne = $this->createForm(new OnePerTenType);
         return $this->render('PequivenSEIPBundle:Sip:onePerTen\show.html.twig', array(
                     "form" => $formSearchOne->createView(),
@@ -505,7 +526,28 @@ class OnePerTenController extends SEIPController {
                     "efectividad" => $efectividad,
                     "profileItemsWithResult" => $profileItemsWithResult,
                     "isAllowToAddAnalisis" => $isAllowToAddAnalisis,
+                    'files' => $files
         ));
+    }
+    
+    public function uploadFilesAction(Request $request) {
+        $onePerTenFile = new \Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile();
+        $form = $this->createForm(new \Pequiven\SEIPBundle\Form\Sip\OnePerTenFileType(), $onePerTenFile);
+        $em = $this->getDoctrine();
+        $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->find($request->get("idOnePerTen"));
+
+        return $this->render('PequivenSEIPBundle:Sip:onePerTen\uploadFile.html.twig', array(
+                    'data' => $onePerTen->getUser()->getId(),
+                    'form' => $form->createView()
+        ));
+    }
+    
+    public function uploadAction(Request $request) {
+        $this->redirect($this->generateUrl('pequiven_search_members', array('user' => $user->getId())));
+        
+        $this->redirect($this->generateUrl("pequiven_meeting_show", array(
+                    'id' => $request->get("idMeeting"),
+        )));
     }
     
     public function addAnalisisAction(Request $request) {
@@ -665,6 +707,84 @@ class OnePerTenController extends SEIPController {
         $pdf->writeHTML($html, true, false, true, false, '');
 
         $pdf->Output('Reporte de 1x10' . '.pdf', 'D');
+    }
+    
+    public function createOnePerTenFile(OnePerTen $onePerTen, $files, $categoryFiles) {
+        $user = $onePerTen->getUser();
+        $fileName = $user->getId() . "_" . $onePerTen->getId();
+        $fileUploaded = false;
+        $fileExist = false;
+        $em = $this->getDoctrine()->getEntityManager();
+
+        foreach ($files as $file) {
+            $ifExistFile = $em->getRepository('PequivenSEIPBundle:Sip\OnePerTenFile')->findBy(array('nameFile' => base64_encode($file["nameFile"]->getClientOriginalName())));
+
+            if (count($ifExistFile) == 0) {
+                $onePerTenFile = new \Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile;
+                $onePerTenFile->setCreatedBy($this->getUser());
+                $onePerTenFile->setNameFile($file["nameFile"]->getClientOriginalName());
+                $onePerTenFile->setPath(\Pequiven\SEIPBundle\Model\Sip\OnePerTenFile::getUploadDir());
+                $onePerTenFile->setExtensionFile($file["nameFile"]->guessExtension());
+                $onePerTenFile->setOnePerTen($onePerTen);
+
+                foreach ($categoryFiles as $key => $value) {
+                    $categoryFileEntity = $em->getRepository('PequivenSEIPBundle:Politic\CategoryFile')->findOneBy(array('id' => $value));
+                    $onePerTenFile->addCategoryFile($categoryFileEntity);
+                }
+                
+                //SE MUEVE EL ARCHIVO AL SERVIDOR
+                    $file["nameFile"]->move($this->container->getParameter("kernel.root_dir") . '/../web/' . \Pequiven\SEIPBundle\Model\Sip\OnePerTenFile::getUploadDir(), \Pequiven\SEIPBundle\Model\Sip\OnePerTenFile::NAME_FILE . $fileName . "_" . base64_encode($file["nameFile"]->getClientOriginalName()));
+                $fileUploaded = $file["nameFile"]->isValid();
+            } else {
+                $fileExist = true;
+            }
+        }
+
+
+        if (!$fileExist) {
+            if (!$fileUploaded) {
+
+
+                $em->persist($onePerTenFile);
+                $em->flush();
+
+                $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.saveFileSuccess', array(), 'PequivenIndicatorBundle'));
+                $this->redirect($this->generateUrl('pequiven_search_members', array('user' => $user->getId())));
+            } else {
+                $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.errorFileUpload', array(), 'PequivenIndicatorBundle'));
+                //$request->request->set("uploadFile", "");
+                $this->redirect($this->generateUrl('pequiven_search_members', array('user' => $user->getId())));
+            }
+        } else {
+            $this->get('session')->getFlashBag()->add('error', "El archivo ya existe.");
+            $this->redirect($this->generateUrl('pequiven_search_members', array('user' => $user->getId())));
+        }
+    }
+    
+    public function generateUrlFileAction(Request $request) {
+
+        $response = new JsonResponse();
+        $data = array();
+        $data["url"] = $this->generateUrl("pequiven_onePerTen_download_file", array("id" => $request->get("id")));
+        $response->setData($data);
+        return $response;
+    }
+    
+    public function downloadFileAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $idFile = $request->get("id");
+        $file = $em->getRepository('PequivenSEIPBundle:Sip\OnePerTenFile')->findOneBy(array('id' => $idFile));
+
+
+        $path = \Pequiven\SEIPBundle\Model\Sip\OnePerTenFile::LOCATION_UPLOAD_FILE;
+        $name = \Pequiven\SEIPBundle\Model\Sip\OnePerTenFile::NAME_FILE;
+        $idOnePerTen = $file->getOnePerTen();
+        $user = $file->getOnePerTen()->getUser();
+
+        $ruta = $this->container->getParameter("kernel.root_dir") . '/../web/' . $path . "/" . $name . $user->getId() . "_" . $idOnePerTen->getId() . "_" . base64_encode($file->getNameFile());
+
+        header('Content-type: application/pdf');
+        readfile($ruta);
     }
 
     protected function getCneService() {
