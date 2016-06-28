@@ -4503,43 +4503,42 @@ class IndicatorService implements ContainerAwareInterface {
      * @return type
      */
     public function getPromdIndicator(Indicator $indicator) {
-
         $result = $acum = $sum = 0;
         $calc = $indicator->getIndicatorSigMedition();
         $contMonth = 1;
-
-        if ($calc === null) {
-            $calc = 1;
-        }
-
-//Recibiendo la frecuencia de calculo del indicador
-//$labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+        if ($calc === null) {$calc = 1;}
+        //Recibiendo la frecuencia de calculo del indicador
+        //$labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
 
         foreach ($indicator->getValuesIndicator() as $value) {
             $data = $value->getValueOfIndicator();
-//$cant = $labelsFrequencyNotificationArray[$contMonth];
-
+            //$cant = $labelsFrequencyNotificationArray[$contMonth];
             $contMonth++;
             $sum = $sum + $data;
             $acum = $acum + $data;
         }
 
-//Data Prom
+        //Data Prom
         if ($contMonth == 1) {
             $contMonth = 2;
         }
 
-        if ($calc === 1) {
-            if ($indicator->getId() == 1655) {
-                $result = $acum / ($contMonth - 1); //Calculo de Promedio                
-            } else {
-                $result = $indicator->getResultReal();
-            }
-//$value = ceil($result); //Paso de promedio
-            $value = $result; //Paso de promedio
-        } elseif ($calc === 0) {
-            $value = $sum; //Paso de sumatoria
-        }
+        switch ($calc) {
+            case 0:
+                $value = $sum; //Paso de sumatoria                
+                break;
+            case 1:
+                if ($indicator->getId() == 1655) {
+                    $value = $acum / ($contMonth - 1); //Calculo de Promedio                
+                } else {
+                    $value = $indicator->getResultReal();
+                }         
+                //$value = ceil($value); //Paso de promedio
+                break;
+            case 2:
+                $value = $indicator->getResultReal();                    
+                break;            
+        }        
 
         return $value;
     }
@@ -4786,7 +4785,7 @@ class IndicatorService implements ContainerAwareInterface {
 
 //Promedio o Acumulado
         $medition = "Promedio";
-        if ($indicator->getIndicatorSigMedition() == 0) {
+        if ($indicator->getIndicatorSigMedition() == 0 or $indicator->getIndicatorSigMedition() == 2) {
             $medition = "Acumulado";
         }
 
