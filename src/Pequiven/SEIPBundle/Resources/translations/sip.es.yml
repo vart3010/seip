@@ -36,5 +36,13 @@ sip:
         generate: Generar
     section_file_cet: Círculo de Estudio y Trabajo
     section_file_exp: Expediente
+    expedientes: 
+        attachment: Expedientes
+        add: Añadir Expediente
+        name: Nombre
+        load: Carga de Expedientes
+        download: Descargar
+        file: Expediente
+        category: Categoria
 
 
