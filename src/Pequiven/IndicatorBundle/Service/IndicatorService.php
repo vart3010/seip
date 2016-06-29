@@ -666,7 +666,10 @@ class IndicatorService implements ContainerAwareInterface {
             $urlParemeters = $options["urlParameters"];
         } else {
             $url = 'pequiven_indicator_show_dashboard';
-            $urlParemeters = array('id' => $indicator->getId());
+            $urlParemeters = array(
+                'id' => $indicator->getId(),
+                'tablero' => 0
+                    );
         }
 
         if ($modeUrl == CommonObject::OPEN_URL_OTHER_WINDOW) {
@@ -1013,7 +1016,8 @@ class IndicatorService implements ContainerAwareInterface {
         } else {
             $url = 'pequiven_indicator_show_dashboard';
         }
-
+//var_dump($options);
+//die();
         $totalNumChildrens = count($indicator->getChildrens()); //Número de indicadores asociados
 //        $numDiv = $totalNumChildrens > 0 ? bcdiv(100, $totalNumChildrens,2) : 100;
         if (isset($options['childrens']) && array_key_exists('childrens', $options)) {
@@ -1033,7 +1037,7 @@ class IndicatorService implements ContainerAwareInterface {
                     $set["toolText"] = $indicatorChildren->getSummary() . ':{br}' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
                     $set["color"] = $this->getColorOfResult($indicatorChildren);
                     if (count($indicatorChildren->getCharts()) > 0) {
-                        $set["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId()));
+                        $set["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(),'tablero' => $options['tablero']));
                     }
                     $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicatorChildren->getId()));
                     $dataSet[] = $set;
