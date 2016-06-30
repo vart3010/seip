@@ -20,12 +20,21 @@ class ChartController extends SEIPController {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
+        $tablero = $request->get('tablero');
+        if($tablero == 1){
+            $options = array(
+                        "url" => 'pequiven_indicator_showdashboardtablero',
+                        "urlParameters" => array('id' => $idIndicator,'tablero' => 1)
+                    );
+        }
+        $options['tablero'] = $tablero;
+        $options['childrens'] = true;
 
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getDataDashboardWidgetDoughnut($indicator, array('childrens' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getDataDashboardWidgetDoughnut($indicator, $options); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 

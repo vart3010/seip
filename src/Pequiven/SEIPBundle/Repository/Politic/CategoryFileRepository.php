@@ -14,6 +14,28 @@ class CategoryFileRepository extends SeipEntityRepository {
         $qb = $this->getQueryBuilder();
         return $qb->getQuery()->getResult();
     }
+    
+    function findQueryCategoriesCET(array $criteria = array()) {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->addSelect('cf')
+                ->andWhere('cf.sectionFile = :sectionFile')
+                ->setParameter('sectionFile', \Pequiven\SEIPBundle\Entity\Politic\CategoryFile::SECTION_CET)
+        ;
+
+        return $qb;
+    }
+    
+    function findQueryCategoriesEXP(array $criteria = array()) {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->addSelect('cf')
+                ->andWhere('cf.sectionFile = :sectionFile')
+                ->setParameter('sectionFile', \Pequiven\SEIPBundle\Entity\Politic\CategoryFile::SECTION_EXP)
+        ;
+
+        return $qb;
+    }
 
     protected function getAlias() {
         return 'cf';

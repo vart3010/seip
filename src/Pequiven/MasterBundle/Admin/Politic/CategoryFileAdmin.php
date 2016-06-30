@@ -18,18 +18,30 @@ class CategoryFileAdmin extends Admin {
         $show
                 ->add('id')
                 ->add('description')
+                ->add('sectionFile', 'choice', array(
+                    'choices' => \Pequiven\SEIPBundle\Entity\Politic\CategoryFile::getTypesOfSection(),
+                    'translation_domain' => 'sip'
+                ))
         ;
     }
 
     protected function configureFormFields(FormMapper $form) {
         $form
                 ->add('description')
+                ->add('sectionFile', 'choice', array(
+                    'choices' => \Pequiven\SEIPBundle\Entity\Politic\CategoryFile::getTypesOfSection(),
+                    'translation_domain' => 'sip'
+                ))
         ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
                 ->add('description')
+                ->add('sectionFile', null, array(), 'choice', array(
+                    'choices' => \Pequiven\SEIPBundle\Entity\Politic\CategoryFile::getTypesOfSection(),
+                    'translation_domain' => 'sip'
+                ))
         ;
     }
 

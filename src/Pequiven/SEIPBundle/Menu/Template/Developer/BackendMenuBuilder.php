@@ -1175,9 +1175,9 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     $comercializadoras->addChild($itemsTableros);
                 }
                 $tableros->addChild($comercializadoras);
+                $visualize->addChild($tableros);
             }
 
-            $visualize->addChild($tableros);
 
 
 

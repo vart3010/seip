@@ -114,6 +114,8 @@
     <br /><br />
     {% include 'PequivenSEIPBundle:Sip:onePerTen/analisis.html.twig' %}
     <br /><br />
+    {% include 'PequivenSEIPBundle:Sip:onePerTen/onePerTenFiles.html.twig' %}
+    <br /><br />
 
     <div class="block" >
         <div class="block-title">
@@ -296,6 +298,21 @@
 
 {% block javascript %}
     <script type="text/javascript">
+        function openFile(idFile) {
+            var data = {
+                id: idFile
+            };
+            $.ajax({
+                type: 'get',
+                url: '{{ path("pequiven_onePerTen_get_url_file") }}',
+                data: data,
+                success: function (data) {
+                    window.open(data["url"], '_blank');
+                }
+            });
+
+        }
+        
         $(document).ready(function () {
 
             $("#onePerTen_search_user").select2({allowClear: true});
@@ -357,6 +374,19 @@
                 } else {
                     alert("Debe Ingresar una Cédula.");
                 }
+            });
+            
+            $("button#downloadFile").click(function () {
+                var idFile = $(this).attr("data");
+                openFile(idFile);
+            });
+            
+            $("input#onePerTenFilePdf").change(function () {
+                $("form#forma").submit();
+            });
+
+            $("#clickUploadFile").click(function () {
+                $("input#onePerTenFilePdf").click();
             });
         });
     </script>

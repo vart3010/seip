@@ -82,7 +82,12 @@ class MaintenanceController extends ResourceController
             $em->flush();
             
             //Notificacion a estandarizacion
-            $apiDataUrl = "";
+            $routeParameters = array(                
+                'id'       => $request->get('id'),
+                'type'     => $request->get('type')
+            );
+
+            $apiDataUrl = $this->generateUrl('pequiven_sig_monitoring_show', $routeParameters);
             $notification = $this->getNotificationService()->setDataNotification("Mantenimiento", "Ha sido cargada la data de por parte de mantenimiento en el Seguimiento y Eficacia que usted cargo anteriormente, puede verificar.", 4 , 1, $apiDataUrl, $createdBy);                                        
             
             $this->get('session')->getFlashBag()->add('success', "Datos Cargados Exitosamente");

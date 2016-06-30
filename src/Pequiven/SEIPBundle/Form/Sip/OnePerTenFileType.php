@@ -1,15 +1,15 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Form\Politic;
+namespace Pequiven\SEIPBundle\Form\Sip;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class MeetingFileType extends AbstractType {
+class OnePerTenFileType extends AbstractType {
 
     /**
-     * @author Victor Tortolero
+     * @author Matías Jiménez
      * @param FormBuilderInterface $builder
      * @param array $options
      */
@@ -22,26 +22,14 @@ class MeetingFileType extends AbstractType {
                     'required' => true,
                     'mapped' => false,
                     'attr' => array('class' => 'input input-xlarge')))
-                
-//                ->add('meeting', 'entity', array(
-//                    'label' => 'Categorias',
-//                    'label_attr' => array('class' => 'label'),
-//                    'class' => 'Pequiven\SEIPBundle\Entity\Politic\CategoryFile',
-//                    'property' => 'description',
-//                    'empty_value' => 'Seleccione',
-//                    'required' => true,
-//                    'multiple' => true,
-//                    'attr' => array(
-//                        'class' => 'select2 input-large form-control',)))
                 ->add('categoryFile', null, array(
                     'query_builder' => function(\Pequiven\SEIPBundle\Repository\Politic\CategoryFileRepository $repository) {
-                        return $repository->findQueryCategoriesCET();
+                        return $repository->findQueryCategoriesEXP();
                     },
                     'label' => 'Categorías',
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
                         'class' => "input-large select2",
-//                        'ng-options' => 'value as (value.firstname + " "+ value.lastname + " ("+value.numPersonal+")") for (key,value) in data.responsibleGoals',
                         'style' => 'width: 270px',
                         'multiple' => 'multiple'
                     ),
@@ -56,7 +44,7 @@ class MeetingFileType extends AbstractType {
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Pequiven\SEIPBundle\Entity\Politic\MeetingFile'
+            'data_class' => 'Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile'
         ));
     }
 
@@ -64,7 +52,7 @@ class MeetingFileType extends AbstractType {
      * @return string
      */
     public function getName() {
-        return 'meetingFile_data';
+        return 'onePerTenFile_data';
     }
 
 }
