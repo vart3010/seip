@@ -11,6 +11,24 @@ use Symfony\Component\HttpFoundation\Request;
  *
  */
 class ChartController extends SEIPController {
+    
+    /**
+     * 
+     * @param Request $request
+     */
+    public function obtainArrayOptions(Request $request){
+        $options = array();
+        $tablero = $request->get('tablero');
+        if($tablero == 1){
+            $options = array(
+                "url" => 'pequiven_indicator_showdashboardtablero',
+                "urlParameters" => array('id' => $idIndicator,'tablero' => 1)
+                );
+        }
+        $options['tablero'] = $tablero;
+        
+        return $options;
+    }
 
     /**
      * 0-Función que retorna la data de los indicadores asociados en un gráfico de tipo dona.
@@ -20,22 +38,11 @@ class ChartController extends SEIPController {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
-        $tablero = $request->get('tablero');
-        if($tablero == 1){
-            $options = array(
-                        "url" => 'pequiven_indicator_showdashboardtablero',
-                        "urlParameters" => array('id' => $idIndicator,'tablero' => 1)
-                    );
-        }
-        $options['tablero'] = $tablero;
+        $options = $this->obtainArrayOptions($request);
         $options['childrens'] = true;
-
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
-
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
-
         $dataChart = $indicatorService->getDataDashboardWidgetDoughnut($indicator, $options); //Obtenemos la data del gráfico de acuerdo al indicador
-
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
         return $response;
@@ -49,13 +56,11 @@ class ChartController extends SEIPController {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
-
+        $options = $this->obtainArrayOptions($request);
+        $options['childrens'] = true;
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
-
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
-
-        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('childrens' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
-
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, $options); //Obtenemos la data del gráfico de acuerdo al indicador
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
         return $response;

@@ -3441,9 +3441,9 @@ class IndicatorService implements ContainerAwareInterface {
                     $dataPlan["value"] = number_format($indicatorChildren->getTotalPlan(), 2, ',', '.');
                     $dataMedition["value"] = number_format($indicatorChildren->getResultReal(), 2, ',', '.');
                     if (count($indicatorChildren->getCharts()) > 0) {
-                        $label["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId()));
-                        $dataReal["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId()));
-                        $dataPlan["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId()));
+                        $label["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(),'tablero' => $options['tablero']));
+                        $dataReal["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(),'tablero' => $options['tablero']));
+                        $dataPlan["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(),'tablero' => $options['tablero']));
                     }
 
                     $category[] = $label;
