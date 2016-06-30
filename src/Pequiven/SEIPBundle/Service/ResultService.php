@@ -10,6 +10,7 @@ use Pequiven\MasterBundle\Entity\Operator;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\ArrangementProgramBundle\Entity\Goal;
+use Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd;
 
 /**
  * Servicio que se encarga de actualizar los resultados
@@ -352,46 +353,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         //ESTABLEZCO EL VALOR DE PENALIZACIONES EN METAS POR RETRASO Y POR PORCENTAJE (DOS PENALIZACIONES DISTINTAS)
         $this->setPenaltiesbyGoal($arrangementProgram, $amountPenalty);
 
-        //PENALIZO LAS METAS
         $totalAP = 0;
         foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
-            $advance = $goal->getResult();
-            $penalties = $goal->getPenalty() + $goal->getPercentagepenalty();
-            if ((($advance - $penalties) < 0) || (($advance - $penalties) >= 120)) {
-                if (($advance - $penalties) < 0) {
-                    $valor = 0;
-                } else {
-                    $valor = 120 - $penalties;
-                }
-            } else {
-                $valor = $advance - $penalties;
-            }
-            $goal->setResult($valor);
-            $goal->setResultReal($valor);
-            $totalAP = $totalAP + ($valor * ($goal->getWeight() / 100));
-
-            //SALVO EL VALOR DE LA META PENALIZADA SIN RESTRICCIONES DE RANGO ES DECIR >120%
-            $goal->setresultBeforepenalty($advance - $penalties);
-
-            $em->persist($goal);
-
-            //TRAIGO LOS MOVIMIENTOS DE LA META
-            $movements = $em->getRepository('PequivenArrangementProgramBundle:MovementEmployee\MovementEmployee')->FindMovementDetailsbyGoal($goal->getId());
-
-            //ACTUALIZO LOS MOVIMIENTOS CON LOS VALORES ACTUALIZADOS DE LA META POR FECHA DE EMISION
-            if ($movements != null) {
-                foreach ($movements as $mov) {
-                    $datos = $this->CalculateAdvancePenalty($goal, $mov->getDate());
-                    if (($datos['realResult'] - $datos['penalty']) < 0) {
-                        $mov->setrealAdvance(0);
-                    } else {
-                        $mov->setrealAdvance($datos['realResult'] - $datos['penalty']);
-                    }
-                    $mov->setPentalty($datos['penalty']);
-                    $mov->setPlanned($datos['plannedResult']);
-                    $em->persist($mov);
-                }
-            }
+            //CALCULO EL TOTAL DEL PROGRAMA DE GESTIÓN
+            $totalAP = $totalAP + ($goal->getResult() * ($goal->getWeight() / 100));
         }
 
         $em->flush();
@@ -447,154 +412,52 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $em->flush();
     }
 
-    /* Establece Penalizaciones de Metas
-     * 
-     * @param Request $request
+    /**
+     * CALCULA EL AVANCE, REAL Y PENALIZACIONES DE UN PROGRAMA DE GESTION A UNA FECHA ESPECIFICA O LA ACTUAL
+     * @param ArrangementProgram $AP
+     * @param type $date
+     * @return type
      */
+    function CalculateAdvancePenaltyAP(ArrangementProgram $AP, $date) {
 
-    public function setPenaltiesbyGoal(ArrangementProgram $resource, $porcentaje) {
+        $realResult = 0;
+        $penalty = 0;
+        $plannedResult = 0;
+        $amountPenalty = 0;
 
-        $real = array();
-        $planned = array();
-        $em = $this->getDoctrine()->getManager();
-        $timeline = $resource->getTimeline();
-
-        foreach ($timeline->getGoals() as $timeline_goals) {
-
-            //ENERO
-            $sump = $timeline_goals->getGoalDetails()->getJanuaryPlanned();
-            $sumr = $timeline_goals->getGoalDetails()->getJanuaryReal();
-            $planned[1] = $sump;
-            $real[1] = $sumr;
-
-            //+FEBRERO
-            $sump += $timeline_goals->getGoalDetails()->getFebruaryPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getFebruaryReal();
-            $planned[2] = $sump;
-            $real[2] = $sumr;
-
-            //+MARZO
-            $sump += $timeline_goals->getGoalDetails()->getMarchPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getMarchReal();
-            $planned[3] = $sump;
-            $real[3] = $sumr;
-
-            //+ABRIL
-            $sump += $timeline_goals->getGoalDetails()->getAprilPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getAprilReal();
-            $planned[4] = $sump;
-            $real[4] = $sumr;
-
-            //+MAYO
-            $sump += $timeline_goals->getGoalDetails()->getMayPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getMayReal();
-            $planned[5] = $sump;
-            $real[5] = $sumr;
-
-            //+JUNIO
-            $sump += $timeline_goals->getGoalDetails()->getJunePlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getJuneReal();
-            $planned[6] = $sump;
-            $real[6] = $sumr;
-
-            //+JULIO
-            $sump += $timeline_goals->getGoalDetails()->getJulyPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getJulyReal();
-            $planned[7] = $sump;
-            $real[7] = $sumr;
-
-            //+AGOSTO
-            $sump += $timeline_goals->getGoalDetails()->getAugustPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getAugustReal();
-            $planned[8] = $sump;
-            $real[8] = $sumr;
-
-            //+SEPTIEMBRE
-            $sump += $timeline_goals->getGoalDetails()->getSeptemberPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getSeptemberReal();
-            $planned[9] = $sump;
-            $real[9] = $sumr;
-
-            //+OCTUBRE
-            $sump += $timeline_goals->getGoalDetails()->getOctoberPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getOctoberReal();
-            $planned[10] = $sump;
-            $real[10] = $sumr;
-
-            //+NOVIEMBRE
-            $sump += $timeline_goals->getGoalDetails()->getNovemberPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getNovemberReal();
-            $planned[11] = $sump;
-            $real[11] = $sumr;
-
-            //+DICIEMBRE
-            $sump += $timeline_goals->getGoalDetails()->getDecemberPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getDecemberReal();
-            $planned[12] = $sump;
-            $real[12] = $sumr;
-
-
-            if ((new \DateTime()) >= ($timeline_goals->getperiod()->getDateEnd())) {
-                $mes = 12;
-            } else {
-                if ((date("n") == 1) || (date("n") == 12)) {
-                    $mes = date("n");
-                } else {
-                    $mes = date("n") - 1;
-                }
-            }
-
-            $mayor = 0;
-            for ($i = 1; $i <= $mes; $i++) {
-                $penal = 0;
-                for ($j = $i; $j <= $mes; $j++) {
-                    if ($real[$j] < $planned[$i]) {
-                        $penal++;
-                    } else {
-                        break;
-                    }
-                }
-
-                if ($penal > $mayor) {
-                    $mayor = $penal;
-                }
-
-                if ($planned[$i] == 100) {
-                    break;
-                }
-            }
-
-            //CARGO LA PENALIZACIÓN POR INCUMPLIMIENTO Y POR PORCENTAJE (DOS PENALIZACIONES DISTINTAS)
-            $timeline_goals->setPenalty($mayor);
-            $timeline_goals->setpercentagepenalty($porcentaje);
-
-            $em->persist($timeline_goals);
+        //DETERMINO SI EL PROGRAMA SE PENALIZA POR PORCENTAJE O NO
+        $lastNotificationInProgressDate = $AP->getDetails()->getLastNotificationInProgressDate();
+        if ($AP->isCouldBePenalized() && ($this->getPeriodService()->isPenaltyInResult($lastNotificationInProgressDate) === true || $AP->isForcePenalize() === true)) {
+            $amountPenalty = $this->getPeriodService()->getPeriodActive()->getPercentagePenalty();
         }
-        $em->flush();
+
+
+        //DETERMINO LAS METAS PERTENECIENTES AL AP
+        foreach ($AP->getTimeline()->getGoals() as $meta) {
+            //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA Y VOY SUMANDO POR META
+            $datosAP = $this->CalculateAdvancePenalty($meta, $date);
+            $realResult+=(($datosAP['realResult'] * $meta->getWeight())) / 100;
+            $penalty+=(($datosAP['penalty'] * $meta->getWeight())) / 100;
+            $plannedResult+=(($datosAP['plannedResult'] * $meta->getWeight())) / 100;
+        }
+
+        $advance = $realResult - $penalty;
+        $retorno = array(
+            'penalty' => ($penalty + $amountPenalty),
+            'realResult' => $advance,
+            'plannedResult' => $plannedResult
+        );
+
+        return $retorno;
     }
 
     /**
-     * CALCULA EL AVANCE, REAL Y PENALIZACIONES DE METAS A UNA FECHA
+     * CALCULA EL AVANCE, REAL Y PENALIZACIONES DE METAS A UNA FECHA ESPECIFICA O LA ACTUAL
      * @param Goal $goal
      * @param type $date
-     * @return array
+     * @return type
      */
-    function CalculateAdvancePenalty(Goal $goal, $date, $user = null) {
-
-        $real = array();
-        $planned = array();
-
-        $periodService = $this->getPeriodService();
-        $amountPenalty = 0;
-
-        $arrangementProgram = $goal->getTimeline()->getArrangementProgram();
-
-        $lastNotificationInProgressDate = $arrangementProgram->getDetails()->getLastNotificationInProgressDate();
-
-        if ($arrangementProgram->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationInProgressDate) === true || $arrangementProgram->isForcePenalize() === true)) {
-            $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
-        }
-
+    public function CalculateAdvancePenalty(Goal $goal, $date = null) {
         //ENERO
         $sump = $goal->getGoalDetails()->getJanuaryPlanned();
         $sumr = $goal->getGoalDetails()->getJanuaryReal();
@@ -667,7 +530,167 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $planned[12] = $sump;
         $real[12] = $sumr;
 
-        $mes = date_format($date, 'n');
+        $dateEnd = $goal->getperiod()->getDateEnd();
+
+        return $this->applyPenalizationAlgorithm($real, $planned, $date, $dateEnd);
+    }
+
+    /**
+     * CALCULA EL AVANCE, REAL Y PENALIZACIONES DE METAS INDIVIDUALES A UNA FECHA ESPECIFICA O LA ACTUAL
+     * @param Goal $goal
+     * @param type $date
+     * @return type
+     */
+    public function CalculateAdvancePenaltyIndv(GoalDetailsInd $goal, $date = null) {
+        //ENERO
+        $sump = $goal->getJanuaryPlanned();
+        if ($goal->getJanuaryReal() == null) {
+            $sumr = $goal->getGoalDetails()->getJanuaryReal();
+        } else {
+            $sumr = $goal->getJanuaryReal();
+        }
+        $planned[1] = $sump;
+        $real[1] = $sumr;
+
+        //+FEBRERO
+        $sump += $goal->getFebruaryPlanned();
+        if ($goal->getFebruaryReal() == null) {
+            $sumr += $goal->getGoalDetails()->getFebruaryReal();
+        } else {
+            $sumr += $goal->getFebruaryReal();
+        }
+        $planned[2] = $sump;
+        $real[2] = $sumr;
+
+        //+MARZO
+        $sump += $goal->getMarchPlanned();
+        if ($goal->getMarchReal() == null) {
+            $sumr += $goal->getGoalDetails()->getMarchReal();
+        } else {
+            $sumr += $goal->getMarchReal();
+        }
+        $planned[3] = $sump;
+        $real[3] = $sumr;
+
+        //+ABRIL
+        $sump += $goal->getAprilPlanned();
+        if ($goal->getAprilReal() == null) {
+            $sumr += $goal->getGoalDetails()->getAprilReal();
+        } else {
+            $sumr += $goal->getAprilReal();
+        }
+        $planned[4] = $sump;
+        $real[4] = $sumr;
+
+        //+MAYO
+        $sump += $goal->getMayPlanned();
+        if ($goal->getMayReal() == null) {
+            $sumr += $goal->getGoalDetails()->getMayReal();
+        } else {
+            $sumr += $goal->getMayReal();
+        }
+        $planned[5] = $sump;
+        $real[5] = $sumr;
+
+        //+JUNIO
+        $sump += $goal->getJunePlanned();
+        if ($goal->getJuneReal() == null) {
+            $sumr += $goal->getGoalDetails()->getJuneReal();
+        } else {
+            $sumr += $goal->getJuneReal();
+        }
+        $planned[6] = $sump;
+        $real[6] = $sumr;
+
+        //+JULIO
+        $sump += $goal->getJulyPlanned();
+        if ($goal->getJulyReal() == null) {
+            $sumr += $goal->getGoalDetails()->getJulyReal();
+        } else {
+            $sumr += $goal->getJulyReal();
+        }
+        $planned[7] = $sump;
+        $real[7] = $sumr;
+
+        //+AGOSTO
+        $sump += $goal->getAugustPlanned();
+        if ($goal->getAugustReal() == null) {
+            $sumr += $goal->getGoalDetails()->getAugustReal();
+        } else {
+            $sumr += $goal->getAugustReal();
+        }
+        $planned[8] = $sump;
+        $real[8] = $sumr;
+
+        //+SEPTIEMBRE
+        $sump += $goal->getSeptemberPlanned();
+        if ($goal->getSeptemberReal() == null) {
+            $sumr += $goal->getGoalDetails()->getSeptemberReal();
+        } else {
+            $sumr += $goal->getSeptemberReal();
+        }
+        $planned[9] = $sump;
+        $real[9] = $sumr;
+
+        //+OCTUBRE
+        $sump += $goal->getOctoberPlanned();
+        if ($goal->getOctoberReal() == null) {
+            $sumr += $goal->getGoalDetails()->getOctoberReal();
+        } else {
+            $sumr += $goal->getOctoberReal();
+        }
+        $planned[10] = $sump;
+        $real[10] = $sumr;
+
+        //+NOVIEMBRE
+        $sump += $goal->getNovemberPlanned();
+        if ($goal->getNovemberReal() == null) {
+            $sumr += $goal->getGoalDetails()->getNovemberReal();
+        } else {
+            $sumr += $goal->getNovemberReal();
+        }
+        $planned[11] = $sump;
+        $real[11] = $sumr;
+
+        //+DICIEMBRE
+        $sump += $goal->getDecemberPlanned();
+        if ($goal->getDecemberReal() == null) {
+            $sumr += $goal->getGoalDetails()->getDecemberReal();
+        } else {
+            $sumr += $goal->getDecemberReal();
+        }
+        $planned[12] = $sump;
+        $real[12] = $sumr;
+
+        $dateEnd = $goal->getGoalDetails()->getGoal()->getperiod()->getDateEnd();
+
+        return $this->applyPenalizationAlgorithm($real, $planned, $date, $dateEnd);
+    }
+
+    /**
+     * APLICA EL ALGORITMO DE PENALIZACIONES
+     * @param int $real
+     * @param int $planned
+     * @param type $date
+     * @param type $dateEnd
+     * @return int
+     */
+    public function applyPenalizationAlgorithm($real, $planned, $date = null, $dateEnd) {
+
+        if ($date != null) {
+            $mes = date_format($date, 'n');
+        } else {
+            if ((new \DateTime()) >= ($dateEnd)) {
+                $mes = 12;
+            } else {
+                if ((date("n") == 1) || (date("n") == 12)) {
+                    $mes = date("n");
+                } else {
+                    $mes = date("n") - 1;
+                }
+            }
+        }
+
         $mayor = 0;
 
         for ($i = 1; $i <= $mes; $i++) {
@@ -700,7 +723,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
 
         $retorno = array(
-            'penalty' => ($mayor + $amountPenalty),
+            'penalty' => $mayor,
             'realResult' => $real[$mes],
             'plannedResult' => $planned[$mes]
         );
@@ -708,30 +731,112 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         return $retorno;
     }
 
-    function CalculateAdvancePenaltyAP(ArrangementProgram $AP, $date) {
+    /**
+     * FUNCION QUE ESCALA EL AVANCE DE UN PROGRAMA, META, MOVIMIENTO O META INDIDIVUAL A LOS PARAMETROS ESTABLECIDOS
+     * @param type $datos
+     * @return type
+     */
+    public function rescaleValue($datos) {
 
-        $realResult = 0;
-        $penalty = 0;
-        $plannedResult = 0;
+        $advance = $datos['realResult'];
+        $penalties = $datos['penalty'];
 
-        //DETERMINO LAS METAS PERTENECIENTES AL AP
-        foreach ($AP->getTimeline()->getGoals() as $meta) {
-            //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA Y VOY SUMANDO POR META
-            $datosAP = $this->CalculateAdvancePenalty($meta, $date);
+        if ((($advance - $penalties) < 0) || (($advance - $penalties) >= 120)) {
+            if (($advance - $penalties) < 0) {
+                $valor = 0;
+            }
 
-            $realResult+=(($datosAP['realResult'] * $meta->getWeight())) / 100;
-            $penalty+=(($datosAP['penalty'] * $meta->getWeight())) / 100;
-            $plannedResult+=(($datosAP['plannedResult'] * $meta->getWeight())) / 100;
+            if (($advance - $penalties) >= 120) {
+                $valor = 120 - $penalties;
+            }
+        } else {
+            $valor = $advance - $penalties;
         }
 
-        $advance = $realResult - $penalty;
-        $retorno = array(
-            'penalty' => $penalty,
-            'realResult' => $advance,
-            'plannedResult' => $plannedResult
-        );
+        return $valor;
+    }
 
-        return $retorno;
+    /**
+     * GUARDA EN BASE DE DATOS LAS PENALIZACIONES DE UNA META
+     * @param ArrangementProgram $resource
+     * @param type $porcentaje
+     */
+    public function setPenaltiesbyGoal(ArrangementProgram $resource, $porcentaje) {
+
+        $em = $this->getDoctrine()->getManager();
+        $timeline = $resource->getTimeline();
+
+        foreach ($timeline->getGoals() as $timeline_goals) {
+            $penalty = $this->CalculateAdvancePenalty($timeline_goals);
+
+            //CARGO LA PENALIZACIÓN POR INCUMPLIMIENTO Y POR PORCENTAJE (DOS PENALIZACIONES DISTINTAS)
+            $timeline_goals->setPenalty($penalty['penalty']);
+            $timeline_goals->setpercentagepenalty($porcentaje);
+            $penalty['penalty'] += $penalty['penalty'] + $porcentaje;
+
+            //VALIDO QUE NO HAYAN AVANCES LOCOS;                    
+            $valor = $this->rescaleValue($penalty);
+
+            $timeline_goals->setResult($valor);
+            $timeline_goals->setResultReal($valor);
+
+            //SALVO EL VALOR DE LA META PENALIZADA SIN RESTRICCIONES DE RANGO ES DECIR >120%
+            $timeline_goals->setresultBeforepenalty($penalty['realResult']);
+
+            $em->persist($timeline_goals);
+
+            //BUSCO LAS NOTIFICACIONES INDIVIDUALES DE LA META
+            $entityInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findBy(array('goalDetails' => $timeline_goals->getGoalDetails()));
+
+            //CARGO LA PENALIZACIÓN POR INCUMPLIMIENTO Y POR PORCENTAJE (DOS PENALIZACIONES DISTINTAS)
+            foreach ($entityInd as $goalDetailsInd) {
+
+                $valores = $this->CalculateAdvancePenaltyIndv($goalDetailsInd);
+                $goalDetailsInd->setPenalty($valores['penalty']);
+                $goalDetailsInd->setpercentagepenalty($porcentaje);
+
+                //VALIDO QUE NO HAYAN AVANCES LOCOS;                    
+                $valor = $this->rescaleValue($valores);
+
+                $goalDetailsInd->setAdvance($valor);
+                $goalDetailsInd->setResultReal($valor);
+
+                //SALVO EL VALOR DE LA META PENALIZADA SIN RESTRICCIONES DE RANGO ES DECIR >120%
+                $goalDetailsInd->setresultBeforepenalty($valores['realResult']);
+                $em->persist($goalDetailsInd);
+                $em->flush($goalDetailsInd);
+            }
+
+            //TRAIGO Y ACTUALIZO LOS MOVIMIENTOS CON LOS VALORES ACTUALIZADOS DE LA META POR FECHA DE EMISION
+            $movements = $em->getRepository('PequivenArrangementProgramBundle:MovementEmployee\MovementEmployee')->FindMovementDetailsbyGoal($timeline_goals->getId());
+
+            if ($movements != null) {
+                foreach ($movements as $mov) {
+
+                    //BUSCO SI EXISTE NOTIFICACION INDIVIDUAL EN EL MOVIMIENTO
+                    $searchCriteria = array(
+                        'goalDetails' => $timeline_goals->getGoalDetails(),
+                        'user' => $mov->getUser(),
+                    );
+
+                    $movInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy($searchCriteria);
+
+                    if ($movInd != null) {
+                        $datos = $this->CalculateAdvancePenaltyIndv($movInd, $mov->getDate());
+                    } else {
+                        $datos = $this->CalculateAdvancePenalty($timeline_goals, $mov->getDate());
+                    }
+
+                    //VALIDO QUE NO HAYAN AVANCES LOCOS;                    
+                    $valor = $this->rescaleValue($datos);
+                    $mov->setrealAdvance($valor);
+                    $mov->setPentalty($datos['penalty']);
+                    $mov->setPlanned($datos['plannedResult']);
+                    $em->persist($mov);
+                }
+            }
+        }
+        $em->flush();
     }
 
     /**

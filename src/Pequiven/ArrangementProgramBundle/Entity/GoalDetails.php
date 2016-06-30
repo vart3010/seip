@@ -268,6 +268,10 @@ class GoalDetails extends Base {
      * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd",mappedBy="goalDetails",cascade={"persist","remove"})
      */
     protected $goalDetailsInd;
+    
+    public function __construct() {
+        $this->goalDetailsInd = new \Doctrine\Common\Collections\ArrayCollection();        
+    }
 
     /**
      * Get id
@@ -844,6 +848,16 @@ class GoalDetails extends Base {
 
     function getGoalDateEnd() {
         return $this->goalDateEnd;
+    }
+        
+    
+    public function addGoalDetailsInd(GoalDetailsInd $goalDetailsInd) {
+        $this->goalDetailsInd[] = $goalDetailsInd;
+        return $this;
+    }
+
+    public function removeGoalDetailsInd(GoalDetailsInd $goalDetailsInd) {
+        $this->goalDetailsInd->removeElement($goalDetailsInd);
     }
 
     function getGoalDetailsInd() {

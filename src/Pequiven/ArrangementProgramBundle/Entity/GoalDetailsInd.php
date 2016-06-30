@@ -4,12 +4,10 @@ namespace Pequiven\ArrangementProgramBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Tpg\ExtjsBundle\Annotation as Extjs;
-use Pequiven\ArrangementProgramBundle\Entity\GoalDetails;
-use Pequiven\SEIPBundle\Entity\User;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Detalles de la meta
+ * Detalles de la Meta Individual
  *
  * @Extjs\Model
  * @Extjs\ModelProxy("/api/goals/details")
@@ -40,6 +38,14 @@ class GoalDetailsInd {
      * @ORM\Column(name="status", type="integer")
      */
     private $status = 0;
+
+    /**
+     * Estatus
+     * @var integer
+     *
+     * @ORM\Column(name="movementEmployeeDate", type="datetime", nullable=true)
+     */
+    private $movementEmployeeDate;
 
     /**
      * Meta
@@ -249,6 +255,13 @@ class GoalDetailsInd {
     private $decemberReal;
 
     /**
+     * Avance de la meta
+     * 
+     * @ORM\Column(name="advance",type="float")
+     */
+    private $advance = 0;
+
+    /**
      * Penalizacion
      * @var integer
      *
@@ -280,6 +293,14 @@ class GoalDetailsInd {
      */
     private $resultReal = 0;
 
+    /**
+     * Resultado original
+     * 
+     * @var float
+     * @ORM\Column(name="realResultGoal",type="float")
+     */
+    protected $realResult = 0;
+
     function getId() {
         return $this->id;
     }
@@ -290,6 +311,10 @@ class GoalDetailsInd {
 
     function getStatus() {
         return $this->status;
+    }
+
+    function getMovementEmployeeDate() {
+        return $this->movementEmployeeDate;
     }
 
     function getGoalDetails() {
@@ -408,6 +433,10 @@ class GoalDetailsInd {
         return $this->resultBeforepenalty;
     }
 
+    function getResultReal() {
+        return $this->resultReal;
+    }
+
     function setId($id) {
         $this->id = $id;
     }
@@ -418,6 +447,10 @@ class GoalDetailsInd {
 
     function setStatus($status) {
         $this->status = $status;
+    }
+
+    function setMovementEmployeeDate($movementEmployeeDate) {
+        $this->movementEmployeeDate = $movementEmployeeDate;
     }
 
     function setGoalDetails(\Pequiven\ArrangementProgramBundle\Entity\GoalDetails $goalDetails) {
@@ -536,10 +569,6 @@ class GoalDetailsInd {
         $this->resultBeforepenalty = $resultBeforepenalty;
     }
 
-    function getResultReal() {
-        return $this->resultReal;
-    }
-
     function setResultReal($resultReal) {
         $this->resultReal = $resultReal;
     }
@@ -554,6 +583,22 @@ class GoalDetailsInd {
             $this->id = null;
             $this->goal = null;
         }
+    }
+
+    function getAdvance() {
+        return $this->advance;
+    }
+
+    function getRealResult() {
+        return $this->realResult;
+    }
+
+    function setAdvance($advance) {
+        $this->advance = $advance;
+    }
+
+    function setRealResult($realResult) {
+        $this->realResult = $realResult;
     }
 
 }

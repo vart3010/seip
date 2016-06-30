@@ -107,8 +107,8 @@ class MovementEmployeeController extends SEIPController {
 
         $mov = $em->getRepository('PequivenArrangementProgramBundle:MovementEmployee\MovementEmployee')->find($id);
         $em->remove($mov);
-        $em->flush();        
-        
+        $em->flush();
+
         $this->get('session')->getFlashBag()->add('success', "Movimiento Eliminado Exitosamente");
 
         if ($type == 'Goal') {
@@ -168,8 +168,8 @@ class MovementEmployeeController extends SEIPController {
                     $arrangementProgram = $entity->getTimeline()->getArrangementProgram();
                     $idap = $arrangementProgram->getid();
 
-                    //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
-                    $datos = $this->CalculateAdvancePenalty($entity, $date);
+                    //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA                 
+                    $datos = $this->getResultService()->CalculateAdvancePenalty($entity, $date);
                 }
 
                 if (!is_null($request->get('idAP'))) {
@@ -185,7 +185,7 @@ class MovementEmployeeController extends SEIPController {
                     $idap = $id;
 
                     //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
-                    $datos = $this->CalculateAdvancePenaltyAP($entity, $date);
+                    $datos = $this->getResultService()->CalculateAdvancePenaltyAP($entity, $date);
                 }
 
                 //SI EL EMPLEADO NO SE ENCUENTRA ASIGNADO A LA META
@@ -309,7 +309,15 @@ class MovementEmployeeController extends SEIPController {
                     $idap = $arrangementProgram->getid();
 
                     //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
-                    $datos = $this->CalculateAdvancePenalty($entity, $date);
+                    //BUSCO SI TIENE NOTIFICACION INDIVIDUAL                     
+                    $entityInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy(array('goalDetails' => $entity->getGoalDetails(), 'user' => $user));
+                    if ($entityInd != null) {
+                        $datos = $this->getResultService()->CalculateAdvancePenaltyIndv($entityInd, $date);
+                        $em->remove($entityInd);
+                        $em->flush();
+                    } else {
+                        $datos = $this->getResultService()->CalculateAdvancePenalty($entity, $date);
+                    }
                 }
 
                 if (!is_null($request->get('idAP'))) {
@@ -325,7 +333,7 @@ class MovementEmployeeController extends SEIPController {
                     $idap = $id;
 
                     //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
-                    $datos = $this->CalculateAdvancePenaltyAP($entity, $date);
+                    $datos = $this->getResultService()->CalculateAdvancePenaltyAP($entity, $date);
                 }
 
                 //VALIDO QUE LAS METAS O PROGRAMAS NO QUEDEN VACIOS
@@ -437,164 +445,11 @@ class MovementEmployeeController extends SEIPController {
     }
 
     /**
-     * CALCULA EL AVANCE, REAL Y PENALIZACIONES DE METAS A UNA FECHA
-     * @param Goal $goal
-     * @param type $date
-     * @return array
+     * Servicio que calcula los resultados
+     * @return \Pequiven\SEIPBundle\Service\ResultService
      */
-    function CalculateAdvancePenalty(Goal $goal, $date) {
-
-        $real = array();
-        $planned = array();
-
-        $periodService = $this->getPeriodService();
-        $amountPenalty = 0;
-
-        $arrangementProgram = $goal->getTimeline()->getArrangementProgram();
-
-        $lastNotificationInProgressDate = $arrangementProgram->getDetails()->getLastNotificationInProgressDate();
-
-        if ($arrangementProgram->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationInProgressDate) === true || $arrangementProgram->isForcePenalize() === true)) {
-            $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
-        }
-
-        //ENERO
-        $sump = $goal->getGoalDetails()->getJanuaryPlanned();
-        $sumr = $goal->getGoalDetails()->getJanuaryReal();
-        $planned[1] = $sump;
-        $real[1] = $sumr;
-
-        //+FEBRERO
-        $sump += $goal->getGoalDetails()->getFebruaryPlanned();
-        $sumr += $goal->getGoalDetails()->getFebruaryReal();
-        $planned[2] = $sump;
-        $real[2] = $sumr;
-
-        //+MARZO
-        $sump += $goal->getGoalDetails()->getMarchPlanned();
-        $sumr += $goal->getGoalDetails()->getMarchReal();
-        $planned[3] = $sump;
-        $real[3] = $sumr;
-
-        //+ABRIL
-        $sump += $goal->getGoalDetails()->getAprilPlanned();
-        $sumr += $goal->getGoalDetails()->getAprilReal();
-        $planned[4] = $sump;
-        $real[4] = $sumr;
-
-        //+MAYO
-        $sump += $goal->getGoalDetails()->getMayPlanned();
-        $sumr += $goal->getGoalDetails()->getMayReal();
-        $planned[5] = $sump;
-        $real[5] = $sumr;
-
-        //+JUNIO
-        $sump += $goal->getGoalDetails()->getJunePlanned();
-        $sumr += $goal->getGoalDetails()->getJuneReal();
-        $planned[6] = $sump;
-        $real[6] = $sumr;
-
-        //+JULIO
-        $sump += $goal->getGoalDetails()->getJulyPlanned();
-        $sumr += $goal->getGoalDetails()->getJulyReal();
-        $planned[7] = $sump;
-        $real[7] = $sumr;
-
-        //+AGOSTO
-        $sump += $goal->getGoalDetails()->getAugustPlanned();
-        $sumr += $goal->getGoalDetails()->getAugustReal();
-        $planned[8] = $sump;
-        $real[8] = $sumr;
-
-        //+SEPTIEMBRE
-        $sump += $goal->getGoalDetails()->getSeptemberPlanned();
-        $sumr += $goal->getGoalDetails()->getSeptemberReal();
-        $planned[9] = $sump;
-        $real[9] = $sumr;
-
-        //+OCTUBRE
-        $sump += $goal->getGoalDetails()->getOctoberPlanned();
-        $sumr += $goal->getGoalDetails()->getOctoberReal();
-        $planned[10] = $sump;
-        $real[10] = $sumr;
-
-        //+NOVIEMBRE
-        $sump += $goal->getGoalDetails()->getNovemberPlanned();
-        $sumr += $goal->getGoalDetails()->getNovemberReal();
-        $planned[11] = $sump;
-        $real[11] = $sumr;
-
-        //+DICIEMBRE
-        $sump += $goal->getGoalDetails()->getDecemberPlanned();
-        $sumr += $goal->getGoalDetails()->getDecemberReal();
-        $planned[12] = $sump;
-        $real[12] = $sumr;
-
-        $mes = date_format($date, 'n');
-        $mayor = 0;
-
-        for ($i = 1; $i <= $mes; $i++) {
-            $penal = 0;
-            for ($j = $i; $j <= $mes; $j++) {
-                if ($real [$j] < $planned[$i]) {
-                    $penal++;
-                } else {
-                    break;
-                }
-            }
-
-            if ($penal > $mayor) {
-                $mayor = $penal;
-            }
-
-            if ($planned [$i] == 100) {
-                break;
-            }
-        }
-
-        if ($mayor == null) {
-            $mayor = 0;
-        }
-        if ($real [$mes] == null) {
-            $real[$mes] = 0;
-        }
-        if ($planned [$mes] == null) {
-            $planned[$mes] = 0;
-        }
-
-        $retorno = array(
-            'penalty' => ($mayor + $amountPenalty),
-            'realResult' => $real[$mes],
-            'plannedResult' => $planned[$mes]
-        );
-
-        return $retorno;
-    }
-
-    function CalculateAdvancePenaltyAP(ArrangementProgram $AP, $date) {
-
-        $realResult = 0;
-        $penalty = 0;
-        $plannedResult = 0;
-
-        //DETERMINO LAS METAS PERTENECIENTES AL AP
-        foreach ($AP->getTimeline()->getGoals() as $meta) {
-            //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA Y VOY SUMANDO POR META
-            $datosAP = $this->CalculateAdvancePenalty($meta, $date);
-
-            $realResult+=(($datosAP['realResult'] * $meta->getWeight())) / 100;
-            $penalty+=(($datosAP['penalty'] * $meta->getWeight())) / 100;
-            $plannedResult+=(($datosAP['plannedResult'] * $meta->getWeight())) / 100;
-        }
-
-        $advance = $realResult - $penalty;
-        $retorno = array(
-            'penalty' => $penalty,
-            'realResult' => $advance,
-            'plannedResult' => $plannedResult
-        );
-
-        return $retorno;
+    public function getResultService() {
+        return $this->container->get('seip.service.result');
     }
 
 }

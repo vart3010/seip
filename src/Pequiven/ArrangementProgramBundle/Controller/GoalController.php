@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\ArrangementProgramBundle\Entity\Goal;
 use Pequiven\ArrangementProgramBundle\Form\GoalType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Goal controller.
@@ -259,6 +260,9 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController {
     }
 
     public function searchValuebyUserAction($idGoal, $idUser) {
+
+      //  $response = new JsonResponse();
+
         $em = $this->getDoctrine()->getManager();
 
         $userobj = $this->get('pequiven.repository.user')->findOneById($idUser);
@@ -266,11 +270,15 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController {
         $searchCriteria = array('goalDetails' => $goalobj->getGoalDetails(), 'user' => $userobj);
         $goalInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy($searchCriteria);
 
+        //$value = array();
+
         if ($goalInd) {
-            return $goalInd->getResultReal();
+            $value = $goalInd->getResultReal();
         } else {
-            return $goalobj->getAdvance();
+            $value = null;
         }
+
+        return $value;
     }
 
 }

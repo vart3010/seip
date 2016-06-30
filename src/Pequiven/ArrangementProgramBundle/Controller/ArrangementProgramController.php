@@ -12,6 +12,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sylius\Bundle\ResourceBundle\Event\ResourceEvent;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
+use Pequiven\ArrangementProgramBundle\Controller\GoalController;
+use Pequiven\ArrangementProgramBundle\Model\MovementEmployee;
 
 /**
  * Controlador del programa de gestion
@@ -348,7 +350,7 @@ class ArrangementProgramController extends SEIPController {
         }
         $resources->setCurrentPage($request->get('page', 1), true, true);
         $resources->setMaxPerPage($maxPerPage);
-        
+
         $view = $this
                 ->view()
                 ->setTemplate('PequivenSIGBundle:ArrangementProgram:listAll.html.twig')
@@ -909,8 +911,28 @@ class ArrangementProgramController extends SEIPController {
             $gerenciaSIG = $gerencias = $this->get('pequiven.repository.gerenciafirst')->findOneBy(array('abbreviation' => 'sigco'));
         }
 
+        $individualValues = array();
+        $i = 1;
+
+        foreach ($entity->getTimeline()->getGoals() as $goal) {
+            $arrayGoalOrder[$goal->getId()] = $i;
+            foreach ($goal->getResponsibles() as $resp) {
+                $individualValues[$goal->getId()][$resp->getId()] = GoalController::searchValuebyUserAction($goal->getId(), $resp->getId());
+            }
+            $i++;
+        }
+
+        //MOVIMIENTOS REALIZADOS
+        $movementHistory = $this->get('pequiven_seip.repository.arrangementprogram_movement')->getMovementHistory($id);
+        //ARREGLO DE CAUSAS
+        $causes = MovementEmployee::getAllCauses();
+
         return array(
             'entity' => $entity,
+            'individualValues' => $individualValues,
+            'movementHistory' => $movementHistory,
+            'arrayGoalOrder' => $arrayGoalOrder,
+            'causes' => $causes,
             'delete_form' => $deleteForm->createView(),
             'isAllowToSendToReview' => $isAllowToSendToReview,
             'isAllowToApprove' => $isAllowToApprove,
@@ -970,7 +992,7 @@ class ArrangementProgramController extends SEIPController {
      * Edits an existing ArrangementProgram entity.
      *
      */
-    public function updateAction(Request $request) {        
+    public function updateAction(Request $request) {
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
 
@@ -1028,10 +1050,10 @@ class ArrangementProgramController extends SEIPController {
         }
 
         $data = array(
-            'entity'     => $entity,
-            'edit_form'  => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'mov'        => $MovementEmployee            
+            'mov' => $MovementEmployee
         );
 
         $view = $this->view($data);

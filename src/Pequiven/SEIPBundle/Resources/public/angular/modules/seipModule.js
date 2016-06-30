@@ -240,14 +240,13 @@ angular.module('seipModule.controllers', [])
 
             };
 
-            $scope.getGoalValuebyResponsible = function (idGoal, idUser) {
-                var url = Routing.generate("individual_value", {responsibles: idGoal, gerencia: idUser});
-                //$http.get(url).success(function (data) {                        
-                    //    console.log(data);
-                 //   });
-                
-                //return value;
-            };
+//            $scope.getGoalValuebyResponsible = function (idGoal, idUser) {
+//                var url = Routing.generate("individual_value", {idGoal: idGoal, idUser: idUser});
+//                var spanValue = angular.element('#'+idGoal+'-'+idUser);
+//                $http.get(url).success(function (data) {
+//                    spanValue.val(data.boo);
+//                });
+//            };
 
             $scope.getUrlMovement = function (idGoal, url) {
 
@@ -1165,8 +1164,6 @@ angular.module('seipModule.controllers', [])
             });
         })
 
-
-
         .controller('ReportArrangementProgramAllController', function ($scope, $http) {
             $scope.data = {
                 tacticals: null,
@@ -1720,11 +1717,11 @@ angular.module('seipModule.controllers', [])
             //Añadir el formulario de edición de acción
             var editAction = function (save, successCallBack) {
                 var formValueIndicator = angular.element('#form_edit_action_evolution');
-                var formData = formValueIndicator.serialize();                
+                var formData = formValueIndicator.serialize();
                 if (save == undefined) {
                     var save = false;
                 }
-                if (save == true) {                    
+                if (save == true) {
                     var url = Routing.generate('pequiven_indicator_action_add_get_form_edit', {idAction: $scope.action_data, month: $scope.month});
                 }
                 notificationBarService.getLoadStatus().loading();
@@ -1905,7 +1902,7 @@ angular.module('seipModule.controllers', [])
 
                 var parameters = {
                     idAction: $scope.action_data,
-                    month: $scope.month,                    
+                    month: $scope.month,
                     _dc: numero
                 };
                 if (resource) {
@@ -5632,7 +5629,7 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
-            
+
             //Busca los Perfiles de Evaluación Política
 //            $scope.getProfilesPoliticEvaluation = function () {
 //                var parameters = {
@@ -7094,7 +7091,7 @@ angular.module('seipModule.controllers', [])
                 $http.get(getDataStackedColumn3DbyIndicator).success(function (data) {
                     FusionCharts.ready(function () {
                         var ChartStackedColumn3DbyIndicator = new FusionCharts({
-                            "type": 'stackedcolumn2d',                            
+                            "type": 'stackedcolumn2d',
                             "renderAt": render,
                             "width": width + "%",
                             "height": height,

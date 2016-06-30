@@ -39,7 +39,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         return array(
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeObjetive', 'class' => 'Pequiven\ObjetiveBundle\Entity\Objetive', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeIndicator', 'class' => 'Pequiven\IndicatorBundle\Entity\Indicator', 'format' => 'json'),
-            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGoalDetails', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\GoalDetails', 'format' => 'json'),            
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGoalDetails', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\GoalDetails', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeArrangementProgram', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeArrangementProgramTemplate', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMonitor', 'class' => 'Pequiven\SEIPBundle\Entity\Monitor', 'format' => 'json'),
@@ -147,6 +147,15 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
 
         $arrangementProgram = $goal->getTimeline()->getArrangementProgram();
         $date = new DateTime();
+
+        //Traer los Valores Individuales de la meta        
+//        foreach ($goal->getResponsibles() as $userobj) {            
+//            $searchCriteria = array(
+//                'idGoal' => $goal->getId(),
+//                'idUser' => $userobj->getId()
+//            );            
+//            $data["Results"][$goal->getId()][$userobj->getId()] = $this->generateUrl('individual_value', $searchCriteria);
+//        }
 
         //Habilitar la carga de lo real
         $isLoadRealEnabled = false;
@@ -398,11 +407,11 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $details = $arrangementProgram->getDetails();
         $user = $this->getUser();
         //var_dump($user); die();
-        if($details->getNotificationInProgressByUser() != null){
+        if ($details->getNotificationInProgressByUser() != null) {
 //            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 9))){
             //if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 35) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 35))){
-            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 14) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 14))){
-           //if((($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 9))){
+            if ($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 14) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 14))) {
+                //if((($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 9))){
                 //$data['januaryReal']['isEnabled'] = true;
                 //$data['februaryReal']['isEnabled'] = true;
                 //$data['marchReal']['isEnabled'] = true;

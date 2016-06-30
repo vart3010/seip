@@ -117,6 +117,7 @@ class RestArrangementProgramController extends FOSRestController {
             'responsibles' => $responsibles,
             'userobj' => $userobj,
             'user' => $user,
+            'APentity' => $entity
         );
 
         if ($request->get('_format') == 'html') {
@@ -144,11 +145,13 @@ class RestArrangementProgramController extends FOSRestController {
 
         //NOTIFICACION INDIVIDUAL
         if ($request->get('user') != 0) {
-            $entityInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneby(array('goalDetails' => $entity));
             $user = $request->get('user');
+            $userObj = $em->getRepository('PequivenSEIPBundle:User')->findOneById($user);
+            $entityInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneby(array('goalDetails' => $entity, 'user' => $userObj));
             $usernotific = $user;
-            if (!$entityInd) {
+            if ($entityInd == null) {
                 $entityInd = new GoalDetailsInd();
+                $entityInd->setUser($userObj);
             }
             //AFECTA A LA ENTIDAD DE NOTIFICACION DE METAS INDIVIDUAL    
             $entityInd->setJanuaryPlanned($entity->getJanuaryPlanned());

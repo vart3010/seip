@@ -23,25 +23,96 @@
         </div>
     </div>
     <div class="with-padding">
+        <br>
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
                 <tr>
                     <th scope="col" width="12%">{{ 'seip.table.header.nro'|trans }}</th>
-                    <th scope="col" width="30%">{{ 'seip.table.header.name'|trans }}</th>
+                    <th scope="col" width="38%">{{ 'seip.table.header.name'|trans }}</th>
                         {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
                         <th scope="col" width="10%" class="hide-on-mobile">{{ 'seip.table.header.type_goal'|trans }}</th>
                         {% endif %}
-                    <th scope="col" width="10%" class="hide-on-mobile-portrait">Inicio</th>
-                    <th scope="col" width="10%" class="hide-on-tablet">Fin</th>
+                    <th scope="col" width="10%" class="align-center hide-on-mobile-portrait">Inicio</th>
+                    <th scope="col" width="10%" class="align-center hide-on-tablet">Fin</th>
                     <th scope="col" width="5%" class="hide-on-tablet">{{ 'seip.table.header.weight'|trans }}</th>
-                    <th scope="col" width="30%">{{ 'seip.table.header.responsible_goal'|trans }}</th>
+                    <th scope="col" width="25%">{{ 'seip.table.header.responsible_goal'|trans }}</th>                    
                 </tr>
             </thead>
             {% set colspan = 6 %}
             {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
                 {% set colspan = 7 %}
             {% endif %}
-            <tbody ng-init="{% if entity.timeline %}goals={{ entity.timeline.goals|serialize('json',serialization_context().setGroups(['id','api_list','responsibles','sonata_api_read'])) }}{% endif %}">
+            <tbody>       
+                {% if entity.timeline %}
+                    {%for goal in entity.timeline.goals %}
+                        {% if goal|length==0 %}        
+                            <tr ng-if="goals.length == 0">
+                                <td colspan="{{ colspan }}" class="empty_row">
+                                    {{ "seip.table.empty.goals"|trans }}
+                                </td>
+                            </tr>
+                        {%endif%}
+                        <tr>
+                            <td class="align-left">                              
+                                {{loop.index}}.                                
+                                <span ng-class="getClassForMeter({{goal.advance}},1)"></span>
+                                <span ng-class="getClassForMeter({{goal.advance}},2)"></span>
+                                <span ng-class="getClassForMeter({{goal.advance}},3)"></span>
+                                - <b>{{ goal.advance }}%</b>
+                                {% if ((entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED')) and ((isAllowSuperAdmin == true) or (is_granted('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_PENALIZED_GOALS')))) %}
+                                    {% if ((goal.penalty>0)or((goal.realResult-goal.penalty)>100)or((goal.realResult-goal.penalty)<0)) %}        
+                                        <p class="text-left">
+                                            {% if goal.penalty>0 %}        
+                                                <i class="fa fa-exclamation-triangle"></i> : {{ goal.penalty }}%                                            
+                                            {%endif%}
+                                            {% if (((goal.realResult-goal.penalty)>100)or((goal.realResult-goal.penalty)<0)) %}   
+                                                <br>
+                                                <i class="fa fa-hand-o-right"></i> : {{ goal.realResult-goal.penalty }}%
+                                            {% endif %}
+                                        </p>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <th style="text-align: justify;">
+                                {{ goal.name }}<br>
+                                <small>{{ goal.observations }}</small>
+                            </th>
+                            {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                                <td style="text-align: justify;">
+                                    {% if goal.typeGoal %}                                                
+                                        {{ goal.typeGoal.description }}                                        
+                                    {% else %}                             
+                                        {{ 'pequiven.form.not_applicable'|trans }}
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                            <td class="align-center">{{ goal.startDate|date("m/d/Y") }}</td>
+                            <td class="align-center">{{ goal.endDate|date("m/d/Y") }}</td>
+                            <td class="align-center">{{ goal.weight }}%</td>
+                            <td colspan="2">  
+                                {% set valueArray = individualValues[goal.id] %}
+                                {%for responsible in goal.responsibles %}
+                                    {{ responsible.getOnlyFullNameUser|ucwords }}
+                                    {% set value = valueArray[responsible.id] %}                                              
+                                    {% if value is not null  %}          
+                                        |
+                                        <span ng-class="getClassForMeter({{value}},1)"></span>
+                                        <span ng-class="getClassForMeter({{value}},2)"></span>
+                                        <span ng-class="getClassForMeter({{value}},3)"></span>
+                                        - <b>{{ value }}%</b>                                        
+                                    {%endif%}
+                                    <br>
+                                {%endfor%}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+            {#
+            <tbody ng-init="
+                   {% if entity.timeline %}
+                goals={{ entity.timeline.goals|serialize('json',serialization_context().setGroups(['id','api_list','responsibles','sonata_api_read'])) }}
+                   {% endif %}">
                 <tr ng-if="goals.length == 0">
                     <td colspan="{{ colspan }}" class="empty_row">
                         {{ "seip.table.empty.goals"|trans }}
@@ -53,11 +124,19 @@
                         <span ng-class="getClassForMeter(goal.advance,2)"></span>
                         <span ng-class="getClassForMeter(goal.advance,3)"></span>
                         {$ goal.advance $}%
-
+    
                         {% if ((entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED')) and ((isAllowSuperAdmin == true) or (is_granted('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_PENALIZED_GOALS')))) %}
                             <br>
-                            <span ng-class="getPenaltyForm(goal.penalty)"><center><i class="fa fa-exclamation-triangle"></i> : {$ goal.penalty $}%</center></span>                            
-                            <span ng-class="getOverflowForm(goal.realResult-goal.penalty)"><center><i class="fa fa-hand-o-right"></i><b> Real:</b> {$ goal.realResult-goal.penalty $}%</center></span>                              
+                            <span ng-class="getPenaltyForm(goal.penalty)">
+                                <center>
+                                    <i class="fa fa-exclamation-triangle"></i> : {$ goal.penalty $}%
+                                </center>
+                            </span>                            
+                            <span ng-class="getOverflowForm(goal.realResult-goal.penalty)">
+                                <center>
+                                    <i class="fa fa-hand-o-right"></i><b> Real:</b> {$ goal.realResult-goal.penalty $}%
+                                </center>
+                            </span>                              
                         {% endif %}
                     </td>
                     <th scope="row">
@@ -80,16 +159,14 @@
                     <td>
                         <span ng-repeat="responsible in goal.responsibles">
                             {$ responsible.firstname + " "+ responsible.lastname $}
-                            <small class="tag">{$ " ("+responsible.username+")" $}</small>
+                            <small class="tag">{$ " ("+responsible.username+")" $}</small>                            
                             <span ng-if="!$last"></span>
-                            <span ng-if="$last"></span>
-                            {$ getGoalValuebyResponsible(goal.id, responsible.id) $}
+                            <span ng-if="$last"></span>                            
                             <br>
                         </span>
                     </td>
                 </tr>
-            </tbody>
+            </tbody>#}
         </table>
-
     </div>
 </div>
