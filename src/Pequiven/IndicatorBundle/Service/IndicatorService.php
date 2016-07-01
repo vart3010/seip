@@ -308,7 +308,7 @@ class IndicatorService implements ContainerAwareInterface {
                     ->setVariableToRealValue(null)
                     ->setVariableToPlanValue(null)
             ;
-        } elseif ($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
+        } elseif ($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC || $typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC_AND_SIMPLE_AVERAGE) {
             if ($variableToRealValue === null || $variableToPlanValue === null) {
                 $error = $this->trans('pequiven.indicator.invalid_configuration_formula_type_calculation', array(
                     '%formula%' => (string) $formula,
