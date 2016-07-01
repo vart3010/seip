@@ -308,7 +308,7 @@ class IndicatorService implements ContainerAwareInterface {
                     ->setVariableToRealValue(null)
                     ->setVariableToPlanValue(null)
             ;
-        } elseif ($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
+        } elseif ($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC || $typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC_AND_SIMPLE_AVERAGE) {
             if ($variableToRealValue === null || $variableToPlanValue === null) {
                 $error = $this->trans('pequiven.indicator.invalid_configuration_formula_type_calculation', array(
                     '%formula%' => (string) $formula,
@@ -3441,9 +3441,9 @@ class IndicatorService implements ContainerAwareInterface {
                     $dataPlan["value"] = number_format($indicatorChildren->getTotalPlan(), 2, ',', '.');
                     $dataMedition["value"] = number_format($indicatorChildren->getResultReal(), 2, ',', '.');
                     if (count($indicatorChildren->getCharts()) > 0) {
-                        $label["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId()));
-                        $dataReal["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId()));
-                        $dataPlan["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId()));
+                        $label["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(),'tablero' => $options['tablero']));
+                        $dataReal["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(),'tablero' => $options['tablero']));
+                        $dataPlan["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(),'tablero' => $options['tablero']));
                     }
 
                     $category[] = $label;

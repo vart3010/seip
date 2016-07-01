@@ -6436,15 +6436,6 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartDoughnut2dIndicatorsAssociated = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                console.log(tablero);
-//                var getDataChartDoughnut = Routing.generate("getDataChartDoughnut", {id: indicatorId});
-//                $scope.chartDoughnut2d = {};
-//                $http.get(getDataChartDoughnut).success(function (data) {
-//                    $scope.chartDoughnut2d = {
-//                        "chart": data.dataSource.chart,
-//                        "data": data.dataSource.dataSet
-//                    }
-//                });
                 var getDataChartDoughnutIndicatorsAssociated = Routing.generate("getDataChartDoughnutIndicatorsAssociated", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartDoughnutIndicatorsAssociated).success(function (data) {
                     FusionCharts.ready(function () {
@@ -6467,7 +6458,9 @@ angular.module('seipModule.controllers', [])
 
             //1-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), de los indicadores asociados
             $scope.chargeChartColumnLineDualAxisIndicatorsAssociated = function (indicatorId, render, width, height) {
-                var getDataChartColumnLineDualAxisIndicatorsAssociated = Routing.generate("getDataChartColumnLineDualAxisIndicatorsAssociated", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartColumnLineDualAxisIndicatorsAssociated = Routing.generate("getDataChartColumnLineDualAxisIndicatorsAssociated", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartColumnLineDualAxisIndicatorsAssociated).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnLineDualAxisIndicatorsAssociated = new FusionCharts({

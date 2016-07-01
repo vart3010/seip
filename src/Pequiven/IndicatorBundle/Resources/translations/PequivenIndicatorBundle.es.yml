@@ -54,6 +54,7 @@ pequiven_indicator:
         formula_automatic_from_eq: Fórmula automatica (Ecuación)
         simple_average: Promedio simple
         real_and_plan_automatic: Plan y Real automático
+        real_and_plan_automatic_method_average: Plan y Real automático promedio simple
         real_automatic: Real automático
         accumulate: Acumulativo de cada carga
         real_and_plan_from_eq: Plan y real a partir de ecuación

@@ -1072,7 +1072,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     private function evaluateIndicatorByFormula(Indicator &$indicator) {
         $formula = $indicator->getFormula();
         $typeOfCalculation = $formula->getTypeOfCalculation();
-        if ($typeOfCalculation == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE) {
+        if ($typeOfCalculation == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE || $typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC_AND_SIMPLE_AVERAGE) {
             $this->calculateFormulaSimpleAverage($indicator);
         } elseif ($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
             $this->calculateFormulaRealPlanAutomatic($indicator);
@@ -1930,7 +1930,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $valueIndicator->setParameter($nameParameter, $valueParameter);
                 }
             } else if ($calculationMethod == Indicator::CALCULATION_METHOD_AVERAGE_BASED_ON_NUMBER_CHILDREN) {
-                if ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
+                if ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC || $indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC_AND_SIMPLE_AVERAGE) {
                     $variableToRealValueName = $indicator->getFormula()->getVariableToRealValue()->getName();
                     $variableToPlanValueName = $indicator->getFormula()->getVariableToPlanValue()->getName();
                 }
@@ -2082,11 +2082,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 //die();
             }
             $i++;
-            //var_dump($valueIndicator->getFormulaParameters());
-            //var_dump($formulaUsed);
+//            var_dump($valueIndicator->getFormulaParameters());
+//            var_dump($formulaUsed);e
             $value = $indicatorService->calculateFormulaValue($formulaUsed, $valueIndicator->getFormulaParameters());
-            //var_dump($value);
-            //die();
             $valueIndicator->setValueOfIndicator($value);
         }
         $this->evaluateIndicatorByFormula($indicator);
