@@ -666,7 +666,10 @@ class IndicatorService implements ContainerAwareInterface {
             $urlParemeters = $options["urlParameters"];
         } else {
             $url = 'pequiven_indicator_show_dashboard';
-            $urlParemeters = array('id' => $indicator->getId());
+            $urlParemeters = array(
+                'id' => $indicator->getId(),
+                'tablero' => 0
+                    );
         }
 
         if ($modeUrl == CommonObject::OPEN_URL_OTHER_WINDOW) {
@@ -1013,7 +1016,8 @@ class IndicatorService implements ContainerAwareInterface {
         } else {
             $url = 'pequiven_indicator_show_dashboard';
         }
-
+//var_dump($options);
+//die();
         $totalNumChildrens = count($indicator->getChildrens()); //Número de indicadores asociados
 //        $numDiv = $totalNumChildrens > 0 ? bcdiv(100, $totalNumChildrens,2) : 100;
         if (isset($options['childrens']) && array_key_exists('childrens', $options)) {
@@ -1033,7 +1037,7 @@ class IndicatorService implements ContainerAwareInterface {
                     $set["toolText"] = $indicatorChildren->getSummary() . ':{br}' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
                     $set["color"] = $this->getColorOfResult($indicatorChildren);
                     if (count($indicatorChildren->getCharts()) > 0) {
-                        $set["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId()));
+                        $set["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(),'tablero' => $options['tablero']));
                     }
                     $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicatorChildren->getId()));
                     $dataSet[] = $set;
@@ -4503,43 +4507,42 @@ class IndicatorService implements ContainerAwareInterface {
      * @return type
      */
     public function getPromdIndicator(Indicator $indicator) {
-
         $result = $acum = $sum = 0;
         $calc = $indicator->getIndicatorSigMedition();
         $contMonth = 1;
-
-        if ($calc === null) {
-            $calc = 1;
-        }
-
-//Recibiendo la frecuencia de calculo del indicador
-//$labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+        if ($calc === null) {$calc = 1;}
+        //Recibiendo la frecuencia de calculo del indicador
+        //$labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
 
         foreach ($indicator->getValuesIndicator() as $value) {
             $data = $value->getValueOfIndicator();
-//$cant = $labelsFrequencyNotificationArray[$contMonth];
-
+            //$cant = $labelsFrequencyNotificationArray[$contMonth];
             $contMonth++;
             $sum = $sum + $data;
             $acum = $acum + $data;
         }
 
-//Data Prom
+        //Data Prom
         if ($contMonth == 1) {
             $contMonth = 2;
         }
 
-        if ($calc === 1) {
-            if ($indicator->getId() == 1655) {
-                $result = $acum / ($contMonth - 1); //Calculo de Promedio                
-            } else {
-                $result = $indicator->getResultReal();
-            }
-//$value = ceil($result); //Paso de promedio
-            $value = $result; //Paso de promedio
-        } elseif ($calc === 0) {
-            $value = $sum; //Paso de sumatoria
-        }
+        switch ($calc) {
+            case 0:
+                $value = $sum; //Paso de sumatoria                
+                break;
+            case 1:
+                if ($indicator->getId() == 1655) {
+                    $value = $acum / ($contMonth - 1); //Calculo de Promedio                
+                } else {
+                    $value = $indicator->getResultReal();
+                }         
+                //$value = ceil($value); //Paso de promedio
+                break;
+            case 2:
+                $value = $indicator->getResultReal();                    
+                break;            
+        }        
 
         return $value;
     }
@@ -4786,7 +4789,7 @@ class IndicatorService implements ContainerAwareInterface {
 
 //Promedio o Acumulado
         $medition = "Promedio";
-        if ($indicator->getIndicatorSigMedition() == 0) {
+        if ($indicator->getIndicatorSigMedition() == 0 or $indicator->getIndicatorSigMedition() == 2) {
             $medition = "Acumulado";
         }
 

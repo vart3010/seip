@@ -6428,6 +6428,9 @@ angular.module('seipModule.controllers', [])
 
             //0-Gráfico en forma de dona para mostrar los indicadores asociados (Resumen, Referencia y Resultado de la Medición)
             $scope.chargeChartDoughnut2dIndicatorsAssociated = function (indicatorId, render, width, height) {
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                console.log(tablero);
 //                var getDataChartDoughnut = Routing.generate("getDataChartDoughnut", {id: indicatorId});
 //                $scope.chartDoughnut2d = {};
 //                $http.get(getDataChartDoughnut).success(function (data) {
@@ -6436,7 +6439,7 @@ angular.module('seipModule.controllers', [])
 //                        "data": data.dataSource.dataSet
 //                    }
 //                });
-                var getDataChartDoughnutIndicatorsAssociated = Routing.generate("getDataChartDoughnutIndicatorsAssociated", {id: indicatorId});
+                var getDataChartDoughnutIndicatorsAssociated = Routing.generate("getDataChartDoughnutIndicatorsAssociated", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartDoughnutIndicatorsAssociated).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartDoughnutIndicatorsAssociated = new FusionCharts({

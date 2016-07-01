@@ -154,7 +154,7 @@ class IndicatorGroupController extends SEIPController {
 
                     $options = array(
                         "url" => 'pequiven_indicator_showdashboardtablero',
-                        "urlParameters" => array('id' => $indicator->getId())
+                        "urlParameters" => array('id' => $indicator->getId(),'tablero' => 1)
                     );
 
                     $tree[(string) $lineStrategic]['child'][$tag][(string) $indicator] = $indicator;
@@ -170,6 +170,8 @@ class IndicatorGroupController extends SEIPController {
                 }
             }
         }
+        
+        //var_dump($data['6.']['IE-6.1.1.']);die();
 
         $data = array(
             'indicators' => $group->getIndicators(),
@@ -317,6 +319,8 @@ class IndicatorGroupController extends SEIPController {
 //        foreach ($type as $t) {
 //            array_push($rs, $t->);
 //        }
+        
+        $tablero = $this->getRequest()->get('tablero');
 
         $data = array(
             'iconsLineStrategic' => $iconsLineStrategic,
@@ -335,6 +339,7 @@ class IndicatorGroupController extends SEIPController {
             'seeInColumnSingleAxis' => $seeInColumnSingleAxis,
             'dataChartColumn' => $dataChartColumn,
             'labelsMonths' => $labelsMonths,
+            'tablero' => $tablero,
             'data' => $indicatorService->getDataDashboardWidgetBulb($indicator),
             'options' => $options
         );
