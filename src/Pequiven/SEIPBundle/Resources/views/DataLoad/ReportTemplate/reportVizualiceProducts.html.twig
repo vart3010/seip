@@ -374,6 +374,7 @@
                                 <a href="{{ path("pequiven_report_template_visualize_pnr_time",{
                                 idProduct:unrealizedProduction.idProduct,
                                 idReportTemplate: (unrealizedProduction.reportTemplateId),
+                                typeOverProduction: overProduction,
                                 idProductReport: (unrealizedProduction.productId),dateReport: (dateReport|date('d/m/Y'))}) }}">
                                     {{ unrealizedProduction.productName|upper }}
                                 </a>
