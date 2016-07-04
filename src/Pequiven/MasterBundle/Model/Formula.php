@@ -37,6 +37,11 @@ abstract class Formula
     const TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ = 4;
     
     /**
+     * Tipo de cálculo de la fórmula es por real automático además del resultado del indicador ser promedio simple
+     */
+    const TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC_AND_SIMPLE_AVERAGE = 5;
+    
+    /**
      * @var integer
      * 
      * @ORM\Column(name="typeOfCalculation", type="integer", nullable=false)
@@ -57,6 +62,7 @@ abstract class Formula
             self::TYPE_CALCULATION_REAL_AUTOMATIC => 'pequiven_indicator.type_calculation.real_automatic',
             self::TYPE_CALCULATION_ACCUMULATE => 'pequiven_indicator.type_calculation.accumulate',
             self::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ => 'pequiven_indicator.type_calculation.real_and_plan_from_eq',
+            self::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC_AND_SIMPLE_AVERAGE => 'pequiven_indicator.type_calculation.real_and_plan_automatic_method_average',
         );
         return $typesOfCalculation;
     }
