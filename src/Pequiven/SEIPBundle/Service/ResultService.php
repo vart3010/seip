@@ -2769,6 +2769,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $realDateEnd = clone($planDateEnd);
                 $realDateEnd->setDate($realDateEnd->format('Y'), $summary['realMonthDateEnd'], \Pequiven\SEIPBundle\Service\ToolService::getLastDayMonth($realDateEnd->format('Y'), $summary['realMonthDateEnd']));
 
+                //VERIFICO SI TIENE METAS INDIVIDUALES                
+                $entityInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy(array('goalDetails' => $goal->getGoalDetails(), 'user' => $user));
+                if ($entityInd == null) {
+                    $valorInd = $goal->getResult();
+                } else {
+                    $valorInd = $entityInd->getResultReal();
+                }
+
                 if ((new \DateTime()) >= ($goal->getperiod()->getDateEnd())) {
                     $fecha = 12;
                 } else {
@@ -2824,7 +2832,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         if (($tipos[count($tipos) - 1] == 'I')) {
                             $status = 'Actual';
                             $tipos[] = 'O';
-                            $valores[] = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                            $valores[] = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($valorInd);
                             $planeado[] = $goal->getGoalDetails()->getPlannedTotal($fecha);
                         } else {
                             $status = 'Pasada';
@@ -2889,7 +2897,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 } else {
                     //SI LA META NO TIENE MOVIMIENTOS, LOS VALORES ACTUALES SON LOS VALORES DE LA EVALUACION
                     $status = 'Actual';
-                    $aporte = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                    $aporte = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($valorInd);
                     if ($goal->getGoalDetails()->getPlannedTotal($fecha) == 0) {
                         $eval = "N/A";
                     } else {
@@ -2898,12 +2906,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $aportePlan = $goal->getGoalDetails()->getPlannedTotal($fecha);
                 }
 
-
                 $goals[$key] = array(
                     'id' => sprintf('ME-%s', $goal->getId()),
                     'description' => $goal->getName(),
                     'weight' => $goal->getWeight(),
-                    'result' => $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult()),
+                    'advance' => $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult()),
+                    'result' => $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($valorInd),
                     'resultToDate' => $goal->getGoalDetails()->getPlannedTotal($fecha),
                     'dateStart' => array(
                         'plan' => ToolService::formatDateTime($planDateStart),

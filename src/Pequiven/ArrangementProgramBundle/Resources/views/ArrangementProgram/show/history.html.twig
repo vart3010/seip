@@ -215,13 +215,13 @@
                     {% for mov in movementHistory %}
                         {% set id_affected = mov.id_affected %}
                         {% if mov.type == 'I' %}
-                            {% set type = 'Ingresa a '%}                            
+                            {% set type = 'Ingresa a'%}                            
                         {%else%}
-                            {% set type = 'Egresa de '%}                            
+                            {% set type = 'Egresa de'%}                            
                         {%endif%}
 
                         {% if mov.typeMov == 'Goal' %}
-                            {% set tipo = 'la Meta ' ~ arrayGoalOrder[id_affected] %}                            
+                            {% set tipo = ' la Meta ' ~ arrayGoalOrder[id_affected] %}                            
                         {%else%}
                             {% set tipo = 'l Programa' %}                            
                         {%endif%}
@@ -238,7 +238,7 @@
                                 {{ mov.user|ucwords }} 
                             </td>                            
                             <td>
-                                {{type}} {{tipo}} por {{ causes[mov.cause] }} con un Avance de {{ mov.realAdvance | number_format(2, '.', ',')  }} %
+                                {{type}}{{tipo}} por {{ causes[mov.cause] }} con un Avance de {{ mov.realAdvance | number_format(2, '.', ',')  }} %
                                 <br>
                                 <small>
                                     <b>

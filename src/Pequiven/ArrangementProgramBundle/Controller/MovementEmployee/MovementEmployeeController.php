@@ -208,7 +208,14 @@ class MovementEmployeeController extends SEIPController {
 
                     //AGREGO AL USUARIO EN LA META O PROGRAMA                
                     $entity->addResponsible($user);
-                    $em->persist($entity);
+
+                    //BUSCO SI TIENE NOTIFICACION INDIVIDUAL VIEJA
+                    $entityInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy(array('goalDetails' => $entity->getGoalDetails(), 'user' => $user));
+                    if ($entityInd != null) {
+                        $entityInd->setInactive(false);
+                        $em->persist($entityInd);
+                    }
+                    $em->persist($entityInd);
                 } else {
 
                     if ($post_mortem == false) {
@@ -308,13 +315,11 @@ class MovementEmployeeController extends SEIPController {
                     $arrangementProgram = $entity->getTimeline()->getArrangementProgram();
                     $idap = $arrangementProgram->getid();
 
-                    //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
+                    //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA                    
                     //BUSCO SI TIENE NOTIFICACION INDIVIDUAL                     
                     $entityInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy(array('goalDetails' => $entity->getGoalDetails(), 'user' => $user));
                     if ($entityInd != null) {
                         $datos = $this->getResultService()->CalculateAdvancePenaltyIndv($entityInd, $date);
-                        $em->remove($entityInd);
-                        $em->flush();
                     } else {
                         $datos = $this->getResultService()->CalculateAdvancePenalty($entity, $date);
                     }
@@ -374,6 +379,10 @@ class MovementEmployeeController extends SEIPController {
 
                         //ELIMINO AL USUARIO EN LA META
                         $entity->removeResponsible($user);
+                        if ($entityInd != null) {
+                            $entityInd->setInactive(true);
+                            $em->persist($entityInd);
+                        }
                         $em->persist($entity);
                     } else {
 

@@ -55,6 +55,7 @@
     }    
 </style>
 {% block body %}
+    <br><br>
     <table width="100%">  
         <tr>
             <td class="white-gradient" width="10%">Periodo:</td>
@@ -221,9 +222,10 @@
             <thead>
                 <tr>
                     <th width="5%" class="white-gradient-th">#</th>          
-                    <th width="55%" class="white-gradient-th">Descripción de la Meta</th>
+                    <th width="45%" class="white-gradient-th">Descripción de la Meta</th>
                     <th width="10%" class="white-gradient-th">Peso</th>
-                    <th width="10%" class="white-gradient-th">Avance hasta la Fecha</th>    
+                    <th width="10%" class="white-gradient-th">Avance Actual</th>    
+                    <th width="10%" class="white-gradient-th">Valor Individual</th>    
                     <th width="10%" class="white-gradient-th">Aporte</th>    
                     <th width="10%" class="white-gradient-th">Efectividad</th>  
                 </tr>
@@ -232,7 +234,7 @@
                 {% set cont = 1 %}
                 {% for goal in userItems.data.evaluation.management["goals"] %} 
                     {% if goal.resultToDate > 0 %}
-                        {% set porc = (goal.result * 100)/ goal.resultToDate %}
+                        {% set porc = (goal.advance * 100)/ goal.resultToDate %}
                     {% else %}    
                         {% set porc = 0 %}
                     {% endif %}
@@ -249,7 +251,7 @@
                     {% endif %}
                     <tr style="height: 30px">
                         <td width="5%" style="text-align: center;">{{ cont }}-</td>
-                        <td width="55%" style="text-align: justify">
+                        <td width="45%" style="text-align: justify">
                             {% if (goal.description==null) %}
                                 {% set goalname='No Cargada' %}
                             {% else %}
@@ -265,10 +267,10 @@
                                     <br>                                    
                                     {% for obs in goal.observaciones %}
                                         {% if obs.type== 'I' %}
-                                            - Ingresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}% , <b>Real Notificado: </b>{{ (obs.realAdvance+obs.pentalty) |number_format(2,',','.') }}%.
+                                            - Ingresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}% , <b>Notificado: </b>{{ (obs.realAdvance+obs.pentalty) |number_format(2,',','.') }}%.
                                         {% endif %}
                                         {% if obs.type== 'O' %}
-                                            - Egresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}% , <b>Real Notificado: </b>{{ (obs.realAdvance+obs.pentalty) |number_format(2,',','.') }}%.
+                                            - Egresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}% , <b>Notificado: </b>{{ (obs.realAdvance+obs.pentalty) |number_format(2,',','.') }}%.
                                         {% endif %} 
                                         <br>
                                     {%endfor%}                                                                    
@@ -277,7 +279,17 @@
                         </td>
                         <td style="text-align: center" width="10%">{{ goal.weight }}%</td>                        
                         <td style="text-align: center" width="10%">                               
-                            <span class="{{ advancesClass }}" >{{ goal.result|number_format(2,',','.') }}% de<br>{{ goal.resultToDate|number_format(2,',','.') }}% </span>
+                            <span class="{{ advancesClass }}" >{{ goal.advance|number_format(2,',','.') }}% de<br>{{ goal.resultToDate|number_format(2,',','.') }}% </span>
+                        </td>
+                        <td style="text-align: center" width="10%">   
+                            {% set advances = (goal.result * 100)/ goal.resultToDate %}
+                            {% set advancesClass = "resultred"%}
+                            {% if advances > 50 and advances <= 80 %}
+                                {% set advancesClass = 'resultyellow' %}
+                            {% elseif advances > 80 %}
+                                {% set advancesClass = 'resultgreen' %}
+                            {% endif %}                            
+                            <span class="{{ advancesClass }}" >{{ goal.aporte|number_format(2,',','.') }}%</span>
                         </td>
                         {% if ((goal.eval=="N/A")and((goal.eval| is_string)==1)) %}
                             <td width="10%" style="text-align: center">

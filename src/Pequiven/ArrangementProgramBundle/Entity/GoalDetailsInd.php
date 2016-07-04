@@ -56,6 +56,13 @@ class GoalDetailsInd {
     private $goalDetails;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="inactive", type="boolean")
+     */
+    private $Inactive = false;
+
+    /**
      * Meta
      * 
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -599,6 +606,18 @@ class GoalDetailsInd {
 
     function setRealResult($realResult) {
         $this->realResult = $realResult;
+    }
+
+    function getInactive() {
+        return $this->Inactive;
+    }
+
+    function setInactive($Inactive) {
+        $this->Inactive = $Inactive;
+    }
+    
+    function getResult(){
+        return ($this->realResult-$this->penalty);
     }
 
 }

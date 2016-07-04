@@ -94,8 +94,7 @@
                                 {%for responsible in goal.responsibles %}
                                     {{ responsible.getOnlyFullNameUser|ucwords }}
                                     {% set value = valueArray[responsible.id] %}                                              
-                                    {% if value is not null  %}          
-                                        |
+                                    {% if value is not null  %}  
                                         <span ng-class="getClassForMeter({{value}},1)"></span>
                                         <span ng-class="getClassForMeter({{value}},2)"></span>
                                         <span ng-class="getClassForMeter({{value}},3)"></span>
