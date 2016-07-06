@@ -3079,9 +3079,9 @@ class IndicatorService implements ContainerAwareInterface {
         );
 
         if(is_null($options["hideUnit"]) || $options["hideUnit"]==""){
-            $unit = "";
-        } else {
             $unit = " Bs./TM";
+        } else {
+            $unit = $options["hideUnit"];
         }
 
 //CARGO LAS CONFIGURACIONES DEL GRAFICO
