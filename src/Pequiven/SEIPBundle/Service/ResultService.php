@@ -769,7 +769,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         foreach ($timeline->getGoals() as $timeline_goals) {
             $penalty = $this->CalculateAdvancePenalty($timeline_goals);
 
-            //CARGO LA PENALIZACIÓN POR INCUMPLIMIENTO Y POR PORCENTAJE (DOS PENALIZACIONES DISTINTAS)
+            //CARGO LA PENALIZACIÓN POR INCUMPLIMIENTO Y POR PORCENTAJE (DOS PENALIZACIONES DISTINTAS)            
             $timeline_goals->setPenalty($penalty['penalty']);
             $timeline_goals->setpercentagepenalty($porcentaje);
             $penalty['penalty'] += $penalty['penalty'] + $porcentaje;
@@ -836,6 +836,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
         }
+        
         $em->flush();
     }
 
