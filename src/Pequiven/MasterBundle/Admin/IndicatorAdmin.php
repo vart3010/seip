@@ -340,6 +340,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('showTags', null, array(
                     'required' => false,
                 ))
+                ->add('unitDashboard', null, array(
+                    'required' => false,
+                ))
                 ->end()
                 ->with('SIG')
                 ->add('managementSystems', 'sonata_type_model_autocomplete', array(

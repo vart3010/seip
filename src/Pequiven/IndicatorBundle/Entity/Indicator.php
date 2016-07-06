@@ -291,6 +291,16 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $requiredToImport = false;
 
     /**
+     * Oculta unidad de indicador en dashboard
+     * Solo para graficos pyramide 
+     * @var string
+     *
+     * @ORM\Column(name="unitDashboard", type="text", nullable=true)
+     */
+    protected $unitDashboard = false;
+
+
+    /**
      * Detalles de la formula del indicador
      * @var \Pequiven\MasterBundle\Entity\Formula\FormulaDetail
      * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Formula\FormulaDetail",mappedBy="indicator",cascade={"persist","remove"}, orphanRemoval=true)
@@ -1535,6 +1545,26 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getRequiredToImport() {
         return $this->requiredToImport;
+    }
+
+    /**
+     * Set unitDashboard
+     *
+     * @param boolean $unitDashboard
+     */
+    public function setUnitDashboard($unitDashboard) {
+        $this->unitDashboard = $unitDashboard;
+
+        return $this;
+    }
+
+    /**
+     * Get unitDashboard
+     *
+     * @return boolean 
+     */
+    public function getUnitDashboard() {
+        return $this->unitDashboard;
     }
 
     /**

@@ -648,6 +648,7 @@ class ChartController extends SEIPController {
         $options['type'] = $type;
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+        $options["hideUnit"] = $indicator->getUnitDashboard();
         $dataChart = $indicatorService->getDataPyramid3DSectioned($indicator, $options); //Obtenemos la data del gráfico de acuerdo al indicador
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
