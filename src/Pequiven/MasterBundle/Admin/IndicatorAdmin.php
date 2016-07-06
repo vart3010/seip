@@ -362,6 +362,14 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->end()
                 ->end()
         ;
+        $form
+                ->tab('Visualización Indicador Padre')
+                ->add('showIndicatorParent', null, array(
+                    'label' => 'Visualizar/ocultar indicador padre',
+                    'required' => false,
+                        )
+                )
+        ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter) {

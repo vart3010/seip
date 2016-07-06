@@ -1587,8 +1587,8 @@ class IndicatorService implements ContainerAwareInterface {
                     $dataActualPeriod["value"] = number_format($arrayVariables[$children->getRef()][$children->getPeriod()->getName()]['value'], 2, ',', '.');
                     $dataLastPeriod["value"] = number_format($arrayVariables[$children->getRef()][$children->getPeriod()->getParent()->getName()]['value'], 2, ',', '.');
                     if (count($children->getCharts()) > 0) {
-                        $dataActualPeriod["link"] = $this->generateUrl($url, array('id' => $children->getId()));
-                        $dataLastPeriod["link"] = $this->generateUrl($url, array('id' => $children->getId()));
+                        $dataActualPeriod["link"] = $this->generateUrl($url, array('id' => $children->getId(),'tablero' => $options['tablero']));
+                        $dataLastPeriod["link"] = $this->generateUrl($url, array('id' => $children->getId(),'tablero' => $options['tablero']));
                     }
 
                     $category[] = $label;
@@ -3172,7 +3172,7 @@ class IndicatorService implements ContainerAwareInterface {
                 "color" => $colorItem,
                 "type" => $indicatorPadre->getIndicatorLevel()->getDescription(),
                 "tooltext" => $indicatorPadre->getIndicatorLevel()->getDescription(),
-                "link" => $this->generateUrl($url, array('id' => $indicatorPadre->getId())),
+                "link" => $this->generateUrl($url, array('id' => $indicatorPadre->getId(),'tablero' => $options['tablero'])),
             );
 
             $chart["dataSource"]["data"][] = $configPadre;
@@ -3224,7 +3224,7 @@ class IndicatorService implements ContainerAwareInterface {
                     "color" => $colorItem,
                     "type" => $temp->getIndicatorLevel()->getDescription(),
                     "tooltext" => $indicatorPadre->getIndicatorLevel()->getDescription(),
-                    "link" => $this->generateUrl($url, array('id' => $temp->getId())),
+                    "link" => $this->generateUrl($url, array('id' => $temp->getId(),'tablero' => $options['tablero'])),
                 );
 
                 $chart["dataSource"]["data"][] = $config;
@@ -3324,7 +3324,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $color = $colorbase;
                 $child = $indicator->getChildrens();
                 if ($child[0] != null) {
-                    $link = $this->generateUrl($url, array('id' => $child[0]->getId()));
+                    $link = $this->generateUrl($url, array('id' => $child[0]->getId(),'tablero' => $options['tablero']));
                 } else {
                     $link = "";
                 }

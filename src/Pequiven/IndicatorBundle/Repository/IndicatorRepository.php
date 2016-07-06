@@ -179,6 +179,7 @@ class IndicatorRepository extends EntityRepository {
     function createPaginatorStrategic(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('i.enabled =:enabled');
+        $queryBuilder->andWhere('i.showIndicatorParent =:false');
         $queryBuilder->innerJoin('i.objetives', 'ob');
         $queryBuilder->andWhere('i.tmp =:false');
         $queryBuilder->andWhere('ob.enabled =:enabled');
@@ -214,6 +215,7 @@ class IndicatorRepository extends EntityRepository {
         $securityContext = $this->getSecurityContext();
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('i.enabled =:enabled');
+        $queryBuilder->andWhere('i.showIndicatorParent =:false');
         $queryBuilder->innerJoin('i.objetives', 'ob');
         $queryBuilder->andWhere('i.tmp =:false');
         $queryBuilder->andWhere('ob.enabled =:enabled');
@@ -266,6 +268,7 @@ class IndicatorRepository extends EntityRepository {
         $user = $this->getUser();
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('i.enabled =:enabled');
+        $queryBuilder->andWhere('i.showIndicatorParent =:false');
         $queryBuilder->innerJoin('i.objetives', 'ob');
         $queryBuilder->andWhere('i.tmp =:false');
         $queryBuilder->andWhere('ob.enabled =:enabled ');

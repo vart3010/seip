@@ -720,6 +720,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $showIndicatorGroups = false;
     
     /**
+     * @var boolean
+     * @ORM\Column(name="showIndicatorParent", type="boolean")
+     */
+    private $showIndicatorParent = false;
+    
+    /**
      * ¿El Valor Plan del Indicador no acumula?
      * @var boolean
      * @ORM\Column(name="planIsNotAccumulative",type="boolean")
@@ -2806,5 +2812,15 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     function setPlanIsNotAccumulative($planIsNotAccumulative) {
         $this->planIsNotAccumulative = $planIsNotAccumulative;
     }
+    
+    /*
+     * Metodos set y get para el campo que mostrará/ocultará los indicadores padres creados para mostar el tablero del CPJAA
+     */
+    function getShowIndicatorParent() {
+        return $this->showIndicatorParent;
+    }
 
+    function setShowIndicatorParent($showIndicatorParent) {
+        $this->showIndicatorParent = $showIndicatorParent;
+    }
 }

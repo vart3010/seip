@@ -6483,7 +6483,9 @@ angular.module('seipModule.controllers', [])
 
             //2-Gráfico en forma de dona para mostrar las variables plan y real a partir de ecuación de la fórmula del indicador
             $scope.chargeChartDoughnut2dWithVariablesRealPlan = function (indicatorId, render, width, height) {
-                var getdataChartDoughnut2dWithVariablesRealPlan = Routing.generate("getDataChartDoughnutWithVariablesRealPlan", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getdataChartDoughnut2dWithVariablesRealPlan = Routing.generate("getDataChartDoughnutWithVariablesRealPlan", {id: indicatorId,tablero: tablero});
                 $http.get(getdataChartDoughnut2dWithVariablesRealPlan).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartDoughnut2dWithVariablesRealPlan = new FusionCharts({
@@ -6505,7 +6507,9 @@ angular.module('seipModule.controllers', [])
 
             //3-Gráfico para mostrar las variables de un indicador que esten marcadas como "real"
             $scope.chargeChartPieVariablesMarkedReal = function (indicatorId, render, width, height) {
-                var getDataChartPieVariablesMarkedReal = Routing.generate("getDataChartPieVariablesMarkedReal", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartPieVariablesMarkedReal = Routing.generate("getDataChartPieVariablesMarkedReal", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartPieVariablesMarkedReal).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartPieVariablesMarkedReal = new FusionCharts({
@@ -6527,7 +6531,9 @@ angular.module('seipModule.controllers', [])
 
             //4-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
             $scope.chargeChartColumnLineDualAxisRealPlan = function (indicatorId, render, width, height) {
-                var getDataChartColumnLineDualAxisRealPlan = Routing.generate("getDataChartColumnLineDualAxisRealPlan", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartColumnLineDualAxisRealPlan = Routing.generate("getDataChartColumnLineDualAxisRealPlan", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartColumnLineDualAxisRealPlan).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnLineDualAxisRealPlan = new FusionCharts({
@@ -6550,7 +6556,9 @@ angular.module('seipModule.controllers', [])
 
             //5-Gráfico para mostrar las variables de un indicador que esten marcadas como "plan"
             $scope.chargeChartPieVariablesMarkedPlan = function (indicatorId, render, width, height) {
-                var getDataChartPieVariablesMarkedPlan = Routing.generate("getDataChartPieVariablesMarkedPlan", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartPieVariablesMarkedPlan = Routing.generate("getDataChartPieVariablesMarkedPlan", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartPieVariablesMarkedPlan).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartPieVariablesMarkedPlan = new FusionCharts({
@@ -6572,7 +6580,9 @@ angular.module('seipModule.controllers', [])
 
             //6-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
             $scope.chargeChartBarsAreaVariablesRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
-                var getDataChartBarsAreaVariablesRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesRealPlanByFrequencyNotification", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartBarsAreaVariablesRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesRealPlanByFrequencyNotification", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartBarsAreaVariablesRealPlanByFrequencyNotification).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartBarsAreaVariablesRealPlanByFrequencyNotification = new FusionCharts({
@@ -6595,7 +6605,9 @@ angular.module('seipModule.controllers', [])
 
             //7-Gráfico para mostrar las variables (sumativas al plan) de un indicador con fórmula a partir de ecuación
             $scope.chargeChartPieVariablesPlanFromEquation = function (indicatorId, render, width, height) {
-                var getDataChartPieVariablesPlanFromEquation = Routing.generate("getDataChartPieVariablesPlanFromEquation", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartPieVariablesPlanFromEquation = Routing.generate("getDataChartPieVariablesPlanFromEquation", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartPieVariablesPlanFromEquation).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartPieVariablesPlanFromEquation = new FusionCharts({
@@ -6617,7 +6629,9 @@ angular.module('seipModule.controllers', [])
 
             //8-Gráfico para mostrar las variables (sumativas al real) de un indicador con fórmula a partir de ecuación
             $scope.chargeChartPieVariablesRealFromEquation = function (indicatorId, render, width, height) {
-                var getDataChartPieVariablesRealFromEquation = Routing.generate("getDataChartPieVariablesRealFromEquation", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartPieVariablesRealFromEquation = Routing.generate("getDataChartPieVariablesRealFromEquation", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartPieVariablesRealFromEquation).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartPieVariablesRealFromEquation = new FusionCharts({
@@ -6639,7 +6653,9 @@ angular.module('seipModule.controllers', [])
 
             //9-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
             $scope.chargeChartColumnLineDualAxisByFrequencyNotification = function (indicatorId, render, width, height) {
-                var getDataChartColumnLineDualAxisByFrequencyNotification = Routing.generate("getDataChartColumnLineDualAxisByFrequencyNotification", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartColumnLineDualAxisByFrequencyNotification = Routing.generate("getDataChartColumnLineDualAxisByFrequencyNotification", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartColumnLineDualAxisByFrequencyNotification).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnLineDualAxisByFrequencyNotification = new FusionCharts({
@@ -6662,7 +6678,9 @@ angular.module('seipModule.controllers', [])
 
             //10-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador (Variables marcadas como real/plan)
             $scope.chargeChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
-                var getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = new FusionCharts({
@@ -6685,7 +6703,9 @@ angular.module('seipModule.controllers', [])
 
             //11-Gráfico tipo barras vertical para mostrar las variables marcadas como real/plan de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación
             $scope.chargeChartColumnVariablesMarkedRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
-                var getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification = Routing.generate("getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification = Routing.generate("getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnVariablesMarkedRealPlanByFrequencyNotification = new FusionCharts({
@@ -6708,7 +6728,9 @@ angular.module('seipModule.controllers', [])
 
             //12-Gráfico en forma de dona para mostrar los resultados real/plan a partir de la ecuación para gráficos de la fórmula del indicador
             $scope.chargeChartVariablesRealPlanFromDashboardEquationDoughnut = function (indicatorId, render, width, height) {
-                var getdataChartVariablesRealPlanFromDashboardEquationDoughnut = Routing.generate("getDataChartVariablesRealPlanFromDashboardEquationDoughnut", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getdataChartVariablesRealPlanFromDashboardEquationDoughnut = Routing.generate("getDataChartVariablesRealPlanFromDashboardEquationDoughnut", {id: indicatorId,tablero: tablero});
                 $http.get(getdataChartVariablesRealPlanFromDashboardEquationDoughnut).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartVariablesRealPlanFromDashboardEquationDoughnut = new FusionCharts({
@@ -6730,7 +6752,9 @@ angular.module('seipModule.controllers', [])
 
             //13-Gráfico tipo barras vertical para mostrar los resultados real/plan de la fórmula del indicador respecto al eje izquierdo, de los indicadores asociados.
             $scope.chargeChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = function (indicatorId, render, width, height) {
-                var getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = Routing.generate("getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = Routing.generate("getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = new FusionCharts({
@@ -6753,7 +6777,9 @@ angular.module('seipModule.controllers', [])
 
             //14-Gráfico tipo columna 3d para mostrar el resultado real/plan de la ecuación para gráficos de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación.
             $scope.chargeChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = function (indicatorId, render, width, height) {
-                var getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = Routing.generate("getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = Routing.generate("getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = new FusionCharts({
@@ -6776,7 +6802,9 @@ angular.module('seipModule.controllers', [])
 
             //15-Gráfico tipo stacked column 3d para mostrar el resultado , de acuerdo a la frecuencia de notificación de los indicadores asociados, además del total del indicador padre.
             $scope.chargeChartStackedColumnVariableByFrequencyNotificationWithTotal = function (indicatorId, render, width, height) {
-                var getDataChartStackedColumnVariableByFrequencyNotificationWithTotal = Routing.generate("getDataChartStackedColumnVariableByFrequencyNotificationWithTotal", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartStackedColumnVariableByFrequencyNotificationWithTotal = Routing.generate("getDataChartStackedColumnVariableByFrequencyNotificationWithTotal", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartStackedColumnVariableByFrequencyNotificationWithTotal).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartStackedColumnVariableByFrequencyNotificationWithTotal = new FusionCharts({
@@ -6799,7 +6827,9 @@ angular.module('seipModule.controllers', [])
 
             //16-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados, con el total acumulado al final
             $scope.chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth = function (indicatorId, month, render, width, height) {
-                var getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth = Routing.generate("getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth", {id: indicatorId, month: month});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth = Routing.generate("getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth", {id: indicatorId, month: month,tablero: tablero});
                 $http.get(getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnResultIndicatorsAssociatedWithTotalByMonth = new FusionCharts({
@@ -6821,7 +6851,9 @@ angular.module('seipModule.controllers', [])
 
             //17-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
             $scope.chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = function (indicatorId, month, render, width, height) {
-                var getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = Routing.generate("getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth", {id: indicatorId, month: month});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = Routing.generate("getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth", {id: indicatorId, month: month,tablero: tablero});
                 $http.get(getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = new FusionCharts({
@@ -6843,7 +6875,9 @@ angular.module('seipModule.controllers', [])
 
             //18-Gráfico tipo multiseries de línea, para las lesiones personales con tiempo, acumulados, sólo del indicador (período actual y anterior)
             $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = function (indicatorId, render, width, height) {
-                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = new FusionCharts({
@@ -6866,7 +6900,9 @@ angular.module('seipModule.controllers', [])
 
             //19-Gráfico tipo multiseries de línea, para las lesiones personales sin tiempo, sólo del indicador (período actual y anterior)
             $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = function (indicatorId, render, width, height) {
-                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = new FusionCharts({
@@ -6889,7 +6925,9 @@ angular.module('seipModule.controllers', [])
 
             //20-Gráfico tipo multiseries de línea, para las lesiones personales con y sin tiempo, acumulados, de los hijos del indicador
             $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = function (indicatorId, render, width, height) {
-                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = new FusionCharts({
@@ -6912,7 +6950,9 @@ angular.module('seipModule.controllers', [])
 
             //21-Gráfico tipo multiseries de línea, para los días perdidos, sólo del indicador (período actual y anterior)
             $scope.chargeChartMultiSeriesLineIndicatorLostDaysAccumulatedTime = function (indicatorId, render, width, height) {
-                var getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesLineIndicatorLostDaysAccumulatedTime = new FusionCharts({
@@ -6935,7 +6975,9 @@ angular.module('seipModule.controllers', [])
 
             //22-Gráfico tipo multiseries columna 3d, para mostrar el resultado de una suma de variables de los indicadores hijos (lesionados con tiempo perdidoa, sin tiempo perdido y días perdidos), según sea el caso del período actual y anterior
             $scope.chargeChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated = function (indicatorId, render, width, height) {
-                var getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated = new FusionCharts({
@@ -6958,7 +7000,9 @@ angular.module('seipModule.controllers', [])
 
             //23-Gráfico tipo multiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de la suma de variables por frecuencia del indicador agrupados por compañia y del período actual y anterior (línea) y el acumulado por período (columna) al final.
             $scope.chargeChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated = function (indicatorId, render, width, height) {
-                var getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated = new FusionCharts({
@@ -6981,7 +7025,9 @@ angular.module('seipModule.controllers', [])
 
             //24-Gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de las lesiones con tiempo perdido por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
             $scope.chargeChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated = function (indicatorId, render, width, height) {
-                var getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated = new FusionCharts({
@@ -7004,7 +7050,9 @@ angular.module('seipModule.controllers', [])
 
             //25-Gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de las lesiones sin tiempo perdido por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
             $scope.chargeChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated = function (indicatorId, render, width, height) {
-                var getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated = new FusionCharts({
@@ -7027,7 +7075,9 @@ angular.module('seipModule.controllers', [])
 
             //26-Gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de los días perdidos por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
             $scope.chargeChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated = function (indicatorId, render, width, height) {
-                var getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated = new FusionCharts({
@@ -7050,7 +7100,9 @@ angular.module('seipModule.controllers', [])
 
             //27-Gráfico sólo para avances de proyectos
             $scope.chargeChartProgressProjectsByFrequencyNotification = function (indicatorId, render, width, height) {
-                var getDataChartProgressProjectsByFrequencyNotification = Routing.generate("getDataChartChartProgressProjectsByFrequencyNotification", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartProgressProjectsByFrequencyNotification = Routing.generate("getDataChartChartProgressProjectsByFrequencyNotification", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartProgressProjectsByFrequencyNotification).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartProgressProjectsByFrequencyNotification = new FusionCharts({
@@ -7073,7 +7125,9 @@ angular.module('seipModule.controllers', [])
 
             //28-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
             $scope.chargeChartColumnLineDualAxisByDifferentFrequencyNotification = function (indicatorId, render, width, height) {
-                var getDataChartColumnLineDualAxisByDifferentFrequencyNotification = Routing.generate("getDataChartColumnLineDualAxisByDifferentFrequencyNotification", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartColumnLineDualAxisByDifferentFrequencyNotification = Routing.generate("getDataChartColumnLineDualAxisByDifferentFrequencyNotification", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartColumnLineDualAxisByDifferentFrequencyNotification).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnLineDualAxisByDifferentFrequencyNotification = new FusionCharts({
@@ -7096,7 +7150,9 @@ angular.module('seipModule.controllers', [])
 
             //29-Gráfico tipo multiseries de línea, con un trendline de forma horizontal
             $scope.chargeChartMultiSeriesLineIndicatorWithTrendlineHorizontal = function (indicatorId, render, width, height) {
-                var getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal = Routing.generate("getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal = Routing.generate("getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontal = new FusionCharts({
@@ -7120,7 +7176,9 @@ angular.module('seipModule.controllers', [])
 
             //30-Gráfico tipo Piramide 3D Seccionada Real
             $scope.chargeChartRealPyramid3DSectioned = function (indicatorId, render, width, height) {
-                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId, type: 'real'});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId, type: 'real',tablero: tablero});
                 $http.get(getDataPyramid3DSectioned).success(function (data) {
                     FusionCharts.ready(function () {
 //                        console.log(data.dataSource.data);
@@ -7142,7 +7200,9 @@ angular.module('seipModule.controllers', [])
             }
             //31-Gráfico tipo Piramide 3D Seccionada Plan
             $scope.chargeChartPlanPyramid3DSectioned = function (indicatorId, render, width, height) {
-                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId, type: 'plan'});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId, type: 'plan',tablero: tablero});
                 $http.get(getDataPyramid3DSectioned).success(function (data) {
                     FusionCharts.ready(function () {
 //                        console.log(data.dataSource.data);
@@ -7165,7 +7225,9 @@ angular.module('seipModule.controllers', [])
 
             //32- GRAFICO DE COLUMNA APILADA QUE MUESTRA EL PLAN/REAL DE TODAS LAS VARIABLES DEL INDICADOR
             $scope.chargeChartStackedColumn3DbyIndicator = function (indicatorId, render, width, height) {
-                var getDataStackedColumn3DbyIndicator = Routing.generate("getDataStackedColumn3DbyIndicator", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataStackedColumn3DbyIndicator = Routing.generate("getDataStackedColumn3DbyIndicator", {id: indicatorId,tablero: tablero});
                 $http.get(getDataStackedColumn3DbyIndicator).success(function (data) {
                     FusionCharts.ready(function () {
                         var ChartStackedColumn3DbyIndicator = new FusionCharts({
@@ -7188,7 +7250,9 @@ angular.module('seipModule.controllers', [])
 
             //33-Gráfico tipo multiseries de línea, con un trendline de forma horizontal y el valor de los resultados
             $scope.chargeChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = function (indicatorId, render, width, height) {
-                var getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = Routing.generate("getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult", {id: indicatorId});
+                var tableroFlag = angular.element('#tableroFlag');
+                var tablero = tableroFlag.val();
+                var getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = Routing.generate("getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult", {id: indicatorId,tablero: tablero});
                 $http.get(getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = new FusionCharts({
