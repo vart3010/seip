@@ -17,6 +17,7 @@
             {% endif %}
         </div>
     </div>
+
     <div class="with-padding">
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
@@ -38,12 +39,10 @@
                             <td>&nbsp;</td>
                         </tr>
                     {% endfor %}
-                {% else %}
-
+                {% elseif (plant_report.plantStopPlannings|length > 0) %}
                     {% set totalStops = 0 %}
                     {% set totalHours = 0 %}
-                    {% for plantReport in plant_report.getchildrensGroup %}
-                        {% for plantStopPlanning in plantReport.plantStopPlannings %}
+                        {% for plantStopPlanning in plant_report.plantStopPlannings %}
                             <tr>
                                 <td>{{ loop.index }} - 
                                     {{ generateLink(plantStopPlanning) }}
@@ -62,15 +61,13 @@
                                     {% endif %}
                                 </td>
                             </tr>
-                        {% else %}
-                            <tr >
-                                <td colspan="{{ colspan }}" class="empty_row">
-                                    {{ "empty.plant_stop_planning"|trans }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endfor %}
-                    
+                          {% endfor %}
+                {% else %}
+                    <tr >
+                        <td colspan="{{ colspan }}" class="empty_row">
+                            {{ "empty.plant_stop_planning"|trans }}
+                        </td>
+                    </tr>
                 {% endif %}
             </tbody>
             {# <tfoot>

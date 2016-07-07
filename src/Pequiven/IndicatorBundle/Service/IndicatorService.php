@@ -3078,6 +3078,12 @@ class IndicatorService implements ContainerAwareInterface {
             ),
         );
 
+        if(is_null($options["hideUnit"]) || $options["hideUnit"]==""){
+            $unit = " Bs./TM";
+        } else {
+            $unit = $options["hideUnit"];
+        }
+
 //CARGO LAS CONFIGURACIONES DEL GRAFICO
         $chart["dataSource"]["chart"] = array(
             "theme" => "fint",
@@ -3094,7 +3100,7 @@ class IndicatorService implements ContainerAwareInterface {
             "showValues" => "1",
             "showlabels" => "0",
 //            "numberPrefix" => "Bs./TM",
-            "numberSuffix" => " Bs./TM",
+            "numberSuffix" => $unit,
 //            "plotTooltext" => "Valor del Indicador",
             "showPercentValues" => "0",
             "chartLeftMargin" => "40",
