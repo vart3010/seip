@@ -240,6 +240,8 @@ class IndicatorController extends ResourceController {
 
         $resultService = $this->getResultService();
         $arrangementRangeService = $this->getArrangementRangeService();
+        
+        $tablero = $request->get('tablero');
 
         $view = $this
                 ->view()
@@ -250,6 +252,7 @@ class IndicatorController extends ResourceController {
             'urlParent' => $urlParent,
             'boxRender' => $boxRender,
             'textParent' => $textParent,
+            'tablero' => $tablero,
                 ))
         ;
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'valuesIndicator', 'api_details', 'sonata_api_read'));

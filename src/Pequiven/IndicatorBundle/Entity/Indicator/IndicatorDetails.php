@@ -186,14 +186,14 @@ class IndicatorDetails extends Model {
     private $varIndicatorReal;
 
     /**
-     *
+     * Bandera para mostrar el resultado de la variable seteada como real, en la ficha del indicador
      * @var type 
      * @ORM\Column(name="isCheckReal",type="boolean", nullable=true)
      */
     private $isCheckReal = false;
 
     /**
-     *
+    * Bandera para mostrar el resultado de la variable seteada como plan, en la ficha del indicador
      * @var type 
      * @ORM\Column(name="isCheckPlan",type="boolean", nullable=true)
      */

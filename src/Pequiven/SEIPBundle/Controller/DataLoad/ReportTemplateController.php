@@ -658,7 +658,8 @@ class ReportTemplateController extends SEIPController {
             "reportTemplate" => $reportTemplate,
             "startDate" => $formatStartDay,
             "endDate" => $formatEndDay,
-            "labelsTypesFailsPNR" => $labelsTypesFailsPNR
+            "labelsTypesFailsPNR" => $labelsTypesFailsPNR,
+            "typeOverProduction"=>$request->get("typeOverProduction")
         );
         $view = $this
                 ->view()
@@ -677,6 +678,7 @@ class ReportTemplateController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $causeFailService = $this->getCauseFailService();
         $pnrByCausesIntExt = $pnrByCausesMP = array();
+        $overProduction = $request->get("typeOverProduction");
 
         $rawMaterials = array(
             \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP => array(),
@@ -826,16 +828,38 @@ class ReportTemplateController extends SEIPController {
                 $pnrByCausesMP = $causeFailService->getPNRByFailsCauseMp($unrealizedProduction, $rawMaterials);
                 foreach ($failsInternal as $failInternal) {
                     $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['day'] = $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
-                    if ($failInternal->getName() != 'Sobre Producción') {
+
+                    if ($failInternal->getName() == 'Sobre Producción') {
+                        if($overProduction==1) {
+                            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
+                        } else if($overProduction==2) {
+                            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = ($result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day]) - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
+
+                        } else {
+                            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
+                        }    
+                    } else {
                         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
                     }
+
                     for ($dayMonth = 1; $dayMonth <= $day; $dayMonth++) {
                         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
-                        if ($failInternal->getName() != 'Sobre Producción') {
+
+                        if ($failInternal->getName() == 'Sobre Producción') {
+                            if($overProduction==1) {
+                                $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];    
+                            } else if($overProduction==2) {
+                                $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = ($result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth]) - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];    
+                            }
+                        } else {
                             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
                         }
                     }
                 }
+
+                //var_dump($result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]);
+                //die();
+
                 foreach ($failsExternal as $failExternal) {
                     $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['day'] = $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]][$failExternal->getName()][$day];
                     $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]['total']['day'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]['total']['day'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]][$failExternal->getName()][$day];
@@ -876,15 +900,39 @@ class ReportTemplateController extends SEIPController {
                         if ($month == $monthUnrealizedProduction) {
                             if ($dayMonth <= $day) {
                                 $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
-                                if ($failInternal->getName() != 'Sobre Producción') {
+
+                                if ($failInternal->getName() == 'Sobre Producción') {
+                                    if($overProduction==1) {
+                                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+
+                                    } else if($overProduction==2) {
+                                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = ($result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth]) - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];    
+                                    }
+                                } else {
                                     $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
                                 }
+
+                                /*if ($failInternal->getName() != 'Sobre Producción') {
+                                    $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                                }*/
                             }
                         } else {
                             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
-                            if ($failInternal->getName() != 'Sobre Producción') {
+
+                                if ($failInternal->getName() == 'Sobre Producción') {
+                                    if($overProduction==1) {
+                                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+
+                                    } else if($overProduction==2) {
+                                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = ($result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth]) - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];    
+                                    }
+                                } else {
+                                    $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                                }
+
+                            /*if ($failInternal->getName() != 'Sobre Producción') {
                                 $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
-                            }
+                            }*/
                         }
                     }
                 }
@@ -946,6 +994,7 @@ class ReportTemplateController extends SEIPController {
             "externalRawMaterials" => $externalRawMaterials,
             "labelsTypesFailsPNR" => $labelsTypesFailsPNR,
             "rawMaterials" => $rawMaterials,
+            "typeOverProduction"=>$request->get("overProduction")
         );
 
 
@@ -1807,15 +1856,9 @@ class ReportTemplateController extends SEIPController {
                                     $unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
                                     if($overProduction==1) {
                                         
-                                        $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $productReport);
-                                        //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]);
-                                        //var_dump($unrealizedProduction["total_day"]);
-                                        //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day']);
-                                        $unrealizedProduction["total_day"] = $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
-                                        $unrealizedProduction["total_month"] = $unrealizedProduction["total_month"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'];
-                                        //var_dump($unrealizedProduction["total_month"]);
-                                        //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month']);
-                                        $unrealizedProduction["total_year"] = ($unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year']);
+                                        $unrealizedProduction["total_day"] = $unrealizedProduction["total_day"];
+                                        $unrealizedProduction["total_month"] = $unrealizedProduction["total_month"];
+                                        $unrealizedProduction["total_year"] = $unrealizedProduction["total_year"];
 
                                     } else if($overProduction==2) { 
                                         #$unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
@@ -1830,9 +1873,15 @@ class ReportTemplateController extends SEIPController {
                                         $unrealizedProduction["total_year"] = ($unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year'])-$excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year'];
                                     } else {
 
-                                        $unrealizedProduction["total_day"] = $unrealizedProduction["total_day"];
-                                        $unrealizedProduction["total_month"] = $unrealizedProduction["total_month"];
-                                        $unrealizedProduction["total_year"] = $unrealizedProduction["total_year"];
+                                        $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $productReport);
+                                        //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]);
+                                        //var_dump($unrealizedProduction["total_day"]);
+                                        //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day']);
+                                        $unrealizedProduction["total_day"] = $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
+                                        $unrealizedProduction["total_month"] = $unrealizedProduction["total_month"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'];
+                                        //var_dump($unrealizedProduction["total_month"]);
+                                        //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month']);
+                                        $unrealizedProduction["total_year"] = ($unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year']);
                                     }
                                     
                                     /*$unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
@@ -1933,7 +1982,8 @@ class ReportTemplateController extends SEIPController {
                         "groupsPlants" => false,
                         "graphicsDays" => $graphicsDays,
                         "graphicsMonth" => $graphicsMonth,
-                        "graphicsYear" => $graphicsYear
+                        "graphicsYear" => $graphicsYear,
+                        "overProduction"=>$overProduction
                     );
                     
                     if ($exportToPdf == 1) {
@@ -2269,7 +2319,7 @@ class ReportTemplateController extends SEIPController {
 
                                                 $totalPnrPlantGroups["year"] += ($unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year']);
 
-                                            } else  if($overProduction==2) {
+                                            } else if($overProduction==2) {
                                                 $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $productReport);
                                                 $totalPnrPlantGroups["day"] += ($unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'])-$excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
 
@@ -2688,11 +2738,11 @@ class ReportTemplateController extends SEIPController {
 
 
                                         if($overProduction==1) {
-                                            $arrayUnrealizedProduction[$productReportId]["total"] += $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
+                                            $arrayUnrealizedProduction[$productReportId]["total"] += $unrealizedProduction["total_day"];
                                         } else if($overProduction==2) {
                                             $arrayUnrealizedProduction[$productReportId]["total"] += ($unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'])-$excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
                                         } else {
-                                            $arrayUnrealizedProduction[$productReportId]["total"] += $unrealizedProduction["total_day"];
+                                            $arrayUnrealizedProduction[$productReportId]["total"] += $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
                                         }
 
                                         
@@ -3025,7 +3075,8 @@ class ReportTemplateController extends SEIPController {
                     'dateFrom' => $dateFrom,
                     'dateEnd' => $dateEnd,
                     'groupsPlants'=>$groupsPlants,
-                    'graphicRange' => $graphicsDays
+                    'graphicRange' => $graphicsDays,
+                    'overProduction'=>$overProduction
                 );
 
 

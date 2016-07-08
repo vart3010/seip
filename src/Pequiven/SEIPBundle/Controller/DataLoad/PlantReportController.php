@@ -264,11 +264,9 @@ class PlantReportController extends SEIPController {
             "alicuota" => $alicuota
         );
 
-//        if (count($plantReport) > 0) {
-//            $viewDefault = 'showGroups.html';
-//        } else {
-//            $viewDefault = 'show.html';
-//        }
+        #var_dump(count($plantReport->getPlantStopPlannings()));
+        #die();
+
 
 
         $view = $this

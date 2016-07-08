@@ -62,8 +62,15 @@
                 </tr>
                 {% set totalInternal = 0 %}
                 {% for failInternal in failsInternal %}
-                    {#                    SE COLOCO ESTE IF PARA Q NO SALGA LA SOBRE PRODUCCION EN LA SUMA CABLE DE 1ER CIERRE 2016 #} 
-                    {% if (failInternal.id != 11 ) %}
+                    {% if (failInternal.id == 11 ) %}
+                        {% if (typeOverProduction == 1) %}
+                            {% set totalInternal = (totalInternal + result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]["total"]) %}
+                        {% elseif (typeOverProduction == 2) %}
+                            {% set totalInternal = (totalInternal - result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]["total"])  %}
+                        {% else %}
+                            {% set totalInternal = (totalInternal - result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]["total"]) +  result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]["total"] %}
+                        {% endif %}
+                    {% else %}
                         {% set totalInternal = totalInternal + result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]["total"] %}
                     {% endif %}
                     <tr>
@@ -79,7 +86,15 @@
                             {{ 'pequiven_seip.total' | trans }}
                         </span>
                     </th>
-                    <th><span class="bold">{{ totalInternal }}</span></th>
+                    <th>
+                        <span class="bold">
+                            {% if (totalInternal < 0)  %}
+                                {% set totalInternal = 0 %}
+                            {% endif %}
+
+                            {{ totalInternal }}
+                        </span>
+                    </th>
                 </tr>
                 <tr>
                     <th colspan="4"></th>

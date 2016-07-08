@@ -1061,7 +1061,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $visualize->addChild($itemPeriod);
             }
 
-            /*             * COMPLEJOS */
+            /** COMPLEJOS */
             if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_*')) {
                 $tableros = $this->factory->createItem('results.visualize.complejo', $this->getSubLevelOptions())
                         ->setLabel($this->translate(sprintf('Tableros de Indicadores', $section)));
@@ -1072,7 +1072,34 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 ))
                         )
                         ->setLabel($this->translate(sprintf('Complejos Petroquímicos', $section)));
-
+                
+                if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA')) {
+                        $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.cpjaa', array(
+                                    'route' => 'pequiven_dasboard_linestrategicbygroup',
+                                    'routeParameters' => array('idGroup' => 12),
+                                    'labelAttributes' => array('icon' => 'fa fa-industry',),
+                                ))->setLabel($this->translate(sprintf(strtoupper('cpjaa'), $section)));
+                        $complejos->addChild($itemStrategicsIndicators);
+                    }
+                 if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPHC')) {
+                        $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.cphc', array(
+                                    'route' => 'pequiven_line_strategic_view_dashboard_complejo',
+                                    //'route' => 'pequiven_line_strategic_indicators_specific',
+                                    'routeParameters' => array('complejo' => '1'),
+                                    'labelAttributes' => array('icon' => 'fa fa-industry',),
+                                ))->setLabel($this->translate(sprintf(strtoupper('cphc'), $section)));
+                        $complejos->addChild($itemStrategicsIndicators);
+                    }
+                  if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPAMC')) {
+                        $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.cpamc', array(
+                                    'route' => 'pequiven_line_strategic_view_dashboard_complejo',
+                                    //'route' => 'pequiven_line_strategic_indicators_specific',
+                                    'routeParameters' => array('complejo' => '2'),
+                                    'labelAttributes' => array('icon' => 'fa fa-industry',),
+                                ))->setLabel($this->translate(sprintf(strtoupper('cpamc'), $section)));
+                        $complejos->addChild($itemStrategicsIndicators);
+                    }
+/*
                 $em = $this->getDoctrine()->getManager();
                 $complejos_sql = $em->getRepository('PequivenMasterBundle:Complejo')->findAll();
 
@@ -1090,16 +1117,9 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 ))->setLabel($this->translate(sprintf(strtoupper($refC), $section)));
                         $complejos->addChild($itemStrategicsIndicators);
                     }
-                }
-
-//                $itemStrategicsIndicators = $this->factory->createItem('results.visualize.tableros.cpjaa', array(
-//                            'route' => 'pequiven_dasboard_subgroupindicatorbygroup',
-//                            'routeParameters' => array('idGroup' => 9),
-//                            'labelAttributes' => array('icon' => 'fa fa-industry',),
-//                        ))->setLabel($this->translate(sprintf('CPJAA', $section)));
-//                $complejos->addChild($itemStrategicsIndicators);
-//
+                }*/
                 $tableros->addChild($complejos);
+                /*fin complejos*/
 
                 $gerencias = $this->factory->createItem('tableros_gerencias', $this->getSubLevelOptions(array(
                                     'uri' => null,
