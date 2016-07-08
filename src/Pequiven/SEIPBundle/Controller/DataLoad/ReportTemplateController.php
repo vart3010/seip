@@ -3250,7 +3250,7 @@ class ReportTemplateController extends SEIPController {
             )
         );
         $activeSheet->getStyle("H2")->applyFromArray($styleArray);
-        $activeSheet->setCellValue("H2", $days[date("N")-1] . ", " . date("d/m/Y"));
+        $activeSheet->setCellValue("H2", $days[date("N")] . ", " . date("d/m/Y"));
 
         $row = 4;
 
@@ -3627,7 +3627,7 @@ class ReportTemplateController extends SEIPController {
             )
         );
         $activeSheet->getStyle("H2")->applyFromArray($styleArray);
-        $activeSheet->setCellValue("H2", $days[date("N")-1] . ", " . date("d/m/Y"));
+        $activeSheet->setCellValue("H2", $days[date("N")] . ", " . date("d/m/Y"));
 
         $rowCont = 4;
 
