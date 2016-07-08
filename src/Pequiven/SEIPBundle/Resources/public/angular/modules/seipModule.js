@@ -5,7 +5,8 @@ var seipModule = angular.module('seipModule', [
     'ngRoute',
     'seipModule.controllers',
     'notificationBarModule',
-    'ngCookies'
+    'ngCookies',
+    'ngSanitize'
 ]);
 seipModule
         .filter('myNumberFormat', function () {
@@ -17,6 +18,19 @@ seipModule
                 return numberFormat;
             };
         });
+seipModule.directive('compile', ['$compile', function ($compile) {
+  return function(scope, element, attrs) {
+    scope.$watch(
+      function(scope) {
+        return scope.$eval(attrs.compile);
+      },
+      function(value) {
+        element.html(value);
+        $compile(element.contents())(scope);
+      }
+   )};
+}]);
+
 function confirm() {
 
 }
@@ -1730,7 +1744,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    //$timeout(callAtTimeout, 3000);
+                    $timeout(callAtTimeout, 3000);
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2899,6 +2913,12 @@ angular.module('seipModule.controllers', [])
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
             };
+            //Carga de html botones
+            $scope.but = function(){
+                var button = angular.element('#buttons');
+                console.log($('#textPrueba').html());                
+                $scope.myHTML = '<a class="button icon-pencil" ng-click="loadTemplateMaintenanceVerification(id_maintenance=64)" href="">Verificar</a>';
+            }
 
             //Formulario Maintenance
             $scope.initFormMaintenaceShow = function (resource) {
@@ -2906,6 +2926,7 @@ angular.module('seipModule.controllers', [])
                 var numero = d.getTime();
                 $scope.setHeight(700);
                 $scope.setWidth(1000);
+                //console.log($scope.id_standardization);
                 var parameters = {
                     id: $scope.id_standardization,
                     _dc: numero

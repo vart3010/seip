@@ -9,8 +9,18 @@ pequiven_sig_monitoring_list:
     methods: [GET]
     options:
         expose: true
+pequiven_sig_monitoring_list_standardization:
+    path: /sig/monitoring/list/show/{type}/{id}.{_format}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:showAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
 pequiven_sig_monitoring_show:
-    path: /sig/monitoring/list/show/{type}/{id}
+    path: /sig/monitoring/list/shows/{type}/{id}
     defaults:
         _controller: pequiven.controller.monitoring_sig:showAction
         _format: html    

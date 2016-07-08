@@ -417,8 +417,20 @@ class ReportEvolutionActionController extends ResourceController
         $editGeneral = false;
         $idAction = $request->get('idAction');
         $month = $request->get('month');
-
-        $action = $this->get('pequiven.repository.sig_action_indicator')->find($idAction);
+        $valueAnte = 0;
+        $action = $this->get('pequiven.repository.sig_action_indicator')->find($idAction);        
+        $actionValues = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue'=> $idAction));
+        foreach ($actionValues as $dataValues) {
+            $monthAnte = $dataValues->getMonth();
+            if ($monthAnte < $month) {
+            $valueAnte = $dataValues->getAdvance();
+                //var_dump($dataValues->getAdvance()); 
+            }elseif ($monthAnte == $dataValues->getMonth()) {
+                $valueReal = $dataValues->getAdvance();
+            }
+        }
+        
+        $valueReal = $valueReal - $valueAnte;        
         $actionValues = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue'=> $idAction, 'month' => $month));
         //se valida el mes de edición
         if ($action->getMonth() == $month) { $editGeneral = true; }
@@ -439,24 +451,29 @@ class ReportEvolutionActionController extends ResourceController
                 $action->setAction($request->get('actionResults')['action']);
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();                                   
-            }
-            die();
+            }            
             $AcValue = $request->get('actionValue')['advance'];
-            $observation = $request->get('actionValue')['observations'];
-            
+            $observation = $request->get('actionValue')['observations'];            
+            //var_dump($observation);
             $actionGeneral = $this->get('pequiven.repository.sig_action_value_indicator')->findOneBy(array('actionValue'=> $idAction, 'month' => $action->getMonth()));
             $actionSet = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue'=> $idAction));            
+            $contValues = 0;
             foreach ($actionSet as $value) {                               
                 if ($value->getMonth() >= $month) {
-                    $sumAdvance = $actionGeneral->getAdvance() + $AcValue;                
+                    if ($contValues == 0) { $sumAdvance = $valueAnte + $AcValue;}
+                    //if ($contValues == 1) { $sumAdvance = $actionGeneral->getAdvance() + $AcValue;}
+                    $sumAdvance = $sumAdvance;
                     $value->setAdvance($sumAdvance);
                     $value->setObservations($observation);                        
                     $em = $this->getDoctrine()->getManager();
                     $em->flush();                   
                     $month = $month + 1;//Carga de los meses tantas veces sean para la consulta
                     $observation = null;//                    
+                    $contValues++;
                 }
             }
+            $this->get('session')->getFlashBag()->add('success', "Plan de Acción Editado Correctamente.");             
+            die();
         }
 
         $view = $this
@@ -466,7 +483,8 @@ class ReportEvolutionActionController extends ResourceController
             ->setData(array(
                 'action'     => $action,                
                 'values'     => $actionValuesData,
-                'editGeneral'=> $editGeneral
+                'editGeneral'=> $editGeneral,
+                'valueReal'  => $valueReal
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));

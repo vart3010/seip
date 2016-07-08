@@ -1,0 +1,21 @@
+Pequiven\SIGBundle\Entity\Tracing\Standardization:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        createdAt:
+            expose: true
+            groups: [api_list]
+        updatedAt:
+            expose: true
+            groups: [api_details]
+        area:
+            expose: true
+            groups: [api_list]
+        code:
+            expose: true
+            groups: [api_list]
+        status:
+            expose: true
+            groups: [api_list]
