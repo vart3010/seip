@@ -319,6 +319,7 @@ form:
         selectObjetiveOperativeFormatNoResultIndicatorOperativeOther: No hay objetivos operativos registrados para la gerencia de 2da línea y el objetivo táctico seleccionados
         selectObjetiveOperativeFormatNoMatcherIndicatorOperativeManagerSecond: Seleccione un objetivo táctico
         selectObjetiveOperativeFormatNoResultIndicatorOperativeManagerSecond: No hay objetivos operativos registrados para el objetivo táctico seleccionado
+        selectFrequencyNotificationPlaceholder: Seleccione una Frecuencia de Notificación
         
     title:
         addIndicatorStrategic: Registro Indicador Estratégico

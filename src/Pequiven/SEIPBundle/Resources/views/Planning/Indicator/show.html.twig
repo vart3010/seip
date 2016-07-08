@@ -155,13 +155,17 @@
                                 {% endif%}
                             </label>
 
-                            {% if indicator.totalPlan != 0 %}
+                            {% if (indicator.totalPlan != 0) or (indicator.getValuesIndicator | length > 0) %}
+                            
                                 {% if  indicator.getDetails.getIsCheckPlan == true %}
                                     {{ indicatorService.getValueOfVariableFromValueIndicator(indicator,indicator.getDetails.getVarIndicatorPlan)|myNumberFormat }}
                                 {% elseif indicator.isValuePlanFromEquationPlanFormula == true %}
                                     {{ indicatorService.getValueFromEquationFormula(indicator,{'typeValue':'plan'})|myNumberFormat }}
                                 {% else %}
-                                    {{ indicator.totalPlan|myNumberFormat }}&nbsp;{% if indicatorDetails.resultPlanUnit != '' %}({{ indicatorDetails.resultPlanUnit }}){% endif %}
+                                    {{ indicator.totalPlan|myNumberFormat }}&nbsp;
+                                    {% if indicatorDetails.resultPlanUnit != '' %}
+                                        ({{ indicatorDetails.resultPlanUnit }})
+                                    {% endif %}
                                 {% endif %}
                             {% else %}
                                 <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
