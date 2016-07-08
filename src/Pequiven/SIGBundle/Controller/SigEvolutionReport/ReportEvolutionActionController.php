@@ -425,11 +425,10 @@ class ReportEvolutionActionController extends ResourceController
             if ($monthAnte < $month) {
             $valueAnte = $dataValues->getAdvance();
                 //var_dump($dataValues->getAdvance()); 
-            }elseif ($monthAnte == $dataValues->getMonth()) {
+            }elseif ($monthAnte == $month) {
                 $valueReal = $dataValues->getAdvance();
             }
-        }
-        
+        }        
         $valueReal = $valueReal - $valueAnte;        
         $actionValues = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue'=> $idAction, 'month' => $month));
         //se valida el mes de edición
