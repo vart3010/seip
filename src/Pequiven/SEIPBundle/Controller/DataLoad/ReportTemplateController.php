@@ -1742,12 +1742,12 @@ class ReportTemplateController extends SEIPController {
                                                         "id" => $rawMaterial->getProduct()->getId(),
                                                         "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
                                                         //"productName" => $n,
-                                                        "plan" => number_format($rawMaterialResult["total_day_plan"], 2, ",", "."),
-                                                        "real" => number_format($rawMaterialResult["total_day"], 2, ",", "."),
-                                                        "plan_month" => number_format($rawMaterialResult["total_month_plan"], 2, ",", "."),
-                                                        "real_month" => number_format($rawMaterialResult["total_month"], 2, ",", "."),
-                                                        "plan_year" => number_format($rawMaterialResult["total_year_plan"], 2, ",", "."),
-                                                        "real_year" => number_format($rawMaterialResult["total_year"], 2, ",", ".")
+                                                        "plan" => ($rawMaterialResult["total_day_plan"]),
+                                                        "real" => ($rawMaterialResult["total_day"]),
+                                                        "plan_month" => ($rawMaterialResult["total_month_plan"]),
+                                                        "real_month" => ($rawMaterialResult["total_month"]),
+                                                        "plan_year" => ($rawMaterialResult["total_year_plan"]),
+                                                        "real_year" => ($rawMaterialResult["total_year"])
                                                     );
                                                 } else {
                                                     $indice = array_search($idProduct, $arrayIdProducts);
