@@ -1928,10 +1928,9 @@ angular.module('seipModule.controllers', [])
             };
             //Formulario Cause
             $scope.initFormCausesAdd = function (resource) {
-
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(420);
+                $scope.setHeight(520);
 
                 var parameters = {
                     idObject: $scope.idObject,

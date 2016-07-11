@@ -1,11 +1,21 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
 
 {% block body %}
-{% trans_default_domain 'PequivenIndicatorBundle' %}  	
-<form method="POST" id="form_causes_evolution">
-	<fieldset class="fieldset fields-list">
-            <legend class="legend">{{ 'sig.causes_deviation'|trans ({}, 'messages') }}</legend>	
-                {% include 'PequivenSIGBundle:Template:set_month.html.twig' %} 	
+{% trans_default_domain 'PequivenIndicatorBundle' %} 
+<fieldset class="fieldset">
+    <legend class="legend">Metodo de Carga de Causas</legend>
+        <div class="new-row twelve-columns red-bg">Seleccione Metodo de Carga de Causas</div>        
+        <ul class="bullet-list">
+            <li><a href id="load">Carga de Causa</a></li>
+            <li><a href id="zync">Sincronización de Causa</a></li>
+        </ul>
+</fieldset>
+
+<fieldset class="fieldset fields-list" id="fieldset">
+    <legend class="legend" id="legend"></legend> 
+        <div id="chargeCause">                    
+            <form method="POST" id="form_causes_evolution">
+                {% include 'PequivenSIGBundle:Template:set_month.html.twig' %}  
                 <div class="field-block button-height" >
                     {{ form_label(form.causes) }}
                     {{ form_widget(form.causes) }}
@@ -15,12 +25,45 @@
                     {{ form_label(form.valueOfcauses) }}
                     {{ form_widget(form.valueOfcauses) }}
                 </div>
-        {{ form_rest(form) }}
-        <p id="max" style="display:none">{{ sumCause }}</p>
-   <br>
-   </fieldset>
-</form>     
+                {{ form_rest(form) }}
+                <p id="max" style="display:none">{{ sumCause }}</p>
+                <br>
+            </form>   
+        </div>
+        <!-- fomulario herencia causas -->
+        <div id="zyncCause">                    
+            <div class="field-block button-height" >
+                <label class="label">Seleccionar Indicador Origen</label>
+                <select id="configSig_indicatorSigMedition" name="configSig[indicatorSigMedition]" class="select2 input-xlarge form-control">
+                    <option value="1">Seleccione...</option>                            
+                </select>
+            </div>
+        </div>
+</fieldset>
+
 <script type="text/javascript">
+$(document).ready(function(){
+    $('#fieldset').hide();
+    $('#chargeCause').hide();
+    $('#zyncCause').hide();
+
+    $("#load").click(function(){
+        $('#legend').text('Carga de Causa');
+        $('#zyncCause').hide();
+        $('#fieldset').show(600,function() {
+            $('#chargeCause').show(400,function() {});                
+        });
+    });
+
+    $("#zync").click(function(){
+        $('#legend').text('Sincronización de Causas y Acciones');
+        $('#chargeCause').hide();
+        $('#fieldset').show(600,function() {
+            $('#zyncCause').show(400,function() {});                
+        });
+    });
+});
+
 $('input#evolutioncause_valueOfcauses').keyup(function openConfirm() {        
     var valueCharge = $("#max").text();                
     var max = 100 - valueCharge;
