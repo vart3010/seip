@@ -31,10 +31,14 @@
             </form>   
         </div>
         <!-- fomulario herencia causas -->
-        <div id="zyncCause">                    
+        <div id="zyncCause">                                
             <div class="field-block button-height" >
-                <label class="label">Seleccionar Indicador Origen</label>
-                <select id="configSig_indicatorSigMedition" name="configSig[indicatorSigMedition]" class="select2 input-xlarge form-control">
+                <label class="label">Seleccionar Indicador Origen</label>                
+                <input type="text" id="data_indicator_origen" name="data_indicator[origen]" style='width: 270px'>
+            </div>
+            <div class="field-block button-height" >
+                <label class="label">Seleccionar Causa Origen</label>
+                <select id="data_cause_load" name="data_cause[load]" class="select2 input-xlarge form-control">
                     <option value="1">Seleccione...</option>                            
                 </select>
             </div>
@@ -46,6 +50,7 @@ $(document).ready(function(){
     $('#fieldset').hide();
     $('#chargeCause').hide();
     $('#zyncCause').hide();
+    $('#data_cause_load').prop('disabled', true);
 
     $("#load").click(function(){
         $('#legend').text('Carga de Causa');
@@ -62,12 +67,60 @@ $(document).ready(function(){
             $('#zyncCause').show(400,function() {});                
         });
     });
+    setUrlResponsibles();        
 });
+
+function setUrlResponsibles(data) {
+    var urlResponsibles = Routing.generate("pequiven_indicator_to_causes"); 
+    if (data == undefined) {
+        data = [];
+    }
+    $("#data_indicator_origen").select2({
+        minimumInputLength: 3,
+        maximumSelectionLength: 1,
+        maximumSelectionSize: 1,
+        multiple: true,      
+            formatInputTooShort: function () {
+                return "Por favor, introduzca 3 o más caracteres";
+            },
+            formatSelectionTooBig: function (limit) {
+                return 'Máximo seleccionado.';
+            },
+        ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
+            url: urlResponsibles,
+            dataType: 'json',
+            quietMillis: 250,
+            data: function (term, page) {
+                return {
+                    query: term, // search term
+                };
+            },
+            results: function (data, page) { // parse the results into the format expected by Select2.                   
+                return {results: data};
+            },
+            cache: true
+        },
+        initSelection: function (element, callback) {
+        },
+        formatResult: indicatorFormatResult, // omitted for brevity, see the source of this page
+        formatSelection: indicatorFormatResult, // omitted for brevity, see the source of this page
+        escapeMarkup: function (m) {
+            return m;
+        } // we do not want to escape markup since we are displaying html in results
+    });
+    if (data != undefined) {         
+        var preselected = [];
+        $.each(data, function (index, value) {
+            preselected.push(value.id);
+        });                
+        $('#data_indicator_origen').select2('data', data);
+        $('#data_indicator_origen').select2('val', preselected);
+    }
+};
 
 $('input#evolutioncause_valueOfcauses').keyup(function openConfirm() {        
     var valueCharge = $("#max").text();                
     var max = 100 - valueCharge;
-
     if ($("#evolutioncause_valueOfcauses").val() > max) {
         $.modal.alert('Valor ingresado mayor a avance valido para carga ' + max, {
             buttons: {

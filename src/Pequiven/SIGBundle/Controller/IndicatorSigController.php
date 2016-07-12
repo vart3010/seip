@@ -554,6 +554,33 @@ class IndicatorSigController extends EvolutionController {
     }
 
     /**
+     * Obtiene los responsable que se pueden asignar a un plan
+     */
+    function getIndicatorToCausesAction(\Symfony\Component\HttpFoundation\Request $request) {        
+        $query = $request->get('query');
+        $results = array();        
+
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();        
+        $repository = $this->get('pequiven.repository.sig_indicator');
+        $indicator = $repository->findBy(array('period' => $this->getPeriodService()->getPeriodActive()));        
+        if (!$indicator) {
+            throw $this->createNotFoundException();
+        }
+        
+        $criteria = array(
+            'ref' => $query,            
+            'description' => $query,                
+        );
+            
+        $results = $this->get('pequiven.repository.sig_indicator')->findToIndicatorValidToEvolution($indicator, $criteria);        
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
+        return $this->handleView($view);
+    }
+
+    /**
      * 
      * @return \Pequiven\SIGBundle\Service\EvolutionService
      */

@@ -305,3 +305,14 @@ pequiven_evolution_check_to_approve:
     methods: [GET|POST]
     options:
         expose: true
+#
+pequiven_indicator_to_causes:
+    path: /indicators-to-causes.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getIndicatorToCausesAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [GET|POST]
+    options:
+        expose: true
