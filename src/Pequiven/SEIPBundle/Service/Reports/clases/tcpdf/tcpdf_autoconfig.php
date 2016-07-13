@@ -129,7 +129,7 @@ if (!defined('K_BLANK_IMAGE')) {
 }
 
 if (!defined('PDF_PAGE_FORMAT')) {
-	define ('PDF_PAGE_FORMAT', 'A4');
+	define ('PDF_PAGE_FORMAT', 'LETTER');
 }
 
 if (!defined('PDF_PAGE_ORIENTATION')) {

@@ -144,6 +144,16 @@ arrangementprogram_export:
         id: "\d+"
     methods: [GET]
     
+arrangementprogram_exportPDF:
+    path: /{id}/exportPDF
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram:exportPDFAction 
+        _format: html
+    requirements:
+        id: "\d+"
+        _format: html|json|xml
+    methods: [GET|POST]
+    
 arrangementprogram_start_the_notification_process:
     path: /{id}/start-the-notification-process
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:startNotificationProcessAction }

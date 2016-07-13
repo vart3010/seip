@@ -1788,4 +1788,117 @@ class ArrangementProgramController extends SEIPController {
         return parent::trans($id, $parameters, $domain);
     }
 
+    public function exportPDFAction(Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+        $resultService = $this->container->get('seip.service.result');
+
+        $APentity = $this->findOr404($request);
+        $individualValues = array();
+        $summaryInd = array();
+        $summaryGeneral = array();
+        $date = $APentity->getLastDateCalculateResult();
+
+        foreach ($APentity->getTimeline()->getGoals() as $goal) {
+            foreach ($goal->getResponsibles() as $resp) {
+                $userobj = $this->get('pequiven.repository.user')->findOneById($resp->getId());
+                $goalobj = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findOneById($goal->getId());
+                $searchCriteria = array('goalDetails' => $goalobj->getGoalDetails(), 'user' => $userobj);
+                $goalDetailsInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy($searchCriteria);
+                if ($goalDetailsInd) {
+                    $individualValues[$goal->getId()][$resp->getId()] = $goalDetailsInd;
+                    $summaryInd[$goal->getId()][$resp->getId()] = $resultService->CalculateAdvancePenaltyIndv($goalDetailsInd, $date);
+                } else {
+                    $individualValues[$goal->getId()][$resp->getId()] = null;
+                    $summaryInd[$goal->getId()][$resp->getId()] = null;
+                }
+            }
+            $summaryGeneral[$goal->getId()] = $resultService->CalculateAdvancePenalty($goalobj, $date);
+        }
+
+        if (($date == null) || (($APentity->getPeriod()->getStatus()) == 0)) {
+            $mes = 12;
+        } else {
+            $mes = date_format($date, 'n') - 1;
+        }
+
+        $categoryArrangementProgram = $APentity->getCategoryArrangementProgram();
+
+        if ($APentity->getTacticalObjective()) {
+            $tacticalObjective = $APentity->getTacticalObjective();
+        } else {
+            $tacticalObjective = null;
+        }
+        if ($APentity->getOperationalObjective()) {
+            $operationalObjective = $APentity->getOperationalObjective();
+        } else {
+            $operationalObjective = null;
+        }
+
+        $location = '';
+        if ($APentity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC) {
+            $location = $APentity->getTacticalObjective()->getGerencia()->getComplejo()->getDescription();
+        } else if ($APentity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE) {
+            $location = $APentity->getOperationalObjective()->getGerencia()->getComplejo()->getDescription();
+        }
+
+        $management = $APentity->getTacticalObjective()->getGerencia()->getDescription();
+        $description = $APentity->getDescription() ? : ($this->trans('pequiven.arrangement_program.description_none'));
+        //var_dump($summaryInd);
+        //die();
+
+        $totales = $resultService->CalculateAdvancePenaltyAP($APentity, $date);
+        $ref=$APentity->getRef();
+
+        $data = array(
+            'APentity' => $APentity,
+            'operationalObjective' => $operationalObjective,
+            'tacticalObjective' => $tacticalObjective,
+            'location' => $location,
+            'description' => $description,
+            'categoryArrangementProgram' => $categoryArrangementProgram,
+            'management' => $management,
+            'individualValues' => $individualValues,
+            'summaryInd' => $summaryInd,
+            'summaryGeneral' => $summaryGeneral,
+            'lastCalculateDate' => $APentity->getLastDateCalculateResult(),
+            'mes' => $mes,
+            'totales' => $totales,
+        );
+
+        $this->generatePdf($data, 'Resultados de Programa de Gestión ' . $ref, 'PequivenArrangementProgramBundle:ArrangementProgram:exportPDF.html.twig');
+    }
+
+    /**
+     * GENERA EL PDF
+     * @param type $data
+     * @param type $title
+     * @param type $template
+     */
+    public function generatePdf($data, $title, $template) {
+
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\NewSeipPdf('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setPrintLineFooter(false);
+        $pdf->setContainer($this->container);
+        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
+        $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('SEIP');
+        $pdf->setTitle($title);
+        $pdf->SetSubject('Resultados SEIP');
+        $pdf->SetKeywords('PDF, SEIP, Resultados');
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->AddPage();
+        $html = $this->renderView($template, $data);
+        $pdf->writeHTML($html, true, false, true, false, '');
+        $pdf->Output(utf8_decode($title) . '.pdf', 'D');
+    }
+
 }

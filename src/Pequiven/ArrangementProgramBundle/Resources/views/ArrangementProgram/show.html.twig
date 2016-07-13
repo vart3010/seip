@@ -227,6 +227,11 @@
                 <span class="button-icon"><span class="icon-download"></span></span>
                     {{ 'pequiven_seip.buttons.export_xls'|trans({},'PequivenSEIPBundle') }}
             </a>
+              &nbsp;
+            <a href="{{ path('arrangementprogram_exportPDF',{ id: entity.id }) }}" class="button">
+                <span class="button-icon"><span class="icon-download"></span></span>
+                  Exportar a PDF
+            </a>
 
             {% if isAllowToNotity == true %}
                 &nbsp;

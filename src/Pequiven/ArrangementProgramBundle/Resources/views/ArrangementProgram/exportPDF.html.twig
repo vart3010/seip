@@ -1,0 +1,649 @@
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+<style> 
+    .white-gradient {
+        background-color: #E6E6E6;        
+        text-align: left;
+        font-size: 7pt;
+        font-weight: bold;                
+    }       
+    .white-gradient-th{
+        background-color: #E6E6E6;        
+        text-align: left;
+        font-size: 6pt;
+        font-weight: bold; 
+        text-align: center;
+    }
+    .observation{
+        font-family: sans-serif;
+        font-size: 6pt;
+        color: #6E6E6E;
+    }
+    td{
+        font-family: sans-serif;
+        font-size: 6pt;        
+    }
+    .indv{
+        font-family: sans-serif;
+        font-size: 5pt;        
+        border-top: black 1px solid;        
+        border-bottom: black 1px solid;        
+        text-align: center;
+    }
+    .general{
+        font-family: sans-serif;
+        font-size: 5pt;                
+        background-color: #E6E6E6;    
+        text-align: center;
+        font-weight: bold;
+        border-top: black 2px solid;        
+        border-bottom: black 2px solid;
+    }
+
+    .redPenalty{        
+        background-color: #F5A9A9;            
+    }
+    .generalEnc{
+        border-top: black 2px solid; 
+        border-bottom: black 2px solid; 
+        vertical-align: middle;
+    }
+
+    table{
+        padding: 2px;
+        border: #000000 5px solid;
+    }
+
+    th{
+        background-color: #E6E6E6;                
+        font-size: 6pt;
+        font-weight: bold;   
+        text-align: center;
+        vertical-align: middle;
+        border-top: black 2px solid; 
+        border-bottom: black 2px solid; 
+    }    
+</style>
+{% block body %}  
+    <table>
+        <thead>
+            <tr>
+                <td width="20%" style="text-align: justify;">
+                    <b>Programa de Gestión Asociado a: </b><br> {{categoryArrangementProgram}}
+                </td>
+                <td width="40%" style="text-align: justify;">                    
+                    {% if(tacticalObjective!=null) %} 
+                        <b>Objetivo Táctico: </b>{{tacticalObjective.getRef}} - {{tacticalObjective.getDescription}}
+                    {%else%}
+                        <b>Objetivo Táctico: </b>No Aplica
+                    {%endif%}
+                </td>
+                <td width="40%" style="text-align: justify;">                    
+                    {% if(operationalObjective!=null) %} 
+                        <b>Objetivo Operativo: </b>{{operationalObjective.getRef}} - {{operationalObjective.getDescription}}
+                    {%else%}
+                        <b>Objetivo Operativo: </b>No Aplica
+                    {%endif%}
+                </td>            
+            </tr>          
+            <tr>
+                <td width="20%" style="text-align: justify;">
+                    <b>Localidad: </b><br>{{location}}
+                </td>
+                <td width="30%" style="text-align: justify;">
+                    <b>Área: </b><br>{{management}}
+                </td>
+                <td width="20%" style="text-align: justify;">
+                    <b>Responsable(s) del Programa: </b>
+                    {%for resp in APentity.getResponsibles%}
+                        <br> {{ resp.getFullNameUser }} 
+                    {%endfor%}
+                </td>
+                <td width="30%" style="text-align: justify;">
+                    <b>Nombre del Programa de Gestión:</b>
+                    <br>
+                    {{description}}
+                </td>
+            </tr>
+            <tr>
+                <td width="100%" style=" border-top: black 2px solid; border-bottom: black 2px solid;">&nbsp;&nbsp;</td>
+            </tr>            
+            <tr>
+                <th width="2%" rowspan="3"><br><br>Nro</th>
+                <th width="19%" rowspan="3"><br><br>Metas a Realizar</th>
+                <th width="5%" rowspan="3"><br><br>Inicio</th>
+                <th width="5%" rowspan="3"><br><br>Fin</th>
+                <th width="3%" rowspan="3"><br><br>Peso</th>
+                <th width="10%" rowspan="3"><br><br>Responsables</th>
+                <th width="12%" colspan="3">I Trimestre</th>
+                <th width="12%" colspan="3">II Trimestre</th>
+                <th width="12%" colspan="3">III Trimestre</th>
+                <th width="12%" colspan="3">IV Trimestre</th>
+                <th width="4%" rowspan="3"><br><br>Penalz</th>
+                <th width="4%" rowspan="3"><br><br>Total</th>
+            </tr>
+            <tr>
+                <th width="4%" colspan="2">ENE</th>
+                <th width="4%" colspan="2">FEB</th>
+                <th width="4%" colspan="2">MAR</th>
+                <th width="4%" colspan="2">ABR</th>
+                <th width="4%" colspan="2">MAY</th>
+                <th width="4%" colspan="2">JUN</th>
+                <th width="4%" colspan="2">JUL</th>
+                <th width="4%" colspan="2">AGO</th>
+                <th width="4%" colspan="2">SEP</th>
+                <th width="4%" colspan="2">OCT</th>
+                <th width="4%" colspan="2">NOV</th>
+                <th width="4%" colspan="2">DIC</th>
+            </tr>
+            <tr>
+                {% for i in 1..12 %}
+                    <td width="2%" style="text-align: center;">P</td>
+                    <td width="2%" style="text-align: center;">R</td>
+                {%endfor%}
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for goals in APentity.getTimeline.getGoals %}
+
+                {% set countResp = goals.getResponsibles|length%}
+                {% set goalOrder = loop.index %}                
+
+                <tr style="page-break-before: auto;"> 
+                    <td width="2%" class="generalEnc" style="text-align: center;" rowspan="{{countResp + 1}}">{{goalOrder}}</td>
+                    <td width="19%" class="generalEnc" style="text-align: justify;" rowspan="{{countResp + 1}}">{{goals.name}}</td>
+                    <td width="5%" class="generalEnc" rowspan="{{countResp + 1}}">{{goals.startDate|date("d/m/Y")}}</td>
+                    <td width="5%" class="generalEnc" rowspan="{{countResp + 1}}">{{goals.endDate|date("d/m/Y")}}</td>     
+                    <td width="3%" class="generalEnc" style="text-align: center;" rowspan="{{countResp + 1}}">{{goals.weight}}%</td>     
+                    <td width="10%" class="general" style="border-top: black 2px solid; border-bottom: black 2px solid; text-align: left;">Valor General</td>
+                    {# ENERO #}
+                    {%if goals.getGoalDetails.getJanuaryPlanned == 0 %}
+                        <td class="general" width="2%">&nbsp;</td>                    
+                    {%else%}
+                        <td class="general" width="2%">{{goals.getGoalDetails.getJanuaryPlanned}}</td>
+                    {%endif%}
+
+                    {%if (((summaryGeneral[goals.id]['arrayPlan'][1])>(summaryGeneral[goals.id]['arrayReal'][1]))and(mes>=1)) %}
+                        {% set penalRed = 'redPenalty'%}
+                    {%else%}
+                        {% set penalRed = ''%}
+                    {%endif%}
+                    <td class="general {{penalRed}}" width="2%">{{goals.getGoalDetails.getJanuaryReal}}</td>   
+
+                    {# FEBRERO #}
+                    {%if goals.getGoalDetails.getFebruaryPlanned == 0 %}
+                        <td class="general" width="2%">&nbsp;</td>                    
+                    {%else%}
+                        <td class="general" width="2%">{{goals.getGoalDetails.getFebruaryPlanned}}</td>
+                    {%endif%}
+
+                    {%if (((summaryGeneral[goals.id]['arrayPlan'][2])>(summaryGeneral[goals.id]['arrayReal'][2]))and(mes>=2)) %}
+                        {% set penalRed = 'redPenalty'%}
+                    {%else%}
+                        {% set penalRed = ''%}
+                    {%endif%}
+                    <td class="general {{penalRed}}" width="2%">{{goals.getGoalDetails.getFebruaryReal}}</td>    
+
+                    {# MARZO #}
+                    {%if goals.getGoalDetails.getMarchPlanned == 0 %}
+                        <td class="general" width="2%">&nbsp;</td>                    
+                    {%else%}
+                        <td class="general" width="2%">{{goals.getGoalDetails.getMarchPlanned}}</td>
+                    {%endif%}  
+
+                    {%if (((summaryGeneral[goals.id]['arrayPlan'][3])>(summaryGeneral[goals.id]['arrayReal'][3]))and(mes>=3)) %}
+                        {% set penalRed = 'redPenalty'%}
+                    {%else%}
+                        {% set penalRed = ''%}
+                    {%endif%}                  
+                    <td class="general {{penalRed}}" width="2%">{{goals.getGoalDetails.getMarchReal}}</td>    
+
+                    {# ABRIL #}
+                    {%if goals.getGoalDetails.getAprilPlanned == 0 %}
+                        <td class="general" width="2%">&nbsp;</td>                    
+                    {%else%}
+                        <td class="general" width="2%">{{goals.getGoalDetails.getAprilPlanned}}</td>
+                    {%endif%}
+
+                    {%if (((summaryGeneral[goals.id]['arrayPlan'][4])>(summaryGeneral[goals.id]['arrayReal'][4]))and(mes>=4)) %}
+                        {% set penalRed = 'redPenalty'%}
+                    {%else%}
+                        {% set penalRed = ''%}
+                    {%endif%}
+                    <td class="general {{penalRed}}" width="2%">{{goals.getGoalDetails.getAprilReal}}</td>
+
+                    {# MAYO #}
+                    {%if goals.getGoalDetails.getMayPlanned == 0 %}
+                        <td class="general" width="2%">&nbsp;</td>                    
+                    {%else%}
+                        <td class="general" width="2%">{{goals.getGoalDetails.getMayPlanned}}</td>
+                    {%endif%}
+
+                    {%if (((summaryGeneral[goals.id]['arrayPlan'][5])>(summaryGeneral[goals.id]['arrayReal'][5]))and(mes>=5)) %}
+                        {% set penalRed = 'redPenalty'%}
+                    {%else%}
+                        {% set penalRed = ''%}
+                    {%endif%}
+                    <td class="general {{penalRed}}" width="2%">{{goals.getGoalDetails.getMayReal}}</td>
+
+                    {# JUNIO #}
+                    {%if goals.getGoalDetails.getJunePlanned == 0 %}
+                        <td class="general" width="2%">&nbsp;</td>                    
+                    {%else%}
+                        <td class="general" width="2%">{{goals.getGoalDetails.getJunePlanned}}</td>
+                    {%endif%}
+
+                    {%if (((summaryGeneral[goals.id]['arrayPlan'][6])>(summaryGeneral[goals.id]['arrayReal'][6]))and(mes>=6)) %}
+                        {% set penalRed = 'redPenalty'%}
+                    {%else%}
+                        {% set penalRed = ''%}
+                    {%endif%}
+                    <td class="general {{penalRed}}" width="2%">{{goals.getGoalDetails.getJuneReal}}</td>
+
+                    {# JULIO #}
+                    {%if goals.getGoalDetails.getJulyPlanned == 0 %}
+                        <td class="general" width="2%">&nbsp;</td>                    
+                    {%else%}
+                        <td class="general" width="2%">{{goals.getGoalDetails.getJulyPlanned}}</td>
+                    {%endif%}
+
+                    {%if (((summaryGeneral[goals.id]['arrayPlan'][7])>(summaryGeneral[goals.id]['arrayReal'][7]))and(mes>=7)) %}
+                        {% set penalRed = 'redPenalty'%}
+                    {%else%}
+                        {% set penalRed = ''%}
+                    {%endif%}
+                    <td class="general {{penalRed}}" width="2%">{{goals.getGoalDetails.getJulyReal}}</td>  
+
+                    {# AGOSTO #}
+                    {%if goals.getGoalDetails.getAugustPlanned == 0 %}
+                        <td class="general" width="2%">&nbsp;</td>                    
+                    {%else%}
+                        <td class="general" width="2%">{{goals.getGoalDetails.getAugustPlanned}}</td>
+                    {%endif%}
+
+                    {%if (((summaryGeneral[goals.id]['arrayPlan'][8])>(summaryGeneral[goals.id]['arrayReal'][8]))and(mes>=8)) %}
+                        {% set penalRed = 'redPenalty'%}
+                    {%else%}
+                        {% set penalRed = ''%}
+                    {%endif%}
+                    <td class="general {{penalRed}}" width="2%">{{goals.getGoalDetails.getAugustReal}}</td>   
+
+                    {# SEPTIEMBRE #}
+                    {%if goals.getGoalDetails.getSeptemberPlanned == 0 %}
+                        <td class="general" width="2%">&nbsp;</td>                    
+                    {%else%}
+                        <td class="general" width="2%">{{goals.getGoalDetails.getSeptemberPlanned}}</td>
+                    {%endif%}
+
+                    {%if (((summaryGeneral[goals.id]['arrayPlan'][9])>(summaryGeneral[goals.id]['arrayReal'][9]))and(mes>=9)) %}
+                        {% set penalRed = 'redPenalty'%}
+                    {%else%}
+                        {% set penalRed = ''%}
+                    {%endif%}
+                    <td class="general {{penalRed}}" width="2%">{{goals.getGoalDetails.getSeptemberReal}}</td>    
+
+                    {# OCTUBRE #}
+                    {%if goals.getGoalDetails.getOctoberPlanned == 0 %}
+                        <td class="general" width="2%">&nbsp;</td>                    
+                    {%else%}
+                        <td class="general" width="2%">{{goals.getGoalDetails.getOctoberPlanned}}</td>
+                    {%endif%}
+
+                    {%if (((summaryGeneral[goals.id]['arrayPlan'][10])>(summaryGeneral[goals.id]['arrayReal'][10]))and(mes>=10)) %}
+                        {% set penalRed = 'redPenalty'%}
+                    {%else%}
+                        {% set penalRed = ''%}
+                    {%endif%}
+                    <td class="general {{penalRed}}" width="2%">{{goals.getGoalDetails.getOctoberReal}}</td>   
+
+                    {# NOVIEMBRE #}
+                    {%if goals.getGoalDetails.getNovemberPlanned == 0 %}
+                        <td class="general" width="2%">&nbsp;</td>                    
+                    {%else%}
+                        <td class="general" width="2%">{{goals.getGoalDetails.getNovemberPlanned}}</td>
+                    {%endif%}
+
+                    {%if (((summaryGeneral[goals.id]['arrayPlan'][11])>(summaryGeneral[goals.id]['arrayReal'][11]))and(mes>=11)) %}
+                        {% set penalRed = 'redPenalty'%}
+                    {%else%}
+                        {% set penalRed = ''%}
+                    {%endif%}
+                    <td class="general {{penalRed}}" width="2%">{{goals.getGoalDetails.getNovemberReal}}</td>   
+
+                    {# DICIEMBRE #}
+                    {%if goals.getGoalDetails.getDecemberPlanned == 0 %}
+                        <td class="general" width="2%">&nbsp;</td>                    
+                    {%else%}
+                        <td class="general" width="2%">{{goals.getGoalDetails.getDecemberPlanned}}</td>
+                    {%endif%}
+
+                    {%if (((summaryGeneral[goals.id]['arrayPlan'][12])>(summaryGeneral[goals.id]['arrayReal'][12]))and(mes>=12)) %}
+                        {% set penalRed = 'redPenalty'%}
+                    {%else%}
+                        {% set penalRed = ''%}
+                    {%endif%}
+                    <td class="general {{penalRed}}" width="2%">{{goals.getGoalDetails.getDecemberReal}}</td>
+
+
+                    {%if goals.getPenalty == 0 %}
+                        <td class="general" width="4%">-</td>                    
+                    {%else%}
+                        <td class="general" width="4%">-{{goals.getPenalty}}</td>
+                    {%endif%}          
+
+                    <td class="general" width="4%" style="border-right: black 2px solid;">{{goals.getAdvance}}%</td>                    
+                </tr>
+
+                {% for resp in goals.getResponsibles %}
+                    {% if(individualValues[goals.id][resp.id]) %}
+                        {% set indValue = individualValues[goals.id][resp.id]%}
+                        {% set penalty = indValue.getPenalty %}
+                        {% set advance = indValue.getAdvance %}
+                    {% else %}
+                        {% set indValue = goals.getGoalDetails %}
+                        {% set penalty = goals.getPenalty %}
+                        {% set advance = goals.getAdvance %}
+                    {% endif %}
+                    <tr style="page-break-before: auto;">                     
+                        <td class="indv" width="10%" style="text-align: left;">{{resp.getOnlyFullNameUser|ucwords}}</td>
+
+                        {# ENERO #}
+                        {%if indValue.getJanuaryPlanned == 0 %}
+                            <td class="indv" width="2%">&nbsp;</td>
+                        {%else%}
+                            <td class="indv" width="2%">{{indValue.getJanuaryPlanned}}</td>
+                        {%endif%}
+
+                        {% if summaryInd[goals.id][resp.id]['arrayPlan'][1] is defined %}
+                            {% set valorR= summaryInd[goals.id][resp.id]['arrayReal'][1] %}
+                            {% set valorP= summaryInd[goals.id][resp.id]['arrayPlan'][1] %}
+                        {%else%}
+                            {% set valorP = null %}
+                            {% set valorR = null %}
+                        {%endif%}
+
+                        {%if ((valorP>valorR)and(mes>=1)) %}
+                            {% set penalRed = 'redPenalty'%}
+                        {%else%}
+                            {% set penalRed = ''%}
+                        {%endif%}
+
+                        <td class="indv {{penalRed}}" width="2%">{{indValue.getJanuaryReal}}</td>   
+
+                        {# FEBRERO #}
+                        {%if indValue.getFebruaryPlanned == 0 %}
+                            <td class="indv" width="2%">&nbsp;</td>
+                        {%else%}
+                            <td class="indv" width="2%">{{indValue.getFebruaryPlanned}}</td>
+                        {%endif%}
+
+                        {% if summaryInd[goals.id][resp.id]['arrayPlan'][2] is defined %}
+                            {% set valorR= summaryInd[goals.id][resp.id]['arrayReal'][2] %}
+                            {% set valorP= summaryInd[goals.id][resp.id]['arrayPlan'][2] %}
+                        {%else%}
+                            {% set valorP = null %}
+                            {% set valorR = null %}
+                        {%endif%}
+
+                        {%if ((valorP>valorR)and(mes>=2)) %}
+                            {% set penalRed = 'redPenalty'%}
+                        {%else%}
+                            {% set penalRed = ''%}
+                        {%endif%}
+
+                        <td class="indv {{penalRed}}" width="2%">{{indValue.getFebruaryReal}}</td>   
+
+                        {# MARZO #}
+                        {%if indValue.getMarchPlanned == 0 %}
+                            <td class="indv" width="2%">&nbsp;</td>
+                        {%else%}
+                            <td class="indv" width="2%">{{indValue.getMarchPlanned}}</td>
+                        {%endif%}
+
+                        {% if summaryInd[goals.id][resp.id]['arrayPlan'][3] is defined %}
+                            {% set valorR= summaryInd[goals.id][resp.id]['arrayReal'][3] %}
+                            {% set valorP= summaryInd[goals.id][resp.id]['arrayPlan'][3] %}
+                        {%else%}
+                            {% set valorP = null %}
+                            {% set valorR = null %}
+                        {%endif%}
+
+                        {%if ((valorP>valorR)and(mes>=3)) %}
+                            {% set penalRed = 'redPenalty'%}
+                        {%else%}
+                            {% set penalRed = ''%}
+                        {%endif%}
+
+                        <td class="indv {{penalRed}}" width="2%">{{indValue.getMarchReal}}</td>   
+
+                        {# ABRIL #}
+                        {%if indValue.getAprilPlanned == 0 %}
+                            <td class="indv" width="2%">&nbsp;</td>
+                        {%else%}
+                            <td class="indv" width="2%">{{indValue.getAprilPlanned}}</td>
+                        {%endif%}
+
+                        {% if summaryInd[goals.id][resp.id]['arrayPlan'][4] is defined %}
+                            {% set valorR= summaryInd[goals.id][resp.id]['arrayReal'][4] %}
+                            {% set valorP= summaryInd[goals.id][resp.id]['arrayPlan'][4] %}
+                        {%else%}
+                            {% set valorP = null %}
+                            {% set valorR = null %}
+                        {%endif%}
+
+                        {%if ((valorP>valorR)and(mes>=4)) %}
+                            {% set penalRed = 'redPenalty'%}
+                        {%else%}
+                            {% set penalRed = ''%}
+                        {%endif%}
+
+                        <td class="indv {{penalRed}}" width="2%">{{indValue.getAprilReal}}</td>   
+
+                        {# MAYO #}
+                        {%if indValue.getMayPlanned == 0 %}
+                            <td class="indv" width="2%">&nbsp;</td>
+                        {%else%}
+                            <td class="indv" width="2%">{{indValue.getMayPlanned}}</td>
+                        {%endif%}
+
+                        {% if summaryInd[goals.id][resp.id]['arrayPlan'][5] is defined %}
+                            {% set valorR= summaryInd[goals.id][resp.id]['arrayReal'][5] %}
+                            {% set valorP= summaryInd[goals.id][resp.id]['arrayPlan'][5] %}
+                        {%else%}
+                            {% set valorP = null %}
+                            {% set valorR = null %}
+                        {%endif%}
+
+                        {%if ((valorP>valorR)and(mes>=5)) %}
+                            {% set penalRed = 'redPenalty'%}
+                        {%else%}
+                            {% set penalRed = ''%}
+                        {%endif%}
+
+                        <td class="indv {{penalRed}}" width="2%">{{indValue.getMayReal}}</td>   
+
+                        {# JUNIO #}
+                        {%if indValue.getJunePlanned == 0 %}
+                            <td class="indv" width="2%">&nbsp;</td>
+                        {%else%}
+                            <td class="indv" width="2%">{{indValue.getJunePlanned}}</td>
+                        {%endif%}
+
+                        {% if summaryInd[goals.id][resp.id]['arrayPlan'][6] is defined %}
+                            {% set valorR= summaryInd[goals.id][resp.id]['arrayReal'][6] %}
+                            {% set valorP= summaryInd[goals.id][resp.id]['arrayPlan'][6] %}
+                        {%else%}
+                            {% set valorP = null %}
+                            {% set valorR = null %}
+                        {%endif%}
+
+                        {%if ((valorP>valorR)and(mes>=6)) %}
+                            {% set penalRed = 'redPenalty'%}
+                        {%else%}
+                            {% set penalRed = ''%}
+                        {%endif%}
+
+                        <td class="indv {{penalRed}}" width="2%">{{indValue.getJuneReal}}</td>   
+
+                        {# JULIO #}
+                        {%if indValue.getJulyPlanned == 0 %}
+                            <td class="indv" width="2%">&nbsp;</td>
+                        {%else%}
+                            <td class="indv" width="2%">{{indValue.getJulyPlanned}}</td>
+                        {%endif%}
+
+                        {% if summaryInd[goals.id][resp.id]['arrayPlan'][7] is defined %}
+                            {% set valorR= summaryInd[goals.id][resp.id]['arrayReal'][7] %}
+                            {% set valorP= summaryInd[goals.id][resp.id]['arrayPlan'][7] %}
+                        {%else%}
+                            {% set valorP = null %}
+                            {% set valorR = null %}
+                        {%endif%}
+
+                        {%if ((valorP>valorR)and(mes>=7)) %}
+                            {% set penalRed = 'redPenalty'%}
+                        {%else%}
+                            {% set penalRed = ''%}
+                        {%endif%}
+
+                        <td class="indv {{penalRed}}" width="2%">{{indValue.getJulyReal}}</td>  
+
+                        {# AGOSTO #}
+                        {%if indValue.getAugustPlanned == 0 %}
+                            <td class="indv" width="2%">&nbsp;</td>
+                        {%else%}
+                            <td class="indv" width="2%">{{indValue.getAugustPlanned}}</td>
+                        {%endif%}
+
+                        {% if summaryInd[goals.id][resp.id]['arrayPlan'][8] is defined %}
+                            {% set valorR= summaryInd[goals.id][resp.id]['arrayReal'][8] %}
+                            {% set valorP= summaryInd[goals.id][resp.id]['arrayPlan'][8] %}
+                        {%else%}
+                            {% set valorP = null %}
+                            {% set valorR = null %}
+                        {%endif%}
+
+                        {%if ((valorP>valorR)and(mes>=8)) %}
+                            {% set penalRed = 'redPenalty'%}
+                        {%else%}
+                            {% set penalRed = ''%}
+                        {%endif%}
+
+                        <td class="indv {{penalRed}}" width="2%">{{indValue.getAugustReal}}</td>  
+
+                        {# SEPTIEMBRE #}
+                        {%if indValue.getSeptemberPlanned == 0 %}
+                            <td class="indv" width="2%">&nbsp;</td>
+                        {%else%}
+                            <td class="indv" width="2%">{{indValue.getSeptemberPlanned}}</td>
+                        {%endif%}
+
+                        {% if summaryInd[goals.id][resp.id]['arrayPlan'][9] is defined %}
+                            {% set valorR= summaryInd[goals.id][resp.id]['arrayReal'][9] %}
+                            {% set valorP= summaryInd[goals.id][resp.id]['arrayPlan'][9] %}
+                        {%else%}
+                            {% set valorP = null %}
+                            {% set valorR = null %}
+                        {%endif%}
+
+                        {%if ((valorP>valorR)and(mes>=9)) %}
+                            {% set penalRed = 'redPenalty'%}
+                        {%else%}
+                            {% set penalRed = ''%}
+                        {%endif%}
+
+                        <td class="indv {{penalRed}}" width="2%">{{indValue.getSeptemberReal}}</td>  
+
+                        {# OCTUBRE #}
+                        {%if indValue.getOctoberPlanned == 0 %}
+                            <td class="indv" width="2%">&nbsp;</td>
+                        {%else%}
+                            <td class="indv" width="2%">{{indValue.getOctoberPlanned}}</td>
+                        {%endif%}
+
+                        {% if summaryInd[goals.id][resp.id]['arrayPlan'][10] is defined %}
+                            {% set valorR= summaryInd[goals.id][resp.id]['arrayReal'][10] %}
+                            {% set valorP= summaryInd[goals.id][resp.id]['arrayPlan'][10] %}
+                        {%else%}
+                            {% set valorP = null %}
+                            {% set valorR = null %}
+                        {%endif%}
+
+                        {%if ((valorP>valorR)and(mes>=10)) %}
+                            {% set penalRed = 'redPenalty'%}
+                        {%else%}
+                            {% set penalRed = ''%}
+                        {%endif%}
+
+                        <td class="indv {{penalRed}}" width="2%">{{indValue.getOctoberReal}}</td>  
+
+                        {# NOVIEMBRE #}
+                        {%if indValue.getNovemberPlanned == 0 %}
+                            <td class="indv" width="2%">&nbsp;</td>
+                        {%else%}
+                            <td class="indv" width="2%">{{indValue.getNovemberPlanned}}</td>
+                        {%endif%}
+
+                        {% if summaryInd[goals.id][resp.id]['arrayPlan'][11] is defined %}
+                            {% set valorR= summaryInd[goals.id][resp.id]['arrayReal'][11] %}
+                            {% set valorP= summaryInd[goals.id][resp.id]['arrayPlan'][11] %}
+                        {%else%}
+                            {% set valorP = null %}
+                            {% set valorR = null %}
+                        {%endif%}
+
+                        {%if ((valorP>valorR)and(mes>=11)) %}
+                            {% set penalRed = 'redPenalty'%}
+                        {%else%}
+                            {% set penalRed = ''%}
+                        {%endif%}
+
+                        <td class="indv {{penalRed}}" width="2%">{{indValue.getNovemberReal}}</td>  
+
+                        {# DICIEMBRE #}
+                        {%if indValue.getDecemberPlanned == 0 %}
+                            <td class="indv" width="2%">&nbsp;</td>
+                        {%else%}
+                            <td class="indv" width="2%">{{indValue.getDecemberPlanned}}</td>
+                        {%endif%}
+
+                        {% if summaryInd[goals.id][resp.id]['arrayPlan'][12] is defined %}
+                            {% set valorR= summaryInd[goals.id][resp.id]['arrayReal'][12] %}
+                            {% set valorP= summaryInd[goals.id][resp.id]['arrayPlan'][12] %}
+                        {%else%}
+                            {% set valorP = null %}
+                            {% set valorR = null %}
+                        {%endif%}
+
+                        {%if ((valorP>valorR)and(mes>=12)) %}
+                            {% set penalRed = 'redPenalty'%}
+                        {%else%}
+                            {% set penalRed = ''%}
+                        {%endif%}
+
+                        <td class="indv {{penalRed}}" width="2%">{{indValue.getDecemberReal}}</td>  
+
+
+                        {%if penalty == 0 %}
+                            <td class="indv" width="4%">-</td>                    
+                        {%else%}
+                            <td class="indv" width="4%">- {{penalty}}</td>
+                        {%endif%}
+                        <td class="indv" width="4%" style="border-right: black 2px solid;">{{advance}}%</td>                    
+                    </tr>
+                {% endfor %}        
+            {%endfor%}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="6" style="border: black 2px solid;">TOTALES DEL PROGRAMA</th>
+                <th colspan="5" style="border: black 2px solid;">Plan Hasta la Fecha:</th>
+                <td colspan="3" style="text-align: center; font-weight: bold; border: black 2px solid;">{{totales.plannedResult|myNumberFormat}}%</td>
+                <th colspan="5" style="border: black 2px solid;">Real Hasta la Fecha:</th>
+                <td colspan="3" style="text-align: center; font-weight: bold; border: black 2px solid;">{{totales.realResult|myNumberFormat}}%</td>                                
+                <th colspan="5" style="border: black 2px solid;">Efectividad:</th>
+                <td colspan="3" style="text-align: center; font-weight: bold; border: black 2px solid;">{{totales.efectivity|myNumberFormat}}%</td>
+            </tr>
+        </tfoot>
+    </table>
+{% endblock %}    

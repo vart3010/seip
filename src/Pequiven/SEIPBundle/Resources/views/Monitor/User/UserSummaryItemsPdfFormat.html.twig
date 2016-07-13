@@ -282,7 +282,12 @@
                             <span class="{{ advancesClass }}" >{{ goal.advance|number_format(2,',','.') }}% de<br>{{ goal.resultToDate|number_format(2,',','.') }}% </span>
                         </td>
                         <td style="text-align: center" width="10%">   
-                            {% set advances = (goal.result * 100)/ goal.resultToDate %}
+                            {% if goal.resultToDate == 0 %}
+                                {% set advances = 0 %}
+                            {%else%}
+                                {% set advances = (goal.result * 100)/ goal.resultToDate %}
+                            {%endif%}
+                            
                             {% set advancesClass = "resultred"%}
                             {% if advances > 50 and advances <= 80 %}
                                 {% set advancesClass = 'resultyellow' %}

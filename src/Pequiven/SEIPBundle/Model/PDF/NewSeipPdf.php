@@ -56,7 +56,7 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
                 . '</table>'
                 . '<table width="100%">'
                 . '<tr bgcolor="#D9D9D9">'
-                . '<td width="100%" height="20px" style="text-align: left; font-size: 10pt; color: #C00000; vertical-align: middle; font-family: sans-serif;">   ' .strtr(strtoupper($tittle),"àèìòùáéíóúçñäëïöü","ÀÈÌÒÙÁÉÍÓÚÇÑÄËÏÖÜ"). '</td>'
+                . '<td width="100%" height="20px" style="text-align: left; font-size: 10pt; color: #C00000; vertical-align: middle; font-family: sans-serif;">   ' . strtr(strtoupper($tittle), "àèìòùáéíóúçñäëïöü", "ÀÈÌÒÙÁÉÍÓÚÇÑÄËÏÖÜ") . '</td>'
                 . '</tr>'
                 . '</table>';
 
@@ -67,30 +67,38 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
     // Footer del pdf de resultados
     public function Footer() {
         // Position at 27 mm from bottom
-        $this->SetY(-30);
+        //      $this->SetY(-30);
         // Set font
         $this->SetFont('helvetica', 'I', 8);
-        $logoeslogan = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Pueblo_Victorioso.png');
+        $logoeslogan = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Patriotas_Unidos.jpg');
         $logoministerio = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Ministerio.jpg');
         // Page number
         //. $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages() .
 
-        $this->Image($logoministerio, 10, 282, 75, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-        $this->Image($logoeslogan, 175, 282, 20, 10, 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $margin = $this->getPageDimensions();
+        $lineRed = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(192, 0, 0));
+        $text = $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages();
+
+        if ($margin['or'] == 'P') {
+            $this->Image($logoministerio, 10, 282, 75, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            $this->Image($logoeslogan, 170, 282, 30, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);            
+            $this->Text(120, 285, $text);
+            $this->Line(10, 281, 200, 281, $lineRed);
+        } else {
+            $this->Image($logoministerio, 15, 193, 75, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            $this->Image($logoeslogan, 250, 193, 30, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            $text = $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages();
+            $this->Text(150, 198, $text);
+            $this->Line(15, 192, 280, 192, $lineRed);
+        }
 
 //        $footer = '<div style="text-align: rigth; margin-top: 100px; margin-left: 50px">'                
 //                . $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages()                
 //                . '</div>';
 ////                . '<span style="color: #bb0707; font-size: 1.3em;font-weight: bold;font-variant: small-caps;">' . $this->footerText . '</span><br><span>' . $this->trans('pequiven_seip.pdf.pageFooter', array('%page%' => $this->getAliasNumPage(), '%totalPage%' => $this->getAliasNbPages()), 'PequivenSEIPBundle') . '</span></div>';
 //        $this->writeHTML($footer);
-        
         //);
-        $text=$this->getAliasNumPage() . '/' . $this->getAliasNbPages();
-        $this->Text(190, 277,$text);
-
         //Línea HR
-         $lineRed = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(192, 0, 0));
-         $this->Line(10, 281, 200, 281, $lineRed);
     }
 
     /**
