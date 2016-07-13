@@ -34,10 +34,14 @@
                 value += object.ref;
             }
             if(object.description){
-                value +=  ' '+ object.description;
-            }                  
+                value +=  ' - '+ object.description;
+            }                      
+            if(object.causes){
+                value += object.causes;
+            }                   
             return value;
-        };        
+        };
+        
 </script>
 
 {% endblock javascripts_base %}

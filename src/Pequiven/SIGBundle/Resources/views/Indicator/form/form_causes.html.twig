@@ -38,9 +38,7 @@
             </div>
             <div class="field-block button-height" >
                 <label class="label">Seleccionar Causa Origen</label>
-                <select id="data_cause_load" name="data_cause[load]" class="select2 input-xlarge form-control">
-                    <option value="1">Seleccione...</option>                            
-                </select>
+                <input type="text" id="data_cause_load" name="data_cause[load]" style='width: 270px'>
             </div>
         </div>
 </fieldset>
@@ -66,16 +64,17 @@ $(document).ready(function(){
         $('#fieldset').show(600,function() {
             $('#zyncCause').show(400,function() {});                
         });
-    });
-    setUrlResponsibles();        
+    });    
+
+    setDataSelect('', Routing.generate('pequiven_indicator_to_causes'),'data_indicator_origen');        
 });
 
-function setUrlResponsibles(data) {
-    var urlResponsibles = Routing.generate("pequiven_indicator_to_causes"); 
+function setDataSelect(data,route,select) {
+    var urlResponsibles = route; 
     if (data == undefined) {
         data = [];
     }
-    $("#data_indicator_origen").select2({
+    $("#"+select).select2({
         minimumInputLength: 3,
         maximumSelectionLength: 1,
         maximumSelectionSize: 1,
@@ -95,17 +94,16 @@ function setUrlResponsibles(data) {
                     query: term, // search term
                 };
             },
-            results: function (data, page) { // parse the results into the format expected by Select2.                   
-                if (data != ) {};
+            results: function (data, page) { // parse the results into the format expected by Select2.                 
                 return {results: data};
             },
             cache: true
         },
-        initSelection: function (element, callback) {
+        initSelection: function (element, callback) {             
         },
         formatResult: indicatorFormatResult, // omitted for brevity, see the source of this page
         formatSelection: indicatorFormatResult, // omitted for brevity, see the source of this page
-        escapeMarkup: function (m) {
+        escapeMarkup: function (m) {            
             return m;
         } // we do not want to escape markup since we are displaying html in results
     });
@@ -114,10 +112,17 @@ function setUrlResponsibles(data) {
         $.each(data, function (index, value) {
             preselected.push(value.id);
         });                
-        $('#data_indicator_origen').select2('data', data);
-        $('#data_indicator_origen').select2('val', preselected);
+        $('#'+select).select2('data', data);
+        $('#'+select).select2('val', preselected);         
     }
 };
+
+$('#data_indicator_origen').on('change',function(){
+    var valor = $(this).val(); 
+    $('#data_cause_load').prop('disabled', false);
+    var route = Routing.generate('pequiven_indicator_get_to_causes')+"?idObject="+valor+"&typeObject=1"+"&month="+$('#month').val();    
+    setDataSelect('', route,'data_cause_load');            
+});
 
 $('input#evolutioncause_valueOfcauses').keyup(function openConfirm() {        
     var valueCharge = $("#max").text();                
