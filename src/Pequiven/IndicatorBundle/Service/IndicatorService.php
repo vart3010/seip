@@ -5202,6 +5202,15 @@ class IndicatorService implements ContainerAwareInterface {
             return false;
         }
     }
+    
+    /*
+     * METODO QUE RETORNA LA FORMULA PARA QUE DIERA ESE RESULTADO
+     */
+    public function getCalculationMethod(Indicator $indicator) {
+        $tendency = $indicator->getTendency();
+        $result = $indicator->getValueFinal();
+        
+    }
 
     /**
      * 

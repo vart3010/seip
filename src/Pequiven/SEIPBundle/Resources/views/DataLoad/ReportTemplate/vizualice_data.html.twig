@@ -94,7 +94,7 @@
                     <tr class="header-tr">
                         <th scope="col" width="40%" class="header-product">TOTALES</th>
                             {% for  totals in totalProduction["day"] %}    
-                            <th scope="col" width="15%" class="header-values">{{ totals }}</th>                                   
+                            <th scope="col" width="15%" class="header-values">{{ totals|myNumberFormat }}</th>                                   
                             {% endfor %}
                     </tr>
                 </tfoot>
@@ -132,7 +132,7 @@
                     <tr class="header-tr">
                         <th scope="col" width="25%" class="header-product">TOTALES</th>
                             {% for  totals in totalProduction["month"] %}    
-                            <th scope="col" width="15%" class="header-values">{{ totals }}</th> 
+                            <th scope="col" width="15%" class="header-values">{{ totals|myNumberFormat }}</th> 
                             {% endfor %}
                     </tr>
                 </tfoot>
@@ -170,7 +170,7 @@
                     <tr class="header-tr">
                         <th scope="col" width="25%" class="header-product">TOTALES</th>
                             {% for  totals in totalProduction["year"] %}    
-                            <th scope="col" width="15%" class="header-values">{{ totals }}</th>
+                            <th scope="col" width="15%" class="header-values">{{ totals|myNumberFormat }}</th>
                             {% endfor %}
                     </tr>
                 </tfoot>
