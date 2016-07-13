@@ -324,15 +324,22 @@ class OnePerTen extends modelOnePerTen {
      * @ORM\Column(name="realProfileValue", type="integer", nullable=true)
      */
     private $realProfileValue;
-    
         
     /**
-     * Relacion expedientes asociados a un usuario
+     * Relación expedientes asociados a un usuario
      * 
      * @var Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile",mappedBy="onePerTen")
      */
     private $onePerTenFile;
+    
+    /**
+     * ¿Firmó para activar el revocatorio contra Nicolás Maduro?
+     * firmaRevocatorio
+     * @var integer
+     * @ORM\Column(name="firmaRevocatorio", type="integer", nullable=true)
+     */
+    private $firmaRevocatorio;
 
     public function __construct() {
         $this->ten = new \Doctrine\Common\Collections\ArrayCollection();
@@ -679,6 +686,14 @@ class OnePerTen extends modelOnePerTen {
      */
     public function getOnePerTenFile() {
         return $this->onePerTenFile;
+    }
+    
+    function getFirmaRevocatorio() {
+        return $this->firmaRevocatorio;
+    }
+
+    function setFirmaRevocatorio($firmaRevocatorio) {
+        $this->firmaRevocatorio = $firmaRevocatorio;
     }
 
 }
