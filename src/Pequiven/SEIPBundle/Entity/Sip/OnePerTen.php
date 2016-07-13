@@ -211,14 +211,6 @@ class OnePerTen extends modelOnePerTen {
      * @ORM\Column(name="firmaCompromiso", type="integer", nullable=true)
      */
     private $firmaCompromiso;
-    
-    /**
-     * militante (Que es parte del PSUV)
-     * @var integer
-     *
-     * @ORM\Column(name="militante", type="integer", nullable=true)
-     */
-    private $militante;
 
     /**
      * @var \Pequiven\SEIPBundle\Entity\Sip\OnerPerTenMembers
@@ -544,14 +536,6 @@ class OnePerTen extends modelOnePerTen {
 
     function setFirmaCompromiso($firmaCompromiso) {
         $this->firmaCompromiso = $firmaCompromiso;
-    }
-       
-    function getMilitante() {
-        return $this->militante;
-    }
-
-    function setMilitante($militante) {
-        $this->militante = $militante;
     }
     
     function getVasamblea6() {
