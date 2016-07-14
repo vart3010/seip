@@ -203,6 +203,63 @@ class ReportEvolutionCausesController extends ResourceController
     }
 
     /**
+     * Obtiene las causas
+     */
+    function getCausesToObjectAction(\Symfony\Component\HttpFoundation\Request $request) {     
+        $response = new JsonResponse();    
+
+        $idObject = $request->get('idObject');
+        $month = $request->get('month');        
+        $typeObject = $request->get('typeObject');        
+        $query = $request->get('query');
+        $results = array();        
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();        
+        $repository = $this->get('pequiven.repository.sig_causes_report_evolution');
+        //$causes = $repository->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));        
+        $dataCauses = $repository->findAll();        
+        
+        if (!$dataCauses) {
+            throw $this->createNotFoundException();
+        }
+        
+        $criteria = array(                                  
+            'causes' => $query,                        
+        );
+            
+        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findToValidToCausesEvolution($dataCauses, $criteria, $idObject, $month, $typeObject);                
+        $id = $causes = [];
+        foreach ($results as $valueCauses) {            
+            $data[] = ['id'=>$valueCauses->getId(),'causes'=>$valueCauses->getCauses()];
+        }
+        
+        $response->setData($data);
+        return $response;
+    }
+    
+    /**
+     *
+     * Añadiendo Causas Sincronizadas
+     *
+     */
+    public function addCausesSyncAction(Request $request){
+        if (isset($request->get('data_cause')['load'])) {
+            var_dump($request->get('data_indicator')['origen']);
+            var_dump($request->get('data_cause')['load']);
+            die();            
+        }
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('form/form_causes_sync.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+            ->setData(array('data'=>''))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
+    }
+
+    /**
      * 
      * @return \Pequiven\SIGBundle\Service\EvolutionService
      */

@@ -2,54 +2,27 @@
 
 {% block body %}
 {% trans_default_domain 'PequivenIndicatorBundle' %} 
-{#<fieldset class="fieldset">
-    <legend class="legend">Metodo de Carga de Causas</legend>
-        <div class="new-row twelve-columns red-bg">Seleccione Metodo de Carga de Causas</div>        
-        <ul class="bullet-list">
-            <li><a href id="load">Carga de Causa</a></li>
-            <li><a href id="sync">Sincronización de Causa</a></li>
-        </ul>
-</fieldset>#}
-<fieldset class="fieldset fields-list" id="fieldset">
-    <legend class="legend" id="legend"></legend> 
-        {#<div id="chargeCause"> #}
-            <form method="POST" id="form_causes_evolution">
-                {% include 'PequivenSIGBundle:Template:set_month.html.twig' %}  
-                <div class="field-block button-height" >
-                    {{ form_label(form.causes) }}
-                    {{ form_widget(form.causes) }}
-                </div>
-
-                <div class="field-block button-height" >
-                    {{ form_label(form.valueOfcauses) }}
-                    {{ form_widget(form.valueOfcauses) }}
-                </div>
-                {{ form_rest(form) }}
-                <p id="max" style="display:none">{{ sumCause }}</p>
-                <br>
-            </form>
-        {#</div>#}
-        <!-- fomulario herencia causas -->
-        {#<div id="syncCause">                                
-            <form method="POST" id="form_causes_evolution_sync">            
-                <div class="field-block button-height" >
-                    <label class="label">Seleccionar Indicador Origen</label>                
-                    <input type="text" id="data_indicator_origen" name="data_indicator[origen]" style='width: 270px'>
-                </div>
-                <div class="field-block button-height" >
-                    <label class="label">Seleccionar Causa Origen</label>
-                    <input type="text" id="data_cause_load" name="data_cause[load]" style='width: 270px'>
-                </div>
-            </form>
-        </div>#}
+<fieldset class="fieldset fields-list">
+    <legend class="legend" id="legend"></legend>         
+        <!-- fomulario herencia causas -->        
+        <form method="POST" id="form_causes_evolution_sync">            
+            <div class="field-block button-height" >
+                <label class="label">Seleccionar Indicador Origen</label>                
+                <input type="text" id="data_indicator_origen" name="data_indicator[origen]" style='width: 270px'>
+            </div>
+            <div class="field-block button-height" >
+                <label class="label">Seleccionar Causa Origen</label>
+                <input type="text" id="data_cause_load" name="data_cause[load]" style='width: 270px'>
+            </div>
+        </form>        
 </fieldset>
 
 <script type="text/javascript">
 $(document).ready(function(){
-    {#$('#fieldset').hide();
+    $('#data_cause_load').prop('disabled', true);
+    /*$('#fieldset').hide();
     $('#chargeCause').hide();
     $('#syncCause').hide();
-    $('#data_cause_load').prop('disabled', true);
 
     $("#load").click(function(){
         $('#legend').text('Carga de Causa');
@@ -65,12 +38,12 @@ $(document).ready(function(){
         $('#fieldset').show(600,function() {
             $('#syncCause').show(400,function() {});                
         });
-    });#}
-    $('#legend').text('Carga de Causa');
-    //setDataSelect('', Routing.generate('pequiven_indicator_to_causes'),'data_indicator_origen');            
+    });    */
+    $('#legend').text('Sincronización de Causas y Acciones');
+    setDataSelect('', Routing.generate('pequiven_indicator_to_causes'),'data_indicator_origen');            
 });
 
-{#function setDataSelect(data,route,select) {
+function setDataSelect(data,route,select) {
     var urlResponsibles = route; 
     if (data == undefined) {        
         data = [];
@@ -94,7 +67,6 @@ $(document).ready(function(){
                 return {query: term}; // search term                
             },
             results: function (data, page) { // parse the results into the format expected by Select2. 
-                console.log(data);
                 return {results: data};                
             },
             cache: true
@@ -122,7 +94,7 @@ $('#data_indicator_origen').on('change',function(){
     $('#data_cause_load').prop('disabled', false);
     var route = Routing.generate('pequiven_indicator_get_to_causes')+"?idObject="+valor+"&typeObject=1"+"&month="+$('#month').val();    
     setDataSelect('', route,'data_cause_load');            
-});#}
+});
 
 $('input#evolutioncause_valueOfcauses').keyup(function openConfirm() {        
     var valueCharge = $("#max").text();                

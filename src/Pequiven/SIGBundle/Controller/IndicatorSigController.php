@@ -554,7 +554,7 @@ class IndicatorSigController extends EvolutionController {
     }
 
     /**
-     * Obtiene los responsable que se pueden asignar a un plan
+     * Obtiene los indicadores
      */
     function getIndicatorToCausesAction(\Symfony\Component\HttpFoundation\Request $request) {        
         $query = $request->get('query');
@@ -576,38 +576,7 @@ class IndicatorSigController extends EvolutionController {
         $results = $this->get('pequiven.repository.sig_indicator')->findToIndicatorValidToEvolution($indicator, $criteria);        
         $view = $this->view();
         $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));        
-        return $this->handleView($view);
-    }
-
-    /**
-     * Obtiene los responsable que se pueden asignar a un plan
-     */
-    function getCausesToObjectAction(\Symfony\Component\HttpFoundation\Request $request) {        
-        $idObject = $request->get('idObject');
-        $month = $request->get('month');        
-        $typeObject = $request->get('typeObject');        
-        $query = $request->get('query');
-        $results = array();        
-        
-        $em = $this->getDoctrine()->getManager();
-        $em->getConnection()->beginTransaction();        
-        $repository = $this->get('pequiven.repository.sig_causes_report_evolution');
-        $causes = $repository->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));        
-        
-        if (!$causes) {
-            throw $this->createNotFoundException();
-        }
-        
-        $criteria = array(
-            'id' => $query,                        
-            'causes' => $query,                        
-        );
-            
-        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findToValidToCausesEvolution($causes, $criteria);                
-        $view = $this->view();
-        $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));        
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));  
         return $this->handleView($view);
     }
 

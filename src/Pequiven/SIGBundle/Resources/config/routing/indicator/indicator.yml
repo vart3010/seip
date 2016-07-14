@@ -152,6 +152,17 @@ pequiven_causes_evolution_add:
     methods: [POST]
     options:
         expose: true
+#Guardamos el formulario de las causas sincronizadas
+pequiven_causes_evolution_add_sync:
+    path: /addCausesSync.{_format}
+    defaults:
+        _controller: pequiven.controller.sig_causes_report_evolution:addCausesSyncAction
+        _format: html
+    requirements:
+        _format: json
+    methods: [GET|POST]
+    options:
+        expose: true
 #Guardamos el formulario de la tendencia del indicador
 pequiven_trend_evolution_add:
     path: /{idObject}/{typeObj}/addTrend.{_format}
@@ -305,7 +316,7 @@ pequiven_evolution_check_to_approve:
     methods: [GET|POST]
     options:
         expose: true
-#
+#Consultas Sincronizacion de Causas
 pequiven_indicator_to_causes:
     path: /indicators-to-causes.{_format}
     defaults:
@@ -319,7 +330,7 @@ pequiven_indicator_to_causes:
 pequiven_indicator_get_to_causes:
     path: /indicators-get-to-causes.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:getCausesToObjectAction
+        _controller: pequiven.controller.sig_causes_report_evolution:getCausesToObjectAction
         _format: json
     requirements:
         _format: json
