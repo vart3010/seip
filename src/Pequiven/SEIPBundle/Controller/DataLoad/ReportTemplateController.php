@@ -3292,7 +3292,7 @@ class ReportTemplateController extends SEIPController {
                 for ($i = 0; $i < count($impressOperacion["col"]); $i++) {
                     $cell = $impressOperacion["col"][$i] . $row;
                     if ($i != 0) {
-                        $field = number_format((float) $prod[$impressOperacion["fieldsShow"][$i]], 2, ',', '.');
+                        $field = $prod[$impressOperacion["fieldsShow"][$i]];
                     } else {
                         $field = $prod[$impressOperacion["fieldsShow"][$i]];
                     }
@@ -3358,10 +3358,11 @@ class ReportTemplateController extends SEIPController {
                 for ($i = 0; $i < count($rawMaterialData["col"]); $i++) {
                     $cell = $rawMaterialData["col"][$i] . $row;
                     if ($i != 0) {
-                        $field = number_format((float) $raw[$rawMaterialData["fieldsShow"][$i]], 2, ',', '.');
+                        $field = $raw[$rawMaterialData["fieldsShow"][$i]];
                     } else {
                         $field = $raw[$rawMaterialData["fieldsShow"][$i]];
                     }
+                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
@@ -3389,10 +3390,11 @@ class ReportTemplateController extends SEIPController {
                 for ($i = 0; $i < count($consumerServiceData["col"]); $i++) {
                     $cell = $consumerServiceData["col"][$i] . $row;
                     if ($i != 0) {
-                        $field = number_format((float) $consume[$consumerServiceData["fieldsShow"][$i]], 2, ',', '.');
+                        $field = $consume[$consumerServiceData["fieldsShow"][$i]];
                     } else {
                         $field = $consume[$consumerServiceData["fieldsShow"][$i]];
                     }
+                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
@@ -3420,10 +3422,11 @@ class ReportTemplateController extends SEIPController {
                 for ($i = 0; $i < count($pnr["col"]); $i++) {
                     $cell = $pnr["col"][$i] . $row;
                     if ($i != 0) {
-                        $field = number_format((float) $unrealized[$pnr["fieldsShow"][$i]], 2, ',', '.');
+                        $field = $unrealized[$pnr["fieldsShow"][$i]];
                     } else {
                         $field = $unrealized[$pnr["fieldsShow"][$i]];
                     }
+                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
@@ -3453,10 +3456,11 @@ class ReportTemplateController extends SEIPController {
                 for ($i = 0; $i < count($inventory["col"]); $i++) {
                     $cell = $inventory["col"][$i] . $row;
                     if ($i != 0) {
-                        $field = number_format((float) $inv[$inventory["fieldsShow"][$i]], 2, ',', '.');
+                        $field = $inv[$inventory["fieldsShow"][$i]];
                     } else {
                         $field = $inv[$inventory["fieldsShow"][$i]];
                     }
+                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
