@@ -3143,8 +3143,8 @@ class ReportTemplateController extends SEIPController {
 
                     if ($byRange) {
                         $production = array(
-                            "production" => $arrayProduction,
-                            "totalProduction" => $summaryProducctionRangeTotals,
+                            "production" => $summaryProduction,
+                            "totalProduction" => $summaryProductionTotals,
                             "rawMaterial" => $arrayRawMaterial,
                             "consumerPlanningServices" => $arrayConsumerServices,
                             "unrealizedProducction" => $arrayUnrealizedProduction,
@@ -3296,6 +3296,7 @@ class ReportTemplateController extends SEIPController {
                     } else {
                         $field = $prod[$impressOperacion["fieldsShow"][$i]];
                     }
+                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
@@ -3328,7 +3329,8 @@ class ReportTemplateController extends SEIPController {
                 if ($impressOperacion["col"][$x] == "B") {
                     $activeSheet->setCellValue($impressOperacion["col"][$x] . $row, "Totales");
                 } else {
-                    $activeSheet->setCellValue($impressOperacion["col"][$x] . $row, number_format($temp[$x-1], 2, ",", "."));
+                    $this->numberFormatPhpExcel($objPHPExcel,$temp[$x-1],$impressOperacion["col"][$x] . $row);
+                    $activeSheet->setCellValue($impressOperacion["col"][$x] . $row, $temp[$x-1]);
                 }
             }
             $row++;
