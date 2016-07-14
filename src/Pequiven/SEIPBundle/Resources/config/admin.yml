@@ -83,7 +83,7 @@ services:
             - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Tipo de Punto de Atención" }
         arguments:
             - ~
-            - Pequiven\IndicatorBundle\Entity\Indicator\TypeFeatureIndicator
+            - Pequiven\MasterBundle\Entity\Indicator\TypeFeatureIndicator
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
