@@ -157,27 +157,27 @@ if (!defined('PDF_UNIT')) {
 }
 
 if (!defined('PDF_MARGIN_HEADER')) {
-	define ('PDF_MARGIN_HEADER', 5);
+	define ('PDF_MARGIN_HEADER', 15);
 }
 
 if (!defined('PDF_MARGIN_FOOTER')) {
-	define ('PDF_MARGIN_FOOTER', 0);
+	define ('PDF_MARGIN_FOOTER', 15);
 }
 
 if (!defined('PDF_MARGIN_TOP')) {
-	define ('PDF_MARGIN_TOP', 32);
+	define ('PDF_MARGIN_TOP', 42);
 }
 
 if (!defined('PDF_MARGIN_BOTTOM')) {
-	define ('PDF_MARGIN_BOTTOM', 25);
+	define ('PDF_MARGIN_BOTTOM', 28);
 }
 
 if (!defined('PDF_MARGIN_LEFT')) {
-	define ('PDF_MARGIN_LEFT', 9);
+	define ('PDF_MARGIN_LEFT', 15);
 }
 
 if (!defined('PDF_MARGIN_RIGHT')) {
-	define ('PDF_MARGIN_RIGHT', 9);
+	define ('PDF_MARGIN_RIGHT', 15);
 }
 
 if (!defined('PDF_FONT_NAME_MAIN')) {

@@ -259,6 +259,12 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController {
         return $this->container->get('pequiven_seip.service.period');
     }
 
+    /**
+     * 
+     * @param type $idGoal
+     * @param type $idUser
+     * @return type
+     */
     public function searchValuebyUserAction($idGoal, $idUser) {
 
       //  $response = new JsonResponse();
@@ -274,6 +280,34 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController {
 
         if ($goalInd) {
             $value = $goalInd->getResultReal();
+        } else {
+            $value = null;
+        }
+
+        return $value;
+    }
+    
+    /**
+     * 
+     * @param type $idGoal
+     * @param type $idUser
+     * @return type
+     */
+    public function searchPenaltybyUserAction($idGoal, $idUser) {
+
+      //  $response = new JsonResponse();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $userobj = $this->get('pequiven.repository.user')->findOneById($idUser);
+        $goalobj = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findOneById($idGoal);
+        $searchCriteria = array('goalDetails' => $goalobj->getGoalDetails(), 'user' => $userobj);
+        $goalInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy($searchCriteria);
+
+        //$value = array();
+
+        if ($goalInd) {
+            $value = $goalInd->getPenalty();
         } else {
             $value = null;
         }

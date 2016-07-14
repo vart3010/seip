@@ -36,7 +36,6 @@
         font-weight: bold;
     }
     .resultgreen{
-
         color: #04B404; 
         font-weight: bold;
     }
@@ -54,8 +53,7 @@
         font-weight: bold;    
     }    
 </style>
-{% block body %}
-    <br><br>
+{% block body %}   
     <table width="100%">  
         <tr>
             <td class="white-gradient" width="10%">Periodo:</td>
@@ -78,27 +76,27 @@
     </table>   
     <table>
         <tr>
-            <td class="white-gradient" width="25%">Datos del Empleado:</td>
-            <td width="75%">{{user.getFullNameUser}}</td>
+            <td class="white-gradient" width="20%">Datos del Empleado:</td>
+            <td width="80%">{{user.getFullNameUser}}</td>
         </tr>
         {% if user.gerencia != null %}
             <tr>
-                <td class="white-gradient" width="25%">Gerencia de Primera Línea:</td>
-                <td width="75%">{{user.gerencia.description}}</td>
+                <td class="white-gradient" width="20%">Gerencia de Primera Línea:</td>
+                <td width="80%">{{user.gerencia.description}}</td>
             </tr>            
         {% endif %}
         {% if user.gerenciaSecond != null %}
             <tr>
-                <td class="white-gradient" width="25%">Gerencia de Segunda Línea:</td>
-                <td width="75%">{{user.gerenciaSecond.description}}</td>
+                <td class="white-gradient" width="20%">Gerencia de Segunda Línea:</td>
+                <td width="80%">{{user.gerenciaSecond.description}}</td>
             </tr>
         {% endif %}
         <tr>
-            <td class="white-gradient" width="25%">Cargo Actual:</td>
-            <td width="75%">
+            <td class="white-gradient" width="20%">Cargo Actual:</td>
+            <td width="80%">
                 {% if(user.getfeestructure|length)>=1 %}
                     {% for cargos in user.getfeestructure %}
-                        {{ cargos.getcharge }} <br>
+                        <br> {{ cargos.getcharge }} 
                     {% endfor %}
                 {% else %}
                     No Cargado en Sistema
@@ -287,7 +285,7 @@
                             {%else%}
                                 {% set advances = (goal.result * 100)/ goal.resultToDate %}
                             {%endif%}
-                            
+
                             {% set advancesClass = "resultred"%}
                             {% if advances > 50 and advances <= 80 %}
                                 {% set advancesClass = 'resultyellow' %}

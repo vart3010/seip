@@ -78,18 +78,28 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
         $margin = $this->getPageDimensions();
         $lineRed = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(192, 0, 0));
         $text = $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages();
+        $html = '<div style="text-align: center; font-size: 6pt; font-weight: bold; color: #B00000; vertical-align: middle; font-family: sans-serif;">'
+                    . 'Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos'
+                    . '</div>';
 
         if ($margin['or'] == 'P') {
-            $this->Image($logoministerio, 10, 282, 75, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-            $this->Image($logoeslogan, 170, 282, 30, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);            
-            $this->Text(120, 285, $text);
-            $this->Line(10, 281, 200, 281, $lineRed);
+            $html = '<p style="text-align: center; font-size: 6pt; font-weight: bold; color: #B00000; vertical-align: middle; font-family: sans-serif;">'
+                    . 'Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos'
+                    . '</p>';
+            $this->Line(15, 254, 200, 254, $lineRed);
+            $this->Image($logoministerio, 15, 255, 75, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            $this->Image($logoeslogan, 160, 255, 40, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            $this->Text(120, 255, $text);
+            $this->writeHTMLCell(60, 20, 95, 260, $html);
         } else {
+            $html = '<div style="text-align: center; font-size: 8pt; font-weight: bold; color: #B00000; vertical-align: middle; font-family: sans-serif;">'
+                    . 'Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos'
+                    . '</div>';
+            $this->Line(15, 192, 265, 192, $lineRed);
             $this->Image($logoministerio, 15, 193, 75, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-            $this->Image($logoeslogan, 250, 193, 30, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-            $text = $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages();
-            $this->Text(150, 198, $text);
-            $this->Line(15, 192, 280, 192, $lineRed);
+            $this->Image($logoeslogan, 225, 193, 40, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);            
+            $this->Text(150, 196, $text);
+            $this->writeHTMLCell(100, 10, 105, 200, $html);
         }
 
 //        $footer = '<div style="text-align: rigth; margin-top: 100px; margin-left: 50px">'                

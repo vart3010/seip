@@ -918,6 +918,7 @@ class ArrangementProgramController extends SEIPController {
             $arrayGoalOrder[$goal->getId()] = $i;
             foreach ($goal->getResponsibles() as $resp) {
                 $individualValues[$goal->getId()][$resp->getId()] = GoalController::searchValuebyUserAction($goal->getId(), $resp->getId());
+                $penalties[$goal->getId()][$resp->getId()] = GoalController::searchPenaltybyUserAction($goal->getId(), $resp->getId());
             }
             $i++;
         }
@@ -930,6 +931,7 @@ class ArrangementProgramController extends SEIPController {
         return array(
             'entity' => $entity,
             'individualValues' => $individualValues,
+            'penalties' => $penalties,
             'movementHistory' => $movementHistory,
             'arrayGoalOrder' => $arrayGoalOrder,
             'causes' => $causes,
@@ -1798,6 +1800,7 @@ class ArrangementProgramController extends SEIPController {
         $summaryInd = array();
         $summaryGeneral = array();
         $date = $APentity->getLastDateCalculateResult();
+        $i = 1;
 
         foreach ($APentity->getTimeline()->getGoals() as $goal) {
             foreach ($goal->getResponsibles() as $resp) {
@@ -1814,6 +1817,8 @@ class ArrangementProgramController extends SEIPController {
                 }
             }
             $summaryGeneral[$goal->getId()] = $resultService->CalculateAdvancePenalty($goalobj, $date);
+            $arrayGoalOrder[$goal->getId()] = $i;
+            $i++;
         }
 
         if (($date == null) || (($APentity->getPeriod()->getStatus()) == 0)) {
@@ -1848,7 +1853,12 @@ class ArrangementProgramController extends SEIPController {
         //die();
 
         $totales = $resultService->CalculateAdvancePenaltyAP($APentity, $date);
-        $ref=$APentity->getRef();
+        $ref = $APentity->getRef();
+
+        //MOVIMIENTOS REALIZADOS
+        $movementHistory = $this->get('pequiven_seip.repository.arrangementprogram_movement')->getMovementHistory($APentity->getId());
+        //ARREGLO DE CAUSAS
+        $causes = MovementEmployee::getAllCauses();
 
         $data = array(
             'APentity' => $APentity,
@@ -1864,6 +1874,9 @@ class ArrangementProgramController extends SEIPController {
             'lastCalculateDate' => $APentity->getLastDateCalculateResult(),
             'mes' => $mes,
             'totales' => $totales,
+            'movementHistory' => $movementHistory,
+            'causes' => $causes,
+            'arrayGoalOrder'=> $arrayGoalOrder
         );
 
         $this->generatePdf($data, 'Resultados de Programa de Gestión ' . $ref, 'PequivenArrangementProgramBundle:ArrangementProgram:exportPDF.html.twig');
@@ -1898,7 +1911,7 @@ class ArrangementProgramController extends SEIPController {
         $pdf->AddPage();
         $html = $this->renderView($template, $data);
         $pdf->writeHTML($html, true, false, true, false, '');
-        $pdf->Output(utf8_decode($title) . '.pdf', 'D');
+        $pdf->Output(($title) . '.pdf', 'D');
     }
 
 }

@@ -38,7 +38,14 @@
         border-top: black 2px solid;        
         border-bottom: black 2px solid;
     }
-
+    .resultgreen{
+        color: #04B404; 
+        font-weight: bold;
+    }
+    .resultred{
+        color: #FF0000;        
+        font-weight: bold;
+    }
     .redPenalty{        
         background-color: #F5A9A9;            
     }
@@ -48,7 +55,7 @@
         vertical-align: middle;
     }
 
-    table{
+    .tableBordered{
         padding: 2px;
         border: #000000 5px solid;
     }
@@ -64,7 +71,7 @@
     }    
 </style>
 {% block body %}  
-    <table>
+    <table class="tableBordered">
         <thead>
             <tr>
                 <td width="20%" style="text-align: justify;">
@@ -637,13 +644,149 @@
         <tfoot>
             <tr>
                 <th colspan="6" style="border: black 2px solid;">TOTALES DEL PROGRAMA</th>
-                <th colspan="5" style="border: black 2px solid;">Plan Hasta la Fecha:</th>
+                <th colspan="6" style="border: black 2px solid;">Planeado Hasta la Fecha:</th>
                 <td colspan="3" style="text-align: center; font-weight: bold; border: black 2px solid;">{{totales.plannedResult|myNumberFormat}}%</td>
-                <th colspan="5" style="border: black 2px solid;">Real Hasta la Fecha:</th>
+                <th colspan="6" style="border: black 2px solid;">Avance Hasta la Fecha:</th>
                 <td colspan="3" style="text-align: center; font-weight: bold; border: black 2px solid;">{{totales.realResult|myNumberFormat}}%</td>                                
                 <th colspan="5" style="border: black 2px solid;">Efectividad:</th>
                 <td colspan="3" style="text-align: center; font-weight: bold; border: black 2px solid;">{{totales.efectivity|myNumberFormat}}%</td>
             </tr>
         </tfoot>
+    </table>
+    <table>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+    <table class="tableBordered">
+        <tr>
+            <td width="25%">
+                <b>Revisado Por:</b>
+                <br>
+                {{ APentity.details.reviewedBy ? APentity.details.reviewedBy : 'pequiven.arrangement_program.no_revison_date'|trans }}
+            </td>
+            <td width="15%">
+                <b>Fecha:</b>
+                <br>
+                {{ APentity.details.revisionDate ? APentity.details.revisionDate|date(appConfiguration.generalDateFormat) : 'pequiven.arrangement_program.no_revison_date'|trans }}
+            </td>
+            <td width="25%">
+                <b>Aprobado Por:</b>
+                <br>
+                {{ APentity.details.approvedBy ? APentity.details.approvedBy : 'pequiven.arrangement_program.no_approval_date'|trans }}
+            </td>
+            <td width="15%">
+                <b>Fecha:</b>
+                <br>
+                {{ APentity.details.approvalDate ? APentity.details.approvalDate|date(appConfiguration.generalDateFormat) : 'pequiven.arrangement_program.no_approval_date'|trans }}
+            </td>        
+            <td width="20%">
+                <b>Datos Actualizados Al:</b>
+                <br>
+                {{ lastCalculateDate ? lastCalculateDate|date(appConfiguration.generalDateFormat) : 'Sin Notificación Realizada' }}
+            </td> 
+        </tr>        
+    </table>
+    <table>
+       <tr>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+    <table class="tableBordered">
+        <thead>
+            <tr>
+                <th width="100%">OBSERVACIONES</th>                        
+            </tr>                      
+            <tr>
+                <th width="5%">Nro.</th>                        
+                <th width="10%">Fecha</th>                        
+                <th width="15%">Usuario</th>                        
+                <th width="70%">Comentario</th>                        
+            </tr>                      
+        </thead>
+        <tbody>
+            {% for observation in APentity.observations %}
+                <tr>
+                    <td width="5%" style="text-align: center;">
+                        {{loop.index}}
+                    </td>  
+                    <td width="10%" style="text-align: center;">
+                        {{ observation.createdAt|date(appConfiguration.generalDateFormat) }}
+                    </td>  
+                    <td width="15%">
+                        {{ observation.createdBy.getOnlyFullNameUser }}
+                    </td>  
+                    <td width="70%">
+                        {{ observation.description }}
+                    </td>  
+                </tr>
+            {% else %}
+                <tr>
+                    <td class="empty_row">
+                        No hay Observaciones en este Programa
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>    
+    <table>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+    <table class="tableBordered">
+        <thead>
+            <tr>
+                <th width="100%">MOVIMIENTOS DE RESPONSABLES</th>                        
+            </tr>
+            <tr>
+                <th width="5%">-</th>
+                <th width="10%">Fecha</th>                        
+                <th width="15%" class="hide-on-mobile">Responsable</th>
+                <th width="35%" class="hide-on-mobile">Movimiento</th>
+                <th width="35%" class="hide-on-mobile">Observaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mov in movementHistory %}
+                {% set id_affected = mov.id_affected %}
+                {% if mov.type == 'I' %}
+                    {% set type = 'Ingresa a'%}                            
+                {%else%}
+                    {% set type = 'Egresa de'%}                            
+                {%endif%}
+
+                {% if mov.typeMov == 'Goal' %}
+                    {% set tipo = ' la Meta ' ~ arrayGoalOrder[id_affected] %}                            
+                {%else%}
+                    {% set tipo = 'l Programa' %}                            
+                {%endif%}
+                <tr>                            
+                    {% if mov.type == 'I'%}
+                        <td width="5%" style="text-align: center;" class="resultgreen">E</td>
+                    {% else %}
+                        <td width="5%" style="text-align: center;" class="resultred">S</td>
+                    {% endif %}
+                    <td width="10%" style="text-align: center;">
+                        {{ mov.date | date("d/m/Y") }}
+                    </td>    
+                    <td width="15%">
+                        {{ mov.user|ucwords }} 
+                    </td>                            
+                    <td width="35%">
+                        {{type}}{{tipo}} por {{ causes[mov.cause] }} con un Avance de {{ mov.realAdvance | number_format(2, '.', ',')  }} %
+                    </td>
+                    <td width="35%">
+                        {{ mov.observations|ucwords }}
+                    </td>
+                </tr>                       
+            {% else %}
+                <tr>
+                    <td colspan="5" class="empty_row">
+                        No hay Movimientos de Responsables en este Programa
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
 {% endblock %}    
