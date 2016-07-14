@@ -61,6 +61,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeOnePerTenMembers', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeObservationsSip', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Center\Observations', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeInventorySip', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Center\Inventory', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeStandardization', 'class' => 'Pequiven\SIGBundle\Entity\Tracing\Standardization', 'format' => 'json'),
         );
     }
 
@@ -410,11 +411,11 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         if ($details->getNotificationInProgressByUser() != null) {
 //            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 9))){
             //if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 35) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 35))){
-            if ($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 14) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 14))) {
-                //if((($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 9))){
-                //$data['januaryReal']['isEnabled'] = true;
-                //$data['februaryReal']['isEnabled'] = true;
-                //$data['marchReal']['isEnabled'] = true;
+            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 14) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 14))){
+           //if((($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 9))){
+                #$data['januaryReal']['isEnabled'] = true;
+                #$data['februaryReal']['isEnabled'] = true;
+                #$data['marchReal']['isEnabled'] = true;
                 //$data['aprilReal']['isEnabled'] = true;
                 //$data['mayReal']['isEnabled'] = true;
                 //$data['juneReal']['isEnabled'] = true;
@@ -839,6 +840,39 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $event->getVisitor()->addData('nameOriginal', $nameOriginal);
         $event->getVisitor()->addData('nameWorkStudyCircle', $workStudyCircle->getName());
         $event->getVisitor()->addData('complejo', $workStudyCircle->getComplejo()->getDescription());
+    }
+
+    public function onPostSerializeStandardization(ObjectEvent $event) {
+        $object = $event->getObject();
+        
+        $statusLoad = [0 => "Sin Notificar",1 => "Notificado"];
+        $status = $statusLoad[$object->getStatus()];
+
+        $statusMaintanence = [0 => "Sin Carga",1 => "Abierta No Vencia",2 => "Cerrada",3 => "Abierta Vencida"];
+        $statusM = $statusMaintanence[0];
+        $buttons = "";
+        foreach ($object->getMaintenance() as $value) { 
+            $statusM = $statusMaintanence[$value->getStatus()];
+            if ($value->getStatus() >= 2) {
+                 $buttons = '<a class="button icon-pencil" ng-click="loadTemplateMaintenanceVerification(id_maintenance='.$object->getId().')" href="">Verificar</a>';
+            } 
+        }
+        $statusCharge = $statusM;
+        
+        if ($statusM == "Sin Carga" or $statusCharge == "Abierta No Vencia") {
+            $buttons = '<a class="button icon-pencil" ng-click="loadTemplateMaintenance(id_standardization='.$object->getId().')" href="">Cargar</a>';
+        }
+        if ($object->getStatus() == 0) {
+            $buttons = '<a class="button icon-bell with-tooltip" ng-click="loadNotify(dataNotify='.$object->getId().')" href="" title="Notificar"></a>'.'<a class="button icon-trash with-tooltip confirm" ng-click="removeStandardization(dataMonitoring='.$object->getId().')" href="" title="Eliminar"></a>';    
+        }
+        //$links['self']['show'] = $this->generateUrl('pequiven_proposal_show', array('id' => $object->getId()));
+        //$links['self']['show'] = $this->generateUrl('pequiven_work_study_circle_download_file', array('id' => $object->getId()));
+        //$links['self']['circle'] = $this->generateUrl('pequiven_work_study_circle_show', array('id' => $workStudyCircle->getId()));
+
+        //$event->getVisitor()->addData('_links', $links);
+        $event->getVisitor()->addData('statusStandardization', $status);
+        $event->getVisitor()->addData('statusCharge', $statusCharge);
+        $event->getVisitor()->addData('buttons', $buttons);
     }
 
     public function setContainer(ContainerInterface $container = null) {

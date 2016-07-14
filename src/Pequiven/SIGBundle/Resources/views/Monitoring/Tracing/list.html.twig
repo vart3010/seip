@@ -1,0 +1,45 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenSIGBundle' %}
+
+{% block title %}- {{('monitoring.title'|trans)}} {% endblock %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('monitoring.title'|trans),
+        ('pequiven_indicator.list'|trans)
+    ) }}
+{% endblock %}
+
+{% block body %} 
+<div class="block" ng-controller="MonitoringTracingSigController">      
+    <div ng-controller="TableFormatController">        
+        <div loading-container="tableParams.settings().$loading">
+            <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info">
+                <tbody>
+                    <tr ng-repeat="result in $data" data="{$ result|json $}" ng-init="but()">
+                        <td data-title="'Area o Proceso'" sortable="'description'">
+                            <a ng-controller="MonitoringTracingSigController" ng-click="loadTemplateMaintenanceShow(id_standardization='{$ result.id $}')" data="{$ result.id $}" href="">{$ result.area $}</a>                                
+                        </td>
+                        <td data-title="'Codigo'" sortable="'code'" filter="{'code' : 'text'}">
+                            <a href="show/{{type}}/{$ result.id $}">{$ result.code $}</a>
+                        </td>                            
+                        <td data-title="'Estatus'" sortable="'description'">
+                            <a href="show/{{type}}/{$ result.id $}">{$ result.statusStandardization $}</a>
+                        </td>
+                        <td data-title="'Estandarización'" sortable="'description'">
+                            <a href="show/{{type}}/{$ result.id $}">{$ result.statusCharge $}</a>
+                        </td>
+                        <td data-title="'Acciones'" sortable="'description'">                                                                                                
+                            <input type="text" ng-model="buttons" id="buttons" value="{$ result.buttons $}">
+                            <p id="textPrueba">{$ result.buttons $}</p>
+                            <!--<p ng-bind-html="myHTML"></p>-->
+                            <p compile="myHTML"></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>    
+</div>
+{% endblock %}

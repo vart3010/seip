@@ -1742,12 +1742,12 @@ class ReportTemplateController extends SEIPController {
                                                         "id" => $rawMaterial->getProduct()->getId(),
                                                         "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
                                                         //"productName" => $n,
-                                                        "plan" => number_format($rawMaterialResult["total_day_plan"], 2, ",", "."),
-                                                        "real" => number_format($rawMaterialResult["total_day"], 2, ",", "."),
-                                                        "plan_month" => number_format($rawMaterialResult["total_month_plan"], 2, ",", "."),
-                                                        "real_month" => number_format($rawMaterialResult["total_month"], 2, ",", "."),
-                                                        "plan_year" => number_format($rawMaterialResult["total_year_plan"], 2, ",", "."),
-                                                        "real_year" => number_format($rawMaterialResult["total_year"], 2, ",", ".")
+                                                        "plan" => ($rawMaterialResult["total_day_plan"]),
+                                                        "real" => ($rawMaterialResult["total_day"]),
+                                                        "plan_month" => ($rawMaterialResult["total_month_plan"]),
+                                                        "real_month" => ($rawMaterialResult["total_month"]),
+                                                        "plan_year" => ($rawMaterialResult["total_year_plan"]),
+                                                        "real_year" => ($rawMaterialResult["total_year"])
                                                     );
                                                 } else {
                                                     $indice = array_search($idProduct, $arrayIdProducts);
@@ -3143,8 +3143,8 @@ class ReportTemplateController extends SEIPController {
 
                     if ($byRange) {
                         $production = array(
-                            "production" => $arrayProduction,
-                            "totalProduction" => $summaryProducctionRangeTotals,
+                            "production" => $summaryProduction,
+                            "totalProduction" => $summaryProductionTotals,
                             "rawMaterial" => $arrayRawMaterial,
                             "consumerPlanningServices" => $arrayConsumerServices,
                             "unrealizedProducction" => $arrayUnrealizedProduction,
@@ -3250,7 +3250,7 @@ class ReportTemplateController extends SEIPController {
             )
         );
         $activeSheet->getStyle("H2")->applyFromArray($styleArray);
-        $activeSheet->setCellValue("H2", $days[date("N")-1] . ", " . date("d/m/Y"));
+        $activeSheet->setCellValue("H2", $days[date("N")] . ", " . date("d/m/Y"));
 
         $row = 4;
 
@@ -3292,10 +3292,11 @@ class ReportTemplateController extends SEIPController {
                 for ($i = 0; $i < count($impressOperacion["col"]); $i++) {
                     $cell = $impressOperacion["col"][$i] . $row;
                     if ($i != 0) {
-                        $field = number_format((float) $prod[$impressOperacion["fieldsShow"][$i]], 2, ',', '.');
+                        $field = $prod[$impressOperacion["fieldsShow"][$i]];
                     } else {
                         $field = $prod[$impressOperacion["fieldsShow"][$i]];
                     }
+                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
@@ -3328,7 +3329,8 @@ class ReportTemplateController extends SEIPController {
                 if ($impressOperacion["col"][$x] == "B") {
                     $activeSheet->setCellValue($impressOperacion["col"][$x] . $row, "Totales");
                 } else {
-                    $activeSheet->setCellValue($impressOperacion["col"][$x] . $row, number_format($temp[$x-1], 2, ",", "."));
+                    $this->numberFormatPhpExcel($objPHPExcel,$temp[$x-1],$impressOperacion["col"][$x] . $row);
+                    $activeSheet->setCellValue($impressOperacion["col"][$x] . $row, $temp[$x-1]);
                 }
             }
             $row++;
@@ -3356,10 +3358,11 @@ class ReportTemplateController extends SEIPController {
                 for ($i = 0; $i < count($rawMaterialData["col"]); $i++) {
                     $cell = $rawMaterialData["col"][$i] . $row;
                     if ($i != 0) {
-                        $field = number_format((float) $raw[$rawMaterialData["fieldsShow"][$i]], 2, ',', '.');
+                        $field = $raw[$rawMaterialData["fieldsShow"][$i]];
                     } else {
                         $field = $raw[$rawMaterialData["fieldsShow"][$i]];
                     }
+                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
@@ -3387,10 +3390,11 @@ class ReportTemplateController extends SEIPController {
                 for ($i = 0; $i < count($consumerServiceData["col"]); $i++) {
                     $cell = $consumerServiceData["col"][$i] . $row;
                     if ($i != 0) {
-                        $field = number_format((float) $consume[$consumerServiceData["fieldsShow"][$i]], 2, ',', '.');
+                        $field = $consume[$consumerServiceData["fieldsShow"][$i]];
                     } else {
                         $field = $consume[$consumerServiceData["fieldsShow"][$i]];
                     }
+                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
@@ -3418,10 +3422,11 @@ class ReportTemplateController extends SEIPController {
                 for ($i = 0; $i < count($pnr["col"]); $i++) {
                     $cell = $pnr["col"][$i] . $row;
                     if ($i != 0) {
-                        $field = number_format((float) $unrealized[$pnr["fieldsShow"][$i]], 2, ',', '.');
+                        $field = $unrealized[$pnr["fieldsShow"][$i]];
                     } else {
                         $field = $unrealized[$pnr["fieldsShow"][$i]];
                     }
+                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
@@ -3451,10 +3456,11 @@ class ReportTemplateController extends SEIPController {
                 for ($i = 0; $i < count($inventory["col"]); $i++) {
                     $cell = $inventory["col"][$i] . $row;
                     if ($i != 0) {
-                        $field = number_format((float) $inv[$inventory["fieldsShow"][$i]], 2, ',', '.');
+                        $field = $inv[$inventory["fieldsShow"][$i]];
                     } else {
                         $field = $inv[$inventory["fieldsShow"][$i]];
                     }
+                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
@@ -3627,7 +3633,7 @@ class ReportTemplateController extends SEIPController {
             )
         );
         $activeSheet->getStyle("H2")->applyFromArray($styleArray);
-        $activeSheet->setCellValue("H2", $days[date("N")-1] . ", " . date("d/m/Y"));
+        $activeSheet->setCellValue("H2", $days[date("N")] . ", " . date("d/m/Y"));
 
         $rowCont = 4;
 
@@ -3703,24 +3709,23 @@ class ReportTemplateController extends SEIPController {
                         array_push($rowData, $productReport->getPlantReport()->getPlant()->getName() . ' - ' . $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")");
 
                         if (array_key_exists("plan_time", $imp)) {
-                            array_push($rowData, number_format((float) $typeVar[$imp["plan_time"]], 2, ',', '.'));
-// $totalPlan+= $typeVar[$imp["plan_time"]];
+                            array_push($rowData, $typeVar[$imp["plan_time"]]);
                         }
 
-                        array_push($rowData, number_format((float) $typeVar[$imp["plan"]], 2, ',', '.'));
+                        array_push($rowData, $typeVar[$imp["plan"]]);
 
 
 
-                        array_push($rowData, number_format($typeVar[$imp["real"]], 2, ",", "."));
+                        array_push($rowData, $typeVar[$imp["real"]]);
 
 
                         if ($typeVar[$imp["plan"]] > 0) {
-                            array_push($rowData, number_format((float) ($typeVar[$imp["real"]] * 100) / $typeVar[$imp["plan"]], 2, ',', '.'));
+                            array_push($rowData, ($typeVar[$imp["real"]] * 100) / $typeVar[$imp["plan"]]);
                         } else {
                             array_push($rowData, 0);
                         }
 
-                        $var = number_format((float) $typeVar[$imp["plan"]] - $typeVar[$imp["real"]], 2, ',', '.');
+                        $var = $typeVar[$imp["plan"]] - $typeVar[$imp["real"]];
                         if ($var < 0) {
                             array_push($rowData, 0);
                         } else {
@@ -3748,9 +3753,9 @@ class ReportTemplateController extends SEIPController {
                         $totalPlanTime, $totalPlan, $totalReal, $perc, $var
                     );
                 }
-
-//var_dump($arrayPerTime);
-
+                
+                #var_dump($rs);
+                #die();
 
                 /** SET TITLES** */
                 $this->setFormatTitle($imp, $activeSheet, $rowCont);
@@ -3761,12 +3766,18 @@ class ReportTemplateController extends SEIPController {
                     $g = 0;
                     foreach ($registros as $regs) {
                         $mat[$imp["col"][$g] . $rowCont] = $regs;
-                        $activeSheet->setCellValue($imp["col"][$g] . $rowCont, $regs);
+                        $activeSheet->setCellValue($imp["col"][$g] . $rowCont,$regs);
+                        $this->numberFormatPhpExcel($objPHPExcel,$regs,$imp["col"][$g] . $rowCont);
+                        
+                        
+                        
+                        #$activeSheet->getStyle($imp["col"][$g] . $rowCont)->getNumberFormat()->setFormatCode('#,##0.00');
+                        
                         $g++;
                     }
                     $rowCont++;
                 }
-
+                
                 $styleArray = array(
                     'font' => array(
                         'bold' => true,
@@ -3784,7 +3795,8 @@ class ReportTemplateController extends SEIPController {
                 $activeSheet->setCellValue($imp["col"][$t] . $rowCont, "Totales");
                 foreach ($arrayPerTime as $perTime) {
                     $activeSheet->getStyle($imp["col"][$t + 1] . $rowCont)->applyFromArray($styleArray);
-                    $activeSheet->setCellValue($imp["col"][$t + 1] . $rowCont, number_format(($perTime), 2, ",", "."));
+                    $this->numberFormatPhpExcel($objPHPExcel,$perTime,$imp["col"][$t + 1] . $rowCont);
+                    $activeSheet->setCellValue($imp["col"][$t + 1] . $rowCont, $perTime);
                     $t++;
                 }
                 $rowCont++;
@@ -3814,11 +3826,13 @@ class ReportTemplateController extends SEIPController {
                 $contCol = $rowCont;
                 foreach ($matPrima[$c] as $cons) {
 //var_dump($cols.$contCol."=>".$cons);
-                    if (gettype($cons) == "string") {
+                    /*if (gettype($cons) == "string") {
                         $activeSheet->setCellValue($cols . $contCol, $cons);
                     } else {
                         $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
-                    }
+                    }*/
+                    $this->numberFormatPhpExcel($objPHPExcel,$cons,$cols . $contCol);
+                    $activeSheet->setCellValue($cols . $contCol, $cons);
                     $contCol++;
                 }
                 $c++;
@@ -3852,7 +3866,9 @@ class ReportTemplateController extends SEIPController {
                         $activeSheet->setCellValue($cols . $contCol, $cons);
                     } else {
                         $contTotal += $cons;
-                        $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                        
+                        $activeSheet->setCellValue($cols . $contCol, $cons);
+                        $this->numberFormatPhpExcel($objPHPExcel,$cons,$cols . $contCol);
                     }
                     $contCol++;
                 }
@@ -3872,7 +3888,8 @@ class ReportTemplateController extends SEIPController {
             foreach ($dataConsumo["col"] as $cols) {
                 if ($contRow > 0) {
                     $activeSheet->getStyle($cols . $rowCont)->applyFromArray($styleArray);
-                    $activeSheet->setCellValue($cols . $rowCont, number_format($totals[$contRow], 2, ',', '.'));
+                    $this->numberFormatPhpExcel($objPHPExcel,$totals[$contRow],$cols . $rowCont);
+                    $activeSheet->setCellValue($cols . $rowCont, $totals[$contRow]);
                 } else {
                     $activeSheet->getStyle($cols . $rowCont)->applyFromArray($styleArray);
                     $activeSheet->setCellValue($cols . $rowCont, "Totales");
@@ -3902,11 +3919,13 @@ class ReportTemplateController extends SEIPController {
                 $contCol = $rowCont;
                 foreach ($unrealizedProduction[$c] as $cons) {
 //var_dump($cols.$contCol."=>".$cons);
-                    if (gettype($cons) == "string") {
+                    $this->numberFormatPhpExcel($objPHPExcel,$cons,$cols . $contCol);
+                    $activeSheet->setCellValue($cols . $contCol, $cons);
+                    /*if (gettype($cons) == "string") {
                         $activeSheet->setCellValue($cols . $contCol, $cons);
                     } else {
                         $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
-                    }
+                    }*/
                     $contCol++;
                 }
                 $c++;
@@ -3938,7 +3957,8 @@ class ReportTemplateController extends SEIPController {
                     if (gettype($cons) == "string") {
                         $activeSheet->setCellValue($cols . $contCol, $cons);
                     } else {
-                        $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                        $this->numberFormatPhpExcel($objPHPExcel,$cons,$cols . $contCol);
+                        $activeSheet->setCellValue($cols . $contCol, $cons);
                     }
                     $contCol++;
                 }
@@ -4461,6 +4481,15 @@ class ReportTemplateController extends SEIPController {
         //}
 
         return $consumos;
+    }
+    
+    /*
+     * RETORNA EL NUMERO FORMATEADO PARA LOS EXCEL
+     */
+    public function numberFormatPhpExcel($objPHPExcel,$value,$coordenada,$type=  \PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1) {
+        if(is_numeric($value)) { 
+            $objPHPExcel->getActiveSheet()->getStyle($coordenada)->getNumberFormat()->setFormatCode($type);
+        }
     }
 
     public function setNumberFormat($value) {

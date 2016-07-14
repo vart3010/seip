@@ -131,6 +131,7 @@ form:
     complejo: Complejo
     gerencia: Gerencia
     gerenciaSecond: Gerencia 2da Línea
+    metodoCalculo: Método de Calculo
     weight: Peso
     weightIndicatorStrategic: Peso del Indicador Estratégico
     weightIndicatorTactic: Peso del Indicador Táctico
@@ -319,6 +320,7 @@ form:
         selectObjetiveOperativeFormatNoResultIndicatorOperativeOther: No hay objetivos operativos registrados para la gerencia de 2da línea y el objetivo táctico seleccionados
         selectObjetiveOperativeFormatNoMatcherIndicatorOperativeManagerSecond: Seleccione un objetivo táctico
         selectObjetiveOperativeFormatNoResultIndicatorOperativeManagerSecond: No hay objetivos operativos registrados para el objetivo táctico seleccionado
+        selectFrequencyNotificationPlaceholder: Seleccione una Frecuencia de Notificación
         
     title:
         addIndicatorStrategic: Registro Indicador Estratégico

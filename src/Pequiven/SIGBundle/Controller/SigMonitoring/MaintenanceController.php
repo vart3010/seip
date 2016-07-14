@@ -131,7 +131,7 @@ class MaintenanceController extends ResourceController
 
     public function showAction(Request $request){
         $em = $this->getDoctrine()->getManager(); 
-        $id = $request->get('id');  
+        $id = $request->get('id');          
         $period = $this->getPeriodService()->getPeriodActive();
         $idMaintenance = 0;
 
