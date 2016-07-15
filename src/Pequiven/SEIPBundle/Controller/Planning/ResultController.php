@@ -130,39 +130,7 @@ class ResultController extends ResourceController {
             'period' => $period,
         );
 
-        $this->generatePdf($data, 'Resultados de Gestion '.$datosUser["nombre"].' Periodo '.$period, 'PequivenSEIPBundle:Monitor/User:UserSummaryItemsPdfFormat.html.twig');
-    }
-
-    /**
-     * GENERA EL PDF
-     * @param type $data
-     * @param type $title
-     * @param type $template
-     */
-    public function generatePdf($data, $title, $template) {
-
-        $pdf = new \Pequiven\SEIPBundle\Model\PDF\NewSeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setPrintLineFooter(false);
-        $pdf->setContainer($this->container);
-        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
-        $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('SEIP');
-        $pdf->setTitle('Resultados de Gestión');
-        $pdf->SetSubject('Resultados SEIP');
-        $pdf->SetKeywords('PDF, SEIP, Resultados');
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-        $pdf->AddPage();
-        $html = $this->renderView($template, $data);
-        $pdf->writeHTML($html, true, false, true, false, '');
-        $pdf->Output($title. '.pdf', 'D');
+        $this->getReportService()->generatePdf($data, 'Resultados de Gestion ' . $datosUser["nombre"] . ' Periodo ' . $period, 'PequivenSEIPBundle:Monitor/User:UserSummaryItemsPdfFormat.html.twig', 'P');
     }
 
     /**
@@ -781,6 +749,14 @@ class ResultController extends ResourceController {
      */
     protected function getOnePerTenService() {
         return $this->get('seip.service.onePerTen');
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    protected function getReportService() {
+        return $this->get('seip.service.report');
     }
 
 }
