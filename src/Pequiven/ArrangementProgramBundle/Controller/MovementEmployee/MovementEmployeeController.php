@@ -206,6 +206,7 @@ class MovementEmployeeController extends SEIPController {
                     $movement->setPeriod($period);
                     $em->persist($movement);
 
+
                     //AGREGO AL USUARIO EN LA META O PROGRAMA                
                     $entity->addResponsible($user);
 
@@ -215,7 +216,6 @@ class MovementEmployeeController extends SEIPController {
                         $entityInd->setInactive(false);
                         $em->persist($entityInd);
                     }
-                    $em->persist($entityInd);
                 } else {
 
                     if ($post_mortem == false) {
