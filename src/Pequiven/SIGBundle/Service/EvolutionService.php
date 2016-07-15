@@ -154,6 +154,7 @@ class EvolutionService implements ContainerAwareInterface {
      */
     public function findEvolutionCause($object, $request, $typeObject) {        
         $id = $object->getId();
+        
         //Mes Consultado       
         $month = $request->get('month');
         //Carga de variable base
@@ -171,9 +172,10 @@ class EvolutionService implements ContainerAwareInterface {
                 $idCause = $value->getId();
                 $cause[] = $idCause;
             }                        
+            //var_dump($cause);
             $action = $this->container->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause));
         }
-
+        //die();
         //Carga de las acciones para sacar la verificaciones realizadas
         if ($action) {
             foreach ($action as $value) {
@@ -210,6 +212,45 @@ class EvolutionService implements ContainerAwareInterface {
         return $data;
     }   
 
+    public function findCausesEvolution($idObject, $month, $typeObject){
+        $causesData = $id = $description = $createdBy = $valueofCause = $createdByUserName = $sync = [];
+        $causes = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));  
+        foreach ($causes as $valueCauses) {
+            $id[] = $valueCauses->getId();
+            $description[] = $valueCauses->getCauses();
+            $valueofCause[] = $valueCauses->getValueOfCauses();
+            $createdBy[] = $valueCauses->getCreatedBy()->getFirstname()." ".$valueCauses->getCreatedBy()->getLastname();
+            $createdByUserName[] = $valueCauses->getCreatedBy()->getUsername();
+            $sync[] = null;
+        }
+        $em = $this->getDoctrine()->getManager();        
+        $result = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseSync')->findBy(array('idObject' => $idObject,'typeObject' => $typeObject));
+        if ($result) {
+            foreach ($result as $valueCauseSync) {
+                $cause = $this->container->get('pequiven.repository.sig_causes_report_evolution')->find($valueCauseSync->getCause());                  
+                if ($cause) {
+                    $id[] = $cause->getId();   
+                    $description[] = $cause->getCauses();
+                    $valueofCause[] = $cause->getValueOfCauses();
+                    $createdBy[] = $cause->getCreatedBy()->getFirstname()." ".$cause->getCreatedBy()->getLastname();
+                    $createdByUserName[] = $cause->getCreatedBy()->getUsername();                                  
+                    $sync[] = true;
+                }
+            }            
+        }
+        
+        $causesData = [
+            'id'                => $id,
+            'description'       => $description,
+            'valueofCause'      => $valueofCause,
+            'createdBy'         => $createdBy,
+            'createdByUserName' => $createdByUserName,
+            'sync'              => $sync,
+            'cant'              => count($id),
+        ];
+        
+        return $causesData;
+    }
     public function getGoalsArrangementProgram($arrangementprogram){
         $timeline = $arrangementprogram->getTimeline();
         $planned = $real = [];
@@ -491,7 +532,7 @@ class EvolutionService implements ContainerAwareInterface {
      * Gráfico de Columna para Causas de Desviación
      * @return type
      */
-    public function getDataChartOfCausesEvolution($object, $urlExportFromChart, $month, $typeObject) {
+    public function getDataChartOfCausesEvolution($object, $urlExportFromChart, $month, $typeObject, $causes) {
 
         $data = array(
             'dataSource' => array(
@@ -537,10 +578,20 @@ class EvolutionService implements ContainerAwareInterface {
         //Carga de Nombres de Labels
         $dataSetCause["seriesname"] = "Causas";
         $monthCause = (int)$month;
-
-        $causes = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $object->getId(), 'month' => $month, 'typeObject' => $typeObject));
         
-        foreach ($causes as $value) {                
+        //$causes = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $object->getId(), 'month' => $month, 'typeObject' => $typeObject));
+        
+        for ($i=0; $i < $causes['cant'] ; $i++) { 
+            $label["label"] = $causes['description'][$i];                    
+            $contCause = $contCause + 1;
+            $category[] = $label;
+        }
+
+        for ($i=0; $i <$causes['cant'] ; $i++) { 
+            $dataCause["value"] = $causes['valueofCause'][$i];
+            $dataSetCause["data"][] = $dataCause;                
+        }
+        /*foreach ($causes as $value) {                
             if ($value->getMonth() === $monthCause) {                
                 $label["label"] = $value->getCauses();                    
                 $contCause = $contCause + 1;
@@ -553,7 +604,7 @@ class EvolutionService implements ContainerAwareInterface {
                 $dataCause["value"] = $value->getvalueOfCauses();
                 $dataSetCause["data"][] = $dataCause;                
             }                
-        }        
+        } */       
            
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['categories'][]["category"] = $category;

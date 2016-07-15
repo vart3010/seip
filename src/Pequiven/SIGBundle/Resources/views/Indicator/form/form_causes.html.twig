@@ -24,8 +24,7 @@
                     {{ form_label(form.valueOfcauses) }}
                     {{ form_widget(form.valueOfcauses) }}
                 </div>
-                {{ form_rest(form) }}
-                <p id="max" style="display:none">{{ sumCause }}</p>
+                {{ form_rest(form) }}                
                 <br>
             </form>
         {#</div>#}
@@ -125,7 +124,7 @@ $('#data_indicator_origen').on('change',function(){
 });#}
 
 $('input#evolutioncause_valueOfcauses').keyup(function openConfirm() {        
-    var valueCharge = $("#max").text();                
+    var valueCharge = $("#max").text();                    
     var max = 100 - valueCharge;
     if ($("#evolutioncause_valueOfcauses").val() > max) {
         $.modal.alert('Valor ingresado mayor a avance valido para carga ' + max, {

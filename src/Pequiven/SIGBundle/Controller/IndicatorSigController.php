@@ -171,14 +171,17 @@ class IndicatorSigController extends EvolutionController {
         
         $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicatorBase,$urlExportFromChart,$month); //Obtenemos la data del gráfico de acuerdo al indicador
         
+        //Consulta de Causas
+        $causes = $evolutionService->findCausesEvolution($idIndicator,$month,$typeObject);        
+        for ($i=0; $i < $causes['cant']; $i++) { 
+            $dataCa = $causes['valueofCause'][$i];
+            $sumCause = $sumCause + $dataCa;            
+        }        
+
         //Carga de los datos de la grafica de las Causas de Desviación
-        $dataCause = $evolutionService->getDataChartOfCausesEvolution($indicator, $urlExportFromChart, $month, $typeObject); //Obtenemos la data del grafico de las causas de desviación
+        $dataCause = $evolutionService->getDataChartOfCausesEvolution($indicator, $urlExportFromChart, $month, $typeObject, $causes); //Obtenemos la data del grafico de las causas de desviación
         
-        $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $idIndicator, 'month' => $month, 'typeObject' => $typeObject));
-        foreach ($causes as $value) {
-            $dataCa = $value->getValueOfCauses();
-            $sumCause = $sumCause + $dataCa;
-        }
+        
 
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('idObject' => $idIndicator, 'month' => $month, 'typeObject' => $typeObject));

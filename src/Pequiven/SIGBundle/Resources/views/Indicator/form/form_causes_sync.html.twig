@@ -12,7 +12,7 @@
             </div>
             <div class="field-block button-height" >
                 <label class="label">Seleccionar Causa Origen</label>
-                <input type="text" id="data_cause_load" name="data_cause[load]" style='width: 270px'>
+                <input type="text" id="data_cause_load" name="data_cause[load]" value="" style='width: 270px'>
             </div>
         </form>        
 </fieldset>
@@ -39,6 +39,7 @@ $(document).ready(function(){
             $('#syncCause').show(400,function() {});                
         });
     });    */
+    var dataSet;
     $('#legend').text('Sincronización de Causas y Acciones');
     setDataSelect('', Routing.generate('pequiven_indicator_to_causes'),'data_indicator_origen');            
 });
@@ -66,7 +67,8 @@ function setDataSelect(data,route,select) {
             data: function (term, page) {
                 return {query: term}; // search term                
             },
-            results: function (data, page) { // parse the results into the format expected by Select2. 
+            results: function (data, page) { // parse the results into the format expected by Select2.
+                validChangeCause(data);
                 return {results: data};                
             },
             cache: true
@@ -96,21 +98,28 @@ $('#data_indicator_origen').on('change',function(){
     setDataSelect('', route,'data_cause_load');            
 });
 
-$('input#evolutioncause_valueOfcauses').keyup(function openConfirm() {        
-    var valueCharge = $("#max").text();                
-    var max = 100 - valueCharge;
-    if ($("#evolutioncause_valueOfcauses").val() > max) {
-        $.modal.alert('Valor ingresado mayor a avance valido para carga ' + max, {
-            buttons: {
-                'Aceptar': {
-                    classes:    'huge blue-gradient glossy full-width',
-                    click:      function(win) { win.closeModal(); 
-                        $("#evolutioncause_valueOfcauses").val("")
-                    }
-                }
-            }
-        });            
-    };
-});    
+function validChangeCause(data){
+    $('#data_cause_load').on('change',function(){
+        for (var i=0; i<data.length; i++) {
+            if (data[i]['valueOfCause']) {
+                if (data[i]['id'] == $(this).val()) {                    
+                    var max = 100 - $("#max").text();
+                    if (data[i]['valueOfCause'] > max) {
+                        $.modal.alert('Causa seleccionada presenta % mayor a valido para carga ' + max, {
+                            buttons: {
+                                'Aceptar': {
+                                    classes:    'huge blue-gradient glossy full-width',
+                                    click:      function(win) { win.closeModal(); 
+                                        $("#data_cause_load").val("");
+                                    }
+                                }
+                            }
+                        });            
+                    };                    
+                };
+            };
+        }        
+    });
+}
 </script>
 {% endblock %}

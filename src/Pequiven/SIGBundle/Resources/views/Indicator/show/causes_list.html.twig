@@ -12,15 +12,15 @@
             {% endif %}        
         </div>
         <div class="with-padding">
-        {% if cause %}
+        {% if cause['cant'] > 0 %}
             {% set colspan = 5 %}
             <table class="simple-table responsive-table tables-extras" id="sorting-example2">
                 <thead>
                     <tr>
-                        <th scope="col" width="2%" class="header" align="center">
+                        <th scope="col" width="5%" class="header">
                             {{ 'seip.table.header.nro'|trans({},'PequivenArrangementProgramBundle') }}
                         </th>
-                        <th scope="col" width="15%" class="hide-on-tablet header" align="center">
+                        <th scope="col" width="12%" class="hide-on-tablet header" align="center">
                             {{ 'seip.table.header.value_of_cause'|trans({},'PequivenSIGBundle') }}
                         </th>
                         <th scope="col" width="45%" class="header" align="left">
@@ -33,17 +33,18 @@
                         <th scope="col" width="30%" class="hide-on-mobile-portrait header">&nbsp;</th>
                     </tr>
                 </thead>
-                {% for cause_data in cause %}
+                {#{% for cause_data in cause %}#}
+                {% for i in 0..cause['cant']-1 %}
                     <tbody>
-                        <tr {{ cycle(["even", "odd"], loop.index) }}> 
-                            <td>{{ loop.index }}</td>
+                        <tr {{ cycle(["even", "odd"], loop.index) }}>                             
+                            <td>{{ loop.index }} {% if cause['sync'][i] == true %}  &nbsp;<i class="fa fa-cloud" style="color:red;"></i>{% endif %}</td>
                             <td align="center">
-                                {{ cause_data.valueofCauses }}
+                                {{ cause['valueofCause'][i] }}
                             </td>
-                            <td align="left">{{ cause_data.causes }}</td>
+                            <td align="left">{{ cause['description'][i] }}</td>
                             <td align="left">
-                                {{ cause_data.createdBy.firstname }} {{ cause_data.createdBy.lastname }}
-                                <small class="tag">({{ cause_data.createdBy.username }})</small>
+                                {{ cause['createdBy'][i] }}
+                                <small class="tag">({{ cause['createdByUserName'][i] }})</small>
                             </td>
                             {% if not cloning %}
                             <td class="align-right vertical-center">
@@ -52,8 +53,9 @@
                                         <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                                         <span class="select-arrow"></span>
                                         <span class="drop-down">
-                                            <a href ng-click="removeCausesEvolution(cause_data='{{ cause_data.id }}')" 
-                                               class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                            {% if cause['sync'][i] == false %}
+                                                <a href ng-click="removeCausesEvolution(cause_data='{{ cause['id'][i] }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                            {% endif %}
                                         </span>
                                     </span>
                             </td>

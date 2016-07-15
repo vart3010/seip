@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionCauseType;
+use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseSync;
 
 use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionCauseAnalysisType;
@@ -126,10 +127,10 @@ class ReportEvolutionCausesController extends ResourceController
 
         $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $idObject, 'month' => $request->get('month'), 'typeObject' => $typeObject));
 
-        $sumCause = 0;
+        /*$sumCause = 0;
         foreach ($causes as $valueCauses) {
             $sumCause = $sumCause + $valueCauses->getValueOfCauses();            
-        }
+        }*/
 
         $cause = new EvolutionCause();
         $form  = $this->createForm(new EvolutionCauseType(), $cause);
@@ -142,7 +143,7 @@ class ReportEvolutionCausesController extends ResourceController
                 'indicator'      => $result,
                 'id'             => $idObject,
                 'period'         => $result->getPeriod()->getName(),
-                'sumCause'       => $sumCause
+                //'sumCause'       => $sumCause
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -177,7 +178,7 @@ class ReportEvolutionCausesController extends ResourceController
             $em = $this->getDoctrine()->getManager();
             $em->persist($cause);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', "Causa Cargada Correctamente");
+            $this->get('session')->getFlashBag()->add('success', "Causa Cargada Exitosamente");
         }     
         die();
     }
@@ -227,11 +228,11 @@ class ReportEvolutionCausesController extends ResourceController
         $criteria = array(                                  
             'causes' => $query,                        
         );
-            
+        $data = [];
         $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findToValidToCausesEvolution($dataCauses, $criteria, $idObject, $month, $typeObject);                
         $id = $causes = [];
         foreach ($results as $valueCauses) {            
-            $data[] = ['id'=>$valueCauses->getId(),'causes'=>$valueCauses->getCauses()];
+            $data[] = ['id'=>$valueCauses->getId(),'causes'=>$valueCauses->getCauses(), 'valueOfCause'=>$valueCauses->getvalueOfCauses()];
         }
         
         $response->setData($data);
@@ -244,11 +245,25 @@ class ReportEvolutionCausesController extends ResourceController
      *
      */
     public function addCausesSyncAction(Request $request){
-        if (isset($request->get('data_cause')['load'])) {
-            var_dump($request->get('data_indicator')['origen']);
-            var_dump($request->get('data_cause')['load']);
-            die();            
-        }
+        
+        if (isset($request->get('data_cause')['load'])) {            
+            $idObject = $request->get('idObject');//$request->get('data_indicator')['origen'];
+            $typeObject = $request->get('typeObj');                
+            $cause = $request->get('data_cause')['load'];
+
+            $user = $this->getUser();
+            $sync = new EvolutionCauseSync();        
+        
+            $sync->setIdObject($idObject);
+            $sync->setCreatedBy($user);            
+            $sync->setTypeObject($typeObject);      
+            $sync->setCause($cause);  
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($sync);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', "Causa Sincronizada Exitosamente");
+        }     
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('form/form_causes_sync.html'))
