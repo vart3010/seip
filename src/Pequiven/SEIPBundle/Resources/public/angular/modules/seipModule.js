@@ -1994,7 +1994,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormCausesAdd = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(520);
+                $scope.setHeight(400);
 
                 var parameters = {
                     idObject: $scope.idObject,
@@ -2019,7 +2019,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormCausesAddSync = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(520);
+                $scope.setHeight(400);
                 var parameters = {
                     idObject: $scope.idObject,
                     typeObj: $scope.typeObj,

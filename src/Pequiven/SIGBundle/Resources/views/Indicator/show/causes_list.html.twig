@@ -37,7 +37,7 @@
                 {% for i in 0..cause['cant']-1 %}
                     <tbody>
                         <tr {{ cycle(["even", "odd"], loop.index) }}>                             
-                            <td>{{ loop.index }} {% if cause['sync'][i] == true %}&nbsp;<i class="fa fa-cloud with-tooltip" style="color:red;" title="Causa sincronizada"></i>{% endif %}</td>
+                            <td>{{ loop.index }} {% if cause['sync'][i] == true %}&nbsp;<i class="fa fa-refresh with-tooltip" style="color:red;" title="Causa sincronizada"></i>{% endif %}</td>
                             <td align="center">
                                 {{ cause['valueofCause'][i] }}
                             </td>
