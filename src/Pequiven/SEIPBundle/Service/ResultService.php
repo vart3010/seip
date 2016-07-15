@@ -684,7 +684,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     public function applyPenalizationAlgorithm($real, $planned, $date = null, $dateEnd) {
 
         if ($date != null) {
-            if ((date_format($date, 'd') > 10) || (date_format($date, 'n') == 1) || (date_format($date, 'n') == 12)) {
+            if ((date_format($date, 'j') > 10) || (date_format($date, 'n') == 1) || (date_format($date, 'n') == 12)) {
                 $mes = date_format($date, 'n');
             } else {
                 $mes = date_format($date, 'n') - 1;
@@ -693,7 +693,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ((new \DateTime()) >= ($dateEnd)) {
                 $mes = 12;
             } else {
-                if ((date("n") == 1) || (date("n") == 12) || (date("d") > 10)) {
+                if ((date("n") == 1) || (date("n") == 12) || (date("j") > 10)) {
                     $mes = date("n");
                 } else {
                     $mes = date("n") - 1;
