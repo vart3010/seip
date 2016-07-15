@@ -170,6 +170,13 @@ class MovementEmployeeController extends SEIPController {
 
                     //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA                 
                     $datos = $this->getResultService()->CalculateAdvancePenalty($entity, $date);
+
+                    //BUSCO SI TIENE NOTIFICACION INDIVIDUAL VIEJA
+                    $entityInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy(array('goalDetails' => $entity->getGoalDetails(), 'user' => $user));
+                    if ($entityInd != null) {
+                        $entityInd->setInactive(false);
+                        $em->persist($entityInd);
+                    }
                 }
 
                 if (!is_null($request->get('idAP'))) {
@@ -206,16 +213,8 @@ class MovementEmployeeController extends SEIPController {
                     $movement->setPeriod($period);
                     $em->persist($movement);
 
-
                     //AGREGO AL USUARIO EN LA META O PROGRAMA                
                     $entity->addResponsible($user);
-
-                    //BUSCO SI TIENE NOTIFICACION INDIVIDUAL VIEJA
-                    $entityInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy(array('goalDetails' => $entity->getGoalDetails(), 'user' => $user));
-                    if ($entityInd != null) {
-                        $entityInd->setInactive(false);
-                        $em->persist($entityInd);
-                    }
                 } else {
 
                     if ($post_mortem == false) {
