@@ -153,8 +153,7 @@ class EvolutionService implements ContainerAwareInterface {
      * @throws type
      */
     public function findEvolutionCause($object, $request, $typeObject) {        
-        $id = $object->getId();
-        
+        $id = $object->getId();        
         //Mes Consultado       
         $month = $request->get('month');
         //Carga de variable base
@@ -164,18 +163,8 @@ class EvolutionService implements ContainerAwareInterface {
         $idCons = [0];
         
         $object = $this->getObjectEntity($id, $typeObject);        
-        $results = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $object->getId(), 'typeObject' => $typeObject));
-
-        $cause = [];
-        if ($results) {
-            foreach ($results as $value) {
-                $idCause = $value->getId();
-                $cause[] = $idCause;
-            }                        
-            //var_dump($cause);
-            $action = $this->container->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause));
-        }
-        //die();
+        $cause = $this->findCausesEvolution($object->getId(), null, $typeObject)['id'];        
+        $action = $this->container->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause));
         //Carga de las acciones para sacar la verificaciones realizadas
         if ($action) {
             foreach ($action as $value) {
@@ -188,24 +177,51 @@ class EvolutionService implements ContainerAwareInterface {
                         $idCons[] = $idAction;
                     }
                 }
-            }            
-            $actionResult = $this->container->get('pequiven.repository.sig_action_indicator')->findBy(array('id' => $idCons));
+            }        
+            //$actionResult = $this->container->get('pequiven.repository.sig_action_indicator')->findBy(array('id' => $idCons));            
         }
-//        $actionsValues = EvolutionActionValue::getActionValues($idCons, $month);          
-        $actionsValues = $this->container->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue' => $idCons, 'month' => $month));
-        $cant = count($actionResult);
 
+        //$idAction = $ref = $action = $typeAction = $dateStart = $dateEnd = $advance = $responsibles = $observations = $sync = [];
+        $actionsValues = $this->container->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue' => $idCons, 'month' => $month));
+        //Nuevo codigo para carga de acciones
+        /*foreach ($actionsValues as $value) {
+            $id[]           = $value->getId();
+            $ref[]          = $value->getActionValue()->getRef();
+            $typeAction[]   = $value->getActionValue()->getAction();
+            $dateStart[]    = $value->getActionValue()->getDateStart();
+            $dateEnd[]      = $value->getActionValue()->getDateEnd();
+            $advance[]      = $value->getAdvance();
+            $responsibles[] = $value->getActionValue()->getResponsible();
+            $observations[] = $value->getObservations();
+            $sync[]         = null;
+        }
+        
+        $dataAction = [
+            'id'          =>$id,
+            'ref'         =>$ref,
+            'typeAction'  =>$typeAction,
+            'dateStart'   =>$dateStart,
+            'dateEnd'     =>$dateEnd,
+            'advance'     =>$advance,
+            'responsibles'=>$responsibles,
+            'observations'=>$observations,
+            'sync'        => $sync
+        ];*/
+        
+        //$cant = count($actionResult);
+        $cant = count($actionsValues);
+        
         if ($opc = false) {
             $idAction = null;
         }
         
         $verification = $this->container->get('pequiven.repository.sig_action_verification')->findBy(array('idObject' => $id, 'month' => $month, 'typeObject' => $typeObject));
-        
+
         //Carga de array con la data
         $data = [
-            'action'        => $actionResult, //Pasando la data de las acciones si las hay
+            //'action'        => $actionResult, //Pasando la data de las acciones si las hay
             'verification'  => $verification, //Pasando la data de las verificaciones            
-            'actionValue'   => $actionsValues,
+            'actionValue'   => $actionsValues, //acciones
             'cant'          => $cant
         ];
         
@@ -214,7 +230,7 @@ class EvolutionService implements ContainerAwareInterface {
 
     public function findCausesEvolution($idObject, $month, $typeObject){
         $causesData = $id = $description = $createdBy = $valueofCause = $createdByUserName = $sync = [];
-        $causes = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));  
+        if ($month != null) {$causes = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));}else{$causes = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $idObject, 'typeObject' => $typeObject));}
         foreach ($causes as $valueCauses) {
             $id[] = $valueCauses->getId();
             $description[] = $valueCauses->getCauses();
@@ -227,7 +243,7 @@ class EvolutionService implements ContainerAwareInterface {
         $result = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseSync')->findBy(array('idObject' => $idObject,'typeObject' => $typeObject));
         if ($result) {
             foreach ($result as $valueCauseSync) {
-                $cause = $this->container->get('pequiven.repository.sig_causes_report_evolution')->find($valueCauseSync->getCause());                  
+                if ($month != null) { $cause = $this->container->get('pequiven.repository.sig_causes_report_evolution')->findOneBy(array('id'=>$valueCauseSync->getCause(),'month' => $month));}else{ $cause = $this->container->get('pequiven.repository.sig_causes_report_evolution')->find($valueCauseSync->getCause());}
                 if ($cause) {
                     $id[] = $cause->getId();   
                     $description[] = $cause->getCauses();

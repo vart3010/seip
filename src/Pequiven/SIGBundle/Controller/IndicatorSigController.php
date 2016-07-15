@@ -218,7 +218,7 @@ class IndicatorSigController extends EvolutionController {
         }
 
         $dataAction = [
-            'action' => $data["action"],
+            //'action' => $data["action"],
             'values' => $data["actionValue"]
         ];
         
