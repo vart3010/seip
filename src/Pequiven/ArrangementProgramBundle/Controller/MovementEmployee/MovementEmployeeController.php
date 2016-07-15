@@ -170,13 +170,6 @@ class MovementEmployeeController extends SEIPController {
 
                     //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA                 
                     $datos = $this->getResultService()->CalculateAdvancePenalty($entity, $date);
-
-                    //BUSCO SI TIENE NOTIFICACION INDIVIDUAL VIEJA
-                    $entityInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy(array('goalDetails' => $entity->getGoalDetails(), 'user' => $user));
-                    if ($entityInd != null) {
-                        $entityInd->setInactive(false);
-                        $em->persist($entityInd);
-                    }
                 }
 
                 if (!is_null($request->get('idAP'))) {
@@ -215,6 +208,16 @@ class MovementEmployeeController extends SEIPController {
 
                     //AGREGO AL USUARIO EN LA META O PROGRAMA                
                     $entity->addResponsible($user);
+                    $em->persist($entity);
+
+                    if (!is_null($request->get('idGoal'))) {
+                        //BUSCO SI TIENE NOTIFICACION INDIVIDUAL VIEJA
+                        $entityInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy(array('goalDetails' => $entity->getGoalDetails(), 'user' => $user));
+                        if ($entityInd != null) {
+                            $entityInd->setInactive(false);
+                            $em->persist($entityInd);
+                        }
+                    }
                 } else {
 
                     if ($post_mortem == false) {
@@ -376,12 +379,15 @@ class MovementEmployeeController extends SEIPController {
                         $movement->setPeriod($this->getPeriodService()->getPeriodActive());
                         $em->persist($movement);
 
-                        //ELIMINO AL USUARIO EN LA META
-                        $entity->removeResponsible($user);
-                        if ($entityInd != null) {
-                            $entityInd->setInactive(true);
-                            $em->persist($entityInd);
+                        if (!is_null($request->get('idGoal'))) {
+                            //ELIMINO AL USUARIO EN LA META
+                            if ($entityInd != null) {
+                                $entityInd->setInactive(true);
+                                $em->persist($entityInd);
+                            }
                         }
+
+                        $entity->removeResponsible($user);
                         $em->persist($entity);
                     } else {
 
