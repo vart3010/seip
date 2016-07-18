@@ -70,22 +70,22 @@
                             <td rowspan="2">{{ dataAction["values"]['dateEnd'][i] | date("d/m/Y") }}</td>
                             <td rowspan="2">{{ dataAction["values"]['advance'][i] }}%</td>
                             <td rowspan="2">
-                                {#{% if action.actionValue.responsible %}
-                                    {% for resp in action.actionValue.responsible %}
+                                {% if dataAction["values"]['responsibles'][dataAction["values"]['id'][i]] %}
+                                    {% for resp in dataAction["values"]['responsibles'][dataAction["values"]['id'][i]] %}
                                         {{ resp.firstname }} {{ resp.lastname }}
                                         <small class="tag">({{ resp.username }})</small>
                                         <br>
                                     {% endfor %}
                                 {% else %}
                                     SIN RESPONSABLE CARGADO
-                                {% endif %}#}
+                                {% endif %}
                             </td>
                             <td>
-                                {#{% if action.observations %}
-                                    {{ action.observations }}
+                                {% if dataAction["values"]['observations'][i] %}
+                                    {{ dataAction["values"]['observations'][i] }}
                                 {% else %}
                                     &nbsp;
-                                {% endif %}#}
+                                {% endif %}
                             </td>
                         </tr>
                         {% if not cloning %}

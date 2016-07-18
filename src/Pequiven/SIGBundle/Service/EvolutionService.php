@@ -198,7 +198,7 @@ class EvolutionService implements ContainerAwareInterface {
                 $dateStart[]    = $value->getActionValue()->getDateStart();
                 $dateEnd[]      = $value->getActionValue()->getDateEnd();
                 $advance[]      = $value->getAdvance();
-                $responsibles[] = $value->getActionValue()->getResponsible();
+                $responsibles[$value->getActionValue()->getId()] = $value->getActionValue()->getResponsible();
                 $observations[] = $value->getObservations();
                 $sync[]         = $causesData[$value->getActionValue()->getEvolutionCause()->getId()];            
             }
@@ -216,7 +216,6 @@ class EvolutionService implements ContainerAwareInterface {
                 'sync'        => $sync,
                 'cant'        => count($idAction)
             ];
-
             //$cant = count($actionResult);
             $actionsValues = $dataAction;
         }
