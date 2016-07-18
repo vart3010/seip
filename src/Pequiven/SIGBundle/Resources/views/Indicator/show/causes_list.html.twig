@@ -6,9 +6,9 @@
             <h3 class="ng-binding">{{ 'sig.causes_desviation'|trans ({}, 'messages') }}</h3>
             {% if sumCause < 100 and not cloning %}        
                 <div class="button-group absolute-right compact">
-                    <a class="button icon-list-add " href="" ng-click="loadTemplateCausesDesviation(month='{{ month }}')" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>   
+                    <a class="button icon-list-add" href="" ng-click="loadTemplateCausesDesviation(month='{{ month }}')" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>   
                     {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION_DELETE')%}                 
-                    <a class="button icon-refresh icon-size2 with-tooltip confirm" href="" ng-click="loadTemplateCausesDesviationSync(month='{{ month }}')"  title="Sincronizar">Sincronizar</a>
+                    <a class="button icon-refresh" href="" ng-click="loadTemplateCausesDesviationSync(month='{{ month }}')">Sincronizar</a>
                     {% endif %}        
                 </div>                  
             {% endif %}        
