@@ -119,6 +119,7 @@
                     </p>
                 </div>
 
+
                 <!-- Valor Real -->
                 {% if indicator.isShowRealValue == true %}
                     <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -142,6 +143,8 @@
                         </p>
                     </div>
                 {% endif %}
+
+
 
                 <!-- Valor Plan -->
                 {% if indicator.isShowPlanValue == true  and indicator.formula.typeOfCalculation != constant('Pequiven\\MasterBundle\\Entity\\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE') %}
@@ -227,7 +230,21 @@
                         </p>
                     </div>
                 {% endif%}
-
+                
+                {#<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        &nbsp;
+                    </p>
+                
+                </div>
+                <!--Metodo de calculo que se aplico para dar el resultado del indicador -->
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'form.metodoCalculo'|trans }}</label>
+                        
+                    </p>
+                </div>
+#}
                 <!-- Rango de gestión del Indicador -->
                 {% if (indicator.showRange) %}
                     {% set resultReal = indicator.resultReal %}

@@ -131,6 +131,7 @@ form:
     complejo: Complejo
     gerencia: Gerencia
     gerenciaSecond: Gerencia 2da Línea
+    metodoCalculo: Método de Calculo
     weight: Peso
     weightIndicatorStrategic: Peso del Indicador Estratégico
     weightIndicatorTactic: Peso del Indicador Táctico

@@ -94,7 +94,7 @@
                     <tr class="header-tr">
                         <th scope="col" width="40%" class="header-product">TOTALES</th>
                             {% for  totals in totalProduction["day"] %}    
-                            <th scope="col" width="15%" class="header-values">{{ totals }}</th>                                   
+                            <th scope="col" width="15%" class="header-values">{{ totals|myNumberFormat }}</th>                                   
                             {% endfor %}
                     </tr>
                 </tfoot>
@@ -132,7 +132,7 @@
                     <tr class="header-tr">
                         <th scope="col" width="25%" class="header-product">TOTALES</th>
                             {% for  totals in totalProduction["month"] %}    
-                            <th scope="col" width="15%" class="header-values">{{ totals }}</th> 
+                            <th scope="col" width="15%" class="header-values">{{ totals|myNumberFormat }}</th> 
                             {% endfor %}
                     </tr>
                 </tfoot>
@@ -170,7 +170,7 @@
                     <tr class="header-tr">
                         <th scope="col" width="25%" class="header-product">TOTALES</th>
                             {% for  totals in totalProduction["year"] %}    
-                            <th scope="col" width="15%" class="header-values">{{ totals }}</th>
+                            <th scope="col" width="15%" class="header-values">{{ totals|myNumberFormat }}</th>
                             {% endfor %}
                     </tr>
                 </tfoot>
@@ -222,16 +222,16 @@
                     <tr>
                         <td scope="col" width="22%" class="product">{{ rawMaterial.productName|upper }}</td>
                         {%  if showDay %}
-                            <td scope="col" width="13%" class="values">{{ rawMaterial.plan }}</td>
-                            <td scope="col" width="13%" class="values">{{ rawMaterial.real }}</td>
+                            <td scope="col" width="13%" class="values">{{ rawMaterial.plan|myNumberFormat }}</td>
+                            <td scope="col" width="13%" class="values">{{ rawMaterial.real|myNumberFormat }}</td>
                         {% endif %}
                         {%  if showMonth %}
-                            <td scope="col" width="13%" class="values">{{ rawMaterial.plan_month }}</td>
-                            <td scope="col" width="13%" class="values">{{ rawMaterial.real_month }}</td>
+                            <td scope="col" width="13%" class="values">{{ rawMaterial.plan_month|myNumberFormat }}</td>
+                            <td scope="col" width="13%" class="values">{{ rawMaterial.real_month|myNumberFormat }}</td>
                         {% endif %}
                         {%  if showYear %}
-                            <td scope="col" width="13%" class="values">{{ rawMaterial.plan_year }}</td>
-                            <td scope="col" width="13%" class="values">{{ rawMaterial.real_year }}</td>
+                            <td scope="col" width="13%" class="values">{{ rawMaterial.plan_year|myNumberFormat }}</td>
+                            <td scope="col" width="13%" class="values">{{ rawMaterial.real_year|myNumberFormat }}</td>
                         {% endif %}
                     </tr>
                 {% endfor %}
@@ -389,7 +389,7 @@
         </table>
     {% endif %}
     <br><br>
-    {% if showObservation %}
+    {% if ((showObservation)and((observations|length))>0) %}        
         <table class="simple-table responsive-table responsive-table-on">
             <thead>
                 <tr>
