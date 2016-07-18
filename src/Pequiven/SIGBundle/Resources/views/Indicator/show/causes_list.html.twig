@@ -8,7 +8,7 @@
                 <div class="button-group absolute-right compact">
                     <a class="button icon-list-add " href="" ng-click="loadTemplateCausesDesviation(month='{{ month }}')" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>   
                     {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION_DELETE')%}                 
-                        <a href="" ng-click="loadTemplateCausesDesviationSync(month='{{ month }}')" class="button icon-refresh icon-size2 with-tooltip confirm" title="Sincronizar"></a>
+                    <a class="button icon-refresh icon-size2 with-tooltip confirm" href="" ng-click="loadTemplateCausesDesviationSync(month='{{ month }}')"  title="Sincronizar">Sincronizar</a>
                     {% endif %}        
                 </div>                  
             {% endif %}        
