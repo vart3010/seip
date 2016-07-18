@@ -17,7 +17,7 @@
 
 <div class="block">
     <div class="block-title">
-        <h3>{$ goals.length $} {{ 'pequiven.goals.goals'|trans }}</h3>
+        <h3>{{entity.getTimeline.getGoals|length}} {{ 'pequiven.goals.goals'|trans }}</h3>
         <div class="button-group absolute-right compact">
             <a id="arrangementGoalDetailsPop" class="button icon-list showPopup" href="{{ path('get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails',{id:app.request.get('id'), user:0, format:'html'}) }}" title="{{ 'pequiven.goals.goals'|trans }}">{{ 'pequiven.details'|trans({},'messages') }}</a>
         </div>
