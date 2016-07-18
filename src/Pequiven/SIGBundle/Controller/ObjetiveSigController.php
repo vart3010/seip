@@ -121,26 +121,26 @@ class ObjetiveSigController extends EvolutionController
         //Grafica de Evolución
         $dataChartEvolution = $evolutionService->getDataChartOfObjetiveEvolution($object, $urlExportFromChart, $month); //Obtenemos la data del gráfico de acuerdo al indicador
 
+        //Consulta de Causas
+        $causes = $evolutionService->findCausesEvolution($idObject,$month,$typeObject);        
+        for ($i=0; $i < $causes['cant']; $i++) { 
+            $dataCa = $causes['valueofCause'][$i];
+            $sumCause = $sumCause + $dataCa;            
+        }
+
         //Carga de los datos de la grafica de las Causas de Desviación
-        $dataChartCause = $evolutionService->getDataChartOfCausesEvolution($object, $urlExportFromChart, $month, $typeObject); //Obtenemos la data del grafico de las causas de desviación
+        $dataChartCause = $evolutionService->getDataChartOfCausesEvolution($object, $urlExportFromChart, $month, $typeObject, $causes); //Obtenemos la data del grafico de las causas de desviación
         
         $objetive = $this->get('pequiven.repository.objetive')->find($idObject); //Obtenemos el Objetivo 
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
         //Carga del analisis de las causas
         $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
-        //Carga de Causa de Objeto
-        $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
         
-        $data = $evolutionService->findEvolutionCause($object, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
-        
-        foreach ($causes as $value) {
-            $dataCa = $value->getValueOfCauses();
-            $sumCause = $sumCause + $dataCa;
-        }
+        $data = $evolutionService->findEvolutionCause($object, $request, $typeObject, true); //Carga la data de las causas y sus acciones relacionadas        
         
         $dataAction = [
-            'action' => $data["action"],
+            //'action' => $data["action"],
             'values' => $data["actionValue"]
         ];
         

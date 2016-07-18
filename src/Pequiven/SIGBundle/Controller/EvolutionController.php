@@ -146,7 +146,7 @@ class EvolutionController extends ResourceController
         }
 
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
-        $dataAction = $evolutionService->findEvolutionCause($result, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
+        $dataAction = $evolutionService->findEvolutionCause($result, $request, $typeObject, false); //Carga la data de las causas y sus acciones relacionadas
         
         $font = "";
         if ($typeObject == 1) {            

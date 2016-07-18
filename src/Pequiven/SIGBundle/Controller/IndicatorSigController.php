@@ -148,7 +148,7 @@ class IndicatorSigController extends EvolutionController {
 
         $month = $request->get('month'); //El mes pasado por parametro
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
-        $data = $evolutionService->findEvolutionCause($indicator, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
+        $data = $evolutionService->findEvolutionCause($indicator, $request, $typeObject, true); //Carga la data de las causas y sus acciones relacionadas
         
         $approve = $evolutionService->findToCheckApproveEvolution($indicator, $typeObject, $month); //Carga la data de las causas y sus acciones relacionadas
        
@@ -181,8 +181,6 @@ class IndicatorSigController extends EvolutionController {
         //Carga de los datos de la grafica de las Causas de Desviación
         $dataCause = $evolutionService->getDataChartOfCausesEvolution($indicator, $urlExportFromChart, $month, $typeObject, $causes); //Obtenemos la data del grafico de las causas de desviación
         
-        
-
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('idObject' => $idIndicator, 'month' => $month, 'typeObject' => $typeObject));
         //Carga del analisis de las causas
@@ -226,23 +224,23 @@ class IndicatorSigController extends EvolutionController {
                 ->view()
                 ->setTemplate($this->config->getTemplate('evolution.html'))
                 ->setData(array(
-            'data' => $dataChart,
-            'verification' => $data["verification"],
-            'dataCause'  => $dataCause,
-            'analysis'   => $causeAnalysis,//Analisis de Causas
-            'cause'      => $causes,//Causas
-            'sumCause'   => $sumCause,//suma de causas
-            'month'      => $month,
-            'dataAction' => $dataAction,
-            'trend'      => $trend,
-            'font'       => $font,
-            'typeObject' => $typeObject,
-            'id'         => $idIndicator,
-            'lastPeriod' => $indicator->getIndicatorLastPeriod(),
-            'route'      => "pequiven_indicator_evolution", //Ruta para carga de Archivo
-            'urlExportFromChart' => $urlExportFromChart,
-            'approve'    => $approve,
-            $this->config->getResourceName() => $resource,            
+                'data' => $dataChart,
+                'verification' => $data["verification"],
+                'dataCause'  => $dataCause,
+                'analysis'   => $causeAnalysis,//Analisis de Causas
+                'cause'      => $causes,//Causas
+                'sumCause'   => $sumCause,//suma de causas
+                'month'      => $month,
+                'dataAction' => $dataAction,
+                'trend'      => $trend,
+                'font'       => $font,
+                'typeObject' => $typeObject,
+                'id'         => $idIndicator,
+                'lastPeriod' => $indicator->getIndicatorLastPeriod(),
+                'route'      => "pequiven_indicator_evolution", //Ruta para carga de Archivo
+                'urlExportFromChart' => $urlExportFromChart,
+                'approve'    => $approve,
+                $this->config->getResourceName() => $resource,            
         ));
 
         return $this->handleView($view);

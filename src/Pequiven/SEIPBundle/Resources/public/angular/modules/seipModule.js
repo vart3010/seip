@@ -1678,7 +1678,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    //$timeout(callAtTimeout, 1500);
+                    $timeout(callAtTimeout, 1500);
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -8263,7 +8263,7 @@ angular.module('seipModule.controllers', [])
                         "type": "mscolumnline3d",
                         "renderAt": id,
                         "width": "95%",
-                        "height": "400%",
+                        //"height": "400%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "Gráfico Evolución Indicador",
                         "exporthandler": urlExportFromChart,

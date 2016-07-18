@@ -36,7 +36,11 @@
                 {#{% for cause_data in cause %}#}
                 {% for i in 0..cause['cant']-1 %}
                     <tbody>
-                        <tr {{ cycle(["even", "odd"], loop.index) }}>                             
+                        {% set colorSync = "" %}
+                        {% if cause['sync'][i] == true %}
+                            {% set colorSync = '#f8e79a' %}
+                        {% endif %}
+                        <tr {{ cycle(["even", "odd"], loop.index) }} style="background-color:{{colorSync}}">                             
                             <td>{{ loop.index }} {% if cause['sync'][i] == true %}&nbsp;<i class="fa fa-refresh with-tooltip" style="color:red;" title="Causa sincronizada"></i>{% endif %}</td>
                             <td align="center">
                                 {{ cause['valueofCause'][i] }}
