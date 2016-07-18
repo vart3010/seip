@@ -70,7 +70,7 @@ class PeriodService extends ContainerAware {
             return false;
         }
         $period = $this->getPeriodActive();
-        $r = ($dateToEvaluate >= $period->getDateStartPenalty() && $dateToEvaluate <= $period->getDateEndPenalty());
+        $r = (($dateToEvaluate >= $period->getDateStartPenalty()) && ($dateToEvaluate <= $period->getDateEndPenalty()));
         return $r;
     }
 
