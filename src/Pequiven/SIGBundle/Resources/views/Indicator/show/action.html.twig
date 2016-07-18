@@ -10,8 +10,8 @@
                 </div>       
             {% endif %}
         </div>
-        <div class="with-padding">
-        {% if dataAction["values"] %}
+        <div class="with-padding">        
+        {% if dataAction["values"]['cant'] > 0 %}        
             {% set colspan = 5 %}
             <table class="simple-table responsive-table tables-extras" id="sorting-example2">
                 <thead>
@@ -45,9 +45,9 @@
                         <th scope="col" width="10%" class="hide-on-mobile-portrait header">&nbsp;</th>
                     </tr>
                 </thead>
-                {% set count =  0 %}
-                {% for  action in dataAction["values"] %}
-                    {% if action.actionValue.status != 1 %}
+                {% set count =  0 %}                
+                {% for i in 0..dataAction["values"]['cant']-1 %}                
+                    {#{% if action.actionValue.status != 1 %}
                         {% set color = "fc0101" %}
                         {% set icon = "fa fa-exclamation-triangle" %}
                         {% set title = ""%}
@@ -55,18 +55,23 @@
                         {% set color = "008eff" %}
                         {% set icon = "fa fa-check-square" %}                            
                         {% set title = "Verificado"%}                            
-                    {% endif %}
+                    {% endif %}#}
                     <tbody align="center">
-                            {#<tr><td rowspan="2" style="color:#{{color}};" title="{{title}}"><i class="{{icon}} fa-1g"></i></td>#}
-                            <td rowspan="2">{{ action.actionValue.ref }}</td>
-                            <td rowspan="2" align="justify">{{ action.actionValue.action }}</td>
-                            <td rowspan="2">{{ action.actionValue.indicatorAction.ref }}</td>
-                            <td rowspan="2">{{ action.actionValue.dateStart | date("d/m/Y") }}</td>
-                            <td rowspan="2">{{ action.actionValue.dateEnd | date("d/m/Y") }}</td>
-                            <td rowspan="2">{{ action.advance }}%</td>
+                            {% set colorSync = "" %}
+                            {% if dataAction["values"]['sync'][i] == true %}
+                                {% set colorSync = '#f8e79a' %}
+                            {% endif %}
+                            <tr style="background-color:{{colorSync}}">
+                            {#<td rowspan="2" style="color:#{{color}};" title="{{title}}"><i class="{{icon}} fa-1g"></i></td>#}
+                            <td rowspan="2">{{ dataAction["values"]['ref'][i] }} {% if dataAction["values"]['sync'][i] == true %}&nbsp;<i class="fa fa-refresh with-tooltip" style="color:red;" title="Acción sincronizada"></i>{% endif %}</td>
+                            <td rowspan="2" align="justify">{{ dataAction["values"]['action'][i] }}</td>
+                            <td rowspan="2">{{ dataAction["values"]['typeAction'][i] }}</td>
+                            <td rowspan="2">{{ dataAction["values"]['dateStart'][i] | date("d/m/Y") }}</td>
+                            <td rowspan="2">{{ dataAction["values"]['dateEnd'][i] | date("d/m/Y") }}</td>
+                            <td rowspan="2">{{ dataAction["values"]['advance'][i] }}%</td>
                             <td rowspan="2">
-                                {% if action.actionValue.responsible %}
-                                    {% for resp in action.actionValue.responsible %}
+                                {% if dataAction["values"]['responsibles'][dataAction["values"]['id'][i]] %}
+                                    {% for resp in dataAction["values"]['responsibles'][dataAction["values"]['id'][i]] %}
                                         {{ resp.firstname }} {{ resp.lastname }}
                                         <small class="tag">({{ resp.username }})</small>
                                         <br>
@@ -76,26 +81,28 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if action.observations %}
-                                    {{ action.observations }}
+                                {% if dataAction["values"]['observations'][i] %}
+                                    {{ dataAction["values"]['observations'][i] }}
                                 {% else %}
                                     &nbsp;
                                 {% endif %}
                             </td>
                         </tr>
                         {% if not cloning %}
-                            <tr>
+                            <tr style="background-color:{{colorSync}}">
                                 <td class="vertical-center" height="15">
                                     <span class="select compact">
                                         <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                                         <span class="select-arrow"></span>
                                         <span class="drop-down">
-                                            <a href ng-click="loadEditToAction(action_data='{{ action.actionValue.id }}')" class="button icon-pencil">Editar</a>
-                                            {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION_DELETE')%}  
-                                                <a href ng-click="removeActionEvolution(action_data='{{ action.actionValue.id }}')" class="button icon-cross-round">Eliminar</a>
-                                            {% endif %}
-                                            {% if action.observations == null and action.advance < 100 %}
-                                                <a href ng-click="loadTemplateActionAdd(idAction='{{ action.actionValue.id }}',month='{{ month }}')" class="button icon-extract">{{ "pequiven_indicator.upload_data"|trans({},"PequivenSIGBundle") }}</a>
+                                            {% if dataAction["values"]['sync'][i] == false %}
+                                                <a href ng-click="loadEditToAction(action_data='{{ dataAction["values"]['id'][i] }}')" class="button icon-pencil">Editar</a>
+                                                {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION_DELETE')%}  
+                                                    <a href ng-click="removeActionEvolution(action_data='{{ dataAction["values"]['id'][i] }}')" class="button icon-cross-round">Eliminar</a>
+                                                {% endif %}
+                                                {% if dataAction["values"]['observations'][i] == null and dataAction["values"]['advance'][i] < 100 %}
+                                                    <a href ng-click="loadTemplateActionAdd(idAction='{{ dataAction["values"]['id'][i] }}',month='{{ month }}')" class="button icon-extract">{{ "pequiven_indicator.upload_data"|trans({},"PequivenSIGBundle") }}</a>
+                                                {% endif %}
                                             {% endif %}
                                         </span>
                                     </span>
