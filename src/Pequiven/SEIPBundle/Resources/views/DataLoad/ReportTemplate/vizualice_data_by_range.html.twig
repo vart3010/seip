@@ -123,11 +123,11 @@
                 {% for raw in rawMaterial %}
                     <tr>
                         <td scope="col" width="40%" class="product">{{ raw.productName|upper }}</td>
-                        <td scope="col" width="15%" class="values">{{ raw.planRaw|number_format(2, ',', '.') }}</td>
-                        <td scope="col" width="15%" class="values">{{ raw.realRaw|number_format(2, ',', '.') }}</td>
+                        <td scope="col" width="15%" class="values">{{ raw.planRaw|myNumberFormat }}</td>
+                        <td scope="col" width="15%" class="values">{{ raw.realRaw|myNumberFormat }}</td>
                         {% if raw.planRaw>0%}
-                            <td scope="col" width="15%" class="values">{{ ((raw.realRaw*100)/raw.planRaw)|number_format(2, ',', '.') }}</td>
-                            <td scope="col" width="15%" class="values">{{ (raw.planRaw-raw.realRaw)|number_format(2, ',', '.') }}</td>
+                            <td scope="col" width="15%" class="values">{{ ((raw.realRaw*100)/raw.planRaw)|myNumberFormat }}</td>
+                            <td scope="col" width="15%" class="values">{{ (raw.planRaw-raw.realRaw)|myNumberFormat }}</td>
                         {%else%}
                             <td scope="col" width="15%" class="values">-</td>
                             <td scope="col" width="15%" class="values">-</td>
@@ -139,7 +139,7 @@
                <!-- <tr>
                     <th scope="col" width="40%" class="header-product">Totales</th>
                         {% for totals in totalRawMaterial %}
-                        <th scope="col" width="15%" class="header-values">{{ totals|number_format(2, ',', '.') }}</th>
+                        <th scope="col" width="15%" class="header-values">{{ totals|myNumberFormat }}</th>
                         {% endfor %}
                     <th scope="col" width="15%" class="header-values">-</th>
                     <th scope="col" width="15%" class="header-values">-</th>

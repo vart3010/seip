@@ -1,11 +1,20 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
 
 {% block body %}
-{% trans_default_domain 'PequivenIndicatorBundle' %}  	
-<form method="POST" id="form_causes_evolution">
-	<fieldset class="fieldset fields-list">
-            <legend class="legend">{{ 'sig.causes_deviation'|trans ({}, 'messages') }}</legend>	
-                {% include 'PequivenSIGBundle:Template:set_month.html.twig' %} 	
+{% trans_default_domain 'PequivenIndicatorBundle' %} 
+{#<fieldset class="fieldset">
+    <legend class="legend">Metodo de Carga de Causas</legend>
+        <div class="new-row twelve-columns red-bg">Seleccione Metodo de Carga de Causas</div>        
+        <ul class="bullet-list">
+            <li><a href id="load">Carga de Causa</a></li>
+            <li><a href id="sync">Sincronización de Causa</a></li>
+        </ul>
+</fieldset>#}
+<fieldset class="fieldset fields-list" id="fieldset">
+    <legend class="legend" id="legend"></legend> 
+        {#<div id="chargeCause"> #}
+            <form method="POST" id="form_causes_evolution">
+                {% include 'PequivenSIGBundle:Template:set_month.html.twig' %}  
                 <div class="field-block button-height" >
                     {{ form_label(form.causes) }}
                     {{ form_widget(form.causes) }}
@@ -15,16 +24,108 @@
                     {{ form_label(form.valueOfcauses) }}
                     {{ form_widget(form.valueOfcauses) }}
                 </div>
-        {{ form_rest(form) }}
-        <p id="max" style="display:none">{{ sumCause }}</p>
-   <br>
-   </fieldset>
-</form>     
-<script type="text/javascript">
-$('input#evolutioncause_valueOfcauses').keyup(function openConfirm() {        
-    var valueCharge = $("#max").text();                
-    var max = 100 - valueCharge;
+                {{ form_rest(form) }}                
+                <br>
+            </form>
+        {#</div>#}
+        <!-- fomulario herencia causas -->
+        {#<div id="syncCause">                                
+            <form method="POST" id="form_causes_evolution_sync">            
+                <div class="field-block button-height" >
+                    <label class="label">Seleccionar Indicador Origen</label>                
+                    <input type="text" id="data_indicator_origen" name="data_indicator[origen]" style='width: 270px'>
+                </div>
+                <div class="field-block button-height" >
+                    <label class="label">Seleccionar Causa Origen</label>
+                    <input type="text" id="data_cause_load" name="data_cause[load]" style='width: 270px'>
+                </div>
+            </form>
+        </div>#}
+</fieldset>
 
+<script type="text/javascript">
+$(document).ready(function(){
+    {#$('#fieldset').hide();
+    $('#chargeCause').hide();
+    $('#syncCause').hide();
+    $('#data_cause_load').prop('disabled', true);
+
+    $("#load").click(function(){
+        $('#legend').text('Carga de Causa');
+        $('#syncCause').hide();
+        $('#fieldset').show(600,function() {
+            $('#chargeCause').show(400,function() {});                
+        });
+    });
+
+    $("#sync").click(function(){
+        $('#legend').text('Sincronización de Causas y Acciones');
+        $('#chargeCause').hide();
+        $('#fieldset').show(600,function() {
+            $('#syncCause').show(400,function() {});                
+        });
+    });#}
+    $('#legend').text('Carga de Causa');
+    //setDataSelect('', Routing.generate('pequiven_indicator_to_causes'),'data_indicator_origen');            
+});
+
+{#function setDataSelect(data,route,select) {
+    var urlResponsibles = route; 
+    if (data == undefined) {        
+        data = [];
+    }
+    $("#"+select).select2({
+        minimumInputLength: 3,
+        maximumSelectionLength: 1,
+        maximumSelectionSize: 1,
+        multiple: true,      
+            formatInputTooShort: function () {
+                return "Por favor, introduzca 3 o más caracteres";
+            },
+            formatSelectionTooBig: function (limit) {
+                return 'Máximo seleccionado.';
+            },
+        ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
+            url: urlResponsibles,
+            dataType: 'json',
+            quietMillis: 250,
+            data: function (term, page) {
+                return {query: term}; // search term                
+            },
+            results: function (data, page) { // parse the results into the format expected by Select2. 
+                console.log(data);
+                return {results: data};                
+            },
+            cache: true
+        },
+        initSelection: function (element, callback) {             
+        },
+        formatResult: indicatorFormatResult, // omitted for brevity, see the source of this page
+        formatSelection: indicatorFormatResult, // omitted for brevity, see the source of this page
+        escapeMarkup: function (m) {            
+            return m;
+        } // we do not want to escape markup since we are displaying html in results
+    });
+    if (data != undefined) {  
+        var preselected = [];
+        $.each(data, function (index, value) {
+            preselected.push(value.id);
+        });                
+        $('#'+select).select2('data', data);
+        $('#'+select).select2('val', preselected);         
+    }
+};
+
+$('#data_indicator_origen').on('change',function(){
+    var valor = $(this).val(); 
+    $('#data_cause_load').prop('disabled', false);
+    var route = Routing.generate('pequiven_indicator_get_to_causes')+"?idObject="+valor+"&typeObject=1"+"&month="+$('#month').val();    
+    setDataSelect('', route,'data_cause_load');            
+});#}
+
+$('input#evolutioncause_valueOfcauses').keyup(function openConfirm() {        
+    var valueCharge = $("#max").text();                    
+    var max = 100 - valueCharge;
     if ($("#evolutioncause_valueOfcauses").val() > max) {
         $.modal.alert('Valor ingresado mayor a avance valido para carga ' + max, {
             buttons: {

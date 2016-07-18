@@ -74,6 +74,28 @@ class MovementEmployeeRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
 
+    public function getMovementHistory($idAP) {
+
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = '
+SELECT (SELECT CONCAT(COALESCE(firstname, "")," ",COALESCE(lastname, "")) FROM seip_user WHERE id = ME.user_id) AS user,
+    ME.typeMov, ME.id_affected,    ME.type,    ME.cause,    ME.date,    ME.realAdvance,    ME.planned,    ME.observations
+FROM
+    MovementEmployee AS ME
+WHERE
+    ME.deletedAt IS NULL AND (ME.id_Affected = ' . $idAP . ' OR ME.id_Affected IN
+    (SELECT id FROM Goal WHERE timeline_id IN (SELECT timeline_id FROM ArrangementProgram WHERE id = ' . $idAP . ')))
+';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     function getAlias() {
         return 'mov';
     }

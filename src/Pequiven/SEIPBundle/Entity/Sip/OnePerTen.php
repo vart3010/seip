@@ -211,14 +211,6 @@ class OnePerTen extends modelOnePerTen {
      * @ORM\Column(name="firmaCompromiso", type="integer", nullable=true)
      */
     private $firmaCompromiso;
-    
-    /**
-     * militante (Que es parte del PSUV)
-     * @var integer
-     *
-     * @ORM\Column(name="militante", type="integer", nullable=true)
-     */
-    private $militante;
 
     /**
      * @var \Pequiven\SEIPBundle\Entity\Sip\OnerPerTenMembers
@@ -332,9 +324,26 @@ class OnePerTen extends modelOnePerTen {
      * @ORM\Column(name="realProfileValue", type="integer", nullable=true)
      */
     private $realProfileValue;
+        
+    /**
+     * Relación expedientes asociados a un usuario
+     * 
+     * @var Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile",mappedBy="onePerTen")
+     */
+    private $onePerTenFile;
+    
+    /**
+     * ¿Firmó para activar el revocatorio contra Nicolás Maduro?
+     * firmaRevocatorio
+     * @var integer
+     * @ORM\Column(name="firmaRevocatorio", type="integer", nullable=true)
+     */
+    private $firmaRevocatorio;
 
     public function __construct() {
         $this->ten = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->onePerTenFile = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -535,14 +544,6 @@ class OnePerTen extends modelOnePerTen {
     function setFirmaCompromiso($firmaCompromiso) {
         $this->firmaCompromiso = $firmaCompromiso;
     }
-       
-    function getMilitante() {
-        return $this->militante;
-    }
-
-    function setMilitante($militante) {
-        $this->militante = $militante;
-    }
     
     function getVasamblea6() {
         return $this->vasamblea6;
@@ -659,6 +660,40 @@ class OnePerTen extends modelOnePerTen {
 
     function setRealProfileValue($realProfileValue) {
         $this->realProfileValue = $realProfileValue;
+    }
+    
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile $onePerTenFile
+     * @return \Pequiven\SEIPBundle\Entity\Sip\OnePerTen
+     */
+    public function addOnePerTenFile(OnePerTenFile $onePerTenFile) {
+        $this->onePerTenFile->add($onePerTenFile);
+        return $this;
+    }
+    
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile $onePerTenFile
+     */
+    public function removeOnePerTenFile(OnePerTenFile $onePerTenFile) {
+        $this->onePerTenFile->removeElement($onePerTenFile);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getOnePerTenFile() {
+        return $this->onePerTenFile;
+    }
+    
+    function getFirmaRevocatorio() {
+        return $this->firmaRevocatorio;
+    }
+
+    function setFirmaRevocatorio($firmaRevocatorio) {
+        $this->firmaRevocatorio = $firmaRevocatorio;
     }
 
 }

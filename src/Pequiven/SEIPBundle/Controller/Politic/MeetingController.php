@@ -262,7 +262,7 @@ class MeetingController extends SEIPController {
                 }
             }
             if ($band) {
-                $this->createMeetingFile($meeting, $request->files, $categoryFilesSelected["meeting"]);
+                $this->createMeetingFile($meeting, $request->files, $categoryFilesSelected["categoryFile"]);
             } else {
                 $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
                 //$this->redirect($this->generateUrl("pequiven_meeting_show", array("meeting_id" => $request->get("idMeeting"))));

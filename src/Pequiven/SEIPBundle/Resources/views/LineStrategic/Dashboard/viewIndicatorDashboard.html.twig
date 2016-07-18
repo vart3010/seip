@@ -35,6 +35,7 @@
 
 {% block body %}   
     <br>
+    <input type="hidden" id="tableroFlag" name="tableroFlag" value="{{ tablero }}" >
     <hr class="hr-linestrategic-icons" />
     <table width="100%">
         <tr>
@@ -53,7 +54,8 @@
                     <br>
                     <center>
                         <a href="javascript:history.back()" class="text-center button red-gradient glossy">
-                            <li class="icon-previous icon-size2" title="icon-replay-all"> Regresar
+                            <li class="fa fa-undo" aria-hidden="true">
+                                <b> Regresar</b>
                             </li>
                         </a>
                     </center>
@@ -187,14 +189,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                {% endif %}                                
-                                {# <br /><br />
-                                 <p class="button-height align-right">
-                                      Visualizacion de Indice de evolucion 
-                                     {% include 'PequivenSIGBundle:Template:base_evolution_nav.html.twig' with {'typeObject': 1, 'id': indicator.id, 'route': 'pequiven_indicator_evolution'} %}
-                                      end 
-                                 </p>
-                                 #}
+                                {% endif %}                                                                
+                                <p class="button-height align-right">
+                                    {#Visualizacion de Indice de evolucion #}
+                                    {% include 'PequivenSIGBundle:Template:base_evolution_nav.html.twig' with {'typeObject': 1, 'id': indicator.id, 'route': 'pequiven_indicator_evolution'} %}                                      
+                                </p>
+
                             </div>
                         </div>
                     </div>

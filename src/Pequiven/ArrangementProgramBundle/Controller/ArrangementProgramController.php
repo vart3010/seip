@@ -12,6 +12,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sylius\Bundle\ResourceBundle\Event\ResourceEvent;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
+use Pequiven\ArrangementProgramBundle\Controller\GoalController;
+use Pequiven\ArrangementProgramBundle\Model\MovementEmployee;
 
 /**
  * Controlador del programa de gestion
@@ -348,7 +350,7 @@ class ArrangementProgramController extends SEIPController {
         }
         $resources->setCurrentPage($request->get('page', 1), true, true);
         $resources->setMaxPerPage($maxPerPage);
-        
+
         $view = $this
                 ->view()
                 ->setTemplate('PequivenSIGBundle:ArrangementProgram:listAll.html.twig')
@@ -909,8 +911,39 @@ class ArrangementProgramController extends SEIPController {
             $gerenciaSIG = $gerencias = $this->get('pequiven.repository.gerenciafirst')->findOneBy(array('abbreviation' => 'sigco'));
         }
 
+        $individualValues = array();
+        $penalties = array();
+        $i = 1;
+        $totalWeight=0;
+        
+        foreach ($entity->getTimeline()->getGoals() as $goal) {
+            $arrayGoalOrder[$goal->getId()] = $i;
+            $totalWeight+=$goal->getWeight();
+            foreach ($goal->getResponsibles() as $resp) {
+                $individualValues[$goal->getId()][$resp->getId()] = GoalController::searchValuebyUserAction($goal->getId(), $resp->getId());
+                $penalties[$goal->getId()][$resp->getId()] = GoalController::searchPenaltybyUserAction($goal->getId(), $resp->getId());                
+            }
+            $i++;
+        }
+
+        //MOVIMIENTOS REALIZADOS
+        $movementHistory = $this->get('pequiven_seip.repository.arrangementprogram_movement')->getMovementHistory($id);
+        //ARREGLO DE CAUSAS
+        $causes = MovementEmployee::getAllCauses();
+
+        $resultService = $this->container->get('seip.service.result');
+        $date = $entity->getLastDateCalculateResult();
+        $totales = $resultService->CalculateAdvancePenaltyAP($entity, $date);
+
         return array(
             'entity' => $entity,
+            'individualValues' => $individualValues,
+            'totales' => $totales,
+            'totalWeight' => $totalWeight,
+            'penalties' => $penalties,
+            'movementHistory' => $movementHistory,
+            'arrayGoalOrder' => $arrayGoalOrder,
+            'causes' => $causes,
             'delete_form' => $deleteForm->createView(),
             'isAllowToSendToReview' => $isAllowToSendToReview,
             'isAllowToApprove' => $isAllowToApprove,
@@ -970,7 +1003,7 @@ class ArrangementProgramController extends SEIPController {
      * Edits an existing ArrangementProgram entity.
      *
      */
-    public function updateAction(Request $request) {        
+    public function updateAction(Request $request) {
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
 
@@ -1028,10 +1061,10 @@ class ArrangementProgramController extends SEIPController {
         }
 
         $data = array(
-            'entity'     => $entity,
-            'edit_form'  => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'mov'        => $MovementEmployee            
+            'mov' => $MovementEmployee
         );
 
         $view = $this->view($data);
@@ -1736,6 +1769,16 @@ class ArrangementProgramController extends SEIPController {
         $entity->addObservation($observation);
     }
 
+    public function getUrlNotificationByPerson(Request $request) {
+        $response = new JsonResponse();
+        $data = array();
+        $url = $this->generateUrl("get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails", array("idPG" => $request->get("ifPg"), "user" => $request->get("user")));
+        $url .= "/goals-details.json";
+        $data["url"] = $url;
+        $response->setData($data);
+        return $response;
+    }
+
     /**
      * Creates a form to create a ArrangementProgram entity.
      *
@@ -1754,6 +1797,100 @@ class ArrangementProgramController extends SEIPController {
 
     protected function trans($id, array $parameters = array(), $domain = 'PequivenArrangementProgramBundle') {
         return parent::trans($id, $parameters, $domain);
+    }
+
+    public function exportPDFAction(Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+        $resultService = $this->container->get('seip.service.result');
+
+        $APentity = $this->findOr404($request);
+        $individualValues = array();
+        $summaryInd = array();
+        $summaryGeneral = array();
+        $date = $APentity->getLastDateCalculateResult();
+        $i = 1;
+
+        foreach ($APentity->getTimeline()->getGoals() as $goal) {
+            foreach ($goal->getResponsibles() as $resp) {
+                $userobj = $this->get('pequiven.repository.user')->findOneById($resp->getId());
+                $goalobj = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findOneById($goal->getId());
+                $searchCriteria = array('goalDetails' => $goalobj->getGoalDetails(), 'user' => $userobj);
+                $goalDetailsInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy($searchCriteria);
+                if ($goalDetailsInd) {
+                    $individualValues[$goal->getId()][$resp->getId()] = $goalDetailsInd;
+                    $summaryInd[$goal->getId()][$resp->getId()] = $resultService->CalculateAdvancePenaltyIndv($goalDetailsInd, $date);
+                } else {
+                    $individualValues[$goal->getId()][$resp->getId()] = null;
+                    $summaryInd[$goal->getId()][$resp->getId()] = null;
+                }
+            }
+            $summaryGeneral[$goal->getId()] = $resultService->CalculateAdvancePenalty($goalobj, $date);
+            $arrayGoalOrder[$goal->getId()] = $i;
+            $i++;
+        }
+
+        if (($date == null) || (($APentity->getPeriod()->getStatus()) == 0)) {
+            $mes = 12;
+        } else {
+            $mes = date_format($date, 'n') - 1;
+        }
+
+        $categoryArrangementProgram = $APentity->getCategoryArrangementProgram();
+
+        if ($APentity->getTacticalObjective()) {
+            $tacticalObjective = $APentity->getTacticalObjective();
+        } else {
+            $tacticalObjective = null;
+        }
+        if ($APentity->getOperationalObjective()) {
+            $operationalObjective = $APentity->getOperationalObjective();
+        } else {
+            $operationalObjective = null;
+        }
+
+        $location = '';
+        if ($APentity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC) {
+            $location = $APentity->getTacticalObjective()->getGerencia()->getComplejo()->getDescription();
+        } else if ($APentity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE) {
+            $location = $APentity->getOperationalObjective()->getGerencia()->getComplejo()->getDescription();
+        }
+
+        $management = $APentity->getTacticalObjective()->getGerencia()->getDescription();
+        $description = $APentity->getDescription() ? : ($this->trans('pequiven.arrangement_program.description_none'));
+        //var_dump($summaryInd);
+        //die();
+
+        $totales = $resultService->CalculateAdvancePenaltyAP($APentity, $date);
+        $ref = $APentity->getRef();
+
+        //MOVIMIENTOS REALIZADOS
+        $movementHistory = $this->get('pequiven_seip.repository.arrangementprogram_movement')->getMovementHistory($APentity->getId());
+        //ARREGLO DE CAUSAS
+        $causes = MovementEmployee::getAllCauses();
+
+        $data = array(
+            'APentity' => $APentity,
+            'operationalObjective' => $operationalObjective,
+            'tacticalObjective' => $tacticalObjective,
+            'location' => $location,
+            'description' => $description,
+            'categoryArrangementProgram' => $categoryArrangementProgram,
+            'management' => $management,
+            'individualValues' => $individualValues,
+            'summaryInd' => $summaryInd,
+            'summaryGeneral' => $summaryGeneral,
+            'lastCalculateDate' => $APentity->getLastDateCalculateResult(),
+            'mes' => $mes,
+            'totales' => $totales,
+            'movementHistory' => $movementHistory,
+            'causes' => $causes,
+            'arrayGoalOrder' => $arrayGoalOrder
+        );
+
+        $twig = 'PequivenArrangementProgramBundle:ArrangementProgram:exportPDF.html.twig';
+
+        $this->getReportService()->generatePdf($data, 'Resultados de Programa de Gestión ' . $ref, $twig, 'L');
     }
 
 }

@@ -1,0 +1,45 @@
+{% trans_default_domain 'sip' %}
+<div ng-controller="TableWorkStudyCircleFileController">
+    <form action="{{ path('pequiven_search_members',{'user':data}) }}" method="POST" id="formFile" enctype="multipart/form-data">
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ "sip.expedientes.add"|trans }}</legend>
+            <div class="columns">
+                <div class="field-block button-height">
+                    {{ form_label(form.nameFile) }}
+                    {{ form_widget(form.nameFile) }}
+                    {{ form_errors(form.nameFile) }}
+                </div>
+                <div class="field-block button-height">
+                    {{ form_label(form.categoryFile) }}
+                    {{ form_widget(form.categoryFile) }}
+                    {{ form_errors(form.categoryFile) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">Categorias de Archivos</span>
+                    </span>
+                </div>
+            </div>
+
+        </fieldset>
+
+        <input style="display: none;" type="submit" id="saveFile">
+        {{ form_rest(form) }}
+    </form>
+</div>
+
+{% block javascript %}
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            charge();
+
+            function charge() {
+                $('.select2').select2({
+                    allowClear: true
+                });
+            }
+        });
+
+    </script>
+
+{% endblock %}

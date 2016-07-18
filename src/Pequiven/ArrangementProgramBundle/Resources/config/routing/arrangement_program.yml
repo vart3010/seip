@@ -144,6 +144,16 @@ arrangementprogram_export:
         id: "\d+"
     methods: [GET]
     
+arrangementprogram_exportPDF:
+    path: /{id}/exportPDF
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram:exportPDFAction 
+        _format: html
+    requirements:
+        id: "\d+"
+        _format: html|json|xml
+    methods: [GET|POST]
+    
 arrangementprogram_start_the_notification_process:
     path: /{id}/start-the-notification-process
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:startNotificationProcessAction }
@@ -227,3 +237,18 @@ AP_movement_remove:
     methods: [GET|POST]
     options:
         expose: true
+        
+AP_notification_search:
+    path: /
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram_rest:getGoalsDetailsAction
+    methods: [GET|POST]
+    
+get_url_reload_notification_by_person:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:generateUrlFile
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]

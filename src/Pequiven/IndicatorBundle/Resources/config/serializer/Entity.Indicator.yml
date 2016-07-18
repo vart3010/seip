@@ -76,5 +76,3 @@ Pequiven\IndicatorBundle\Entity\Indicator:
         indicatorCause:
             expose: true
             groups: [indicatorCause]
-        
-        

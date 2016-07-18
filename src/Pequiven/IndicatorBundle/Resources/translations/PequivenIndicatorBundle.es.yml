@@ -54,6 +54,7 @@ pequiven_indicator:
         formula_automatic_from_eq: Fórmula automatica (Ecuación)
         simple_average: Promedio simple
         real_and_plan_automatic: Plan y Real automático
+        real_and_plan_automatic_method_average: Plan y Real automático promedio simple
         real_automatic: Real automático
         accumulate: Acumulativo de cada carga
         real_and_plan_from_eq: Plan y real a partir de ecuación
@@ -130,6 +131,7 @@ form:
     complejo: Complejo
     gerencia: Gerencia
     gerenciaSecond: Gerencia 2da Línea
+    metodoCalculo: Método de Calculo
     weight: Peso
     weightIndicatorStrategic: Peso del Indicador Estratégico
     weightIndicatorTactic: Peso del Indicador Táctico
@@ -318,6 +320,7 @@ form:
         selectObjetiveOperativeFormatNoResultIndicatorOperativeOther: No hay objetivos operativos registrados para la gerencia de 2da línea y el objetivo táctico seleccionados
         selectObjetiveOperativeFormatNoMatcherIndicatorOperativeManagerSecond: Seleccione un objetivo táctico
         selectObjetiveOperativeFormatNoResultIndicatorOperativeManagerSecond: No hay objetivos operativos registrados para el objetivo táctico seleccionado
+        selectFrequencyNotificationPlaceholder: Seleccione una Frecuencia de Notificación
         
     title:
         addIndicatorStrategic: Registro Indicador Estratégico

@@ -214,6 +214,7 @@
                                     <a href="{{ path("pequiven_report_template_visualize_pnr_range_time",{
                                  idProduct:unrealized.idProduct,
                                  idProductReport:unrealized.idProductReport,
+                                 typeOverProduction: overProduction,
                                  startDate:dateFrom|date('d-m-Y'),
                                  endDate:dateEnd|date('d-m-Y'),
                                  idReportTemplate:unrealized.idReportTemplate    
@@ -312,6 +313,15 @@
             </div>
         </div>
     {% endif %}
+    
+     {% if is_granted(['ROLE_SEIP_OPERATION_EXPORT_EXCEL_PRODUCTION']) %}
+        <p class="button-height float-right">
+            <a id="btnExportToExcel" href="#" class="button">
+                <span class="button-icon"><span class="icon-download"></span></span>
+                    {{ "pequiven_seip.buttons.export_xls"|trans }}
+            </a>
+        </p>
+    {% endif %}
 
     <p class="button-height float-right">
         <a id="btnExportToPdf" href="#" class="button">
@@ -320,14 +330,7 @@
         </a>
     </p>
 
-    {% if is_granted(['ROLE_SEIP_OPERATION_EXPORT_EXCEL_PRODUCTION']) %}
-        <p class="button-height float-right">
-            <a id="btnExportToExcel" href="#" class="button">
-                <span class="button-icon"><span class="icon-download"></span></span>
-                    {{ "pequiven_seip.buttons.export_xls"|trans }}
-            </a>
-        </p>
-    {% endif %}
+   
 
 {% else %}
     <h2 class="text-center">{{ "Select the plant"|trans }}</h2>

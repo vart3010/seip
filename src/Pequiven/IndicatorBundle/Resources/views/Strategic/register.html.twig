@@ -252,6 +252,8 @@
                 selectArrangementRangeTypeMiddleTop = $("#pequiven_indicator_strategic_registration_arrangementRangeTypeMiddleTop"), //Select de Tipo de Rango Medio Alto
                 selectArrangementRangeTypeMiddleBottom = $("#pequiven_indicator_strategic_registration_arrangementRangeTypeMiddleBottom"), //Select de Tipo de Rango Medio Bajo
                 selectArrangementRangeTypeBottom = $("#pequiven_indicator_strategic_registration_arrangementRangeTypeBottom"), //Select de Tipo de Rango Bajo
+                selectFrequencyNotification = $("#pequiven_indicator_strategic_registration_frequencyNotificationIndicator");
+
                 linkTabRankTop = $("#linkTabRankTop"), //Link del Tab de Rango Alto
                 linkTabRankMiddleTop = $("#linkTabRankMiddleTop"), //Link del Tab de Rango Medio Alto
                 linkTabRankMiddleBottom = $("#linkTabRankMiddleBottom"), //Link del Tab de Rango Medio Bajo
@@ -333,6 +335,10 @@
                 //Inicializamos el select2 de Fórmula
                 selectFormula.select2({
                     placeholder: '{{ 'form.messages.selectFormulaPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
+                });
+
+                selectFrequencyNotification.select2({
+                    placeholder: '{{ 'form.messages.selectFrequencyNotificationPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
                 });
 
                 inputHiddenTypeArrangementRangeTop.val("TOP_BASIC");

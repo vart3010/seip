@@ -264,11 +264,10 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      */
     protected $standardization;
 
-
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->observations = new \Doctrine\Common\Collections\ArrayCollection();                
+        $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -924,6 +923,10 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getStandardization() {
         return $this->standardization;
+    }
+
+    function getLastDateCalculateResult() {
+        return $this->lastDateCalculateResult;
     }
 
 }

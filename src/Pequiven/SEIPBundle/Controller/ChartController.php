@@ -11,6 +11,25 @@ use Symfony\Component\HttpFoundation\Request;
  *
  */
 class ChartController extends SEIPController {
+    
+    /**
+     * 
+     * @param Request $request
+     */
+    public function obtainArrayOptions(Request $request){
+        $options = array();
+        $tablero = $request->get('tablero');
+        $idIndicator = $request->get('id');
+        if($tablero == 1){
+            $options = array(
+                "url" => 'pequiven_indicator_showdashboardtablero',
+                "urlParameters" => array('id' => $idIndicator,'tablero' => 1)
+                );
+        }
+        $options['tablero'] = $tablero;
+        
+        return $options;
+    }
 
     /**
      * 0-Función que retorna la data de los indicadores asociados en un gráfico de tipo dona.
@@ -20,13 +39,11 @@ class ChartController extends SEIPController {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
-
+        $options = $this->obtainArrayOptions($request);
+        $options['childrens'] = true;
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
-
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
-
-        $dataChart = $indicatorService->getDataDashboardWidgetDoughnut($indicator, array('childrens' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
-
+        $dataChart = $indicatorService->getDataDashboardWidgetDoughnut($indicator, $options); //Obtenemos la data del gráfico de acuerdo al indicador
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
         return $response;
@@ -40,13 +57,11 @@ class ChartController extends SEIPController {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
-
+        $options = $this->obtainArrayOptions($request);
+        $options['childrens'] = true;
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
-
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
-
-        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('childrens' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
-
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, $options); //Obtenemos la data del gráfico de acuerdo al indicador
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
         return $response;
@@ -463,12 +478,16 @@ class ChartController extends SEIPController {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
-
+        $options = $this->obtainArrayOptions($request);
+        $options['resultIndicatorsAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodAccumulated'] = true;
+        $options['variables']['lesionados_con_tiempo_perdido'] = true;
+        $options['variables']['lesiones_con_tiempo_perdido'] = true;
+        $options['variables']['lesionados_sin_tiempo_perdido'] = true;
+        $options['variables']['dias_perdidos'] = true;
+        $options['path_array'] = 'resultIndicatorsAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodAccumulated';
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
-
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
-
-        $dataChart = $indicatorService->getDataChartColumnMultiSeries3d($indicator, array('resultIndicatorsAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodAccumulated' => true, 'variables' => array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true, "lesionados_sin_tiempo_perdido" => true, "dias_perdidos" => true), 'path_array' => 'resultIndicatorsAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getDataChartColumnMultiSeries3d($indicator, $options); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
@@ -624,10 +643,12 @@ class ChartController extends SEIPController {
 
         $response = new JsonResponse();
         $idIndicator = $request->get('id');
+        $options = $this->obtainArrayOptions($request);
         $type = $request->get('type');
-        $options = array('type' => $type);
+        $options['type'] = $type;
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+        $options["hideUnit"] = $indicator->getUnitDashboard();
         $dataChart = $indicatorService->getDataPyramid3DSectioned($indicator, $options); //Obtenemos la data del gráfico de acuerdo al indicador
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
@@ -643,8 +664,8 @@ class ChartController extends SEIPController {
 
         $response = new JsonResponse();
         $idIndicator = $request->get('id');
-        $options = array(
-            "colors" => array(
+        $options = $this->obtainArrayOptions($request);
+        $colors = array(
                 1 => "BDBDBD",
                 2 => "da2f2a",
                 3 => "e58123",
@@ -655,8 +676,8 @@ class ChartController extends SEIPController {
                 8 => "FFFFFF",
                 9 => "FFFFFF",
                 10 => "FFFFFF",
-            )
-        );
+            );
+        $options['colors'] = $colors;
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
         $dataChart = $indicatorService->getDataStackedColumn3DbyIndicator($indicator, $options); //Obtenemos la data del gráfico de acuerdo al indicador

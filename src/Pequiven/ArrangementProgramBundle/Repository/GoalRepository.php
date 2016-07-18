@@ -82,6 +82,62 @@ class GoalRepository extends EntityRepository {
         return $result;
     }
 
+    /**
+     * FUNCION QUE RETORNA LOS RESPONSABLES DE METAS EN UN PROGRAMA DE GESTIÓN. LO UTILIZO PARA EL SENCHA DE NOTIFICACION DE PG
+     * @param type $idAP
+     * @return type
+     */
+    function getGoalResponsiblesUserbyAP($idAP, $notuser) {
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = '
+            SELECT DISTINCT
+    user.id,
+    (CONCAT(COALESCE(user.firstname, " "),
+            " ",
+            COALESCE(user.lastname, " "))) AS Responsable
+FROM
+    goals_users AS g_u
+        INNER JOIN
+    seip_user AS user ON (user.id = g_u.user_id)
+        INNER JOIN
+    Goal AS goal ON (goal.id = g_u.goal_id)
+        INNER JOIN
+    ArrangementProgram AS ap ON (goal.timeline_id = ap.timeline_id)
+WHERE
+    ap.id = ' . $idAP . ' AND user.id NOT IN ("'. $notuser .'") ORDER by (CONCAT(COALESCE(user.firstname, " ")," ",COALESCE(user.lastname, " ")))
+            '
+        ;
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        return $result;
+    }
+
+    /**
+     * RETORNA LAS METAS DE UN PROGRAMA DE GESTION FILTRADO POR RESPONSABLE
+     * @param type $idAP
+     * @param type $idResp
+     * @return type
+     */
+    function getGoalByResponsibleByAP($idAP, $idResp) {
+
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin('g.timeline', 't')
+                ->innerJoin('g.responsibles', 'g_r')
+                ->innerJoin('t.arrangementProgram', 'ap')
+                ->andWhere('ap.id = :idAP')
+                ->andWhere('g_r.id = :responsible')
+                ->setParameter('idAP', $idAP)
+                ->setParameter('responsible', $idResp)
+        ;
+        //print($qb->getQuery()->getSQL());
+        return $qb->getQuery()->getResult();
+    }
+
     protected function getAlias() {
         return 'g';
     }

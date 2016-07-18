@@ -130,39 +130,7 @@ class ResultController extends ResourceController {
             'period' => $period,
         );
 
-        $this->generatePdf($data, 'Resultados de Gestión', 'PequivenSEIPBundle:Monitor/User:UserSummaryItemsPdfFormat.html.twig');
-    }
-
-    /**
-     * GENERA EL PDF
-     * @param type $data
-     * @param type $title
-     * @param type $template
-     */
-    public function generatePdf($data, $title, $template) {
-
-        $pdf = new \Pequiven\SEIPBundle\Model\PDF\NewSeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setPrintLineFooter(false);
-        $pdf->setContainer($this->container);
-        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
-        $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('SEIP');
-        $pdf->setTitle($title);
-        $pdf->SetSubject('Resultados SEIP');
-        $pdf->SetKeywords('PDF, SEIP, Resultados');
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-        $pdf->AddPage();
-        $html = $this->renderView($template, $data);
-        $pdf->writeHTML($html, true, false, true, false, '');
-        $pdf->Output(utf8_decode($title) . '.pdf', 'D');
+        $this->getReportService()->generatePdf($data, 'Resultados de Gestion ' . $datosUser["nombre"] . ' Periodo ' . $period, 'PequivenSEIPBundle:Monitor/User:UserSummaryItemsPdfFormat.html.twig', 'P');
     }
 
     /**
@@ -396,9 +364,9 @@ class ResultController extends ResourceController {
 
         $period = $this->getPeriodService()->getPeriodActive();
         $user = $this->getUser();
-        
+
         $isAllowPolitic = false;
-        if($user->getId() == 112 || $user->getId() == 22){
+        if ($user->getId() == 112 || $user->getId() == 22) {
             $isAllowPolitic = true;
         }
 
@@ -412,7 +380,7 @@ class ResultController extends ResourceController {
 //        $userRepository = $this->container->get('pequiven_seip.repository.user');
         $userRepository = $this->get('pequiven.repository.user');
         $onePerTenRepository = $this->get('pequiven.repository.oneperten');
-        
+
         if ($request->isMethod('POST')) {
             $resultService = $this->getResultService();
             $id = $request->get('id');
@@ -462,19 +430,19 @@ class ResultController extends ResourceController {
         $qbUsers->select('u.id,u.numPersonal');
         $resultsUserEvaluationDetails = $qbUsers->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         //Perfiles Políticos
-        if($isAllowPolitic){
+        if ($isAllowPolitic) {
             $qbOnePerTen = $onePerTenRepository->findQueryWithResultNull($period);
             $qbOnePerTen->select('opt.id,u.firstname,u.lastname');
             $resultsOnePerTen = $qbOnePerTen->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         }
-        
+
         $dataArray = array(
             'resultsArrangementprogram' => $resultsArrangementprogram,
             'resultsIndicator' => $resultsIndicator,
             'resultsUserEvaluationDetails' => $resultsUserEvaluationDetails,
             'isAllowPolitic' => $isAllowPolitic,
         );
-        if($isAllowPolitic){
+        if ($isAllowPolitic) {
             $dataArray['resultsOnePerTen'] = $resultsOnePerTen;
         }
 
@@ -775,13 +743,20 @@ class ResultController extends ResourceController {
     private function getUserManager() {
         return $this->get('seip.user_manager');
     }
-    
+
     /**
-    * @return \Pequiven\SEIPBundle\Service\Sip\OnePerTenService
-    */
-    protected function getOnePerTenService()
-    {
+     * @return \Pequiven\SEIPBundle\Service\Sip\OnePerTenService
+     */
+    protected function getOnePerTenService() {
         return $this->get('seip.service.onePerTen');
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    protected function getReportService() {
+        return $this->get('seip.service.report');
     }
 
 }

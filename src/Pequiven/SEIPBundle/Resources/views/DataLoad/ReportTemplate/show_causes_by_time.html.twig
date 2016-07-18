@@ -45,10 +45,10 @@
         <table class="simple-table responsive-table" id="">
             <thead>
                 <tr>
-                    <th scope="col">{{ 'pequiven_seip.cause_of_PNR' | trans }}</th>
-                    <th scope="col" width="23%" class="">{{ "Day" | trans }}</th>
-                    <th scope="col" width="23%" class="">{{ "Month" | trans }}</th>
-                    <th scope="col" width="23%" class="">{{ "Year" | trans }}</th>
+                    <th style="text-align: left;" scope="col" width="40%">{{ 'pequiven_seip.cause_of_PNR' | trans }}</th>
+                    <th style="text-align: right;" scope="col" width="20%" class="">{{ "Day" | trans }}</th>
+                    <th style="text-align: right;" scope="col" width="20%" class="">{{ "Month" | trans }}</th>
+                    <th style="text-align: right;" scope="col" width="20%" class="">{{ "Year" | trans }}</th>
                 </tr>
             </thead>
 
@@ -65,7 +65,7 @@
                 <!-- CAUSAS INTERNAS -->
                 <tr>
                     <th scope="row" >
-                        <span style="margin-left: 18px;font-size: 15px;" class="bold">
+                        <span style="margin-left: 18px; font-size: 15px;" class="bold">
                             {{ labelsTypesFailsPNR[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')] | trans }}
                         </span>
                     </th>
@@ -74,11 +74,11 @@
                 {% for failInternal in failsInternal %}
                     <tr>
                         <th scope="row">
-                            <span>{{ failInternal.name }}</span>
+                            <span style="margin-left: 30px;">- {{ failInternal.name }}</span>
                         </th>
-                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]['day'] }}</th>
-                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]['month'] }}</th>
-                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]['year'] }}</th>
+                        <td style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]['day'] | myNumberFormat }}</th>
+                        <td style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]['month']| myNumberFormat }}</th>
+                        <td style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]['year']| myNumberFormat }}</th>
                     </tr>
                 {% endfor %}
                 <tr>
@@ -87,9 +87,35 @@
                             {{ 'pequiven_seip.total' | trans }}
                         </span>
                     </th>
-                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['day'] }}</span></th>
-                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['month'] }}</span></th>
-                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['year'] }}</span></th>
+                    <th style="text-align: right;">
+                        <span class="bold">
+                            {% if ( result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['day'] <0) %}
+                                {{ 0 | myNumberFormat}}
+                            {% else %}
+                                {{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['day'] | myNumberFormat }}
+                            {% endif %}
+                        
+                        </span>
+                    </th>
+                    <th style="text-align: right;">
+                        <span class="bold">
+                            {% if ( result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['month'] <0) %}
+                                {{ 0 | myNumberFormat}}
+                            {% else %}
+                                {{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['month']| myNumberFormat }}
+                            {% endif %}
+                        </span>
+                    </th>
+                    <th style="text-align: right;">
+                        <span  class="bold">
+                            {% if ( result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['year'] <0) %}
+                                {{ 0 | myNumberFormat}}
+                            {% else %}
+                                {{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['year']| myNumberFormat }}
+                            {% endif %}
+
+                        </span>
+                    </th>
                 </tr>
                 <tr>
                     <th colspan="4"></th>
@@ -106,12 +132,12 @@
                 </tr>
                 {% for failExternal in failsExternal %}
                     <tr>
-                        <th scope="row">
-                            <span>{{ failExternal.name }}</span>
+                        <th  scope="row">
+                            <span style="margin-left: 30px;" >-{{ failExternal.name }}</span>
                         </th>
-                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')][failExternal.name]['day'] }}</th>
-                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')][failExternal.name]['month'] }}</th>
-                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')][failExternal.name]['year'] }}</th>
+                        <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')][failExternal.name]['day'] | myNumberFormat }}</th>
+                        <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')][failExternal.name]['month'] | myNumberFormat }}</th>
+                        <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')][failExternal.name]['year'] | myNumberFormat }}</th>
                     </tr>
                 {% endfor %}
                 <tr>
@@ -120,9 +146,9 @@
                             {{ 'pequiven_seip.total' | trans }}
                         </span>
                     </th>
-                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')]['total']['day'] }}</span></th>
-                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')]['total']['month'] }}</span></th>
-                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')]['total']['year'] }}</span></th>
+                    <th style="text-align: right;"><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')]['total']['day'] | myNumberFormat}}</span></th>
+                    <th style="text-align: right;"><span style="text-align: right;" class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')]['total']['month'] | myNumberFormat }}</span></th>
+                    <th style="text-align: right;"><span style="text-align: right;" class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')]['total']['year'] | myNumberFormat }}</span></th>
                 </tr>
                 <tr>
                     <th colspan="4"></th>
@@ -141,21 +167,21 @@
                     {% for internalRawMaterial in internalRawMaterials %}
                         <tr>
                             <th scope="row">
-                                <span class="bold">{{ internalRawMaterial }}</span>
+                                <span style="margin-left: 30px;"  class="bold">-{{ internalRawMaterial }}</span>
                             </th>
-                            <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')][internalRawMaterial.name]['day'] }}</th>
-                            <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')][internalRawMaterial.name]['month'] }}</th>
-                            <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')][internalRawMaterial.name]['year'] }}</th>
+                            <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')][internalRawMaterial.name]['day'] | myNumberFormat }}</th>
+                            <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')][internalRawMaterial.name]['month'] | myNumberFormat }}</th>
+                            <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')][internalRawMaterial.name]['year'] | myNumberFormat }}</th>
                         </tr>
                     {% endfor %}
                 {% else %}
                     <tr>
                         <th scope="row">
-                            <span class="bold">{{ 'Ninguna' | trans }}</span>
+                            <span style="margin-left: 30px;" class="bold">-{{ 'Ninguna' | trans }}</span>
                         </th>
-                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['empty']['day'] }}</th>
-                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['empty']['month'] }}</th>
-                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['empty']['year'] }}</th>
+                        <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['empty']['day'] | myNumberFormat }}</th>
+                        <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['empty']['month'] | myNumberFormat }}</th>
+                        <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['empty']['year'] | myNumberFormat }}</th>
                     </tr>
                 {% endif %}
                 <tr>
@@ -164,9 +190,9 @@
                             {{ 'pequiven_seip.total' | trans }}
                         </span>
                     </th>
-                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['total']['day'] }}</span></th>
-                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['total']['month'] }}</span></th>
-                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['total']['year'] }}</span></th>
+                    <th style="text-align: right;"><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['total']['day'] | myNumberFormat }}</span></th>
+                    <th style="text-align: right;"><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['total']['month']| myNumberFormat }}</span></th>
+                    <th style="text-align: right;"><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['total']['year']| myNumberFormat }}</span></th>
                 </tr>
                 <tr>
                     <th colspan="4"></th>
@@ -185,21 +211,21 @@
                     {% for externalRawMaterial in externalRawMaterials %}
                         <tr>
                             <th scope="row">
-                                <span class="bold">{{ externalRawMaterial }}</span>
+                                <span style="margin-left: 30px;" class="bold">-{{ externalRawMaterial }}</span>
                             </th>
-                            <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')][externalRawMaterial.name]['day'] }}</th>
-                            <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')][externalRawMaterial.name]['month'] }}</th>
-                            <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')][externalRawMaterial.name]['year'] }}</th>
+                            <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')][externalRawMaterial.name]['day'] | myNumberFormat }}</th>
+                            <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')][externalRawMaterial.name]['month']  | myNumberFormat}}</th>
+                            <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')][externalRawMaterial.name]['year'] | myNumberFormat }}</th>
                         </tr>
                     {% endfor %}
                 {% else %}
                     <tr>
                         <th scope="row">
-                            <span class="bold">{{ 'Ninguna' | trans }}</span>
+                            <span style="margin-left: 30px;" class="bold">-{{ 'Ninguna' | trans }}</span>
                         </th>
-                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['empty']['day'] }}</th>
-                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['empty']['month'] }}</th>
-                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['empty']['year'] }}</th>
+                        <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['empty']['day']| myNumberFormat }}</th>
+                        <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['empty']['month']| myNumberFormat }}</th>
+                        <th style="text-align: right;">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['empty']['year']| myNumberFormat }}</th>
                     </tr>
                 {% endif %}
                 <tr>
@@ -208,9 +234,9 @@
                             {{ 'pequiven_seip.total' | trans }}
                         </span>
                     </th>
-                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['total']['day'] }}</span></th>
-                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['total']['month'] }}</span></th>
-                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['total']['year'] }}</span></th>
+                    <th style="text-align: right;"><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['total']['day'] | myNumberFormat}}</span></th>
+                    <th style="text-align: right;"><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['total']['month']| myNumberFormat }}</span></th>
+                    <th style="text-align: right;"><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['total']['year'] | myNumberFormat}}</span></th>
                 </tr>
                 <tr>
                     <th colspan="4"></th>

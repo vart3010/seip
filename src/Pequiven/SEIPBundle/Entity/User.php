@@ -301,6 +301,15 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     private $notification;
 
     /**
+
+     * Metas Individuales
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd",mappedBy="user",cascade={"persist","remove"})
+     */
+    protected $goalDetailsInd;
+
+    /**
      * aciones
      * 
      * @var \Pequiven\SIGBundle\Entity\Tracing\Standardization

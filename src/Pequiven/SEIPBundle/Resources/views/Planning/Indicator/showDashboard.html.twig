@@ -31,7 +31,7 @@
 {% endblock %}
 
 {% block body -%}
-    
+    <input type="hidden" id="tableroFlag" name="tableroFlag" value="{{ tablero }}" >
     {{ boxRender.renderBox('pequiven_seip_box_indicators_dashboard')|raw }}
     
 {% endblock %}

@@ -27,7 +27,7 @@ class ArrangementProgramSigController extends ResourceController
         $ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
 
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
-        $data = $evolutionService->findEvolutionCause($ArrangementProgram, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
+        $data = $evolutionService->findEvolutionCause($ArrangementProgram, $request, $typeObject, true); //Carga la data de las causas y sus acciones relacionadas
         
         //Validación de que el mes pasado este entre los validos
         if ($month > 12) {
@@ -49,18 +49,18 @@ class ArrangementProgramSigController extends ResourceController
         $ArrangementProgramService = $this->getArrangementProgramService(); //Obtenemos el servicio del indicador
         
         $dataChart = $ArrangementProgramService->getDataChartOfArrangementProgramEvolution($ArrangementProgram, $urlExportFromChart, $month); //Obtenemos la data del gráfico de acuerdo al programa
-
-        $dataCause = $evolutionService->getDataChartOfCausesEvolution($ArrangementProgram, $urlExportFromChart, $month, $typeObject); //Obtenemos la data del grafico de las causas de desviación
         
         $analysis = $sumCause = 0;
 
-        //Carga de las Causas
-        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $id,'month' => $month, 'typeObject' => $typeObject));
-        
-        foreach ($results as $value) {
-            $dataCa = $value->getValueOfCauses();
-            $sumCause = $sumCause + $dataCa;
+        //Consulta de Causas
+        $causes = $evolutionService->findCausesEvolution($id,$month,$typeObject);
+        for ($i=0; $i < $causes['cant']; $i++) { 
+            $dataCa = $causes['valueofCause'][$i];
+            $sumCause = $sumCause + $dataCa;            
         }
+
+        $dataCause = $evolutionService->getDataChartOfCausesEvolution($ArrangementProgram, $urlExportFromChart, $month, $typeObject, $causes); //Obtenemos la data del grafico de las causas de desviación
+        
 
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('idObject' => $id, 'month' => $month, 'typeObject' => $typeObject));
@@ -68,9 +68,8 @@ class ArrangementProgramSigController extends ResourceController
         //Carga el analisis de Causas
         $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('idObject'=> $id, 'month' => $month, 'typeObject'=> $typeObject));
         
-
         $dataAction = [
-            'action' => $data["action"],
+            //'action' => $data["action"],
             'values' => $data["actionValue"] 
         ];
 
@@ -84,7 +83,7 @@ class ArrangementProgramSigController extends ResourceController
                 'trend'               => $trend,
                 'month'               => $month,
                 'analysis'            => $causeAnalysis,
-                'cause'               => $results,
+                'cause'               => $causes,
                 'sumCause'            => $sumCause,                
                 'dataAction'          => $dataAction,                
                 'verification'        => $data['verification'],

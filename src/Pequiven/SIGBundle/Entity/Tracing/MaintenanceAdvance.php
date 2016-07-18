@@ -64,6 +64,15 @@ class MaintenanceAdvance
      */
     private $deletedAt;
 
+     /**
+     * Usuario que creo la causa
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\User
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $createdBy;
+
     /**
      * Constructor
      */
@@ -217,6 +226,27 @@ class MaintenanceAdvance
     public function getObservations()
     {
         return $this->observations;
+    }
+
+     /**
+     * Set createdBy
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $createdBy
+     * @return IndicatorSimpleValue
+     */
+    public function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy) {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get createdBy
+     *
+     * @return \Pequiven\SEIPBundle\Entity\User 
+     */
+    public function getCreatedBy() {
+        return $this->createdBy;
     }
     
 }

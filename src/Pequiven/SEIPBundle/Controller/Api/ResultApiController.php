@@ -389,6 +389,14 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                 $realDateEnd = clone($planDateEnd);
                 $realDateEnd->setDate($realDateEnd->format('Y'), $summary['realMonthDateEnd'], \Pequiven\SEIPBundle\Service\ToolService::getLastDayMonth($realDateEnd->format('Y'), $summary['realMonthDateEnd']));
 
+                //VERIFICO SI TIENE METAS INDIVIDUALES                
+                $entityInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy(array('goalDetails' => $goal->getGoalDetails(), 'user' => $user));
+                if ($entityInd == null) {
+                    $valorInd = $goal->getResult();
+                } else {
+                    $valorInd = $entityInd->getResultReal();
+                }
+
                 if ((new \DateTime()) >= ($goal->getperiod()->getDateEnd())) {
                     $fecha = 12;
                 } else {
@@ -444,7 +452,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                         if (($tipos[count($tipos) - 1] == 'I')) {
                             $status = 'Actual';
                             $tipos[] = 'O';
-                            $valores[] = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                            $valores[] = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($valorInd);
                             $planeado[] = $goal->getGoalDetails()->getPlannedTotal($fecha);
                         } else {
                             $status = 'Pasada';
@@ -509,7 +517,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                 } else {
                     //SI LA META NO TIENE MOVIMIENTOS, LOS VALORES ACTUALES SON LOS VALORES DE LA EVALUACION
                     $status = 'Actual';
-                    $aporte = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                    $aporte = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($valorInd);
                     if ($goal->getGoalDetails()->getPlannedTotal($fecha) == 0) {
                         $eval = "N/A";
                     } else {

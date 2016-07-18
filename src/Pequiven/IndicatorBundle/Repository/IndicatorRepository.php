@@ -179,6 +179,7 @@ class IndicatorRepository extends EntityRepository {
     function createPaginatorStrategic(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('i.enabled =:enabled');
+        $queryBuilder->andWhere('i.showIndicatorParent =:false');
         $queryBuilder->innerJoin('i.objetives', 'ob');
         $queryBuilder->andWhere('i.tmp =:false');
         $queryBuilder->andWhere('ob.enabled =:enabled');
@@ -214,6 +215,7 @@ class IndicatorRepository extends EntityRepository {
         $securityContext = $this->getSecurityContext();
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('i.enabled =:enabled');
+        $queryBuilder->andWhere('i.showIndicatorParent =:false');
         $queryBuilder->innerJoin('i.objetives', 'ob');
         $queryBuilder->andWhere('i.tmp =:false');
         $queryBuilder->andWhere('ob.enabled =:enabled');
@@ -266,6 +268,7 @@ class IndicatorRepository extends EntityRepository {
         $user = $this->getUser();
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('i.enabled =:enabled');
+        $queryBuilder->andWhere('i.showIndicatorParent =:false');
         $queryBuilder->innerJoin('i.objetives', 'ob');
         $queryBuilder->andWhere('i.tmp =:false');
         $queryBuilder->andWhere('ob.enabled =:enabled ');
@@ -620,6 +623,37 @@ class IndicatorRepository extends EntityRepository {
         ;
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * Retornar los indicadores consultados y validos
+     * @return type
+     */
+    function findToIndicatorValidToEvolution(array $indicator = array(), array $criteria = array()) {
+        return $this->findQueryToIndicators($indicator, $criteria)->getQuery()->getResult();
+    }
+
+    /**
+     *
+     *
+     */
+    public function findQueryToIndicators(array $indicator, array $criteria = array()){
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);        
+        $qb = $this->getQueryBuilder();
+
+        $orX = $qb->expr()->orX();
+        if (($ref = $criteria->remove('ref'))) {
+            $orX->add($qb->expr()->like('i.ref', "'%" . $ref . "%'"));
+        }
+        if (($description = $criteria->remove('description'))) {
+            $orX->add($qb->expr()->like('i.description', "'%" . $description . "%'"));
+        }
+        
+        $qb->andWhere($orX);
+
+        $qb->setMaxResults(30);        
+        
+        return $qb;
     }
 
     protected function getAlias() {
