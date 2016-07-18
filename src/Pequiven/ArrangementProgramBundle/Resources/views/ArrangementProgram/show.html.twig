@@ -55,11 +55,19 @@
                             {{ entity.process }}
                         </p>
                     </div>
-                {% endif %}
+                {% endif %}               
+
                 <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
                     <p class="inline-label">
                         <label class="label">{{ 'pequiven.arrangement_program.category_arrangement_program'|trans }}</label>
                         {{ entity.categoryArrangementProgram }}
+                    </p>
+                </div>
+
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Último Recalculado</label>
+                        {{ entity.getLastDateCalculateResult|date(appConfiguration.generalDateFormat) }}
                     </p>
                 </div>
 
