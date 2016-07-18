@@ -168,8 +168,10 @@ class EvolutionService implements ContainerAwareInterface {
         $causesData = [];
         for ($i=0; $i <count($cause['id']) ; $i++) { 
             $causesData[$cause['id'][$i]] = $cause['sync'][$i];            
-        }        
-        if ($cause) {$action = $this->container->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause['id']));}
+        }   
+        
+        if (count($cause['id']) > 0) {$action = $this->container->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause['id']));}
+        
         //Carga de las acciones para sacar la verificaciones realizadas
         if ($action) {
             foreach ($action as $value) {
