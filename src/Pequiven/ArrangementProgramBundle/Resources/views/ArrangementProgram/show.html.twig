@@ -15,7 +15,7 @@
 {% endif %}
 
 {% block body %}
-    
+
     <div ng-controller="ArrangementProgramController">
         <hgroup id="main-title" class="thin breadcrumb">
             <h1>
@@ -137,33 +137,67 @@
             {% set summary = entity.summary() %}
             {% if entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED') or
               entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REJECTED') %}
-            <br/><br/>
-            <p class="inline-label">
-                <label class="label">{{ 'pequiven.arrangement_program.advances'|trans }}</label>
-                {% set advances = entity.getResult %}
-                {% if(entity.getResult < 0) %}
-                    {% set advances = 0 %}
-                {% endif %}
-
-                {% set advancesClass = 'red-gradient' %}
-                {% if advances >= 50 and advances < 100 %}
-                    {% set advancesClass = 'orange-gradient' %}
-
-                {% elseif advances >= 100 %}
-                    {% set advancesClass = 'green-gradient' %}
-                {% endif %}
-                <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
-            </p>
-            <br/>
+            <div class="columns">
+                <div class="new-row six-columns twelve-columns-tablet">
+                    <p class="inline-label">
+                        <label class="label">Avance Actual / Valor Real</label>
+                        {%set real = totales.realResult %}
+                        <small class="tag" style="font-size: 10pt;">{{ real }}%</small>
+                    </p>
+                </div>
+                <div class="six-columns twelve-columns-tablet">
+                    <p class="inline-label">
+                        <label class="label">Valor Plan hasta la Fecha</label>
+                        <small class="tag" style="font-size: 10pt;">{{ totales.plannedResult }}%</small>
+                    </p>
+                </div>
+                <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                    <br/><br/>
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven.arrangement_program.advances'|trans }}</label>
+                        {% set advances = entity.getResult %}
+                        {% if(entity.getResult < 0) %}
+                            {% set advances = 0 %}
+                        {% endif %}                        
+                        {% set advancesClass = 'red-gradient' %}
+                        {% if advances > 50 and advances <= 80 %}
+                            {% set advancesClass = 'orange-gradient' %}
+                        {% elseif advances > 80 %}
+                            {% set advancesClass = 'green-gradient' %}
+                        {% endif %}
+                        <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances|myNumberFormat }}%</span>
+                    </p>
+                    <br/>
+                </div>
+                <div class="six-columns twelve-columns-tablet">
+                    <br/><br/>
+                    <p class="inline-label">
+                        <label class="label">Efectividad del Programa</label>
+                        {% set advances = totales.efectivity %}
+                        {% set advancesClass = 'red-gradient' %}
+                        {% if advances > 50 and advances <= 80 %}
+                            {% set advancesClass = 'orange-gradient' %}
+                        {% elseif advances > 80 %}
+                            {% set advancesClass = 'green-gradient' %}
+                        {% endif %}
+                        <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"Deficiente"},{"value":50,"label":"Regular"},{"value":100,"label":"Excelente"}],"insetExtremes":true}'>{{ advances|myNumberFormat }}%</span>
+                    </p>
+                    <br/>
+                </div> 
+            </div>
             {% endif %}
                 <div class="columns">
                     <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
                         <p class="inline-label">
                             <label class="label">{{ "pequiven.form.total_weight"|trans }}</label>
-                            <span ng-if="getTotalWeight() == 0" class="tag">{$ getTotalWeight() $}/100 %</span>
-                            <span ng-if="getTotalWeight() > 0 && getTotalWeight() < 100" class="tag orange-bg">{$ getTotalWeight() $}/100%</span>
-                            <span ng-if="getTotalWeight() == 100" class="tag green-bg">{$ getTotalWeight() $}/100%</span>
-                            <span ng-if="getTotalWeight() > 100" class="tag red-bg">{$ getTotalWeight() $}/100%</span>
+                            {% set advances = totalWeight %}
+                            {% set advancesClass = 'red-gradient' %}
+                            {% if advances > 50 and advances <= 80 %}
+                                {% set advancesClass = 'orange-gradient' %}
+                            {% elseif advances > 80 %}
+                                {% set advancesClass = 'green-gradient' %}
+                            {% endif %}                           
+                            <span class="{{advancesClass}}">{{totalWeight}}/100%</span>
                         </p>
                     </div>
                     <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet" ng-init="totalPlanned={{ summary['advancesPlanned'] }}">
@@ -227,10 +261,10 @@
                 <span class="button-icon"><span class="icon-download"></span></span>
                     {{ 'pequiven_seip.buttons.export_xls'|trans({},'PequivenSEIPBundle') }}
             </a>
-              &nbsp;
+            &nbsp;
             <a href="{{ path('arrangementprogram_exportPDF',{ id: entity.id }) }}" class="button">
                 <span class="button-icon"><span class="icon-download"></span></span>
-                  Exportar a PDF
+                Exportar a PDF
             </a>
 
             {% if isAllowToNotity == true %}

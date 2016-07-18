@@ -325,15 +325,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function refreshValueArrangementProgram(ArrangementProgram $arrangementProgram, $andFlush = true) {
         $periodService = $this->getPeriodService();
-        $amountPenalty = 0;
+
         $em = $this->getDoctrine()->getManager();
-
-
-//DETERMINO SI EL PROGRAMA SE PENALIZA POR PORCENTAJE O NO
-        $lastNotificationInProgressDate = $arrangementProgram->getDetails()->getLastNotificationInProgressDate();
-        if ($arrangementProgram->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationInProgressDate) === true || $arrangementProgram->isForcePenalize() === true)) {
-            $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
-        }
 
 //RECALCULO LOS VALORES ORIGINALES DE LAS METAS SIN PENALIZAR
         $arrangementProgram->getSummary(array(
@@ -350,39 +343,26 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //SALVO EL VALOR DEL AP SIN PENALIZAR
         $arrangementProgram->setresultBeforepenalty($beforepenaltyAP['advances']);
 
-//ESTABLEZCO EL VALOR DE PENALIZACIONES EN METAS POR RETRASO Y POR PORCENTAJE (DOS PENALIZACIONES DISTINTAS)
-        $this->setPenaltiesbyGoal($arrangementProgram, $amountPenalty);
-
-        $totalAP = 0;
-        foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
-//CALCULO EL TOTAL DEL PROGRAMA DE GESTIÓN
-            $totalAP = $totalAP + ($goal->getResult() * ($goal->getWeight() / 100));
-        }
-
+//ESTABLEZCO EL VALOR DE PENALIZACIONES EN METAS
+        $this->setPenaltiesbyGoal($arrangementProgram);
         $em->flush();
 
 //ACTUALIZO LOS PROGRAMAS DE GESTION. EN CASO DE SER NEGATIVO EL RESULTADO SE ESTABLECE COMO CERO. SI ES MAYOR A 120, SE ESTABLECE COMO 120
-        if (($totalAP < 0) || ($totalAP >= 120)) {
-            if ($totalAP < 0) {
-                $arrangementProgram->setResult(0);
-                $arrangementProgram->setResultReal(0);
-                $arrangementProgram->setTotalAdvance(0);
-            } else {
-                $arrangementProgram->setResult(120);
-                $arrangementProgram->setResultReal(120);
-                $arrangementProgram->setTotalAdvance(120);
-            }
-        } else {
-            $arrangementProgram->setResult($totalAP);
-            $arrangementProgram->setResultReal($totalAP);
-            $arrangementProgram->setTotalAdvance($totalAP);
-        }
+        $totalAP = $this->CalculateAdvancePenaltyAP($arrangementProgram);
+        $totalAP['realResult']+=$totalAP['penalty'];
+
+        $valor = $this->rescaleValue($totalAP);
+
+        $arrangementProgram->setResult($valor);
+        $arrangementProgram->setResultReal($valor);
+        $arrangementProgram->setTotalAdvance($valor);
+
 
 //SALVO EL VALOR DEL PROGRAMA CUANDO ESTE SOBREPASA LOS 120% DE CUMPLIMIENTO O QUEDA COMO NEGATIVO
-        $arrangementProgram->setRealResult($totalAP);
+        $arrangementProgram->setRealResult($totalAP['realResult']);
 
 //CALCULO Y GUARDO EL VALOR DE LA PENALIZACIÓN DEL AP
-        $arrangementProgram->setPenalty($beforepenaltyAP['advances'] - $totalAP);
+        $arrangementProgram->setPenalty($totalAP['penalty']);
 
 //INGRESO LOS DATOS DE AUDITORIA
         $arrangementProgram->updateLastDateCalculateResult();
@@ -418,17 +398,20 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param type $date
      * @return type
      */
-    function CalculateAdvancePenaltyAP(ArrangementProgram $AP, $date) {
+    function CalculateAdvancePenaltyAP(ArrangementProgram $AP, $date = null) {
 
         $realResult = 0;
-        $penalty = 0;
         $plannedResult = 0;
-        $amountPenalty = 0;
 
 //DETERMINO SI EL PROGRAMA SE PENALIZA POR PORCENTAJE O NO
-        $lastNotificationInProgressDate = $AP->getDetails()->getLastNotificationInProgressDate();
-        if ($AP->isCouldBePenalized() && ($this->getPeriodService()->isPenaltyInResult($lastNotificationInProgressDate) === true || $AP->isForcePenalize() === true)) {
+        //$lastNotificationInProgressDate = $AP->updateLastDateCalculateResult();
+//        if ($AP->isCouldBePenalized() && ($this->getPeriodService()->isPenaltyInResult($lastNotificationInProgressDate) === true || $AP->isForcePenalize() === true)) {
+//            $amountPenalty = $this->getPeriodService()->getPeriodActive()->getPercentagePenalty();
+//        } else {
+        if (($AP->isCouldBePenalized() === true) && ($AP->isForcePenalize() === true)) {
             $amountPenalty = $this->getPeriodService()->getPeriodActive()->getPercentagePenalty();
+        } else {
+            $amountPenalty = 0;
         }
 
 
@@ -436,19 +419,21 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         foreach ($AP->getTimeline()->getGoals() as $meta) {
 //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA Y VOY SUMANDO POR META
             $datosAP = $this->CalculateAdvancePenalty($meta, $date);
-            $realResult+=(($datosAP['realResult'] * $meta->getWeight())) / 100;
-            $penalty+=(($datosAP['penalty'] * $meta->getWeight())) / 100;
+            $goalValue = $this->rescaleValue($datosAP);            
+            $realResult+=$goalValue * $meta->getWeight();
             $plannedResult+=(($datosAP['plannedResult'] * $meta->getWeight())) / 100;
         }
+        
+        $realResult/=100;
 
         if ($plannedResult > 0) {
-            $efectividad = ($realResult - $penalty) * 100 / $plannedResult;
+            $efectividad = ($realResult - $amountPenalty) * 100 / $plannedResult;
         } else {
             $efectividad = 'N/A';
         }
 
         $retorno = array(
-            'penalty' => ($penalty + $amountPenalty),
+            'penalty' => $amountPenalty,
             'realResult' => $realResult,
             'plannedResult' => $plannedResult,
             'efectivity' => $efectividad
@@ -733,7 +718,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
 
         if ($planned[$mes] > 0) {
-            $efectividad = $real[$mes] * 100 / $planned[$mes];
+            $efectividad = ($real[$mes] - $mayor) * 100 / $planned[$mes];
         } else {
             $efectividad = 'N/A';
         }
@@ -780,10 +765,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param ArrangementProgram $resource
      * @param type $porcentaje
      */
-    public function setPenaltiesbyGoal(ArrangementProgram $resource, $porcentaje) {
+    public function setPenaltiesbyGoal(ArrangementProgram $resource) {
 
         $em = $this->getDoctrine()->getManager();
         $timeline = $resource->getTimeline();
+        $porcentaje = 0;
 
         foreach ($timeline->getGoals() as $timeline_goals) {
             $penalty = $this->CalculateAdvancePenalty($timeline_goals);

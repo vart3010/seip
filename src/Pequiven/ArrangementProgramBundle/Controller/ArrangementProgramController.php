@@ -912,13 +912,16 @@ class ArrangementProgramController extends SEIPController {
         }
 
         $individualValues = array();
+        $penalties = array();
         $i = 1;
-
+        $totalWeight=0;
+        
         foreach ($entity->getTimeline()->getGoals() as $goal) {
             $arrayGoalOrder[$goal->getId()] = $i;
+            $totalWeight+=$goal->getWeight();
             foreach ($goal->getResponsibles() as $resp) {
                 $individualValues[$goal->getId()][$resp->getId()] = GoalController::searchValuebyUserAction($goal->getId(), $resp->getId());
-                $penalties[$goal->getId()][$resp->getId()] = GoalController::searchPenaltybyUserAction($goal->getId(), $resp->getId());
+                $penalties[$goal->getId()][$resp->getId()] = GoalController::searchPenaltybyUserAction($goal->getId(), $resp->getId());                
             }
             $i++;
         }
@@ -928,9 +931,15 @@ class ArrangementProgramController extends SEIPController {
         //ARREGLO DE CAUSAS
         $causes = MovementEmployee::getAllCauses();
 
+        $resultService = $this->container->get('seip.service.result');
+        $date = $entity->getLastDateCalculateResult();
+        $totales = $resultService->CalculateAdvancePenaltyAP($entity, $date);
+
         return array(
             'entity' => $entity,
             'individualValues' => $individualValues,
+            'totales' => $totales,
+            'totalWeight' => $totalWeight,
             'penalties' => $penalties,
             'movementHistory' => $movementHistory,
             'arrayGoalOrder' => $arrayGoalOrder,
