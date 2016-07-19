@@ -669,7 +669,7 @@ class IndicatorService implements ContainerAwareInterface {
             $urlParemeters = array(
                 'id' => $indicator->getId(),
                 'tablero' => 0
-                    );
+            );
         }
 
         if ($modeUrl == CommonObject::OPEN_URL_OTHER_WINDOW) {
@@ -1037,7 +1037,7 @@ class IndicatorService implements ContainerAwareInterface {
                     $set["toolText"] = $indicatorChildren->getSummary() . ':{br}' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
                     $set["color"] = $this->getColorOfResult($indicatorChildren);
                     if (count($indicatorChildren->getCharts()) > 0) {
-                        $set["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(),'tablero' => $options['tablero']));
+                        $set["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(), 'tablero' => $options['tablero']));
                     }
                     $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicatorChildren->getId()));
                     $dataSet[] = $set;
@@ -1587,8 +1587,8 @@ class IndicatorService implements ContainerAwareInterface {
                     $dataActualPeriod["value"] = number_format($arrayVariables[$children->getRef()][$children->getPeriod()->getName()]['value'], 2, ',', '.');
                     $dataLastPeriod["value"] = number_format($arrayVariables[$children->getRef()][$children->getPeriod()->getParent()->getName()]['value'], 2, ',', '.');
                     if (count($children->getCharts()) > 0) {
-                        $dataActualPeriod["link"] = $this->generateUrl($url, array('id' => $children->getId(),'tablero' => $options['tablero']));
-                        $dataLastPeriod["link"] = $this->generateUrl($url, array('id' => $children->getId(),'tablero' => $options['tablero']));
+                        $dataActualPeriod["link"] = $this->generateUrl($url, array('id' => $children->getId(), 'tablero' => $options['tablero']));
+                        $dataLastPeriod["link"] = $this->generateUrl($url, array('id' => $children->getId(), 'tablero' => $options['tablero']));
                     }
 
                     $category[] = $label;
@@ -3078,7 +3078,7 @@ class IndicatorService implements ContainerAwareInterface {
             ),
         );
 
-        if(is_null($options["hideUnit"]) || $options["hideUnit"]==""){
+        if (is_null($options["hideUnit"]) || $options["hideUnit"] == "") {
             $unit = " Bs./TM";
         } else {
             $unit = $options["hideUnit"];
@@ -3178,7 +3178,7 @@ class IndicatorService implements ContainerAwareInterface {
                 "color" => $colorItem,
                 "type" => $indicatorPadre->getIndicatorLevel()->getDescription(),
                 "tooltext" => $indicatorPadre->getIndicatorLevel()->getDescription(),
-                "link" => $this->generateUrl($url, array('id' => $indicatorPadre->getId(),'tablero' => $options['tablero'])),
+                "link" => $this->generateUrl($url, array('id' => $indicatorPadre->getId(), 'tablero' => $options['tablero'])),
             );
 
             $chart["dataSource"]["data"][] = $configPadre;
@@ -3230,7 +3230,7 @@ class IndicatorService implements ContainerAwareInterface {
                     "color" => $colorItem,
                     "type" => $temp->getIndicatorLevel()->getDescription(),
                     "tooltext" => $indicatorPadre->getIndicatorLevel()->getDescription(),
-                    "link" => $this->generateUrl($url, array('id' => $temp->getId(),'tablero' => $options['tablero'])),
+                    "link" => $this->generateUrl($url, array('id' => $temp->getId(), 'tablero' => $options['tablero'])),
                 );
 
                 $chart["dataSource"]["data"][] = $config;
@@ -3330,7 +3330,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $color = $colorbase;
                 $child = $indicator->getChildrens();
                 if ($child[0] != null) {
-                    $link = $this->generateUrl($url, array('id' => $child[0]->getId(),'tablero' => $options['tablero']));
+                    $link = $this->generateUrl($url, array('id' => $child[0]->getId(), 'tablero' => $options['tablero']));
                 } else {
                     $link = "";
                 }
@@ -3447,9 +3447,9 @@ class IndicatorService implements ContainerAwareInterface {
                     $dataPlan["value"] = number_format($indicatorChildren->getTotalPlan(), 2, ',', '.');
                     $dataMedition["value"] = number_format($indicatorChildren->getResultReal(), 2, ',', '.');
                     if (count($indicatorChildren->getCharts()) > 0) {
-                        $label["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(),'tablero' => $options['tablero']));
-                        $dataReal["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(),'tablero' => $options['tablero']));
-                        $dataPlan["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(),'tablero' => $options['tablero']));
+                        $label["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(), 'tablero' => $options['tablero']));
+                        $dataReal["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(), 'tablero' => $options['tablero']));
+                        $dataPlan["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(), 'tablero' => $options['tablero']));
                     }
 
                     $category[] = $label;
@@ -4516,7 +4516,9 @@ class IndicatorService implements ContainerAwareInterface {
         $result = $acum = $sum = 0;
         $calc = $indicator->getIndicatorSigMedition();
         $contMonth = 1;
-        if ($calc === null) {$calc = 1;}
+        if ($calc === null) {
+            $calc = 1;
+        }
         //Recibiendo la frecuencia de calculo del indicador
         //$labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
 
@@ -4542,13 +4544,13 @@ class IndicatorService implements ContainerAwareInterface {
                     $value = $acum / ($contMonth - 1); //Calculo de Promedio                
                 } else {
                     $value = $indicator->getResultReal();
-                }         
+                }
                 //$value = ceil($value); //Paso de promedio
                 break;
             case 2:
-                $value = $indicator->getResultReal();                    
-                break;            
-        }        
+                $value = $indicator->getResultReal();
+                break;
+        }
 
         return $value;
     }
@@ -4634,7 +4636,7 @@ class IndicatorService implements ContainerAwareInterface {
         return $results;
     }
 
-    public function IndicatorCalculateTendency($indicator,$resultNumbers) {
+    public function IndicatorCalculateTendency($indicator, $resultNumbers) {
         $cont = 1;
         $values = count($indicator->getValuesIndicator());
 
@@ -4651,9 +4653,9 @@ class IndicatorService implements ContainerAwareInterface {
                     $dataXY[] = $data * $cont; //X*Y
                     $dataXX[] = $cont * $cont; //X^2
                 }
-                $cont++;                                        
+                $cont++;
             }
-            
+
 //echo "X"; var_dump($dataX);                    
 //echo "Cantidad"; var_dump(count($dataX));                    
 //echo "Y"; var_dump($dataY);
@@ -4786,7 +4788,7 @@ class IndicatorService implements ContainerAwareInterface {
 //Número de indicadores asociados
         $totalNumValues = count($indicator->getValuesIndicator());
         if ($totalNumValues >= 3) {
-            $dataTendency = $this->IndicatorCalculateTendency($indicator,$resultNumbers);
+            $dataTendency = $this->IndicatorCalculateTendency($indicator, $resultNumbers);
         }
 
 //Inicialización
@@ -5202,14 +5204,86 @@ class IndicatorService implements ContainerAwareInterface {
             return false;
         }
     }
-    
+
     /*
      * METODO QUE RETORNA LA FORMULA PARA QUE DIERA ESE RESULTADO
      */
+
     public function getCalculationMethod(Indicator $indicator) {
-        $tendency = $indicator->getTendency();
-        $result = $indicator->getValueFinal();
-        
+        $tendenty = $indicator->getTendency();
+        $resultIndicator = $indicator->getResultReal();
+        $arrangementRange = $indicator->getArrangementRange();
+        $arrangementRangeService = $this->getArrangementRangeService();
+        $resultService = $this->getResultService();
+
+
+        $penalty = 0;
+        $formula = "";
+
+        if ($tendenty) {
+            if ($arrangementRange) {
+                //Validamos que no existe error en el rango del Indicador para que pueda ser recalculado sin problemas
+                $error = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendenty);
+                ##CRECIENTE
+                if ($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX) {
+                    if ($error == Null) {
+                        $penalty = $resultService->getPenaltyIndicator($indicator,$tendenty);
+                    }
+                    #$formula = (($resultIndicator / $arrangementRange->getRankTopBasic()) * 100);
+                    $formula = "(((" . number_format($resultIndicator, 2, ",", ".") . " / " . $arrangementRange->getRankTopBasic() . "))" . " * 100) - ".$penalty."%";
+
+                    #var_dump($formula);
+                    return $formula;
+                }
+                ##DECRECIENTE
+                else if ($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN) {//Decreciente
+                    if ($error == Null) {
+                        $penalty = $resultService->getPenaltyIndicator($indicator,$tendenty);
+                    }
+                    #$formula = (($resultIndicator / $arrangementRange->getRankTopBasic()) * 100);
+                    $formula = "(((" . $arrangementRange->getRankBottomBasic() . " / " . number_format($resultIndicator, 2, ",", ".") . "))" . " * 100) - ".$penalty."%";
+
+                    #var_dump($formula);
+                    return $formula;
+                }
+                ##ESTABLE
+                else if ($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_EST) {
+                    if ($error == Null) {
+                        if ($resultService->calculateRangeGood($indicator, $tendenty)) {//Rango Verde R*100% (Máximo 100)
+                            $penalty = 0;
+                        } else if ($resultService->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
+                            $penalty = 10;
+                        } else if ($resultService->calculateRangeBad($indicator, $tendenty)) {//Rango Rojo R*0%
+                            $penalty = 20;
+                        }
+                        
+                        $middle = ($arrangementRange->getRankTopMixedBottom()+$arrangementRange->getRankTopMixedTop())/2;
+                        if($resultIndicator > $middle) {
+                            $formula = "(((" . $middle. " * 100 / " . number_format($resultIndicator, 2, ",", ".") . "))" . ") - ".$penalty."%";
+                        } else if($resultIndicator<$middle) {
+                            $formula = "(((" . number_format($resultIndicator, 2, ",", ".") . " * 100 / " .$middle . "))" . ") - ".$penalty."%";
+                        }
+                    }
+                    
+                    #var_dump($formula);
+                    return $formula;
+                    
+                }
+            } else {
+                #var_dump("Sin rango de gestion definido");
+                $formula = "Sin rango de gestion definido";
+                return $formula;
+            }
+        } else {
+            #var_dump("Sin tendencia definida");
+            $formula = "Sin tendencia definida";
+            return $formula;
+        }
+
+
+
+//        var_dump($tendency->getRef());
+//        var_dump($result);
     }
 
     /**

@@ -26,6 +26,8 @@
 {% endblock %}
 
 {% block body -%}
+    
+
     {% set labelTypeDetailValue = indicator.getLabelTypeDetailValue|trans %}
     {% set showIndicatorConfigButton = false %}
     {% set isValueIndicatorConfig = false %}
@@ -159,7 +161,7 @@
                             </label>
 
                             {% if (indicator.totalPlan != 0) or (indicator.getValuesIndicator | length > 0) %}
-                            
+
                                 {% if  indicator.getDetails.getIsCheckPlan == true %}
                                     {{ indicatorService.getValueOfVariableFromValueIndicator(indicator,indicator.getDetails.getVarIndicatorPlan)|myNumberFormat }}
                                 {% elseif indicator.isValuePlanFromEquationPlanFormula == true %}
@@ -230,21 +232,22 @@
                         </p>
                     </div>
                 {% endif%}
-                
-                {#<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+
+               {#<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         &nbsp;
                     </p>
-                
                 </div>
+
                 <!--Metodo de calculo que se aplico para dar el resultado del indicador -->
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                    <p class="inline-label">
+                    <p class="inline-label" style="text-align: left;">
                         <label class="label">{{ 'form.metodoCalculo'|trans }}</label>
-                        
-                    </p>
-                </div>
-#}
+{#                        {{ indicatorService.getCalculationMethod(indicator) }}
+                        << {(Resx100)} \over ({PRV\over2}) >>
+                    {#</p>
+                </div>#}
+
                 <!-- Rango de gestión del Indicador -->
                 {% if (indicator.showRange) %}
                     {% set resultReal = indicator.resultReal %}
@@ -302,7 +305,7 @@
                     <ul class="fa-ul">
                         {% for managementSystem in indicator.managementSystems %}
                             <li>{{ managementSystem.description }}</li>
-                        {% endfor %}
+                            {% endfor %}
                     </ul>
                 </div>
             {% endif %}
@@ -366,7 +369,7 @@
 
         {# Visualizacion de Indice de evolucion #} 
         {% if indicator.showEvolutionView %}             
-        {% include 'PequivenSIGBundle:Template:base_evolution_nav.html.twig' with {'typeObject': 1, 'id': indicator.id, 'route': 'pequiven_indicator_evolution'} %}
+            {% include 'PequivenSIGBundle:Template:base_evolution_nav.html.twig' with {'typeObject': 1, 'id': indicator.id, 'route': 'pequiven_indicator_evolution'} %}
         {% endif %}                
         {# end #}
 
