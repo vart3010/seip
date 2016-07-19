@@ -149,6 +149,15 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $arrangementProgram = $goal->getTimeline()->getArrangementProgram();
         $date = new DateTime();
 
+        //Traer los Valores Individuales de la meta        
+//        foreach ($goal->getResponsibles() as $userobj) {            
+//            $searchCriteria = array(
+//                'idGoal' => $goal->getId(),
+//                'idUser' => $userobj->getId()
+//            );            
+//            $data["Results"][$goal->getId()][$userobj->getId()] = $this->generateUrl('individual_value', $searchCriteria);
+//        }
+
         //Habilitar la carga de lo real
         $isLoadRealEnabled = false;
         //Habilitar la carga de los planeado
@@ -399,7 +408,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $details = $arrangementProgram->getDetails();
         $user = $this->getUser();
         //var_dump($user); die();
-        if($details->getNotificationInProgressByUser() != null){
+        if ($details->getNotificationInProgressByUser() != null) {
 //            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 9))){
             //if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 35) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 35))){
             if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 14) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 14))){

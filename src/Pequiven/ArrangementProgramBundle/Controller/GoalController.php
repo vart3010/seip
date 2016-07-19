@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\ArrangementProgramBundle\Entity\Goal;
 use Pequiven\ArrangementProgramBundle\Form\GoalType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Goal controller.
@@ -114,8 +115,7 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController {
      *
      * @Template("PequivenArrangementProgramBundle:Goal:_form.html.twig")
      */
-    public function getFormAction($typeForm)
-    {
+    public function getFormAction($typeForm) {
         $entity = new Goal();
         $form = $this->createCreateForm($entity, $typeForm);
         $form->remove('responsibles');
@@ -172,7 +172,7 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController {
 
         $form = $this->createForm(new GoalType(), $entity, array(
             'action' => $this->generateUrl('goal_update', array('id' => $entity->getId())),
-            'method' => 'PUT',            
+            'method' => 'PUT',
         ));
 
         $form->add('submit', 'submit', array('label' => 'Update'));
@@ -257,6 +257,62 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController {
      */
     protected function getPeriodService() {
         return $this->container->get('pequiven_seip.service.period');
+    }
+
+    /**
+     * 
+     * @param type $idGoal
+     * @param type $idUser
+     * @return type
+     */
+    public function searchValuebyUserAction($idGoal, $idUser) {
+
+      //  $response = new JsonResponse();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $userobj = $this->get('pequiven.repository.user')->findOneById($idUser);
+        $goalobj = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findOneById($idGoal);
+        $searchCriteria = array('goalDetails' => $goalobj->getGoalDetails(), 'user' => $userobj);
+        $goalInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy($searchCriteria);
+
+        //$value = array();
+
+        if ($goalInd) {
+            $value = $goalInd->getResultReal();
+        } else {
+            $value = null;
+        }
+
+        return $value;
+    }
+    
+    /**
+     * 
+     * @param type $idGoal
+     * @param type $idUser
+     * @return type
+     */
+    public function searchPenaltybyUserAction($idGoal, $idUser) {
+
+      //  $response = new JsonResponse();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $userobj = $this->get('pequiven.repository.user')->findOneById($idUser);
+        $goalobj = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findOneById($idGoal);
+        $searchCriteria = array('goalDetails' => $goalobj->getGoalDetails(), 'user' => $userobj);
+        $goalInd = $em->getRepository('PequivenArrangementProgramBundle:GoalDetailsInd')->findOneBy($searchCriteria);
+
+        //$value = array();
+
+        if ($goalInd) {
+            $value = $goalInd->getPenalty();
+        } else {
+            $value = null;
+        }
+
+        return $value;
     }
 
 }

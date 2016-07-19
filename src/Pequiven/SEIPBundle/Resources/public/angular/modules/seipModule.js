@@ -254,6 +254,14 @@ angular.module('seipModule.controllers', [])
 
             };
 
+//            $scope.getGoalValuebyResponsible = function (idGoal, idUser) {
+//                var url = Routing.generate("individual_value", {idGoal: idGoal, idUser: idUser});
+//                var spanValue = angular.element('#'+idGoal+'-'+idUser);
+//                $http.get(url).success(function (data) {
+//                    spanValue.val(data.boo);
+//                });
+//            };
+
             $scope.getUrlMovement = function (idGoal, url) {
 
                 var redirect = url + "?idGoal=" + idGoal;
@@ -1170,8 +1178,6 @@ angular.module('seipModule.controllers', [])
             });
         })
 
-
-
         .controller('ReportArrangementProgramAllController', function ($scope, $http) {
             $scope.data = {
                 tacticals: null,
@@ -1595,6 +1601,22 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
+            //Carga el formulario de las Causas de Desviacion
+            $scope.loadTemplateCausesDesviationSync = function (resource) {
+                $scope.initFormCausesAddSync(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+
+                $scope.templateOptions.setParameterCallBack(resource);
+
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
             //Añadir Causa de Desviación
             var addCause = function (save, successCallBack) {
                 var formValueIndicator = angular.element('#form_causes_evolution');
@@ -1605,6 +1627,49 @@ angular.module('seipModule.controllers', [])
                 }
                 if (save == true) {
                     var url = Routing.generate('pequiven_causes_evolution_add', {idObject: $scope.idObject, typeObj: $scope.typeObj});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    $timeout(callAtTimeout, 1500);
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+                function callAtTimeout() {
+                    location.reload();
+                }
+            };
+            //Añadir Causa de Desviación
+            var addCauseSync = function (save, successCallBack) {
+                var formValueIndicator = angular.element('#form_causes_evolution_sync');
+                var formData = formValueIndicator.serialize();
+
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_causes_evolution_add_sync', {idObject: $scope.idObject, typeObj: $scope.typeObj});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -1725,11 +1790,11 @@ angular.module('seipModule.controllers', [])
             //Añadir el formulario de edición de acción
             var editAction = function (save, successCallBack) {
                 var formValueIndicator = angular.element('#form_edit_action_evolution');
-                var formData = formValueIndicator.serialize();                
+                var formData = formValueIndicator.serialize();
                 if (save == undefined) {
                     var save = false;
                 }
-                if (save == true) {                    
+                if (save == true) {
                     var url = Routing.generate('pequiven_indicator_action_add_get_form_edit', {idAction: $scope.action_data, month: $scope.month});
                 }
                 notificationBarService.getLoadStatus().loading();
@@ -1806,12 +1871,17 @@ angular.module('seipModule.controllers', [])
                 }
             };
             $scope.templateOptions.setVar('addCause', addCause);
+            $scope.templateOptions.setVar('addCauseSync', addCauseSync);
             $scope.templateOptions.setVar('addAction', addAction);
             $scope.templateOptions.setVar('addActionValues', addActionValues);
             $scope.templateOptions.setVar('addTrendEvolution', addTrendEvolution);
             $scope.templateOptions.setVar('editAction', editAction);
             var confirmCallBackCauses = function () {
                 addCause(true, function (data) {});
+                return true;
+            };
+            var confirmCallBackCausesSync = function () {
+                addCauseSync(true, function (data) {});
                 return true;
             };
             var confirmCallBackAction = function () {
@@ -1910,7 +1980,7 @@ angular.module('seipModule.controllers', [])
 
                 var parameters = {
                     idAction: $scope.action_data,
-                    month: $scope.month,                    
+                    month: $scope.month,
                     _dc: numero
                 };
                 if (resource) {
@@ -1928,10 +1998,9 @@ angular.module('seipModule.controllers', [])
             };
             //Formulario Cause
             $scope.initFormCausesAdd = function (resource) {
-
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(420);
+                $scope.setHeight(400);
 
                 var parameters = {
                     idObject: $scope.idObject,
@@ -1945,9 +2014,33 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_indicatorcauses_get_form', parameters);
                 $scope.templates = [
                     {
-                        name: 'Causas de Desviación del Indicador',
+                        name: 'Causas de Desviación',
                         url: url,
                         confirmCallBack: confirmCallBackCauses,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+            //Formulario Cause
+            $scope.initFormCausesAddSync = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(400);
+                var parameters = {
+                    idObject: $scope.idObject,
+                    typeObj: $scope.typeObj,
+                    month: $scope.month,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_causes_evolution_add_sync', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Causas de Desviación Sincronizadas',
+                        url: url,
+                        confirmCallBack: confirmCallBackCausesSync,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
@@ -5726,7 +5819,7 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
-            
+
             //Busca los Perfiles de Evaluación Política
 //            $scope.getProfilesPoliticEvaluation = function () {
 //                var parameters = {
@@ -7246,14 +7339,14 @@ angular.module('seipModule.controllers', [])
                 $http.get(getDataStackedColumn3DbyIndicator).success(function (data) {
                     FusionCharts.ready(function () {
                         var ChartStackedColumn3DbyIndicator = new FusionCharts({
-                            "type": 'stackedcolumn2d',                            
+                            "type": 'stackedcolumn2d',
                             "renderAt": render,
                             "width": width + "%",
                             "height": height,
-                            "dataFormat": 'json',                            
+                            "dataFormat": 'json',
                             "dataSource": {
                                 "chart": data.dataSource.chart,
-                                "categories": data.dataSource.categories,                                
+                                "categories": data.dataSource.categories,
                                 "dataset": data.dataSource.dataset
                             }
                         });
@@ -7262,7 +7355,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //33-Gráfico tipo multiseries de línea, con un trendline de forma horizontal y el valor de los resultados
             $scope.chargeChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
@@ -8176,7 +8269,7 @@ angular.module('seipModule.controllers', [])
                         "type": "mscolumnline3d",
                         "renderAt": id,
                         "width": "95%",
-                        //"height": "300%",
+                        //"height": "400%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "Gráfico Evolución Indicador",
                         "exporthandler": urlExportFromChart,

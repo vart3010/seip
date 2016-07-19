@@ -144,10 +144,11 @@
                                 <thead>
                                     <tr style="vertical-align: middle;">
                                         <th style="vertical-align: middle;" width="2%">#</th>
-                                        <th style="vertical-align: middle;" scope="col" width="53%" >Descripción de la Meta</th>
-                                        <th style="vertical-align: middle; text-align: center" scope="col" width="10%" >Peso</th>
-                                        <th style="vertical-align: middle; text-align: center"  scope="col" width="17%">Avance hasta la Fecha</th>    
-                                        <th style="vertical-align: middle; text-align: center" scope="col" width="10%" >Aporte</th>    
+                                        <th style="vertical-align: middle;" scope="col" width="51%" >Descripción de la Meta</th>
+                                        <th style="vertical-align: middle; text-align: center" scope="col" width="5%" >Peso</th>
+                                        <th style="vertical-align: middle; text-align: center"  scope="col" width="17%">Avance Actual</th>    
+                                        <th style="vertical-align: middle; text-align: center"  scope="col" width="10%">Valor Individual</th>    
+                                        <th style="vertical-align: middle; text-align: center" scope="col" width="8%" >Aporte</th>    
                                         <th style="vertical-align: middle; text-align: center" scope="col" width="8%" >Efect.</th>    
                                     </tr>
                                 </thead>
@@ -157,7 +158,7 @@
                                     {% for goal in  management["goals"] %} 
 
                                         {% if goal.resultToDate > 0 %}
-                                            {% set porc = (goal.result * 100)/ goal.resultToDate %}
+                                            {% set porc = (goal.advance * 100)/ goal.resultToDate %}
                                         {% else %}    
                                             {% set porc = 0 %}
                                         {% endif %}
@@ -179,10 +180,10 @@
                                                     <small>
                                                         {% for obs in goal.observaciones %}
                                                             {% if obs.type== 'I' %}
-                                                                Ingresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}% , <b>Real Notificado: </b>{{ (obs.realAdvance+obs.pentalty) |number_format(2,',','.') }}%.
+                                                                Ingresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}% , <b>Notificado: </b>{{ (obs.realAdvance+obs.pentalty) |number_format(2,',','.') }}%.
                                                             {% endif %}
                                                             {% if obs.type== 'O' %}
-                                                                Egresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}% , <b>Real Notificado: </b>{{ (obs.realAdvance+obs.pentalty) |number_format(2,',','.') }}%.
+                                                                Egresado desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}% , <b>Notificado: </b>{{ (obs.realAdvance+obs.pentalty) |number_format(2,',','.') }}%.
                                                             {% endif %}
                                                             <br>
                                                         {%endfor%}
@@ -190,26 +191,32 @@
                                                 {% endif %}
                                             </td>
                                             <td style="text-align: center" >{{ goal.weight }}%</td>
-                                            <td  scope="row" width="15%">
+                                            <td  scope="row">
                                     <center>
                                         <span ng-class="getClassForMeter({{ porc }},1)"></span>
                                         <span ng-class="getClassForMeter({{ porc }},2)"></span>
                                         <span ng-class="getClassForMeter({{ porc }},3)"></span>
-                                        - {{ goal.result|number_format(2,',','.') }}% &nbsp;      
+                                        - {{ goal.advance|number_format(2,',','.') }}% &nbsp;      
                                         <br>
                                         <span class="tag {{ class }}">
-                                            {{ goal.result|number_format(2,',','.') }} de {{ goal.resultToDate|number_format(2,',','.') }}
+                                            {{ goal.advance|number_format(2,',','.') }} de {{ goal.resultToDate|number_format(2,',','.') }}
                                         </span>
                                     </center>
-                                    </td>                                       
-                                    <td width="10%"style="text-align: center">
+                                    </td>    
+                                    <td style="text-align: left; vertical-align: middle;">
+                                        <span ng-class="getClassForMeter({{goal.result}},1)"></span>
+                                        <span ng-class="getClassForMeter({{goal.result}},2)"></span>
+                                        <span ng-class="getClassForMeter({{goal.result}},3)"></span>
+                                        - {{ goal.aporte|number_format(0,',','.') }}% &nbsp;      
+                                    </td>
+                                    <td style="text-align: center">
                                         {% if ((goal.eval=="N/A")and((goal.eval| is_string)==1)) %}
                                             No<br>Aplica
                                         {%else%} 
                                             {{ goal.aporte |number_format(2,',','.') }} de<br>{{ goal.aportePlan |number_format(2,',','.') }}
                                         {% endif %}
                                     </td>
-                                    <td width="10%" style="text-align: center">
+                                    <td style="text-align: center">
                                         {% if ((goal.eval=="N/A")and((goal.eval| is_string)==1)) %}
                                             No Aplica
                                         {%else%}                                            
@@ -220,7 +227,6 @@
                                     {% set cont = cont + 1 %}
                                 {% endfor %}
                                 </tbody>
-
                             </table>
                         </div>
                     </fieldset>

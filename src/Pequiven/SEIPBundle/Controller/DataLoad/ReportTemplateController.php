@@ -659,7 +659,7 @@ class ReportTemplateController extends SEIPController {
             "startDate" => $formatStartDay,
             "endDate" => $formatEndDay,
             "labelsTypesFailsPNR" => $labelsTypesFailsPNR,
-            "typeOverProduction"=>$request->get("typeOverProduction")
+            "typeOverProduction" => $request->get("typeOverProduction")
         );
         $view = $this
                 ->view()
@@ -830,14 +830,13 @@ class ReportTemplateController extends SEIPController {
                     $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['day'] = $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
 
                     if ($failInternal->getName() == 'Sobre Producción') {
-                        if($overProduction==1) {
+                        if ($overProduction == 1) {
                             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
-                        } else if($overProduction==2) {
+                        } else if ($overProduction == 2) {
                             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = ($result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day]) - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
-
                         } else {
                             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
-                        }    
+                        }
                     } else {
                         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
                     }
@@ -846,10 +845,10 @@ class ReportTemplateController extends SEIPController {
                         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
 
                         if ($failInternal->getName() == 'Sobre Producción') {
-                            if($overProduction==1) {
-                                $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];    
-                            } else if($overProduction==2) {
-                                $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = ($result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth]) - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];    
+                            if ($overProduction == 1) {
+                                $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                            } else if ($overProduction == 2) {
+                                $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = ($result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth]) - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
                             }
                         } else {
                             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
@@ -902,37 +901,35 @@ class ReportTemplateController extends SEIPController {
                                 $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
 
                                 if ($failInternal->getName() == 'Sobre Producción') {
-                                    if($overProduction==1) {
+                                    if ($overProduction == 1) {
                                         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
-
-                                    } else if($overProduction==2) {
-                                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = ($result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth]) - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];    
+                                    } else if ($overProduction == 2) {
+                                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = ($result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth]) - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
                                     }
                                 } else {
                                     $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
                                 }
 
-                                /*if ($failInternal->getName() != 'Sobre Producción') {
-                                    $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
-                                }*/
+                                /* if ($failInternal->getName() != 'Sobre Producción') {
+                                  $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                                  } */
                             }
                         } else {
                             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
 
-                                if ($failInternal->getName() == 'Sobre Producción') {
-                                    if($overProduction==1) {
-                                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
-
-                                    } else if($overProduction==2) {
-                                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = ($result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth]) - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];    
-                                    }
-                                } else {
+                            if ($failInternal->getName() == 'Sobre Producción') {
+                                if ($overProduction == 1) {
                                     $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                                } else if ($overProduction == 2) {
+                                    $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = ($result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth]) - $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
                                 }
-
-                            /*if ($failInternal->getName() != 'Sobre Producción') {
+                            } else {
                                 $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
-                            }*/
+                            }
+
+                            /* if ($failInternal->getName() != 'Sobre Producción') {
+                              $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                              } */
                         }
                     }
                 }
@@ -994,7 +991,7 @@ class ReportTemplateController extends SEIPController {
             "externalRawMaterials" => $externalRawMaterials,
             "labelsTypesFailsPNR" => $labelsTypesFailsPNR,
             "rawMaterials" => $rawMaterials,
-            "typeOverProduction"=>$request->get("overProduction")
+            "typeOverProduction" => $request->get("overProduction")
         );
 
 
@@ -1207,12 +1204,12 @@ class ReportTemplateController extends SEIPController {
             }
 
             //ME TRAIGO LAS OBSERVACIONES 
-            if($summaryDay["observation"] !="")  { 
+            if ($summaryDay["observation"] != "") {
                 $observations[] = array(
                     "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
                     "obs" => $summaryDay["observation"]
                 );
-            }      
+            }
 
             if ($summaryDay["plan"] > 0) {
                 $ejecutionDay = ($summaryDay["real"] * 100) / $summaryDay["plan"];
@@ -1434,9 +1431,8 @@ class ReportTemplateController extends SEIPController {
                     'expanded' => false,
                     'attr' => array('class' => 'select2'),
                     'translation_domain' => 'PequivenSEIPBundle',
-                    'data'=>false
+                    'data' => false
                 ))
-
                 ->getForm();
 
         $showProduction = null;
@@ -1570,7 +1566,7 @@ class ReportTemplateController extends SEIPController {
                 "day" => 0.0,
                 "day_preview" => 0.0
             );
-            
+
             $plants = array();
 
             //HASTA LA FECHA
@@ -1592,10 +1588,10 @@ class ReportTemplateController extends SEIPController {
                             }
                             //PRODUCTS REPORTS
                             foreach ($plantReport->getProductsReport() as $productReport) {
-                                
+
                                 //VALIDA Q SEAN PLANTS REPORTS HIJOS
                                 if ($productReport->getIsGroup() == 0) {
-                                    if ($productReport->getProduct()->isEnabled()) { 
+                                    if ($productReport->getProduct()->isEnabled()) {
 
                                         if (!$dataProductsReports->contains($productReport)) {
                                             $dataProductsReports->add($productReport);
@@ -1607,10 +1603,10 @@ class ReportTemplateController extends SEIPController {
                                         $dayPlan+=$summaryDay["plan"];
                                         $dayReal+=$summaryDay["real"];
 
-                                        
-                                        
+
+
                                         //ME TRAIGO LAS OBSERVACIONES 
-                                        if($summaryDay["observation"] !="")  { 
+                                        if ($summaryDay["observation"] != "") {
                                             $observations[] = array(
                                                 "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
                                                 "obs" => $summaryDay["observation"]
@@ -1650,10 +1646,6 @@ class ReportTemplateController extends SEIPController {
                                         $summaryProductionTotals["day"]["real"] +=$summaryDay["real"];
                                         #$summaryProductionTotals["day"]["ejec"] +=$ejecutionDay;
                                         #$summaryProductionTotals["day"]["var"] +=$var;
-
-
-
-
                                         //PRODUCCTION MONTH
                                         $summaryMonth = $productReport->getSummaryMonth($dateReport, $typeReport);
 
@@ -1687,8 +1679,6 @@ class ReportTemplateController extends SEIPController {
                                         $summaryProductionTotals["month"]["realAcumulado"] +=$summaryMonth["real_acumulated"];
                                         #$summaryProductionTotals["month"]["ejec"] +=$ejecutionMonth;
                                         #$summaryProductionTotals["month"]["var"] +=$varMonth;
-
-
                                         //PRODUCCTION YEAR
                                         $summaryYear = $productReport->getSummaryYear($dateReport, $typeReport);
 
@@ -1781,21 +1771,21 @@ class ReportTemplateController extends SEIPController {
                             } //PRODUCT REPORT
 
 
-                            $summaryProductionTotals["day"]["ejec"] = $this->getEjecution($summaryProductionTotals["day"]["ppto"],$summaryProductionTotals["day"]["real"],false);
-                            $summaryProductionTotals["day"]["var"] = $this->getVariation($summaryProductionTotals["day"]["ppto"],$summaryProductionTotals["day"]["real"],false);
+                            $summaryProductionTotals["day"]["ejec"] = $this->getEjecution($summaryProductionTotals["day"]["ppto"], $summaryProductionTotals["day"]["real"], false);
+                            $summaryProductionTotals["day"]["var"] = $this->getVariation($summaryProductionTotals["day"]["ppto"], $summaryProductionTotals["day"]["real"], false);
 
-                            $summaryProductionTotals["month"]["ejec"] = $this->getEjecution($summaryProductionTotals["month"]["pptoAcumulado"],$summaryProductionTotals["month"]["realAcumulado"],false);
-                            $summaryProductionTotals["month"]["var"] = $this->getVariation($summaryProductionTotals["month"]["pptoAcumulado"],$summaryProductionTotals["month"]["realAcumulado"],false);
+                            $summaryProductionTotals["month"]["ejec"] = $this->getEjecution($summaryProductionTotals["month"]["pptoAcumulado"], $summaryProductionTotals["month"]["realAcumulado"], false);
+                            $summaryProductionTotals["month"]["var"] = $this->getVariation($summaryProductionTotals["month"]["pptoAcumulado"], $summaryProductionTotals["month"]["realAcumulado"], false);
 
-                            $summaryProductionTotals["year"]["ejec"] = $this->getEjecution($summaryProductionTotals["year"]["pptoAcumulado"],$summaryProductionTotals["year"]["realAcumulado"],false);
-                            $summaryProductionTotals["year"]["var"] = $this->getVariation($summaryProductionTotals["year"]["pptoAcumulado"],$summaryProductionTotals["year"]["realAcumulado"],false);
+                            $summaryProductionTotals["year"]["ejec"] = $this->getEjecution($summaryProductionTotals["year"]["pptoAcumulado"], $summaryProductionTotals["year"]["realAcumulado"], false);
+                            $summaryProductionTotals["year"]["var"] = $this->getVariation($summaryProductionTotals["year"]["pptoAcumulado"], $summaryProductionTotals["year"]["realAcumulado"], false);
 
 
 
 
                             //CONSUMO DE SERVICIOS 
                             foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
-                            $consumerPlanningServiceObjects[] = $consumerPlanningService;
+                                $consumerPlanningServiceObjects[] = $consumerPlanningService;
 
                                 $serviceName = $consumerPlanningService->getService()->getName() . " (" . $consumerPlanningService->getService()->getServiceUnit() . ")";
                                 $serviceId = $consumerPlanningService->getService()->getId();
@@ -1854,23 +1844,22 @@ class ReportTemplateController extends SEIPController {
                                     );
                                     // }
                                     $unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
-                                    if($overProduction==1) {
-                                        
+                                    if ($overProduction == 1) {
+
                                         $unrealizedProduction["total_day"] = $unrealizedProduction["total_day"];
                                         $unrealizedProduction["total_month"] = $unrealizedProduction["total_month"];
                                         $unrealizedProduction["total_year"] = $unrealizedProduction["total_year"];
-
-                                    } else if($overProduction==2) { 
+                                    } else if ($overProduction == 2) {
                                         #$unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
                                         $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $productReport);
                                         //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]);
                                         //var_dump($unrealizedProduction["total_day"]);
                                         //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day']);
-                                        $unrealizedProduction["total_day"] = ($unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'])-$excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
-                                        $unrealizedProduction["total_month"] = ($unrealizedProduction["total_month"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'])-$excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'];
+                                        $unrealizedProduction["total_day"] = ($unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day']) - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
+                                        $unrealizedProduction["total_month"] = ($unrealizedProduction["total_month"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month']) - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'];
                                         //var_dump($unrealizedProduction["total_month"]);
                                         //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month']);
-                                        $unrealizedProduction["total_year"] = ($unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year'])-$excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year'];
+                                        $unrealizedProduction["total_year"] = ($unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year']) - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year'];
                                     } else {
 
                                         $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $productReport);
@@ -1883,21 +1872,21 @@ class ReportTemplateController extends SEIPController {
                                         //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month']);
                                         $unrealizedProduction["total_year"] = ($unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year']);
                                     }
-                                    
-                                    /*$unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
-                                    $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $productReport);
-                                    //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]);
-                                    //var_dump($unrealizedProduction["total_day"]);
-                                    //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day']);
-                                    $unrealizedProduction["total_day"] = $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
-                                    $unrealizedProduction["total_month"] = $unrealizedProduction["total_month"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'];
-                                    //var_dump($unrealizedProduction["total_month"]);
-                                    //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month']);
-                                    $unrealizedProduction["total_year"] = ($unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year']);
-                                    //var_dump($unrealizedProduction["total_year"]);
-                                    //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year']);
-*/
-                                    
+
+                                    /* $unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
+                                      $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $productReport);
+                                      //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]);
+                                      //var_dump($unrealizedProduction["total_day"]);
+                                      //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day']);
+                                      $unrealizedProduction["total_day"] = $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
+                                      $unrealizedProduction["total_month"] = $unrealizedProduction["total_month"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'];
+                                      //var_dump($unrealizedProduction["total_month"]);
+                                      //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month']);
+                                      $unrealizedProduction["total_year"] = ($unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year']);
+                                      //var_dump($unrealizedProduction["total_year"]);
+                                      //var_dump($excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year']);
+                                     */
+
 
                                     $arrayUnrealizedProduction[$productReportId]["day"] = $unrealizedProduction["total_day"];
                                     $arrayUnrealizedProduction[$productReportId]["month"] = $unrealizedProduction["total_month"];
@@ -1910,7 +1899,7 @@ class ReportTemplateController extends SEIPController {
                             }//FIN PNR
                             //INVENTARIO
                             foreach ($plantReport->getProductsReport() as $productReport) {
-                            $productReportsObjects[] = $productReport;
+                                $productReportsObjects[] = $productReport;
                                 if (!$productReport->getIsGroup()) {
                                     $productId = $productReport->getProduct()->getId();
                                     $Inventory = $productReport->getSummaryInventory($dateReport);
@@ -1983,58 +1972,22 @@ class ReportTemplateController extends SEIPController {
                         "graphicsDays" => $graphicsDays,
                         "graphicsMonth" => $graphicsMonth,
                         "graphicsYear" => $graphicsYear,
-                        "overProduction"=>$overProduction
+                        "overProduction" => $overProduction
                     );
-                    
+
                     if ($exportToPdf == 1) {
-                        $pdf = new \Pequiven\SEIPBundle\Model\PDF\NewSeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-                        $pdf->setPrintLineFooter(false);
-                        $pdf->setContainer($this->container);
-                        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
-                        $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
 
-                        // set document information
-                        $pdf->SetCreator(PDF_CREATOR);
-                        $pdf->SetAuthor('SEIP');
-                        $pdf->setTitle('Reporte de Produccion');
-                        $pdf->SetSubject('Resultados SEIP');
-                        $pdf->SetKeywords('PDF, SEIP, Resultados');
-
-                        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-                        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-                        // set default monospaced font
-                        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-                        // set margins
-                        $pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
-                        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-                        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-                        // set auto page breaks
-                        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-                        // set image scale factor
-                        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-                        // set font
-                        //$pdf->SetFont('times', 'BI', 12);
-                        // add a page
-                        $pdf->AddPage();
-
-                        // set some text to print
                         if ($byRange) {
+                            $twig = 'PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data_by_range.html.twig';
                             $html = $this->renderView('PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data_by_range.html.twig', $data);
                         } else {
+                            $twig = 'PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data.html.twig';
                             $html = $this->renderView('PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data.html.twig', $data);
                         }
-                        // print a block of text using Write()
-                        $pdf->writeHTML($html, true, false, true, false, '');
 
-                        //$pdf->Output('Reporte del dia'.'.pdf', 'I');
-                        $pdf->Output('Reporte de Produccion' . '.pdf', 'D');
+                        $this->getReportService()->generatePdf($data, 'Reporte de Producción', $twig, 'P', 'Producción del ' . date_format($dateReport, 'd-m-Y'));
                     } elseif ($exportToPdf == 2) {
-                        
+
                         $sections = array(
                             "production" => $showProduction,
                             "rawMaterial" => $showRawMaterial,
@@ -2043,7 +1996,7 @@ class ReportTemplateController extends SEIPController {
                             "pnr" => $showPnr,
                             "observations" => $showObservation
                         );
-                        
+
                         if ($byRange) {
                             $production = array(
                                 "production" => $summaryProducction,
@@ -2107,26 +2060,26 @@ class ReportTemplateController extends SEIPController {
                     $summaryConsumeServices = array();
 
                     $totalsProduction = array(
-                        "day"=>array(
-                            "plan"=>0.0,
-                            "real"=>0.0,
-                            "ejec"=>0.0,
-                            "perc"=>0.0
+                        "day" => array(
+                            "plan" => 0.0,
+                            "real" => 0.0,
+                            "ejec" => 0.0,
+                            "perc" => 0.0
                         ),
-                        "month"=>array(
-                            "plan_month"=>0.0,
-                            "plan_acumulated"=>0.0,
-                            "real_acumulated"=>0.0,
-                            "ejec"=>0.0,
-                            "perc"=>0.0
+                        "month" => array(
+                            "plan_month" => 0.0,
+                            "plan_acumulated" => 0.0,
+                            "real_acumulated" => 0.0,
+                            "ejec" => 0.0,
+                            "perc" => 0.0
                         ),
-                        "year"=>array(
-                            "plan_year"=>0.0,
-                            "plan_acumulated"=>0.0,
-                            "real_acumulated"=>0.0,
-                            "ejec"=>0.0,
-                            "perc"=>0.0
-                        )    
+                        "year" => array(
+                            "plan_year" => 0.0,
+                            "plan_acumulated" => 0.0,
+                            "real_acumulated" => 0.0,
+                            "ejec" => 0.0,
+                            "perc" => 0.0
+                        )
                     );
 
                     $arrayUnrealizedProduction = array();
@@ -2134,7 +2087,7 @@ class ReportTemplateController extends SEIPController {
                     foreach ($reportTemplates as $reportTemplate) {
                         foreach ($reportTemplate->getPlantReports() as $plantReport) {
 
-                            
+
                             $childrens = $plantReport->getChildrensGroup();
                             $nameGroup = $plantReport->getNameGroup();
                             //var_dump($nameGroup);
@@ -2142,22 +2095,22 @@ class ReportTemplateController extends SEIPController {
                             if (count($childrens) > 0) {
                                 $dayPlan = 0;
                                 $dayReal = 0;
-                                
+
                                 $MonthPlan = 0;
                                 $MonthPlanAcumulated = 0;
                                 $MonthRealAcumualated = 0;
 
-                                $yearPlan = 0; 
+                                $yearPlan = 0;
                                 $yearPlanAcumulated = 0;
-                                $yearRealAcumualated  = 0;
+                                $yearRealAcumualated = 0;
 
 
                                 $dayPlanRaw = 0;
                                 $dayRealRaw = 0;
-                                $monthPlanRaw =0;
-                                $monthRealRaw =0;
-                                $yearPlanRaw =0;
-                                $yearRealRaw =0;
+                                $monthPlanRaw = 0;
+                                $monthRealRaw = 0;
+                                $yearPlanRaw = 0;
+                                $yearRealRaw = 0;
 
                                 $consumeReal = 0.0;
                                 $consumePlan = 0.0;
@@ -2166,19 +2119,19 @@ class ReportTemplateController extends SEIPController {
                                 $consumeRealYear = 0.0;
                                 $consumePlanYear = 0.0;
 
-                                
+
 
                                 $arrayProdServices = array();
-                                
+
                                 $totalPnrPlantGroups = array(
-                                    "day"=>0.0,
-                                    "month"=>0.0,
-                                    "year"=>0.0
+                                    "day" => 0.0,
+                                    "month" => 0.0,
+                                    "year" => 0.0
                                 );
-                                
-                                
+
+
                                 foreach ($childrens as $child) {
-                                   
+
 
                                     foreach ($child->getProductsReport() as $productReport) {
                                         if ($productReport->getIsGroup() == 0) {
@@ -2191,7 +2144,7 @@ class ReportTemplateController extends SEIPController {
 
 
                                             //ME TRAIGO LAS OBSERVACIONES 
-                                            if($summaryDay["observation"] !="")  { 
+                                            if ($summaryDay["observation"] != "") {
                                                 $observations[] = array(
                                                     "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
                                                     "obs" => $summaryDay["observation"]
@@ -2200,7 +2153,7 @@ class ReportTemplateController extends SEIPController {
 
                                             //SUMMARY MONTH
                                             $summaryMonth = $productReport->getSummaryMonth($dateReport, $typeReport);
-                                            
+
 
                                             $MonthPlan+=$summaryMonth["plan_month"];
                                             $MonthPlanAcumulated+=$summaryMonth["plan_acumulated"];
@@ -2209,11 +2162,11 @@ class ReportTemplateController extends SEIPController {
 
                                             //SUMMARY YEAR
                                             $summaryYear = $productReport->getSummaryYear($dateReport, $typeReport);
-                                            
+
                                             $yearPlan+=$summaryYear["plan_year"];
                                             $yearPlanAcumulated+=$summaryYear["plan_acumulated"];
                                             $yearRealAcumualated+=$summaryYear["real_acumulated"];
-                                            
+
 
                                             $cont = 0;
 
@@ -2265,17 +2218,11 @@ class ReportTemplateController extends SEIPController {
                                                     $cont++;
                                                 }
                                             }//RAW MATERIAL
-
-                                            
                                         }
-
-                                        
-
                                     }//FIN DE PRODUCTOS POR PLANT REPORT
-
-                                     //CONSUMO DE SERVICIOS 
+                                    //CONSUMO DE SERVICIOS 
                                     foreach ($child->getConsumerPlanningServices() as $consumerPlanningService) {
-                                    $consumerPlanningServiceObjects[] = $consumerPlanningService;
+                                        $consumerPlanningServiceObjects[] = $consumerPlanningService;
 
                                         $serviceName = $consumerPlanningService->getService()->getName() . " (" . $consumerPlanningService->getService()->getServiceUnit() . ")";
                                         $serviceId = $consumerPlanningService->getService()->getId();
@@ -2293,7 +2240,7 @@ class ReportTemplateController extends SEIPController {
                                             );
                                         }
                                         $consumerPlanning = $consumerPlanningService->getSummary($dateReport);
-                                        
+
                                         $arrayConsumerServices[$serviceId]["real"] += $consumerPlanning["total_day"];
                                         $arrayConsumerServices[$serviceId]["plan"] += $consumerPlanning["total_day_plan"];
                                         $arrayConsumerServices[$serviceId]["real_month"] += $consumerPlanning["total_month"];
@@ -2301,7 +2248,6 @@ class ReportTemplateController extends SEIPController {
                                         $arrayConsumerServices[$serviceId]["real_year"] += $consumerPlanning["total_year"];
                                         $arrayConsumerServices[$serviceId]["plan_year"] += $consumerPlanning["total_year_plan"];
                                     }//FIN CONSUMO DE SERVICIOS
-                                    
                                     //PRODUCION NO REALIZADA
                                     $productReportService = $this->getProductReportService();
                                     foreach ($child->getProductsReport() as $productReport) {
@@ -2310,36 +2256,33 @@ class ReportTemplateController extends SEIPController {
                                             $productReportId = $productReport->getId();
 
                                             $unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
-                                            
-                                            if($overProduction==1) {
+
+                                            if ($overProduction == 1) {
                                                 $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $productReport);
                                                 $totalPnrPlantGroups["day"] += $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
 
                                                 $totalPnrPlantGroups["month"] += $unrealizedProduction["total_month"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'];
 
                                                 $totalPnrPlantGroups["year"] += ($unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year']);
-
-                                            } else if($overProduction==2) {
+                                            } else if ($overProduction == 2) {
                                                 $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $productReport);
-                                                $totalPnrPlantGroups["day"] += ($unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'])-$excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
+                                                $totalPnrPlantGroups["day"] += ($unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day']) - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
 
-                                                $totalPnrPlantGroups["month"] += ($unrealizedProduction["total_month"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'])-$excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'];
+                                                $totalPnrPlantGroups["month"] += ($unrealizedProduction["total_month"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month']) - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'];
 
-                                                $totalPnrPlantGroups["year"] += ($unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year'])-$excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year'];
+                                                $totalPnrPlantGroups["year"] += ($unrealizedProduction["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year']) - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year'];
                                             } else {
                                                 $totalPnrPlantGroups["day"] += $unrealizedProduction["total_day"];
                                                 $totalPnrPlantGroups["month"] += $unrealizedProduction["total_month"];
                                                 $totalPnrPlantGroups["year"] += $unrealizedProduction["total_year"];
                                             }
-                                                                                        
                                         }
                                     }//FIN PNR
-
                                     //INVENTARIO
                                     foreach ($child->getProductsReport() as $productReport) {
-                                    $productReportsObjects[] = $productReport;
+                                        $productReportsObjects[] = $productReport;
                                         if (!$productReport->getIsGroup()) {
-                                            if($productReport->getProduct()->isEnabled()) { 
+                                            if ($productReport->getProduct()->isEnabled()) {
                                                 $productId = $productReport->getProduct()->getId();
                                                 $Inventory = $productReport->getSummaryInventory($dateReport);
                                                 $totalInventory["day"] += $Inventory["total_day"];
@@ -2353,50 +2296,49 @@ class ReportTemplateController extends SEIPController {
                                             }
                                         }
                                     }//FIN INVENTARIO
+                                }
 
-                                }                                
-                                
 
                                 $groupsCount++;
 
                                 $summaryDayGroups[] = array(
-                                    "nameGroup"=>$nameGroup,
-                                    "plan"=>$this->setNumberFormat($dayPlan),
-                                    "real"=>$this->setNumberFormat($dayReal),
-                                    "percentaje"=>0.0,
-                                    "pnr"=>0.0,
-                                    "ejec"=>$this->getEjecution($dayPlan,$dayReal),
-                                    "var"=>$this->getVariation($dayPlan,$dayReal)
+                                    "nameGroup" => $nameGroup,
+                                    "plan" => $this->setNumberFormat($dayPlan),
+                                    "real" => $this->setNumberFormat($dayReal),
+                                    "percentaje" => 0.0,
+                                    "pnr" => 0.0,
+                                    "ejec" => $this->getEjecution($dayPlan, $dayReal),
+                                    "var" => $this->getVariation($dayPlan, $dayReal)
                                 );
                                 $totalsProduction["day"]["plan"] += $dayPlan;
                                 $totalsProduction["day"]["real"] += $dayReal;
-                                
+
 
 
                                 $summaryMonthGroups[] = array(
-                                    "nameGroup"=>$nameGroup,
-                                    "plan_month"=>$this->setNumberFormat($MonthPlan),
-                                    "plan_acumulated"=>$this->setNumberFormat($MonthPlanAcumulated),
-                                    "real_acumulated"=>$this->setNumberFormat($MonthRealAcumualated),
-                                    "percentaje"=>0.0,
-                                    "pnr"=>0.0,
-                                    "ejecution"=>$this->getEjecution($MonthPlanAcumulated,$MonthRealAcumualated),
-                                    "var"=>$this->getVariation($MonthPlanAcumulated,$MonthRealAcumualated)
+                                    "nameGroup" => $nameGroup,
+                                    "plan_month" => $this->setNumberFormat($MonthPlan),
+                                    "plan_acumulated" => $this->setNumberFormat($MonthPlanAcumulated),
+                                    "real_acumulated" => $this->setNumberFormat($MonthRealAcumualated),
+                                    "percentaje" => 0.0,
+                                    "pnr" => 0.0,
+                                    "ejecution" => $this->getEjecution($MonthPlanAcumulated, $MonthRealAcumualated),
+                                    "var" => $this->getVariation($MonthPlanAcumulated, $MonthRealAcumualated)
                                 );
                                 $totalsProduction["month"]["plan_month"] += $MonthPlan;
                                 $totalsProduction["month"]["plan_acumulated"] += $MonthPlanAcumulated;
                                 $totalsProduction["month"]["real_acumulated"] += $MonthRealAcumualated;
-                                
+
 
                                 $summaryYearGroups[] = array(
-                                    "nameGroup"=>$nameGroup,
-                                    "plan_year"=>$this->setNumberFormat($yearPlan),
-                                    "plan_acumulated"=>$this->setNumberFormat($yearPlanAcumulated),
-                                    "real_acumulated"=>$this->setNumberFormat($yearRealAcumualated),
-                                    "percentaje"=>0.0,
-                                    "pnr"=>0.0,
-                                    "ejecution"=>$this->getEjecution($yearPlanAcumulated,$yearRealAcumualated),
-                                    "var"=>$this->getVariation($yearPlanAcumulated,$yearRealAcumualated)
+                                    "nameGroup" => $nameGroup,
+                                    "plan_year" => $this->setNumberFormat($yearPlan),
+                                    "plan_acumulated" => $this->setNumberFormat($yearPlanAcumulated),
+                                    "real_acumulated" => $this->setNumberFormat($yearRealAcumualated),
+                                    "percentaje" => 0.0,
+                                    "pnr" => 0.0,
+                                    "ejecution" => $this->getEjecution($yearPlanAcumulated, $yearRealAcumualated),
+                                    "var" => $this->getVariation($yearPlanAcumulated, $yearRealAcumualated)
                                 );
                                 $totalsProduction["year"]["plan_year"] += $yearPlan;
                                 $totalsProduction["year"]["plan_acumulated"] += $yearPlanAcumulated;
@@ -2405,31 +2347,28 @@ class ReportTemplateController extends SEIPController {
 
                                 //PNR AGRUPADA
                                 $arrayUnrealizedProduction[] = array(
-                                    "nameGroup"=>$nameGroup,
-                                    "day"=>$totalPnrPlantGroups["day"],
-                                    "month"=>$totalPnrPlantGroups["month"],
-                                    "year"=>$totalPnrPlantGroups["year"]
+                                    "nameGroup" => $nameGroup,
+                                    "day" => $totalPnrPlantGroups["day"],
+                                    "month" => $totalPnrPlantGroups["month"],
+                                    "year" => $totalPnrPlantGroups["year"]
                                 );
-                               
-
                             }
-                           
                         }
                     }
-                }   
+                }
 
-                
+
                 //DIA
-                $totalsProduction["day"]["ejec"] = $this->getEjecution($totalsProduction["day"]["plan"],$totalsProduction["day"]["real"],false);
-                $totalsProduction["day"]["perc"] = $this->getVariation($totalsProduction["day"]["plan"],$totalsProduction["day"]["real"],false);
+                $totalsProduction["day"]["ejec"] = $this->getEjecution($totalsProduction["day"]["plan"], $totalsProduction["day"]["real"], false);
+                $totalsProduction["day"]["perc"] = $this->getVariation($totalsProduction["day"]["plan"], $totalsProduction["day"]["real"], false);
 
                 //MES
-                $totalsProduction["month"]["ejec"] = $this->getEjecution($totalsProduction["month"]["plan_acumulated"],$totalsProduction["month"]["real_acumulated"],false);
-                $totalsProduction["month"]["perc"] = $this->getVariation($totalsProduction["month"]["plan_acumulated"],$totalsProduction["month"]["real_acumulated"],false);
+                $totalsProduction["month"]["ejec"] = $this->getEjecution($totalsProduction["month"]["plan_acumulated"], $totalsProduction["month"]["real_acumulated"], false);
+                $totalsProduction["month"]["perc"] = $this->getVariation($totalsProduction["month"]["plan_acumulated"], $totalsProduction["month"]["real_acumulated"], false);
 
                 //AÑO
-                $totalsProduction["year"]["ejec"] = $this->getEjecution($totalsProduction["year"]["plan_acumulated"],$totalsProduction["year"]["real_acumulated"],false);
-                $totalsProduction["year"]["perc"] = $this->getVariation($totalsProduction["year"]["plan_acumulated"],$totalsProduction["year"]["real_acumulated"],false);
+                $totalsProduction["year"]["ejec"] = $this->getEjecution($totalsProduction["year"]["plan_acumulated"], $totalsProduction["year"]["real_acumulated"], false);
+                $totalsProduction["year"]["perc"] = $this->getVariation($totalsProduction["year"]["plan_acumulated"], $totalsProduction["year"]["real_acumulated"], false);
 
                 $summaryProduction["day"] = $summaryDayGroups;
                 $summaryProduction["month"] = $summaryMonthGroups;
@@ -2437,11 +2376,11 @@ class ReportTemplateController extends SEIPController {
 
                 $reportService = $this->getProductReportService();
 
-                $graphicsDays = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM","range"=>$byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd),"day", "plan", "real");
+                $graphicsDays = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM", "range" => $byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), "day", "plan", "real");
 
-                $graphicsMonth = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM","range"=>$byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd),"month", "plan_acumulated", "real_acumulated");
+                $graphicsMonth = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM", "range" => $byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), "month", "plan_acumulated", "real_acumulated");
 
-                $graphicsYear = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM","range"=>$byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd),"year", "plan_acumulated", "real_acumulated");
+                $graphicsYear = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM", "range" => $byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), "year", "plan_acumulated", "real_acumulated");
 
 
 
@@ -2475,11 +2414,11 @@ class ReportTemplateController extends SEIPController {
                     "startDatePeriod" => $startDatePeriod,
                     "endDatePeriod" => $endDatePeriod,
                     "groupsPlants" => $groupsPlants,
-                    "graphicsDays"=>$graphicsDays,
-                    "graphicsMonth"=>$graphicsMonth,
-                    "graphicsYear"=>$graphicsYear
+                    "graphicsDays" => $graphicsDays,
+                    "graphicsMonth" => $graphicsMonth,
+                    "graphicsYear" => $graphicsYear
                 );
-                
+
                 $view = $this
                         ->view()
                         ->setTemplate($this->config->getTemplate('reportVisualize.html'))
@@ -2487,7 +2426,7 @@ class ReportTemplateController extends SEIPController {
                 $view->setData($data);
 
                 return $this->handleView($view);
-               
+
                 //return $this->handleView($view);
             } else {
                 //FILTRO POR RANGO SIN GRUPO DE PLANTAS
@@ -2501,7 +2440,7 @@ class ReportTemplateController extends SEIPController {
                     $totalProdPlan = 0;
                     $totalProdReal = 0;
 
-                   // $exportToPdf = false;
+                    // $exportToPdf = false;
                     $arrayIdProductsByRange = array();
                     $summaryProductionTotals = array(
                         "ppto" => 0.0,
@@ -2537,7 +2476,7 @@ class ReportTemplateController extends SEIPController {
                             //PRODUCTS REPORTS
                             foreach ($plantReport->getProductsReport() as $productReport) {
                                 if (!$productReport->getIsGroup()) {
-                                    if ($productReport->getProduct()->isEnabled()) { 
+                                    if ($productReport->getProduct()->isEnabled()) {
 
                                         if (!$dataProductsReports->contains($productReport)) {
                                             $dataProductsReports->add($productReport);
@@ -2573,8 +2512,6 @@ class ReportTemplateController extends SEIPController {
                                                 $rs["pnr"] = 0.0;
                                             }
                                             //var_dump($rs["observation"]);
-                                            
-
                                             //Verifica si va a exportar y obvia las observaciones vacías.
                                             if ($exportToPdf) {
                                                 if ($rs["observation"] != "" || is_null($rs["observation"])) {
@@ -2589,10 +2526,10 @@ class ReportTemplateController extends SEIPController {
                                         //PRODUCTION 
                                         $rs["productName"] = $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")";
 
-                                        
+
 
                                         $summaryProductionTotals["ppto"] +=$totalPlan;
-                                        $summaryProductionTotals["real"] +=$totalReal; 
+                                        $summaryProductionTotals["real"] +=$totalReal;
                                         #$summaryProductionTotals["ejec"] +=$ejectRange;
                                         #$summaryProductionTotals["var"] +=$varRange;
 
@@ -2663,8 +2600,6 @@ class ReportTemplateController extends SEIPController {
                                     }
                                 }
                             } //END PRODUCT REPORT RANGE
-
-
                             //CONSUMO DE SERVICIOS
                             foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
                                 $i = $dateDesde;
@@ -2737,27 +2672,24 @@ class ReportTemplateController extends SEIPController {
                                         $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($timeNormal, $productReport);
 
 
-                                        if($overProduction==1) {
+                                        if ($overProduction == 1) {
                                             $arrayUnrealizedProduction[$productReportId]["total"] += $unrealizedProduction["total_day"];
-                                        } else if($overProduction==2) {
-                                            $arrayUnrealizedProduction[$productReportId]["total"] += ($unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'])-$excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
+                                        } else if ($overProduction == 2) {
+                                            $arrayUnrealizedProduction[$productReportId]["total"] += ($unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day']) - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
                                         } else {
                                             $arrayUnrealizedProduction[$productReportId]["total"] += $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
                                         }
 
-                                        
+
 
                                         $i += 86400; //VOY RECORRIENDO DIA POR DIA
                                     }
                                 }
                             } //FIN PNR
-
-
-
                             //INVENTARIO
                             foreach ($plantReport->getProductsReport() as $productReport) {
                                 if (!$productReport->getIsGroup()) {
-                                    if($productReport->getProduct()->isEnabled()) { 
+                                    if ($productReport->getProduct()->isEnabled()) {
                                         $productId = $productReport->getProduct()->getId();
                                         $timeNormal = new \DateTime(date("Y-m-d", $dateHasta));
                                         $Inventory = $productReport->getSummaryInventory($timeNormal);
@@ -2766,7 +2698,6 @@ class ReportTemplateController extends SEIPController {
                                 }
                             }//END INVENTARIO
                         } //END PLANT REPORT RANGE
-
                         #CALCULO DE PORCENTAJE Y VARIACION DE LOS TOTALES DE PRODUCION
                         if ($summaryProductionTotals["ppto"] > 0) {
                             $ejectRange = ($summaryProductionTotals["real"] * 100) / $summaryProductionTotals["ppto"];
@@ -2782,14 +2713,11 @@ class ReportTemplateController extends SEIPController {
 
                         $summaryProductionTotals["ejec"] +=$ejectRange;
                         $summaryProductionTotals["var"] +=$varRange;
-
                     } //END REPORT TEMPLATE RANGE
-                    
+
                     $reportService = $this->getProductReportService();
 
                     $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
-
-
                 } else {
                     ////
                     //POR RANGO Y POR GRUPO DE PLANTAS
@@ -2804,10 +2732,10 @@ class ReportTemplateController extends SEIPController {
                     $summaryProduction = array();
                     $summaryProductionTotals = array();
                     $arrayObservation = array();
-                    
+
 
                     $arrayIdProductsByRange = array();
-             
+
                     $summaryProducctionRangeTotals = array(
                         "ppto" => 0.0,
                         "real" => 0.0,
@@ -2832,12 +2760,12 @@ class ReportTemplateController extends SEIPController {
 
                     $arrayNamesUnrealizedProduction = array();
                     $plants = array();
-                    $totalPlanProd=0.0;
-                    $totalRealProd=0.0;
+                    $totalPlanProd = 0.0;
+                    $totalRealProd = 0.0;
 
                     $arrayConsumerServices = array();
-                    $arrayUnrealizedProduction = array();                        
-                    
+                    $arrayUnrealizedProduction = array();
+
 
                     foreach ($reportTemplates as $reportTemplate) {
                         //var_dump($reportTemplate->getShortName());
@@ -2849,13 +2777,13 @@ class ReportTemplateController extends SEIPController {
                             $nameGroup = $plantReport->getNameGroup();
 
 
-                           $pnrGroup = 0;
+                            $pnrGroup = 0;
 
-                            if(count($childrens)>0) {
+                            if (count($childrens) > 0) {
                                 $planDay = 0.0;
                                 $realDay = 0.0;
 
-                                
+
                                 #var_dump($nameGroup);
 
                                 $totalPnrGroup = 0;
@@ -2870,7 +2798,7 @@ class ReportTemplateController extends SEIPController {
                                             $totalRawPlan = $tiotalRawReal = 0.0;
                                             while ($i != ($dateHasta + 86400)) {
                                                 $timeNormal = new \DateTime(date("Y-m-d", $i));
-                                                
+
                                                 //RESULTADOS DE PRODUCCION
                                                 $rs = $productReport->getSummaryDay($timeNormal, $typeReport);
                                                 $planDay+= $rs["plan"];
@@ -2886,10 +2814,9 @@ class ReportTemplateController extends SEIPController {
                                                 } else {
                                                     $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
                                                 }
-                                                
+
                                                 $i = $i + 86400;
                                             }
-                                            
                                         }
                                         //RAW MATERIAL
                                         foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
@@ -2928,7 +2855,6 @@ class ReportTemplateController extends SEIPController {
                                             }
                                         }
                                         //END RAW MATERIAL
-
                                     }
 
                                     //CONSUMO DE SERVICIOS
@@ -2960,22 +2886,20 @@ class ReportTemplateController extends SEIPController {
                                         }
                                     }
                                     //CONSUMO SERVICIOS
-
-                                    
                                     //PRODUCION NO REALIZADA
                                     $i = $dateDesde;
                                     $productReportService = $this->getProductReportService();
-                                    
+
                                     #print $nameGroup;
 
                                     foreach ($child->getProductsReport() as $productReport) {
-                                        
+
                                         #var_dump($productReport->getName());
 
                                         if (!$productReport->getIsGroup()) {
                                             $productReportId = $productReport->getId();
 
-                                            
+
                                             while ($i != ($dateHasta + 86400)) {
                                                 $timeNormal = new \DateTime(date("Y-m-d", $i));
                                                 $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($timeNormal);
@@ -2984,12 +2908,12 @@ class ReportTemplateController extends SEIPController {
                                                 $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($timeNormal, $productReport);
 
 
-                                                if($overProduction==1) {
+                                                if ($overProduction == 1) {
                                                     #$arrayUnrealizedProduction[$productReportId]["total"] += $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
-                                                    $pnrGroup  += $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
-                                                } else if($overProduction==2) {
+                                                    $pnrGroup += $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
+                                                } else if ($overProduction == 2) {
                                                     #$arrayUnrealizedProduction[$productReportId]["total"] += ($unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'])-$excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
-                                                    $pnrGroup += ($unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'])-$excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
+                                                    $pnrGroup += ($unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day']) - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
                                                 } else {
                                                     #$arrayUnrealizedProduction[$productReportId]["total"] += $unrealizedProduction["total_day"];
                                                     $pnrGroup += $unrealizedProduction["total_day"];
@@ -3000,50 +2924,41 @@ class ReportTemplateController extends SEIPController {
                                     } //FIN PNR
                                     #var_dump($pnrGroup);
                                     $totalPnrGroup += $pnrGroup;
-
-                                   
-
-                                } 
-                                $summaryProduction[] = array (
-                                    "nameGroup"=>$nameGroup,
-                                    "plan"=>$this->setNumberFormat($planDay),
-                                    "real"=>$this->setNumberFormat($realDay),
-                                    "ejec"=>$this->getEjecution($planDay,$realDay),
-                                    "var"=>$this->getVariation($planDay,$realDay),
+                                }
+                                $summaryProduction[] = array(
+                                    "nameGroup" => $nameGroup,
+                                    "plan" => $this->setNumberFormat($planDay),
+                                    "real" => $this->setNumberFormat($realDay),
+                                    "ejec" => $this->getEjecution($planDay, $realDay),
+                                    "var" => $this->getVariation($planDay, $realDay),
                                 );
                                 $arrayUnrealizedProduction[] = array(
-                                    "nameGroup"=>$nameGroup,
-                                    "total"=>$totalPnrGroup
-                                );                         
+                                    "nameGroup" => $nameGroup,
+                                    "total" => $totalPnrGroup
+                                );
                             }
                         }
                     }
                     $summaryProductionTotals = array(
-                        "plan"=>$this->setNumberFormat($totalPlanProd),
-                        "real"=>$this->setNumberFormat($totalRealProd),
-                        "ejec"=>$this->getEjecution($totalPlanProd,$totalRealProd),
-                        "var"=>$this->getVariation($totalPlanProd,$totalRealProd)
+                        "plan" => $this->setNumberFormat($totalPlanProd),
+                        "real" => $this->setNumberFormat($totalRealProd),
+                        "ejec" => $this->getEjecution($totalPlanProd, $totalRealProd),
+                        "var" => $this->getVariation($totalPlanProd, $totalRealProd)
                     );
 
 
                     $reportService = $this->getProductReportService();
-                    
+
 
 
                     $graphicsDays = $reportService->generateColumn3dLineryPerRange(
-                        array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), 
-                        $summaryProduction,
-                        array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd),
-                        1,
-                        true
+                            array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), 1, true
                     );
-
-
                 }
-                
-                
 
-                
+
+
+
 
                 $data = array(
                     'productsReport' => "",
@@ -3074,72 +2989,32 @@ class ReportTemplateController extends SEIPController {
                     'showObservation' => $showObservation,
                     'dateFrom' => $dateFrom,
                     'dateEnd' => $dateEnd,
-                    'groupsPlants'=>$groupsPlants,
+                    'groupsPlants' => $groupsPlants,
                     'graphicRange' => $graphicsDays,
-                    'overProduction'=>$overProduction
+                    'overProduction' => $overProduction
                 );
 
 
                 if ($exportToPdf == "1") {
-                    //var_dump("report pdf");
-                
-                
-                    $pdf = new \Pequiven\SEIPBundle\Model\PDF\NewSeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-                    $pdf->setPrintLineFooter(false);
-                    $pdf->setContainer($this->container);
-                    $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
-                    $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
-
-        // set document information
-                    $pdf->SetCreator(PDF_CREATOR);
-                    $pdf->SetAuthor('SEIP');
-                    $pdf->setTitle('Reporte de Produccion');
-                    $pdf->SetSubject('Resultados SEIP');
-                    $pdf->SetKeywords('PDF, SEIP, Resultados');
-
-                    $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-                    $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-        // set default monospaced font
-                    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-        // set margins
-                    $pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
-                    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-                    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-        // set auto page breaks
-                    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-        // set image scale factor
-                    $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-        // set font
-        //            $pdf->SetFont('times', 'BI', 12);
-        // add a page
-                    $pdf->AddPage();
-
-        // set some text to print
                     if ($byRange) {
+                        $twig = 'PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data_by_range.html.twig';
                         $html = $this->renderView('PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data_by_range.html.twig', $data);
                     } else {
+                        $twig = 'PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data.html.twig';
                         $html = $this->renderView('PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data.html.twig', $data);
                     }
-        // print a block of text using Write()
-                    $pdf->writeHTML($html, true, false, true, false, '');
 
-        //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
-                    $pdf->Output('Reporte de Produccion' . '.pdf', 'D');
+                    $this->getReportService()->generatePdf($data, 'Reporte de Producción', $twig, 'P', 'Producción del ' . date_format($dateReport, 'd-m-Y'));
                 } else if ($exportToPdf == "2") {
 
                     $sections = array(
-                            "production" => $showProduction,
-                            "rawMaterial" => $showRawMaterial,
-                            "services" => $showService,
-                            "inventory" => $showInventory,
-                            "pnr" => $showPnr,
-                            "observations" => $showObservation
-                        );
+                        "production" => $showProduction,
+                        "rawMaterial" => $showRawMaterial,
+                        "services" => $showService,
+                        "inventory" => $showInventory,
+                        "pnr" => $showPnr,
+                        "observations" => $showObservation
+                    );
 
                     if ($byRange) {
                         $production = array(
@@ -3167,12 +3042,6 @@ class ReportTemplateController extends SEIPController {
 
                     return $this->handleView($view);
                 }
-
-
-
-
-
-                
             }
         } //FIN DE FORM-SUBMIT
 
@@ -3209,8 +3078,6 @@ class ReportTemplateController extends SEIPController {
 
         return $this->handleView($view);
     }
-
-
 
     public function ExportExcelActionByRange($data, $sections) {
 
@@ -3296,7 +3163,7 @@ class ReportTemplateController extends SEIPController {
                     } else {
                         $field = $prod[$impressOperacion["fieldsShow"][$i]];
                     }
-                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
+                    $this->numberFormatPhpExcel($objPHPExcel, $field, $cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
@@ -3321,7 +3188,7 @@ class ReportTemplateController extends SEIPController {
             $temp = array();
 
             //CONVIERTE EL VECTOR INDEXADO EN UN VECTOR NORMAL PARA Q PUEDA LLAMAR LOS VALORES
-            foreach ($totalProduction as $value ) {
+            foreach ($totalProduction as $value) {
                 $temp[] = $value;
             }
 
@@ -3329,14 +3196,14 @@ class ReportTemplateController extends SEIPController {
                 if ($impressOperacion["col"][$x] == "B") {
                     $activeSheet->setCellValue($impressOperacion["col"][$x] . $row, "Totales");
                 } else {
-                    $this->numberFormatPhpExcel($objPHPExcel,$temp[$x-1],$impressOperacion["col"][$x] . $row);
-                    $activeSheet->setCellValue($impressOperacion["col"][$x] . $row, $temp[$x-1]);
+                    $this->numberFormatPhpExcel($objPHPExcel, $temp[$x - 1], $impressOperacion["col"][$x] . $row);
+                    $activeSheet->setCellValue($impressOperacion["col"][$x] . $row, $temp[$x - 1]);
                 }
             }
             $row++;
         }
-        
-        
+
+
 
         if ($sections["rawMaterial"]) {
 //REGISTRO MATERIA PRIMA
@@ -3362,7 +3229,7 @@ class ReportTemplateController extends SEIPController {
                     } else {
                         $field = $raw[$rawMaterialData["fieldsShow"][$i]];
                     }
-                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
+                    $this->numberFormatPhpExcel($objPHPExcel, $field, $cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
@@ -3394,7 +3261,7 @@ class ReportTemplateController extends SEIPController {
                     } else {
                         $field = $consume[$consumerServiceData["fieldsShow"][$i]];
                     }
-                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
+                    $this->numberFormatPhpExcel($objPHPExcel, $field, $cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
@@ -3426,7 +3293,7 @@ class ReportTemplateController extends SEIPController {
                     } else {
                         $field = $unrealized[$pnr["fieldsShow"][$i]];
                     }
-                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
+                    $this->numberFormatPhpExcel($objPHPExcel, $field, $cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
@@ -3460,7 +3327,7 @@ class ReportTemplateController extends SEIPController {
                     } else {
                         $field = $inv[$inventory["fieldsShow"][$i]];
                     }
-                    $this->numberFormatPhpExcel($objPHPExcel,$field,$cell);
+                    $this->numberFormatPhpExcel($objPHPExcel, $field, $cell);
                     $activeSheet->setCellValue($cell, $field);
                 }
                 $row++;
@@ -3561,7 +3428,7 @@ class ReportTemplateController extends SEIPController {
                 $row++;
             }
         }
-        
+
 
         $fileName = sprintf("Reporte de Producción " . date("d-m-Y") . ".xls");
 
@@ -3593,7 +3460,7 @@ class ReportTemplateController extends SEIPController {
             "Viernes",
             "Sábado"
         );
-        
+
 //        $days = array();
 //        $days[] = "Lunes";
 //        $days[] = "Martes";
@@ -3753,7 +3620,7 @@ class ReportTemplateController extends SEIPController {
                         $totalPlanTime, $totalPlan, $totalReal, $perc, $var
                     );
                 }
-                
+
                 #var_dump($rs);
                 #die();
 
@@ -3766,18 +3633,18 @@ class ReportTemplateController extends SEIPController {
                     $g = 0;
                     foreach ($registros as $regs) {
                         $mat[$imp["col"][$g] . $rowCont] = $regs;
-                        $activeSheet->setCellValue($imp["col"][$g] . $rowCont,$regs);
-                        $this->numberFormatPhpExcel($objPHPExcel,$regs,$imp["col"][$g] . $rowCont);
-                        
-                        
-                        
+                        $activeSheet->setCellValue($imp["col"][$g] . $rowCont, $regs);
+                        $this->numberFormatPhpExcel($objPHPExcel, $regs, $imp["col"][$g] . $rowCont);
+
+
+
                         #$activeSheet->getStyle($imp["col"][$g] . $rowCont)->getNumberFormat()->setFormatCode('#,##0.00');
-                        
+
                         $g++;
                     }
                     $rowCont++;
                 }
-                
+
                 $styleArray = array(
                     'font' => array(
                         'bold' => true,
@@ -3795,7 +3662,7 @@ class ReportTemplateController extends SEIPController {
                 $activeSheet->setCellValue($imp["col"][$t] . $rowCont, "Totales");
                 foreach ($arrayPerTime as $perTime) {
                     $activeSheet->getStyle($imp["col"][$t + 1] . $rowCont)->applyFromArray($styleArray);
-                    $this->numberFormatPhpExcel($objPHPExcel,$perTime,$imp["col"][$t + 1] . $rowCont);
+                    $this->numberFormatPhpExcel($objPHPExcel, $perTime, $imp["col"][$t + 1] . $rowCont);
                     $activeSheet->setCellValue($imp["col"][$t + 1] . $rowCont, $perTime);
                     $t++;
                 }
@@ -3826,12 +3693,12 @@ class ReportTemplateController extends SEIPController {
                 $contCol = $rowCont;
                 foreach ($matPrima[$c] as $cons) {
 //var_dump($cols.$contCol."=>".$cons);
-                    /*if (gettype($cons) == "string") {
-                        $activeSheet->setCellValue($cols . $contCol, $cons);
-                    } else {
-                        $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
-                    }*/
-                    $this->numberFormatPhpExcel($objPHPExcel,$cons,$cols . $contCol);
+                    /* if (gettype($cons) == "string") {
+                      $activeSheet->setCellValue($cols . $contCol, $cons);
+                      } else {
+                      $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                      } */
+                    $this->numberFormatPhpExcel($objPHPExcel, $cons, $cols . $contCol);
                     $activeSheet->setCellValue($cols . $contCol, $cons);
                     $contCol++;
                 }
@@ -3866,9 +3733,9 @@ class ReportTemplateController extends SEIPController {
                         $activeSheet->setCellValue($cols . $contCol, $cons);
                     } else {
                         $contTotal += $cons;
-                        
+
                         $activeSheet->setCellValue($cols . $contCol, $cons);
-                        $this->numberFormatPhpExcel($objPHPExcel,$cons,$cols . $contCol);
+                        $this->numberFormatPhpExcel($objPHPExcel, $cons, $cols . $contCol);
                     }
                     $contCol++;
                 }
@@ -3888,7 +3755,7 @@ class ReportTemplateController extends SEIPController {
             foreach ($dataConsumo["col"] as $cols) {
                 if ($contRow > 0) {
                     $activeSheet->getStyle($cols . $rowCont)->applyFromArray($styleArray);
-                    $this->numberFormatPhpExcel($objPHPExcel,$totals[$contRow],$cols . $rowCont);
+                    $this->numberFormatPhpExcel($objPHPExcel, $totals[$contRow], $cols . $rowCont);
                     $activeSheet->setCellValue($cols . $rowCont, $totals[$contRow]);
                 } else {
                     $activeSheet->getStyle($cols . $rowCont)->applyFromArray($styleArray);
@@ -3919,13 +3786,13 @@ class ReportTemplateController extends SEIPController {
                 $contCol = $rowCont;
                 foreach ($unrealizedProduction[$c] as $cons) {
 //var_dump($cols.$contCol."=>".$cons);
-                    $this->numberFormatPhpExcel($objPHPExcel,$cons,$cols . $contCol);
+                    $this->numberFormatPhpExcel($objPHPExcel, $cons, $cols . $contCol);
                     $activeSheet->setCellValue($cols . $contCol, $cons);
-                    /*if (gettype($cons) == "string") {
-                        $activeSheet->setCellValue($cols . $contCol, $cons);
-                    } else {
-                        $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
-                    }*/
+                    /* if (gettype($cons) == "string") {
+                      $activeSheet->setCellValue($cols . $contCol, $cons);
+                      } else {
+                      $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                      } */
                     $contCol++;
                 }
                 $c++;
@@ -3957,7 +3824,7 @@ class ReportTemplateController extends SEIPController {
                     if (gettype($cons) == "string") {
                         $activeSheet->setCellValue($cols . $contCol, $cons);
                     } else {
-                        $this->numberFormatPhpExcel($objPHPExcel,$cons,$cols . $contCol);
+                        $this->numberFormatPhpExcel($objPHPExcel, $cons, $cols . $contCol);
                         $activeSheet->setCellValue($cols . $contCol, $cons);
                     }
                     $contCol++;
@@ -4206,7 +4073,7 @@ class ReportTemplateController extends SEIPController {
     }
 
     public function getDataRawMateria($rawMaterial, $dateReport) {
-        
+
         $em = $this->getDoctrine()->getManager();
 
         $productos = array();
@@ -4216,8 +4083,8 @@ class ReportTemplateController extends SEIPController {
         $totalDayPlan = array();
         $totalMonthPlan = array();
         $totalYearPlan = array();
-        
-        
+
+
 
         foreach ($rawMaterial as $rs) {
             //$rs = $this->container->get('pequiven.repository.product')->findOneBy(array('id' => $rs['id']));
@@ -4235,7 +4102,7 @@ class ReportTemplateController extends SEIPController {
             $idsPlanta[] = $rs->getProductReport()->getPlantReport()->getPlant()->getId();
 //var_dump($rawMaterialConsumption->getSummary($dateReport));
         }
-        
+
 
         return $this->getArrayTable($rawMaterial, $dateReport, $productos, $idsPlanta, $totalDay, $totalMonth, $totalYear, $totalDayPlan, $totalMonthPlan, $totalYearPlan);
     }
@@ -4283,7 +4150,7 @@ class ReportTemplateController extends SEIPController {
 
         foreach ($productsReport as $rs) {
             $productos[] = $rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
-            
+
             $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $rs);
             //$unrealizedProduction["total_day"] = $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
             //$unrealizedProduction["total_month"] = $unrealizedProduction["total_month"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'];
@@ -4293,7 +4160,7 @@ class ReportTemplateController extends SEIPController {
             $valueDay = $rs->getSummaryUnrealizedProductions($dateReport)["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
             $valueMonth = $rs->getSummaryUnrealizedProductions($dateReport)["total_month"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['month'];
             $valueYear = $rs->getSummaryUnrealizedProductions($dateReport)["total_year"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['year'];
-            
+
             array_push($totalDay, $valueDay);
             array_push($totalMonth, $valueMonth);
             array_push($totalYear, $valueYear);
@@ -4482,12 +4349,13 @@ class ReportTemplateController extends SEIPController {
 
         return $consumos;
     }
-    
+
     /*
      * RETORNA EL NUMERO FORMATEADO PARA LOS EXCEL
      */
-    public function numberFormatPhpExcel($objPHPExcel,$value,$coordenada,$type=  \PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1) {
-        if(is_numeric($value)) { 
+
+    public function numberFormatPhpExcel($objPHPExcel, $value, $coordenada, $type = \PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1) {
+        if (is_numeric($value)) {
             $objPHPExcel->getActiveSheet()->getStyle($coordenada)->getNumberFormat()->setFormatCode($type);
         }
     }
@@ -4496,7 +4364,7 @@ class ReportTemplateController extends SEIPController {
         return number_format($value, 2, ',', '.');
     }
 
-    public function getEjecution($plan,$real,$band = true) {
+    public function getEjecution($plan, $real, $band = true) {
 
         if ($plan > 0) {
             $ejecution = ($real * 100) / $plan;
@@ -4504,29 +4372,26 @@ class ReportTemplateController extends SEIPController {
             $ejecution = 0;
         }
 
-        if($band) { 
+        if ($band) {
             return $this->setNumberFormat($ejecution);
         } else {
             return $ejecution;
         }
     }
 
-    
-    public function getVariation($plan,$real,$band = true) {
+    public function getVariation($plan, $real, $band = true) {
 
         if ($plan - $real < 0) {
             $var = 0;
         } else {
             $var = $plan - $real;
         }
-        
-        if($band) { 
+
+        if ($band) {
             return $this->setNumberFormat($var);
         } else {
             return $var;
         }
-        
-
     }
 
     protected function getProductReportService() {
@@ -4539,6 +4404,10 @@ class ReportTemplateController extends SEIPController {
 
     protected function getCauseFailService() {
         return $this->container->get('seip.service.causefail');
+    }
+
+    protected function getReportService() {
+        return $this->get('seip.service.report');
     }
 
 }

@@ -148,7 +148,7 @@ class IndicatorSigController extends EvolutionController {
 
         $month = $request->get('month'); //El mes pasado por parametro
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
-        $data = $evolutionService->findEvolutionCause($indicator, $request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
+        $data = $evolutionService->findEvolutionCause($indicator, $request, $typeObject, true); //Carga la data de las causas y sus acciones relacionadas
         
         $approve = $evolutionService->findToCheckApproveEvolution($indicator, $typeObject, $month); //Carga la data de las causas y sus acciones relacionadas
        
@@ -171,15 +171,16 @@ class IndicatorSigController extends EvolutionController {
         
         $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicatorBase,$urlExportFromChart,$month); //Obtenemos la data del gráfico de acuerdo al indicador
         
-        //Carga de los datos de la grafica de las Causas de Desviación
-        $dataCause = $evolutionService->getDataChartOfCausesEvolution($indicator, $urlExportFromChart, $month, $typeObject); //Obtenemos la data del grafico de las causas de desviación
-        
-        $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('idObject' => $idIndicator, 'month' => $month, 'typeObject' => $typeObject));
-        foreach ($causes as $value) {
-            $dataCa = $value->getValueOfCauses();
-            $sumCause = $sumCause + $dataCa;
-        }
+        //Consulta de Causas
+        $causes = $evolutionService->findCausesEvolution($idIndicator,$month,$typeObject);        
+        for ($i=0; $i < $causes['cant']; $i++) { 
+            $dataCa = $causes['valueofCause'][$i];
+            $sumCause = $sumCause + $dataCa;            
+        }        
 
+        //Carga de los datos de la grafica de las Causas de Desviación
+        $dataCause = $evolutionService->getDataChartOfCausesEvolution($indicator, $urlExportFromChart, $month, $typeObject, $causes); //Obtenemos la data del grafico de las causas de desviación
+        
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('idObject' => $idIndicator, 'month' => $month, 'typeObject' => $typeObject));
         //Carga del analisis de las causas
@@ -215,7 +216,7 @@ class IndicatorSigController extends EvolutionController {
         }
 
         $dataAction = [
-            'action' => $data["action"],
+            //'action' => $data["action"],
             'values' => $data["actionValue"]
         ];
         
@@ -223,23 +224,23 @@ class IndicatorSigController extends EvolutionController {
                 ->view()
                 ->setTemplate($this->config->getTemplate('evolution.html'))
                 ->setData(array(
-            'data' => $dataChart,
-            'verification' => $data["verification"],
-            'dataCause'  => $dataCause,
-            'analysis'   => $causeAnalysis,//Analisis de Causas
-            'cause'      => $causes,//Causas
-            'sumCause'   => $sumCause,//suma de causas
-            'month'      => $month,
-            'dataAction' => $dataAction,
-            'trend'      => $trend,
-            'font'       => $font,
-            'typeObject' => $typeObject,
-            'id'         => $idIndicator,
-            'lastPeriod' => $indicator->getIndicatorLastPeriod(),
-            'route'      => "pequiven_indicator_evolution", //Ruta para carga de Archivo
-            'urlExportFromChart' => $urlExportFromChart,
-            'approve'    => $approve,
-            $this->config->getResourceName() => $resource,            
+                'data' => $dataChart,
+                'verification' => $data["verification"],
+                'dataCause'  => $dataCause,
+                'analysis'   => $causeAnalysis,//Analisis de Causas
+                'cause'      => $causes,//Causas
+                'sumCause'   => $sumCause,//suma de causas
+                'month'      => $month,
+                'dataAction' => $dataAction,
+                'trend'      => $trend,
+                'font'       => $font,
+                'typeObject' => $typeObject,
+                'id'         => $idIndicator,
+                'lastPeriod' => $indicator->getIndicatorLastPeriod(),
+                'route'      => "pequiven_indicator_evolution", //Ruta para carga de Archivo
+                'urlExportFromChart' => $urlExportFromChart,
+                'approve'    => $approve,
+                $this->config->getResourceName() => $resource,            
         ));
 
         return $this->handleView($view);
@@ -551,6 +552,33 @@ class IndicatorSigController extends EvolutionController {
         $response->setData($data);
 
         return $response;        
+    }
+
+    /**
+     * Obtiene los indicadores
+     */
+    function getIndicatorToCausesAction(\Symfony\Component\HttpFoundation\Request $request) {        
+        $query = $request->get('query');
+        $results = array();        
+
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();        
+        $repository = $this->get('pequiven.repository.sig_indicator');
+        $indicator = $repository->findBy(array('period' => $this->getPeriodService()->getPeriodActive()));        
+        if (!$indicator) {
+            throw $this->createNotFoundException();
+        }
+        
+        $criteria = array(
+            'ref' => $query,            
+            'description' => $query,                
+        );
+            
+        $results = $this->get('pequiven.repository.sig_indicator')->findToIndicatorValidToEvolution($indicator, $criteria);        
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));  
+        return $this->handleView($view);
     }
 
     /**

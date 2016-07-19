@@ -389,7 +389,7 @@
         </table>
     {% endif %}
     <br><br>
-    {% if showObservation %}
+    {% if ((showObservation)and((observations|length))>0) %}        
         <table class="simple-table responsive-table responsive-table-on">
             <thead>
                 <tr>

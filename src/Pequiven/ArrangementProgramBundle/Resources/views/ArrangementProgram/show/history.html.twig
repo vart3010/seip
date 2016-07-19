@@ -5,7 +5,8 @@
     <ul class="tabs">
         <li class="active"><a href="#tab-1">{{ 'pequiven.details'|trans({},'messages') }}</a></li>
         <li><a href="#tab-2">{{ 'pequiven.events'|trans({},'messages') }}</a></li>
-        <li><a href="#tab-3">{{ 'pequiven.arrangement_program.observations'|trans({},'PequivenArrangementProgramBundle') }}</a></li>
+        <li><a href="#tab-4">Movimientos de Responsables</a></li>
+        <li><a href="#tab-3">{{ 'pequiven.arrangement_program.observations'|trans({},'PequivenArrangementProgramBundle') }}</a></li>        
     </ul>
 
     <div class="tabs-content">
@@ -152,12 +153,12 @@
                 <tbody>
                     {% for history in entity.histories %}
                         <tr>
-                            <th scope="row">
+                            <td scope="row">
                                 {{ history.event }}<br>
-                                <small>{{ history.comment }}</small>
-                            </th>
+                                <small><b>{{ history.comment }}</b></small>
+                            </td>
                             <td>
-                                {{ history.user.firstname ~ " "~ history.user.lastname }} <small class="tag">{{ " (" ~ history.user.username ~ ")" }}</small>
+                                {{ history.user.firstname ~ " "~ history.user.lastname }} {#<small class="tag">{{ " (" ~ history.user.username ~ ")" }}</small>#}
                             </td>
                             <td>
                                 {{ history.createdAt|date(appConfiguration.generalDateFormat) }}
@@ -167,7 +168,7 @@
                 </tbody>
             </table>
         </div>
-                
+
         <div id="tab-3" class="with-padding">
             <table class="simple-table responsive-table tables-extras" >
                 <thead>
@@ -180,11 +181,11 @@
                 <tbody>
                     {% for observation in entity.observations %}
                         <tr>
-                            <th scope="row">
+                            <td scope="row">
                                 {{ observation.description }}
-                            </th>
+                            </td>
                             <td>
-                                {{ observation.createdBy.firstname ~ " "~ observation.createdBy.lastname }} <small class="tag">{{ " (" ~ observation.createdBy.username ~ ")" }}</small>
+                                {{ observation.createdBy.firstname ~ " "~ observation.createdBy.lastname }} {#<small class="tag">{{ " (" ~ observation.createdBy.username ~ ")" }}</small>#}
                             </td>
                             <td>
                                 {{ observation.createdAt|date(appConfiguration.generalDateFormat) }}
@@ -194,6 +195,62 @@
                         <tr>
                             <td colspan="3" class="empty_row">
                                 {{ "seip.table.empty.observations"|trans }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id="tab-4" class="with-padding">
+            <table class="simple-table responsive-table tables-extras" >
+                <thead>
+                    <tr>
+                        <th scope="col" width="5%">-</th>
+                        <th scope="col" width="10%">Fecha</th>                        
+                        <th scope="col" width="20%" class="hide-on-mobile">Responsable</th>
+                        <th scope="col" width="65%" class="hide-on-mobile">Movimiento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mov in movementHistory %}
+                        {% set id_affected = mov.id_affected %}
+                        {% if mov.type == 'I' %}
+                            {% set type = 'Ingresa a'%}                            
+                        {%else%}
+                            {% set type = 'Egresa de'%}                            
+                        {%endif%}
+
+                        {% if mov.typeMov == 'Goal' %}
+                            {% set tipo = ' la Meta ' ~ arrayGoalOrder[id_affected] %}                            
+                        {%else%}
+                            {% set tipo = 'l Programa' %}                            
+                        {%endif%}
+                        <tr>                            
+                            {% if mov.type == 'I'%}
+                                <td class="centrado green"><i class="fa fa-long-arrow-up"></i></td>
+                                {% else %}
+                                <td class="centrado red"><i class="fa fa-long-arrow-down"></i></td>
+                                {% endif %}
+                            <td>
+                                {{ mov.date | date("d/m/Y") }}
+                            </td>    
+                            <td>
+                                {{ mov.user|ucwords }} 
+                            </td>                            
+                            <td>
+                                {{type}}{{tipo}} por {{ causes[mov.cause] }} con un Avance de {{ mov.realAdvance | number_format(2, '.', ',')  }} %
+                                <br>
+                                <small>
+                                    <b>
+                                        {{ mov.observations|ucwords }}
+                                    </b>
+                                </small>
+                            </td>
+                        </tr>                       
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="empty_row">
+                                No hay Movimientos de Responsables en este Programa
                             </td>
                         </tr>
                     {% endfor %}

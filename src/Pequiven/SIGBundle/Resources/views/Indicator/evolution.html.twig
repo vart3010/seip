@@ -23,7 +23,8 @@
     {% set cloning = indicator_sig.parentCloning %}
 {% endif %}
 <div class="block_id" ng-init="idObject='{{ indicator_sig.id }}'"></div>
-    <div class="block_id" ng-init="typeObj='{{ typeObject }}'"></div>    
+    <div class="block_id" ng-init="typeObj='{{ typeObject }}'"></div>  
+    <p id="max" style="display:none">{{ sumCause }}</p>  
     
     {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}  
     <div ng-controller="TableFormatController">        

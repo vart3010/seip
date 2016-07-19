@@ -16,8 +16,8 @@ use Pequiven\MasterBundle\Model\Evaluation\AuditableInterface;
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\GerenciaRepository")
  * @author matias
  */
-class Gerencia extends modelGerencia implements AuditableInterface
-{
+class Gerencia extends modelGerencia implements AuditableInterface {
+
     /**
      * @var integer
      *
@@ -40,7 +40,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-    
+
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -48,7 +48,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @ORM\JoinColumn(name="fk_user_created_at", referencedColumnName="id")
      */
     private $userCreatedAt;
-    
+
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -64,30 +64,30 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @ORM\Column(name="description", type="string", length=100)
      */
     protected $description;
-    
-    /** 
+
+    /**
      * Complejo
      * @var \Pequiven\MasterBundle\Entity\Complejo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo",inversedBy="gerencias")
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
     private $complejo;
-    
-    /** 
+
+    /**
      * Dirección
      * @var \Pequiven\MasterBundle\Entity\Direction
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Direction")
      * @ORM\JoinColumn(name="fk_direction", referencedColumnName="id")
      */
     private $direction;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="ref", type="string", length=100, nullable=true)
      */
     private $ref;
-    
+
     /**
      * Abreviatura
      * @var string
@@ -95,14 +95,14 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @ORM\Column(name="abbreviation", type="string", length=100, nullable=true)
      */
     private $abbreviation;
-    
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="modular", type="boolean", nullable=true)
      */
     private $modular = false;
-    
+
     /**
      * @var boolean
      *
@@ -116,7 +116,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled = true;
-    
+
     /**
      * Configuracion de la gerencia
      * 
@@ -132,7 +132,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @ORM\OneToMany(targetEntity="Pequiven\ObjetiveBundle\Entity\Objetive",mappedBy="gerencia")
      */
     private $tacticalObjectives;
-    
+
     /**
      * Grupo de la gerencia
      * 
@@ -140,38 +140,38 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaGroup")
      */
     private $gerenciaGroup;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond", inversedBy="gerenciaVinculants")
      * @ORM\JoinTable(name="seip_gerencia_second_vinculant")
      */
     private $gerenciaSecondVinculants;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond", inversedBy="gerenciaSupports")
      * @ORM\JoinTable(name="seip_gerencia_second_support")
      */
     private $gerenciaSecondSupports;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="resume", type="string", length=50, nullable=true)
      */
     private $resume;
-    
+
     /**
      * Es válida la auditoria para ser evaluado
      * @var boolean
      * @ORM\Column(name="validAudit",type="boolean")
      */
     private $validAudit = true;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", mappedBy="gerencias")
      */
     private $workStudyCircles;
-    
+
     /**
      * @var \Pequiven\SEIPBundle\Entity\User\FeeStructure
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure", mappedBy="gerencia",cascade={"persist","remove"})
@@ -186,24 +186,29 @@ class Gerencia extends modelGerencia implements AuditableInterface
     private $normalizedManagement = false;
 
     /**
+     * Notifica Individualmente?
+     * @var boolean
+     * @ORM\Column(name="IndividualNotification",type="boolean")
+     */
+    private $individualNotification = false;
+
+    /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->gerenciaSecondVinculants = new \Doctrine\Common\Collections\ArrayCollection();
         $this->gerenciaSecondSupports = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tacticalObjectives = new \Doctrine\Common\Collections\ArrayCollection();
         $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -213,8 +218,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param \DateTime $createdAt
      * @return Gerencia
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
 
         return $this;
@@ -225,8 +229,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
@@ -236,8 +239,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param \DateTime $updatedAt
      * @return Gerencia
      */
-    public function setUpdatedAt($updatedAt)
-    {
+    public function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
 
         return $this;
@@ -248,8 +250,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return \DateTime 
      */
-    public function getUpdatedAt()
-    {
+    public function getUpdatedAt() {
         return $this->updatedAt;
     }
 
@@ -259,8 +260,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param string $description
      * @return Gerencia
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
 
         return $this;
@@ -271,8 +271,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return string 
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -282,8 +281,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param boolean $enabled
      * @return Gerencia
      */
-    public function setEnabled($enabled)
-    {
+    public function setEnabled($enabled) {
         $this->enabled = $enabled;
 
         return $this;
@@ -294,8 +292,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return boolean 
      */
-    public function getEnabled()
-    {
+    public function getEnabled() {
         return $this->enabled;
     }
 
@@ -305,8 +302,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param \Pequiven\SEIPBundle\Entity\User $userCreatedAt
      * @return Gerencia
      */
-    public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null)
-    {
+    public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null) {
         $this->userCreatedAt = $userCreatedAt;
 
         return $this;
@@ -317,8 +313,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getUserCreatedAt()
-    {
+    public function getUserCreatedAt() {
         return $this->userCreatedAt;
     }
 
@@ -328,8 +323,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param \Pequiven\SEIPBundle\Entity\User $userUpdatedAt
      * @return Gerencia
      */
-    public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null)
-    {
+    public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null) {
         $this->userUpdatedAt = $userUpdatedAt;
 
         return $this;
@@ -340,8 +334,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getUserUpdatedAt()
-    {
+    public function getUserUpdatedAt() {
         return $this->userUpdatedAt;
     }
 
@@ -351,8 +344,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param \Pequiven\MasterBundle\Entity\Complejo $complejo
      * @return Gerencia
      */
-    public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null)
-    {
+    public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null) {
         $this->complejo = $complejo;
 
         return $this;
@@ -363,8 +355,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return \Pequiven\MasterBundle\Entity\Complejo 
      */
-    public function getComplejo()
-    {
+    public function getComplejo() {
         return $this->complejo;
     }
 
@@ -374,8 +365,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param string $ref
      * @return Gerencia
      */
-    public function setRef($ref)
-    {
+    public function setRef($ref) {
         $this->ref = $ref;
 
         return $this;
@@ -386,8 +376,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return string 
      */
-    public function getRef()
-    {
+    public function getRef() {
         return $this->ref;
     }
 
@@ -397,8 +386,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param boolean $modular
      * @return Gerencia
      */
-    public function setModular($modular)
-    {
+    public function setModular($modular) {
         $this->modular = $modular;
 
         return $this;
@@ -409,8 +397,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return boolean 
      */
-    public function getModular()
-    {
+    public function getModular() {
         return $this->modular;
     }
 
@@ -420,8 +407,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param boolean $vinculante
      * @return Gerencia
      */
-    public function setVinculante($vinculante)
-    {
+    public function setVinculante($vinculante) {
         $this->vinculante = $vinculante;
 
         return $this;
@@ -432,8 +418,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return boolean 
      */
-    public function getVinculante()
-    {
+    public function getVinculante() {
         return $this->vinculante;
     }
 
@@ -443,8 +428,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param \Pequiven\MasterBundle\Entity\Direction $direction
      * @return Gerencia
      */
-    public function setDirection(\Pequiven\MasterBundle\Entity\Direction $direction = null)
-    {
+    public function setDirection(\Pequiven\MasterBundle\Entity\Direction $direction = null) {
         $this->direction = $direction;
 
         return $this;
@@ -455,18 +439,17 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return \Pequiven\MasterBundle\Entity\Direction 
      */
-    public function getDirection()
-    {
+    public function getDirection() {
         return $this->direction;
     }
-    
+
     function getConfiguration() {
         return $this->configuration;
     }
 
     function setConfiguration(\Pequiven\MasterBundle\Entity\Gerencia\Configuration $configuration) {
         $this->configuration = $configuration;
-        
+
         return $this;
     }
 
@@ -476,8 +459,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param string $abbreviation
      * @return Gerencia
      */
-    public function setAbbreviation($abbreviation)
-    {
+    public function setAbbreviation($abbreviation) {
         $this->abbreviation = $abbreviation;
 
         return $this;
@@ -488,8 +470,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return string 
      */
-    public function getAbbreviation()
-    {
+    public function getAbbreviation() {
         return $this->abbreviation;
     }
 
@@ -499,8 +480,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $tacticalObjectives
      * @return Gerencia
      */
-    public function addTacticalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $tacticalObjectives)
-    {
+    public function addTacticalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $tacticalObjectives) {
         $this->tacticalObjectives->add($tacticalObjectives);
 
         return $this;
@@ -511,8 +491,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $tacticalObjectives
      */
-    public function removeTacticalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $tacticalObjectives)
-    {
+    public function removeTacticalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $tacticalObjectives) {
         $this->tacticalObjectives->removeElement($tacticalObjectives);
     }
 
@@ -521,8 +500,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getTacticalObjectives()
-    {
+    public function getTacticalObjectives() {
         return $this->tacticalObjectives;
     }
 
@@ -532,8 +510,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param \Pequiven\MasterBundle\Entity\GerenciaGroup $gerenciaGroup
      * @return Gerencia
      */
-    public function setGerenciaGroup(\Pequiven\MasterBundle\Entity\GerenciaGroup $gerenciaGroup = null)
-    {
+    public function setGerenciaGroup(\Pequiven\MasterBundle\Entity\GerenciaGroup $gerenciaGroup = null) {
         $this->gerenciaGroup = $gerenciaGroup;
 
         return $this;
@@ -544,11 +521,9 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return \Pequiven\MasterBundle\Entity\GerenciaGroup 
      */
-    public function getGerenciaGroup()
-    {
+    public function getGerenciaGroup() {
         return $this->gerenciaGroup;
     }
-
 
     /**
      * Add gerenciaSecondVinculants
@@ -556,8 +531,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param \Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecondVinculants
      * @return Gerencia
      */
-    public function addGerenciaSecondVinculant(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecondVinculants)
-    {
+    public function addGerenciaSecondVinculant(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecondVinculants) {
         $this->gerenciaSecondVinculants[] = $gerenciaSecondVinculants;
 
         return $this;
@@ -568,8 +542,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @param \Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecondVinculants
      */
-    public function removeGerenciaSecondVinculant(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecondVinculants)
-    {
+    public function removeGerenciaSecondVinculant(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecondVinculants) {
         $this->gerenciaSecondVinculants->removeElement($gerenciaSecondVinculants);
     }
 
@@ -578,8 +551,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getGerenciaSecondVinculants()
-    {
+    public function getGerenciaSecondVinculants() {
         return $this->gerenciaSecondVinculants;
     }
 
@@ -589,8 +561,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param \Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecondSupports
      * @return Gerencia
      */
-    public function addGerenciaSecondSupport(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecondSupports)
-    {
+    public function addGerenciaSecondSupport(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecondSupports) {
         $this->gerenciaSecondSupports[] = $gerenciaSecondSupports;
 
         return $this;
@@ -601,8 +572,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @param \Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecondSupports
      */
-    public function removeGerenciaSecondSupport(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecondSupports)
-    {
+    public function removeGerenciaSecondSupport(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecondSupports) {
         $this->gerenciaSecondSupports->removeElement($gerenciaSecondSupports);
     }
 
@@ -611,11 +581,10 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getGerenciaSecondSupports()
-    {
+    public function getGerenciaSecondSupports() {
         return $this->gerenciaSecondSupports;
     }
-    
+
     /**
      * Get Resume
      * @return type
@@ -631,7 +600,6 @@ class Gerencia extends modelGerencia implements AuditableInterface
     function setResume($resume) {
         $this->resume = $resume;
     }
-    
 
     /**
      * Set validAudit
@@ -639,8 +607,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param boolean $validAudit
      * @return Gerencia
      */
-    public function setValidAudit($validAudit)
-    {
+    public function setValidAudit($validAudit) {
         $this->validAudit = $validAudit;
 
         return $this;
@@ -651,8 +618,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return boolean 
      */
-    public function getValidAudit()
-    {
+    public function getValidAudit() {
         return $this->validAudit;
     }
 
@@ -661,11 +627,10 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return boolean 
      */
-    public function isValidAudit()
-    {
+    public function isValidAudit() {
         return $this->validAudit;
     }
-    
+
     function getFeeStructure() {
         return $this->feeStructure;
     }
@@ -680,8 +645,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @param \DateTime $normalizedManagement
      * @return Gerencia
      */
-    public function setNormalizedManagement($normalizedManagement)
-    {
+    public function setNormalizedManagement($normalizedManagement) {
         $this->normalizedManagement = $normalizedManagement;
 
         return $this;
@@ -692,10 +656,16 @@ class Gerencia extends modelGerencia implements AuditableInterface
      *
      * @return \DateTime 
      */
-    public function getNormalizedManagement()
-    {
+    public function getNormalizedManagement() {
         return $this->normalizedManagement;
     }
 
-}
+    function getIndividualNotification() {
+        return $this->individualNotification;
+    }
 
+    function setIndividualNotification($individualNotification) {
+        $this->individualNotification = $individualNotification;
+    }
+
+}
