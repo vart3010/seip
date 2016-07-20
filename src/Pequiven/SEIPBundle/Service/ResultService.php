@@ -2155,8 +2155,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $totalReal += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
         }
 
-//var_dump($totalReal);
-//die();
+        //var_dump($totalReal);
+        //die();
 
         $value = $totalReal;
         $indicator
@@ -3036,6 +3036,24 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //        }
 
         return $data;
+    }
+
+    /**
+     * RETORNA EL PORCENTAJE DE PENALIZACION DEL INDICADOR
+     * @param Indicator $indicator
+     * @param Tendency $tendency
+     */
+    public function getPenaltyIndicator(Indicator $indicator, Tendency $tendenty) {
+
+        if ($this->calculateRangeGood($indicator, $tendenty)) {//Rango Verde R*100% (Máximo 100)
+            $penalty = 0;
+        } else if ($this->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
+            $penalty = 10;
+        } else if ($this->calculateRangeBad($indicator, $tendenty)) {//Rango Rojo R*0%
+            $penalty = 20;
+        }
+
+        return $penalty;
     }
 
     private function addErrorTrans($error, array $parameters = array()) {
