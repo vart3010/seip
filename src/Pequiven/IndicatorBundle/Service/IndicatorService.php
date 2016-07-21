@@ -5230,8 +5230,9 @@ class IndicatorService implements ContainerAwareInterface {
                         $penalty = $resultService->getPenaltyIndicator($indicator,$tendenty);
                     }
                     #$formula = (($resultIndicator / $arrangementRange->getRankTopBasic()) * 100);
-                    $formula = "(((" . number_format($resultIndicator, 2, ",", ".") . " / " . $arrangementRange->getRankTopBasic() . "))" . " * 100) - ".$penalty."%";
-
+                    #$formula = "(((" . number_format($resultIndicator, 2, ",", ".") . " / " . $arrangementRange->getRankTopBasic() . "))" . " * 100) - ".$penalty."%";
+                    $formula = "Ao = { { {(Res)} \over ({RV}) } x 100 )} - P";
+                    
                     #var_dump($formula);
                     return $formula;
                 }
@@ -5241,7 +5242,8 @@ class IndicatorService implements ContainerAwareInterface {
                         $penalty = $resultService->getPenaltyIndicator($indicator,$tendenty);
                     }
                     #$formula = (($resultIndicator / $arrangementRange->getRankTopBasic()) * 100);
-                    $formula = "(((" . $arrangementRange->getRankBottomBasic() . " / " . number_format($resultIndicator, 2, ",", ".") . "))" . " * 100) - ".$penalty."%";
+                    #$formula = "(((" . $arrangementRange->getRankBottomBasic() . " / " . number_format($resultIndicator, 2, ",", ".") . "))" . " * 100) - ".$penalty."%";
+                    $formula = "Ao = {( { {(RV)} \over ({Res}) } x 100 )} - P";
 
                     #var_dump($formula);
                     return $formula;
@@ -5259,9 +5261,11 @@ class IndicatorService implements ContainerAwareInterface {
                         
                         $middle = ($arrangementRange->getRankTopMixedBottom()+$arrangementRange->getRankTopMixedTop())/2;
                         if($resultIndicator > $middle) {
-                            $formula = "(((" . $middle. " * 100 / " . number_format($resultIndicator, 2, ",", ".") . "))" . ") - ".$penalty."%";
+                            #$formula = "(((" . $middle. " * 100 / " . number_format($resultIndicator, 2, ",", ".") . "))" . ") - ".$penalty."%";
+                            $formula = "Ao = { {(PRV x 100)} \over {(Res)} } - P";
                         } else if($resultIndicator<$middle) {
-                            $formula = "(((" . number_format($resultIndicator, 2, ",", ".") . " * 100 / " .$middle . "))" . ") - ".$penalty."%";
+                            #$formula = "(((" . number_format($resultIndicator, 2, ",", ".") . " * 100 / " .$middle . "))" . ") - ".$penalty."%";
+                            $formula = "Ao = { {(Res x 100)} \over ({PRV \over 2}) } - P";
                         }
                     }
                     
@@ -5279,9 +5283,7 @@ class IndicatorService implements ContainerAwareInterface {
             $formula = "Sin tendencia definida";
             return $formula;
         }
-
-
-
+        
 //        var_dump($tendency->getRef());
 //        var_dump($result);
     }
