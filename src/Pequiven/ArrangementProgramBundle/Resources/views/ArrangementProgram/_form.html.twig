@@ -39,6 +39,25 @@
             </div>
         {% endif %}
     {% endif %}
+    {% if form.strategicObjetive is defined %}
+        {% if(is_granted('ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT')or(entity.status != 3)) %}
+            <div class="field-block button-height">
+                {{ form_label(form.strategicObjetive) }}
+                {{ form_widget(form.strategicObjetive) }}
+                {{ form_errors(form.strategicObjetive) }}
+            </div>
+        {% else %}
+            <div class="field-block button-height hidden">
+                {{ form_label(form.strategicObjetive) }}
+                {{ form_widget(form.strategicObjetive) }}
+                {{ form_errors(form.strategicObjetive) }}
+            </div>
+            <div class="field-block button-height">
+                <label class="label">Objetivo Estratégico</label>
+                {{entity.strategicObjetive.ref}}-{{entity.strategicObjetive.description}}
+            </div>
+        {% endif %}
+    {% endif %}
     {% if form.tacticalObjective is defined %}
         {% if(is_granted('ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT')or(entity.status != 3)) %}
             <div class="field-block button-height">

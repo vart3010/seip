@@ -1497,6 +1497,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.main', $section)));
 
+            if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_STRATEGIC')) {
+                $subchild
+                        ->addChild('arrangement_programs.strategic', array(
+                            'route' => 'pequiven_arrangementprogram_create',
+                            'routeParameters' => array('type' => \Pequiven \ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA),
+                        ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.strategic', $section)));
+            }
             if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_TACTIC')) {
                 $subchild
                         ->addChild('arrangement_programs.tactic', array(

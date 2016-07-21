@@ -342,7 +342,6 @@ angular.module('seipModule.controllers', [])
             var loadTemplateMetaButton = angular.element('#loadTemplateMeta');
             var categoryArrangementProgramId = angular.element('#categoryArrangementProgramValue');
             $scope.setOperationalObjective = function (tacticalObjetive, selected) {
-
                 if (tacticalObjetive) {
                     notificationBarService.getLoadStatus().loading();
                     $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives", {idObjetiveTactical: tacticalObjetive, idCategoryArrangementProgram: categoryArrangementProgramId.val()})).success(function (data) {
@@ -471,6 +470,9 @@ angular.module('seipModule.controllers', [])
             };
             $scope.setEntityType = function (entity) {
                 $scope.entityType = entity;
+                if ($scope.entityType == 0) {
+                    $scope.getLocationByTactical(tacticalObjective.val());
+                }
                 if ($scope.entityType == 1) {
                     $scope.getLocationByTactical(tacticalObjective.val());
                 }

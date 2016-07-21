@@ -42,6 +42,15 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     private $period;
 
     /**
+     * Objetivo estrategíco
+     * @var \Pequiven\ObjetiveBundle\Entity\Objetive
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\ObjetiveBundle\Entity\Objetive",inversedBy="strategicArrangementPrograms")
+     * @ORM\JoinColumn(name="strategic_objective_id")
+     */
+    private $strategicObjetive;
+
+    /**
      * Objetivo táctico
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive
      *
@@ -320,6 +329,27 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getPeriod() {
         return $this->period;
+    }
+
+    /**
+     * Set strategicObjetive
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $strategicObjetive
+     * @return ArrangementProgram
+     */
+    public function setStrategicObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $strategicObjetive = null) {
+        $this->strategicObjetive = $strategicObjetive;
+
+        return $this;
+    }
+
+    /**
+     * Get strategicObjetive
+     *
+     * @return \Pequiven\ObjetiveBundle\Entity\Objetive 
+     */
+    public function getStrategicObjetive() {
+        return $this->strategicObjetive;
     }
 
     /**

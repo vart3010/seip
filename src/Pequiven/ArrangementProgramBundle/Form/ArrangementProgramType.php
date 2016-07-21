@@ -99,6 +99,9 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
             } else {
 //                   $parametersTactical['choices'] = array();
             }
+            if (is_array($data) && isset($data['strategicObjetive']) && $data['strategicObjetive'] != null) {
+                $strategicObjetive = (int) $data['strategicObjetive'];
+            }
             if (is_array($data) && isset($data['tacticalObjective']) && $data['tacticalObjective'] != null) {
                 $tacticalObjective = (int) $data['tacticalObjective'];
             }
@@ -130,7 +133,32 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
             $object = $event->getData();
             $form = $event->getForm();
 
-            if ($object->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC) {
+            if ($object->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC) {
+                $form->add('responsibles', null, array(
+                    'label' => 'pequiven.form.responsibles',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array(
+                        'class' => "select2 input-xlarge",
+                    ),
+                    'query_builder' => function(UserRepository $repository) {
+                return $repository->findQueryToAssingTacticArrangementProgram();
+            },
+                    'empty_value' => 'pequiven.select',
+                    'required' => false,
+                ));
+                
+                $form->add('strategicObjetive', null, array(
+                    'label' => 'pequiven.form.strategic_objective',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array(
+                        'class' => "select2 input-xlarge",
+                    ),
+                    'query_builder' => function(\Pequiven\ObjetiveBundle\Repository\ObjetiveRepository $repository) {
+                return $repository->findQueryObjetivesStrategic();},
+                    'empty_value' => 'pequiven.select',
+                    'required' => true,
+                ));                
+            }elseif ($object->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC) {
                 $form->add('responsibles', null, array(
                     'label' => 'pequiven.form.responsibles',
                     'label_attr' => array('class' => 'label'),
@@ -247,13 +275,15 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
             'validation_groups' => function (\Symfony\Component\Form\FormInterface $form) {
                 $data = $form->getData();
                 $groups = array();
-                if ($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC) {
+                if ($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC) {                    
+                    $groups = array('base', 'strategicObjetive');
+                }elseif ($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC) {
 //                    if($data->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
 //                        
 //                    } else{
                     $groups = array('base', 'tacticalObjective');
 //                    }
-                } elseif ($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE) {
+                }elseif ($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE) {
 //                    if($data->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
 //                        
 //                    } else{

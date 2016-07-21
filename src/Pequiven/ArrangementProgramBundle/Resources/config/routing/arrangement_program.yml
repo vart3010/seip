@@ -58,8 +58,8 @@ pequiven_arrangementprogram_create:
         _controller: pequiven_seip.controller.arrangementprogram:createAction
         associate: 1
     requirements:
-        type: 1|2
-        associate: 1|2
+        type: 0|1|2
+        associate: 0|1|2
     methods: [GET|POST]
     options:
         expose: true
