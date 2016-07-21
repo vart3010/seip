@@ -48,7 +48,7 @@
         }
 
         $(document).ready(function () {
-            $("input#costo").mask('000.000.000.000.000,00', {reverse: true});
+            //$("input#costo").mask('000.000.000.000.000,00', {reverse: true});
 
             $("#dataProduct").val('{"datos":{}}');
             setTable("table1");
@@ -64,16 +64,22 @@
             validaButton();
 
             $("#addItem").click(function () {
+                
+                
                 var cantidad = [$("#cantidad").val(), $("#cantidad").val()];
                 var producto = [$("#producto").val(), $("#producto").find('option:selected').attr("name")];
                 var costo = [$("#costo").val(), $("#costo").val()];
+                // var costoCalculo = [$("#costo").val(), $("#costo").val()];
 
                 $("input#costo").unmask();
                 var costoCalculo = $("#costo").val();
-                $("input#costo").mask('000.000.000.000.000,00', {reverse: true});
-
+                //$("input#costo").mask('000.000.000.000.000,00', {reverse: true});
+                
+                
+                //console.log($("#cantidad").val());
+                
                 var subtotal = [(costoCalculo * $("#cantidad").val()), (costoCalculo * $("#cantidad").val())];
-
+                
 
                 if ((cantidad[0] != "") && (costo[0] != "") && (producto[0] != 0)) {
                     var boton = ["", "<a id='" + index + "' name='" + producto[0] + "' onClick='delRow(this.id,this.name)' class='button icon-trash delItem'></a>"];
@@ -83,7 +89,7 @@
                     index = index + 1;
                     getJson();
                     $("#cantidad").val('');
-                    $("#costo").val('');                    
+                    $("#costo").val('');
 
                     validaButton();
                 } else {
@@ -281,7 +287,7 @@
                                                 <input type="number" class="input-small" id="cantidad" placeholder="Cantidad" min="1">
                                             </td>
                                             <td width="60%" style="text-align: center;">
-                                                <input type="text"  class="input-small" id="costo" placeholder="Costo" >
+                                                <input type="number"  class="input-small" id="costo" placeholder="Costo" pattern="[0-9]" title="Sólo Números">
                                             </td>                                        
                                             <td width="20%" style="text-align: left;">                                            
                                                 <a class="button green-gradient" href="javascript:void(0)" id="addItem">Agregar</a>

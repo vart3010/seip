@@ -17,7 +17,7 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder;
  * CONTROLADOR DE PEDIDOS DE CASA - ABASTO
  * @author Gilbert C. <glavrjk@gmail.com>
  */
-class HouseSupplyOrderController extends SEIPController {
+class HouseSupplyOrderKitController extends SEIPController {
 
     public function chargeAction(Request $request) {
         $em = $this->getDoctrine()->getManager();

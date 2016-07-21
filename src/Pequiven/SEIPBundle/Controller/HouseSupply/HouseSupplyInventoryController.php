@@ -164,16 +164,17 @@ class HouseSupplyInventoryController extends SEIPController {
             $product->setCost($prod->costo);
 
             //ACTUALIZO MAXIMO POR PERSONA EN LA INSTANCIA DEL PRODUCTO
-            $instance = $product->getInstance();
-            $dispInst = (($instance->getAvailable()) + ($sign * $prod->cantidad));
-            $poblacion = $deposit->getComplejo()->getNumberMembersCET();
+            //$instance = $product->getInstance();
+            //$dispInst = (($instance->getAvailable()) + ($sign * $prod->cantidad));
+            //$poblacion = $deposit->getComplejo()->getNumberMembersCET();
+//            if ($dispInst <= 0) {
+//                $instance->setMaxPerUser(0);
+//            } else {
+//                //$instance->setMaxPerUser(floor($dispInst / $poblacion));
+//                $instance->setMaxPerUser(1000);
+//                $instance->setAvailable($dispInst);
+//            }
 
-            if ($dispInst <= 0) {
-                $instance->setMaxPerUser(0);
-            } else {
-                $instance->setMaxPerUser(floor($dispInst / $poblacion));
-                $instance->setAvailable($dispInst);
-            }
             $em->flush();
         }
 

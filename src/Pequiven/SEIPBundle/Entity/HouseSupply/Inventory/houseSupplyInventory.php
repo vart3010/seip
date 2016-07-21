@@ -4,18 +4,18 @@ namespace Pequiven\SEIPBundle\Entity\HouseSupply\Inventory;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyDeposit;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProduct;
 
 /**
  * Productos
  *
- * @author Máximo Sojo <maxsojo13@gmail.com>
+ * @author Gilbert C. <glavrjk@gmail.com>
  * 
  * @ORM\Table(name="seip_gsh_inventory")
- * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyInventoryRepository")
+ * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyInventoryRepository") 
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\HasLifecycleCallbacks()
  */
 class houseSupplyInventory {
 
@@ -59,23 +59,16 @@ class houseSupplyInventory {
     private $lastChargeDate;
 
     /**
-     * Creado por
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $createdBy;
-
-    /**
+     * @var \DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="createdAt", type="datetime")
      */
     private $createdAt;
 
     /**
+     * @var \DateTime
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated_at", type="datetime")
+     * @ORM\Column(name="updatedAt", type="datetime")
      */
     private $updatedAt;
 
@@ -102,10 +95,6 @@ class houseSupplyInventory {
 
     function getLastChargeDate() {
         return $this->lastChargeDate;
-    }
-
-    function getCreatedBy() {
-        return $this->createdBy;
     }
 
     function getCreatedAt() {
@@ -136,19 +125,15 @@ class houseSupplyInventory {
         $this->available = $available;
     }
 
-    function setLastChargeDate($lastChargeDate) {
+    function setLastChargeDate(datetime $lastChargeDate) {
         $this->lastChargeDate = $lastChargeDate;
     }
 
-    function setCreatedBy(User $createdBy) {
-        $this->createdBy = $createdBy;
-    }
-
-    function setCreatedAt($createdAt) {
+    function setCreatedAt(\DateTime $createdAt) {
         $this->createdAt = $createdAt;
     }
 
-    function setUpdatedAt($updatedAt) {
+    function setUpdatedAt(\DateTime $updatedAt) {
         $this->updatedAt = $updatedAt;
     }
 

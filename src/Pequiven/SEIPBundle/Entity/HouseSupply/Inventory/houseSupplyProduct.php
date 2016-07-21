@@ -4,8 +4,9 @@ namespace Pequiven\SEIPBundle\Entity\HouseSupply\Inventory;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventory;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductInstance;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKitItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems;
@@ -33,7 +34,7 @@ class houseSupplyProduct {
 
     /**
      * 
-     * @var houseSupplyProduct
+     * @var houseSupplyProductInstance
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductInstance", inversedBy="product")
      * @ORM\JoinColumn(name="instance_id", referencedColumnName="id")
      */
@@ -88,6 +89,12 @@ class houseSupplyProduct {
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\Inventory\houseSupplyInventory",mappedBy="product",cascade={"persist","remove"})
      */
     protected $inventory;
+
+    /**
+     * @var houseSupplyProductKitItems
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKitItems",mappedBy="product",cascade={"persist"}))
+     */
+    protected $productKitItems;
 
     /**
      * Carga de Items de Inventario
@@ -166,6 +173,10 @@ class houseSupplyProduct {
         return $this->inventory;
     }
 
+    function getProductKitItems() {
+        return $this->productKitItems;
+    }
+
     function getInventoryChargeItems() {
         return $this->inventoryChargeItems;
     }
@@ -194,7 +205,7 @@ class houseSupplyProduct {
         $this->id = $id;
     }
 
-    function setInstance(houseSupplyProduct $instance) {
+    function setInstance(houseSupplyProductInstance $instance) {
         $this->instance = $instance;
     }
 
@@ -224,6 +235,10 @@ class houseSupplyProduct {
 
     function setInventory(houseSupplyInventory $inventory) {
         $this->inventory = $inventory;
+    }
+
+    function setProductKitItems(houseSupplyProductKitItems $productKitItems) {
+        $this->productKitItems = $productKitItems;
     }
 
     function setInventoryChargeItems(houseSupplyInventoryChargeItems $inventoryChargeItems) {

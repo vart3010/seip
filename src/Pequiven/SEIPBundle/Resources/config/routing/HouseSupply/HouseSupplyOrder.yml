@@ -1,60 +1,60 @@
 ## YAML Template.
-pequiven_housesupply_order_charge:
+pequiven_housesupply_orderkit_charge:
     path: /create/{typemember}
     defaults:
-        _controller: pequiven.controller.housesupply_order:chargeAction
+        _controller: pequiven.controller.housesupply_orderkit:chargeAction
         _format: html
     requirements:
         _format: html|json|xml
     methods: [GET|POST]
     
-pequiven_housesupply_order_show:
+pequiven_housesupply_orderkit_show:
     path: /show/{id}
     defaults:
-        _controller: pequiven.controller.housesupply_order:showAction
+        _controller: pequiven.controller.housesupply_orderkit:showAction
         _format: html
     requirements:
         _format: html|json|xml
     methods: [GET|POST]
     
-pequiven_housesupply_order_register:
+pequiven_housesupply_orderkit_register:
     path: /register/
     defaults:
-        _controller: pequiven.controller.housesupply_order:registerAction
+        _controller: pequiven.controller.housesupply_orderkit:registerAction
         _format: html
     requirements:
         _format: html|json|xml
     methods: [GET|POST]
     
-pequiven_housesupply_order_charge_add:
+pequiven_housesupply_orderkit_charge_add:
     path: /addItem/
     defaults:
-        _controller: pequiven.controller.housesupply_order:addItemAction
+        _controller: pequiven.controller.housesupply_orderkit:addItemAction
         _format: html
     requirements:
         _format: html|json|xml
     methods: [GET|POST]
     
-pequiven_housesupply_order_charge_delete:
+pequiven_housesupply_orderkit_charge_delete:
     path: /deleteItem/{id}
     defaults:
-        _controller: pequiven.controller.housesupply_order:deleteItemAction
+        _controller: pequiven.controller.housesupply_orderkit:deleteItemAction
         _format: html
     requirements:
         _format: html|json|xml
     methods: [GET|POST]
     
-pequiven_housesupply_order_charge_total:
+pequiven_housesupply_orderkit_charge_total:
     path: /total/
     defaults:
-        _controller: pequiven.controller.housesupply_order:totalAction
+        _controller: pequiven.controller.housesupply_orderkit:totalAction
         _format: html
     requirements:
         _format: html|json|xml
     methods: [GET|POST]
 
-pequiven_housesupply_save_order:
+pequiven_housesupply_save_orderkit:
     path: /save
     defaults:
-        _controller: pequiven.controller.housesupply_order:saveOrderAction
+        _controller: pequiven.controller.housesupply_orderkit:saveOrderAction
     

@@ -1,22 +1,24 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Entity\HouseSupply\Order;
+namespace Pequiven\SEIPBundle\Entity\HouseSupply\Inventory;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
-use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKitItems;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
- * Ciclos de Pedidos por Grupo de WorkstudyCircle
+ * Productos
  *
- * @author Gilbert C. <glavrjk@gmail.com>
+ * @author Máximo Sojo
  * 
- * @ORM\Table(name="seip_gsh_cycle") 
- * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Order\HouseSupplyCycleRepository")
+ * @ORM\Table(name="seip_gsh_productkit")
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyProductKitRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class houseSupplyCycle {
+class houseSupplyProductKit {
 
     /**
      *
@@ -27,23 +29,24 @@ class houseSupplyCycle {
     private $id;
 
     /**
-     * @var \DateTime
-     * @ORM\Column(name="dateBeginOrder", type="datetime", nullable=false)
+     *
+     * @var string
+     * @ORM\Column(name="code",type="string",nullable=true)
      */
-    private $dateBeginOrder;
-
-    /**
-     * @var \DateTime
-     * @ORM\Column(name="dateEndOrder", type="datetime", nullable=false)
-     */
-    private $dateEndOrder;
+    private $code;
 
     /**
      *
-     * @var integer
-     * @ORM\Column(name="workStudyCircleGroup",type="integer",nullable=true)
+     * @var string
+     * @ORM\Column(name="description",type="string",nullable=false)
      */
-    private $workStudyCircleGroup;
+    private $description;
+
+    /**
+     * @var houseSupplyProductKitItems
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKitItems",mappedBy="productKit",cascade={"persist"}))
+     */
+    protected $productKitItems;
 
     /**
      * Creado por
@@ -71,26 +74,20 @@ class houseSupplyCycle {
      */
     private $deletedAt;
 
-    /**
-     * @var houseSupplyOrder
-     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder",mappedBy="cycle",cascade={"persist"}))
-     */
-    private $houseSupplyOrder;
-
     function getId() {
         return $this->id;
     }
 
-    function getDateBeginOrder() {
-        return $this->dateBeginOrder;
+    function getCode() {
+        return $this->code;
     }
 
-    function getDateEndOrder() {
-        return $this->dateEndOrder;
+    function getDescription() {
+        return $this->description;
     }
 
-    function getWorkStudyCircleGroup() {
-        return $this->workStudyCircleGroup;
+    function getProductKitItems() {
+        return $this->productKitItems;
     }
 
     function getCreatedBy() {
@@ -109,24 +106,20 @@ class houseSupplyCycle {
         return $this->deletedAt;
     }
 
-    function getHouseSupplyOrder() {
-        return $this->houseSupplyOrder;
-    }
-
     function setId($id) {
         $this->id = $id;
     }
 
-    function setDateBeginOrder(\DateTime $dateBeginOrder) {
-        $this->dateBeginOrder = $dateBeginOrder;
+    function setCode($code) {
+        $this->code = $code;
     }
 
-    function setDateEndOrder(\DateTime $dateEndOrder) {
-        $this->dateEndOrder = $dateEndOrder;
+    function setDescription($description) {
+        $this->description = $description;
     }
 
-    function setWorkStudyCircleGroup($workStudyCircleGroup) {
-        $this->workStudyCircleGroup = $workStudyCircleGroup;
+    function setProductKitItems(houseSupplyProductKitItems $productKitItems) {
+        $this->productKitItems = $productKitItems;
     }
 
     function setCreatedBy(User $createdBy) {
@@ -145,8 +138,6 @@ class houseSupplyCycle {
         $this->deletedAt = $deletedAt;
     }
 
-    function setHouseSupplyOrder(houseSupplyOrder $houseSupplyOrder) {
-        $this->houseSupplyOrder = $houseSupplyOrder;
-    }
+
 
 }
