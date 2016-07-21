@@ -25,6 +25,12 @@ class ArrangementProgramSigController extends ResourceController
 
         $em = $this->getDoctrine()->getManager();
         $ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
+        
+        //Validación para Visualizar informe de Evolución        
+        if (!$ArrangementProgram->getShowEvolutionView()) {
+            $this->get('session')->getFlashBag()->add('success', 'Programa de Gestión no Habilitado para Visualizar Informe de Evolución');
+            return $this->redirect($this->generateUrl("pequiven_seip_arrangementprogram_show", array("id" => $ArrangementProgram->getId())));         
+        }
 
         $evolutionService = $this->getEvolutionService(); //Obtenemos el servicio de las causas            
         $data = $evolutionService->findEvolutionCause($ArrangementProgram, $request, $typeObject, true); //Carga la data de las causas y sus acciones relacionadas
