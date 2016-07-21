@@ -851,7 +851,6 @@ class ArrangementProgramController extends SEIPController {
         $user = $this->getUser();
 
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }

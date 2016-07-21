@@ -21,7 +21,7 @@ class ArrangementProgramRepository extends EntityRepository {
      * @param type $id
      * @return type
      */
-    public function findWithData($id) {
+    public function findWithData($id) {        
         $qb = $this->getQueryBuilder();
         $qb
                 ->addSelect('ap_r')
@@ -32,8 +32,10 @@ class ArrangementProgramRepository extends EntityRepository {
                 ->addSelect('ap_r_g')
                 ->addSelect('ap_t_g_r_g')
                 ->addSelect('ap_t_g_gd')
+                ->addSelect('ap_so')
                 ->addSelect('ap_to')
                 ->addSelect('ap_oo')
+                ->innerJoin('ap.strategicObjetive', 'ap_so')
                 ->innerJoin('ap.tacticalObjective', 'ap_to')
                 ->leftJoin('ap.operationalObjective', 'ap_oo')
                 ->leftJoin('ap.responsibles', 'ap_r')

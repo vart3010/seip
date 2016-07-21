@@ -36,6 +36,10 @@ class SequenceGenerator
             ;
         
         $gerencia = 'ERROR';
+        if($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC){
+            $type = 'STR';
+            $gerencia = 'S/G';//$arrangementProgram->getTacticalObjective()->getGerencia()->getAbbreviation();
+        }
         if($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
             $type = 'TAC';
             $gerencia = $arrangementProgram->getTacticalObjective()->getGerencia()->getAbbreviation();

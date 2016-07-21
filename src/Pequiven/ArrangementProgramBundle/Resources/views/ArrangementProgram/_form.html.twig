@@ -96,11 +96,13 @@
             </div>
         {%endif%}
     {% endif %}
-    <div class="field-block button-height">
-        <label class="label">{{ "pequiven.form.location"|trans }}</label>
-        <span ng-if="!complejo" class="tag orange-bg">Seleccione el Objetivo</span>
-        {$ complejo.description $}
-    </div>
+    {% if form.strategicObjetive is not defined %}    
+        <div class="field-block button-height">
+            <label class="label">{{ "pequiven.form.location"|trans }}</label>
+            <span ng-if="!complejo" class="tag orange-bg">Seleccione el Objetivo</span>
+            {$ complejo.description $}
+        </div>
+    {% endif %}
     {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
         <div class="field-block button-height">
             {{ form_label(form.process) }}
