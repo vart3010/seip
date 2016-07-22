@@ -26,7 +26,7 @@
 {% endblock %}
 
 {% block body -%}
-    
+
 
     {% set labelTypeDetailValue = indicator.getLabelTypeDetailValue|trans %}
     {% set showIndicatorConfigButton = false %}
@@ -233,20 +233,20 @@
                     </div>
                 {% endif%}
 
-               {#<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                    <p class="inline-label">
-                        &nbsp;
-                    </p>
-                </div>
-
-                <!--Metodo de calculo que se aplico para dar el resultado del indicador -->
-                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                    <p class="inline-label" style="text-align: left;">
-                        <label class="label">{{ 'form.metodoCalculo'|trans }}</label>
-{#                        {{ indicatorService.getCalculationMethod(indicator) }}
-                        << {(Resx100)} \over ({PRV\over2}) >>
-                    {#</p>
-                </div>#}
+                {#<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                     <p class="inline-label">
+                         &nbsp;
+                     </p>
+                 </div>#}
+                {% if(is_granted('ROLE_SEIP_PLANNING_*')) %}
+                    <!--Metodo de calculo que se aplico para dar el resultado del indicador -->
+                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile"  >
+                        <p class="inline-label">
+                            <label class="label">{{ 'form.metodoCalculo'|trans }}</label>
+                            << {{ indicatorService.getCalculationMethod(indicator) }} >>
+                        </p>
+                    </div>
+                {% endif %}
 
                 <!-- Rango de gestión del Indicador -->
                 {% if (indicator.showRange) %}
@@ -492,6 +492,8 @@ function openImg(rutaImg) {
 }
 
 $(document).ready(function () {
+    
+    
     $("a#loadFileIndicator").click(function () {
         $("input#fileIndicator").click();
     });
