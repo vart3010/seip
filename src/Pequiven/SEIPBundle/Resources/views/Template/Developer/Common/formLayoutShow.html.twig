@@ -27,8 +27,10 @@
 {#    <script type="text/javascript" src="{{ asset('bundles/pequivenseip/Mathjax.js') }}">#}
     <script src="{{  asset('bundles/pequivenseip/MathJax/MathJax.js') }}">
         MathJax.Hub.Config({
+            
             extensions: ["tex2jax.js"],
             jax: ["input/TeX", "output/HTML-CSS"],
+            displayAlign: "left",
             tex2jax: {
                 inlineMath: [['<', '>'], ["\\(", "\\)"]],
                 displayMath: [['<<', '>>'], ["\\[", "\\]"]],
