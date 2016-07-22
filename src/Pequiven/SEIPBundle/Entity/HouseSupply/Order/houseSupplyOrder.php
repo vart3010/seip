@@ -43,7 +43,7 @@ class houseSupplyOrder {
     private $dateBilling;
 
     /**
-     * 1. PEDIDO / 2. DEVOLUCION DE PEDIDO
+     * 1. PEDIDO / 2. DEVOLUCION DE PEDIDO / 3. Espera
      * @var string
      * @ORM\Column(name="type",type="string",nullable=false)
      */

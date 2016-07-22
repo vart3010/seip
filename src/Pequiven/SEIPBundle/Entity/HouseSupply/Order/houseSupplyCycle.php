@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKit;
 
 /**
  * Ciclos de Pedidos por Grupo de WorkstudyCircle
@@ -77,6 +78,13 @@ class houseSupplyCycle {
      */
     private $houseSupplyOrder;
 
+    /**
+     * @var houseSupplyProductKit
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKit",inversedBy="cycle")
+     * @ORM\JoinColumn(name="productKit_id", referencedColumnName="id", nullable=true)
+     */
+    private $productKit;
+
     function getId() {
         return $this->id;
     }
@@ -113,6 +121,10 @@ class houseSupplyCycle {
         return $this->houseSupplyOrder;
     }
 
+    function getProductKit() {
+        return $this->productKit;
+    }
+
     function setId($id) {
         $this->id = $id;
     }
@@ -147,6 +159,10 @@ class houseSupplyCycle {
 
     function setHouseSupplyOrder(houseSupplyOrder $houseSupplyOrder) {
         $this->houseSupplyOrder = $houseSupplyOrder;
+    }
+
+    function setProductKit(houseSupplyProductKit $productKit) {
+        $this->productKit = $productKit;
     }
 
 }

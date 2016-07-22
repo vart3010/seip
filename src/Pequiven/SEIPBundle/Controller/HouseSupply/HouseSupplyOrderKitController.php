@@ -43,8 +43,8 @@ class HouseSupplyOrderKitController extends SEIPController {
         //CICLO DE ORDENES    
         //$grupo = $wsc->getHouseSupplyGroup();
         $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle(new \DateTime((date("Y-m-d h:m:s"))), $grupo = null);
-        
-      
+
+
         if ($cycle != null) {
             $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('cycle' => $cycle[0]->getId(), 'workStudyCircle' => $wsc->getId()));
 
@@ -52,33 +52,21 @@ class HouseSupplyOrderKitController extends SEIPController {
                 //NUEVO NUMERO DE PEDIDO
                 $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
                 $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
-
-                if (($request->get('member')) && ($request->get('member') != 0)) {
-                    $member = $em->getRepository('PequivenSEIPBundle:User')->findOneById($request->get('member'));
-                    $searchitemsbymember = array(
-                        'client' => $member,
-                        'type' => 3,
-                        'workStudyCircle' => $wsc,
-                    );
-                    $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
-                } else {
-                    if (($request->get('typemember') == 0) || ($request->get('member') == 0)) {
-                        $member = null;
-                        $searchitemsbymember = array(
-                            'type' => 3,
-                            'workStudyCircle' => $wsc,
-                        );
-                        $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
-                    }
-                }
+                $member = null;
+                $searchitemsbymember = array(
+                    'type' => 3,
+                    'workStudyCircle' => $wsc,
+                );
+                $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
 
                 $idProductItems = array();
+                
                 foreach ($items as $item) {
                     //var_dump($item->getProduct()->getDescription());
                     $idProductItems[] = $item->getProduct()->getId();
                 }
 
-                return $this->render('PequivenSEIPBundle:HouseSupply\Order:create.html.twig', array(
+                return $this->render('PequivenSEIPBundle:HouseSupply\Order:createkit.html.twig', array(
                             'type' => $type,
                             'neworder' => $neworder,
                             'inventory' => $inventory,
@@ -93,7 +81,7 @@ class HouseSupplyOrderKitController extends SEIPController {
                 return $this->redirect($this->generateUrl("pequiven_housesupply_order_show", array("id" => $order[0]->getId())));
             }
         } else {
-            $this->get('session')->getFlashBag()->add('error', "Su Círculo de Estudio No Tiene Asignado un Periodo para Realizar Pedidos");
+            $this->get('session')->getFlashBag()->add('error', "Aún No se Encuentra Aperturado el Registro de Ordenes");
             return $this->redirect($this->generateUrl("pequiven_housesupply_order_show", array("id" => 0)));
         }
     }

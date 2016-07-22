@@ -6,11 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKitItems;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyCycle;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * Productos
+ * Kit de Productos
  *
  * @author Máximo Sojo
  * 
@@ -47,6 +48,12 @@ class houseSupplyProductKit {
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKitItems",mappedBy="productKit",cascade={"persist"}))
      */
     protected $productKitItems;
+
+    /**
+     * @var houseSupplyCycle
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyCycle",mappedBy="productKit",cascade={"persist"}))
+     */
+    protected $cycle;
 
     /**
      * Creado por
@@ -90,6 +97,10 @@ class houseSupplyProductKit {
         return $this->productKitItems;
     }
 
+    function getCycle() {
+        return $this->cycle;
+    }
+
     function getCreatedBy() {
         return $this->createdBy;
     }
@@ -120,6 +131,10 @@ class houseSupplyProductKit {
 
     function setProductKitItems(houseSupplyProductKitItems $productKitItems) {
         $this->productKitItems = $productKitItems;
+    }
+
+    function setCycle(houseSupplyCycle $cycle) {
+        $this->cycle = $cycle;
     }
 
     function setCreatedBy(User $createdBy) {
