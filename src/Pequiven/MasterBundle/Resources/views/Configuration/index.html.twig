@@ -1,0 +1,90 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+{% block body %}
+<div class="with-padding">
+	<fieldset class="fieldset">
+	    <legend class="legend"><b>Configuration</b></legend>
+	    <div class="columns">
+	    	<div class="new-row four-columns four-columns-tablet four-columns-mobile">
+	    		<p class="inline-label">Objetivos</p>
+	    		<input type="radio" name="radio" id="radio-2" value="2" class="radio mid-margin-left"> <label for="radio-2" class="label">Styled radio</label>
+	    	</div>
+			<div class="four-columns four-columns-tablet four-columns-mobile">
+				<p class="inline-label">Programas de Gestión</p>
+			</div>
+			<div class="four-columns four-columns-tablet four-columns-mobile">
+				<p class="inline-label">Indicadores</p>
+			</div>
+	        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+	            <p class="inline-label">
+	                <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
+	                test
+	            </p>
+	        </div>
+	    </div>
+	</fieldset>
+</div>
+
+<div class="with-padding">
+	<div class="columns">
+		<div class="six-columns six-columns-tablet twelve-columns-mobile">
+			<div class="block large-margin-bottom">
+				<div class="block-title">
+					<h3>Next events</h3>
+					<span class="ribbon"><span class="ribbon-inner">3 new</span></span>
+				</div>
+				<ul class="events">
+					<li>
+						<span class="event-date orange">8</span>
+						<a href="javascript:void(0);" class="event-description">
+							<h4>Event title</h4>
+							<p>Event description text</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<!--<div class="button-height wrapped align-right">
+				<span class="float-left mid-margin-left">Want some modals?</span>
+				<span class="button-group">
+					<a href="javascript:openAlert();" class="button">Alert</a>
+					<a href="javascript:openPrompt();" class="button">Prompt</a>
+					<a href="javascript:openConfirm();" class="button">Confirm</a>
+				</span>
+			</div>-->
+		</div>
+		<div class="six-columns six-columns-tablet twelve-columns-mobile">
+			<h2 class="relative thin">
+				New users
+				<span class="info-spot">
+					<span class="icon-info-round"></span>
+					<span class="info-bubble">
+						This is an information bubble to help the user.
+					</span>
+				</span>
+				<span class="button-group absolute-right">
+					<a href="javascript:openModal()" title="Add user" class="button icon-plus-round">Add</a>
+					<a href="javascript:openLoadingModal()" title="Reload list" class="button icon-redo"></a>
+				</span>
+			</h2>
+			<ul class="list spaced">
+				<li>
+					<a href="javascript:void(0);" class="list-link icon-user" title="Click to edit">
+						<span class="meter orange-gradient"></span>
+						<span class="meter orange-gradient"></span>
+						<span class="meter"></span>
+						<span class="meter"></span>
+
+						<strong>John</strong> Doe
+					</a>
+					<div class="button-group absolute-right compact show-on-parent-hover">
+						<a href="javascript:void(0);" class="button icon-pencil">Edit</a>
+						<a href="javascript:void(0);" class="button icon-gear with-tooltip" title="Other actions"></a>
+						<a href="javascript:void(0);" class="button icon-trash with-tooltip confirm" title="Delete"></a>
+					</div>
+				</li>
+			</ul>
+
+		</div>
+
+	</div>
+</div>
+{% endblock %}

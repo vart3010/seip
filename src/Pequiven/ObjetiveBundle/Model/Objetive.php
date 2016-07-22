@@ -34,7 +34,7 @@ abstract class Objetive implements ObjetiveInterface
      * Programas de gestion a nivel tactico
      * 
      * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
-     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",mappedBy="strategicObjective",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",mappedBy="strategicObjetive",cascade={"remove"})
      */
     protected $strategicArrangementPrograms;
 

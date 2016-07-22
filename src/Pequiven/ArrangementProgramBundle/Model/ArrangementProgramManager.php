@@ -23,7 +23,12 @@ class ArrangementProgramManager implements ContainerAwareInterface {
         $valid = false;
         $user = $this->getUser();
         if ($entity->getCategoryArrangementProgram()->getId() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA) {
-            $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
+            if ($entity->getType() == 0) {
+                $configuration = "";
+            }else{
+                $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();                
+            }
+
             if (!$configuration) {
                 return $valid;
             }
@@ -62,7 +67,11 @@ class ArrangementProgramManager implements ContainerAwareInterface {
         $user = $this->getUser();
 
         if ($entity->getCategoryArrangementProgram()->getId() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA) {
-            $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
+            if ($entity->getType() == 0) {            
+                $configuration = "";
+            }else{
+                $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();                
+            }
 
             if (!$configuration) {
                 return $valid;
@@ -219,7 +228,12 @@ class ArrangementProgramManager implements ContainerAwareInterface {
      * @return boolean
      */
     public function isAllowToNotity(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $entity) {
-        $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
+        if ($entity->getType() == 0) {
+            $configuration = "";//$entity->getStrategicObjetive()->getGerencia()->getConfiguration();
+        }else{
+            $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
+        }
+
         $details = $entity->getDetails();
         $valid = false;
         if (!$configuration) {

@@ -849,7 +849,7 @@ class ArrangementProgramController extends SEIPController {
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-
+        //$arrayGoalOrder = 0;
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
@@ -864,6 +864,7 @@ class ArrangementProgramController extends SEIPController {
         }
 
         $rolesByType = array(
+            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_STRATEGIC', 'ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_STRATEGIC', 'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_STRATEGIC'),
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC', 'ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_TACTIC', 'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_TACTIC'),
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE', 'ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_OPERATIVE', 'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE'),
         );
@@ -916,7 +917,7 @@ class ArrangementProgramController extends SEIPController {
         $i = 1;
         $totalWeight=0;
         
-        foreach ($entity->getTimeline()->getGoals() as $goal) {
+        foreach ($entity->getTimeline()->getGoals() as $goal) {            
             $arrayGoalOrder[$goal->getId()] = $i;
             $totalWeight+=$goal->getWeight();
             foreach ($goal->getResponsibles() as $resp) {
@@ -934,7 +935,7 @@ class ArrangementProgramController extends SEIPController {
         $resultService = $this->container->get('seip.service.result');
         $date = $entity->getLastDateCalculateResult();
         $totales = $resultService->CalculateAdvancePenaltyAP($entity, $date);
-
+        
         return array(
             'entity' => $entity,
             'individualValues' => $individualValues,

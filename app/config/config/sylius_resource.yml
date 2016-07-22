@@ -103,6 +103,14 @@ sylius_resource:
                 model: Pequiven\MasterBundle\Entity\GerenciaSecond
                 controller: Pequiven\MasterBundle\Controller\GerenciaSecondController
                 repository: Pequiven\MasterBundle\Repository\GerenciaSecondRepository
+        #Master de Configuraciones
+        pequiven.configuration:
+            driver: doctrine/orm
+            templates: PequivenMasterBundle:Configuration
+            classes:
+                model: Pequiven\MasterBundle\Entity\GerenciaSecond
+                controller: Pequiven\MasterBundle\Controller\Configuration\NotifyController
+                repository: Pequiven\MasterBundle\Repository\GerenciaSecondRepository
         #Nivel de Acceso por Usuario
         pequiven_seip.userpermission:
             driver: doctrine/orm

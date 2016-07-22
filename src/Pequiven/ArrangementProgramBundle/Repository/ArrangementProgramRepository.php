@@ -24,7 +24,7 @@ class ArrangementProgramRepository extends EntityRepository {
     public function findWithData($id) {        
         $qb = $this->getQueryBuilder();
         $qb
-                ->addSelect('ap_r')
+                /*->addSelect('ap_r')
                 ->addSelect('ap_t')
                 ->addSelect('ap_ms')
                 ->addSelect('ap_t_g')
@@ -32,11 +32,11 @@ class ArrangementProgramRepository extends EntityRepository {
                 ->addSelect('ap_r_g')
                 ->addSelect('ap_t_g_r_g')
                 ->addSelect('ap_t_g_gd')
-                ->addSelect('ap_so')
+                //->addSelect('ap_so')
                 ->addSelect('ap_to')
-                ->addSelect('ap_oo')
-                ->innerJoin('ap.strategicObjetive', 'ap_so')
-                ->innerJoin('ap.tacticalObjective', 'ap_to')
+                ->addSelect('ap_oo')*/
+                //->innerJoin('ap.strategicObjetive', 'ap_so')
+                /*->innerJoin('ap.tacticalObjective', 'ap_to')
                 ->leftJoin('ap.operationalObjective', 'ap_oo')
                 ->leftJoin('ap.responsibles', 'ap_r')
                 ->leftJoin('ap_r.groups', 'ap_r_g')
@@ -45,7 +45,7 @@ class ArrangementProgramRepository extends EntityRepository {
                 ->leftJoin('ap_t.goals', 'ap_t_g')
                 ->leftJoin('ap_t_g.responsibles', 'ap_t_g_r')
                 ->leftJoin('ap_t_g.goalDetails', 'ap_t_g_gd')
-                ->leftJoin('ap_t_g_r.groups', 'ap_t_g_r_g')
+                ->leftJoin('ap_t_g_r.groups', 'ap_t_g_r_g')*/
                 ->andWhere('ap.id = :id')
                 ->setParameter('id', $id)
         ;
