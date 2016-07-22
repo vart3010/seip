@@ -486,6 +486,13 @@ class OnePerTenController extends SEIPController {
         $texts[0] = 'No';
         $texts[1] = 'Sí';
         
+        $textsFirmaRevocatorio = array(
+            -1 => 'Sin Información',
+            0 => 'No',
+            1 => 'F',
+            2 => 'R',
+        );
+        
         $isAllowToAddAnalisis = false;
         if($user->getId() == 70 || $user->getId() == 112){
             $isAllowToAddAnalisis = true;
@@ -522,6 +529,7 @@ class OnePerTenController extends SEIPController {
                     "wasSupportAssemblyElections" => $wasSupportAssemblyElections,
                     "workStudyCircle" => $workStudyCircle,
                     "texts" => $texts,
+                    "textsFirmaRevocatorio" => $textsFirmaRevocatorio,
                     "members" => $members,
                     "efectividad" => $efectividad,
                     "profileItemsWithResult" => $profileItemsWithResult,

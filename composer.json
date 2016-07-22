@@ -61,11 +61,11 @@
     "repositories": [
         {
             "type": "vcs",
-            "url":  "https://github.com/carlitoxenlaweb/admin-bundle.git"
+            "url":  "git@172.20.124.26:carlitoxenlaweb/admin-bundle.git"
         },
         {
             "type": "vcs",
-            "url":  "https://github.com/carlitoxenlaweb/doctrine-orm-admin-bundle.git"
+            "url":  "git@172.20.124.26:carlitoxenlaweb/doctrine-orm-admin-bundle.git"
         }
     ],  
     "scripts": {
