@@ -914,14 +914,14 @@ class ArrangementProgramController extends SEIPController {
         $individualValues = array();
         $penalties = array();
         $i = 1;
-        $totalWeight=0;
-        
+        $totalWeight = 0;
+
         foreach ($entity->getTimeline()->getGoals() as $goal) {
             $arrayGoalOrder[$goal->getId()] = $i;
             $totalWeight+=$goal->getWeight();
             foreach ($goal->getResponsibles() as $resp) {
                 $individualValues[$goal->getId()][$resp->getId()] = GoalController::searchValuebyUserAction($goal->getId(), $resp->getId());
-                $penalties[$goal->getId()][$resp->getId()] = GoalController::searchPenaltybyUserAction($goal->getId(), $resp->getId());                
+                $penalties[$goal->getId()][$resp->getId()] = GoalController::searchPenaltybyUserAction($goal->getId(), $resp->getId());
             }
             $i++;
         }
@@ -1889,8 +1889,9 @@ class ArrangementProgramController extends SEIPController {
         );
 
         $twig = 'PequivenArrangementProgramBundle:ArrangementProgram:exportPDF.html.twig';
+        $tittle = 'Resultados de Programa de Gestión ' . $ref;
 
-        $this->getReportService()->generatePdf($data, 'Resultados de Programa de Gestión ' . $ref, $twig, 'L');
+        $this->getReportService()->generatePdf($data, $tittle, $twig, 'L');
     }
 
 }

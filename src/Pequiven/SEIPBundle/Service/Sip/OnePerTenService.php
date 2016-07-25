@@ -617,6 +617,10 @@ class OnePerTenService {
             $onePerTen->setProfileValue($profileItemsWithResult[OnePerTen::TYPE_GLOBAL]['profileValue']);
         }
         
+        if($profileItemsAvailables[OnePerTen::TYPE_COMPROMISO][OnePerTen::LISTA_SUMATE]['enabled'] && $onePerTen->getProfileValue() < 3){
+            $onePerTen->setProfileValue(3);
+        }
+        
         $onePerTen->updateLastDateCalculateProfile();
         
         $em->persist($onePerTen);
