@@ -5216,9 +5216,15 @@ class IndicatorService implements ContainerAwareInterface {
         $arrangementRangeService = $this->getArrangementRangeService();
         $resultService = $this->getResultService();
 
-
+        $labels = \Pequiven\MasterBundle\Entity\Tendency::getLabelsSummary();
         $penalty = 0;
         $formula = "";
+        $datos = array(
+            "formula" => "",
+            "vars" => array(),
+            "error" => "",
+            "indicator"=>array("ref"=>$indicator->getRef(),"tendency"=> $labels[$tendenty->getRef()])
+        );
 
         if ($tendenty) {
             if ($arrangementRange) {
@@ -5234,7 +5240,11 @@ class IndicatorService implements ContainerAwareInterface {
                     $formula = "Ao = { { {(Res)} \over ({RV}) } x 100 )} - P";
 
                     #var_dump($formula);
-                    return $formula;
+                    #return $formula;
+                    $datos["formula"] = $formula;
+                    $datos["vars"] = array("Res" => "Resultado de Indicador", "RV" => "Resultado Verde", "P" => "Penalización");
+                    $datos["error"] = 0;
+                    return $datos;
                 }
                 ##DECRECIENTE
                 else if ($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN) {//Decreciente
@@ -5246,7 +5256,11 @@ class IndicatorService implements ContainerAwareInterface {
                     $formula = "Ao = {( { {(RV)} \over ({Res}) } x 100 )} - P";
 
                     #var_dump($formula);
-                    return $formula;
+                    #return $formula;
+                    $datos["formula"] = $formula;
+                    $datos["vars"] = array("Res" => "Resultado de Indicador", "RV" => "Resultado Verde", "P" => "Penalización");
+                    $datos["error"] = 0;
+                    return $datos;
                 }
                 ##ESTABLE
                 else if ($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_EST) {
@@ -5263,24 +5277,33 @@ class IndicatorService implements ContainerAwareInterface {
                         if ($resultIndicator > $middle) {
                             #$formula = "(((" . $middle. " * 100 / " . number_format($resultIndicator, 2, ",", ".") . "))" . ") - ".$penalty."%";
                             $formula = "Ao = { {(PRV x 100)} \over {(Res)} } - P";
+                            $datos["vars"] = array("Res" => "Resultado de Indicador", "PRV" => "Promedio Resultado Verde", "P" => "Penalización");
                         } else if ($resultIndicator < $middle) {
                             #$formula = "(((" . number_format($resultIndicator, 2, ",", ".") . " * 100 / " .$middle . "))" . ") - ".$penalty."%";
                             $formula = "Ao = { {(Res x 100)} \over ({PRV \over 2}) } - P";
+                            $datos["vars"] = array("Res" => "Resultado de Indicador", "PRV" => "Promedio Resultado Verde", "P" => "Penalización");
                         }
                     }
 
                     #var_dump($formula);
-                    return $formula;
+                    #return $formula;
+                    $datos["formula"] = $formula;
+                    $datos["error"] = 0;
+                    return $datos;
                 }
             } else {
                 #var_dump("Sin rango de gestion definido");
-                $formula = "Sin rango de gestion definido";
-                return $formula;
+                #return $formula;
+                $datos["formula"] = "";
+                $datos["error"] = "Sin rango de gestion definido";
+                return $datos;
             }
         } else {
             #var_dump("Sin tendencia definida");
-            $formula = "Sin tendencia definida";
-            return $formula;
+            #$formula = "Sin tendencia definida";
+            $datos["formula"] = "";
+            $datos["error"] = "Sin rango de gestion definido";
+            return $datos;
         }
 
 //        var_dump($tendency->getRef());

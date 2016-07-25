@@ -239,15 +239,21 @@
                      </p>
                  </div>#}
                 {% if(is_granted('ROLE_SEIP_PLANNING_*')) %}
+
+                    {% set dataMethod =  indicatorService.getCalculationMethod(indicator) %}
                     <!--Metodo de calculo que se aplico para dar el resultado del indicador -->
-                    {#<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile"  >
+                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile"  >
                         <p class="inline-label">
                             <label class="label">{{ 'form.metodoCalculo'|trans }}</label>
                             <a href="#" id="opener">
-                                << {{ indicatorService.getCalculationMethod(indicator) }} >>
+                                {% if (dataMethod["error"]==0) %}
+                                    << {{ dataMethod["formula"] }} >>
+                                {% else %}
+                                    {{ dataMethod["error"] }}
+                                {% endif %}
                             </a>
                         </p>
-                    </div>#}
+                    </div>
                 {% endif %}
 
                 <!-- Rango de gestión del Indicador -->
@@ -440,19 +446,34 @@
     </p>
 
 
-    <div id="dialog" title="Basic dialog">
+    <div id="dialog" title="Descripción de la Fórmula">
         <fieldset class="fieldset fields-list">
             <div class="field-block button-height" >
-                <label for="form_plan" class="label required">Método de Cálculo</label>
-                << {{ indicatorService.getCalculationMethod(indicator) }} >>
+                <label for="form_plan" class="label required">Indicador</label>
+                {{ dataMethod["indicator"]["ref"] }}
             </div>
             <div class="field-block button-height" >
-                <label for="form_plan" class="label required">Var</label>
+                <label for="form_plan" class="label required">Tendencia</label>
+                {{ dataMethod["indicator"]["tendency"]|trans({},'PequivenArrangementBundle') }}
             </div>
+            <div class="field-block button-height" >
+                <label for="form_plan" class="label required">Método de Cálculo</label>
+                {% if (dataMethod["error"]==0) %}
+                    << {{ dataMethod["formula"] }} >>
+                {% else %}
+                    {{ dataMethod["error"] }}
+                {% endif %}
+            </div>
+
+            {% for key,desc in dataMethod["vars"] %}
+                <div class="field-block button-height" >
+                    <label for="form_plan" class="label required">{{ key }}</label>
+                    <strong>{{ desc }} </strong>
+                </div>
+            {% endfor %}
+
         </fieldset>
     </div>
-
-
 
 {% endblock %}
 
@@ -534,7 +555,9 @@ MathJax.Hub.Config({
                 hide: {
                     effect: "explode",
                     duration: 1000
-                }
+                },
+                width: "45%",
+                maxWidth: "45%"
             });
 
             $("#opener").on("click", function () {
