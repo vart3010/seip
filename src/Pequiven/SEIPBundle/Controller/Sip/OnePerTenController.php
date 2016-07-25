@@ -62,11 +62,18 @@ class OnePerTenController extends SEIPController {
         $profilesPoliticEvaluation[] = array('id' => 4,'description' => 'Perfil 4');
         $profilesPoliticEvaluation[] = array('id' => 5,'description' => 'Perfil 5');
         
+        $statusRevocatorySignature = array();
+        $statusRevocatorySignature[] = array('id' => -1,'description' => 'Sin Información');
+        $statusRevocatorySignature[] = array('id' => 0,'description' => 'No Firmó');
+        $statusRevocatorySignature[] = array('id' => 1,'description' => 'Firmó');
+        $statusRevocatorySignature[] = array('id' => 2,'description' => 'R');
+        
         if ($request->get('_format') == 'html') {
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
                 $this->config->getPluralResourceName() => $resources,
                 'profilesPoliticEvaluation' => $profilesPoliticEvaluation,
+                'statusRevocatorySignature' => $statusRevocatorySignature,
             );
             $view->setData($data);
         } else {

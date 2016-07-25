@@ -78,6 +78,13 @@ class OnePerTenRepository extends EntityRepository {
             ;
         }
         
+        if (($revocatorySignature = $criteria->remove('statusRevocatorySignature'))) {
+            $queryBuilder
+                    ->andWhere('opt.firmaRevocatorio = :revocatorySignature')
+                    ->setParameter('revocatorySignature', $revocatorySignature)
+            ;
+        }
+        
         if (($voto = $criteria->remove('voto'))) {
             $numVoto = 0;
             if($voto == 'SI'){
