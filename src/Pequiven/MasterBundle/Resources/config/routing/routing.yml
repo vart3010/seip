@@ -32,4 +32,28 @@ pequiven_gerenciafirst:
 admin_master_configuration_notify:
     path: /configuration/notify
     defaults: 
-        _controller: pequiven.controller.configuration:indexAction        
+        _controller: pequiven.controller.configuration:indexAction
+pequiven_configurations_get_to_programs:
+    path: /program-get-to-data.{_format}
+    defaults:
+        _controller: pequiven.controller.configuration:getProgramAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_configuration_find_data:
+    path: /find-data-users.{_format}
+    defaults:
+        _controller: pequiven.controller.configuration:findByDataAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_configuration_get_data_users:
+    path: /get-data-users
+    defaults: 
+        _controller: pequiven.controller.configuration:getDataUsersAction
