@@ -5747,6 +5747,7 @@ angular.module('seipModule.controllers', [])
             var selectSecondLineManagement = angular.element("#selectSecondLineManagement");
             var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
             var selectProfilesPoliticEvaluation = angular.element("#selectProfilesPoliticEvaluation");
+            var selectStatusRevocatorySignature = angular.element("#selectStatusRevocatorySignature");
 
 
             $scope.data = {
@@ -5755,6 +5756,7 @@ angular.module('seipModule.controllers', [])
                 second_line_managements: null,
                 work_study_circles: null,
                 profiles_politic_evaluation: null,
+                status_revocatory_signature: null,
             };
 
             $scope.model = {
@@ -5763,6 +5765,7 @@ angular.module('seipModule.controllers', [])
                 secondLineManagement: null,
                 workStudyCircle: null,
                 profilesPoliticEvaluation: null,
+                statusRevocatorySignature: null,
             };
 
             //Busca las localidades
@@ -5922,7 +5925,7 @@ angular.module('seipModule.controllers', [])
             $scope.$watch("model.profilesPoliticEvaluation", function (newParams, oldParams) {
                 if ($scope.model.profilesPoliticEvaluation != null && $scope.model.profilesPoliticEvaluation.id != undefined) {
                     $scope.tableParams.$params.filter['profilesPoliticEvaluation'] = $scope.model.profilesPoliticEvaluation.id;
-                    //Al cambiar el círculo de estudio de trabajo
+                    //Al cambiar el Perfil Político
                     selectProfilesPoliticEvaluation.change(function () {
                     });
                 } else {
@@ -5930,10 +5933,21 @@ angular.module('seipModule.controllers', [])
                 }
             });
 
+            //Scope de Firma Revocatorio 2016
+            $scope.$watch("model.statusRevocatorySignature", function (newParams, oldParams) {
+                if ($scope.model.statusRevocatorySignature != null && $scope.model.statusRevocatorySignature.id != undefined) {
+                    $scope.tableParams.$params.filter['statusRevocatorySignature'] = $scope.model.statusRevocatorySignature.id;
+                    //Al cambiar el Status Firma Revocatorio 2016
+                    selectStatusRevocatorySignature.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['statusRevocatorySignature'] = null;
+                }
+            });
+
 
         })
         //FIN ONE PER TEN
-
 
         .controller('TableProposalController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var selectComplejo = angular.element("#selectComplejos");
