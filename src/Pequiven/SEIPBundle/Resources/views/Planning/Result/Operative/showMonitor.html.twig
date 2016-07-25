@@ -3,7 +3,14 @@
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
-{% block before_body %}
+
+{% if entity.gerencia is defined %}
+    {%set descrip= entity.gerencia.description%}
+{% else %}
+    {%set descrip= entity.description%}
+{% endif %}
+
+{#{% block before_body %}
     {% if is_granted('ROLE_SEIP_RESULT_BY_PERIOD') %}
         {{ contentHeader(
             ['Resultados por Gerencia'],0,1,0
@@ -13,12 +20,15 @@
         ('Resultados por Gerencia')
     ) }}
     {% endif %}
+{% endblock %}#}
+
+{% block before_body %}
+    {{ contentHeader(
+        {("#"):("Resultados por Gerencia")},(descrip)
+    ) }}
 {% endblock %}
 
 {% block body %}
-    <br>
-    <br>
-
     <fieldset class="fieldset">
         <legend class="legend"><b>Datos de la Gerencia</b></legend>
         <div class="columns">   
@@ -135,7 +145,7 @@
             <div class="four-columns align-center"><i class="fa fa-cog"></i> -> Obj. Operativo</div>
         </div>
     </fieldset>
-    <br><br>
+    <br>
     <div class="columns">
         <div class="twelve-columns align-right">
             <a href="" id='exportpng' type='button' class="button" value='' />
