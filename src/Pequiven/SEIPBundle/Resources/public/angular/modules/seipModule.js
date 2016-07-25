@@ -4568,6 +4568,24 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
+            
+             //Carga la formula del metodo de calculo 
+            $scope.loadEcuationMethod = function (resource) {
+                $scope.initForm(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[2]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                $scope.templateOptions.setVar('evaluationResult', 0);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+            
             $scope.removeFeatureIndicator = function (featureIndicator) {
                 $scope.openModalConfirm('pequiven.modal.confirm.indicator.delete_feature', function () {
                     notificationBarService.getLoadStatus().loading();
@@ -4743,6 +4761,7 @@ angular.module('seipModule.controllers', [])
                 }
                 var url = Routing.generate('pequiven_value_indicator_get_form', parameters);
                 var url2 = Routing.generate('pequiven_feature_indicator_get_form', parameters);
+                var url2 = Routing.generate('pequiven_show_method_calcule_indicator_get_form', parameters);
                 $scope.templates = [
                     {
                         name: 'pequiven.modal.title.value_indicator',
@@ -4751,6 +4770,11 @@ angular.module('seipModule.controllers', [])
                     },
                     {
                         name: 'SEIP',
+                        url: url2,
+                        confirmCallBack: confirmCallBack2,
+                    },
+                    {
+                        name: 'Método de Cálculo',
                         url: url2,
                         confirmCallBack: confirmCallBack2,
                     }

@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Controlador de los indicadores (Planificacion)
  *
- * @author Carlos Mendoza<inhack20@gmail.com>
+ * @author Carlos Mendoza<inhack20@gmail.com>showEcuationMethodCalcule
  */
 class IndicatorController extends ResourceController {
 
@@ -240,7 +240,7 @@ class IndicatorController extends ResourceController {
 
         $resultService = $this->getResultService();
         $arrangementRangeService = $this->getArrangementRangeService();
-        
+
         $tablero = $request->get('tablero');
 
         $view = $this
@@ -571,13 +571,13 @@ class IndicatorController extends ResourceController {
         $indicator = $this->get('pequiven.repository.indicator')->find($id); //Obtenemos el indicador
 
         $rs = $indicatorService->isGrantToEdit($indicator, $index);
-        
+
         $response = new JsonResponse();
         $data = array();
         $data["data"] = $rs;
         $response->setData($data);
         return $response;
-        
+
 //        var_dump($rs);die();
 //
 //        return $rs;
@@ -655,19 +655,18 @@ class IndicatorController extends ResourceController {
 
         $archivo = $valueIndicator->getValueIndicatorFile();
         $flag = true;
-        
+
         if ($archivo) {
             $flag = true;
         } else {
             $flag = false;
         }
-        
+
         $response = new JsonResponse();
         $data = array();
         $data["data"] = $flag;
         $response->setData($data);
         return $response;
-        
     }
 
     /**
@@ -744,6 +743,22 @@ class IndicatorController extends ResourceController {
 
         //$this->showAction($request);
         return $this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));
+    }
+
+    public function showEcuationMethodCalcule(Request $request) {
+        $idIndicator = $request->get("idIndicator");
+        $indicatorService = $this->getIndicatorService();
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator);
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('MethodIndicator/form.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+                ->setData(
+                array("indicator" => $indicator,"methodEcuation"=>$indicatorService->getCalculationMethod($indicator))
+        );
+        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+        return $view;
     }
 
 //    public function getIndicatorPnrAction() {

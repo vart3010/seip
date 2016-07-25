@@ -5227,19 +5227,19 @@ class IndicatorService implements ContainerAwareInterface {
                 ##CRECIENTE
                 if ($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX) {
                     if ($error == Null) {
-                        $penalty = $resultService->getPenaltyIndicator($indicator,$tendenty);
+                        $penalty = $resultService->getPenaltyIndicator($indicator, $tendenty);
                     }
                     #$formula = (($resultIndicator / $arrangementRange->getRankTopBasic()) * 100);
                     #$formula = "(((" . number_format($resultIndicator, 2, ",", ".") . " / " . $arrangementRange->getRankTopBasic() . "))" . " * 100) - ".$penalty."%";
                     $formula = "Ao = { { {(Res)} \over ({RV}) } x 100 )} - P";
-                    
+
                     #var_dump($formula);
                     return $formula;
                 }
                 ##DECRECIENTE
                 else if ($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN) {//Decreciente
                     if ($error == Null) {
-                        $penalty = $resultService->getPenaltyIndicator($indicator,$tendenty);
+                        $penalty = $resultService->getPenaltyIndicator($indicator, $tendenty);
                     }
                     #$formula = (($resultIndicator / $arrangementRange->getRankTopBasic()) * 100);
                     #$formula = "(((" . $arrangementRange->getRankBottomBasic() . " / " . number_format($resultIndicator, 2, ",", ".") . "))" . " * 100) - ".$penalty."%";
@@ -5258,20 +5258,19 @@ class IndicatorService implements ContainerAwareInterface {
                         } else if ($resultService->calculateRangeBad($indicator, $tendenty)) {//Rango Rojo R*0%
                             $penalty = 20;
                         }
-                        
-                        $middle = ($arrangementRange->getRankTopMixedBottom()+$arrangementRange->getRankTopMixedTop())/2;
-                        if($resultIndicator > $middle) {
+
+                        $middle = ($arrangementRange->getRankTopMixedBottom() + $arrangementRange->getRankTopMixedTop()) / 2;
+                        if ($resultIndicator > $middle) {
                             #$formula = "(((" . $middle. " * 100 / " . number_format($resultIndicator, 2, ",", ".") . "))" . ") - ".$penalty."%";
                             $formula = "Ao = { {(PRV x 100)} \over {(Res)} } - P";
-                        } else if($resultIndicator<$middle) {
+                        } else if ($resultIndicator < $middle) {
                             #$formula = "(((" . number_format($resultIndicator, 2, ",", ".") . " * 100 / " .$middle . "))" . ") - ".$penalty."%";
                             $formula = "Ao = { {(Res x 100)} \over ({PRV \over 2}) } - P";
                         }
                     }
-                    
+
                     #var_dump($formula);
                     return $formula;
-                    
                 }
             } else {
                 #var_dump("Sin rango de gestion definido");
@@ -5283,7 +5282,7 @@ class IndicatorService implements ContainerAwareInterface {
             $formula = "Sin tendencia definida";
             return $formula;
         }
-        
+
 //        var_dump($tendency->getRef());
 //        var_dump($result);
     }
