@@ -5260,6 +5260,7 @@ class IndicatorService implements ContainerAwareInterface {
                     $datos["formula"] = $formula;
                     $datos["vars"] = array("Res" => "Resultado de Indicador", "RV" => "Resultado Verde", "P" => "Penalización");
                     $datos["error"] = 0;
+                    return $datos;
                 }
                 ##ESTABLE
                 else if ($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_EST) {
