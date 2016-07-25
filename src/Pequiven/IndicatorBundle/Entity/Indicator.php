@@ -75,7 +75,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     /**
      * @var string
      *
-     * @ORM\Column(name="ref", type="string", length=20, nullable=true)
+     * @ORM\Column(name="ref", type="string", length=25, nullable=true)
      */
     private $ref;
 
