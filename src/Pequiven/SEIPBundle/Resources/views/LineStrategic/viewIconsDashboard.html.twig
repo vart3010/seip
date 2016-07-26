@@ -2,16 +2,30 @@
 
 <div class="with-padding">
     <div class="columns">
-    {% for lineStrategic in linesStrategics %}
-    <div class="four-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
-        <a href="{{ path('pequiven_line_strategic_show',{id:lineStrategic.id}) }}">
-            <span class="centrar_imagen">
-                <img class="icon-strategic" id="iconMoney" src="{{ asset(iconsLineStrategic[lineStrategic.level]) }}">
-            </span>
-            <p class="title-icon-strategic">{{ lineStrategic.description }}</p>
-            <i class="{{ iconsLineStrategic[lineStrategic.level] }} fa-5x"></i>
-        </a>
-    </div>
-    {% endfor %}
+        {% for lineStrategic in linesStrategics %}
+{#            <div class="four-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
+                <a href="{{ path('pequiven_line_strategic_show',{id:lineStrategic.id}) }}">
+                    <span class="centrar_imagen">
+                        <img class="icon-strategic" id="iconMoney" src="{{ asset(iconsLineStrategic[lineStrategic.level]) }}">
+                    </span>
+                    <p class="title-icon-strategic">{{ lineStrategic.description }}</p>
+                    <i class="{{ iconsLineStrategic[lineStrategic.level] }} fa-5x"></i>
+                </a>
+            </div>#}
+            <div class="four-columns new-row-mobile new-row-mobile new-row-mobile new-row-tablet align-center" style="min-height: 240px; display:inline-block; vertical-align: top; align-items: center;">                
+                <a href="{{ path('pequiven_line_strategic_show',{id:lineStrategic.id}) }}">
+                    <div class="button" style="height: 160px; width: 300px;">                    
+                        <img class="icon-strategic" src="{{ asset(iconsLineStrategic[lineStrategic.level]) }}" style="margin: 5%;">  
+                        <br>
+                        <div class="button red-gradient glossy" style="height: 30px; width: 300px; position: inherit;">                    
+                            <p class="title-icon-strategic" style="font-size: 13px; font-weight: bold;">
+                                {{lineStrategic.description}}
+                            </p> 
+                            <i class="{{ iconsLineStrategic[lineStrategic.level] }} fa-5x"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
     </div>
 </div>
