@@ -67,6 +67,10 @@
             "type": "vcs",
             "url":  "https://github.com/carlitoxenlaweb/doctrine-orm-admin-bundle.git"
         }
+        {
+            "type": "vcs",
+            "url":  "https://github.com/carlitoxenlaweb/block-bundle.git"
+        },
     ],  
     "scripts": {
         "post-install-cmd": [
