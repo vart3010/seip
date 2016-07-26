@@ -9,24 +9,13 @@
     <script src="{{  asset('bundles/pequivenseip/jQuery-Mask-Plugin-master/jquery.mask.min.js') }}"></script>   
     <script type="text/javascript">
 
-        function refresh() {
-            alert("holas");
-        }
-
-
         $(document).ready(function () {
-            var idsProductsItems
-            = {{ idsProductsItems }};
-                    //var idsProductsItems = [1,2,3];
 
-                    var maxPerson = $("select#producto option:selected").attr("data");
-            $("input#cantidad").attr("max", maxPerson);
-            charge();
 
-            $("select#producto").change(function () {
+            $("checkbox").change(function () {
                 $("input#cantidad").val("");
                 var maxPerson = $("select#producto option:selected").attr("data");
-                $("input#cantidad").attr("max", maxPerson);
+                // $("input#cantidad").attr("max", maxPerson);
 
             });
 
@@ -180,7 +169,7 @@
                                         <td>{{ member.getCellphone }}</td>
                                         <td>
                                             <p class="assistance button-height">
-                                                <input type="checkbox"  name="meeting_extra[member_{{ member.id }}]" data="{{ member.id}}" value="0" class="switch green-active mid-margin-right" data-text-on="SI" data-text-off="NO">
+                                                <input type="checkbox" name="members[{{ member.id }}]" data="{{ member.id}}" value="0" class="switch green-active mid-margin-right" data-text-on="SI" data-text-off="NO">
                                             </p>
                                         </td>                                            
                                     </tr>
@@ -188,14 +177,14 @@
                             </table>    
                         </td>
                         <td width="40%">  
-                            <br>
+                            <br><br>
                     <center>
-                        <table width="80%">  
+                        <table width="90%">  
                             <tr>
                                 <td width="25%" style="font-weight: bold; height: 50px;">Cant. Kits</td>
                                 <td width="75%" style="color: #002a80; font-size: 25pt; text-align: right; font-weight: bold; height: 50px;">                                       
                                     <span id="totales_2">
-                                        0
+                                        {{wsc.getMembers|length}}
                                     </span>
                                 </td>
                             </tr>
@@ -210,7 +199,25 @@
                             </tr>  
                             <tr>
                                 <td colspan="2" class="bold">                                       
-                                    Kit para la Jornada:
+                                    Kit para la Jornada:                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">   
+                                    <table class="simple-table">
+                                        <tr>
+                                            <th style="text-align: center;">Cant</th>
+                                            <th>Producto</th>
+                                            <th style="text-align: right;">Precio</th>
+                                        </tr>
+                                        {% for product in kit.getProductKitItems%}                              
+                                        <tr>
+                                            <td style="text-align: center;">{{product.getCant}}</td>
+                                            <td>{{product.getProduct.getDescription}}</td>
+                                            <td style="text-align: right;">{{product.getProduct.getPrice|myNumberFormat}}</td>
+                                        </tr>
+                                        {%endfor%}
+                                    </table>
                                 </td>
                             </tr>
                         </table>  

@@ -82,7 +82,7 @@ class houseSupplyOrderItems {
     /**
      *
      * @var integer
-     * @ORM\Column(name="line",type="integer",nullable=false)
+     * @ORM\Column(name="line",type="integer",nullable=true)
      */
     private $line;
 

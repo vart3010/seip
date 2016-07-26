@@ -80,8 +80,12 @@ class houseSupplyProductKit {
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+    
+    public function __toString() {
+        return $this->description;
+    }
 
-    function getId() {
+        function getId() {
         return $this->id;
     }
 

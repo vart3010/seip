@@ -31,13 +31,7 @@ class HouseSupplyOrderKitController extends SEIPController {
 
         $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($searchwsc);
         $dep = array('complejo' => $wsc->getComplejo());
-        $deposit = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->findOneBy($dep);
-
-        $searchInventory = array(
-            'deposit' => $deposit,
-        );
-
-        $inventory = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventory')->findBy($searchInventory);
+        //$deposit = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->findOneBy($dep);
 
         //VALIDO SI EN EL CICLO TIENE PEDIDOS REALIZADOS
         //CICLO DE ORDENES    
@@ -53,36 +47,22 @@ class HouseSupplyOrderKitController extends SEIPController {
                 $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
                 $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
                 $member = null;
-                $searchitemsbymember = array(
-                    'type' => 3,
-                    'workStudyCircle' => $wsc,
-                );
-                $items = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchitemsbymember);
-
-                $idProductItems = array();
-                
-                foreach ($items as $item) {
-                    //var_dump($item->getProduct()->getDescription());
-                    $idProductItems[] = $item->getProduct()->getId();
-                }
-
+                $kit = $cycle[0]->getProductKit();
                 return $this->render('PequivenSEIPBundle:HouseSupply\Order:createkit.html.twig', array(
                             'type' => $type,
                             'neworder' => $neworder,
-                            'inventory' => $inventory,
                             'wsc' => $wsc,
-                            'items' => $items,
+                            'kit' => $kit,
                             'memberobj' => $member,
-                            'idsProductsItems' => json_encode($idProductItems)
                 ));
             } else {
                 $this->get('session')->getFlashBag()->add('error', "Su Círculo de Estudio Ya Realizó un Pedido para esta Jornada");
 
-                return $this->redirect($this->generateUrl("pequiven_housesupply_order_show", array("id" => $order[0]->getId())));
+                return $this->redirect($this->generateUrl("pequiven_housesupply_orderkit_show", array("id" => $order[0]->getId())));
             }
         } else {
             $this->get('session')->getFlashBag()->add('error', "Aún No se Encuentra Aperturado el Registro de Ordenes");
-            return $this->redirect($this->generateUrl("pequiven_housesupply_order_show", array("id" => 0)));
+            return $this->redirect($this->generateUrl("pequiven_housesupply_orderkit_show", array("id" => 0)));
         }
     }
 
@@ -111,42 +91,47 @@ class HouseSupplyOrderKitController extends SEIPController {
         ));
     }
 
-    public function addItemAction(Request $request) {
+    public function proccessItemAction(Request $request) {
+        
+    }
+
+    public function addItemAction($idMember, $idWsc, $idKit) {
 
         $iva = 0.12;
         $em = $this->getDoctrine()->getManager();
-        $client = $request->get('datauser');
-        $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneById($wsc = $request->get('wsc'));
-        $clientobj = $em->getRepository('PequivenSEIPBundle:User')->findOneById($client);
-        $cant = $request->get('cantidad');
-        $product = $request->get('producto');
-        $productobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyProduct')->findOneById($product);
-        $line = $request->get('linea');
+        $clientobj = $em->getRepository('PequivenSEIPBundle:User')->findOneById($idMember);
+        $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneById($idWsc);
         $date = new \DateTime((date("Y-m-d h:m:s")));
 
+        $kit = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\houseSupplyProductKit')->findOneBy($idKit);
+
         $em->getConnection()->beginTransaction();
+        foreach ($kit->getProductKitItems() as $itemsKit) {
+            $cant = $itemsKit->getCant();
+            $productobj = $itemsKit->getProduct();
+            
+            $order = new houseSupplyOrderItems();
+            $order->setDate($date);
+            $order->setType(3);
+            $order->setSign(1);
+            $order->setClient($clientobj);
+            $order->setCant($cant);
+            //$order->setLine($line);
+            $order->setProduct($productobj);
+            $order->setCost($productobj->getCost() * $cant);
+            $order->setTotalLine($productobj->getPrice() * $cant);
+            $order->setPrice($productobj->getPrice());
+            $order->setWorkStudyCircle($wsc);
+            $order->setCreatedBy($this->getUser());
 
-        $order = new houseSupplyOrderItems();
-        $order->setDate($date);
-        $order->setType(3);
-        $order->setSign(1);
-        $order->setClient($clientobj);
-        $order->setCant($cant);
-        $order->setLine($line);
-        $order->setProduct($productobj);
-        $order->setCost($productobj->getCost() * $cant);
-        $order->setTotalLine($productobj->getPrice() * $cant);
-        $order->setPrice($productobj->getPrice());
-        $order->setWorkStudyCircle($wsc);
-        $order->setCreatedBy($this->getUser());
-
-        if ($productobj->getExento() == 1) {
-            $order->setTotalLineTaxes(0);
-        } else {
-            $order->setTotalLineTaxes($productobj->getPrice() * $cant * $iva);
+            if ($productobj->getExento() == 1) {
+                $order->setTotalLineTaxes(0);
+            } else {
+                $order->setTotalLineTaxes($productobj->getPrice() * $cant * $iva);
+            }
+            $em->persist($order);
         }
-
-        $em->persist($order);
+        
         try {
             $em->flush();
             $em->getConnection()->commit();
@@ -155,7 +140,7 @@ class HouseSupplyOrderKitController extends SEIPController {
             throw $e;
         }
 
-        return $this->redirect($this->generateUrl("pequiven_housesupply_order_charge", array("member" => $client, 'typemember' => 1)));
+       // return $this->redirect($this->generateUrl("pequiven_housesupply_order_charge", array("member" => $idMember, 'typemember' => 1)));
     }
 
     public function deleteItemAction(Request $request) {

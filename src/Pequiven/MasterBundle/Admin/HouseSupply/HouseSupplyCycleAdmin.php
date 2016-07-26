@@ -28,16 +28,30 @@ class HouseSupplyCycleAdmin extends Admin {
         $show
                 ->add('id')
                 ->add('dateBeginOrder')
-                ->add('dateEndOrder')
+                ->add('dateEndOrder')    
+                ->add('productKit')
                 ->add('workStudyCircleGroup')
         ;
     }
 
     protected function configureFormFields(FormMapper $form) {
         $form                
-                ->add('dateBeginOrder')
-                ->add('dateEndOrder')
-                ->add('workStudyCircleGroup')
+                ->add('dateBeginOrder','sonata_type_date_picker',array(
+                    'required' => true,
+                    'label' => 'Fecha de Inicio',
+                ))
+                ->add('dateEndOrder','sonata_type_date_picker',array(
+                    'required' => true,
+                    'label' => 'Fecha de Cierre',
+                ))
+                ->add('productKit',null,array(
+                    'required' => false,
+                    'label' => 'Kit Asociado',
+                ))
+                ->add('workStudyCircleGroup',null,array(
+                    'required' => false,
+                    'label' => 'Grupo de Círculos de Estudio',
+                ))
 
         ;
     }
@@ -46,7 +60,8 @@ class HouseSupplyCycleAdmin extends Admin {
         $filter
                 ->add('id')
                 ->add('dateBeginOrder')
-                ->add('dateEndOrder')
+                ->add('dateEndOrder')    
+                ->add('productKit')
                 ->add('workStudyCircleGroup')
         ;
     }
@@ -55,7 +70,8 @@ class HouseSupplyCycleAdmin extends Admin {
         $list
                 ->addIdentifier('id')
                 ->add('dateBeginOrder')
-                ->add('dateEndOrder')
+                ->add('dateEndOrder')  
+                ->add('productKit')
                 ->add('workStudyCircleGroup')
         ;
     }
