@@ -34,9 +34,9 @@ class ConfigurationNotification {
      */
     static function getActions() {
         static $labelsActions = array(
-            self::REVIEW => 'review',
-            self::NOTIFY => 'notify',
-            self::APROBE => 'aprobe',
+            self::REVIEW => 'Revisar',
+            self::NOTIFY => 'Notificar',
+            self::APROBE => 'Aprobar',
         );
         return $labelsActions;
     }

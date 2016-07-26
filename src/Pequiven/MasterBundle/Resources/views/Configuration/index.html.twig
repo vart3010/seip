@@ -1,6 +1,8 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
 {% block body %}
 <div class="with-padding">
+	<a href class="margin-left" id="loading" style='display:none;'><span class="loader big working"></span></a>
+	<p class="wrapped left-icon icon-info-round">La Siguiente Sección de Configuración solo ha sido liberada para Programas de Gestión Estrategicos. <a href="">Info</a></p>
 	<fieldset class="fieldset">
 	    <legend class="legend"><b>Configuration</b></legend>
 	    <div class="columns">
@@ -29,20 +31,28 @@
 	</fieldset>
 </div>
 
-<div class="with-padding">
+<div class="with-padding">	
 	<div class="columns">
 		<div class="six-columns six-columns-tablet twelve-columns-mobile">
 			<div id="show-data">				
 				<div class="block large-margin-bottom">
 					<div class="block-title"><h3 id="title-form"></h3></div>
 						<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">            				
-				            <p class="inline-label">
-				                <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>				                
-                				<input type="text" id="select_to_data" name="select_to[data]" style='width: 270px'>
-				            </p>					        
+				            <p class="inline-label" id="label"></p>					        
 				        </div>							
 				</div>				
 			</div>
+		</div>
+		<div class="six-columns six-columns-tablet twelve-columns-mobile" id="formAddUser">						
+			<input type="text" id="data_user_select" name="data_user[select]" style="width: 270px">
+			<select id="select-action" class="select2 input-large">
+				<option value="1">Revisar</option>
+				<option value="2">Notificar</option>
+				<option value="3">Aprobar</option>
+			</select>
+			<input type="hidden" id="idObject" value="">			
+			<a href="" id="save-to-form" title="Add user" class="button icon-tick"></a>
+			<a href="" id="cancel-to-form" title="Reload list" class="button icon-cross"></a>									
 		</div>
 		<div class="six-columns six-columns-tablet twelve-columns-mobile">
 			<div id="list-data">								
@@ -71,14 +81,19 @@
 	$(document).ready(function() {
 		$('#show-data').hide();
 		$('#list-data').hide();
+		$('#formAddUser').hide();
 
 		$("input[name=objects]").click(function() {
 	        var idObject = $(this).val();
 	        confForm(idObject);//set de idObject
-	        $('#show-data').show(); 
-			//$('#list-data').hide();	        
+			$('#list-data').hide();
+			$('#formAddUser').hide();
+	        $('#show-data').show(); 			
 	    });
-
+		
+		$("#select-action").select2({
+            //minimumInputLength: 3,
+        });
 	    //var arraRoutes = {1:' ',2:'pequiven_configurations_get_to_programs',3:' '};
 	    //setRouteObjects(Routing.generate(arraRoutes[idObject]));
 	});
