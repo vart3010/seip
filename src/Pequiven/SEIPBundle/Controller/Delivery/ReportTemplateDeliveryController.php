@@ -65,5 +65,6 @@ class ReportTemplateDeliveryController extends SEIPController {
 
         return $this->handleView($view);
     }
+    
 
 }
