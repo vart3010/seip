@@ -177,7 +177,7 @@ $.ajax({
                     var cont = '';
 
                     if (data.companies[0].enabled != 0) {
-                        if (data.companies[0].ubicacion == "-1" && data.companies[0].alias == "PEQUIVEN" && (region == "oriental" || region == "central" || region == "zuliana")) {
+                        if (data.companies[0].ubicacion == "-1" && data.companies[0].alias == "PEQUIVEN" && (region == "oriental" || region == "central" || region == "occidental")) {
                             cont += '<div class="contentLogoCompany"><a href="' + company_link + '"><div class="companySelected"><img class="logoCompany" src="' + data.companies[0].base64image + '"/></div><p class="companyName">' + data.companies[0].alias + '</p></a></div>';
                             $("#dialog").html(cont);
                             $("#dialog").dialog({title: "Región" + " " + region}).dialog("open");
