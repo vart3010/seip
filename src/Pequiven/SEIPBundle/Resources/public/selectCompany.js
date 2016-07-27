@@ -13,7 +13,7 @@ $("#dialog").dialog({
 });
 
 var default_attributes = {
-    fill: '#EEE',
+    fill: '#ffe6e6',
     stroke: 'white',
     'stroke-width': '2'
 };
@@ -27,14 +27,14 @@ var capital = {
 };
 
 var central = {
-    fill: '#ADD8E6',
+    fill: '#ff9999',
     stroke: 'white',
     'stroke-width': '2',
     cursor: 'pointer',
 };
 
 var occidental = {
-    fill: '#AFEEEE',
+    fill: '#ff6666',
     stroke: 'white',
     'stroke-width': '2',
     cursor: 'pointer',
@@ -49,39 +49,38 @@ var zuliana = {
 };
 
 var andina = {
-    fill: '#6495ED',
+    fill: '#ffe6e6',
     stroke: 'white',
     'stroke-width': '2',
-    opacity:0.5,
-    cursor: 'pointer',
+//    cursor: 'pointer',
 };
 
 var oriental = {
-    fill: '#AFEEEE',
+    fill: '#ffcccc',
     stroke: 'white',
     'stroke-width': '2',
     cursor: 'pointer',
 };
 
 var guayana = {
-    fill: '#ADD8E6',
+    fill: '#ffe6e6',
     stroke: 'white',
     'stroke-width': '2',
-    cursor: 'pointer',
+//    cursor: 'pointer',
 };
 
 var insular = {
     fill: '#c6d5da',
     stroke: 'white',
     'stroke-width': '2',
-    cursor: 'pointer',
+//    cursor: 'pointer',
 };
 
 var llanera = {
-    fill: '#87CEEB',
+    fill: '#ffe6e6',
     stroke: 'white',
     'stroke-width': '2',
-    cursor: 'pointer',
+//    cursor: 'pointer',
 };
 
 $.ajax({
@@ -177,7 +176,7 @@ $.ajax({
                     var cont = '';
 
                     if (data.companies[0].enabled != 0) {
-                        if (data.companies[0].ubicacion == "-1" && data.companies[0].alias == "PEQUIVEN" && (region == "oriental" || region == "central" || region == "occidental")) {
+                        if (data.companies[0].ubicacion == "-1" && data.companies[0].alias == "PEQUIVEN" && (region == "oriental" || region == "central" || region == "occidental" || region == "capital")) {
                             cont += '<div class="contentLogoCompany"><a href="' + company_link + '"><div class="companySelected"><img class="logoCompany" src="' + data.companies[0].base64image + '"/></div><p class="companyName">' + data.companies[0].alias + '</p></a></div>';
                             $("#dialog").html(cont);
                             $("#dialog").dialog({title: "Región" + " " + region}).dialog("open");
