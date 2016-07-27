@@ -166,7 +166,7 @@ $.ajax({
                             this.animate({fill: default_attributes.fill, opacity: '1'});
                         }                
             }).click(function () {
-                var urlAjax = '../app_dev.php/selectCompanyC';
+                var urlAjax = '../app.php/selectCompanyC';
 
                 $.get(urlAjax, function (data, status) {
                     $("#dialog").dialog("close");
