@@ -172,7 +172,7 @@ $.ajax({
                     $("#dialog").dialog("close");
                     var data = $.parseJSON(data);
                     //var company_link= document.location.origin+"/app_dev.php/";
-                    var company_link = '../app_dev.php/';
+                    var company_link = '../app.php/';
                     //var company_link = "http://localhost/multiempresa/web/app_dev.php/";
                     var cont = '';
 
