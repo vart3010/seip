@@ -70,7 +70,7 @@ var guayana = {
 };
 
 var insular = {
-    fill: '#c6d5da',
+    fill: '#ffe6e6',
     stroke: 'white',
     'stroke-width': '2',
 //    cursor: 'pointer',
