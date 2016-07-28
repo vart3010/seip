@@ -16,19 +16,12 @@ use Pequiven\MasterBundle\Model\Configurations\ConfigurationNotification as Mode
 class ConfigurationNotification extends Model{
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
+     * Id del Objeto
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="action", type="integer")
-     */
-    private $action; 
+     * @ORM\GeneratedValue(strategy="NONE")
+     */    
+    private $id;     
 
     /**
      * @var integer
@@ -40,25 +33,9 @@ class ConfigurationNotification extends Model{
     /**
      * @var integer
      *
-     * @ORM\Column(name="idObject", type="integer")
-     */    
-    private $idObject;     
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="levelObject", type="integer")
      */    
     private $levelObject; 
-
-    /**
-     * Usuario
-     * 
-     * @var \Pequiven\SEIPBundle\Entity\User
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
 
     /**
      * @var \DateTime
@@ -95,57 +72,23 @@ class ConfigurationNotification extends Model{
     }
     
     /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set action
-     *
-     * @param $action
-     * @return action
-     */
-    public function setAction($action) {
-        
-        $this->action = $action;
-
-        return $this;
-    }
-
-    /**
-     * Get action
-     *
-     * @return action
-     */
-    public function getAction() {
-        return $this->action;
-    }
-
-    /**
      * Set idObject
      *
      * @param $idObject
      * @return idObject
      */
-    public function setIdObject($idObject) {
-        
-        $this->idObject = $idObject;
-
+    public function setId($id) {        
+        $this->id = $id;
         return $this;
     }
 
     /**
-     * Get idObject
+     * Get id
      *
-     * @return idObject
+     * @return id
      */
-    public function getIdObject() {
-        return $this->idObject;
+    public function getId() {
+        return $this->id;
     }
 
     /**
@@ -183,26 +126,6 @@ class ConfigurationNotification extends Model{
      */
     public function getLevelObject() {
         return $this->levelObject;
-    }
-
-    /**
-     * Set user
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $user
-     * @return IndicatorSimpleValue
-     */
-    public function setUser(\Pequiven\SEIPBundle\Entity\User $user) {
-        $this->user = $user;
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \Pequiven\SEIPBundle\Entity\User 
-     */
-    public function getUser() {
-        return $this->user;
     }
 
     /**

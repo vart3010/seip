@@ -87,9 +87,11 @@ function validChangeData(data,select){
 	});
 }
 
-$("#addUser").click(function(){ 
-	$('#formAddUser').show();   
-	loadDataForm('',Routing.generate('pequiven_responsibles_to_plan'),'data_user_select'); 
+$("#addUser").click(function(){	
+	if ($('#idObject').val()) {
+		$('#formAddUser').show();   
+		loadDataForm('',Routing.generate('pequiven_responsibles_to_plan'),'data_user_select'); 		
+	};
 });
 
 $('#save-to-form').click(function(){
@@ -122,6 +124,10 @@ $('#cancel-to-form').click(function(){
 	$('#formAddUser').hide();   	
 });
 
+$('#reload').click(function(){
+	findData($('#idObject').val());
+});
+
 function findData(idObject){    
 	$('#idObject').val(idObject);
     var data = {idObject: idObject, typeObject:2};    
@@ -151,9 +157,9 @@ function loadListUser(data){
 								'&nbsp;<strong>'+data['user'][i]+'</strong> - <b>Acción:</b>&nbsp;'+data['action'][i]+''+
 							'</a>'+
 							'<div class="button-group absolute-right compact show-on-parent-hover">'+
-								'<a href="" class="button icon-pencil">Edit</a>'+
+								'<a href="" class="button icon-pencil" onClick="editUser('+data['idUser'][i]+');">Edit</a>'+
 								'<a href="" class="button icon-gear with-tooltip" title="Other actions"></a>'+
-								'<a href="" class="button icon-trash with-tooltip confirm" title="Delete"></a>'+
+								'<a href="" class="button icon-trash with-tooltip confirm" title="Delete" onClick="deleteUser('+data['idUser'][i]+');"></a>'+
 							'</div>'+
 						'</li>';		
 		};
@@ -162,4 +168,12 @@ function loadListUser(data){
     	//$('#addUser').prop('disabled', true);    	
     	$('#body-list').html('<li class="new-row twelve-columns empty_row" align="center">Sin Usuarios Cargados</li>');
     };
+}
+
+function editUser(idUser){
+	console.log(idUser);
+}
+
+function deleteUser(idUser){
+	console.log(idUser);
 }

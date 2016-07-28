@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 use Pequiven\MasterBundle\Entity\Configurations\ConfigurationNotification;
+use Pequiven\MasterBundle\Entity\Configurations\NotificationUser;
 
 
 /**
@@ -56,20 +57,28 @@ class NotifyController extends ResourceController{
 		$idObject = $request->get('idObject');
 		$typeObject = $request->get('typeObject');
         $em = $this->getDoctrine()->getManager();
-        $id = $user = $action = [];
-        $config = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\ConfigurationNotification")->findBy(array('idObject' => $idObject, 'typeObject' => $typeObject));
+        $id = $idUser = $user = $action = $actionId = [];
+        $config = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\ConfigurationNotification")->findBy(array('id' => $idObject, 'typeObject' => $typeObject));
         
         foreach ($config as $value) {
         	$id[] = $value->getId();
-        	$user[] = $value->getUser()->getFullNameUser();
-        	$action[] = ConfigurationNotification::getActions()[$value->getAction()];
+        	$idObject = $value->getId();
+        	$userConfig = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\NotificationUser")->findBy(array('idObject' => $idObject));
+        	foreach ($userConfig as $userC) {
+	        	$idUser[] = $userC->getId();        	
+	        	$user[] = $userC->getUser()->getFullNameUser();        	
+	        	$actionId[] = $userC->getAction();
+	        	$action[] = ConfigurationNotification::getActions()[$userC->getAction()];        			        	
+        	}
         }
         
         $data = [
         	'id'         => $id,
+        	'idUser'     => $idUser,
         	'user'       => $user,
+        	'actionId'     => $actionId,
         	'action'     => $action,
-        	'count'      => count($id),
+        	'count'      => count($idUser),
         	'idObject'   => $idObject,
         	'typeObject' => $typeObject
         ];
@@ -80,19 +89,27 @@ class NotifyController extends ResourceController{
 
 	public function setDataUsersAction(Request $request){
 		$response = new JsonResponse();
+        $em = $this->getDoctrine()->getManager();
 
 		$action = $request->get('action');
 		$idObject = $request->get('idObject');
 		$user = $this->get('pequiven_seip.repository.user')->find($request->get('user'));
-
-		$em = $this->getDoctrine()->getManager();
-		$config = new ConfigurationNotification;
-		$config->setAction($action);
-		$config->setTypeObject(2);
-		$config->setIdObject($idObject);
-		$config->setLevelObject(0);
-		$config->setUser($user);
- 		$em->persist($config);            
+        $config = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\ConfigurationNotification")->find($idObject);
+        if (count($config) === 0) {
+			$em = $this->getDoctrine()->getManager();
+			$config = new ConfigurationNotification;
+			$config->setId($idObject);
+			$config->setTypeObject(2);
+			$config->setLevelObject(0);
+	 		$em->persist($config);            
+	        $em->flush();        	
+        }
+		
+		$configUser = new NotificationUser;        
+		$configUser->setAction($action);
+		$configUser->setUser($user);
+		$configUser->setIdObject($config);
+		$em->persist($configUser);            
         $em->flush();
 
         $response->setData(true);

@@ -856,13 +856,21 @@ class ArrangementProgramController extends SEIPController {
         }
 
         $rol = null;
-
-        if ($entity->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA) {
-            
-        } else {
-            
+        $configUsers = $userReview = $userNotify = $userAprobe = [];
+        if ($entity->getType() == 0) {
+            $em = $this->getDoctrine()->getManager();
+            $config = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\ConfigurationNotification")->findBy(array('id' => $entity->getId(), 'typeObject' => 2));
+            var_dump(count($config));
         }
-
+        $configUsers = [
+            'userReview' => $userReview,
+            'userNotify' => $userNotify,
+            'userAprobe' => $userAprobe,
+        ];
+        if ($entity->getType() == 0) {
+            //var_dump($configUsers);
+            die();
+        }
         $rolesByType = array(
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_STRATEGIC', 'ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_STRATEGIC', 'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_STRATEGIC'),
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC', 'ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_TACTIC', 'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_TACTIC'),
