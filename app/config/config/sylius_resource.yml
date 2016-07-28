@@ -686,11 +686,5 @@ sylius_resource:
             templates: PequivenSEIPBundle:HouseSupply/OrderKit
             classes:
                 model: Pequiven\SEIPBundle\Entity\HouseSupply\Order\HouseSupplyOrderKit
-                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyOrderKitController                  
-        pequiven.housesupply_billing:
-            driver: doctrine/orm
-            templates: PequivenSEIPBundle:HouseSupply/Billing
-            classes:
-                model: Pequiven\SEIPBundle\Entity\HouseSupply\Billing\HouseSupplyBilling
-                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyBillingController   
-                   
+                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyOrderKitController             
+       

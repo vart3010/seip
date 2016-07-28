@@ -9,6 +9,8 @@ use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyCycle;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKit;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyPayments;
 
 /**
  * Ordenes
@@ -37,24 +39,11 @@ class houseSupplyOrder {
     private $date;
 
     /**
-     * @var \DateTime
-     * @ORM\Column(name="dateBilling", type="datetime", nullable=true)
-     */
-    private $dateBilling;
-
-    /**
-     * 1. PEDIDO / 2. DEVOLUCION DE PEDIDO / 3. Espera
-     * @var string
-     * @ORM\Column(name="type",type="string",nullable=false)
+     * REGISTRADA = 1; / DEVUELTA = 2; / ESPERA = 3; / PAGADA = 4; / ENTREGADA = 5;    
+     * @var integer
+     * @ORM\Column(name="type",type="integer",nullable=false)
      */
     private $type;
-
-    /**
-     * FACTURADO?
-     * @var string
-     * @ORM\Column(name="invoiced",type="boolean",nullable=false)
-     */
-    private $invoiced = false;
 
     /**
      *
@@ -78,6 +67,14 @@ class houseSupplyOrder {
      * @ORM\JoinColumn(name="cycle_id", referencedColumnName="id")
      */
     private $cycle;
+
+    /**
+     * 
+     * @var houseSupplyProductKit
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKit", inversedBy="houseSupplyOrder")
+     * @ORM\JoinColumn(name="productkit_id", referencedColumnName="id", nullable=true)
+     */
+    private $productKit;
 
     /**
      *
@@ -128,10 +125,10 @@ class houseSupplyOrder {
     protected $orderItems;
 
     /**
-     * @var houseSupplyBilling
-     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling",mappedBy="order",cascade={"persist"}))
+     * @var houseSupplyPayments
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyPayments",mappedBy="houseSupplyOrder",cascade={"persist"}))
      */
-    protected $bills;
+    protected $payments;
 
     /**
      * Creado por
@@ -167,16 +164,8 @@ class houseSupplyOrder {
         return $this->date;
     }
 
-    function getDateBilling() {
-        return $this->dateBilling;
-    }
-
     function getType() {
         return $this->type;
-    }
-
-    function getInvoiced() {
-        return $this->invoiced;
     }
 
     function getSign() {
@@ -189,6 +178,10 @@ class houseSupplyOrder {
 
     function getCycle() {
         return $this->cycle;
+    }
+
+    function getProductKit() {
+        return $this->productKit;
     }
 
     function getNroOrder() {
@@ -219,8 +212,8 @@ class houseSupplyOrder {
         return $this->orderItems;
     }
 
-    function getBills() {
-        return $this->bills;
+    function getPayments() {
+        return $this->payments;
     }
 
     function getCreatedBy() {
@@ -247,16 +240,8 @@ class houseSupplyOrder {
         $this->date = $date;
     }
 
-    function setDateBilling(\DateTime $dateBilling) {
-        $this->dateBilling = $dateBilling;
-    }
-
     function setType($type) {
         $this->type = $type;
-    }
-
-    function setInvoiced($invoiced) {
-        $this->invoiced = $invoiced;
     }
 
     function setSign($sign) {
@@ -269,6 +254,10 @@ class houseSupplyOrder {
 
     function setCycle(houseSupplyCycle $cycle) {
         $this->cycle = $cycle;
+    }
+
+    function setProductKit(houseSupplyProductKit $productKit) {
+        $this->productKit = $productKit;
     }
 
     function setNroOrder($nroOrder) {
@@ -299,8 +288,8 @@ class houseSupplyOrder {
         $this->orderItems = $orderItems;
     }
 
-    function setBills(houseSupplyBilling $bills) {
-        $this->bills = $bills;
+    function setPayments(houseSupplyPayments $payments) {
+        $this->payments = $payments;
     }
 
     function setCreatedBy(User $createdBy) {

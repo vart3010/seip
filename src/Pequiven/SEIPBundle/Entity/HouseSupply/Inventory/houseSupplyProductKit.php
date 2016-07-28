@@ -7,6 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKitItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyCycle;
+use Pequiven\SEIPBundle\Model\HouseSupply\Order\HouseSupplyOrder;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -50,6 +51,12 @@ class houseSupplyProductKit {
     protected $productKitItems;
 
     /**
+     * @var houseSupplyOrder
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder",mappedBy="productKit",cascade={"persist"}))
+     */
+    protected $houseSupplyOrder;
+
+    /**
      * @var houseSupplyCycle
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyCycle",mappedBy="productKit",cascade={"persist"}))
      */
@@ -80,12 +87,12 @@ class houseSupplyProductKit {
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
+
     public function __toString() {
         return $this->description;
     }
 
-        function getId() {
+    function getId() {
         return $this->id;
     }
 
@@ -99,6 +106,10 @@ class houseSupplyProductKit {
 
     function getProductKitItems() {
         return $this->productKitItems;
+    }
+
+    function getHouseSupplyOrder() {
+        return $this->houseSupplyOrder;
     }
 
     function getCycle() {
@@ -137,6 +148,10 @@ class houseSupplyProductKit {
         $this->productKitItems = $productKitItems;
     }
 
+    function setHouseSupplyOrder(houseSupplyOrder $houseSupplyOrder) {
+        $this->houseSupplyOrder = $houseSupplyOrder;
+    }
+
     function setCycle(houseSupplyCycle $cycle) {
         $this->cycle = $cycle;
     }
@@ -156,7 +171,5 @@ class houseSupplyProductKit {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
-
-
 
 }

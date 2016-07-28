@@ -269,18 +269,6 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     protected $houseSupplyOrderItems;
 
     /**
-     * @var Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling
-     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling",mappedBy="client",cascade={"persist"}))
-     */
-    protected $houseSupplyBilling;
-
-    /**
-     * @var Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems
-     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems",mappedBy="client",cascade={"persist"}))
-     */
-    protected $houseSupplyBillingItems;
-
-    /**
      * Trimestre que esta permitido notificar en el Módulo de Operaciones/Producción
      * @var integer
      *

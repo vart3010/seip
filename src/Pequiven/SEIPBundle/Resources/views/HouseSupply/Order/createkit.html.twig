@@ -14,35 +14,25 @@
 
             $("checkbox").change(function () {
                 $("input#cantidad").val("");
-                var maxPerson = $("select#producto option:selected").attr("data");
-                // $("input#cantidad").attr("max", maxPerson);
+                var idMember = $("select#producto option:selected").attr("data");
 
-            });
-
-            $("button#addSubmit").click(function (event) {
-                var idProduct = parseInt($("select#producto").val());
-                var comp = jQuery.inArray(idProduct, idsProductsItems);
-
-                if (comp >= 0) {
-                    alert("Este producto ya se encuentra agregado.");
-                    event.preventDefault();
-                }
             });
 
         });
 
-        function charge() {
-            $('.select2').select2({
-                allowClear: true
-            });
-        }
-
-        function cargar(URL) {
-            myWindow = window.open(URL, "myWindow", "left=300px, top=250px, width=1200px, height=800px, Scrollbars=YES, Resizable=NO, Directories=NO, Location=NO, Menubar=NO, Status=NO, Toolbar=NO");   // Opens a new window
-        }
+        {# function cargar(URL) {
+             myWindow = window.open(URL, "myWindow", "left=300px, top=250px, width=1200px, height=800px, Scrollbars=YES, Resizable=NO, Directories=NO, Location=NO, Menubar=NO, Status=NO, Toolbar=NO");   // Opens a new window
+         }#}
 
     </script>    
 {% endblock javascript %}
+
+{% block before_body %}
+    {{ contentHeader(
+        { ( '*' ): ('Ordenes Kit de Pedidos') },
+         (' Crear')
+    ) }}
+{% endblock %}
 
 {% block body %}
 
@@ -64,176 +54,173 @@
             vertical-align: middle; 
             padding-left:8px;                
         }
-    </style>
-    <hgroup id="main-title" class="thin breadcrumb">
-        <h1>
-            <a href="">Ordenes Kit de Pedidos</a>
-            <span class="icon-forward"></span>            
-            <span class="thin">Crear</span>                        
-        </h1>
-    </hgroup>
-    <br>
-    <div class="columns">
-        <div class="twelve-columns" style="border: 1px #D8D8D8 solid;">            
-            <center>
-                <table width="95%">
-                    <tr style="height: 30px;">
-                        <td colspan="2" class="members">                                
-                            Datos del Pedido                                                                  
-                        </td>         
-                    </tr>
-                    <tr>
-                        <td width="60%" style="border-right: 1px #D8D8D8 solid;">
-                            <table width="100%" class="simple-table" style="background-color: #FFFFFF; border: hidden;">                                    
-                                <tr>
-                                    <td width="25%" class="header bold">Fecha:</td>
-                                    <td width="75%">
-                                        {{ "now"|date("d/m/Y") }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="25%" class="header bold">Localidad:</td>
-                                    <td width="75%">
-                                        {{ wsc.getComplejo.getdescription }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="25%" class="header bold">Código C.E.T.:</td>
-                                    <td width="75%">
-                                        {{ wsc.codigo }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="25%" class="header bold">Nombre C.E.T.:</td>
-                                    <td width="75%">
-                                        {{ wsc.name }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="25%" class="header bold">Coordinador:</td>
-                                    <td width="75%">
-                                        {{ wsc.getcoordinator.getfullname }}
-                                    </td>
-                                </tr>
-                            </table> 
-                        </td>
-                        <td width="40%">
-                            <table width="100%" class="simple-table" style="height: content-box;">
-                                <tr>
-                                    <td style="background-color: #D8D8D8; font-size: 30pt; vertical-align: middle; text-align: center; height: 55px; " colspan="2">                                                           
-                                        Orden:
-                                        <span class="green bold">{{ neworder }}</span>              
-                                    </td>                                        
-                                </tr>
-                                {# {% if (lastorder) %}
-                                     <tr>
-                                         <td class="header bold">
-                                             Última Orden Realizada                                        
-                                         </td>
-                                         <td>{{ lastorder.getdate| date("d/m/Y") }}</td>
-                                     </tr>
-                                     <tr>
-                                         <td class="header bold">Total:</td>
-                                         <td class="text-left">{{ lastorder.totalCharge}}</td>
-                                     </tr>
-                                     <tr>
-                                         <td class="header bold">Nro. Ítems:</td>
-                                         <td class="text-left">{{ lastorder.getOrderItems|length }}</td>
-                                     </tr>
-                                 {% endif %}#}
-                            </table>
-                        </td>
-                    </tr>
-                </table>
+    </style>   
 
-                <br>
-                <table width="95%"  style="border-top: 1px #D8D8D8 solid;"> 
-                    <tr style="height: 30px;">
-                        <td colspan="2" class="members">                                
-                            Contenido del Pedido
-                        </td>         
-                    </tr>
-                    <tr>
-                        <td width="60%" style="border-right: 1px #D8D8D8 solid;">
-                            <table class="simple-table">
-                                <tr>
-                                    <th width="5%">&nbsp;</th>
-                                    <th width="60%">Miembro</th>
-                                    <th width="20%">Teléfono</th>
-                                    <th width="15%">&nbsp;</th>                                        
-                                </tr>
-                                {% for member in wsc.getMembers %}                                
+    <form method="POST" action="{{ path("pequiven_housesupply_orderkit_charge_total") }}">
+        <div class="columns">
+            <div class="twelve-columns" style="border: 1px #D8D8D8 solid;">            
+                <center>
+                    <table width="95%">
+                        <tr style="height: 30px;">
+                            <td colspan="2" class="members">                                
+                                Datos del Pedido                                                                  
+                            </td>         
+                        </tr>
+                        <tr>
+                            <td width="60%" style="border-right: 1px #D8D8D8 solid;">
+                                <table width="100%" class="simple-table" style="background-color: #FFFFFF; border: hidden;">                                    
                                     <tr>
-                                        <td>{{ loop.index  }}</td>
-                                        <td>{{ member.getOnlyFullNameUser }}</td>
-                                        <td>{{ member.getCellphone }}</td>
-                                        <td>
-                                            <p class="assistance button-height">
-                                                <input type="checkbox" name="members[{{ member.id }}]" data="{{ member.id}}" value="0" class="switch green-active mid-margin-right" data-text-on="SI" data-text-off="NO">
-                                            </p>
-                                        </td>                                            
+                                        <td width="25%" class="header bold">Fecha:</td>
+                                        <td width="75%">
+                                            {{ "now"|date("d/m/Y") }}
+                                        </td>
                                     </tr>
-                                {% endfor %}
-                            </table>    
+                                    <tr>
+                                        <td width="25%" class="header bold">Localidad:</td>
+                                        <td width="75%">
+                                            {{ wsc.getComplejo.getdescription }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="25%" class="header bold">Código C.E.T.:</td>
+                                        <td width="75%">
+                                            {{ wsc.codigo }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="25%" class="header bold">Nombre C.E.T.:</td>
+                                        <td width="75%">
+                                            {{ wsc.name }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="25%" class="header bold">Coordinador:</td>
+                                        <td width="75%">
+                                            {{ wsc.getcoordinator.getfullname }}
+                                        </td>
+                                    </tr>
+                                </table> 
+                            </td>
+                            <td width="40%">
+                                <table width="100%" class="simple-table" style="height: content-box;">
+                                    <tr>
+                                        <td style="background-color: #D8D8D8; font-size: 30pt; vertical-align: middle; text-align: center; height: 55px; " colspan="2">                                                           
+                                            Orden:
+                                            <span class="green bold">{{ neworder }}</span>              
+                                        </td>                                        
+                                    </tr>
+                                    {# {% if (lastorder) %}
+                                         <tr>
+                                             <td class="header bold">
+                                                 Última Orden Realizada                                        
+                                             </td>
+                                             <td>{{ lastorder.getdate| date("d/m/Y") }}</td>
+                                         </tr>
+                                         <tr>
+                                             <td class="header bold">Total:</td>
+                                             <td class="text-left">{{ lastorder.totalCharge}}</td>
+                                         </tr>
+                                         <tr>
+                                             <td class="header bold">Nro. Ítems:</td>
+                                             <td class="text-left">{{ lastorder.getOrderItems|length }}</td>
+                                         </tr>
+                                     {% endif %}#}
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <br>
+                    <table width="95%"  style="border-top: 1px #D8D8D8 solid;"> 
+                        <tr style="height: 30px;">
+                            <td colspan="2" class="members">                                
+                                Contenido del Pedido
+                            </td>         
+                        </tr>
+                        <tr>
+                            <td width="60%" style="border-right: 1px #D8D8D8 solid;">
+                                <table class="simple-table">
+                                    <tr>
+                                        <th width="5%">&nbsp;</th>
+                                        <th width="60%">Miembro</th>
+                                        <th width="20%">Teléfono</th>
+                                        <th width="15%">&nbsp;</th>                                        
+                                    </tr>
+                                    {% for member in wsc.getMembers %}                                
+                                        <tr>
+                                            <td>{{ loop.index  }}</td>
+                                            <td>{{ member.getOnlyFullNameUser }}</td>
+                                            <td>{{ member.getCellphone }}</td>
+                                            <td>
+                                                <p class="assistance button-height">
+                                                    <input type="checkbox" name="members[{{ member.id}}]" data="{{ member.id}}" value="1" class="switch green-active mid-margin-right" data-text-on="Si" data-text-off="No">
+                                                </p>
+                                            </td>                                            
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </td>
+                            <td width="40%">  
+                                <br><br>
+                        <center>
+                            <table width="90%">  
+                                <tr>
+                                    <td width="25%" style="font-weight: bold; height: 50px;">Cant. Kits</td>
+                                    <td width="75%" style="color: #002a80; font-size: 25pt; text-align: right; font-weight: bold; height: 50px;">                                       
+                                        <span id="totales_2">
+                                            {{wsc.getMembers|length}}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="25%" style="font-weight: bold; height: 50px;">Total:</td>
+                                    <td width="75%" style="color: #002a80; font-size: 25pt; text-align: right; font-weight: bold; height: 100px;">
+                                        Bs. 
+                                        <span id="totales_3">
+                                            0,00
+                                        </span>
+                                    </td>
+                                </tr>  
+                                <tr>
+                                    <td colspan="2" class="bold">                                       
+                                        Kit para la Jornada:                                    
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">   
+                                        <table class="simple-table">
+                                            <tr>
+                                                <th style="text-align: center;">Cant</th>
+                                                <th>Producto</th>
+                                                <th style="text-align: right;">Precio</th>
+                                            </tr>
+                                            {% for product in kit.getProductKitItems%}                              
+                                                <tr>
+                                                    <td style="text-align: center;">{{product.getCant}}</td>
+                                                    <td>{{product.getProduct.getDescription}}</td>
+                                                    <td style="text-align: right;">{{product.getProduct.getPrice|myNumberFormat}}</td>
+                                                </tr>
+                                            {%endfor%}
+                                        </table>
+                                        <input type='text' hidden name="wsc" value="{{wsc.id}}">
+                                        <input type='text' hidden name="kit" value="{{kit.id}}">           
+                                    </td>
+                                </tr>
+                            </table>  
+                        </center>
                         </td>
-                        <td width="40%">  
-                            <br><br>
-                    <center>
-                        <table width="90%">  
-                            <tr>
-                                <td width="25%" style="font-weight: bold; height: 50px;">Cant. Kits</td>
-                                <td width="75%" style="color: #002a80; font-size: 25pt; text-align: right; font-weight: bold; height: 50px;">                                       
-                                    <span id="totales_2">
-                                        {{wsc.getMembers|length}}
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="25%" style="font-weight: bold; height: 50px;">Total:</td>
-                                <td width="75%" style="color: #002a80; font-size: 25pt; text-align: right; font-weight: bold; height: 100px;">
-                                    Bs. 
-                                    <span id="totales_3">
-                                        0,00
-                                    </span>
-                                </td>
-                            </tr>  
-                            <tr>
-                                <td colspan="2" class="bold">                                       
-                                    Kit para la Jornada:                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">   
-                                    <table class="simple-table">
-                                        <tr>
-                                            <th style="text-align: center;">Cant</th>
-                                            <th>Producto</th>
-                                            <th style="text-align: right;">Precio</th>
-                                        </tr>
-                                        {% for product in kit.getProductKitItems%}                              
-                                        <tr>
-                                            <td style="text-align: center;">{{product.getCant}}</td>
-                                            <td>{{product.getProduct.getDescription}}</td>
-                                            <td style="text-align: right;">{{product.getProduct.getPrice|myNumberFormat}}</td>
-                                        </tr>
-                                        {%endfor%}
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>  
-                    </center>
-                    </td>
-                    </tr>  
-                </table>
-            </center>            
+                        </tr>  
+                    </table>
+                </center>            
+            </div>
+            <br>
+            <div class="new-row twelve-columns" style="text-align: right;">                      
+                <button type="submit" {#onclick="cargar('{{ path("pequiven_housesupply_orderkit_charge_total") }}');"#} class="button glossy mid-margin-right">
+                    <span class="button-icon green-gradient"><span class="icon-tick"></span></span>
+                    Registrar Orden
+                </button>                        
+            </div>      
         </div>
-        <br>
-        <div class="new-row twelve-columns" style="text-align: right;">                      
-            <button type="submit" onclick="cargar('{{ path("pequiven_housesupply_orderkit_charge_total") }}');" class="button glossy mid-margin-right">
-                <span class="button-icon green-gradient"><span class="icon-tick"></span></span>
-                Totalizar Orden
-            </button>                        
-        </div>       
-    </div>
+    </form>  
 {% endblock %}
 

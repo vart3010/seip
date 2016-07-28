@@ -1,17 +1,18 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Entity\HouseSupply\Billing;
+namespace Pequiven\SEIPBundle\Entity\HouseSupply\Order;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
+use Pequiven\SEIPBundle\Model\HouseSupply\Order\HouseSupplyOrder;
 
 /**
  * Pagos
  *
  * @author Gilbert C. <glavrjk@gmail.com>
  * 
- * @ORM\Table(name="seip_gsh_payments")
+ * @ORM\Table(name="seip_gsh_order_payments")
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
@@ -27,18 +28,25 @@ class houseSupplyPayments {
 
     /**
      * 
-     * @var houseSupplyBilling
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling", inversedBy="payments")
-     * @ORM\JoinColumn(name="bill_id", referencedColumnName="id", nullable=true)
+     * @var HouseSupplyOrder
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\HouseSupplyOrder", inversedBy="payments")
+     * @ORM\JoinColumn(name="order_id", referencedColumnName="id", nullable=false)
      */
-    private $bill;
+    private $houseSupplyOrder;
 
     /**
      * 1. TRANSFERENCIA / 2. TARJETA DE DEBITO / 3. TARJETA DE CREDITO
-     * @var string
-     * @ORM\Column(name="type",type="string",nullable=false)
+     * @var interger
+     * @ORM\Column(name="type",type="integer",nullable=false)
      */
     private $type;
+
+    /**
+     * 
+     * @var string
+     * @ORM\Column(name="number",type="string",nullable=false)
+     */
+    private $number;
 
     /**
      *
@@ -77,12 +85,16 @@ class houseSupplyPayments {
         return $this->id;
     }
 
-    function getBill() {
-        return $this->bill;
+    function getHouseSupplyOrder() {
+        return $this->houseSupplyOrder;
     }
 
     function getType() {
         return $this->type;
+    }
+
+    function getNumber() {
+        return $this->number;
     }
 
     function getTotal() {
@@ -109,12 +121,16 @@ class houseSupplyPayments {
         $this->id = $id;
     }
 
-    function setBill(houseSupplyBilling $bill) {
-        $this->bill = $bill;
+    function setHouseSupplyOrder(HouseSupplyOrder $houseSupplyOrder) {
+        $this->houseSupplyOrder = $houseSupplyOrder;
     }
 
-    function setType($type) {
+    function setType(interger $type) {
         $this->type = $type;
+    }
+
+    function setNumber($number) {
+        $this->number = $number;
     }
 
     function setTotal($total) {

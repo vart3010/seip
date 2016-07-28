@@ -64,8 +64,8 @@
             validaButton();
 
             $("#addItem").click(function () {
-                
-                
+
+
                 var cantidad = [$("#cantidad").val(), $("#cantidad").val()];
                 var producto = [$("#producto").val(), $("#producto").find('option:selected').attr("name")];
                 var costo = [$("#costo").val(), $("#costo").val()];
@@ -74,12 +74,12 @@
                 $("input#costo").unmask();
                 var costoCalculo = $("#costo").val();
                 //$("input#costo").mask('000.000.000.000.000,00', {reverse: true});
-                
-                
+
+
                 //console.log($("#cantidad").val());
-                
+
                 var subtotal = [(costoCalculo * $("#cantidad").val()), (costoCalculo * $("#cantidad").val())];
-                
+
 
                 if ((cantidad[0] != "") && (costo[0] != "") && (producto[0] != 0)) {
                     var boton = ["", "<a id='" + index + "' name='" + producto[0] + "' onClick='delRow(this.id,this.name)' class='button icon-trash delItem'></a>"];
@@ -104,6 +104,18 @@
     </script>
 {% endblock javascript %}
 
+{% if (type==1)%}
+   {% set labelType='Cargo de Productos' %}
+{% else %}
+   {% set labelType='Descargo de Productos' %}
+{% endif %}
+
+{% block before_body %}
+    {{ contentHeader(
+        { ( '*' ): ('Inventario') },
+         (labelType)
+    ) }}
+{% endblock %}
 
 {% block body %}
     <style>
@@ -118,18 +130,7 @@
             text-align: right;
         }
     </style>
-    <hgroup id="main-title" class="thin breadcrumb">
-        <h1>
-            <a href="">Inventario</a>
-            <span class="icon-forward"></span>
-            {% if (type==1)%}
-                <span class="thin">Cargo de Productos</span>            
-            {% else %}
-                <span class="thin">Descargo de Productos</span>            
-            {% endif %}
-        </h1>
-    </hgroup>
-    <br>
+
     <div class="columns">
         <div class="twelve-columns">
             <form method="POST" action="{{ path("pequiven_housesupply_inventory_charge_create",{'type': type}) }}">

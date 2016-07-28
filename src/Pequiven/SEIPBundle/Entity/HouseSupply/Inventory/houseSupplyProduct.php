@@ -8,7 +8,6 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventory;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductInstance;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKitItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeItems;
-use Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -103,12 +102,6 @@ class houseSupplyProduct {
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\houseSupply\Inventory\houseSupplyInventoryChargeItems",mappedBy="product",cascade={"persist","remove"})
      */
     protected $inventoryChargeItems;
-
-    /**
-     * @var houseSupplyBillingItems
-     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBillingItems",mappedBy="product",cascade={"persist"}))
-     */
-    protected $billingItems;
 
     /**
      * @var houseSupplyOrderItems
@@ -243,10 +236,6 @@ class houseSupplyProduct {
 
     function setInventoryChargeItems(houseSupplyInventoryChargeItems $inventoryChargeItems) {
         $this->inventoryChargeItems = $inventoryChargeItems;
-    }
-
-    function setBillingItems(houseSupplyBillingItems $billingItems) {
-        $this->billingItems = $billingItems;
     }
 
     function setOrderItems(houseSupplyOrderItems $orderItems) {

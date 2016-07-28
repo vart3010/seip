@@ -86,10 +86,6 @@ pequiven_houseSupply_Inventory:
     resource: "@PequivenSEIPBundle/Resources/config/routing/HouseSupply/HouseSupplyInventory.yml"
     prefix:   /HouseSupply/Inventory
     
-pequiven_houseSupply_Billing:
-    resource: "@PequivenSEIPBundle/Resources/config/routing/HouseSupply/HouseSupplyBilling.yml"
-    prefix:   /HouseSupply/Billing
-    
 pequiven_houseSupply_Order:
     resource: "@PequivenSEIPBundle/Resources/config/routing/HouseSupply/HouseSupplyOrder.yml"
     prefix:   /HouseSupply/Order
