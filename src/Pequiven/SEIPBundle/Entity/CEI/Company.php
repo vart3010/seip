@@ -82,6 +82,20 @@ class Company extends BaseModel
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Region")
      */
     private $region;
+    
+    /**
+     * Imagen codificada en Base64
+     * @var string
+     * @ORM\Column(type="text")
+     */
+    protected $base64image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAN5QTFRFwsLCxMTExcXFxsbGx8fHyMjIycnJysrKy8vLzMzMzc3Nzc7Ozs7Oz8/P0NDQ0dHR0tLS09PT1NTU1dXV1dbW1tbW19fX2NjY2dnZ2tra2tvb29vb3Nzc3d3d3d7e3t7e3t/f39/f4ODg4OHh4eHh4uLi4+Pj5OTk5OXl5eXl5ebm5ubm5ufn5+fn5+jo6Ojo6enp6urq6+vr6+zs7Ozs7O3t7e3t7u7u7+/v8PDw8PHx8fHx8vLy8/Pz9PT09fX19vb29/f3+Pj4+fn5+vr6+/v7/Pz8/f39/v7+////obAPKgAAA/lJREFUWMOdl3l7okgQxlljEpMdJ8eMSu+QHWMU1zAOxyLHciPn9/9CW9WNxhgUyPuHj0q9v6e6moYqbqRYtu24ruf7AShsFEb5vue6jm1bpsRJYxX81A5XoxaiEEQ4tiWNOFOe6OBHexTFrYQMQABBniicacvEQj/at61EEUhQeM3kLNtRBAf81J60EEMAQSGGbXFYAPXJpf4kSVsIEUhQBQvKgAA/0GdBzOxZoxgijrVn16cArGCoz0P0Y0B+VgwBBG3mYR1tDlaABTAXEfrzFqIETQygDLARHK4AAFtTjNFfNIoSDDHCOvo7ABbQWm7b+CnBWIEjrgBQAkgACmBJ6T4oCY4VHxAMaZtCHSMoAgWEFJBl9joripJKJ8cS2YUSAIacZhQQHgFyIJRNgLIwFNyJPYBtAgKgAracs6jNaYCu4k4wAGzDe0BhKfl5QKFreXES4KriaLgQQdMPAAH/Fhf39//8l54AhC8YeHPJk5PirwbwOQ1rAYnAgs4Q+MsByyapA/zahQ2u+PN+QtZ1AIE0ECb9m31BagDRQWgtYdK/ffsRfAR4h8GDa0aYqxtVrPwXXw4CvAYAub6Gj01Ctz7fwOrG7/zNAP56MI93916ZzMe9IekEIPyfGji9zevGQcLNV9IRQCLNjNn9OA1TyRK6AuSyWO2qPv7pHx+OZgDU7+8rtu+j3ve8TDoCprB+uPNuqP+eQB3m3QAiPdH85S35Bn5YUCl/BkD4/qD38PazO4A8cANW0vK1G0DAGhDy+MdDH+/A7jUgYVlOyUPvG5yBIRG67wJ5Lcv4sTeip2joHdewzZ3oleHsL/b1Cb6TzgDBlNLSUUXVybO1LnQH3PWt/Wn0+nedAXe9MRFDag9lMu7ddQR8BX/1MqDZHxNqAOnh9eHF+CjnI0LNMzGdvV3+cjH58Ewd45k491ROrTd/f1LzVD8k1L4Xspfq6m2tn51rppfaN1OWiA2vthE9mYSs0lNv50jXdYH/d3NKv7+/6rqZvH+9H3Yo0L6YWlGe1laKsMfJsxMtTgHtwzk/JdQAqi4tyzNNa2r04mVEV3DQpe36ROi8VK25S4yWEUtg3ydWnSp0GLLWptMMl2GVwA7AtmG7ldR2vbIvBjSBqldm3TqMCyu1bbfuLYIqAezWbbaGUFTbzwvu3I+rFVAApOAv1C4Tiz3zWAIAsDAF71nuNjNZz25AE7BganNc+6fSdWrTnxyagMmZlm3+kLvPjRoduSyTM0ydX39mclV+mOA3OEPlpc/NzmveQIA8WllQSEQAw2eY06IhHo7ejr3iNUPnHpeGaeIADwiENAvjHDq6i2NF4xaabjAEMFDuWbEYG+2mYcxH8v/D6kHpgLvkXwAAAABJRU5ErkJggg==";
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ubicacion", type="string")
+     */
+    private $ubicacion;
 
     /**
      * Constructor
@@ -285,5 +299,49 @@ class Company extends BaseModel
     
     public function __toString() {
         return $this->getAlias()?:'-';
+    }
+    
+    /**
+     * Set image
+     *
+     * @param string $base64image
+     * @return string
+     */
+    public function setBase64Image($encodedImage)
+    {
+        $this->base64image = $encodedImage;
+
+        return $this;
+    }
+    
+    /**
+     *
+     * @param string $ubicacion
+     * @return string
+     */
+    public function setUbicacion($ubicacion)
+    {
+        $this->ubicacion = $ubicacion;
+        
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string 
+     */
+    public function getBase64Image()
+    {
+        return $this->base64image;
+    }
+    
+    /**
+     *
+     * @return string
+     */
+    public function getUbicacion()
+    {
+        return $this->ubicacion;
     }
 }
