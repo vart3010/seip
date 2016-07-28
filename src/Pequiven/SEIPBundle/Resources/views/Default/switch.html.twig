@@ -1,0 +1,25 @@
+{% extends "PequivenSEIPBundle:Template:Developer/layoutSelectCompany.hmtl.twig" %}
+{% block javascripts %}
+    <script src="{{ asset('bundles/pequivenseip/raphael/raphael-min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/pequivenseip/jquery-ui-1.12.0/jquery-ui.js')}}"></script>
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/jquery-ui-1.12.0/jquery-ui.css') }}">
+    <script src="{{ asset('bundles/pequivenseip/selectCompany.js') }}" type="text/javascript"></script>
+{#    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">#}
+{% endblock %}
+
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/selectCompany.css') }}">
+{% endblock stylesheets_base %}
+
+{% block body %}
+    <div class="content">
+{#        <div id="contentBack" class="backContent"><img alt="pequiven.png" src="{{ asset('bundles/pequivenseip/imgSelectCompany/elemen2.png') }}"/></div>#}
+       <div id="contentBack" class="backContent"></div>
+        <div id="fondo" class="left"><img alt="fondo.png" src="{{ asset('bundles/pequivenseip/imgSelectCompany/elemen1.png') }}"/></div>
+        <div id="mapa" class="right"></div>
+        <div class="contMessage"><div id="mensaje" class="bottomMessage"><p>El motor petroquímico eres tú</p></div></div>
+    </div>
+    <div id="divDatos"></div>
+    <div id="dialog"></div>
+{% endblock body %}

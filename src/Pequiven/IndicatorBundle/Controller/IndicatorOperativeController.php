@@ -145,7 +145,8 @@ class IndicatorOperativeController extends baseController {
             }
 
             //Obtenemos el último indicador guardado y le añadimos el rango de gestión o semáforo
-            $lastObjectInsert = $this->get("pequiven.repository.indicator")->findOneBy(array('ref' => $refIndicator,'period' => $period->getId(),'refParent' => $objetive->getRef()));
+            #$lastObjectInsert = $this->get("pequiven.repository.indicator")->findOneBy(array('ref' => $refIndicator,'period' => $period->getId(),'refParent' => $objetive->getRef()));
+            $lastObjectInsert = $this->get("pequiven.repository.indicator")->findOneBy(array('ref' => $refIndicator,'period' => $period->getId()));
             $this->createArrangementRange($lastObjectInsert, $data);
 
             //Guardamos la relación entre el indicador y el objetivo

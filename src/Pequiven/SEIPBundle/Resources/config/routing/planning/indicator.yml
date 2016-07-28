@@ -227,3 +227,14 @@ pequiven_dasboard_subgroupindicatorbygroup:
     requirements:
         _format: html|json|xml
     methods: [GET]
+    
+pequiven_show_method_calcule_indicator_get_form:
+    path: /showMethodCalcule.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:showEcuationMethodCalcule
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true

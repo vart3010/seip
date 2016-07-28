@@ -239,11 +239,19 @@
                      </p>
                  </div>#}
                 {% if(is_granted('ROLE_SEIP_PLANNING_*')) %}
+
+                    {% set dataMethod =  indicatorService.getCalculationMethod(indicator) %}
                     <!--Metodo de calculo que se aplico para dar el resultado del indicador -->
                     <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile"  >
                         <p class="inline-label">
                             <label class="label">{{ 'form.metodoCalculo'|trans }}</label>
-                            << {{ indicatorService.getCalculationMethod(indicator) }} >>
+                            <a href="#" id="opener">
+                                {% if (dataMethod["error"]==0) %}
+                                    << {{ dataMethod["formula"] }} >>
+                                {% else %}
+                                    {{ dataMethod["error"] }}
+                                {% endif %}
+                            </a>
                         </p>
                     </div>
                 {% endif %}
@@ -437,74 +445,133 @@
         {% endif %}
     </p>
 
+
+    <div id="dialog" title="Descripción de la Fórmula">
+        <fieldset class="fieldset fields-list">
+            <div class="field-block button-height" >
+                <label for="form_plan" class="label required">Indicador</label>
+                {{ dataMethod["indicator"]["ref"] }}
+            </div>
+            <div class="field-block button-height" >
+                <label for="form_plan" class="label required">Tendencia</label>
+                {{ dataMethod["indicator"]["tendency"]|trans({},'PequivenArrangementBundle') }}
+            </div>
+            <div class="field-block button-height" >
+                <label for="form_plan" class="label required">Método de Cálculo</label>
+                {% if (dataMethod["error"]==0) %}
+                    << {{ dataMethod["formula"] }} >>
+                {% else %}
+                    {{ dataMethod["error"] }}
+                {% endif %}
+            </div>
+
+            {% for key,desc in dataMethod["vars"] %}
+                <div class="field-block button-height" >
+                    <label for="form_plan" class="label required">{{ key }}</label>
+                    <strong>{{ desc }} </strong>
+                </div>
+            {% endfor %}
+
+        </fieldset>
+    </div>
+
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+
+    <script src="{{  asset('bundles/pequivenseip/MathJax/MathJax.js') }}">
+MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    displayAlign: "left",
+    tex2jax: {
+        inlineMath: [['<', '>'], ["\\(", "\\)"]],
+        displayMath: [['<<', '>>'], ["\\[", "\\]"]],
+    },
+    "HTML-CSS": {availableFonts: ["TeX"]}
+});
+    </script>
+
 {% endblock %}
 
 {% block javascript %}
     <script type="text/javascript">
-function uploadFilePdf(valueIndicatorId) {
-    $("input#indicatorFilePdf_" + valueIndicatorId).click();
+
+        function uploadFilePdf(valueIndicatorId) {
+            $("input#indicatorFilePdf_" + valueIndicatorId).click();
 //$("#form_"+valueIndicatorId).submit();
-}
-function openFile(valueIndicatorId) {
+        }
+        function openFile(valueIndicatorId) {
 //var obj = $("span#" + valueIndicatorId);
 //var url = obj.attr("data");
-    valueIndicatorId = valueIndicatorId.split("_");
+            valueIndicatorId = valueIndicatorId.split("_");
 
-    var data = {
-        id: valueIndicatorId[1]
-    };
-    $.ajax({
-        type: 'get',
-        url: '{{ path("pequiven_indicator_get_url_file") }}',
-        data: data,
-        success: function (data) {
+            var data = {
+                id: valueIndicatorId[1]
+            };
+            $.ajax({
+                type: 'get',
+                url: '{{ path("pequiven_indicator_get_url_file") }}',
+                data: data,
+                success: function (data) {
 //alert(data["url"]);
-            window.open(data["url"]);
+                    window.open(data["url"]);
+                }
+            });
+
         }
-    });
 
-}
+        function getUrl(data) {
+            var rs;
 
-function getUrl(data) {
-    var rs;
+            return rs;
+        }
 
-    return rs;
-}
+        function submitUploadFile(valueIndicatorId) {
+            valueIndicatorId = valueIndicatorId.split("_");
+            $("#field_" + valueIndicatorId[1]).val(valueIndicatorId[1]);
+            $("#form_" + valueIndicatorId[1]).submit();
+        }
+        function openImg(rutaImg) {
+            var url = "<div align='center'><img src='" + rutaImg + "' class='img-responsive'  style='max-width: 100%;  height: auto;'></div>";
+            $.modal({
+                title: "",
+                content: url
+            });
 
-function submitUploadFile(valueIndicatorId) {
-    valueIndicatorId = valueIndicatorId.split("_");
-    $("#field_" + valueIndicatorId[1]).val(valueIndicatorId[1]);
-    $("#form_" + valueIndicatorId[1]).submit();
-}
-function openImg(rutaImg) {
-    var url = "<div align='center'><img src='" + rutaImg + "' class='img-responsive'  style='max-width: 100%;  height: auto;'></div>";
-    $.modal({
-        title: "",
-        content: url
-    });
+        }
 
-}
+        $(document).ready(function () {
 
-$(document).ready(function () {
-    
-    
-    $("a#loadFileIndicator").click(function () {
-        $("input#fileIndicator").click();
-    });
+            $("#dialog").dialog({
+                autoOpen: false,
+                show: {
+                    effect: "blind",
+                    duration: 1000
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                },
+                width: "45%",
+                maxWidth: "45%"
+            });
 
-    $("input#fileIndicator").change(function () {
-        $("form#loadFileForm").submit();
-    });
+            $("#opener").on("click", function () {
+                $("#dialog").dialog("open");
+            });
 
+            $("a#loadFileIndicator").click(function () {
+                $("input#fileIndicator").click();
+            });
+            $("input#fileIndicator").change(function () {
+                $("form#loadFileForm").submit();
+            });
 // Progress
-    $('.progress').progress();
-
+            $('.progress').progress();
         {#$("a.uploadFileButton").click(function () {
             alert("hola");
         });#}
