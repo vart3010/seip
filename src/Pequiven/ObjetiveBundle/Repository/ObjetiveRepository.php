@@ -226,8 +226,7 @@ class ObjetiveRepository extends EntityRepository {
      * @param array $orderBy
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    function getObjetivesManagementSystem($managementSystem) {
-        
+    function getObjetivesManagementSystem($managementSystem) {        
         $queryBuilder = $this->getQueryBuilder();
         $queryBuilder
                 ->select('o')
