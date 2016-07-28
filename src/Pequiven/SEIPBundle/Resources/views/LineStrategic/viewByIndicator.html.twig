@@ -9,13 +9,14 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("pequiven_seip.results.resultsIndicatorsStrategics"|trans)
+        {("#"):("Indicadores Estratégicos")},('Dashboard de Resultados')
     ) }}
 {% endblock %}
 
 {% block body %}
     <div class="with-padding">
         <div class="columns">
+            <br><br>
             {{ boxRender.renderBox('pequiven_seip_box_linestrategic_icons_indicator_dashboard')|raw }}
         </div>
     </div>
