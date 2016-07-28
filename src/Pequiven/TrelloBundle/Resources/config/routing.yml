@@ -1,0 +1,9 @@
+create:
+    path: /create
+    defaults: {_controller: PequivenTrelloBundle:Trello:create}
+    methods: [GET, POST]
+
+approve:
+    path: /update
+    defaults: {_controller: PequivenTrelloBundle:Trello:update}
+    methods: [POST]
