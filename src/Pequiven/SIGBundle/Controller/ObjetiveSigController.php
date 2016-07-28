@@ -462,90 +462,92 @@ class ObjetiveSigController extends EvolutionController
                             $idObjManagement = $data->getId();                            
                         }
                     }
-                        $cantOperative = count($value->getManagementSystems());                                                                                        
-                        if ($cantOperative !== 0 && $idObjManagement == $managementSystemId) {//Si el objetivo esta marcado con el sistema de la calidad                            
-                            $objetiveOperative = $value;
-                            $contTotalObjOperatives = 0;
-                            //var_dump($row);
-                            $rowIniOpe = $row;//Fila Inicial del Objetivo Operativo
-                            $indicatorsOperatives = $objetiveOperative->getIndicators();//Indicadores de Obj Operativos
-                            $totalIndicatorOperatives = count($indicatorsOperatives);//Cantidad de Indicadores
-                            if($totalIndicatorOperatives > 0){//Si el objetivo operativo tiene indicadores operativos
-                                foreach($indicatorsOperatives as $indicatorOperative){
-                                    if (count($indicatorOperative->getManagementSystems()) != 0) {
-                                        foreach ($indicatorOperative->getManagementSystems() as $dataManagement) {
-                                            if ($dataManagement->getId() == $managementSystemId) {
-                                                $activeSheet->setCellValue('J'.$row, $indicatorOperative->getRef().' '.$indicatorOperative->getDescription());//Seteamos el Indicador Operativo
-                                                $activeSheet->setCellValue('K'.$row, $indicatorOperative->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Operativo
-                                                $activeSheet->setCellValue('M'.$row, $indicatorOperative->getWeight());//Seteamos el Peso del Indicador Operativo
-                                                $activeSheet->setCellValue('N'.$row, $indicatorOperative->getFrequencyNotificationIndicator());//Seteamos la frecuencia de medicion Operativo                                            
-                                                //$row++;                                
-                                                //$contResult++;                            
-                                            }
+                    $cantOperative = count($value->getManagementSystems());                                                                                        
+                    if ($cantOperative !== 0 && $idObjManagement == $managementSystemId) {//Si el objetivo esta marcado con el sistema de la calidad                            
+                        $objetiveOperative = $value;
+                        $contTotalObjOperatives = 0;                        
+                        $rowIniOpe = $row;//Fila Inicial del Objetivo Operativo
+                        $indicatorsOperatives = $objetiveOperative->getIndicators();//Indicadores de Obj Operativos
+                        $totalIndicatorOperatives = count($indicatorsOperatives);//Cantidad de Indicadores
+                        
+                        if($totalIndicatorOperatives > 0){//Si el objetivo operativo tiene indicadores operativos
+                            foreach($indicatorsOperatives as $indicatorOperative){
+                                //var_dump($row);
+                                //var_dump('row: '.$row.' -- '.$indicatorOperative->getRef());
+                                if (count($indicatorOperative->getManagementSystems()) != 0) {
+                                    foreach ($indicatorOperative->getManagementSystems() as $dataManagement) {
+                                        if ($dataManagement->getId() == $managementSystemId) {
+                                            $activeSheet->setCellValue('J'.$row, $indicatorOperative->getRef().' '.$indicatorOperative->getDescription());//Seteamos el Indicador Operativo
+                                            $activeSheet->setCellValue('K'.$row, $indicatorOperative->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Operativo
+                                            $activeSheet->setCellValue('M'.$row, $indicatorOperative->getWeight());//Seteamos el Peso del Indicador Operativo
+                                            $activeSheet->setCellValue('N'.$row, $indicatorOperative->getFrequencyNotificationIndicator());//Seteamos la frecuencia de medicion Operativo                                            
+                                            $row++;                                
+                                            $contResult++;                            
                                         }
-                                    }elseif($totalIndicatorOperatives == 1){//En caso de que tenga solo un indicador operativo
-                                        $activeSheet->setCellValue('J'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                                        $activeSheet->setCellValue('K'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                                        $activeSheet->setCellValue('M'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                                        $activeSheet->setCellValue('N'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                                        //$row++;
-                                        //$contResult++;
                                     }
+                                }elseif($totalIndicatorOperatives == 1){//En caso de que tenga solo un indicador operativo
+                                    $activeSheet->setCellValue('J'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                                    $activeSheet->setCellValue('K'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                                    $activeSheet->setCellValue('M'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                                    $activeSheet->setCellValue('N'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                                    $row++;
+                                    $contResult++;
                                 }
-                            } else{//En caso de que el objetivo operativo no tenga indicadores operativos
-                                $activeSheet->setCellValue('J'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                                $activeSheet->setCellValue('K'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                                $activeSheet->setCellValue('M'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                                $activeSheet->setCellValue('N'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado                                
-                                //$row++;
-                                //$contResult++;
                             }
-                            //var_dump($row);
-                            $rowFinOpe = $row;//$row - 1;//Fila Final del Objetivo Operativo
-                            $rowFinTac = $row;//$row - 1;//Fila Final del Objetivo Táctico
-                            //Sección Programas de Gestión Operativos
-                            $arrangementProgramsOperatives = $objetiveOperative->getArrangementPrograms();
-                            $totalArrangementProgramsOperatives = count($arrangementProgramsOperatives);
-                            $textArrangementProgramsOperatives = '';
-                            if($totalArrangementProgramsOperatives > 0){//Si el Objetivo Operativo tiene al menos un Programa de Gestión
-                                foreach($arrangementProgramsOperatives as $arrangementProgram){
-                                    $textArrangementProgramsOperatives.= $arrangementProgram->getRef() . "\n";
-                                }
-                            } else{
-                                $textArrangementProgramsOperatives = $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle');
+                            //die();
+                        } else{//En caso de que el objetivo operativo no tenga indicadores operativos
+                            $activeSheet->setCellValue('J'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                            $activeSheet->setCellValue('K'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                            $activeSheet->setCellValue('M'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                            $activeSheet->setCellValue('N'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado                                
+                            //$row++;
+                            //$contResult++;
+                        }                            
+                        $rowFinOpe = $row;//$row - 1;//Fila Final del Objetivo Operativo
+                        $rowFinTac = $row;//$row - 1;//Fila Final del Objetivo Táctico
+                        //Sección Programas de Gestión Operativos
+                        $arrangementProgramsOperatives = $objetiveOperative->getArrangementPrograms();
+                        $totalArrangementProgramsOperatives = count($arrangementProgramsOperatives);
+                        $textArrangementProgramsOperatives = '';
+                        if($totalArrangementProgramsOperatives > 0){//Si el Objetivo Operativo tiene al menos un Programa de Gestión
+                            foreach($arrangementProgramsOperatives as $arrangementProgram){
+                                $textArrangementProgramsOperatives.= $arrangementProgram->getRef() . "\n";
                             }
-                            
-                            $activeSheet->setCellValue('O'.$rowIniOpe, $textArrangementProgramsOperatives);//Seteamos los Programas de Gestión del Objetivo Operativo
-                            
-                            //Si el objetivo operativo tiene un proceso de sistema de gestion asociado
-                            $processManagement = $objetiveOperative->getProcessManagementSystem();
-                            $countProcessManagement =  count($processManagement);
-                            $dataProcess = '';
-                            if ($countProcessManagement >= 1) {                          
-                                foreach ($processManagement as $process) {
-                                    $dataProcess.= $process->getDescription() . "\n";                                                               
-                                }                          
-                            }else{                                                    
-                                $dataProcess = $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle');//Seteamos el texto de que no hay cargado
-                            }                            
-                            
-                            //var_dump('row:'.$rowIniOpe.' -- '.$objetiveTactic->getRef()." -- ".$objetiveOperative->getRef());//con ref parents and childrens                            
-                            $activeSheet->setCellValue('H'.$rowIniOpe, $dataProcess);//Seteamos el proceso
-                            $activeSheet->setCellValue('I'.$rowIniOpe, $objetiveOperative->getRef().' '.$objetiveOperative->getDescription());//Seteamos el Objetivo Operativo
-                            $activeSheet->setCellValue('L'.$rowIniOpe, $objetiveOperative->getGoal());//Seteamos el Peso del Objetivo Operativo
-                            if (($rowFinOpe - $rowIniOpe) > 0) {
-                                $activeSheet->mergeCells(sprintf('H%s:H%s',($rowIniOpe),($rowFinOpe)));
-                                $activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniOpe),($rowFinOpe)));
-                                $activeSheet->mergeCells(sprintf('L%s:L%s',($rowIniOpe),($rowFinOpe)));
-                                $activeSheet->mergeCells(sprintf('O%s:O%s',($rowIniOpe),($rowFinOpe)));
-                            }
-                            $contTotalObjOperatives++;
-                            /*if($totalObjetiveOperatives = $contTotalObjOperatives){
-                                $lastRowOpe = $rowIniOpe;
-                                $row--;                                             
-                            }*/
-                            $row++;             
-                        }//if de managementsystems                                                        
+                        } else{
+                            $textArrangementProgramsOperatives = $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle');
+                        }
+                        
+                        $activeSheet->setCellValue('O'.$rowIniOpe, $textArrangementProgramsOperatives);//Seteamos los Programas de Gestión del Objetivo Operativo
+                        
+                        //Si el objetivo operativo tiene un proceso de sistema de gestion asociado
+                        $processManagement = $objetiveOperative->getProcessManagementSystem();
+                        $countProcessManagement =  count($processManagement);
+                        $dataProcess = '';
+                        if ($countProcessManagement >= 1) {                          
+                            foreach ($processManagement as $process) {
+                                $dataProcess.= $process->getDescription() . "\n";                                                               
+                            }                          
+                        }else{                                                    
+                            $dataProcess = $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle');//Seteamos el texto de que no hay cargado
+                        }                            
+                        
+                        //var_dump('row:'.$rowIniOpe.' -- '.$objetiveTactic->getRef()." -- ".$objetiveOperative->getRef());//con ref parents and childrens                            
+                        $activeSheet->setCellValue('H'.$rowIniOpe, $dataProcess);//Seteamos el proceso
+                        $activeSheet->setCellValue('I'.$rowIniOpe, $objetiveOperative->getRef().' '.$objetiveOperative->getDescription());//Seteamos el Objetivo Operativo
+                        $activeSheet->setCellValue('L'.$rowIniOpe, $objetiveOperative->getGoal());//Seteamos el Peso del Objetivo Operativo
+                        if (($rowFinOpe - $rowIniOpe) > 0) {
+                            $activeSheet->mergeCells(sprintf('H%s:H%s',($rowIniOpe),($rowFinOpe)));
+                            $activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniOpe),($rowFinOpe)));
+                            $activeSheet->mergeCells(sprintf('L%s:L%s',($rowIniOpe),($rowFinOpe)));
+                            $activeSheet->mergeCells(sprintf('O%s:O%s',($rowIniOpe),($rowFinOpe)));
+                        }
+                        //$contTotalObjOperatives++;
+                        /*if($totalObjetiveOperatives = $contTotalObjOperatives){
+                            $lastRowOpe = $rowIniOpe;
+                            $row--;                                             
+                        }*/
+                        $row++;             
+                    }//if de managementsystems                                                        
                 }
                 
                 if($totalIndicatorTactics > 0){//Si el Objetivo Táctico tiene Indicadores Táctico
