@@ -16,9 +16,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
- * Controlador de producto de reporte
+ * Controlador de productos despacho
  *
- * @author Carlos Mendoza <inhack20@gmail.com>
+ * @author Victor Tortolero <vart10.30@gmail.com>
  */
 class ProductReportDeliveryController extends SEIPController {
 
