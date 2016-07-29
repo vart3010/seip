@@ -12,6 +12,7 @@
 {% endblock %}
 
 {% block body -%}
+    {{ id }}
     <form method="POST" action="{{ path("pequiven_product_group_delivery_create",{reportTemplateDelivery:app.request.get("reportTemplateDelivery") }) }}">
         <br /><br />
         {% include 'PequivenSEIPBundle:Delivery/ProductGroupDelivery:_form.html.twig' %}

@@ -532,6 +532,12 @@
             </call>
         </service>
         
+        <service id="seip.service.phpexcelreader" class="Pequiven\SEIPBundle\Service\DataLoad\PhpExcelReader">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
         
         
     </services>

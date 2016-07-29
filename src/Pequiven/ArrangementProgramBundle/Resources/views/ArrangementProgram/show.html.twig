@@ -328,6 +328,7 @@
             }
         )
                 %}
+                {{ buttons.generic_modal(path('arrangementprogram_reject', { 'id': entity.id }),('pequiven.arrangement_program.buttons.rejected'|trans),{'gradient':'red-gradient','icon':'icon-cross','content':('pequiven.arrangement_program.questions.rejected'|trans) ~ filedObservation}) }}
             </p>
 
             {% endblock %}
