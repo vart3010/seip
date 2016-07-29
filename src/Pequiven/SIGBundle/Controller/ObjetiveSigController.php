@@ -447,16 +447,22 @@ class ObjetiveSigController extends EvolutionController
         $rowIniTac = $row;//Fila Inicial del Objetivo Táctico
         $rowFinTac = $row;//Fila Final del Objetivo Táctico        
         $lastRowOpe = 7;        
+        $idObjManagement = 0;
         foreach($objetivesTactics as $objetiveTactic){//Recorremos los objetivos tácticos
             $indicatorsTactics = $objetiveTactic->getIndicators();
             $totalIndicatorTactics = count($indicatorsTactics);
             $objetivesOperatives = $objetiveTactic->getChildrens();
             $totalObjetiveOperatives = count($objetivesOperatives);
+            //sistema de la calidad de objetivo tactico
+            foreach ($objetiveTactic->getManagementSystems() as $data) {
+                if ($data->getId() == $managementSystemId) {
+                    $idObjManagement = $data->getId();                            
+                }
+            }
             //var_dump($totalObjetiveOperatives." ot ". $objetiveTactic->getRef());//Cantidad de hijos por objetivos Tacticos
             if($totalObjetiveOperatives > 0){//Si el objetivo táctico tiene objetivos operativos
-                foreach($objetivesOperatives as $value){//Recorremos los Objetivos Operativos                    
-                    //Consulta de Sistema de la Calidad Pegado al Objetivo
-                    $idObjManagement = 0;
+                foreach($objetivesOperatives as $value){//Recorremos los Objetivos Operativos                                        
+                    //sistema de la calidad de objetivo operativo
                     foreach ($value->getManagementSystems() as $data) {
                         if ($data->getId() == $managementSystemId) {
                             $idObjManagement = $data->getId();                            
@@ -550,11 +556,25 @@ class ObjetiveSigController extends EvolutionController
                     }//if de managementsystems                                                        
                 }
                 
+                $idManagementsIndicator = 0;
+                $indicatorTacticsData = [];
+                if($totalIndicatorTactics > 0){//Si el Objetivo Táctico tiene Indicadores Táctico 
+                    foreach($indicatorsTactics as $indicatorTactic){
+                        foreach ($indicatorTactic->getManagementSystems() as $dataManagement) {
+                            if ($managementSystemId == $dataManagement->getId()) {
+                                //var_dump("sistema: ".$managementSystemId."ref indica: ".$indicatorTactic."indicator systems".$dataManagement->getId());
+                                $idManagementsIndicator = $dataManagement->getId();                            
+                                $indicatorTacticsData[] = $indicatorTactic;
+                            }
+                        }
+                    }
+                }
+
                 if($totalIndicatorTactics > 0){//Si el Objetivo Táctico tiene Indicadores Táctico
                     $rowsSectionOperative = $row - $rowIniTac;
                     $rowIndTac = $rowIniTac;
-                    $contIndTac = 0;                    
-                    foreach($indicatorsTactics as $indicatorTactic){
+                    $contIndTac = 0;                       
+                    foreach($indicatorTacticsData as $indicatorTactic){                                                    
                         $activeSheet->setCellValue('D'.$rowIndTac, $indicatorTactic->getRef().' '.$indicatorTactic->getDescription());//Seteamos el Indicador Táctico
                         $activeSheet->setCellValue('E'.$rowIndTac, $indicatorTactic->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Táctico
                         $activeSheet->setCellValue('F'.$rowIndTac, $indicatorTactic->getWeight());//Seteamos el Peso del Indicador Táctico $activeSheet->mergeCells(sprintf('J%s:K%s',($rowIndTac),($rowIndTac)));
@@ -564,7 +584,7 @@ class ObjetiveSigController extends EvolutionController
                             $activeSheet->mergeCells(sprintf('E%s:E%s',($rowIndTac),($rowFinTac)));
                             $activeSheet->mergeCells(sprintf('F%s:F%s',($rowIndTac),($rowFinTac)));
                         }
-                        $rowIndTac++;
+                        $rowIndTac++;                            
                     }                    
                     /*if($totalIndicatorTactics > $rowsSectionOperative and ($rowFinTac-$rowIniOpe)>0){
                             $activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniOpe),($rowFinTac)));
@@ -599,7 +619,7 @@ class ObjetiveSigController extends EvolutionController
                     $rowIndTac = $rowIniTac;
                     $rowFinTac = $rowIniTac + $totalIndicatorTactics - 1;
                     $contIndTac = 0;
-                    foreach($indicatorsTactics as $indicatorTactic){
+                    foreach($indicatorTacticsData as $indicatorTactic){                                                
                         $activeSheet->setCellValue('D'.$rowIndTac, $indicatorTactic->getRef().' '.$indicatorTactic->getDescription());//Seteamos el Indicador Táctico
                         $activeSheet->setCellValue('E'.$rowIndTac, $indicatorTactic->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Táctico
                         $activeSheet->setCellValue('F'.$rowIndTac, $indicatorTactic->getWeight());//Seteamos el Peso del Indicador Táctico
@@ -607,7 +627,7 @@ class ObjetiveSigController extends EvolutionController
                         $contIndTac++;
                         $rowIndTac++;
                         $row++;
-                        $contResult++;
+                        $contResult++;                         
                     }
                 } else{//En caso de que el Objetivo Táctico no tenga Indicadores Tácticos
                     $activeSheet->setCellValue('D'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
