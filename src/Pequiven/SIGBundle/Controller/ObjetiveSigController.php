@@ -459,27 +459,26 @@ class ObjetiveSigController extends EvolutionController
                     $idObjManagement = $data->getId();                            
                 }
             }
-            //var_dump($totalObjetiveOperatives." ot ". $objetiveTactic->getRef());//Cantidad de hijos por objetivos Tacticos
+            //var_dump($totalObjetiveOperatives." ot ". $objetiveTactic->getRef());//Cantidad de hijos por objetivos Tacticos            
+            //$objetiveOperative = [];
             if($totalObjetiveOperatives > 0){//Si el objetivo táctico tiene objetivos operativos
-                foreach($objetivesOperatives as $value){//Recorremos los Objetivos Operativos                                        
+                foreach($objetivesOperatives as $value){//Recorremos los Objetivos Operativos 
                     //sistema de la calidad de objetivo operativo
                     foreach ($value->getManagementSystems() as $data) {
                         if ($data->getId() == $managementSystemId) {
                             $idObjManagement = $data->getId();                            
+                            $objetiveOperative = $value;
                         }
                     }
-                    $cantOperative = count($value->getManagementSystems());                                                                                        
+                    //var_dump("Ref object: ".$objetiveOperative->getRef() ."ManagementObjec: ".$idObjManagement." management set".$managementSystemId);
+                    $cantOperative = count($objetiveOperative->getManagementSystems());  
                     if ($cantOperative !== 0 && $idObjManagement == $managementSystemId) {//Si el objetivo esta marcado con el sistema de la calidad                            
-                        $objetiveOperative = $value;
                         $contTotalObjOperatives = 0;                        
                         $rowIniOpe = $row;//Fila Inicial del Objetivo Operativo
                         $indicatorsOperatives = $objetiveOperative->getIndicators();//Indicadores de Obj Operativos
-                        $totalIndicatorOperatives = count($indicatorsOperatives);//Cantidad de Indicadores
-                        
+                        $totalIndicatorOperatives = count($indicatorsOperatives);//Cantidad de Indicadores                        
                         if($totalIndicatorOperatives > 0){//Si el objetivo operativo tiene indicadores operativos
-                            foreach($indicatorsOperatives as $indicatorOperative){
-                                //var_dump($row);
-                                //var_dump('row: '.$row.' -- '.$indicatorOperative->getRef());
+                            foreach($indicatorsOperatives as $indicatorOperative){                                
                                 if (count($indicatorOperative->getManagementSystems()) != 0) {
                                     foreach ($indicatorOperative->getManagementSystems() as $dataManagement) {
                                         if ($dataManagement->getId() == $managementSystemId) {
@@ -499,8 +498,7 @@ class ObjetiveSigController extends EvolutionController
                                     $row++;
                                     $contResult++;
                                 }
-                            }
-                            //die();
+                            }                            
                         } else{//En caso de que el objetivo operativo no tenga indicadores operativos
                             $activeSheet->setCellValue('J'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                             $activeSheet->setCellValue('K'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
@@ -531,7 +529,13 @@ class ObjetiveSigController extends EvolutionController
                         $dataProcess = '';
                         if ($countProcessManagement >= 1) {                          
                             foreach ($processManagement as $process) {
-                                $dataProcess.= $process->getDescription() . "\n";                                                               
+                                foreach ($process->getManagementSystem() as $valueProcessManagement) {
+                                    if ($valueProcessManagement->getId()) {
+                                        if ($idObjManagement === $valueProcessManagement->getId()) {                                            
+                                            $dataProcess.= $process->getDescription() . "\n";                                                               
+                                        }
+                                    }
+                                }
                             }                          
                         }else{                                                    
                             $dataProcess = $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle');//Seteamos el texto de que no hay cargado
@@ -561,8 +565,7 @@ class ObjetiveSigController extends EvolutionController
                 if($totalIndicatorTactics > 0){//Si el Objetivo Táctico tiene Indicadores Táctico 
                     foreach($indicatorsTactics as $indicatorTactic){
                         foreach ($indicatorTactic->getManagementSystems() as $dataManagement) {
-                            if ($managementSystemId == $dataManagement->getId()) {
-                                //var_dump("sistema: ".$managementSystemId."ref indica: ".$indicatorTactic."indicator systems".$dataManagement->getId());
+                            if ($managementSystemId == $dataManagement->getId()) {                                
                                 $idManagementsIndicator = $dataManagement->getId();                            
                                 $indicatorTacticsData[] = $indicatorTactic;
                             }
