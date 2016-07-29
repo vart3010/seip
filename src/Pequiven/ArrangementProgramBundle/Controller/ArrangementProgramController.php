@@ -860,15 +860,32 @@ class ArrangementProgramController extends SEIPController {
         if ($entity->getType() == 0) {
             $em = $this->getDoctrine()->getManager();
             $config = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\ConfigurationNotification")->findBy(array('id' => $entity->getId(), 'typeObject' => 2));
-            var_dump(count($config));
+            
+            foreach ($config as $value) {
+                $configUser = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\NotificationUser")->findBy(array('idObject' => $value->getId()));
+                foreach ($configUser as $valueUsers) {                    
+                    switch ($valueUsers->getAction()) {
+                        case 1:
+                            $userReview = $valueUsers;
+                            break;
+                        case 2:
+                            $userNotify = $valueUsers;
+                            break;
+                        case 3:
+                            $userAprobe = $valueUsers;
+                            break;
+                    }
+                }
+            }            
         }
+        
         $configUsers = [
             'userReview' => $userReview,
             'userNotify' => $userNotify,
             'userAprobe' => $userAprobe,
         ];
         if ($entity->getType() == 0) {
-            //var_dump($configUsers);
+            var_dump($configUsers);
             die();
         }
         $rolesByType = array(
