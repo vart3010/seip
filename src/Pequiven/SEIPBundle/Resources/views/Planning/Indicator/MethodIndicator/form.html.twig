@@ -1,0 +1,30 @@
+
+<fieldset class="fieldset fields-list">
+    <div class="field-block button-height" >
+        <label for="form_plan" class="label required">Método de Cálculo</label>
+        << {{ methodEcuation }} >> 
+    </div>
+    <div class="field-block button-height" >
+        <label for="form_plan" class="label required">Valor planificado </label>
+        {{ indicator.id }}
+    </div>
+</fieldset>
+
+
+{% block javascripts %}
+
+    <script src="{{  asset('bundles/pequivenseip/MathJax/MathJax.js') }}">
+        MathJax.Hub.Config({
+            extensions: ["tex2jax.js"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+            displayAlign: "left",
+            tex2jax: {
+                inlineMath: [['<', '>'], ["\\(", "\\)"]],
+                displayMath: [['<<', '>>'], ["\\[", "\\]"]],
+            },
+            "HTML-CSS": {availableFonts: ["TeX"]}
+        });
+    </script>
+
+{% endblock %}
+

@@ -1,0 +1,191 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 05/06/2016, 01:52:01 PM
+    Author     : johana
+*/
+
+#open-menu, #labelPeriod, #header-gestion{
+    visibility: hidden;
+}
+.marginTop{
+    margin-top: -50px;
+}
+.companiesList{
+    list-style-type: none;
+}
+.companyName{
+        text-align: center;
+        margin-top: 15px; 
+}
+#contentP{
+    min-height: 700px;
+    background:url("imgSelectCompany/elemen2.png") no-repeat center center; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.contentLogoCompany {
+    /*width: 70px;*/
+    /*  height: 70px;*/
+    margin-bottom: 10px;
+    float: left;
+    margin-left: 50px;
+}
+
+.companySelected {
+    background: #B0E0E6;
+    box-shadow: inset 0 3px 8px rgba(0,0,0,0.125);
+    width: 70px;
+    height: 70px;
+}
+
+.companyNotSelected {
+    background: none;
+    box-shadow: inset 0 3px 8px rgba(0,0,0,0.125);
+    width: 70px;
+    height: 70px;
+}
+
+.logoCompany {
+    width: 50px;
+    height: 50px;
+    margin: 8px 8px;
+    /*position: absolute;*/
+    /* margin-left: 10px; */
+}
+
+table{
+    border-top: solid #585858;
+}
+
+hr{
+    border:none;
+}
+
+svg{
+    width: 100%;
+}
+
+.content {
+    width: 100%;
+}
+
+.left {
+    /* padding-left: 10px; */
+    /* padding-top: 10px; */
+    /* margin-left: 57px; */
+    margin-top: 76px;
+    /* float: left; */
+    position: absolute;
+    /*width: 45%;*/
+    width: 55%;
+    /* border: steelblue solid 1px; */
+    height: auto;
+    z-index: 1;
+    bottom: 86px;
+}
+
+.right {
+    /* padding-top: 10px; */
+    /* padding-left: 10px; */
+    /* margin-left: 10px; */
+    position: relative;
+    /* float: left; */
+    width: 55%;
+    /*width: 44%;*/
+    /*border: steelblue solid 1px;*/ 
+    height: auto;
+    z-index: 1;
+    left: 45%;
+}
+
+#fondo img{
+    max-width: 87%;
+    height: auto;
+    background-size: contain;
+}
+
+.backContent{
+    position:absolute;
+    background-image: url("imgSelectCompany/elemen2.png");
+    background-size: 100% 100%;
+    /*border: steelblue solid 1px;*/
+}
+
+.backContent img {
+    max-width: 100%;
+    height: 705px;
+    background-size: contain;
+}
+
+.contMessage{
+    width: 100%;
+    z-index: 3;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; 
+}
+
+.bottomMessage {
+    position: relative;
+    width: 65%;
+    z-index: 2;
+    background: #FFFFFF;
+    opacity: 0.9;
+    top: 1%;
+    left: 102%;
+    box-shadow: -10px -10px #DCDCDC;
+    font-size: 146%;
+}
+
+.bottomMessage p{
+    padding: 30px;
+    text-align: center;
+    text-align: center;
+    vertical-align: middle;
+    color: #8B0000;
+    font-weight: bold;
+    font-style: oblique;
+    font-family: serif;
+    /*font-size: 107%;*/
+    text-transform: uppercase;
+    font-weight: bold;
+    /* border-radius: 5px; */
+    /* opacity: 2; */
+    /* background: none; */
+}
+
+/*FooterGestion.html.twig*/
+.seipFooter{
+    width: 55%;
+    height: 60px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    color: #424242;
+    font-style: italic;
+    font-family: sans-serif;
+    font-size: 139%;
+    line-height: 25px;
+}
+
+@media only screen and (min-width: 600px) {
+    .seipFooter {
+        width: 55%;
+        height: 60px;
+        font-weight: bold;
+        text-align: center;
+        vertical-align: middle;
+        color: #424242;
+        font-style: italic;
+        font-family: sans-serif;
+        font-size: 96%;
+        line-height: 25px;
+    }
+}

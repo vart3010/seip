@@ -81,12 +81,15 @@ class ObjetiveStrategicController extends baseController {
 
         $indicatorService = $this->getIndicatorService();
 
-        $data=array(
+        $data = array(
             'entity' => $entity,
             'indicatorService' => $indicatorService,
         );
 
-        $this->generatePdf($data, 'Ficha de Objetivo Estratégico', 'PequivenObjetiveBundle:Strategic:viewPdf.html.twig');
+        $twig = 'PequivenObjetiveBundle:Strategic:viewPdf.html.twig';
+        $tittle = 'Ficha de Objetivo Estratégico';
+
+        $this->getReportService()->generatePdf($data, $tittle, $twig, 'P');
     }
 
     /**
@@ -358,30 +361,12 @@ class ObjetiveStrategicController extends baseController {
         return $this->container->get('pequiven_indicator.service.inidicator');
     }
 
-    public function generatePdf($data, $title, $template) {
-        
-        $pdf = new \Pequiven\SEIPBundle\Model\PDF\NewSeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setPrintLineFooter(false);
-        $pdf->setContainer($this->container);
-        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
-        $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('SEIP');
-        $pdf->setTitle($title);
-        $pdf->SetSubject('Resultados SEIP');
-        $pdf->SetKeywords('PDF, SEIP, Resultados');
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-        $pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-        $pdf->AddPage();       
-        $html = $this->renderView($template, $data);
-        $pdf->writeHTML($html, true, false, true, false, '');
-        $pdf->Output(utf8_decode($title). '.pdf', 'D');
+    /**
+     * 
+     * @return type
+     */
+    protected function getReportService() {
+        return $this->get('seip.service.report');
     }
 
 }

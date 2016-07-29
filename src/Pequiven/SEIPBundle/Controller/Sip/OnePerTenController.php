@@ -62,11 +62,18 @@ class OnePerTenController extends SEIPController {
         $profilesPoliticEvaluation[] = array('id' => 4,'description' => 'Perfil 4');
         $profilesPoliticEvaluation[] = array('id' => 5,'description' => 'Perfil 5');
         
+        $statusRevocatorySignature = array();
+        $statusRevocatorySignature[] = array('id' => -1,'description' => 'Sin Información');
+        $statusRevocatorySignature[] = array('id' => 0,'description' => 'No Firmó');
+        $statusRevocatorySignature[] = array('id' => 1,'description' => 'Firmó');
+        $statusRevocatorySignature[] = array('id' => 2,'description' => 'R');
+        
         if ($request->get('_format') == 'html') {
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
                 $this->config->getPluralResourceName() => $resources,
                 'profilesPoliticEvaluation' => $profilesPoliticEvaluation,
+                'statusRevocatorySignature' => $statusRevocatorySignature,
             );
             $view->setData($data);
         } else {
@@ -486,6 +493,13 @@ class OnePerTenController extends SEIPController {
         $texts[0] = 'No';
         $texts[1] = 'Sí';
         
+        $textsFirmaRevocatorio = array(
+            -1 => 'Sin Información',
+            0 => 'No',
+            1 => 'F',
+            2 => 'R',
+        );
+        
         $isAllowToAddAnalisis = false;
         if($user->getId() == 70 || $user->getId() == 112){
             $isAllowToAddAnalisis = true;
@@ -522,6 +536,7 @@ class OnePerTenController extends SEIPController {
                     "wasSupportAssemblyElections" => $wasSupportAssemblyElections,
                     "workStudyCircle" => $workStudyCircle,
                     "texts" => $texts,
+                    "textsFirmaRevocatorio" => $textsFirmaRevocatorio,
                     "members" => $members,
                     "efectividad" => $efectividad,
                     "profileItemsWithResult" => $profileItemsWithResult,
