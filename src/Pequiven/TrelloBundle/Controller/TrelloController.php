@@ -5,11 +5,11 @@ namespace Pequiven\TrelloBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Pequiven\TrelloBundle\Entity\Task;
+use Pequiven\TrelloBundle\Entity\TaskTrello;
+use Pequiven\SEIPBundle\Controller\SEIPController;
 use Pequiven\TrelloBundle\Form\TaskType;
 
-class TrelloController extends Controller
+class TrelloController extends SEIPController
 {
     public function createAction(Request $request)
     {
@@ -18,10 +18,11 @@ class TrelloController extends Controller
             throw $this->createAccessDeniedException();
         }
 
-        $task = new Task();
+        $task = new TaskTrello();
         $form = $this->createForm(TaskType::class, $task);
 
-        $em = $this->get('app.connection_service')->getManager('master');
+//        $em = $this->get('app.connection_service')->getManager('master');
+        $em = $this->getDoctrine()->getManager();
 
         switch($request->getMethod())
         {
@@ -33,30 +34,39 @@ class TrelloController extends Controller
                 $em->persist($task);
                 $em->flush();
                 
-                return redirectToRoute('create');
+                $this->redirect($this->generateUrl("create_task_trello"));
                 
                 break;
 
             case 'GET':
-                $em = $this->getDoctrine()->getManager('master');
+//                $em = $this->getDoctrine()->getManager('master');
+                $em = $this->getDoctrine()->getManager();
 
-                $tasks = $em->getRepository('PequivenTrelloBundle:Task')
+                $tasks = $em->getRepository('PequivenTrelloBundle:TaskTrello')
                             ->findBy(
                                 array('status' => 0)
                             );
 
-                $lists = $em->getRepository('PequivenTrelloBundle:Lists')
+                $lists = $em->getRepository('PequivenTrelloBundle:ListTrello')
                             ->findAll();
 
-                $users = $em->getRepository('PequivenTrelloBundle:User')
+                $users = $em->getRepository('PequivenTrelloBundle:UserTrello')
                             ->findTrelloUsers();
+                
+                $view = $this
+                    ->view()
+                    ->setTemplate($this->config->getTemplate('create.html'))
+                    ->setData(array(
+                        'form' => $form->createView(),
+                        'tasksList' => $tasks,
+                        'mainList' => $lists,
+                        'userList' => $users
+                    ))
+                ;
 
-                return $this->render('PequivenTrelloBundle:create.html.twig', array(
-                    'form' => $form->createView(),
-                    'tasksList' => $tasks,
-                    'mainList' => $lists,
-                    'userList' => $users
-                ));
+                //$groups = array_merge(array('id','api_list','gerencia','gerenciaSecond'), $request->get('_groups',array()));
+                //$view->getSerializationContext()->setGroups($groups);
+                return $this->handleView($view);
 
                 break;
         }
@@ -75,9 +85,10 @@ class TrelloController extends Controller
                 'memberIDs' => $membersArray
             );
 
-        $em = $this->get('app.connection_service')->getManager('master');
+//        $em = $this->get('app.connection_service')->getManager('master');
+        $em = $this->getDoctrine()->getManager();
 
-        $task = $em->getRepository('PequivenTrelloBundle:Task')
+        $task = $em->getRepository('PequivenTrelloBundle:TaskTrello')
                    ->findOneById($array['taskId']);
 
         if (!$task) {

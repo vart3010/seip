@@ -2,7 +2,7 @@
 
 namespace Pequiven\TrelloBundle\Model;
 
-abstract class StatusModel
+abstract class TaskTrello
 {
     const STATUS_PENDING = 0;
     

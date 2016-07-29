@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\Collection;
  * @ORM\Table(name="trello_category")
  */
 
-class Category
+class CategoryTrello
 {
     /**
      * @ORM\Id

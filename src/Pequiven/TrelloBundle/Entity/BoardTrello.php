@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="trello_board")
  */
 
-class Board
+class BoardTrello
 {
     /**
      * @var string
@@ -45,13 +45,13 @@ class Board
     private $shortUrl;
 
     /**
-     * @ORM\OneToMany(targetEntity="\Pequiven\TrelloBundle\Entity\List", mappedBy="board", cascade={"persist", "remove"}, orphanRemoval=TRUE)
+     * @ORM\OneToMany(targetEntity="\Pequiven\TrelloBundle\Entity\ListTrello", mappedBy="boardTrello", cascade={"persist", "remove"}, orphanRemoval=TRUE)
      */
-    private $lists;
+    private $listTrello;
 
     public function __construct()
     {
-        $this->lists = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->listTrello = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
@@ -107,19 +107,19 @@ class Board
         return $this->shortUrl;
     }
 
-    public function getLists()
+    public function getListTrello()
     {
-        return $this->lists;
+        return $this->listTrello;
     }
 
-    public function addLists(\Pequiven\TrelloBundle\Entity\Lists $list)
+    public function addListTrello(\Pequiven\TrelloBundle\Entity\ListTrello $listTrello)
     {
-        $this->lists[] = $list;
+        $this->listTrello[] = $listTrello;
         return $this;
     }
 
-    public function removeLists(\Pequiven\TrelloBundle\Entity\Lists $list)
+    public function removeListTrello(\Pequiven\TrelloBundle\Entity\ListTrello $listTrello)
     {
-        $this->lists->removeElement($list);
+        $this->listTrello->removeElement($listTrello);
     }
 }

@@ -8,16 +8,16 @@ use Doctrine\Common\Collections\Collection;
 
 use Pequiven\SEIPBundle\Entity\User;
 
-use Pequiven\TrelloBundle\Entity\Category;
-use Pequiven\TrelloBundle\Model\StatusModel;
+use Pequiven\TrelloBundle\Entity\Trello;
+use Pequiven\TrelloBundle\Model\TaskTrello as modelTask;
 
 /**
- * @ORM\Entity(repositoryClass="Pequiven\TrelloBundle\Repository\TaskRepository")
+ * @ORM\Entity(repositoryClass="Pequiven\TrelloBundle\Repository\TaskTrelloRepository")
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="trello_tasks")
  */
 
-class Task extends StatusModel
+class TaskTrello extends modelTask
 {
     /**
      * @ORM\Id
@@ -40,11 +40,11 @@ class Task extends StatusModel
     private $description;
 
     /**
-     * @var \Pequiven\TrelloBundle\Entity\Category
-     * @ORM\ManyToOne(targetEntity="\Pequiven\TrelloBundle\Entity\Category")
+     * @var \Pequiven\TrelloBundle\Entity\CategoryTrello
+     * @ORM\ManyToOne(targetEntity="\Pequiven\TrelloBundle\Entity\CategoryTrello")
      * @ORM\JoinColumn(name="category", referencedColumnName="id")
      */
-    private $category;
+    private $categoryTrello;
 
     /**
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -128,26 +128,26 @@ class Task extends StatusModel
     }
 
     /**
-     * Set Category
+     * Set CategoryTrello
      *
-     * @param Category $category
-     * @return Category
+     * @param CategoryTrello $categoryTrello
+     * @return CategoryTrello
      */
-    public function setCategory(Category $category)
+    public function setCategoryTrello(CategoryTrello $categoryTrello)
     {
-        $this->category = $category;
+        $this->categoryTrello = $categoryTrello;
 
         return $this;
     }
 
     /**
-     * Get Category
+     * Get CategoryTrello
      *
-     * @return Category
+     * @return CategoryTrello
      */
-    public function getCategory()
+    public function getCategoryTrello()
     {
-        return $this->category;
+        return $this->categoryTrello;
     }
 
     /**

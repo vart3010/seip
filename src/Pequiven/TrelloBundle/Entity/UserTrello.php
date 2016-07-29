@@ -5,17 +5,15 @@ namespace Pequiven\TrelloBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-
 use Pequiven\SEIPBundle\Entity\User;
-
 use Pequiven\TrelloBundle\Entity\Task;
 
 /**
- * @ORM\Entity(repositoryClass="Pequiven\TrelloBundle\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="Pequiven\TrelloBundle\Repository\UserTrelloRepository")
  * @ORM\Table(name="trello_user")
  */
 
-class User
+class UserTrello
 {
     /**
      * @var type 
@@ -39,7 +37,7 @@ class User
     private $seipUser;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Pequiven\TrelloBundle\Entity\Task")
+     * @ORM\ManyToMany(targetEntity="\Pequiven\TrelloBundle\Entity\TaskTrello")
      * @ORM\JoinTable(name="trello_user_tasks",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="task_id", referencedColumnName="id", onDelete="CASCADE")}
@@ -80,10 +78,10 @@ class User
     /**
      * Add task
      *
-     * @param \Pequiven\TrelloBundle\Entity\Task $task
+     * @param \Pequiven\TrelloBundle\Entity\TaskTrello $task
      * @return Task
      */
-    public function addTasks(Task $task) {
+    public function addTaskTrello(TaskTrello $task) {
         $this->trelloTasks[] = $task;
 
         return $this;
@@ -92,9 +90,9 @@ class User
     /**
      * Remove task
      *
-     * @param \Pequiven\TrelloBundle\Entity\Task $task
+     * @param \Pequiven\TrelloBundle\Entity\TaskTrello $task
      */
-    public function removeTasks(Task $task) {
+    public function removeTaskTrello(TaskTrello $task) {
         $this->trelloTasks->removeElement($task);
     }
 
@@ -103,7 +101,7 @@ class User
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getTasks() {
+    public function getTaskTrello() {
         return $this->trelloTasks;
     }
 }

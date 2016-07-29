@@ -1,4 +1,3 @@
-{# empty Twig template #}
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
 
 {% trans_default_domain 'PequivenObjetiveBundle' %}
@@ -79,6 +78,7 @@
 {% endblock body %}
 
 {% block javascript %}
+{#    <script src="https://trello.com/1/client.js?key=0e0e0eef452fe2056e0604213b6084cb&scope=read%2Cwrite&name=SEIP&expiration=never&response_type=token"></script>#}
     <script src="https://trello.com/1/client.js?key=0e0e0eef452fe2056e0604213b6084cb&scope=read%2Cwrite&name=SEIP&expiration=never&response_type=token"></script>
     <script type="text/javascript">
         var trelloToken = null;
@@ -108,7 +108,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: '{{path('seip_trello_create')}}',
+                    url: '{{path('create_task_trello')}}',
                     data: rqXhr,
                     success: function (data) {
                         $('#actionTrelloTask_task').val('');
@@ -133,7 +133,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: '{{path('seip_trello_approve')}}',
+                    url: '{{path('approve_task_trello')}}',
                     data: rqXhr,
                     success: function (data) {
                         var onSuccess = function(data) {
@@ -153,6 +153,7 @@
                             idMembers: data.memberIDs
                         };
 
+{#                        Trello.get('/boards/5706b99076b26925412b1977', newCard, onSuccess, onError);#}
                         Trello.post('/cards/', newCard, onSuccess, onError);
                     },
                     error: function (err) {

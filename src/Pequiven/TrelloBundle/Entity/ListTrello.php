@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\Collection;
  * @ORM\Table(name="trello_list")
  */
 
-class Lists
+class ListTrello
 {
     /**
      * @var string
@@ -34,10 +34,10 @@ class Lists
 
     /**
      * @var string
-     * @ORM\ManyToOne(targetEntity="\Pequiven\TrelloBundle\Entity\Board", inversedBy="lists")
+     * @ORM\ManyToOne(targetEntity="\Pequiven\TrelloBundle\Entity\BoardTrello", inversedBy="listTrello")
      * @ORM\JoinColumn(name="board", referencedColumnName="id")
      */
-    private $board;
+    private $boardTrello;
 
     public function getId()
     {
@@ -68,13 +68,13 @@ class Lists
         return $this->closed;
     }
 
-    public function setBoard(\Pequiven\TrelloBundle\Entity\Board $board) {
-        $this->board = $board;
+    public function setBoardTrello(\Pequiven\TrelloBundle\Entity\BoardTrello $boardTrello) {
+        $this->boardTrello = $boardTrello;
 
         return $this;
     }
 
-    public function getBoard() {
-        return $this->board;
+    public function getBoardTrello() {
+        return $this->boardTrello;
     }
 }

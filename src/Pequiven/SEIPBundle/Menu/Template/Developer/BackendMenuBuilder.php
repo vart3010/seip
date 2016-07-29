@@ -454,6 +454,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             }
             $child->addChild($subchild);
         }
+        
+        #Trello
+        $child->addChild('admin.tickets', array(
+            'route' => 'create_task_trello',
+        ))->setLabel($this->translate(sprintf('Tickets', $section)));
 
         $menu->addChild($child);
     }

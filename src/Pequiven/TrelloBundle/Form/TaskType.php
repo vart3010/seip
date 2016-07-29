@@ -19,7 +19,7 @@ class TaskType extends AbstractType
         $builder
             ->add('title', TextType::class, array('label' => 'Título'))
             ->add('description', TextareaType::class, array('label' => 'Descripción'))
-            ->add('category', TextareaType::class, array('label' => 'Categoría'))
+            ->add('categoryTrello', TextareaType::class, array('label' => 'Categoría'))
             ->add('save', SubmitType::class, array('label' => 'Generar'))
         ;
     }
@@ -27,7 +27,7 @@ class TaskType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Pequiven\TrelloBundle\Entity\Task'
+            'data_class' => 'Pequiven\TrelloBundle\Entity\TaskTrello'
         ));
     }
 
