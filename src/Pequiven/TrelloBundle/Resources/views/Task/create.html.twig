@@ -1,0 +1,167 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenObjetiveBundle' %}
+{% block title %}- Solicitar Desarrollo{% endblock %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <!-- JavaScript at the bottom for fast page loading -->
+    <!-- Scripts -->
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery-1.8.2.min.js') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('pequiven_objetive.objetives'|trans),
+        ('pequiven_objetive.add'|trans),
+        ('pequiven_objetive.strategic'|trans)
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+    {{ form_start(form, {'attr': {'class': 'trello-new-task-form'} }) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+    <hr/>
+    <a href="#!" class="TrelloAuthBtn">Autorizar</a>
+    <div id="trello_admin">
+        <table id="table_data" class="table table-striped table-bordered" cellspacing="0" width="100%">          
+            <thead>
+                <tr>
+                    <th scope="col" class="header">Tarea</th>
+                    <th scope="col" class="header">Descripción</th>
+                    <th scope="col" class="header">Fecha</th>
+                    <th scope="col" class="header">Lista</th>
+                    <th scope="col" class="header">Miembro</th>
+                    <th scope="col" class="header">Acción</th>
+                </tr>
+            </thead>
+            <tbody>  {#{ dump(userList) }#}
+                {% for data in tasksList %}
+                    <tr data-id="{{ data.id }}">         
+                        <td data-rel="title">{{ data.title }}</td>
+                        <td data-rel="desc">{{ data.description }}</td>
+                        <td data-rel="date">{{ data.createdAt|date('d/m/Y H:i:s') }}</td>
+                        <td data-rel="list">
+                            <select class="trelloList">
+                                {% for data in mainList %}
+                                    <option value="{{ data.id }}">{{ data.name }}</option>
+                                {% endfor %}
+                            </select> 
+                        </td>
+                        <td data-rel="member">
+                            <select class="trelloMembers">
+                                {# {% for user in userList %}
+                                    <option value="{{ user.trelloId }}">{{ user.fullname }}</option>
+                                {% endfor %} #}
+                                <!-- Trello Users ID -->
+                                    <option value="56d9916114c9a47549e9925b">Matías Jimenez</option>
+                                    <option value="56f979d321488f422a56a80e">Victor Tortolero</option>
+                                    <option value="570fc33ad50f67251f87dbcc">Gilberto Carrillo</option>
+                                    <option value="559ebf974c3015677745d42e">Maximo Sojo</option>
+                                    <option value="5706f2dc7fdc28b501fa0d66">Johana Rivas</option>
+                                    <option value="570b961e78cf571fb28f9a18">Carlos Martínez</option>
+                                <!-- Trello Users ID -->
+                            </select> 
+                        </td>
+                        <td><a class="approve" href="#!">Aprobar</a></td>
+                    </tr>                                    
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock body %}
+
+{% block javascript %}
+{#    <script src="https://trello.com/1/client.js?key=0e0e0eef452fe2056e0604213b6084cb&scope=read%2Cwrite&name=SEIP&expiration=never&response_type=token"></script>#}
+    <script src="https://trello.com/1/client.js?key=0e0e0eef452fe2056e0604213b6084cb&scope=read%2Cwrite&name=SEIP&expiration=never&response_type=token"></script>
+    <script type="text/javascript">
+        var trelloToken = null;
+        jQuery(document).ready(function($){
+
+            var onAuthorize = function(){
+                trelloToken = Trello.token();
+                $('trello_admin').show();
+            };
+
+            $('a.TrelloAuthBtn').click(function(){
+                Trello.authorize({
+                    type: "popup",
+                    scope: { read: true, write: true },
+                    name: "SEIP",
+                    expiration: "never",
+                    interactive: true,
+                    success: onAuthorize
+                });
+            });
+
+            $('form').submit(function(e){
+                e.preventDefault();
+
+                var rqXhr = 'title=' + $('#actionTrelloTask_title').val() +
+                            '&desc=' + $('#actionTrelloTask_description').val()
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{path('create_task_trello')}}',
+                    data: rqXhr,
+                    success: function (data) {
+                        $('#actionTrelloTask_task').val('');
+                        alert("SOLICITUD ENVIADA");
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+            });
+
+            $('a.approve').click(function(e){
+                e.preventDefault();
+
+                $row = $(this).closest('tr');
+
+                var rqXhr = 'taskId=' + $row.data('id') +
+                            '&taskTitle=' + $row.children('td[data-rel=title]').text() +
+                            '&taskDesc=' + $row.children('td[data-rel=desc]').text() +
+                            '&listId=' + $row.find('select.trelloList').val() +
+                            '&memberId=' + $row.find('select.trelloMembers').val()
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{path('approve_task_trello')}}',
+                    data: rqXhr,
+                    success: function (data) {
+                        var onSuccess = function(data) {
+                            alert("Actividad Asignada!");
+                            console.log('Card created successfully. Data returned:' + JSON.stringify(data));
+                            $row.remove();
+                        }, onError = function(data) {
+                            alert("Error al asignar actividad...");
+                            console.log('Card created successfully. Data returned:' + JSON.stringify(data));
+                        };
+                        
+                        var newCard = {
+                            name: data.cardTitle, 
+                            desc: data.cardDescription, 
+                            idList: data.listID,
+                            pos: 'top',
+                            idMembers: data.memberIDs
+                        };
+
+{#                        Trello.get('/boards/5706b99076b26925412b1977', newCard, onSuccess, onError);#}
+                        Trello.post('/cards/', newCard, onSuccess, onError);
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+
+            });
+        });
+    </script>
+{% endblock javascript %}
