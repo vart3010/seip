@@ -7,6 +7,13 @@ security:
     acl:
         connection: default
     role_hierarchy:
+        ROLE_TRELLO:
+            - ROLE_TRELLO_VIEW_TICKET
+            - ROLE_TRELLO_CREATE_TICKECT
+            - ROLE_TRELLO_EDIT_TICKET
+            - ROLE_TRELLO_DELETE_TICKET
+            - ROLE_TRELLO_APPROVE_TICKET
+            
         ROLE_SEIP:
             - ROLE_SEIP_UNLOCKED_USER
 #            Rol Dashboard

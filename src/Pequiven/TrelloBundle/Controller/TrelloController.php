@@ -27,6 +27,7 @@ class TrelloController extends SEIPController
         switch($request->getMethod())
         {
             case 'POST':
+                var_dump('epae');die();
                 $task->setTitle($request->request->get('title'));
                 $task->setDescription($request->request->get('desc'));
                 $task->setCreatedBy($this->getUser());

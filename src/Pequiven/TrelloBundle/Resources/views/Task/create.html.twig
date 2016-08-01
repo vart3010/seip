@@ -1,6 +1,6 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
 
-{% trans_default_domain 'PequivenObjetiveBundle' %}
+{% trans_default_domain 'PequivenTrelloBundle' %}
 {% block title %}- Solicitar Desarrollo{% endblock %}
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
@@ -15,9 +15,8 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ('pequiven_objetive.objetives'|trans),
-        ('pequiven_objetive.add'|trans),
-        ('pequiven_objetive.strategic'|trans)
+        ('monitoring.title'|trans({},'PequivenSIGBundle')),        
+        ('pequiven_indicator.show'|trans)
     ) }}
 {% endblock %}
 
@@ -104,7 +103,8 @@
                 e.preventDefault();
 
                 var rqXhr = 'title=' + $('#actionTrelloTask_title').val() +
-                            '&desc=' + $('#actionTrelloTask_description').val()
+                            '&desc=' + $('#actionTrelloTask_description').val() + 
+                            '&category' + $('#actionTrelloTask_categoryTrello').val()
 
                 $.ajax({
                     type: 'POST',

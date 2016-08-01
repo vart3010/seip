@@ -92,6 +92,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         if ($this->isGranted('ROLE_SEIP_OPERATION_*')) {
             $this->addMenuOperation($menu, $section);
         }
+        
+        //Menú Ticket Trello
+        if ($this->isGranted('ROLE_TRELLO_*')){
+            $this->addMenuTicketTrello($menu, $section);
+        }
 
         //Menú SIG
         if ($this->isGranted('ROLE_SEIP_SIG_MENU')) {
@@ -454,11 +459,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             }
             $child->addChild($subchild);
         }
-        
-        #Trello
-        $child->addChild('admin.tickets', array(
-            'route' => 'create_task_trello',
-        ))->setLabel($this->translate(sprintf('Tickets', $section)));
 
         $menu->addChild($child);
     }
@@ -2190,6 +2190,49 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.modules.proyectos', $section)));
 
         $menu->addChild($child);
+    }
+    
+    private function addMenuTicketTrello(ItemInterface $menu, $section) {
+        $menuTrello = $this->factory->createItem('trello.main', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                            'labelAttributes'
+                            => array('icon' => 'fa fa-sticky-note-o',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.trello.main', $section)));
+
+            $ticket = $this->factory->createItem('trello.ticket', $this->getSubLevelOptions(array('route' => "create_task_trello", 'routeParameters' => array(),
+                                'labelAttributes' => array('icon' => 'fa fa-ticket',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.trello.ticket', $section)));
+
+            if ($this->isGranted(array('ROLE_SEIP_OPERATION_VIEW_MONITOR_PRODUCTION'))) {
+                $production = $this->factory->createItem('operations.monitor.production', $this->getSubLevelOptions(array("route" => "",
+                                ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.monitor.production.main', $section)));
+
+                if ($this->isGranted(array('ROLE_SEIP_OPERATION_VIEW_MONITOR_PRODUCTION_STATUS_CHARGE'))) {
+                    $productionStatusCharge = $this->factory->createItem('operations.monitor.production.status_charge', $this->getSubLevelOptions(array("route" => "pequiven_data_load_dashboard_production",
+                                        'routeParameters' => array('typeView' => \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_STATUS_CHARGE),
+                                    ))
+                            )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.monitor.production.statusCharge', $section)));
+
+                    $production->addChild($productionStatusCharge);
+                }
+
+                if ($this->isGranted(array('ROLE_SEIP_OPERATION_VIEW_MONITOR_PRODUCTION_COMPLIANCE'))) {
+                    $productionStatusCharge = $this->factory->createItem('operations.monitor.production.compliance', $this->getSubLevelOptions(array("route" => "pequiven_data_load_dashboard_production",
+                                        'routeParameters' => array('typeView' => \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE),
+                                    ))
+                            )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.monitor.production.compliance', $section)));
+
+                    $production->addChild($productionStatusCharge);
+                }
+
+                $monitor->addChild($production);
+            }
+
+            $menuTrello->addChild($ticket);
     }
 
     /**
