@@ -93,7 +93,8 @@
                     {{ isCoordinator }}
                 </p>
             </div>
-            {% if onePerTen.markedStatus == 5 %}
+                
+            {% if onePerTen.profileValue != onePerTen.realProfileValue %}
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         <label class="label">Perfil Real</label>
@@ -101,6 +102,19 @@
                     </p>
                 </div>
             {% endif %}
+            
+            {% set class = '' %}
+            {% if onePerTen.firmaRevocatorio > 0 %}
+                {% set class = 'blue-bg' %}
+            {% endif %}
+            
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label {{ class }}">Firma Revocatorio</label>
+                    <span class="{{ class }}"><b>{{ textsFirmaRevocatorio[onePerTen.firmaRevocatorio] }}</b></span>
+                </p>
+            </div>
+            
             <div class="new-row-mobile new-row twelve-columns twelve-columns-tablet twelve-columns-mobile {{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['class'] }}" align="center">
                 <h1>Perfil Político:
                     {#{{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['profileValue'] }}</h1>#}

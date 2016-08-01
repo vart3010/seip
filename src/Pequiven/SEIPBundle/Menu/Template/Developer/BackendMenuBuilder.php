@@ -199,7 +199,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
             $objective->addChild($visualize);
 
-            if ($this->isGranted('ROLE_SEIP_SIG_EVOLUTION_OBJETIVE')) {
+            /*if ($this->isGranted('ROLE_SEIP_SIG_EVOLUTION_OBJETIVE')) {
                 //Lista de Informe de Evolución Consolidado
                 $evolution = $this->factory->createItem('sig.evolution.visualize', $this->getSubLevelOptions(array(
                                     'uri' => 'null',
@@ -223,7 +223,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));
 
                 $objective->addChild($evolution);
-            }
+            }*/
             $menuSig->addChild($objective);
         }
         if ($this->isGranted('ROLE_SEIP_SIG_INDICATOR')) {

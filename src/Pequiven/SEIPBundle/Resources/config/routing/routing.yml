@@ -125,5 +125,13 @@ seip_notification_get_data_notify:
     defaults:
         _controller: pequiven_seip.controller.userNotification:getNotificationUserAction
     methods: [GET]
+#Lista las empresas que el usuario tiene asignadas
+seip_select_company:
+    path: /selectCompany
+    defaults: {_controller: PequivenSEIPBundle:Default:selectOption}
+    methods: [GET]
     
-
+showCompany:
+    path: /selectCompanyC
+    defaults: {_controller: PequivenSEIPBundle:Default:showCompanaies}
+    methods: [GET]

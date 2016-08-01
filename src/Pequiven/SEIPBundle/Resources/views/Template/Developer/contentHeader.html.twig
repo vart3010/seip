@@ -1,58 +1,86 @@
-<hgroup id="main-title" class="thin breadcrumb">
-    <h1>
-        {% for breadcrumb in breadcrumbs %}
-            {% if breadcrumb.link != null %}
-                {% if loop.first == true %}
-                    <a href="{{ breadcrumb.link }}">{{ breadcrumb.label }}</a>
-                {% else %}
-                    <span class="thin">
-                        <a href="{{ breadcrumb.link }}">{{ breadcrumb.label }}</a>
-                    </span>
-                {% endif %}
-            {% else %}
-                {% if loop.first == true %}
-                    {{ breadcrumb.label }}
-                {% else %}
-                    <span class="{% if loop.first == false %}thin{% endif %}">{{ breadcrumb.label }}</span>
-                {% endif %}
-            {% endif %}
-            {% if loop.last  == false %}
-                <span class="icon-forward"></span>
-            {% endif %}
-        {% endfor %}
-        {#        <div class="absolute-right">{{ period }}</div>#}
-        {% set referer = app.request.getUri %}
-        <div class="absolute-right">
-            <span id="labelPeriod">{{ period }}&nbsp;</span>
-            {% if type ==  constant('Pequiven\\SEIPBundle\\Model\\Period::VIEW_ALL_PERIODS') %}
-                <select id="selectPeriod" name="selectPeriod" class="hide">
-                    {% for listArrayPeriod in listArrayPeriods %}
-                        <option value="{{ path('seip_change_period',{period:listArrayPeriod['id'],referer:referer}) }}" {% if listArrayPeriod['id'] == period.id %}selected="selected"{% endif %} >{{ listArrayPeriod['description'] }}</option>
-                    {% endfor %}
-                </select>
-                {#                &nbsp;#}
-                <i id="showCombo" class="fa fa-angle-double-down" style="cursor: pointer; cursor: hand;"></i>            
-            {% endif %}
-
-        </div>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                var showCombo = $('#showCombo');
-                var selectPeriod = $('#selectPeriod');
-                var labelPeriod = $('#labelPeriod');
-                selectPeriod.on('change', function () {
-                    window.location.assign(selectPeriod.val());
-                });
-                var showPeriodCombo = false;
-                showCombo.on('click', function () {
-                    showPeriodCombo = !showPeriodCombo;
-                    labelPeriod.toggle();
-                    selectPeriod.toggle();
-                });
-            });
-        </script>
-    </h1>
-    {#<h2>
-        <strong>{{ period }}</strong>
-    </h2>#}
+<hgroup id="main-title" class="thin">       
+    {% if breadcrumbs %}
+        {%set height='height: 80px;'%}
+    {%else%}
+        {%set height=''%}
+    {%endif%}
+    <table width="100%">
+        <tr>
+            <td width="65%" style="text-align: left; {{height}} vertical-align: bottom;">
+                {% for breadcrumb in breadcrumbs %}
+                    {% if breadcrumb.link != null %}
+                        {% if loop.first == true %}
+                            <h1 style="display:inline;">
+                                <a href="{{ breadcrumb.link }}"> {{ breadcrumb.label }} </a>
+                            </h1>
+                        {% else %}
+                            {% if loop.last == true %}
+                                <h3 style="display:inline;">
+                                    <a href="{{ breadcrumb.link }}"> {{ breadcrumb.label }} </a>
+                                </h3>
+                            {%else%}
+                                <h3 style="display:inline;  font-weight: bold;">
+                                    <a href="{{ breadcrumb.link }}"> {{ breadcrumb.label }} </a>
+                                </h3>
+                            {% endif %}    
+                        {% endif %}
+                    {% else %}
+                        {% if loop.first == true %}
+                            <h1 style="display:inline;">
+                                <a href="*"> {{ breadcrumb.label }} </a>
+                            </h1>                            
+                        {% else %}
+                            {% if loop.last == true %}
+                                <h3 style="display:inline; color: #585858;">
+                                    {{ breadcrumb.label }}
+                                </h3>
+                            {%else%}
+                                <h3 style="display:inline; font-weight: bold;">
+                                    <a href="*"> {{ breadcrumb.label }} </a>
+                                </h3>
+                            {%endif%}
+                        {% endif %}
+                    {% endif %}
+                    {% if loop.last  == false %}
+                        <h3 style="display:inline; color: #424242;">
+                            <span class="icon-forward"></span> 
+                        </h3>
+                    {% endif %}
+                {% endfor %}
+            </td>
+            <td width="35%" style="text-align: right; {{height}} vertical-align: top;">
+                <h1>
+                    {% set referer = app.request.getUri %}
+                    <span id="labelPeriod">{{ period }}&nbsp;</span>
+                    {% if type ==  constant('Pequiven\\SEIPBundle\\Model\\Period::VIEW_ALL_PERIODS') %}
+                        <select id="selectPeriod" name="selectPeriod" class="hide">
+                            {% for listArrayPeriod in listArrayPeriods %}
+                                <option value="{{ path('seip_change_period',{period:listArrayPeriod['id'],referer:referer}) }}" {% if listArrayPeriod['id'] == period.id %}selected="selected"{% endif %} >{{ listArrayPeriod['description'] }}</option>
+                            {% endfor %}
+                        </select>
+                        {#                &nbsp;#}
+                        <i id="showCombo" class="fa fa-angle-double-down" style="cursor: pointer; cursor: hand;"></i>            
+                    {% endif %}
+                </h1>
+            </td>  
+        </tr>
+    </table>  
+    <br>
 </hgroup>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var showCombo = $('#showCombo');
+        var selectPeriod = $('#selectPeriod');
+        var labelPeriod = $('#labelPeriod');
+        selectPeriod.on('change', function () {
+            window.location.assign(selectPeriod.val());
+        });
+        var showPeriodCombo = false;
+        showCombo.on('click', function () {
+            showPeriodCombo = !showPeriodCombo;
+            labelPeriod.toggle();
+            selectPeriod.toggle();
+        });
+
+    });
+</script>  

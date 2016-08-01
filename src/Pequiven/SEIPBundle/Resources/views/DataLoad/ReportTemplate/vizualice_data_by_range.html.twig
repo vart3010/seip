@@ -185,7 +185,7 @@
                     {% set totalReal = totalReal + consumer.real %}
                 {% endfor %}                
             </tbody>
-            <tfoot>
+            {#<tfoot>
                 <tr>
                     <th scope="col" width="40%" class="header-product">Totales</th>
                     <th scope="col" width="15%" class="header-values">{{ totalPlan|number_format(2, ',', '.') }}</th>
@@ -198,7 +198,7 @@
                         <th scope="col" width="15%" class="header-values">-</th>
                         {%endif%}                    
                 </tr>
-            </tfoot>
+            </tfoot>#}
         </table>    
     {% endif %}
     <br><br>
@@ -218,7 +218,7 @@
 
             </thead>
             <tbody>
-                {% set totalPnr = 90 %}
+                {% set totalPnr = 0 %}
                 {% for unrealized in unrealizedProduction %}
                     {% set totalPnr = totalPnr + unrealized.total %}
                     <tr>

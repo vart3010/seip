@@ -4568,6 +4568,24 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
+            
+             //Carga la formula del metodo de calculo 
+            $scope.loadEcuationMethod = function (resource) {
+                $scope.initForm(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[2]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                $scope.templateOptions.setVar('evaluationResult', 0);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+            
             $scope.removeFeatureIndicator = function (featureIndicator) {
                 $scope.openModalConfirm('pequiven.modal.confirm.indicator.delete_feature', function () {
                     notificationBarService.getLoadStatus().loading();
@@ -4743,6 +4761,7 @@ angular.module('seipModule.controllers', [])
                 }
                 var url = Routing.generate('pequiven_value_indicator_get_form', parameters);
                 var url2 = Routing.generate('pequiven_feature_indicator_get_form', parameters);
+                var url2 = Routing.generate('pequiven_show_method_calcule_indicator_get_form', parameters);
                 $scope.templates = [
                     {
                         name: 'pequiven.modal.title.value_indicator',
@@ -4751,6 +4770,11 @@ angular.module('seipModule.controllers', [])
                     },
                     {
                         name: 'SEIP',
+                        url: url2,
+                        confirmCallBack: confirmCallBack2,
+                    },
+                    {
+                        name: 'Método de Cálculo',
                         url: url2,
                         confirmCallBack: confirmCallBack2,
                     }
@@ -5723,6 +5747,7 @@ angular.module('seipModule.controllers', [])
             var selectSecondLineManagement = angular.element("#selectSecondLineManagement");
             var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
             var selectProfilesPoliticEvaluation = angular.element("#selectProfilesPoliticEvaluation");
+            var selectStatusRevocatorySignature = angular.element("#selectStatusRevocatorySignature");
 
 
             $scope.data = {
@@ -5731,6 +5756,7 @@ angular.module('seipModule.controllers', [])
                 second_line_managements: null,
                 work_study_circles: null,
                 profiles_politic_evaluation: null,
+                status_revocatory_signature: null,
             };
 
             $scope.model = {
@@ -5739,6 +5765,7 @@ angular.module('seipModule.controllers', [])
                 secondLineManagement: null,
                 workStudyCircle: null,
                 profilesPoliticEvaluation: null,
+                statusRevocatorySignature: null,
             };
 
             //Busca las localidades
@@ -5898,7 +5925,7 @@ angular.module('seipModule.controllers', [])
             $scope.$watch("model.profilesPoliticEvaluation", function (newParams, oldParams) {
                 if ($scope.model.profilesPoliticEvaluation != null && $scope.model.profilesPoliticEvaluation.id != undefined) {
                     $scope.tableParams.$params.filter['profilesPoliticEvaluation'] = $scope.model.profilesPoliticEvaluation.id;
-                    //Al cambiar el círculo de estudio de trabajo
+                    //Al cambiar el Perfil Político
                     selectProfilesPoliticEvaluation.change(function () {
                     });
                 } else {
@@ -5906,10 +5933,21 @@ angular.module('seipModule.controllers', [])
                 }
             });
 
+            //Scope de Firma Revocatorio 2016
+            $scope.$watch("model.statusRevocatorySignature", function (newParams, oldParams) {
+                if ($scope.model.statusRevocatorySignature != null && $scope.model.statusRevocatorySignature.id != undefined) {
+                    $scope.tableParams.$params.filter['statusRevocatorySignature'] = $scope.model.statusRevocatorySignature.id;
+                    //Al cambiar el Status Firma Revocatorio 2016
+                    selectStatusRevocatorySignature.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['statusRevocatorySignature'] = null;
+                }
+            });
+
 
         })
         //FIN ONE PER TEN
-
 
         .controller('TableProposalController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var selectComplejo = angular.element("#selectComplejos");

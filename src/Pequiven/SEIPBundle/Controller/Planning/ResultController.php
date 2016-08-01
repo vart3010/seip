@@ -543,27 +543,29 @@ class ResultController extends ResourceController {
             $entity = $gerenciaSecond;
         }
 
-        $pdf = new \Pequiven\SEIPBundle\Model\PDF\NewSeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $namePdf = $entity->getDescription();
+        $period = $this->getPeriodService()->getEntityPeriodActive();
+
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\NewSeipPdf('P', 'mm', 'LETTER', true, 'UTF-8', false);
         $pdf->setPrintLineFooter(false);
         $pdf->setContainer($this->container);
         $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
-        $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
-        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->setFooterText('Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos');
+        $pdf->SetCreator('SEIP');
         $pdf->SetAuthor('SEIP');
-        $pdf->setTitle('Resultados de Objetivos por Gerencia');
-        $pdf->SetSubject('Resultados SEIP');
+        $pdf->setTitle('Resultados - ' . $namePdf);
+        $pdf->SetSubject('Resultados - ' . $namePdf);
         $pdf->SetKeywords('PDF, SEIP, Resultados');
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-        $pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->setHeaderFont(Array('helvetica', '', 10));
+        $pdf->setFooterFont(Array('helvetica', '', 8));
+        $pdf->SetDefaultMonospacedFont('courier');
+        $pdf->SetMargins(15, 42, 15);
+        $pdf->SetHeaderMargin(15);
+        $pdf->SetFooterMargin(15);
+        $pdf->SetAutoPageBreak(TRUE, 28);
+        $pdf->setImageScale(1.25);
         $pdf->AddPage();
-        $namePdf = $entity->getDescription();
-        $period = $this->getPeriodService()->getEntityPeriodActive();
+
 
         $html = $this->renderView('PequivenSEIPBundle:Result:viewPdf.html.twig', array(
             'chartName' => $chartName,
