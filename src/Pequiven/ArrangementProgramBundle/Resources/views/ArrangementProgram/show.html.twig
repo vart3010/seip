@@ -1,8 +1,6 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
-
-{% trans_default_domain 'PequivenArrangementProgramBundle' %}
-
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
 
 {% if entity.categoryArrangementProgram.id == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG') %}
     {% set configuration = gerenciaSIG.configuration %}
@@ -14,26 +12,23 @@
     {% set validConfiguration = true %}
 {% endif %}
 
+{% block before_body %}
+    {{ contentHeader(
+        { ( '*' ): ('pequiven.arrangement_program.arrangement_program'|trans~' '~entity.getTypeLabel|trans) },
+         (' Visualizar Ficha')
+    ) }}
+{% endblock %}
+
 {% block body %}
 
     <div ng-controller="ArrangementProgramController">
-        <hgroup id="main-title" class="thin breadcrumb">
-            <h1>
-                <a href="{{ path('pequiven_seip_arrangementprogram_index') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
-                <span class="icon-forward"></span>
-                <span class="thin">{{ entity.getTypeLabel|trans }}</span>
-                <span class="icon-forward"></span>
-                <span class="thin">{{ 'pequiven.show'|trans({},'messages') }}</span>
-            </h1>
-        </hgroup>
-
         {% if validConfiguration == false %}
             {% set message =  'pequiven.arrangement_program.you_must_assign_config'|trans %}
             {{ print_error(message) }}
         {% endif  %}
 
         <fieldset class="fieldset">
-            <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}&nbsp;<b>{{ entity.getTypeLabel|trans }}</b></legend>
+            <legend class="legend"><b>Datos Generales</b></legend>
 
             <div class="columns">
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -163,7 +158,7 @@
                     <br/><br/>
                     <p class="inline-label">
                         <label class="label">{{ 'pequiven.arrangement_program.advances'|trans }}</label>
-                        {% set advances = entity.getResult %}
+                        {% set advances = entity.getResult*1 %}
                         {% if(entity.getResult < 0) %}
                             {% set advances = 0 %}
                         {% endif %}                        
@@ -181,7 +176,7 @@
                     <br/><br/>
                     <p class="inline-label">
                         <label class="label">Efectividad del Programa</label>
-                        {% set advances = totales.efectivity %}
+                        {% set advances = totales.efectivity*1 %} 
                         {% set advancesClass = 'red-gradient' %}
                         {% if advances > 50 and advances <= 80 %}
                             {% set advancesClass = 'orange-gradient' %}
