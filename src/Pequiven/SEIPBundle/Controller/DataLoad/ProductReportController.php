@@ -42,11 +42,11 @@ class ProductReportController extends SEIPController {
                 ->setTemplate($this->config->getTemplate('show.html'))
                 ->setTemplateVar($this->config->getResourceName())
                 ->setData([
-                $this->config->getResourceName() => $this->findOr404($request),
-                    'isAllowPlanningReport' => $periodService->isAllowPlanningReport(),
-                    'factorConversionService' => $factorConversionService,
-                    'productReportService'=>$this->getProductReportService(),
-                    'dateNow'=>  new \DateTime(date("Y-m-d", strtotime("-1 day")))
+            $this->config->getResourceName() => $this->findOr404($request),
+            'isAllowPlanningReport' => $periodService->isAllowPlanningReport(),
+            'factorConversionService' => $factorConversionService,
+            'productReportService' => $this->getProductReportService(),
+            'dateNow' => new \DateTime(date("Y-m-d", strtotime("-1 day")))
                 ])
         ;
 
@@ -230,6 +230,9 @@ class ProductReportController extends SEIPController {
      */
     public function runPlanningAction(Request $request) {
         set_time_limit(0);
+        $productReportId = $request->get("id");
+        $productReport = $this->get("pequiven.repository.product_report")->findOneBy(array("id" => $productReportId));
+        $factorService = $this->getFactorConversionService();
 
         $resource = $this->findOr404($request);
         $productPlanningsNet = $resource->getProductPlanningsNet(); //Presupuesto de produccion neto
@@ -300,7 +303,7 @@ class ProductReportController extends SEIPController {
             }
         }
         $this->save($resource);
-        
+
 
 //Planificacion de productos
         $productPlannings = $resource->getProductPlannings();
@@ -395,7 +398,14 @@ class ProductReportController extends SEIPController {
                                 if ($rawMaterialConsumptionPlanning->isAutomaticCalculationPlan() === true) {
 //Calcular el consumo de materia prima del dia en base la alicuota
                                     $aliquot = $rawMaterialConsumptionPlanning->getAliquot();
-                                    $totalByAliquot = $value * $aliquot;
+// si el product report tiene factor de conversion lo obtiene y se calcula en base a el
+                                    if ($factorService->hasFactorConversion($productReport)) {
+                                        $valueConv = $factorService->calculateFormulaValueFromFactor($value, $productReport);
+                                        $totalByAliquot = $valueConv * $aliquot;
+                                    } else {
+                                        $totalByAliquot = $value * $aliquot;
+                                    }
+
                                     $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyDayPlan, $totalByAliquot);
                                 }
                             }
@@ -498,8 +508,6 @@ class ProductReportController extends SEIPController {
 
         return $this->handleView($view);
     }
-    
-    
 
     /**
      * 
