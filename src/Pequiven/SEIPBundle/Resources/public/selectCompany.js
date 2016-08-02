@@ -165,13 +165,13 @@ $.ajax({
                             this.animate({fill: default_attributes.fill, opacity: '1'});
                         }                
             }).click(function () {
-                var urlAjax = '../app.php/selectCompanyC';
+                var urlAjax = '../app_dev.php/selectCompanyC';
 
                 $.get(urlAjax, function (data, status) {
                     $("#dialog").dialog("close");
                     var data = $.parseJSON(data);
                     //var company_link= document.location.origin+"/app_dev.php/";
-                    var company_link = '../app.php/';
+                    var company_link = '../app_dev.php/';
                     //var company_link = "http://localhost/multiempresa/web/app_dev.php/";
                     var cont = '';
 

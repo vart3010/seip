@@ -5,10 +5,11 @@
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
 {% block before_body %}
-    {{ contentHeader(
-        ("pequiven_seip.report_template.report_template_delivery"|trans )
-    ) }}
+    {{ contentHeader(({(path("pequiven_report_template_delivery_index")):("Planificación de Despacho"|trans)}),
+                        ("Detalle"|trans )  )}}
 {% endblock %}
+
+
 
 {% block body %}
     <fieldset class="fieldset">

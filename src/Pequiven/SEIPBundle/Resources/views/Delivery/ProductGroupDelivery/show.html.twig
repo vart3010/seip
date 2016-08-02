@@ -5,6 +5,17 @@
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
 
+{#{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.product_group_delivery.product_group"|trans )
+    ) }}
+{% endblock %}#}
+
+{% block before_body %}
+    {{ contentHeader(({(path("pequiven_report_template_delivery_show",{id: product_group_delivery.reportTemplateDelivery.id})):("Linea de Negocio"|trans)}),
+                        ("Detalle"|trans )  )}}
+{% endblock %}
+
 {% block body %}
 
     <fieldset class="fieldset">
@@ -57,7 +68,7 @@
             </div>#}
         </div>
     </fieldset>
-{#            {{ dump(product|length) }}#}
+    
 
     {% include 'PequivenSEIPBundle:Delivery:ProductReportDelivery/show/products.html.twig' %}
     <br /><br />

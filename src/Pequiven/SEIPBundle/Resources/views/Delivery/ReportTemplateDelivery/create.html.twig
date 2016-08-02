@@ -17,10 +17,10 @@
 {% endblock stylesheets %}
 
 {% block body -%}
-    <form method="POST" action="{{ path("pequiven_report_template_delivery_create") }}">
-       <br /><br />
-       {% include 'PequivenSEIPBundle:Delivery/ReportTemplateDelivery:_form.html.twig' %}
-       {{ actions.create() }}
-       {{ form_rest(form) }}
-   </form>
+    <form method="POST" action="{{ path("pequiven_report_template_delivery_create",{ save_and_close: true} ) }}">
+        <br /><br />
+        {% include 'PequivenSEIPBundle:Delivery/ReportTemplateDelivery:_form.html.twig' %}
+        {{ actions.create() }}
+        {{ form_rest(form) }}
+    </form>
 {% endblock %}
