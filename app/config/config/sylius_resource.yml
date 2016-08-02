@@ -669,3 +669,11 @@ sylius_resource:
                 model: Pequiven\SEIPBundle\Entity\Delivery\ProductReportDelivery
                 controller: Pequiven\SEIPBundle\Controller\Delivery\ProductReportDeliveryController
                 repository: Pequiven\SEIPBundle\Repository\Delivery\ProductReportDeliveryRepository
+                
+        #TRELLO
+        pequiven.trello:
+            driver: doctrine/orm
+            templates: PequivenTrelloBundle:Task
+            classes:
+                controller: Pequiven\TrelloBundle\Controller\TrelloController
+                model: Pequiven\TrelloBundle\Entity\TaskTrello

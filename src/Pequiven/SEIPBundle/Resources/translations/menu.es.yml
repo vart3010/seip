@@ -289,4 +289,6 @@ app:
                         despachos: Despachos
                         contrataciones: Contrataciones
                         proyectos: Proyectos
-                            
+                    trello:
+                        main: Trello-SEIP
+                        ticket: Tickets
