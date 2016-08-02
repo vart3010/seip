@@ -33,7 +33,7 @@ class ProductGroupDeliveryController extends SEIPController {
 
         $data = array(
             "product_group_delivery" => $productGroupDelivery,
-            "product" => $products
+            "products" => $products
         );
 
         $view = $this

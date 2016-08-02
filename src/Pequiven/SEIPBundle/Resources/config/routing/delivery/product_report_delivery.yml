@@ -5,11 +5,15 @@ pequiven_product_group_report_create:
         _sylius:
             form: pequiven_seipbundle_delivery_productreport
     methods: [GET|POST]
-
+    
 pequiven_product_report_delivery_update:
     path: /{id}/update
     defaults:
         _controller: pequiven.controller.product_report_delivery:updateAction
         _sylius:
             form: pequiven_seipbundle_delivery_productreport
+<<<<<<< HEAD
     methods: [GET|POST|PUT]
+=======
+    methods: [GET|POST]
+>>>>>>> a819223f9a7b99927b1cedeaa49b60f10429e1d1
