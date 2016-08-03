@@ -513,7 +513,14 @@ class ObjetiveSigController extends EvolutionController
                         $textArrangementProgramsOperatives = '';
                         if($totalArrangementProgramsOperatives > 0){//Si el Objetivo Operativo tiene al menos un Programa de Gestión
                             foreach($arrangementProgramsOperatives as $arrangementProgram){
-                                $textArrangementProgramsOperatives.= $arrangementProgram->getRef() . "\n";
+                                //validación programas de gestión
+                                if (count($arrangementProgram->getManagementSystems()) > 0) {
+                                    foreach ($arrangementProgram->getManagementSystems() as $arrangementProgramManagement) {
+                                        if ($arrangementProgramManagement->getId() == $managementSystemId) {
+                                            $textArrangementProgramsOperatives.= $arrangementProgram->getRef() . "\n";                                            
+                                        }
+                                    }
+                                }
                             }
                         } else{
                             $textArrangementProgramsOperatives = $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle');
@@ -564,6 +571,7 @@ class ObjetiveSigController extends EvolutionController
                 $indicatorTacticsData = [];
                 if($totalIndicatorTactics > 0){//Si el Objetivo Táctico tiene Indicadores Táctico 
                     foreach($indicatorsTactics as $indicatorTactic){
+                        //validacion por sistema consultado
                         foreach ($indicatorTactic->getManagementSystems() as $dataManagement) {
                             if ($managementSystemId == $dataManagement->getId()) {                                
                                 $idManagementsIndicator = $dataManagement->getId();                            
@@ -649,8 +657,15 @@ class ObjetiveSigController extends EvolutionController
             $totalArrangementProgramsTactic = count($arrangementProgramsTactics);
             $textArrangementProgramsTactic = '';
             if($totalArrangementProgramsTactic > 0){//Si el Objetivo Táctico tiene al menos un Programa de Gestión
-                foreach($arrangementProgramsTactics as $arrangementProgram){
-                    $textArrangementProgramsTactic.= $arrangementProgram->getRef() . "\n";
+                foreach($arrangementProgramsTactics as $arrangementProgram){                    
+                    //validación de programas por sistema de calidad consultado
+                    if (count($arrangementProgram->getManagementSystems()) > 0) {
+                        foreach ($arrangementProgram->getManagementSystems() as $arrangementProgramManagement) {
+                            if ($arrangementProgramManagement->getId() == $managementSystemId) {                                
+                                $textArrangementProgramsTactic.= $arrangementProgram->getRef() . "\n";
+                            }
+                        }
+                    }
                 }
             } else {
                 $textArrangementProgramsTactic = $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle');
