@@ -41,10 +41,6 @@ DirectoryIndex app.php
     RewriteRule .? %{ENV:BASE}/app.php [L]
 </IfModule>
 
-<IfModule mod_headers.c>
-  Header set Access-Control-Allow-Origin "*"
-</IfModule>
-
 
 <IfModule !mod_rewrite.c>
     <IfModule mod_alias.c>
