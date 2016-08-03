@@ -42,7 +42,7 @@ DirectoryIndex app.php
 </IfModule>
 
 <IfModule mod_headers.c>
-  Header set Access-Control-Allow-Origin "seiptest.pequiven.com"
+  Header set Access-Control-Allow-Origin "*"
 </IfModule>
 
 
