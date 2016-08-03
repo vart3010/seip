@@ -178,7 +178,7 @@ svg{
 
 @media (max-width: 1366px) and (max-height: 768px) {
     #contentP{
-        height: 90px;
+        height: 90px !important;
     }
     .bottomMessage {
         top: 81%;
@@ -206,7 +206,7 @@ svg{
 
 @media (max-width: 1280px) and (max-height: 1024px) {
     #contentP{
-        height: 700px;
+        height: 700px !important;
     }
     .bottomMessage {
         width: 65%;
@@ -220,7 +220,7 @@ svg{
 
 @media (max-width: 1280px) and (max-height: 720px) {
     #contentP{
-        height: 90px;
+        height: 90px !important;
     }
     .bottomMessage {
         width: 65%;
@@ -243,4 +243,13 @@ svg{
   .left {
         width: 52% !important;
     }  
+}
+
+@media (max-width: 1920px) and (max-height: 1080px) {
+    #contentP{
+        height: 690px !important;
+    }
+  .left {
+        width: 39% !important;
+    }
 }
