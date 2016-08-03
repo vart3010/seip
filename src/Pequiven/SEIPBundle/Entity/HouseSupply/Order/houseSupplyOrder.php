@@ -7,7 +7,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems;
-use Pequiven\SEIPBundle\Entity\HouseSupply\Billing\houseSupplyBilling;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyCycle;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKit;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyPayments;
@@ -84,20 +83,6 @@ class houseSupplyOrder {
     private $nroOrder;
 
     /**
-     *
-     * @var integer
-     * @ORM\Column(name="nroDevol",type="integer",nullable=true)
-     */
-    private $nroDevol;
-
-    /**
-     * 
-     * @var integer
-     * @ORM\Column(name="idAffected",type="integer",nullable=true)
-     */
-    private $idAffected;
-
-    /**
      * BASE IMPONIBLE. MONTO SIN IVA
      * @var float
      * @ORM\Column(name="taxable",type="float",nullable=true)
@@ -122,13 +107,13 @@ class houseSupplyOrder {
      * @var houseSupplyOrderItems
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems",mappedBy="order",cascade={"persist"}))
      */
-    protected $orderItems;
+    private $orderItems;
 
     /**
      * @var houseSupplyPayments
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyPayments",mappedBy="houseSupplyOrder",cascade={"persist"}))
      */
-    protected $payments;
+    private $payments;
 
     /**
      * Creado por
@@ -155,6 +140,10 @@ class houseSupplyOrder {
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+
+    function __construct() {
+        $this->orderItems = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     function getId() {
         return $this->id;
@@ -186,14 +175,6 @@ class houseSupplyOrder {
 
     function getNroOrder() {
         return $this->nroOrder;
-    }
-
-    function getNroDevol() {
-        return $this->nroDevol;
-    }
-
-    function getIdAffected() {
-        return $this->idAffected;
     }
 
     function getTaxable() {
@@ -264,14 +245,6 @@ class houseSupplyOrder {
         $this->nroOrder = $nroOrder;
     }
 
-    function setNroDevol($nroDevol) {
-        $this->nroDevol = $nroDevol;
-    }
-
-    function setIdAffected($idAffected) {
-        $this->idAffected = $idAffected;
-    }
-
     function setTaxable($taxable) {
         $this->taxable = $taxable;
     }
@@ -284,9 +257,7 @@ class houseSupplyOrder {
         $this->totalOrder = $totalOrder;
     }
 
-    function setOrderItems(houseSupplyOrderItems $orderItems) {
-        $this->orderItems = $orderItems;
-    }
+    
 
     function setPayments(houseSupplyPayments $payments) {
         $this->payments = $payments;

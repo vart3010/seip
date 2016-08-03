@@ -19,8 +19,8 @@ class HouseSupplyOrderRepository extends EntityRepository {
         $qb = $this->getQueryBuilder();
         $qb
                 ->select('MAX(HSOrder.nroOrder) as nro')
-                ->andWhere('HSOrder.type= :type')
-                ->setParameter('type', $type)
+        // ->andWhere('HSOrder.type= :type')
+        // ->setParameter('type', $type)
         ;
 
         return $qb->getQuery()->getResult();
@@ -36,7 +36,7 @@ class HouseSupplyOrderRepository extends EntityRepository {
         $stmt->execute();
     }
 
-    function TotalOrder($wsc, $type, $id = null) {
+    function TotalOrder($type = null, $id = null, $wsc = null) {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
@@ -50,7 +50,14 @@ class HouseSupplyOrderRepository extends EntityRepository {
                 . ' INNER JOIN'
                 . ' seip_gsh_product AS prod ON (item.product_id = prod.id)'
                 . ' WHERE'
-                . ' workStudyCircle_id = ' . $wsc . ' AND type = ' . $type;
+                . ' type = ' . $type;
+
+        if ($wsc != null) {
+            $sql4 = ' AND workStudyCircle_id = ' . $wsc;
+        } else {
+            $sql4 = '';
+        }
+
 
         if ($id != null) {
             $sql2 = ' AND order_id=' . $id;
@@ -60,7 +67,7 @@ class HouseSupplyOrderRepository extends EntityRepository {
 
         $sql3 = ' GROUP BY item.workStudyCircle_id, item.product_id';
 
-        $sql = $sql1 . $sql2 . $sql3;
+        $sql = $sql1 . $sql2 . $sql4 . $sql3;
 
         $stmt = $db->prepare($sql);
         $stmt->execute();

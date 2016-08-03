@@ -68,6 +68,13 @@ class houseSupplyProduct {
     private $cost;
 
     /**
+     *
+     * @var float
+     * @ORM\Column(name="taxes",type="float",nullable=true)
+     */
+    private $taxes;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="exento", type="boolean")
@@ -154,6 +161,10 @@ class houseSupplyProduct {
         return $this->cost;
     }
 
+    function getTaxes() {
+        return $this->taxes;
+    }
+
     function getExento() {
         return $this->exento;
     }
@@ -172,10 +183,6 @@ class houseSupplyProduct {
 
     function getInventoryChargeItems() {
         return $this->inventoryChargeItems;
-    }
-
-    function getBillingItems() {
-        return $this->billingItems;
     }
 
     function getOrderItems() {
@@ -216,6 +223,10 @@ class houseSupplyProduct {
 
     function setCost($cost) {
         $this->cost = $cost;
+    }
+
+    function setTaxes($taxes) {
+        $this->taxes = $taxes;
     }
 
     function setExento($exento) {

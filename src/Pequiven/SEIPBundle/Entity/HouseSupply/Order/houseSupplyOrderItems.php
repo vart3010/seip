@@ -17,6 +17,7 @@ use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle;
  * @ORM\Table(name="seip_gsh_order_items") 
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\HasLifecycleCallbacks()
  */
 class houseSupplyOrderItems {
 
@@ -29,7 +30,7 @@ class houseSupplyOrderItems {
     private $id;
 
     /**
-     * 1. PEDIDO / 2. DEVOLUCION DE PEDIDO / 3. EN ESPERA
+     * REGISTRADA = 1; / DEVUELTA = 2; / ESPERA = 3; / PAGADA = 4; / ENTREGADA = 5;    
      * @var string
      * @ORM\Column(name="type",type="string",nullable=false)
      */
@@ -148,6 +149,15 @@ class houseSupplyOrderItems {
      */
     private $deletedAt;
 
+    /**
+     * Creado por
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $deletedBy;
+
     function getId() {
         return $this->id;
     }
@@ -218,6 +228,10 @@ class houseSupplyOrderItems {
 
     function getDeletedAt() {
         return $this->deletedAt;
+    }
+
+    function getDeletedBy() {
+        return $this->deletedBy;
     }
 
     function setId($id) {
@@ -292,6 +306,8 @@ class houseSupplyOrderItems {
         $this->deletedAt = $deletedAt;
     }
 
-
+    function setDeletedBy(User $deletedBy) {
+        $this->deletedBy = $deletedBy;
+    }
 
 }

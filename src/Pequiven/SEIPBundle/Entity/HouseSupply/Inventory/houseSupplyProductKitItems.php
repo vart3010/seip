@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\Collection;
 /**
  * Productos
  *
- * @author Máximo Sojo
+ * @author Gilbert C. <glavrjk@gmail.com>
  * 
  * @ORM\Table(name="seip_gsh_productkit_items")
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\HouseSupply\Inventory\HouseSupplyProductKitItemsRepository")
