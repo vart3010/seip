@@ -92,6 +92,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         if ($this->isGranted('ROLE_SEIP_OPERATION_*')) {
             $this->addMenuOperation($menu, $section);
         }
+        
+        //Menú Ticket Trello
+        /*if ($this->isGranted('ROLE_TRELLO')){
+            $this->addMenuTicketTrello($menu, $section);
+        }*/
 
         //Menú SIG
         if ($this->isGranted('ROLE_SEIP_SIG_MENU')) {
@@ -1307,7 +1312,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             }
 
             if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_DELIVERY'))) {
-                $delivery = $this->factory->createItem('operations.planning.delivery', $this->getSubLevelOptions(array("route" => "pequiven_report_template_delivery_index",
+                //pequiven_report_template_delivery_index
+                $delivery = $this->factory->createItem('operations.planning.delivery', $this->getSubLevelOptions(array("route" => "",
                                 ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.planning.delivery', $section)));
 
@@ -2185,6 +2191,25 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.modules.proyectos', $section)));
 
         $menu->addChild($child);
+    }
+    
+    private function addMenuTicketTrello(ItemInterface $menu, $section) {
+        $menuTrello = $this->factory->createItem('trello.main', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                            'labelAttributes'
+                            => array('icon' => 'fa fa-sticky-note-o',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.trello.main', $section)));
+
+            $ticket = $this->factory->createItem('trello.ticket', $this->getSubLevelOptions(array('route' => "create_task_trello", 'routeParameters' => array(),
+                                'labelAttributes' => array('icon' => 'fa fa-ticket',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.trello.ticket', $section)));
+
+            $menuTrello->addChild($ticket);
+            
+        $menu->addChild($menuTrello);
     }
 
     /**
