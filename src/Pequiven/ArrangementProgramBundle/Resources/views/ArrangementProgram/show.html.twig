@@ -5,7 +5,7 @@
 {% if entity.categoryArrangementProgram.id == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG') %}
     {% set configuration = gerenciaSIG.configuration %}
 {% elseif entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC') %}
-    {% set configuration = "" %}    
+    {% set configuration = configUsers %}    
 {% else %}
     {% set configuration = entity.tacticalObjective.gerencia.configuration %}
 {% endif %}

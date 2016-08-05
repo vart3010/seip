@@ -70,6 +70,8 @@ pequiven_seip_arrangementprogram_show:
     requirements:
         id: "\d+"
     methods: [GET]
+    options:
+        expose: true
     
 arrangementprogram_revised:
     path: /{id}/revised

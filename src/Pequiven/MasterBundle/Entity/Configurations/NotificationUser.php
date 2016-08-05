@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @author Máximo Sojo<maxsojo13@gmail.com>
  * @ORM\Table(name="seip_general_configurations_notifications_users")
  * @ORM\Entity()
- * 
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class NotificationUser{
     
@@ -46,8 +46,12 @@ class NotificationUser{
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Configurations\ConfigurationNotification")
      * @ORM\JoinColumn(nullable=false)
      */    
-    private $idObject;     
-    
+    private $idObject;
+
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;    
     
     /**
      * Constructor
@@ -125,6 +129,29 @@ class NotificationUser{
      */
     public function getUser() {
         return $this->user;
+    }
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     * @return ManagementSystem
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime 
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
     }
     
 }

@@ -855,7 +855,7 @@ class ArrangementProgramController extends SEIPController {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
 
-        $rol = null;
+        $rol = $userStrategic = null;
         $configUsers = $userReview = $userNotify = $userAprobe = [];
         if ($entity->getType() == 0) {
             $em = $this->getDoctrine()->getManager();
@@ -864,15 +864,16 @@ class ArrangementProgramController extends SEIPController {
             foreach ($config as $value) {
                 $configUser = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\NotificationUser")->findBy(array('idObject' => $value->getId()));
                 foreach ($configUser as $valueUsers) {                    
+                    $userStrategic = $valueUsers->getUser()->getFullNamePersonalNumber();
                     switch ($valueUsers->getAction()) {
-                        case 1:
-                            $userReview = $valueUsers;
+                        case 1:                            
+                            $userReview[] = $userStrategic;                            
                             break;
                         case 2:
-                            $userNotify = $valueUsers;
+                            $userNotify[] = $userStrategic;
                             break;
                         case 3:
-                            $userAprobe = $valueUsers;
+                            $userAprobe[] = $userStrategic;
                             break;
                     }
                 }
@@ -884,10 +885,10 @@ class ArrangementProgramController extends SEIPController {
             'userNotify' => $userNotify,
             'userAprobe' => $userAprobe,
         ];
-        if ($entity->getType() == 0) {
+        /*if ($entity->getType() == 0) {
             var_dump($configUsers);
             die();
-        }
+        }*/
         $rolesByType = array(
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_STRATEGIC', 'ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_STRATEGIC', 'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_STRATEGIC'),
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC', 'ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_TACTIC', 'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_TACTIC'),
@@ -979,6 +980,7 @@ class ArrangementProgramController extends SEIPController {
             'isAllowToNotity' => $isAllowToNotity,
             'isAllowSuperAdmin' => $isAllowSuperAdmin,
             'gerenciaSIG' => $gerenciaSIG,
+            'configUsers' => $configUsers
         );
     }
 

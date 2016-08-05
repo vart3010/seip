@@ -128,6 +128,12 @@ $('#reload').click(function(){
 	findData($('#idObject').val());
 });
 
+$('#visualize').click(function(){
+    url = Routing.generate('pequiven_seip_arrangementprogram_show',{id: $('#idObject').val()});
+    window.open(url, '_blank');
+});
+
+
 function findData(idObject){    
 	$('#idObject').val(idObject);
     var data = {idObject: idObject, typeObject:2};    
@@ -175,5 +181,21 @@ function editUser(idUser){
 }
 
 function deleteUser(idUser){
-	console.log(idUser);
+	//console.log(idUser);
+    var data = {idUser: idUser, idObject: $('#idObject').val()};    
+    $.ajax({
+            type: 'get',
+            url: Routing.generate('pequiven_configuration_delete_data_users'),
+            data: data,                              
+            beforeSend:function(){
+                $('#loading').css({display:'block'});                            
+            },
+            complete:function(){
+                $('#loading').css('display','none');                        
+            },
+            success: function (data) {
+                console.log(data);
+                findData($('#idObject').val());
+            }
+    });
 }

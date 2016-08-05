@@ -73,3 +73,13 @@ pequiven_configuration_get_data_users:
     methods: [GET|POST]
     options:
         expose: true
+pequiven_configuration_delete_data_users:
+    path: /delete-data-users.{_format}
+    defaults: 
+        _controller: pequiven.controller.configuration:deleteDataUsersAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [GET|POST]
+    options:
+        expose: true

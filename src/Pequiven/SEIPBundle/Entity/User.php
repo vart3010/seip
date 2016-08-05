@@ -703,12 +703,16 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         return $this->levelRealByGroup;
     }
 
-    public function getFullNameUser() {
-        return $this->firstname . ' ' . $this->lastname . ' (' . $this->numPersonal . ' | ' . $this->username . ')';
+    public function getFullNamePersonalNumber() {
+        return $this->firstname . ' ' . $this->lastname . ' (' . $this->numPersonal . ')';
     }
 
     public function getOnlyFullNameUser() {
         return $this->firstname . ' ' . $this->lastname;
+    }
+
+    public function getFullNameUser() {
+        return $this->firstname . ' ' . $this->lastname . ' (' . $this->numPersonal . ' | ' . $this->username . ')';
     }
 
     /**

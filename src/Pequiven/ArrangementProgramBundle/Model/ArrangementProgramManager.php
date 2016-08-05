@@ -23,10 +23,10 @@ class ArrangementProgramManager implements ContainerAwareInterface {
         $valid = false;
         $user = $this->getUser();
         if ($entity->getCategoryArrangementProgram()->getId() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA) {
-            if ($entity->getType() == 0) {
-                $configuration = "";
+            if ($entity->getType() == 0) {                
+                $configuration = $this->getUserActions($entity)['userReview'];
             }else{
-                $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();                
+                $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
             }
 
             if (!$configuration) {
@@ -36,13 +36,20 @@ class ArrangementProgramManager implements ContainerAwareInterface {
             if ($this->getSecurityConext()->isGranted(array('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_TACTIC', 'ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE'))) {
                 $valid = true;
             }
-
-            foreach ($configuration->getArrangementProgramUserToRevisers() as $userToReviser) {
-                if ($user === $userToReviser) {
+            
+            if ($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC) {
+                if (in_array($user->getId(), $configuration) === true) {
                     $valid = true;
-                    break;
                 }
+            }else{            
+                foreach ($configuration->getArrangementProgramUserToRevisers() as $userToReviser) {
+                    if ($user === $userToReviser) {
+                        $valid = true;
+                        break;
+                    }
+                }                
             }
+
         } else {
             $gerencia = $this->container->get('pequiven.repository.gerenciafirst')->findOneBy(array('abbreviation' => 'sigco'));
             $configuration = $gerencia->getConfiguration();
@@ -52,7 +59,7 @@ class ArrangementProgramManager implements ContainerAwareInterface {
                     break;
                 }
             }
-        }
+        }        
         return $valid;
     }
 
@@ -68,7 +75,7 @@ class ArrangementProgramManager implements ContainerAwareInterface {
 
         if ($entity->getCategoryArrangementProgram()->getId() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA) {
             if ($entity->getType() == 0) {            
-                $configuration = "";
+                $configuration = $this->getUserActions($entity)['userNotify'];
             }else{
                 $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();                
             }
@@ -80,6 +87,9 @@ class ArrangementProgramManager implements ContainerAwareInterface {
                 return $valid;
             }
 
+            if ($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC && in_array($user->getId(), $configuration) === true) {
+                $valid = true;
+            }
             if ($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $configuration->getArrangementProgramUsersToApproveTactical()->contains($user) === true && $entity->getTacticalObjective()->getStatus() == true) {
                 $valid = true;
             }
@@ -104,12 +114,9 @@ class ArrangementProgramManager implements ContainerAwareInterface {
     public function isAllowToSendToReview(ArrangementProgram $entity) {
         $user = $this->getUser();
         $valid = false;
-        if (($entity->getStatus() === ArrangementProgram::STATUS_DRAFT) &&
-                ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === true || $this->isAllowToApprove($entity) === true)
-        ) {
+        if (($entity->getStatus() === ArrangementProgram::STATUS_DRAFT) && ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === true || $this->isAllowToApprove($entity) === true)){
             $valid = true;
         }
-
         return $valid;
     }
 
@@ -229,7 +236,7 @@ class ArrangementProgramManager implements ContainerAwareInterface {
      */
     public function isAllowToNotity(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $entity) {
         if ($entity->getType() == 0) {
-            $configuration = "";//$entity->getStrategicObjetive()->getGerencia()->getConfiguration();
+            $configuration = $this->getUserActions($entity)['userNotify'];            
         }else{
             $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
         }
@@ -244,13 +251,21 @@ class ArrangementProgramManager implements ContainerAwareInterface {
         $periodService = $this->getPeriodService();
 //        var_dump($periodService->isAllowNotifyArrangementProgram());die();
         if ($entity->getCategoryArrangementProgram()->getId() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA) {
-            if (
-                    $configuration->getArrangementProgramUsersToNotify()->contains($user) === true && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED && $periodService->isAllowNotifyArrangementProgram() === true && ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0 || (($entity->getResult() > 0 || $entity->getResult() < 0) && $details->getNotificationInProgressByUser() === null) || ((($entity->getResult() > 0 || $entity->getResult() < 0) && $details->getNotificationInProgressByUser()->getId() === $user->getId())))
-            ) {
-                if ($periodService->isAllowNotifyArrangementProgramInClearance() === true) {
-                    $valid = true;
-                } elseif ($periodService->isAllowNotifyArrangementProgram() === true) {
-                    $valid = true;
+            if ($entity->getType() == 0) {                
+                if (in_array($user->getId(), $configuration) === true && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED) {
+                    if ($periodService->isAllowNotifyArrangementProgramInClearance() === true) {
+                        $valid = true;
+                    } elseif ($periodService->isAllowNotifyArrangementProgram() === true) {
+                        $valid = true;
+                    }
+                }
+            }else{
+                if ($configuration->getArrangementProgramUsersToNotify()->contains($user) === true && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED && $periodService->isAllowNotifyArrangementProgram() === true && ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0 || (($entity->getResult() > 0 || $entity->getResult() < 0) && $details->getNotificationInProgressByUser() === null) || ((($entity->getResult() > 0 || $entity->getResult() < 0) && $details->getNotificationInProgressByUser()->getId() === $user->getId())))) {                
+                    if ($periodService->isAllowNotifyArrangementProgramInClearance() === true) {
+                        $valid = true;
+                    } elseif ($periodService->isAllowNotifyArrangementProgram() === true) {
+                        $valid = true;
+                    }
                 }
             }
 //            elseif($entity->getStatus() == ArrangementProgram::STATUS_DRAFT && $this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN')){
@@ -280,7 +295,6 @@ class ArrangementProgramManager implements ContainerAwareInterface {
 //        {
 //            $valid = true;
 //        }
-
         return $valid;
     }
 
@@ -340,6 +354,40 @@ class ArrangementProgramManager implements ContainerAwareInterface {
         return $valid;
     }
 
+    private function getUserActions($entity){
+        $rol = $userStrategic = null;
+        $configUsers = $userReview = $userNotify = $userAprobe = [];
+
+        $em = $this->getDoctrine()->getManager();
+        $config = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\ConfigurationNotification")->findBy(array('id' => $entity->getId(), 'typeObject' => 2));            
+        foreach ($config as $value) {
+            $configUser = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\NotificationUser")->findBy(array('idObject' => $value->getId()));
+            foreach ($configUser as $valueUsers) {                    
+                //$userStrategic = $valueUsers->getUser()->getFullNamePersonalNumber();
+                $userStrategic = $valueUsers->getUser()->getId();
+                switch ($valueUsers->getAction()) {
+                    case 1:                            
+                        $userReview[] = $userStrategic;                            
+                        break;
+                    case 2:
+                        $userNotify[] = $userStrategic;
+                        break;
+                    case 3:
+                        $userAprobe[] = $userStrategic;
+                        break;
+                }
+            }
+        }            
+        
+        
+        $configUsers = [
+            'userReview' => $userReview,
+            'userNotify' => $userNotify,
+            'userAprobe' => $userAprobe,
+        ];
+        return $configUsers;
+    }
+
     /**
      * Get a user from the Security Context
      *
@@ -363,6 +411,21 @@ class ArrangementProgramManager implements ContainerAwareInterface {
         }
 
         return $user;
+    }
+
+    /**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * @return Registry
+     *
+     * @throws LogicException If DoctrineBundle is not available
+     */
+    public function getDoctrine() {
+        if (!$this->container->has('doctrine')) {
+            throw new LogicException('The DoctrineBundle is not registered in your application.');
+        }
+
+        return $this->container->get('doctrine');
     }
 
     public function setContainer(ContainerInterface $container = null) {

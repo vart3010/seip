@@ -115,6 +115,20 @@ class NotifyController extends ResourceController{
         $response->setData(true);
         return $response;		
 	}
+    
+    public function deleteDataUsersAction(Request $request){
+        $response = new JsonResponse();
+        $em = $this->getDoctrine()->getManager();
+        //$user = $this->get('pequiven_seip.repository.user')->find($request->get('idUser'));        
+        $userConfig = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\NotificationUser")->find($request->get('idUser'));
+        if($userConfig){
+            $em->remove($userConfig);
+            $em->flush();            
+            //$this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteCauseAnalysis', array(), 'PequivenSIGBundle'));
+            $response->setData(array('message'=>'Usuario eliminado exirosamente.'));
+        }  
+        return $response;
+    }
 
 	public function setDataSession(Request $request){
 		// set and get session attributes		
