@@ -114,6 +114,7 @@ $('#save-to-form').click(function(){
             },
             success: function (data) {                                                        
              	if (data == true) {$('#formAddUser').hide();};
+                messagesFlash('Usuario añadido exitosamente.');
              	findData($('#idObject').val());
             }
     	});
@@ -194,8 +195,38 @@ function deleteUser(idUser){
                 $('#loading').css('display','none');                        
             },
             success: function (data) {
-                console.log(data);
+                messagesFlash(data['message']);
                 findData($('#idObject').val());
             }
     });
 }
+
+// Messages form
+function messagesFlash(message){
+    var positionHorizontal, positionVertical,
+        closeButton, showCloseOnHover;
+
+    /*event.preventDefault();*/
+
+    // Positions            
+    title = 'Notificación';
+    message = message;
+    positionVertical = 'top';           
+    positionHorizontal = 'right';
+    closeButton = true;
+    showCloseOnHover = true;
+    icon = false;//'img/demo/icon.png';
+
+    // Gather options
+    notify(title, message, {
+        system:             $('#system').prop('checked'),
+        vPos:               positionVertical,
+        hPos:               positionHorizontal,
+        autoClose:          true,
+        icon:               icon,
+        iconOutside:        false,
+        closeButton:        closeButton,
+        showCloseOnHover:   showCloseOnHover,
+        groupSimilar:       $('#group-similar').prop('checked')
+    });
+};

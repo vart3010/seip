@@ -21,6 +21,9 @@
 	    		<input type="radio" name="objects" id="objetc3" value="3">	    			    		
 	    		<label for="radio-2" class="label">&nbsp;Indicadores</label>
 			</div>
+			{#<p class="inline-label">
+						<button type="submit" id="show-not" class="button blue-gradient">Show notification</button>
+					</p>#}
 	        {#<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
 	            <p class="inline-label">
 	                <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
@@ -98,5 +101,35 @@
 	    //var arraRoutes = {1:' ',2:'pequiven_configurations_get_to_programs',3:' '};
 	    //setRouteObjects(Routing.generate(arraRoutes[idObject]));
 	});
+
+	// Messages form
+		/*$('#show-not').click(function(event){
+			var positionHorizontal, positionVertical,
+				closeButton, showCloseOnHover;
+
+			event.preventDefault();
+
+			// Positions			
+			title = 'Notificación';
+			message = 'Pruebas';
+			positionVertical = 'top';			
+			positionHorizontal = 'right';
+			closeButton = true;
+			showCloseOnHover = true;
+			icon = false;//'img/demo/icon.png';
+
+			// Gather options
+			notify(title, message, {
+				system:				$('#system').prop('checked'),
+				vPos:				positionVertical,
+				hPos:				positionHorizontal,
+				autoClose:			true,
+				icon:				icon,
+				iconOutside:		false,
+				closeButton:		closeButton,
+				showCloseOnHover:	showCloseOnHover,
+				groupSimilar:		$('#group-similar').prop('checked')
+			});
+		});*/
 </script>   
 {% endblock %}
