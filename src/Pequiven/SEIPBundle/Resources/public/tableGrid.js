@@ -6,8 +6,9 @@ var columsTotals; //INDICES DE LAS COLUMNAS QUE SE QUIERES SUMAR EMPEZANDO DESDE
 var campoClave; //CAMPO CLAVE PARA NO REPETIR REGISTROS AL MOMENTO DE AGREGAR REGISTROS
 var selectorTotals; //SELECTOR DE JQUERY PARA MOSTRAR LOS RESULTADOS DE LOS TOTALES
 var idsClaves = new Array();
-var colsRight = new Array();
+var colsRight = new Array(); //A PARTIR DE QUE COLUMNA HIRAN FORMATEADOS LOS NUMEROS COMO MONEDA
 var moneda = "Bs. ";
+var mensajeElementoRepetido = "Producto no se Encuentra!";
 
 function setTable(obj) {
     table = obj;
@@ -15,6 +16,10 @@ function setTable(obj) {
 
 function setFieldRsJson(field) {
     fieldRsJson = field;
+}
+
+function setMsjAlertaRepetido(msj) {
+    mensajeElementoRepetido = msj;
 }
 
 function setSelectorTotals(selector) {
@@ -48,13 +53,13 @@ function delRowDefault() {
 }
 
 function addRow(data) {
-
+    
     var allow = idsClaves.indexOf(data[campoClave][0]);
     if (allow < 0) {
         var fila = "<tr class='id_" + index + "'>";
         for (i = 0; i < data.length; i++) {
+            
             var clase = colsRight.indexOf(i);
-
             if (clase >= 0) {
                 fila = fila + "<td class='" + data[i][0] + " gridTd'>" + moneyFormat(data[i][1]) + "</td>";
             } else {
@@ -68,7 +73,7 @@ function addRow(data) {
 
         $("#" + table).find("tbody").append(fila);
     } else {
-        alert("El producto ya se encuentra!");
+        alert(mensajeElementoRepetido);
     }
     totals();
 
@@ -136,6 +141,7 @@ function totals() {
     //alert(totals);
     for (var i = 0; i < columsTotals.length; i++) {
         $(selectorTotals + columsTotals[i]).html(moneyFormat(totals[i],2));
+        $(selectorTotals + columsTotals[i]).attr("data",totals[i]);
     }
 }
 

@@ -53,6 +53,14 @@ pequiven_housesupply_orderkitcheck_edit:
         _format: html|json|xml
     methods: [GET|POST]
 
+pequiven_housesupply_orderkitcheck_payment:
+    path: /paymentOrderKit/
+    defaults:
+        _controller: pequiven.controller.housesupply_orderkit:PaymentOrderCheckAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
     
 #ORDENES DE PEDIDO POR PRODUCTO    
 pequiven_housesupply_order_charge_add:

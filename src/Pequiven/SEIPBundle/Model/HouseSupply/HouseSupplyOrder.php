@@ -1,6 +1,6 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Model\HouseSupply\Order;
+namespace Pequiven\SEIPBundle\Model\HouseSupply;
 
 abstract class HouseSupplyOrder {
 
@@ -12,7 +12,7 @@ abstract class HouseSupplyOrder {
     const ESPERA = 3;
     const PAGADA = 4;    
     const ENTREGADA = 5;    
-        
+            
     /**
      * 
      * @staticvar array $array

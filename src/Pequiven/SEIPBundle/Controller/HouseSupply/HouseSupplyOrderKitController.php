@@ -12,6 +12,7 @@ use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder;
+use Pequiven\SEIPBundle\Model\HouseSupply\HouseSupplyPayments;
 
 /**
  * CONTROLADOR DE PEDIDOS DE CASA - ABASTO
@@ -91,7 +92,7 @@ class HouseSupplyOrderKitController extends SEIPController {
         } else {
             $type = 3;
         }
-        
+
         foreach ($kit->getProductKitItems() as $itemsKit) {
             $cant = $itemsKit->getCant();
             $productobj = $itemsKit->getProduct();
@@ -283,11 +284,6 @@ class HouseSupplyOrderKitController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $allOrders = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('type' => 1));
         $members = array();
-//        foreach ($allOrders as $ord) {
-//            $datos['nro'] = $ord->getNroOrder();
-//            $datos['id'] = $ord->getId();
-//            $ordersArray[]=$datos;
-//        }
 
         if ($request->get('idOrder')) {
             $id = $request->get('idOrder');
@@ -307,12 +303,15 @@ class HouseSupplyOrderKitController extends SEIPController {
             $members = null;
         }
 
+        $arrayPayments = HouseSupplyPayments::getPaymentsTypes();
+
         return $this->render('PequivenSEIPBundle:HouseSupply\Order:checkOrderkit.html.twig', array(
                     'order' => $order,
                     'ordersArray' => $allOrders,
                     'cantKits' => $cantKits,
                     'members' => $members,
-                    'orderDetails' => $orderDetails
+                    'orderDetails' => $orderDetails,
+                    'arrayPayments' => $arrayPayments
         ));
     }
 
@@ -355,7 +354,7 @@ class HouseSupplyOrderKitController extends SEIPController {
 
         $em = $this->getDoctrine()->getManager();
         $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findOneById($idOrder);
-        
+
         $baseImponible = 0;
         $iva = 0;
 
@@ -379,6 +378,15 @@ class HouseSupplyOrderKitController extends SEIPController {
             $em->getConnection()->rollback();
             throw $e;
         }
+    }
+
+    /**
+     * REGISTRA EL PAGO DE UNA ORDEN DE PEDIDO
+     * @param Request $request
+     */
+    public function PaymentOrderCheckAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $idOrder = $request->get('idOrder');
     }
 
 }

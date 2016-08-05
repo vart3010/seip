@@ -7,7 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKitItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyCycle;
-use Pequiven\SEIPBundle\Model\HouseSupply\Order\HouseSupplyOrder;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 

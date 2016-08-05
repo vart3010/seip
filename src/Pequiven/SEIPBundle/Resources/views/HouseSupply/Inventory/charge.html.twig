@@ -64,8 +64,6 @@
             validaButton();
 
             $("#addItem").click(function () {
-
-
                 var cantidad = [$("#cantidad").val(), $("#cantidad").val()];
                 var producto = [$("#producto").val(), $("#producto").find('option:selected').attr("name")];
                 var costo = [$("#costo").val(), $("#costo").val()];
@@ -74,13 +72,9 @@
                 $("input#costo").unmask();
                 var costoCalculo = $("#costo").val();
                 //$("input#costo").mask('000.000.000.000.000,00', {reverse: true});
-
-
-                //console.log($("#cantidad").val());
-
+                ////console.log($("#cantidad").val());
                 var subtotal = [(costoCalculo * $("#cantidad").val()), (costoCalculo * $("#cantidad").val())];
-
-
+                
                 if ((cantidad[0] != "") && (costo[0] != "") && (producto[0] != 0)) {
                     var boton = ["", "<a id='" + index + "' name='" + producto[0] + "' onClick='delRow(this.id,this.name)' class='button icon-trash delItem'></a>"];
                     var data = [cantidad, producto, costo, subtotal, boton];
@@ -95,10 +89,6 @@
                 } else {
                     alert("Debe llenar los campos");
                 }
-
-
-
-
             });
         });
     </script>
