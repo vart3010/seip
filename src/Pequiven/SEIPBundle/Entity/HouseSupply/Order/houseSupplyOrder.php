@@ -123,7 +123,7 @@ class houseSupplyOrder {
 
     /**
      * @var houseSupplyPayments
-     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyPayments",mappedBy="houseSupplyOrder",cascade={"persist"}))
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyPayments",mappedBy="order",cascade={"persist"}))
      */
     private $payments;
 

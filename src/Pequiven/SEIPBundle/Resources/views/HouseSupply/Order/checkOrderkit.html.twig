@@ -196,7 +196,7 @@
                             </td>
                             <td width="20%" class="header bold">Fecha de Pago:</td>
                             <td width="30%">
-                                {%if order.getType==3%}                                
+                                {%if order.getType==4%}                                
                                     {{ order.getDatePay|date("d/m/Y h:i:s a") }} 
                                 {%else%}
                                     Sin Pagar
@@ -210,7 +210,7 @@
                             </td>
                             <td width="20%" class="header bold">Fecha de Entrega:</td>
                             <td width="30%">
-                                {%if order.getType==4%}
+                                {%if order.getType==5%}
                                     {{ order.getDateDelivery|date("d/m/Y h:i:s a") }} 
                                 {%else%}
                                     Sin Retirar

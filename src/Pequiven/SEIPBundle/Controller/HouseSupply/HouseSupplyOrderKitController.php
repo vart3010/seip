@@ -361,8 +361,10 @@ class HouseSupplyOrderKitController extends SEIPController {
         $baseImponible = 0;
         $iva = 0;
 
+        $list = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy(array('order' => $order));
+
         //TRAIGO LOS DOCUMENTOS EN ESPERA
-        foreach ($order->getOrderItems() as $items) {
+        foreach ($list as $items) {
             $baseImponible+=$items->getTotalLine();
             $iva+=$items->getTotalLineTaxes();
         }
@@ -372,15 +374,7 @@ class HouseSupplyOrderKitController extends SEIPController {
         $order->setTotalOrder($baseImponible + $iva);
 
         $em->persist($order);
-
-        $em->getConnection()->beginTransaction();
-        try {
-            $em->flush();
-            $em->getConnection()->commit();
-        } catch (Exception $e) {
-            $em->getConnection()->rollback();
-            throw $e;
-        }
+        $em->flush();
     }
 
     /**
@@ -411,9 +405,16 @@ class HouseSupplyOrderKitController extends SEIPController {
         }
 
         //ACTUALIZO LOS DATOS DE LA ORDEN Y EL ESTATUS
-        $order->setType(3);
+        $order->setType(4);
         $order->setDatePay($date);
         $order->setPaidBy($this->getUser());
+
+        $waitingItems = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy(array('order' => $order));
+
+        foreach ($waitingItems as $items) {
+            $items->setType(4);
+            $em->persist($items);
+        }
 
         $em->getConnection()->beginTransaction();
         try {

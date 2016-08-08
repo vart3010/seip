@@ -24,7 +24,7 @@ abstract class HouseSupplyOrder {
             self::DEVUELTA => 'Devuelta/Anulada',
             self::ESPERA => 'En Proceso',
             self::PAGADA => 'Pagada/Confirmada',
-            self::ENTREGADA => 'Despachada'
+            self::ENTREGADA => 'Despachada/Entregada'
         ];
         return $array;
     }
