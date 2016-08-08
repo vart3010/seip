@@ -145,14 +145,14 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
+
     /**
      * Miembros
      * @var \Pequiven\SEIPBundle\Entity\User
      * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User", inversedBy="workStudyCircles", cascade={"persist","remove"})
      */
     private $members;
-    
+
     /**
      * Creado por
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -161,8 +161,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * @ORM\JoinColumn(nullable=true)
      */
     private $coordinator;
-    
-        
+
     /**
      * Creado por
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -171,14 +170,14 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * @ORM\JoinColumn(nullable=true)
      */
     private $coordinatorDiscussion;
-    
+
     /**
      * @var integer
      * 
      * @ORM\Column(name="phase", type="integer", nullable=true)
      */
     private $phase = self::PHASE_ONE;
-    
+
     /**
      * CET al que pertenece este CET
      * 
@@ -202,6 +201,22 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      */
 
     private $houseSupplyGroup = 0;
+
+    /**
+     * Ordenes en HouseSupply
+     * 
+     * @var houseSupplyOrder
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder",mappedBy="workStudyCircle",cascade={"persist","remove"})
+     */
+    protected $houseSupplyOrder;
+
+    /**
+     * Items en Ordenes de HouseSupply
+     * 
+     * @var houseSupplyOrderItems
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems",mappedBy="workStudyCircle",cascade={"persist","remove"})
+     */
+    protected $houseSupplyOrderItems;
 
     /**
      * Constructor
@@ -548,7 +563,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
     public function getProposals() {
         return $this->proposals;
     }
-    
+
     /**
      * Get Coordinator
      * @return type
@@ -566,7 +581,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
         $this->coordinator = $coordinator;
         return $this;
     }
-    
+
     /**
      * Get CoordinatorDiscussion
      * @return type
@@ -584,7 +599,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
         $this->coordinatorDiscussion = $coordinatorDiscussion;
         return $this;
     }
-    
+
     /**
      * Set Fase
      *
@@ -605,7 +620,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
     public function getPhase() {
         return $this->phase;
     }
-    
+
     /**
      * Set parent
      *
@@ -657,25 +672,25 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
     public function getChildrens() {
         return $this->childrens;
     }
-    
+
     /**
      * Retorna los miembros de un CET, sin contar al coordinador
      * @return type
      */
-    public function obtainMembersWithoutCoordinator(){
+    public function obtainMembersWithoutCoordinator() {
         $members = array();
-        if($this->id > 0){
-            if($this->coordinator != null){
-                foreach($this->members as $member){
-                    if($this->getCoordinator()->getId() != $member->getId()){
+        if ($this->id > 0) {
+            if ($this->coordinator != null) {
+                foreach ($this->members as $member) {
+                    if ($this->getCoordinator()->getId() != $member->getId()) {
                         array_push($members, $member);
                     }
                 }
-            } else{
+            } else {
                 $members = $this->members;
             }
         }
-            
+
         return $members;
     }
     

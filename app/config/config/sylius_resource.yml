@@ -652,16 +652,14 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery
                 controller: Pequiven\SEIPBundle\Controller\Delivery\ReportTemplateDeliveryController
-                repository: Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository
-        
+                repository: Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository        
         pequiven.product_group_delivery:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Delivery/ProductGroupDelivery
             classes:
                 model: Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
                 controller: Pequiven\SEIPBundle\Controller\Delivery\ProductGroupDeliveryController
-                repository: Pequiven\SEIPBundle\Repository\Delivery\ProductGroupDeliveryRepository
-                
+                repository: Pequiven\SEIPBundle\Repository\Delivery\ProductGroupDeliveryRepository                
         pequiven.product_report_delivery:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Delivery/ProductReportDelivery
@@ -670,10 +668,31 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Delivery\ProductReportDeliveryController
                 repository: Pequiven\SEIPBundle\Repository\Delivery\ProductReportDeliveryRepository
                 
-        #TRELLO
+        # TRELLO
         pequiven.trello:
             driver: doctrine/orm
             templates: PequivenTrelloBundle:Task
             classes:
                 controller: Pequiven\TrelloBundle\Controller\TrelloController
                 model: Pequiven\TrelloBundle\Entity\TaskTrello
+                
+        # CASA-ABASTO
+        pequiven.housesupply_inventory:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:HouseSupply/Inventory
+            classes:
+                model: Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\HouseSupplyInventoryCharge
+                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyInventoryController
+        pequiven.housesupply_order:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:HouseSupply/Order
+            classes:
+                model: Pequiven\SEIPBundle\Entity\HouseSupply\Order\HouseSupplyOrder
+                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyOrderController                  
+        pequiven.housesupply_orderkit:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:HouseSupply/OrderKit
+            classes:
+                model: Pequiven\SEIPBundle\Entity\HouseSupply\Order\HouseSupplyOrderKit
+                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyOrderKitController             
+       
