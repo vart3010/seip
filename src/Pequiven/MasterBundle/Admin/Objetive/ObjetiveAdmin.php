@@ -115,9 +115,9 @@ class ObjetiveAdmin extends Admin
                         'multiple' => true,
                         'required' => false,
                     ))
-                    ->add('showEvolutionView',null,array(                        
+                    /*->add('showEvolutionView',null,array(                        
                         'required' => false,
-                    ))
+                    ))*/
                     ->end()
             ->end()
         ;

@@ -223,11 +223,11 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $isEnabledLoadByQuarterSecondReal = true;
 
         //Habilitar la carga del tercer trimestre (Requiere isEnabledLoadByQuarter)
-        $isEnabledLoadByQuarterThird = false;
+        $isEnabledLoadByQuarterThird = true;
         //Habilitar la carga de valores planificados del tercer trimestre (Requiere isEnabledLoadByQuarterThird)
         $isEnabledLoadByQuarterThirdPlanned = false;
         //Habilitar la carga de valores reales del tercer trimestre (Requiere isEnabledLoadByQuarterThird)
-        $isEnabledLoadByQuarterThirdReal = false;
+        $isEnabledLoadByQuarterThirdReal = true;
 
         //Habilitar la carga del cuarto trimestre (Requiere isEnabledLoadByQuarter)
         $isEnabledLoadByQuarterFourth = false;
@@ -411,14 +411,14 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         if ($details->getNotificationInProgressByUser() != null) {
 //            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 9))){
             //if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 35) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 35))){
-            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 21) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 21))){
+            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 9))){
            # if((($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 21) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 21))){
-                $data['januaryReal']['isEnabled'] = true;
-                $data['februaryReal']['isEnabled'] = true;
-                $data['marchReal']['isEnabled'] = true;
-                $data['aprilReal']['isEnabled'] = true;
-                $data['mayReal']['isEnabled'] = true;
-                $data['juneReal']['isEnabled'] = true;
+//                $data['januaryReal']['isEnabled'] = true;
+//                $data['februaryReal']['isEnabled'] = true;
+//                $data['marchReal']['isEnabled'] = true;
+                $data['aprilReal']['isEnabled'] = false;
+                $data['mayReal']['isEnabled'] = false;
+                $data['juneReal']['isEnabled'] = false;
                 //$data['julyReal']['isEnabled'] = true;
                 //$data['augustReal']['isEnabled'] = true;
                 //$data['septemberReal']['isEnabled'] = true;
