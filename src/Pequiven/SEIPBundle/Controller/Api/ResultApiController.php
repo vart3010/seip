@@ -286,6 +286,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
 
             $gerenciaFirst = $user->getGerencia();
             $gerenciaSecond = $user->getGerenciaSecond();
+//            var_dump($gerenciaFirst->isValidAudit());die();
 
             if ($gerenciaFirst && $gerenciaFirst->isValidAudit() === false) {
                 $isValidAudit = false;
@@ -294,7 +295,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
             }
             if ($gerenciaSecond && $gerenciaSecond->isValidAudit() === false) {
                 $isValidAudit = false;
-                $this->addErrorTrans('pequiven_seip.errors.the_second_line_management_no_audit', array("%gerenciaSecond%" => $gerenciaSecond->getGerencia()));
+                $this->addErrorTrans('pequiven_seip.errors.the_second_line_management_no_audit', array("%gerenciaSecond%" => $gerenciaSecond->getGerencia()->getDescription().' - '.$gerenciaSecond->getDescription()));
                 $status = \Pequiven\SEIPBundle\Controller\Api\ResultApiController::RESULT_NO_AUDIT;
             }
 
@@ -599,6 +600,11 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                 $canBeEvaluated = $isValidAdvance;
                 //$this->addErrorTrans($this->getErrors());
             }
+            
+            
+            if(!$isValidAudit){
+                $canBeEvaluated = $isValidAudit;
+            }
 
 //Se evalua que tenga por lo menos un item
             if (count($goals) == 0 && count($arrangementPrograms) == 0 && count($objetives) == 0) {
@@ -645,6 +651,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
         if (!$canBeEvaluated || count($this->errors) > 0) {
             $data['success'] = false;
         }
+        
         $view = $this->view($data);
         $view->getSerializationContext()->setGroups(array('api_list', 'api_result', 'sonata_api_read'));
 
