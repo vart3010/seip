@@ -151,7 +151,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                 //ALMACENO EN ARRAYS LOS VALORES DE PLAN, REAL Y TIPO
                 foreach ($movements as $mov) {
                     $valores[$idarray] = $mov->getRealAdvance();
-                    $realResult[$idarray] = $mov->getRealAdvance() + $mov->getPenalty();
+                    $realResult[$idarray] = $mov->getRealAdvance() + $mov->getPentalty();
                     $planeado[$idarray] = $mov->getplanned();
                     $tipos[$idarray] = $mov->getType();
                     $idarray++;

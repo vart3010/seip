@@ -419,11 +419,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         foreach ($AP->getTimeline()->getGoals() as $meta) {
 //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA Y VOY SUMANDO POR META
             $datosAP = $this->CalculateAdvancePenalty($meta, $date);
-            $goalValue = $this->rescaleValue($datosAP);            
+            $goalValue = $this->rescaleValue($datosAP);
             $realResult+=$goalValue * $meta->getWeight();
             $plannedResult+=(($datosAP['plannedResult'] * $meta->getWeight())) / 100;
         }
-        
+
         $realResult/=100;
 
         if ($plannedResult > 0) {
