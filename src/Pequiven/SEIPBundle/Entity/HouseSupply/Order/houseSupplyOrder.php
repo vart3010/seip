@@ -33,9 +33,21 @@ class houseSupplyOrder {
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="date", type="datetime", nullable=false)
+     * @ORM\Column(name="dateOrder", type="datetime", nullable=false)
      */
-    private $date;
+    private $dateOrder;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="datePay", type="datetime", nullable=true)
+     */
+    private $datePay;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="dateDelivery", type="datetime", nullable=true)
+     */
+    private $dateDelivery;
 
     /**
      * REGISTRADA = 1; / DEVUELTA = 2; / ESPERA = 3; / PAGADA = 4; / ENTREGADA = 5;    
@@ -125,6 +137,24 @@ class houseSupplyOrder {
     private $createdBy;
 
     /**
+     * Pagado por
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $paidBy;
+
+    /**
+     * Despachado por
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $deliveredBy;
+
+    /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="createdAt", type="datetime")
      */
@@ -149,8 +179,16 @@ class houseSupplyOrder {
         return $this->id;
     }
 
-    function getDate() {
-        return $this->date;
+    function getDateOrder() {
+        return $this->dateOrder;
+    }
+
+    function getDatePay() {
+        return $this->datePay;
+    }
+
+    function getDateDelivery() {
+        return $this->dateDelivery;
     }
 
     function getType() {
@@ -201,6 +239,14 @@ class houseSupplyOrder {
         return $this->createdBy;
     }
 
+    function getPaidBy() {
+        return $this->paidBy;
+    }
+
+    function getDeliveredBy() {
+        return $this->deliveredBy;
+    }
+
     function getCreatedAt() {
         return $this->createdAt;
     }
@@ -217,8 +263,16 @@ class houseSupplyOrder {
         $this->id = $id;
     }
 
-    function setDate(\DateTime $date) {
-        $this->date = $date;
+    function setDateOrder(\DateTime $dateOrder) {
+        $this->dateOrder = $dateOrder;
+    }
+
+    function setDatePay(\DateTime $datePay) {
+        $this->datePay = $datePay;
+    }
+
+    function setDateDelivery(\DateTime $dateDelivery) {
+        $this->dateDelivery = $dateDelivery;
     }
 
     function setType($type) {
@@ -257,7 +311,9 @@ class houseSupplyOrder {
         $this->totalOrder = $totalOrder;
     }
 
-    
+    function setOrderItems(houseSupplyOrderItems $orderItems) {
+        $this->orderItems = $orderItems;
+    }
 
     function setPayments(houseSupplyPayments $payments) {
         $this->payments = $payments;
@@ -265,6 +321,14 @@ class houseSupplyOrder {
 
     function setCreatedBy(User $createdBy) {
         $this->createdBy = $createdBy;
+    }
+
+    function setPaidBy(User $paidBy) {
+        $this->paidBy = $paidBy;
+    }
+
+    function setDeliveredBy(User $deliveredBy) {
+        $this->deliveredBy = $deliveredBy;
     }
 
     function setCreatedAt($createdAt) {

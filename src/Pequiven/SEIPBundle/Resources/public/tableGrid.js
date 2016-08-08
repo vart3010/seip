@@ -53,15 +53,15 @@ function delRowDefault() {
 }
 
 function addRow(data) {
-    
+
     var allow = idsClaves.indexOf(data[campoClave][0]);
     if (allow < 0) {
         var fila = "<tr class='id_" + index + "'>";
         for (i = 0; i < data.length; i++) {
-            
+
             var clase = colsRight.indexOf(i);
             if (clase >= 0) {
-                fila = fila + "<td class='" + data[i][0] + " gridTd'>" + moneyFormat(data[i][1]) + "</td>";
+                fila = fila + "<td class=\"" + data[i][0] + " gridTd\">" + moneyFormat(data[i][1]) + "</td>";
             } else {
                 fila = fila + "<td class='" + data[i][0] + "'>" + data[i][1] + "</td>";
             }
@@ -140,8 +140,8 @@ function totals() {
     }
     //alert(totals);
     for (var i = 0; i < columsTotals.length; i++) {
-        $(selectorTotals + columsTotals[i]).html(moneyFormat(totals[i],2));
-        $(selectorTotals + columsTotals[i]).attr("data",totals[i]);
+        $(selectorTotals + columsTotals[i]).html(moneyFormat(totals[i], 2));
+        $(selectorTotals + columsTotals[i]).attr("data", totals[i]);
     }
 }
 

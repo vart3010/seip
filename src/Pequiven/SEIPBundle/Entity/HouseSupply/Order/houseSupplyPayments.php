@@ -5,7 +5,7 @@ namespace Pequiven\SEIPBundle\Entity\HouseSupply\Order;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Entity\User;
-use Pequiven\SEIPBundle\Model\HouseSupply\Order\HouseSupplyOrder;
+use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder;
 
 /**
  * Pagos
@@ -32,7 +32,7 @@ class houseSupplyPayments {
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\HouseSupplyOrder", inversedBy="payments")
      * @ORM\JoinColumn(name="order_id", referencedColumnName="id", nullable=false)
      */
-    private $houseSupplyOrder;
+    private $order;
 
     /**
      * 1. TRANSFERENCIA / 2. TARJETA DE DEBITO / 3. TARJETA DE CREDITO
@@ -44,9 +44,9 @@ class houseSupplyPayments {
     /**
      * 
      * @var string
-     * @ORM\Column(name="number",type="string",nullable=false)
+     * @ORM\Column(name="ref",type="string",nullable=false)
      */
-    private $number;
+    private $ref;
 
     /**
      *
@@ -85,16 +85,16 @@ class houseSupplyPayments {
         return $this->id;
     }
 
-    function getHouseSupplyOrder() {
-        return $this->houseSupplyOrder;
+    function getOrder() {
+        return $this->order;
     }
 
     function getType() {
         return $this->type;
     }
 
-    function getNumber() {
-        return $this->number;
+    function getRef() {
+        return $this->ref;
     }
 
     function getTotal() {
@@ -121,16 +121,16 @@ class houseSupplyPayments {
         $this->id = $id;
     }
 
-    function setHouseSupplyOrder(HouseSupplyOrder $houseSupplyOrder) {
-        $this->houseSupplyOrder = $houseSupplyOrder;
+    function setOrder(HouseSupplyOrder $order) {
+        $this->order = $order;
     }
 
-    function setType(interger $type) {
+    function setType($type) {
         $this->type = $type;
     }
 
-    function setNumber($number) {
-        $this->number = $number;
+    function setRef($ref) {
+        $this->ref = $ref;
     }
 
     function setTotal($total) {
