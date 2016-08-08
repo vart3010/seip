@@ -283,7 +283,15 @@ class HouseSupplyOrderKitController extends SEIPController {
      */
     public function checkAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $allOrders = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('type' => 1));
+        $user = $this->getUser();
+        $searchwsc = array(
+            'coordinator' => $user,
+            'phase' => 1,
+        );
+
+        $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($searchwsc);
+        
+        $allOrders = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('type' => 1, 'workStudyCircle' => $wsc));
         $members = array();
 
         if ($request->get('idOrder')) {

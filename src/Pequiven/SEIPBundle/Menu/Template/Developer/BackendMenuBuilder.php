@@ -92,11 +92,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         if ($this->isGranted('ROLE_SEIP_OPERATION_*')) {
             $this->addMenuOperation($menu, $section);
         }
-        
+
         //Menú Ticket Trello
-        /*if ($this->isGranted('ROLE_TRELLO')){
-            $this->addMenuTicketTrello($menu, $section);
-        }*/
+        /* if ($this->isGranted('ROLE_TRELLO')){
+          $this->addMenuTicketTrello($menu, $section);
+          } */
 
         //Menú SIG
         if ($this->isGranted('ROLE_SEIP_SIG_MENU')) {
@@ -204,31 +204,31 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
             $objective->addChild($visualize);
 
-            /*if ($this->isGranted('ROLE_SEIP_SIG_EVOLUTION_OBJETIVE')) {
-                //Lista de Informe de Evolución Consolidado
-                $evolution = $this->factory->createItem('sig.evolution.visualize', $this->getSubLevelOptions(array(
-                                    'uri' => 'null',
-                                    'labelAttributes' => array('icon' => '',),
-                                ))
-                        )->setLabel($this->translate(sprintf('Informe de Evolución', $section)));
-                //Nivel 3
-                $evolution->addChild('planning.visualize.objetives.strategico', array(
-                    'route' => 'pequiven_objetives_list_sig_evolution',
-                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.strategic', $section)));
+            /* if ($this->isGranted('ROLE_SEIP_SIG_EVOLUTION_OBJETIVE')) {
+              //Lista de Informe de Evolución Consolidado
+              $evolution = $this->factory->createItem('sig.evolution.visualize', $this->getSubLevelOptions(array(
+              'uri' => 'null',
+              'labelAttributes' => array('icon' => '',),
+              ))
+              )->setLabel($this->translate(sprintf('Informe de Evolución', $section)));
+              //Nivel 3
+              $evolution->addChild('planning.visualize.objetives.strategico', array(
+              'route' => 'pequiven_objetives_list_sig_evolution',
+              'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO)
+              ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.strategic', $section)));
 
-                $evolution->addChild('planning.visualize.objetives.tactico', array(
-                    'route' => 'pequiven_objetives_list_sig_evolution',
-                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.tactic', $section)));
+              $evolution->addChild('planning.visualize.objetives.tactico', array(
+              'route' => 'pequiven_objetives_list_sig_evolution',
+              'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO)
+              ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.tactic', $section)));
 
-                $evolution->addChild('planning.visualize.objetives.operativo', array(
-                    'route' => 'pequiven_objetives_list_sig_evolution',
-                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));
+              $evolution->addChild('planning.visualize.objetives.operativo', array(
+              'route' => 'pequiven_objetives_list_sig_evolution',
+              'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO)
+              ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));
 
-                $objective->addChild($evolution);
-            }*/
+              $objective->addChild($evolution);
+              } */
             $menuSig->addChild($objective);
         }
         if ($this->isGranted('ROLE_SEIP_SIG_INDICATOR')) {
@@ -1904,83 +1904,99 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
      * @param type $section
      */
     private function addMenuHouseSupply(ItemInterface $menu, $section) {
+        $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $child = $this->factory->createItem('housesupply', $this->getSubLevelOptions(array(
-                            'uri' => null,
-                            'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
-                        ))
-                )
-                ->setLabel($this->translate(sprintf('Casa - Abasto', $section)));
+        $searchwsc = array(
+            'coordinator' => $user,
+            'phase' => 1,
+        );
 
-        $child2 = $this->factory->createItem('housesupply.order', $this->getSubLevelOptions(array(
-                            'uri' => null,
-                                // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
-                        ))
-                )
-                ->setLabel($this->translate(sprintf('Pedidos', $section)));
-        $child2
-                ->addChild('housesupply.order.create', array(
-                    'route' => 'pequiven_housesupply_orderkit_charge',
-                    'routeParameters' => array('typemember' => 0),
-                    'labelAttributes' => array('icon' => 'fa fa-shopping-cart')
-                ))
-                ->setLabel($this->translate(sprintf('Crear', $section)));
+        $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($searchwsc);
+        
+       
+            $child = $this->factory->createItem('housesupply', $this->getSubLevelOptions(array(
+                                'uri' => null,
+                                'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                            ))
+                    )
+                    ->setLabel($this->translate(sprintf('Casa - Abasto', $section)));
 
-        $child2
-                ->addChild('housesupply.order.check', array(
-                    'route' => 'pequiven_housesupply_orderkit_check',                                        
-                    'labelAttributes' => array('icon' => 'fa fa-check-square-o')
-                ))
-                ->setLabel($this->translate(sprintf('Validar', $section)));
+            if ($wsc != null) {
+            $child2 = $this->factory->createItem('housesupply.order', $this->getSubLevelOptions(array(
+                                'uri' => null,
+                                    // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                            ))
+                    )
+                    ->setLabel($this->translate(sprintf('Pedidos', $section)));
+            $child2
+                    ->addChild('housesupply.order.create', array(
+                        'route' => 'pequiven_housesupply_orderkit_charge',
+                        'routeParameters' => array('typemember' => 0),
+                        'labelAttributes' => array('icon' => 'fa fa-shopping-cart')
+                    ))
+                    ->setLabel($this->translate(sprintf('Crear', $section)));
 
-        $child2
-                ->addChild('housesupply.order.view', array(
+            $child2
+                    ->addChild('housesupply.order.check', array(
+                        'route' => 'pequiven_housesupply_orderkit_check',
+                        'labelAttributes' => array('icon' => 'fa fa-check-square-o')
+                    ))
+                    ->setLabel($this->translate(sprintf('Validar', $section)));
+
+            $child2
+                    ->addChild('housesupply.order.view', array(
+                            //'route' => 'pequiven_user_feestructure',
+                            //'labelAttributes' => array('icon' => 'fa fa-calculator')
+                    ))
+                    ->setLabel($this->translate(sprintf('Visualizar', $section)));
+            $child2
+                    ->addChild('housesupply.order.reports', array(
                         //'route' => 'pequiven_user_feestructure',
-                        //'labelAttributes' => array('icon' => 'fa fa-calculator')
-                ))
-                ->setLabel($this->translate(sprintf('Visualizar', $section)));
-        $child2
-                ->addChild('housesupply.order.reports', array(
-                    //'route' => 'pequiven_user_feestructure',
-                    'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
-                ))
-                ->setLabel($this->translate(sprintf('Reportes', $section)));
+                        'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
+                    ))
+                    ->setLabel($this->translate(sprintf('Reportes', $section)));
+            
+            $child->addChild($child2);
+        }
 
-        $child3 = $this->factory->createItem('housesupply.inventory', $this->getSubLevelOptions(array(
-                            'uri' => null,
-                                // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
-                        ))
-                )
-                ->setLabel($this->translate(sprintf('Inventario', $section)));
-        $child3
-                ->addChild('housesupply.inventory.charge', array(
-                    'route' => 'pequiven_housesupply_inventory_charge',
-                    'routeParameters' => array('type' => 1),
-                    'labelAttributes' => array('icon' => 'fa fa-arrow-up')
-                ))
-                ->setLabel($this->translate(sprintf('Cargos', $section)));
-        $child3
-                ->addChild('housesupply.inventory.uncharge', array(
-                    'route' => 'pequiven_housesupply_inventory_charge',
-                    'routeParameters' => array('type' => 2),
-                    'labelAttributes' => array('icon' => 'fa fa-arrow-down')
-                ))
-                ->setLabel($this->translate(sprintf('Descargos', $section)));
-        $child3
-                ->addChild('housesupply.inventory.product', array(
-                    //'route' => 'pequiven_user_feestructure',
-                    'labelAttributes' => array('icon' => 'fa fa-shopping-basket')
-                ))
-                ->setLabel($this->translate(sprintf('Productos', $section)));
-        $child3
-                ->addChild('housesupply.inventory.reports', array(
-                    //'route' => 'pequiven_user_feestructure',
-                    'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
-                ))
-                ->setLabel($this->translate(sprintf('Reportes', $section)));
+        if ($this->isGranted(array('ROLE_SEIP_HOUSESUPPLY_INVENTORY'))) {
 
-        $child->addChild($child2);
-        $child->addChild($child3);
+            $child3 = $this->factory->createItem('housesupply.inventory', $this->getSubLevelOptions(array(
+                                'uri' => null,
+                                    // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                            ))
+                    )
+                    ->setLabel($this->translate(sprintf('Inventario', $section)));
+            $child3
+                    ->addChild('housesupply.inventory.charge', array(
+                        'route' => 'pequiven_housesupply_inventory_charge',
+                        'routeParameters' => array('type' => 1),
+                        'labelAttributes' => array('icon' => 'fa fa-arrow-up')
+                    ))
+                    ->setLabel($this->translate(sprintf('Cargos', $section)));
+            $child3
+                    ->addChild('housesupply.inventory.uncharge', array(
+                        'route' => 'pequiven_housesupply_inventory_charge',
+                        'routeParameters' => array('type' => 2),
+                        'labelAttributes' => array('icon' => 'fa fa-arrow-down')
+                    ))
+                    ->setLabel($this->translate(sprintf('Descargos', $section)));
+            $child3
+                    ->addChild('housesupply.inventory.product', array(
+                        //'route' => 'pequiven_user_feestructure',
+                        'labelAttributes' => array('icon' => 'fa fa-shopping-basket')
+                    ))
+                    ->setLabel($this->translate(sprintf('Productos', $section)));
+            $child3
+                    ->addChild('housesupply.inventory.reports', array(
+                        //'route' => 'pequiven_user_feestructure',
+                        'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
+                    ))
+                    ->setLabel($this->translate(sprintf('Reportes', $section)));
+
+            $child->addChild($child3);
+        }
+
         $menu->addChild($child);
     }
 
@@ -2284,7 +2300,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
         $menu->addChild($child);
     }
-    
+
     private function addMenuTicketTrello(ItemInterface $menu, $section) {
         $menuTrello = $this->factory->createItem('trello.main', $this->getSubLevelOptions(array(
                             'uri' => null,
@@ -2294,13 +2310,13 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.trello.main', $section)));
 
-            $ticket = $this->factory->createItem('trello.ticket', $this->getSubLevelOptions(array('route' => "create_task_trello", 'routeParameters' => array(),
-                                'labelAttributes' => array('icon' => 'fa fa-ticket',),
-                            ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.trello.ticket', $section)));
+        $ticket = $this->factory->createItem('trello.ticket', $this->getSubLevelOptions(array('route' => "create_task_trello", 'routeParameters' => array(),
+                            'labelAttributes' => array('icon' => 'fa fa-ticket',),
+                        ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.trello.ticket', $section)));
 
-            $menuTrello->addChild($ticket);
-            
+        $menuTrello->addChild($ticket);
+
         $menu->addChild($menuTrello);
     }
 

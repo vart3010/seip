@@ -9,8 +9,8 @@ abstract class HouseSupplyPayments {
      */
     const TRANSFERENCIA = 1;
     const DEPOSITO = 2;
-    const TARJETA_DEBITO = 3;
-    const TARJETA_CREDITO = 4;        
+   // const TARJETA_DEBITO = 3;
+   // const TARJETA_CREDITO = 4;        
         
     /**
      * 
@@ -21,8 +21,8 @@ abstract class HouseSupplyPayments {
         static $array = [
             self::TRANSFERENCIA => 'Transferencia',
             self::DEPOSITO => 'Depósito',
-            self::TARJETA_DEBITO => 'Tarjeta de Débito',
-            self::TARJETA_CREDITO => 'Tarjeta de Crédito',            
+        //    self::TARJETA_DEBITO => 'Tarjeta de Débito',
+        //    self::TARJETA_CREDITO => 'Tarjeta de Crédito',            
         ];
         return $array;
     }
