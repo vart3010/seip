@@ -597,7 +597,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
             $isValidAdvance = $resultService->validateAdvanceOfObjetives($objetives);
             if (!$isValidAdvance) {
                 $canBeEvaluated = $isValidAdvance;
-                $this->addErrorTrans($this->getErrors());
+                //$this->addErrorTrans($this->getErrors());
             }
 
 //Se evalua que tenga por lo menos un item
