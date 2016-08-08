@@ -262,7 +262,7 @@ class HouseSupplyOrderKitController extends SEIPController {
         $id = $request->get('id');
         $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findOneById($id);
         $wsc = $order->getWorkStudyCircle()->getId();
-        $orderDetails = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->TotalOrder($type = 1, $id, $wsc);
+        $orderDetails = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->TotalOrder($id);
         $productKit = $order->getProductKit();
         $cantKits = count($order->getOrderItems()) / count($productKit->getProductKitItems());
         $arrayStatus = \Pequiven\SEIPBundle\Model\HouseSupply\HouseSupplyOrder::getStatus();
