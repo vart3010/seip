@@ -125,7 +125,7 @@ class houseSupplyInventory {
         $this->available = $available;
     }
 
-    function setLastChargeDate(datetime $lastChargeDate) {
+    function setLastChargeDate(\DateTime $lastChargeDate) {
         $this->lastChargeDate = $lastChargeDate;
     }
 
