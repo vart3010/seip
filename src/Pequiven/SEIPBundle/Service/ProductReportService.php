@@ -257,9 +257,10 @@ class ProductReportService implements ContainerAwareInterface {
         $plan = array();
         $real = array();
 
-
+        
 
         foreach ($summaryProduction[$methodFrecuency] as $production) {
+
             $arrayCategories[] = array("label" => $production["nameGroup"]);
             $plan[] = array("value" => $production[$fieldPlan]);
             $real[] = array("value" => $production[$fieldReal]);
@@ -289,9 +290,6 @@ class ProductReportService implements ContainerAwareInterface {
             "showValues" => "0",
             "data" => $perc
         );
-        //var_dump(json_encode($data["dataSource"]["dataset"]));
-
-        
 
 
         #var_dump($data["dataSource"]["dataset"]);
@@ -375,10 +373,22 @@ class ProductReportService implements ContainerAwareInterface {
         $arrayPlan = array();
         $arrayReal = array();
 
+        $factorService = $this->getFactorConversionService();
+
+        $bandUnitFactor = 0;
+
         if (!$range["range"]) {
             foreach ($productReport as $product) {
                 if ($product->getProduct()->getIsCheckToReportProduction()) {
                     $typeVar = $product->$methodFrecuency($dateReport, $typeReport);
+                    
+                    if($factorService->hasFactorConversion($product)) {
+                        $bandUnitFactor+=1;
+                    }
+                    //SI TIENE FACTOR DE CONVERSION LO APLICA
+                    $typeVar[$plan] = $factorService->getConversionFactorValue($typeVar[$plan], $product);
+                    $typeVar[$real] = $factorService->getConversionFactorValue($typeVar[$real], $product);
+
                     array_push($arrayCategories, $product->getProduct()->getName());
                     array_push($arrayPlan, $typeVar[$plan]);
                     array_push($arrayReal, $typeVar[$real]);
@@ -391,7 +401,6 @@ class ProductReportService implements ContainerAwareInterface {
             $dayUnixTime = 86400;
             $cantDias = ($dateEnd - $dateStart) / $dayUnixTime;
 
-
             foreach ($productReport as $product) {
                 if ($product->getProduct()->getIsCheckToReportProduction()) {
                     $sumPlan = 0;
@@ -401,6 +410,15 @@ class ProductReportService implements ContainerAwareInterface {
                         $date = $dateStart + ($d * $dayUnixTime);
                         $dateReport = new \DateTime(date("Y-m-d", $date));
                         $typeVar = $product->$methodFrecuency($dateReport, $typeReport);
+
+                        if($factorService->hasFactorConversion($product)) {
+                            $bandUnitFactor+=1;
+                        }
+
+                        //SI TIENE FACTOR DE CONVERSION LO APLICA
+                        $typeVar[$plan] = $factorService->getConversionFactorValue($typeVar[$plan], $product);
+                        $typeVar[$real] = $factorService->getConversionFactorValue($typeVar[$real], $product);
+
                         $sumPlan += $typeVar[$plan];
                         $sumReal += $typeVar[$real];
                     }
@@ -411,6 +429,14 @@ class ProductReportService implements ContainerAwareInterface {
                     array_push($arrayReal, $sumReal);
                 }
             }
+        }
+
+        //SI POR LO MENOS UN PROUCTO TIENE UN FACTOR DE CONVERSION LA GRAFICA MOSTRARA PIEZA
+        if($bandUnitFactor>0) {
+            $chart["pYAxisName"] = "Cantidad (PZA)";
+            $chart["subCaption"] .= " PZA "; 
+        } else {
+            $chart["subCaption"] .= " TM ";
         }
 
         
@@ -618,6 +644,10 @@ class ProductReportService implements ContainerAwareInterface {
 
     protected function getCauseFailService() {
         return $this->container->get('seip.service.causefail');
+    }
+
+    protected function getFactorConversionService() {
+        return $this->container->get('pequiven_factorConversion.service.factorConversion');
     }
 
 }
