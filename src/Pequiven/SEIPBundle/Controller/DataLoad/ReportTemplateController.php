@@ -1446,7 +1446,7 @@ class ReportTemplateController extends SEIPController {
 
             $exportToPdf = $request->get('exportToPdf', false);
             //var_dump("aqui: "+$exportToPdf);
-
+            $factorService = $this->getFactorConversionService();
 
             $data = $form->getData();
 
@@ -1603,7 +1603,9 @@ class ReportTemplateController extends SEIPController {
                                         $dayPlan+=$summaryDay["plan"];
                                         $dayReal+=$summaryDay["real"];
 
-
+                                        //SE CONVIERTEN LOS VALORES SI TIENEN FACTOR DE CONVERSION
+                                        $summaryDay["plan"] = $factorService->getConversionFactorValue($summaryDay["plan"], $productReport);
+                                        $summaryDay["real"] = $factorService->getConversionFactorValue($summaryDay["real"], $productReport);
 
                                         //ME TRAIGO LAS OBSERVACIONES 
                                         if ($summaryDay["observation"] != "") {
@@ -1653,6 +1655,13 @@ class ReportTemplateController extends SEIPController {
                                         $MonthPlanAcumulated+=$summaryMonth["plan_acumulated"];
                                         $MonthRealAcumualated+=$summaryMonth["real_acumulated"];
 
+                                        //SE CONVIERTEN LOS VALORES SI TIENEN FACTOR DE CONVERSION
+                                        $summaryMonth["plan_month"] = $factorService->getConversionFactorValue($summaryMonth["plan_month"], $productReport);
+                                        $summaryMonth["plan_acumulated"] = $factorService->getConversionFactorValue($summaryMonth["plan_acumulated"], $productReport);
+                                        $summaryMonth["real_acumulated"] = $factorService->getConversionFactorValue($summaryMonth["real_acumulated"], $productReport);
+
+
+
                                         if ($summaryMonth["plan_acumulated"] - $summaryMonth["real_acumulated"] < 0) {
                                             $varMonth = 0;
                                         } else {
@@ -1682,9 +1691,16 @@ class ReportTemplateController extends SEIPController {
                                         //PRODUCCTION YEAR
                                         $summaryYear = $productReport->getSummaryYear($dateReport, $typeReport);
 
+
                                         $yearPlan+=$summaryYear["plan_year"];
                                         $yearPlanAcumulated+=$summaryYear["plan_acumulated"];
                                         $yearRealAcumualated+=$summaryYear["real_acumulated"];
+
+                                        //SE CONVIERTEN LOS VALORES SI TIENEN FACTOR DE CONVERSION
+                                        $summaryYear["plan_year"] = $factorService->getConversionFactorValue($summaryYear["plan_year"], $productReport);
+                                        $summaryYear["plan_acumulated"] = $factorService->getConversionFactorValue($summaryYear["plan_acumulated"], $productReport);
+                                        $summaryYear["real_acumulated"] = $factorService->getConversionFactorValue($summaryYear["real_acumulated"], $productReport);
+
 
                                         if ($summaryYear["plan_acumulated"] - $summaryYear["real_acumulated"] < 0) {
                                             $varYear = 0;
@@ -1714,6 +1730,8 @@ class ReportTemplateController extends SEIPController {
                                         $summaryProductionTotals["year"]["realAcumulado"] +=$summaryYear["real_acumulated"];
                                         #$summaryProductionTotals["year"]["ejec"] +=$ejecutionYear;
                                         #$summaryProductionTotals["year"]["var"] +=$varYear;
+
+
 
                                         $cont = 0;
 
@@ -1844,7 +1862,14 @@ class ReportTemplateController extends SEIPController {
                                     );
                                     // }
                                     $unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
+
+                                    //CONVIERTE EL VALOR SI TIENE FACTOR CONFIGURADO
+                                    $unrealizedProduction["total_day"] = $factorService->getConversionFactorValue($unrealizedProduction["total_day"], $productReport);
+                                    $unrealizedProduction["total_month"] = $factorService->getConversionFactorValue($unrealizedProduction["total_month"], $productReport);
+                                    $unrealizedProduction["total_year"] = $factorService->getConversionFactorValue($unrealizedProduction["total_year"], $productReport);
+
                                     if ($overProduction == 1) {
+                                    
 
                                         $unrealizedProduction["total_day"] = $unrealizedProduction["total_day"];
                                         $unrealizedProduction["total_month"] = $unrealizedProduction["total_month"];
@@ -1897,12 +1922,20 @@ class ReportTemplateController extends SEIPController {
                                     $totalUnrealizedProduction["year"] += $unrealizedProduction["total_year"];
                                 }
                             }//FIN PNR
+                            
+
+
                             //INVENTARIO
                             foreach ($plantReport->getProductsReport() as $productReport) {
                                 $productReportsObjects[] = $productReport;
                                 if (!$productReport->getIsGroup()) {
                                     $productId = $productReport->getProduct()->getId();
                                     $Inventory = $productReport->getSummaryInventory($dateReport);
+
+                                    //CONVIERTE EL VALOR SI TIENE FACTOR CONFIGURADO
+                                    $Inventory["total_day"] = $factorService->getConversionFactorValue($Inventory["total_day"], $productReport);
+                                    $Inventory["total_month"] = $factorService->getConversionFactorValue($Inventory["total_month"], $productReport);
+
                                     $totalInventory["day"] += $Inventory["total_day"];
                                     $totalInventory["day_preview"] += $Inventory["total_month"];
 
@@ -1927,9 +1960,9 @@ class ReportTemplateController extends SEIPController {
 //                }
                     //die();
                     $reportService = $this->getProductReportService();
-                    $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
-                    $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
-                    $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
+                    $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
+                    $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
+                    $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
 
 
                     $data = array(
@@ -2034,7 +2067,7 @@ class ReportTemplateController extends SEIPController {
                 } else {//POR GRUPO DE PLANTAS Y REPORTE HASTA LA FECHA
                     //POR GRUPO DE PLANTAS Y REPORTE HASTA LA FECHA
                     ////POR GRUPO DE PLANTAS Y REPORTE HASTA LA FECHA
-                    //
+                    
                     $summaryProduction = array();
                     $arrayConsumerServices = array();
                     $arrayUnrealizedProduction = array();
@@ -2129,15 +2162,24 @@ class ReportTemplateController extends SEIPController {
                                     "year" => 0.0
                                 );
 
+                                $countFactorConverter = 0;
+                                $factorUnit = "TM";
 
                                 foreach ($childrens as $child) {
-
-
                                     foreach ($child->getProductsReport() as $productReport) {
                                         if ($productReport->getIsGroup() == 0) {
-                                            //var_dump($productReport->getId());
+                                            
+                                            if($factorService->hasFactorConversion($productReport)) {
+                                                $countFactorConverter+=1;
+                                                $factorUnit = $factorService->unitToFactorConversion($productReport);
+                                            }
+
                                             //SUMMARY DAY
                                             $summaryDay = $productReport->getSummaryDay($dateReport, $typeReport);
+
+                                            //SE CONVIERTEN LOS VALORES SI TIENEN FACTOR DE CONVERSION
+                                            $summaryDay["plan"] = $factorService->getConversionFactorValue($summaryDay["plan"], $productReport);
+                                            $summaryDay["real"] = $factorService->getConversionFactorValue($summaryDay["real"], $productReport);
 
                                             $dayPlan+=$summaryDay["plan"];
                                             $dayReal+=$summaryDay["real"];
@@ -2154,6 +2196,11 @@ class ReportTemplateController extends SEIPController {
                                             //SUMMARY MONTH
                                             $summaryMonth = $productReport->getSummaryMonth($dateReport, $typeReport);
 
+                                            //SE CONVIERTEN LOS VALORES SI TIENEN FACTOR DE CONVERSION
+                                            $summaryMonth["plan_month"] = $factorService->getConversionFactorValue($summaryMonth["plan_month"], $productReport);
+                                            $summaryMonth["plan_acumulated"] = $factorService->getConversionFactorValue($summaryMonth["plan_acumulated"], $productReport);
+                                            $summaryMonth["real_acumulated"] = $factorService->getConversionFactorValue($summaryMonth["real_acumulated"], $productReport);
+
 
                                             $MonthPlan+=$summaryMonth["plan_month"];
                                             $MonthPlanAcumulated+=$summaryMonth["plan_acumulated"];
@@ -2162,6 +2209,10 @@ class ReportTemplateController extends SEIPController {
 
                                             //SUMMARY YEAR
                                             $summaryYear = $productReport->getSummaryYear($dateReport, $typeReport);
+                                            //SE CONVIERTEN LOS VALORES SI TIENEN FACTOR DE CONVERSION
+                                            $summaryYear["plan_year"] = $factorService->getConversionFactorValue($summaryYear["plan_year"], $productReport);
+                                            $summaryYear["plan_acumulated"] = $factorService->getConversionFactorValue($summaryYear["plan_acumulated"], $productReport);
+                                            $summaryYear["real_acumulated"] = $factorService->getConversionFactorValue($summaryYear["real_acumulated"], $productReport);
 
                                             $yearPlan+=$summaryYear["plan_year"];
                                             $yearPlanAcumulated+=$summaryYear["plan_acumulated"];
@@ -2257,6 +2308,12 @@ class ReportTemplateController extends SEIPController {
 
                                             $unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
 
+                                            //SE CONVIERTEN LOS VALORES SI TIENEN FACTOR DE CONVERSION
+                                            $unrealizedProduction["total_day"] = $factorService->getConversionFactorValue($unrealizedProduction["total_day"], $productReport);
+                                            $unrealizedProduction["total_month"] = $factorService->getConversionFactorValue($unrealizedProduction["total_month"], $productReport);
+                                            $unrealizedProduction["total_year"] = $factorService->getConversionFactorValue($unrealizedProduction["total_year"], $productReport);
+
+
                                             if ($overProduction == 1) {
                                                 $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $productReport);
                                                 $totalPnrPlantGroups["day"] += $unrealizedProduction["total_day"] - $excludePnr[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]["Sobre Producción"]['day'];
@@ -2285,6 +2342,11 @@ class ReportTemplateController extends SEIPController {
                                             if ($productReport->getProduct()->isEnabled()) {
                                                 $productId = $productReport->getProduct()->getId();
                                                 $Inventory = $productReport->getSummaryInventory($dateReport);
+
+                                                //SE CONVIERTEN LOS VALORES SI TIENEN FACTOR DE CONVERSION
+                                                $Inventory["total_day"] = $factorService->getConversionFactorValue($Inventory["total_day"], $productReport);
+                                                $Inventory["total_month"] = $factorService->getConversionFactorValue($Inventory["total_month"], $productReport);
+
                                                 $totalInventory["day"] += $Inventory["total_day"];
                                                 $totalInventory["day_preview"] += $Inventory["total_month"];
 
@@ -2298,6 +2360,7 @@ class ReportTemplateController extends SEIPController {
                                     }//FIN INVENTARIO
                                 }
 
+                                
 
                                 $groupsCount++;
 
@@ -2375,12 +2438,18 @@ class ReportTemplateController extends SEIPController {
                 $summaryProduction["year"] = $summaryYearGroups;
 
                 $reportService = $this->getProductReportService();
+                
+                if($countFactorConverter>0) {
+                    $unit = $factorUnit;
+                } else {
+                    $unit = "TM";
+                }
 
-                $graphicsDays = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM", "range" => $byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), "day", "plan", "real");
+                $graphicsDays = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en ".$unit, "range" => $byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), "day", "plan", "real");
 
-                $graphicsMonth = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM", "range" => $byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), "month", "plan_acumulated", "real_acumulated");
+                $graphicsMonth = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en ".$unit, "range" => $byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), "month", "plan_acumulated", "real_acumulated");
 
-                $graphicsYear = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM", "range" => $byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), "year", "plan_acumulated", "real_acumulated");
+                $graphicsYear = $reportService->generateColumn3dLineryPerPlantGroups(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en ".$unit, "range" => $byRange), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), "year", "plan_acumulated", "real_acumulated");
 
 
 
@@ -2490,6 +2559,12 @@ class ReportTemplateController extends SEIPController {
                                             $timeNormal = new \DateTime(date("Y-m-d", $i));
                                             //RESULTADOS DE PRODUCCION
                                             $rs = $productReport->getSummaryDay($timeNormal, $typeReport);
+
+                                            //CONVIERTE EL VALOR SI TIENE FACTOR CONFIGURADO
+                                            $rs["plan"] = $factorService->getConversionFactorValue($rs["plan"], $productReport);
+                                            $rs["real"] = $factorService->getConversionFactorValue($rs["real"], $productReport);
+                                            
+
                                             $totalPlan += $rs["plan"];
                                             $totalReal += $rs["real"];
                                             $totalProdPlan += $rs["plan"];
@@ -2514,11 +2589,13 @@ class ReportTemplateController extends SEIPController {
                                             //var_dump($rs["observation"]);
                                             //Verifica si va a exportar y obvia las observaciones vacías.
                                             if ($exportToPdf) {
-                                                if ($rs["observation"] != "" || is_null($rs["observation"])) {
+                                                if ($rs["observation"] != "" || !is_null($rs["observation"])) {
                                                     $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
                                                 }
                                             } else {
-                                                $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
+                                                if ($rs["observation"] != "" || !is_null($rs["observation"])) {
+                                                    $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
+                                                }
                                             }
                                             $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
                                             //TOTALES PRODUCCTION
@@ -2538,15 +2615,11 @@ class ReportTemplateController extends SEIPController {
 
                                         //CONSUMO DE MATERIA PRIMA
                                         //VERIFICA SI EL PRODUCTO ES MATERIA PRIMA
-
-
                                         foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
                                             if ($rawMaterial->getProduct()->getIsRawMaterial()) {
                                                 $totalRawDayPlan = 0.0;
                                                 $totalRawDayReal = 0.0;
-
                                                 $i = $dateDesde;
-
 
                                                 while ($i != ($dateHasta + 86400)) {
                                                     $timeNormal = new \DateTime(date("Y-m-d", $i));
@@ -2600,6 +2673,7 @@ class ReportTemplateController extends SEIPController {
                                     }
                                 }
                             } //END PRODUCT REPORT RANGE
+
                             //CONSUMO DE SERVICIOS
                             foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
                                 $i = $dateDesde;
@@ -2668,6 +2742,9 @@ class ReportTemplateController extends SEIPController {
                                         $timeNormal = new \DateTime(date("Y-m-d", $i));
                                         $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($timeNormal);
 
+                                        //CONVIERTE EL VALOR SI TIENE FACTOR CONFIGURADO
+                                        $unrealizedProduction["total_day"] = $factorService->getConversionFactorValue($unrealizedProduction["total_day"], $productReport);
+
                                         //$unrealizedProduction = $productReport->getSummaryUnrealizedProductionsFilterCause($dateReport);
                                         $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($timeNormal, $productReport);
 
@@ -2693,6 +2770,10 @@ class ReportTemplateController extends SEIPController {
                                         $productId = $productReport->getProduct()->getId();
                                         $timeNormal = new \DateTime(date("Y-m-d", $dateHasta));
                                         $Inventory = $productReport->getSummaryInventory($timeNormal);
+
+                                        //CONVIERTE EL VALOR SI TIENE FACTOR CONFIGURADO
+                                        $Inventory["total_day"] = $factorService->getConversionFactorValue($Inventory["total_day"], $productReport);
+
                                         $arrayInventory[] = array("productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")", "total" => $Inventory["total_day"]);
                                     }
                                 }
@@ -2717,7 +2798,7 @@ class ReportTemplateController extends SEIPController {
 
                     $reportService = $this->getProductReportService();
 
-                    $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
+                    $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en"), $dataProductsReports, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
                 } else {
                     ////
                     //POR RANGO Y POR GRUPO DE PLANTAS
@@ -2801,6 +2882,11 @@ class ReportTemplateController extends SEIPController {
 
                                                 //RESULTADOS DE PRODUCCION
                                                 $rs = $productReport->getSummaryDay($timeNormal, $typeReport);
+
+                                                //SE CONVIERTEN LOS VALORES SI TIENEN FACTOR DE CONVERSION
+                                                $rs["plan"] = $factorService->getConversionFactorValue($rs["plan"], $productReport);
+                                                $rs["real"] = $factorService->getConversionFactorValue($rs["real"], $productReport);                                                
+
                                                 $planDay+= $rs["plan"];
                                                 $realDay+= $rs["real"];
                                                 $totalPlanProd += $rs["plan"];
@@ -2952,7 +3038,7 @@ class ReportTemplateController extends SEIPController {
 
 
                     $graphicsDays = $reportService->generateColumn3dLineryPerRange(
-                            array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), 1, true
+                            array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en"), $summaryProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), 1, true
                     );
                 }
 
@@ -4396,6 +4482,10 @@ class ReportTemplateController extends SEIPController {
 
     protected function getProductReportService() {
         return $this->container->get('seip.service.productReport');
+    }
+
+    protected function getFactorConversionService() {
+        return $this->container->get('pequiven_factorConversion.service.factorConversion');
     }
 
     protected function getUnrealizedProductionService() {
