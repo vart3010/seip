@@ -1,0 +1,18 @@
+## YAML Template.
+pequiven_housesupply_inventory_charge:
+    path: /{type}/
+    defaults:
+        _controller: pequiven.controller.housesupply_inventory:chargeAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
+pequiven_housesupply_inventory_charge_create:
+    path: /Charge/Create
+    defaults:
+        _controller: pequiven.controller.housesupply_inventory:CreateAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]

@@ -2976,7 +2976,6 @@ angular.module('seipModule.controllers', [])
 
                 var parameters = {
                     id: $scope.id_managementSystem,
-                    type: $scope.type,
                     _dc: numero
                 };
                 if (resource) {

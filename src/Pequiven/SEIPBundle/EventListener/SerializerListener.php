@@ -413,12 +413,12 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             //if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 35) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 35))){
             if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 14) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 14))){
            # if((($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 21) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 21))){
-                $data['januaryReal']['isEnabled'] = true;
-                $data['februaryReal']['isEnabled'] = true;
-                $data['marchReal']['isEnabled'] = true;
-                //$data['aprilReal']['isEnabled'] = true;
-                //$data['mayReal']['isEnabled'] = true;
-                //$data['juneReal']['isEnabled'] = true;
+                $data['januaryReal']['isEnabled'] = false;
+                $data['februaryReal']['isEnabled'] = false;
+                $data['marchReal']['isEnabled'] = false;
+                $data['aprilReal']['isEnabled'] = false;
+                $data['mayReal']['isEnabled'] = false;
+                $data['juneReal']['isEnabled'] = false;
                 //$data['julyReal']['isEnabled'] = true;
                 //$data['augustReal']['isEnabled'] = true;
                 //$data['septemberReal']['isEnabled'] = true;

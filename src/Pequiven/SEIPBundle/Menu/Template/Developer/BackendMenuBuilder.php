@@ -92,11 +92,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         if ($this->isGranted('ROLE_SEIP_OPERATION_*')) {
             $this->addMenuOperation($menu, $section);
         }
-        
+
         //Menú Ticket Trello
-        /*if ($this->isGranted('ROLE_TRELLO')){
-            $this->addMenuTicketTrello($menu, $section);
-        }*/
+        /* if ($this->isGranted('ROLE_TRELLO')){
+          $this->addMenuTicketTrello($menu, $section);
+          } */
 
         //Menú SIG
         if ($this->isGranted('ROLE_SEIP_SIG_MENU')) {
@@ -204,31 +204,31 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
             $objective->addChild($visualize);
 
-            /*if ($this->isGranted('ROLE_SEIP_SIG_EVOLUTION_OBJETIVE')) {
-                //Lista de Informe de Evolución Consolidado
-                $evolution = $this->factory->createItem('sig.evolution.visualize', $this->getSubLevelOptions(array(
-                                    'uri' => 'null',
-                                    'labelAttributes' => array('icon' => '',),
-                                ))
-                        )->setLabel($this->translate(sprintf('Informe de Evolución', $section)));
-                //Nivel 3
-                $evolution->addChild('planning.visualize.objetives.strategico', array(
-                    'route' => 'pequiven_objetives_list_sig_evolution',
-                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.strategic', $section)));
+            /* if ($this->isGranted('ROLE_SEIP_SIG_EVOLUTION_OBJETIVE')) {
+              //Lista de Informe de Evolución Consolidado
+              $evolution = $this->factory->createItem('sig.evolution.visualize', $this->getSubLevelOptions(array(
+              'uri' => 'null',
+              'labelAttributes' => array('icon' => '',),
+              ))
+              )->setLabel($this->translate(sprintf('Informe de Evolución', $section)));
+              //Nivel 3
+              $evolution->addChild('planning.visualize.objetives.strategico', array(
+              'route' => 'pequiven_objetives_list_sig_evolution',
+              'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO)
+              ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.strategic', $section)));
 
-                $evolution->addChild('planning.visualize.objetives.tactico', array(
-                    'route' => 'pequiven_objetives_list_sig_evolution',
-                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.tactic', $section)));
+              $evolution->addChild('planning.visualize.objetives.tactico', array(
+              'route' => 'pequiven_objetives_list_sig_evolution',
+              'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO)
+              ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.tactic', $section)));
 
-                $evolution->addChild('planning.visualize.objetives.operativo', array(
-                    'route' => 'pequiven_objetives_list_sig_evolution',
-                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));
+              $evolution->addChild('planning.visualize.objetives.operativo', array(
+              'route' => 'pequiven_objetives_list_sig_evolution',
+              'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO)
+              ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));
 
-                $objective->addChild($evolution);
-            }*/
+              $objective->addChild($evolution);
+              } */
             $menuSig->addChild($objective);
         }
         if ($this->isGranted('ROLE_SEIP_SIG_INDICATOR')) {
@@ -1077,54 +1077,54 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 ))
                         )
                         ->setLabel($this->translate(sprintf('Complejos Petroquímicos', $section)));
-                
+
                 if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA')) {
-                        $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.cpjaa', array(
-                                    'route' => 'pequiven_dasboard_linestrategicbygroup',
-                                    'routeParameters' => array('idGroup' => 12),
-                                    'labelAttributes' => array('icon' => 'fa fa-industry',),
-                                ))->setLabel($this->translate(sprintf(strtoupper('cpjaa'), $section)));
-                        $complejos->addChild($itemStrategicsIndicators);
-                    }
-                 if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPHC')) {
-                        $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.cphc', array(
-                                    'route' => 'pequiven_line_strategic_view_dashboard_complejo',
-                                    //'route' => 'pequiven_line_strategic_indicators_specific',
-                                    'routeParameters' => array('complejo' => '1'),
-                                    'labelAttributes' => array('icon' => 'fa fa-industry',),
-                                ))->setLabel($this->translate(sprintf(strtoupper('cphc'), $section)));
-                        $complejos->addChild($itemStrategicsIndicators);
-                    }
-                  if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPAMC')) {
-                        $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.cpamc', array(
-                                    'route' => 'pequiven_line_strategic_view_dashboard_complejo',
-                                    //'route' => 'pequiven_line_strategic_indicators_specific',
-                                    'routeParameters' => array('complejo' => '2'),
-                                    'labelAttributes' => array('icon' => 'fa fa-industry',),
-                                ))->setLabel($this->translate(sprintf(strtoupper('cpamc'), $section)));
-                        $complejos->addChild($itemStrategicsIndicators);
-                    }
-/*
-                $em = $this->getDoctrine()->getManager();
-                $complejos_sql = $em->getRepository('PequivenMasterBundle:Complejo')->findAll();
+                    $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.cpjaa', array(
+                                'route' => 'pequiven_dasboard_linestrategicbygroup',
+                                'routeParameters' => array('idGroup' => 12),
+                                'labelAttributes' => array('icon' => 'fa fa-industry',),
+                            ))->setLabel($this->translate(sprintf(strtoupper('cpjaa'), $section)));
+                    $complejos->addChild($itemStrategicsIndicators);
+                }
+                if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPHC')) {
+                    $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.cphc', array(
+                                'route' => 'pequiven_line_strategic_view_dashboard_complejo',
+                                //'route' => 'pequiven_line_strategic_indicators_specific',
+                                'routeParameters' => array('complejo' => '1'),
+                                'labelAttributes' => array('icon' => 'fa fa-industry',),
+                            ))->setLabel($this->translate(sprintf(strtoupper('cphc'), $section)));
+                    $complejos->addChild($itemStrategicsIndicators);
+                }
+                if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPAMC')) {
+                    $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.cpamc', array(
+                                'route' => 'pequiven_line_strategic_view_dashboard_complejo',
+                                //'route' => 'pequiven_line_strategic_indicators_specific',
+                                'routeParameters' => array('complejo' => '2'),
+                                'labelAttributes' => array('icon' => 'fa fa-industry',),
+                            ))->setLabel($this->translate(sprintf(strtoupper('cpamc'), $section)));
+                    $complejos->addChild($itemStrategicsIndicators);
+                }
+                /*
+                  $em = $this->getDoctrine()->getManager();
+                  $complejos_sql = $em->getRepository('PequivenMasterBundle:Complejo')->findAll();
 
-                foreach ($complejos_sql as $varComplejo) {
-                    $idC = $varComplejo->getId();
-                    $refC = $varComplejo->getRef();
+                  foreach ($complejos_sql as $varComplejo) {
+                  $idC = $varComplejo->getId();
+                  $refC = $varComplejo->getRef();
 
-                    if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_' . $refC)) {
-                        $refC = strtolower($refC);
-                        $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.' . $refC, array(
-                                    'route' => 'pequiven_line_strategic_view_dashboard_complejo',
-                                    //'route' => 'pequiven_line_strategic_indicators_specific',
-                                    'routeParameters' => array('complejo' => $idC),
-                                    'labelAttributes' => array('icon' => 'fa fa-industry',),
-                                ))->setLabel($this->translate(sprintf(strtoupper($refC), $section)));
-                        $complejos->addChild($itemStrategicsIndicators);
-                    }
-                }*/
+                  if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_' . $refC)) {
+                  $refC = strtolower($refC);
+                  $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.' . $refC, array(
+                  'route' => 'pequiven_line_strategic_view_dashboard_complejo',
+                  //'route' => 'pequiven_line_strategic_indicators_specific',
+                  'routeParameters' => array('complejo' => $idC),
+                  'labelAttributes' => array('icon' => 'fa fa-industry',),
+                  ))->setLabel($this->translate(sprintf(strtoupper($refC), $section)));
+                  $complejos->addChild($itemStrategicsIndicators);
+                  }
+                  } */
                 $tableros->addChild($complejos);
-                /*fin complejos*/
+                /* fin complejos */
 
                 $gerencias = $this->factory->createItem('tableros_gerencias', $this->getSubLevelOptions(array(
                                     'uri' => null,
@@ -1548,6 +1548,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.main', $section)));
 
+        // MENU CASA - ABASTO
+        //     if ($this->isGranted('ROLE_SEIP_HOUSE_SUPPLY_*')) {
+        $this->addMenuHouseSupply($menuWorkStudyCircles, $section);
+        //    }
+
         if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_CREATE')) && $this->getPeriodService()->isAllowLoadWorkStudyCircle()) {
 
             $workStudyCirclesRegister = $this->factory->createItem('work_study_circles.register', $this->getSubLevelOptions(array(
@@ -1893,6 +1898,109 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
     }
 
     /**
+     * CONSTRUYE EL MENU DE CASA-ABASTO
+     * @author Gilbert C. <glavrjk@gmail.com>
+     * @param ItemInterface $menu
+     * @param type $section
+     */
+    private function addMenuHouseSupply(ItemInterface $menu, $section) {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $searchwsc = array(
+            'coordinator' => $user,
+            'phase' => 1,
+        );
+
+        $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($searchwsc);
+        
+       
+            $child = $this->factory->createItem('housesupply', $this->getSubLevelOptions(array(
+                                'uri' => null,
+                                'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                            ))
+                    )
+                    ->setLabel($this->translate(sprintf('Casa - Abasto', $section)));
+
+            if ($wsc != null) {
+            $child2 = $this->factory->createItem('housesupply.order', $this->getSubLevelOptions(array(
+                                'uri' => null,
+                                    // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                            ))
+                    )
+                    ->setLabel($this->translate(sprintf('Pedidos', $section)));
+            $child2
+                    ->addChild('housesupply.order.create', array(
+                        'route' => 'pequiven_housesupply_orderkit_charge',
+                        'routeParameters' => array('typemember' => 0),
+                        'labelAttributes' => array('icon' => 'fa fa-shopping-cart')
+                    ))
+                    ->setLabel($this->translate(sprintf('Crear', $section)));
+
+            $child2
+                    ->addChild('housesupply.order.check', array(
+                        'route' => 'pequiven_housesupply_orderkit_check',
+                        'labelAttributes' => array('icon' => 'fa fa-check-square-o')
+                    ))
+                    ->setLabel($this->translate(sprintf('Validar', $section)));
+
+            $child2
+                    ->addChild('housesupply.order.view', array(
+                            //'route' => 'pequiven_user_feestructure',
+                            //'labelAttributes' => array('icon' => 'fa fa-calculator')
+                    ))
+                    ->setLabel($this->translate(sprintf('Visualizar', $section)));
+            $child2
+                    ->addChild('housesupply.order.reports', array(
+                        //'route' => 'pequiven_user_feestructure',
+                        'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
+                    ))
+                    ->setLabel($this->translate(sprintf('Reportes', $section)));
+            
+            $child->addChild($child2);
+        }
+
+        if ($this->isGranted(array('ROLE_SEIP_HOUSESUPPLY_INVENTORY'))) {
+
+            $child3 = $this->factory->createItem('housesupply.inventory', $this->getSubLevelOptions(array(
+                                'uri' => null,
+                                    // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                            ))
+                    )
+                    ->setLabel($this->translate(sprintf('Inventario', $section)));
+            $child3
+                    ->addChild('housesupply.inventory.charge', array(
+                        'route' => 'pequiven_housesupply_inventory_charge',
+                        'routeParameters' => array('type' => 1),
+                        'labelAttributes' => array('icon' => 'fa fa-arrow-up')
+                    ))
+                    ->setLabel($this->translate(sprintf('Cargos', $section)));
+            $child3
+                    ->addChild('housesupply.inventory.uncharge', array(
+                        'route' => 'pequiven_housesupply_inventory_charge',
+                        'routeParameters' => array('type' => 2),
+                        'labelAttributes' => array('icon' => 'fa fa-arrow-down')
+                    ))
+                    ->setLabel($this->translate(sprintf('Descargos', $section)));
+            $child3
+                    ->addChild('housesupply.inventory.product', array(
+                        //'route' => 'pequiven_user_feestructure',
+                        'labelAttributes' => array('icon' => 'fa fa-shopping-basket')
+                    ))
+                    ->setLabel($this->translate(sprintf('Productos', $section)));
+            $child3
+                    ->addChild('housesupply.inventory.reports', array(
+                        //'route' => 'pequiven_user_feestructure',
+                        'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
+                    ))
+                    ->setLabel($this->translate(sprintf('Reportes', $section)));
+
+            $child->addChild($child3);
+        }
+
+        $menu->addChild($child);
+    }
+
+    /**
      * 
      * Menu se SIP
      * 
@@ -1910,7 +2018,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.main', $section)));
 
 
-        if ($this->isGranted(array('ROLE_SEIP_SIP_SEACH_EMPLOYEES')) && ($user->getId() == 112 || $user->getId() == 22 || $user->getId() == 1668 || $user->getId() == 70 || $user->getId() == 1640 || $user->getId() == 96 || $user->getId() == 79)) {
+        if ($this->isGranted(array('ROLE_SEIP_SIP_SEACH_EMPLOYEES')) && ($user->getId() == 112 || $user->getId() == 22 || $user->getId() == 1668 || $user->getId() == 70 || $user->getId() == 1640 || $user->getId() == 96 || $user->getId() == 79 || $user->getId() == 2)) {
             $menuSip->addChild('sip.list_pqv', array(
                 'route' => 'pequiven_onePerTen_list',
                 'labelAttributes' => array('icon' => 'fa fa-table',)
@@ -2192,7 +2300,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
         $menu->addChild($child);
     }
-    
+
     private function addMenuTicketTrello(ItemInterface $menu, $section) {
         $menuTrello = $this->factory->createItem('trello.main', $this->getSubLevelOptions(array(
                             'uri' => null,
@@ -2202,13 +2310,13 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.trello.main', $section)));
 
-            $ticket = $this->factory->createItem('trello.ticket', $this->getSubLevelOptions(array('route' => "create_task_trello", 'routeParameters' => array(),
-                                'labelAttributes' => array('icon' => 'fa fa-ticket',),
-                            ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.trello.ticket', $section)));
+        $ticket = $this->factory->createItem('trello.ticket', $this->getSubLevelOptions(array('route' => "create_task_trello", 'routeParameters' => array(),
+                            'labelAttributes' => array('icon' => 'fa fa-ticket',),
+                        ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.trello.ticket', $section)));
 
-            $menuTrello->addChild($ticket);
-            
+        $menuTrello->addChild($ticket);
+
         $menu->addChild($menuTrello);
     }
 
