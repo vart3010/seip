@@ -89,6 +89,10 @@ pequiven_houseSupply_Inventory:
 pequiven_houseSupply_Order:
     resource: "@PequivenSEIPBundle/Resources/config/routing/HouseSupply/HouseSupplyOrder.yml"
     prefix:   /HouseSupply/Order
+    
+pequiven_houseSupply_Reports:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/HouseSupply/HouseSupplyReports.yml"
+    prefix:   /HouseSupply/Reports
 
 ###SISTEMA DE INFORMACION POLITICA
 pequiven_sip:

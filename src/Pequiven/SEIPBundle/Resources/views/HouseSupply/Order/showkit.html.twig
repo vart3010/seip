@@ -142,7 +142,7 @@
                     </tr>                     
                 </table>
                 <br>
-                <table width="95%" style="width: 915px; border: 2px #D8D8D8 solid;">                    
+                <table style="width: 915px; border: 2px #D8D8D8 solid;">                    
                     <tr style="height: 30px;">
                         <td width="100%" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">Observaciones</td>         
                     </tr>
@@ -181,11 +181,13 @@
                     </tr>
                 </table>
                 <br>
-                <div class="new-row twelve-columns" style="text-align: right;">  
-                    <button type="submit" {#onclick="cargar(' {{ path("pequiven_housesupply_order_charge_total") }} ');" #}class="button glossy mid-margin-right">
-                        <span class="button-icon green-gradient"><span class="icon-tick"></span></span>
-                        Imprimir Orden
-                    </button>    
+                <div class="new-row twelve-columns" style="width: 915px; text-align: right;">  
+                    <form action="{{ path("pequiven_housesupply_orderkit_export", { 'id': order.id }) }}">
+                        <button type="submit" class="button glossy mid-margin-right">
+                            <span class="button-icon blue-gradient"><span class="icon-download"></span></span>
+                            Exportar Orden de Pedido {{"%05d" | format(order.nroOrder) }}
+                        </button>    
+                    </form>
                 </div>       
             </center>            
         </div>

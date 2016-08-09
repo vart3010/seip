@@ -406,7 +406,7 @@ class HouseSupplyOrderKitController extends SEIPController {
             $payment = new houseSupplyPayments();
             $payment->setOrder($order);
             $payment->setType($concepto);
-            $payment->setRef($ref);
+            $payment->setRef(strtoupper($ref));
             $payment->setTotal($monto);
             $payment->setCreatedBy($this->getUser());
             $em->persist($payment);
