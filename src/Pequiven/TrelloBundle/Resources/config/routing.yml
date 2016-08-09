@@ -1,0 +1,11 @@
+create_task_trello:
+    path: /create
+    defaults: 
+        _controller: pequiven.controller.trello:createAction
+    methods: [GET, POST]
+
+approve_task_trello:
+    path: /update
+    defaults: 
+        _controller: pequiven.controller.trello:updateAction
+    methods: [POST]

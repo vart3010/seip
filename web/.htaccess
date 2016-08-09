@@ -41,6 +41,17 @@ DirectoryIndex app.php
     RewriteRule .? %{ENV:BASE}/app.php [L]
 </IfModule>
 
+#<IfModule mod_headers.c>
+#  Header set Access-Control-Allow-Origin "*"
+#</IfModule>
+
+#<IfModule mod_headers.c>
+#  <FilesMatch "\.(ttf|ttc|otf|eot|woff|font.css|css)$">
+#    Header set Access-Control-Allow-Origin "*"
+#  </FilesMatch>
+#</IfModule>
+
+
 <IfModule !mod_rewrite.c>
     <IfModule mod_alias.c>
         # When mod_rewrite is not available, we instruct a temporary redirect of

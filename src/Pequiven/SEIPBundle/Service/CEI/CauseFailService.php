@@ -222,31 +222,39 @@ class CauseFailService implements ContainerAwareInterface {
     public function getDaysMonth(UnrealizedProduction $unrealizedProduction) {
         return $unrealizedProduction->getDaysPerMonth($unrealizedProduction->getMonth());
     }
-
+    /**
+     * 
+     * @param UnrealizedProduction $unrealizedProduction
+     * @param type $mp
+     * @param type $type
+     * @return array
+     */
     public function getArrayTotalsMp(UnrealizedProduction $unrealizedProduction, $mp, $type) {
         $days = $this->getDaysMonth($unrealizedProduction);
 
         $totals = array();
-
+        
         //var_dump($mp[$type]["total"]);
+        
         $total = 0;
         foreach ($mp[$type] as $key => $product) {
 
             if ($key == "total") {
 
-                for ($d = 1; $d < $days; $d++) {
+                for ($d = 1; $d <= $days; $d++) {
                     $total = $total + $product[$d];
                 }
             } else {
                 $sumaCat = 0;
-                for ($d = 1; $d < $days; $d++) {
+                for ($d = 1; $d <= $days; $d++) {
                     $sumaCat = $sumaCat + $product[$d];
                 }
                 array_push($totals, $sumaCat);
             }
         }
+        #var_dump($total);
         array_push($totals, $total);
-        //var_dump($totals);
+        
         return $totals;
     }
 

@@ -56,7 +56,8 @@ class AppKernel extends Kernel {
             new Tecnocreaciones\Bundle\BoxBundle\TecnocreacionesBoxBundle(),
             new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle(),
             //REPORTEADOR
-            //new Mesd\Jasper\ReportBundle\MesdJasperReportBundle()
+            //new Mesd\Jasper\ReportBundle\MesdJasperReportBundle(),
+            new Pequiven\TrelloBundle\PequivenTrelloBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

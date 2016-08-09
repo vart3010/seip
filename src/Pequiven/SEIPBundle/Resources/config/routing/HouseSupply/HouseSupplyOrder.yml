@@ -1,0 +1,86 @@
+#ORDENES DE PEDIDO POR KIT
+pequiven_housesupply_orderkit_charge:
+    path: /createKit/{typemember}
+    defaults:
+        _controller: pequiven.controller.housesupply_orderkit:chargeAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
+pequiven_housesupply_orderkit_show:
+    path: /showKit/{id}
+    defaults:
+        _controller: pequiven.controller.housesupply_orderkit:showAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
+pequiven_housesupply_orderkit_register:
+    path: /registerKit/
+    defaults:
+        _controller: pequiven.controller.housesupply_orderkit:registerAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
+pequiven_housesupply_orderkit_charge_total:
+    path: /totalKit/
+    defaults:
+        _controller: pequiven.controller.housesupply_orderkit:totalAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
+pequiven_housesupply_orderkit_check:
+    path: /checkOrder/
+    defaults:
+        _controller: pequiven.controller.housesupply_orderkit:checkAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
+pequiven_housesupply_orderkitcheck_edit:
+    path: /addMemberOrderKit/
+    defaults:
+        _controller: pequiven.controller.housesupply_orderkit:editMemberOrderCheckAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+
+pequiven_housesupply_orderkitcheck_payment:
+    path: /paymentOrderKit/
+    defaults:
+        _controller: pequiven.controller.housesupply_orderkit:PaymentOrderCheckAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
+#ORDENES DE PEDIDO POR PRODUCTO    
+pequiven_housesupply_order_charge_add:
+    path: /addItem/
+    defaults:
+        _controller: pequiven.controller.housesupply_order:addItemAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
+pequiven_housesupply_order_charge_delete:
+    path: /deleteItem/{id}
+    defaults:
+        _controller: pequiven.controller.housesupply_order:deleteItemAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+   
+    
+    
+

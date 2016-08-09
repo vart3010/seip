@@ -1518,6 +1518,13 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
+        
+        //Controladores Trello
+        .controller('TrelloTicketController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
+            
+        })        
+        //Fin Controladores Trello
+        
         //Controladores SIG
         .controller('IndicatorSigEvolutionController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
             $scope.urlCausesEvolutionForm = null;
@@ -2969,7 +2976,6 @@ angular.module('seipModule.controllers', [])
 
                 var parameters = {
                     id: $scope.id_managementSystem,
-                    type: $scope.type,
                     _dc: numero
                 };
                 if (resource) {

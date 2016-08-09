@@ -281,6 +281,7 @@
                                             </tr>
                                         {% endfor %}
                                         {% set totals =  causeFailService.getArrayTotalsMp(unrealized_production,mp,"getExternalCausesMp") %}
+                                        
                                         <tr style="font-weight: bold;">
                                             <td align="left">{{ 'pequiven_seip.totals'|trans }}</td>
                                             {% for t in  totals %}
