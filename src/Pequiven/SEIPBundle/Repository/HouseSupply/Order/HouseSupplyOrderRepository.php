@@ -36,7 +36,7 @@ class HouseSupplyOrderRepository extends EntityRepository {
         $stmt->execute();
     }
 
-    function TotalOrder($type = null, $id = null, $wsc = null) {
+    function TotalOrder($id = null, $type = null, $wsc = null) {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
@@ -52,22 +52,28 @@ class HouseSupplyOrderRepository extends EntityRepository {
                 . ' WHERE'
                 . ' item.deletedAt is null';
 
-        if ($wsc != null) {
-            $sql4 = ' AND workStudyCircle_id = ' . $wsc;
-        } else {
-            $sql4 = '';
-        }
-
-
         if ($id != null) {
-            $sql2 = ' AND order_id=' . $id;
+            $sql2 = ' AND item.order_id=' . $id;
         } else {
             $sql2 = '';
         }
 
-        $sql3 = ' GROUP BY item.workStudyCircle_id, item.product_id';
+        if ($type != null) {
+            $sql3 = ' AND item.type=' . $type;
+        } else {
+            $sql3 = '';
+        }
 
-        $sql = $sql1 . $sql2 . $sql4 . $sql3;
+
+        if ($wsc != null) {
+            $sql4 = ' AND item.workStudyCircle_id = ' . $wsc;
+        } else {
+            $sql4 = '';
+        }
+
+        $sql5 = ' GROUP BY item.workStudyCircle_id, item.product_id';
+
+        $sql = $sql1 . $sql2 . $sql3 . $sql4 . $sql5;
 
         $stmt = $db->prepare($sql);
         $stmt->execute();

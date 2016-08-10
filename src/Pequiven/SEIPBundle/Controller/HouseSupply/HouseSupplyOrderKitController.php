@@ -152,12 +152,9 @@ class HouseSupplyOrderKitController extends SEIPController {
         $orderItems = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($arraySearch);
 
         foreach ($orderItems as $items) {
-            $items->setType(2);
-            $items->setDeletedBy($this->getUser());
-            $em->remove($items);
+            $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->DeleteItemOrder($items->getId());
         }
 
-        $em->flush();
         $this->refreshTotalOrder($idOrder);
     }
 
@@ -290,7 +287,7 @@ class HouseSupplyOrderKitController extends SEIPController {
         );
 
         $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($searchwsc);
-        
+
         $allOrders = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('type' => 1, 'workStudyCircle' => $wsc));
         $members = array();
 
@@ -302,7 +299,7 @@ class HouseSupplyOrderKitController extends SEIPController {
                     $members[$items->getClient()->getId()] = $items->getClient();
                 }
             }
-            $orderDetails = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->TotalOrder($type = 1, $id);
+            $orderDetails = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->TotalOrder($id, $type = 1);
             $productKit = $order->getProductKit();
             $cantKits = count($order->getOrderItems()) / count($productKit->getProductKitItems());
         } else {
