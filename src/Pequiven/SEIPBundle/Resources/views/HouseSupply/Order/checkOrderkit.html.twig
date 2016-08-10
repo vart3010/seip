@@ -98,10 +98,10 @@
 
                 });
 
-              {#  $('#idOrder').select2({
-                    minimumInputLength: 5
-                });#}
-            }
+        {#  $('#idOrder').select2({
+              minimumInputLength: 5
+          });#}
+              }
     </script>    
 {% endblock %}
 
@@ -366,7 +366,7 @@
                         </tr>
                     </table>  
                 </div>                   
-                <div class="new-row twelve-columns" style="text-align: right;">  
+                <div class="new-row twelve-columns" style="text-align: right;">                  
                     <form method="POST" action="{{ path("pequiven_housesupply_orderkitcheck_payment", { 'idOrder': order.id}) }}">  
                         <input id="dataProduct" name="dataProduct" type="text" hidden="true">                    
                         <button type="submit" id="confirmarOrden" class="button glossy mid-margin-right">
@@ -374,8 +374,18 @@
                             Pagar Orden
                         </button>    
                     </form>
+                </div>                    
+            {%else%}
+                <div class="new-row twelve-columns" style="text-align: right;">  
+                    <form action="{{ path("pequiven_housesupply_orderkit_export", { 'id': order.id }) }}">
+                        <button type="submit" class="button glossy mid-margin-right">
+                            <span class="button-icon blue-gradient"><span class="icon-download"></span></span>
+                            Exportar Orden de Pedido {{"%05d" | format(order.nroOrder) }}
+                        </button>    
+                    </form>
                 </div>
             {%endif%}
+
         {%endif%}
     </div>
 {% endblock %}
