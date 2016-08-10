@@ -2894,11 +2894,13 @@ class ReportTemplateController extends SEIPController {
 
                                                 //Verifica si va a exportar y obvia las observaciones vacías.
                                                 if ($exportToPdf) {
-                                                    if ($rs["observation"] != "" || is_null($rs["observation"])) {
+                                                    if ($rs["observation"] != "" || !is_null($rs["observation"])) {
                                                         $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
                                                     }
                                                 } else {
-                                                    $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
+                                                    if ($rs["observation"] != "" || !is_null($rs["observation"])) {
+                                                        $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
+                                                    }
                                                 }
 
                                                 $i = $i + 86400;
