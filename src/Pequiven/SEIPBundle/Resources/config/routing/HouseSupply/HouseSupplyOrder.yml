@@ -1,6 +1,6 @@
 #ORDENES DE PEDIDO POR KIT
 pequiven_housesupply_orderkit_charge:
-    path: /createKit/{typemember}
+    path: /createOrderKit/{typemember}
     defaults:
         _controller: pequiven.controller.housesupply_orderkit:chargeAction
         _format: html
@@ -9,7 +9,7 @@ pequiven_housesupply_orderkit_charge:
     methods: [GET|POST]
     
 pequiven_housesupply_orderkit_show:
-    path: /showKit/{id}
+    path: /showOrderKit/{id}
     defaults:
         _controller: pequiven.controller.housesupply_orderkit:showAction
         _format: html
@@ -18,7 +18,7 @@ pequiven_housesupply_orderkit_show:
     methods: [GET|POST]
     
 pequiven_housesupply_orderkit_register:
-    path: /registerKit/
+    path: /registerOrderKit/
     defaults:
         _controller: pequiven.controller.housesupply_orderkit:registerAction
         _format: html
@@ -27,16 +27,17 @@ pequiven_housesupply_orderkit_register:
     methods: [GET|POST]
     
 pequiven_housesupply_orderkit_charge_total:
-    path: /totalKit/
+    path: /totalOrderKit/
     defaults:
         _controller: pequiven.controller.housesupply_orderkit:totalAction
         _format: html
     requirements:
         _format: html|json|xml
     methods: [GET|POST]
-    
+
+#VALIDACIÓN DE ORDENES DE PEDIDO
 pequiven_housesupply_orderkit_check:
-    path: /checkOrder/
+    path: /checkOrderKit/
     defaults:
         _controller: pequiven.controller.housesupply_orderkit:checkAction
         _format: html
@@ -53,6 +54,7 @@ pequiven_housesupply_orderkitcheck_edit:
         _format: html|json|xml
     methods: [GET|POST]
 
+#PAGOS DE ORDENES DE PEDIDO
 pequiven_housesupply_orderkitcheck_payment:
     path: /paymentOrderKit/
     defaults:
@@ -64,7 +66,7 @@ pequiven_housesupply_orderkitcheck_payment:
     
 #ORDENES DE PEDIDO POR PRODUCTO    
 pequiven_housesupply_order_charge_add:
-    path: /addItem/
+    path: /addItemOrderKit/
     defaults:
         _controller: pequiven.controller.housesupply_order:addItemAction
         _format: html
@@ -73,7 +75,7 @@ pequiven_housesupply_order_charge_add:
     methods: [GET|POST]
     
 pequiven_housesupply_order_charge_delete:
-    path: /deleteItem/{id}
+    path: /deleteItemOrderKit/{id}
     defaults:
         _controller: pequiven.controller.housesupply_order:deleteItemAction
         _format: html

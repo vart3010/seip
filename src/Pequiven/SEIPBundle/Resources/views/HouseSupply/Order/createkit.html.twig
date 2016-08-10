@@ -12,12 +12,6 @@
         $(document).ready(function () {
             validaCheck();
 
-            $("checkbox").change(function () {
-                $("input#cantidad").val("");
-                var idMember = $("select#producto option:selected").attr("data");
-
-            });
-
             $("p.assistance input").change(function () {
                 validaCheck();
             });

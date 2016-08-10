@@ -30,11 +30,12 @@ class HouseSupplyInventoryAdmin extends Admin {
                 ->add('product')
                 ->add('deposit')
                 ->add('available')
+                ->add('lastChargeDate')
         ;
     }
 
     protected function configureFormFields(FormMapper $form) {
-        $form               
+        $form
                 ->add('product')
                 ->add('deposit')
                 ->add('available')
@@ -46,7 +47,7 @@ class HouseSupplyInventoryAdmin extends Admin {
                 ->add('id')
                 ->add('product')
                 ->add('deposit')
-                ->add('available')
+                ->add('lastChargeDate')
         ;
     }
 
@@ -56,6 +57,7 @@ class HouseSupplyInventoryAdmin extends Admin {
                 ->add('product')
                 ->add('deposit')
                 ->add('available')
+                ->add('lastChargeDate')
         ;
     }
 

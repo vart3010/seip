@@ -28,29 +28,25 @@ class HouseSupplyCycleAdmin extends Admin {
         $show
                 ->add('id')
                 ->add('dateBeginOrder')
-                ->add('dateEndOrder')    
+                ->add('dateEndOrder')
                 ->add('productKit')
                 ->add('workStudyCircleGroup')
         ;
     }
 
     protected function configureFormFields(FormMapper $form) {
-        $form                
-                ->add('dateBeginOrder','sonata_type_date_picker',array(
-                    'required' => true,
-                    'label' => 'Fecha de Inicio',
+        $form
+                ->add('dateBeginOrder', 'sonata_type_date_picker', array(
+                    'label' => 'Fecha de Inicio para la Creación de Pedidos',
                 ))
-                ->add('dateEndOrder','sonata_type_date_picker',array(
-                    'required' => true,
-                    'label' => 'Fecha de Cierre',
+                ->add('dateEndOrder', 'sonata_type_date_picker', array(
+                    'label' => 'Fecha de Cierre para la Creación de Pedidos',
                 ))
-                ->add('productKit',null,array(
-                    'required' => false,
+                ->add('productKit', null, array(
                     'label' => 'Kit Asociado',
                 ))
-                ->add('workStudyCircleGroup',null,array(
-                    'required' => false,
-                    'label' => 'Grupo de Círculos de Estudio',
+                ->add('workStudyCircleGroup', null, array(
+                    'label' => 'Grupo de Círculos de Estudio que Pueden Crear Pedidos',
                 ))
 
         ;
@@ -60,7 +56,7 @@ class HouseSupplyCycleAdmin extends Admin {
         $filter
                 ->add('id')
                 ->add('dateBeginOrder')
-                ->add('dateEndOrder')    
+                ->add('dateEndOrder')
                 ->add('productKit')
                 ->add('workStudyCircleGroup')
         ;
@@ -70,7 +66,7 @@ class HouseSupplyCycleAdmin extends Admin {
         $list
                 ->addIdentifier('id')
                 ->add('dateBeginOrder')
-                ->add('dateEndOrder')  
+                ->add('dateEndOrder')
                 ->add('productKit')
                 ->add('workStudyCircleGroup')
         ;

@@ -50,7 +50,7 @@ class HouseSupplyOrderRepository extends EntityRepository {
                 . ' INNER JOIN'
                 . ' seip_gsh_product AS prod ON (item.product_id = prod.id)'
                 . ' WHERE'
-                . ' type >= ' . 0;
+                . ' item.deletedAt is null';
 
         if ($wsc != null) {
             $sql4 = ' AND workStudyCircle_id = ' . $wsc;

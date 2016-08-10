@@ -13,10 +13,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use TCPDF;
 
 /**
- * HEADER Y FOOTER DE REPORTES DEL SEIP
+ * HEADER Y FOOTER DE REPORTES CASA-ABASTO
  * @author Gilbert C. <glavrjk@gmail.com>
  */
-class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
+class HouseSupplyPdf extends TCPDF implements ContainerAwareInterface {
 
     /**
      * @var ContainerInterface
@@ -35,8 +35,8 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
 //        $logopqv = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Logo_Pequiven.jpg'); //K_PATH_IMAGES.'logo_example.jpg';
 //        $logoseip = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Logo_Seip.jpg'); //K_PATH_IMAGES.'logo_example.jpg';
 
-        $logopqv = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/PQV_Diamante.png');
-        $logoseip = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/SEIP_Blanco.png');
+        $logopqv = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/housesupply/Casa_Abasto_Cintillo.png');
+        $logoseip = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/housesupply/Casa_Abasto.png');
 
 
         $tittle = $this->title;
@@ -46,25 +46,19 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
         $this->SetTextColor(0, 0, 0);
         // Title
         $text = '<table width="100%" cellpadding="2">'
-                . '<tr bgcolor="#B00000">'
-                . '<td width="12%" height="65px" style="text-align: center;">'
-                . '<img src="' . $logopqv . '" width="45px" height="60px">'
+                . '<tr>'
+                . '<td width="50%" height="85px" style="text-align: left;">'
+                . '<img src="' . $logopqv . '" height="80px">'
                 . '</td>'
-                . '<td width="76%" height="65px" style="text-align: center;">'
-                . '&nbsp;'
+                . '<td width="35%" height="85px" style="text-align: left; font-size: 12pt; color: #C00000; vertical-align: middle; font-family: sans-serif;">   '
+                . '<br><br><br>'
+                . strtr(strtoupper($tittle), "àèìòùáéíóúçñäëïöü", "ÀÈÌÒÙÁÉÍÓÚÇÑÄËÏÖÜ")
                 . '</td>'
-                . '<td width="12%" height="65px" style="text-align: center; font-size: 3pt;">'
-                . '<br><br><img src="' . $logoseip . '" width="50px" height="50px">'
+                . '<td width="15%" height="85px" style="text-align: center; font-size: 3pt;">'
+                . '<br><br><img src="' . $logoseip . '" height="80px">'
                 . '</td>'
-                . '</tr>'
-                . '</table>'
-                . '<table width="100%">'
-                . '<tr bgcolor="#D9D9D9">'
-                . '<td width="100%" height="20px" style="text-align: left; font-size: 10pt; color: #C00000; vertical-align: middle; font-family: sans-serif;">   ' . strtr(strtoupper($tittle), "àèìòùáéíóúçñäëïöü", "ÀÈÌÒÙÁÉÍÓÚÇÑÄËÏÖÜ") . '</td>'
                 . '</tr>'
                 . '</table>';
-
-
         $this->writeHTML($text);
     }
 
@@ -74,36 +68,33 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
         //      $this->SetY(-30);
         // Set font
         $this->SetFont('helvetica', 'I', 8);
-        $logoeslogan = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Patriotas_Unidos.jpg');
-        $logoministerio = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Ministerio.jpg');
+//        $logoeslogan = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Patriotas_Unidos.jpg');
+//        $logoministerio = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Ministerio.jpg');
         // Page number
         //. $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages() .
 
         $margin = $this->getPageDimensions();
         $lineRed = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(192, 0, 0));
         $text = $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages();
-        $html = '<div style="text-align: center; font-size: 6pt; font-weight: bold; color: #B00000; vertical-align: middle; font-family: sans-serif;">'
-                    . 'Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos'
-                    . '</div>';
 
         if ($margin['or'] == 'P') {
-            $html = '<p style="text-align: center; font-size: 6pt; font-weight: bold; color: #B00000; vertical-align: middle; font-family: sans-serif;">'
-                    . 'Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos'
-                    . '</p>';
-            $this->Line(15, 254, 200, 254, $lineRed);
-            $this->Image($logoministerio, 15, 255, 75, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-            $this->Image($logoeslogan, 160, 255, 40, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-            $this->Text(120, 255, $text);
-            $this->writeHTMLCell(60, 20, 95, 260, $html);
+//            $html = '<p style="text-align: center; font-size: 6pt; font-weight: bold; color: #B00000; vertical-align: middle; font-family: sans-serif;">'
+//                    . 'Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos'
+//                    . '</p>';
+            $this->Line(15, 260, 200, 260, $lineRed);
+//            $this->Image($logoministerio, 15, 255, 75, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+//            $this->Image($logoeslogan, 160, 255, 40, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            $this->Text(110, 262, $text);
+//            $this->writeHTMLCell(60, 20, 95, 260, $html);
         } else {
-            $html = '<div style="text-align: center; font-size: 8pt; font-weight: bold; color: #B00000; vertical-align: middle; font-family: sans-serif;">'
-                    . 'Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos'
-                    . '</div>';
-            $this->Line(15, 192, 265, 192, $lineRed);
-            $this->Image($logoministerio, 15, 193, 75, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-            $this->Image($logoeslogan, 225, 193, 40, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);            
-            $this->Text(150, 196, $text);
-            $this->writeHTMLCell(100, 10, 105, 200, $html);
+//            $html = '<div style="text-align: center; font-size: 8pt; font-weight: bold; color: #B00000; vertical-align: middle; font-family: sans-serif;">'
+//                    . 'Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos'
+//                    . '</div>';
+            $this->Line(15, 198, 265, 198, $lineRed);
+//            $this->Image($logoministerio, 15, 193, 75, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+//            $this->Image($logoeslogan, 225, 193, 40, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            $this->Text(140, 200, $text);
+//            $this->writeHTMLCell(100, 10, 105, 200, $html);
         }
 
 //        $footer = '<div style="text-align: rigth; margin-top: 100px; margin-left: 50px">'                
