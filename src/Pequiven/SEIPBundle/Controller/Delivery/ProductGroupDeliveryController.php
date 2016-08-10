@@ -45,5 +45,18 @@ class ProductGroupDeliveryController extends SEIPController {
 
         return $this->handleView($view);
     }
+    
+    public function readExcel() {
+        $excelService = $this->getPhpExcelReaderService();
+        $path = "test.xlsx";
+        $excelService->getSheetValues($path);
+        
+    }
+    
+    
+    protected function getPhpExcelReaderService() {
+        return $this->get('seip.service.phpexcelreader');
+    }
+
 
 }
