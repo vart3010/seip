@@ -90,6 +90,7 @@ class WorkStudyCircleController extends SEIPController {
 
 
                 $workStudyCircle->setCreatedBy($user);
+                $workStudyCircle->setCoordinator($user);
                 $workStudyCircle->setPeriod($period = $this->getPeriodService()->getPeriodActive());
                 $workStudyCircle->setCodigo($this->setNewRef($request->get("workStudyCircle_data")["complejo"]));
 
