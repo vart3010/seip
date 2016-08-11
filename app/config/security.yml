@@ -313,7 +313,7 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js|compiled|translations)/
             security: false
         login_firewall:
-            pattern: ^/(login$|register|resetting)
+            pattern: ^/(login$|resetting)
             anonymous: ~
         cache:
             pattern: ^/media/cache
@@ -366,8 +366,8 @@ security:
     access_control:
         - { path: ^/compiled, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/translations, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }        
+        - { path: ^/register/, role: ROLE_SUPER_ADMIN }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         # Admin login page needs to be access without credential
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }

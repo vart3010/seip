@@ -54,6 +54,7 @@ class NotifyController extends ResourceController{
 		$response = new JsonResponse();
 		$data = [];
 
+        $filterSet = $request->get('filterSet');
 		$idObject = $request->get('idObject');
 		$typeObject = $request->get('typeObject');
         $em = $this->getDoctrine()->getManager();
@@ -63,7 +64,12 @@ class NotifyController extends ResourceController{
         foreach ($config as $value) {
         	$id[] = $value->getId();
         	$idObject = $value->getId();
-        	$userConfig = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\NotificationUser")->findBy(array('idObject' => $idObject));
+            if ($filterSet != 0) {
+                $userConfig = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\NotificationUser")->findBy(array('idObject' => $idObject, 'action' => $filterSet));
+            }else{
+                $userConfig = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\NotificationUser")->findBy(array('idObject' => $idObject));
+            }            
+
         	foreach ($userConfig as $userC) {
 	        	$idUser[] = $userC->getId();        	
 	        	$user[] = $userC->getUser()->getFullNameUser();        	

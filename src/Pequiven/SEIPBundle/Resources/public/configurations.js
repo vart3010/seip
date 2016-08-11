@@ -87,7 +87,7 @@ function validChangeData(data,select){
 	});
 }
 
-$("#addUser").click(function(){	
+$("#addUser").click(function(){
 	if ($('#idObject').val()) {
 		$('#formAddUser').show();   
 		loadDataForm('',Routing.generate('pequiven_responsibles_to_plan'),'data_user_select'); 		
@@ -107,10 +107,10 @@ $('#save-to-form').click(function(){
             url: Routing.generate('pequiven_configuration_set_data_users'),
             data: data,                              
             beforeSend:function(){
-                $('#loading').css({display:'block'});                            
+                loadWindows()                            
             },
             complete:function(){
-                $('#loading').css('display','none');                        
+                endWindows()                        
             },
             success: function (data) {                                                        
              	if (data == true) {$('#formAddUser').hide();};
@@ -118,7 +118,9 @@ $('#save-to-form').click(function(){
              	findData($('#idObject').val());
             }
     	});
-	};
+	}else{
+        messagesFlash('Debe seleccionar un usuario.');
+    };
 });
 
 $('#cancel-to-form').click(function(){
@@ -137,16 +139,16 @@ $('#visualize').click(function(){
 
 function findData(idObject){    
 	$('#idObject').val(idObject);
-    var data = {idObject: idObject, typeObject:2};    
+    var data = {idObject: idObject, typeObject:2, filterSet:$('#filterSet').val()};    
     $.ajax({
             type: 'get',
             url: Routing.generate('pequiven_configuration_find_data'),
             data: data,                              
             beforeSend:function(){
-                $('#loading').css({display:'block'});                            
+                loadWindows()                            
             },
             complete:function(){
-                $('#loading').css('display','none');                        
+                endWindows()                        
             },
             success: function (data) {                                                        
              	loadListUser(data);
@@ -165,8 +167,8 @@ function loadListUser(data){
 							'</a>'+
 							'<div class="button-group absolute-right compact show-on-parent-hover">'+
 								'<a href="" class="button icon-pencil" onClick="editUser('+data['idUser'][i]+');">Edit</a>'+
-								'<a href="" class="button icon-gear with-tooltip" title="Other actions"></a>'+
-								'<a href="" class="button icon-trash with-tooltip confirm" title="Delete" onClick="deleteUser('+data['idUser'][i]+');"></a>'+
+								'<a href="" class="button icon-gear with-tooltip" title="Otras Opciones"></a>'+
+								'<a href="" class="button icon-trash with-tooltip confirm" title="Eliminar" onClick="openConfirmDelete('+data['idUser'][i]+');"></a>'+
 							'</div>'+
 						'</li>';		
 		};
@@ -189,10 +191,10 @@ function deleteUser(idUser){
             url: Routing.generate('pequiven_configuration_delete_data_users'),
             data: data,                              
             beforeSend:function(){
-                $('#loading').css({display:'block'});                            
+                loadWindows()                            
             },
             complete:function(){
-                $('#loading').css('display','none');                        
+                endWindows()                        
             },
             success: function (data) {
                 messagesFlash(data['message']);
@@ -201,11 +203,23 @@ function deleteUser(idUser){
     });
 }
 
+//confirm delete
+function openConfirmDelete(idUser){
+    options = {
+      textConfirm : "Si",
+        textCancel : "No"
+    };
+    $.modal.confirm('Desea eliminar el registro?', function(){
+        deleteUser(idUser);
+    }, function(){
+        return false;
+    }, options);
+};
+
 // Messages form
 function messagesFlash(message){
     var positionHorizontal, positionVertical,
         closeButton, showCloseOnHover;
-
     /*event.preventDefault();*/
 
     // Positions            
@@ -230,3 +244,28 @@ function messagesFlash(message){
         groupSimilar:       $('#group-similar').prop('checked')
     });
 };
+
+function loadWindows(){
+    var id = '#dialog'; 
+    //Get the screen height and width
+    var maskHeight = $(document).height();
+    var maskWidth = $(window).width();  
+    //Set heigth and width to mask to fill up the whole screen
+    $('#mask').css({'width':maskWidth,'height':maskHeight});        
+    //transition effect     
+    $('#mask').fadeIn(100); 
+    $('#mask').fadeTo("slow",0.8);      
+    //Get the window height and width
+    var winH = $(window).height();
+    var winW = $(window).width();              
+    //Set the popup window to center
+    $(id).css('top',  winH/2-$(id).height()/2);
+    $(id).css('left', winW/2-$(id).width()/2);  
+    //transition effect
+    $(id).fadeIn(200);
+}
+
+function endWindows(){    
+    $('#mask').hide();
+    $('.window').hide();
+}

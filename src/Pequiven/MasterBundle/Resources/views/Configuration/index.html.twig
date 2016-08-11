@@ -1,83 +1,151 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
 {% block body %}
-<div class="with-padding">
-	<a href class="margin-left" id="loading" style='display:none;'><span class="loader big working"></span></a>
+<style type="text/css">
+a {color:#333; text-decoration:none}
+a:hover {color:#ccc; text-decoration:none}
+
+#mask {
+  position:absolute;
+  left:0;
+  top:0;
+  z-index:9000;
+  /*background-color:#9f9f9f;*/
+  display:none;
+}  
+#boxes .window {
+  position:absolute;
+  /*left:0;
+  top:0;
+  width:440px;
+  height:200px;
+  display:none;
+  z-index:9999;
+  padding:20px;*/
+}
+#boxes #dialog {
+  /*width:375px; 
+  height:203px;
+  padding:10px;*/
+  /*background-color:#ffffff;*/
+}
+</style>
+
+<div class="with-padding">	
 	<p class="wrapped left-icon icon-info-round">La Siguiente Sección de Configuración solo ha sido liberada para Programas de Gestión Estrategicos. <a href="">Info</a></p>
 	<fieldset class="fieldset">
 	    <legend class="legend"><b>Configuration</b></legend>
 	    <div class="columns">
-	    	<div class="new-row four-columns four-columns-tablet four-columns-mobile">	    		
-	    		<!--<input type="radio" name="objects" id="objetc1" value="1" class="radio mid-margin-left">-->
-	    		<input type="radio" name="objects" id="objetc1" value="1">
-	    		<label for="radio-2" class="label">&nbsp;Objetivos</label>
+	    	<div class="new-row four-columns four-columns-tablet four-columns-mobile">
+	    		<input type="checkbox" name="switch-medium" id="switch-medium-1" class="switch medium mid-margin-right check1" value="1" data-text-on="SI" data-text-off="NO"> <label for="switch-medium-1">Objetivos</label>
 	    	</div>
 			<div class="four-columns four-columns-tablet four-columns-mobile">
-	    		<!--<input type="radio" name="objects" id="objetc2" value="2" class="radio mid-margin-left">-->
-	    		<input type="radio" name="objects" id="objetc2" value="2">	    		
-	    		<label for="radio-2" class="label">&nbsp;Programas de Gestión</label>
+	    		<input type="checkbox" name="switch-medium" id="switch-medium-2" class="switch medium mid-margin-right check2" value="2" data-text-on="SI" data-text-off="NO"> <label for="switch-medium-1">Programas de Gestión</label>
 			</div>
 			<div class="four-columns four-columns-tablet four-columns-mobile">
-	    		<!--<input type="radio" name="objects" id="objetc3"  value="3" class="radio mid-margin-left">-->
-	    		<input type="radio" name="objects" id="objetc3" value="3">	    			    		
-	    		<label for="radio-2" class="label">&nbsp;Indicadores</label>
+	    		<input type="checkbox" name="switch-medium" id="switch-medium-3" class="switch medium mid-margin-right check3" value="3" data-text-on="SI" data-text-off="NO"> <label for="switch-medium-1">Indicadores</label>
 			</div>
-			{#<p class="inline-label">
-						<button type="submit" id="show-not" class="button blue-gradient">Show notification</button>
-					</p>#}
-	        {#<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-	            <p class="inline-label">
-	                <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
-	                test
-	            </p>
-	        </div>#}
 	    </div>
 	</fieldset>
 </div>
-
-<div class="with-padding">	
+{# sección de configuraciones #}
+<div class="with-padding">
 	<div class="columns">
-		<div class="six-columns six-columns-tablet twelve-columns-mobile">
+		{# formulario de consulta de programas de gestión #}
+		<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
 			<div id="show-data">				
 				<div class="block large-margin-bottom">
 					<div class="block-title"><h3 id="title-form"></h3></div>
-						<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">            				
-				            <p class="inline-label" id="label"></p>					        
-				        </div>							
+						<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+							<div class="with-padding"><p class="inline-label" id="label"></p></div>
+				        </div>	
+				         <!-- Detalles -->
+				        <div class="with-padding" id="details">
+				        	<div class="columns">
+				                <div class="nine-columns one-column">
+				                    <p class="inline-label">
+				                        <label class="label">Referencia</label>
+				                        reviw
+				                    </p>
+				                </div>
+				                <div class="three-columns">
+				                    <p class="inline-label">
+				                        <label class="label">Nombre</label>
+				                        nombre
+				                    </p>
+				                </div>
+				                <div class="three-columns">
+				                    <p class="inline-label">
+				                        <label class="label">Periodo</label>
+				                        period
+				                    </p>
+				                </div>
+			            	</div>
+			        	</div>
 				</div>				
 			</div>
 		</div>
-		<div class="six-columns six-columns-tablet twelve-columns-mobile" id="formAddUser">						
-			<input type="text" id="data_user_select" name="data_user[select]" style="width: 270px">
-			<select id="select-action" class="select2 input-large">
-				<option value="1">Revisar</option>
-				<option value="2">Notificar</option>
-				<option value="3">Aprobar</option>
-			</select>
-			<input type="hidden" id="idObject" value="">			
-			<a href="" id="save-to-form" title="Add user" class="button icon-tick"></a>
-			<a href="" id="cancel-to-form" title="Reload list" class="button icon-cross"></a>									
+		{# formulario de usuario #}
+		<div class="six-columns six-columns-tablet twelve-columns-mobile" id="formAddUser">
+			<div class="wrapped align-center progress-controls">
+				Seleccione Usuario:
+				<input type="text" id="data_user_select" name="data_user[select]" style="width: 270px">&nbsp;
+				<select id="select-action" class="select2 input-large">
+					<option value="1">Revisar</option>
+					<option value="2">Notificar</option>
+					<option value="3">Aprobar</option>
+				</select>&nbsp;
+				<input type="hidden" id="idObject" value="">
+				<a href="" id="save-to-form" title="Añadir Usuario" class="button icon-tick">Aceptar</a>
+				<a href="" id="cancel-to-form" title="Cancelar" class="button icon-cross"></a>
+			</div>
 		</div>
+		{# lista de usuario relacionado a acciones de programa #}
 		<div class="six-columns six-columns-tablet twelve-columns-mobile">
 			<div id="list-data">								
-				<h2 class="relative thin">
-					Lista de Usuarios
-					<span class="info-spot">
-						<span class="icon-info-round"></span>
-						<span class="info-bubble">
-							Lista de Usuarios con sus diferentes funciones(Revisores, Notificadores y Aprobadores).
-						</span>
-					</span>
-					<span class="button-group absolute-right">
-						<a href="" id="visualize" title="Views user" class="button icon-extract">Vizualizar</a>
-						<a href="" id="addUser" title="Add user" class="button icon-plus-round">Añadir</a>
-						<a href="" id="reload" title="Reload list" class="button icon-redo"></a>
-					</span>
-				</h2>
-				<ul class="list spaced" id="body-list"></ul>
+				<div class="block large-margin-bottom">
+					{# acciones principales #}
+					<div class="block-title">
+						<h3 class="relative thin">
+							Lista de Usuarios
+							<span class="info-spot">
+								<span class="icon-info-round"></span>
+								<span class="info-bubble">
+									Lista de Usuarios con sus diferentes funciones(Revisores, Notificadores y Aprobadores).
+								</span>
+							</span>
+							<span class="button-group absolute-right">
+								{# filtros #}
+								<input type="hidden" id="filterSet" value="0">
+								&nbsp;<span class="label">Filtros:</span>
+								<span class="button-group">
+									<label for="button-radio-0" class="button green-active"><input type="radio" name="button-radio" id="button-radio-0" value="0" checked>General</label>
+									<label for="button-radio-1" class="button green-active"><input type="radio" name="button-radio" id="button-radio-1" value="1">Revisar</label>
+									<label for="button-radio-2" class="button green-active"><input type="radio" name="button-radio" id="button-radio-2" value="2">Notificar</label>
+									<label for="button-radio-3" class="button green-active"><input type="radio" name="button-radio" id="button-radio-3" value="3">Aprobar</label>
+								</span>																								
+								<a href="" id="visualize" title="Visualizar Ficha del Programa" class="button icon-extract"></a>
+								<a href="" id="addUser" title="Añadir Usuario" class="button icon-plus-round"></a>
+								<a href="" id="reload" title="Refrescar" class="button icon-redo"></a>
+							</span>
+						</h3>
+					</div>
+					<div class="with-padding">
+						<ul class="list spaced" id="body-list"></ul>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<div id="boxes">
+	<div style="top: 199.5px; left: 551.5px; display: none;" id="dialog" class="window"><!--<span class="loader big working"></span>&nbsp;loading...-->
+		<img src="{{ asset('bundles/pequivenseip/logotipos-pqv/loading_gif_seip_01.gif') }}" style="background:transparent;"/>
+		<!--<img src="{{ asset('bundles/pequivenseip/logotipos-pqv/loading_gif_seip_01.gif') }}" style="background:transparent;" height="100px" width="100px" />-->
+	</div>
+	<div style="width: 1478px; height: 602px; display: none; opacity: 0.8;" id="mask"></div>
+</div>
+
 {% endblock %}
 {% block javascript %}		
 <script src="{{  asset('bundles/pequivenseip/configurations.js') }}"></script>
@@ -86,50 +154,46 @@
 		$('#show-data').hide();
 		$('#list-data').hide();
 		$('#formAddUser').hide();
+		$('#details').hide();
 
-		$("input[name=objects]").click(function() {
+		/*$("input[name=objects]").click(function() {
 	        var idObject = $(this).val();
 	        confForm(idObject);//set de idObject
 			$('#list-data').hide();
 			$('#formAddUser').hide();
-	        $('#show-data').show(); 			
-	    });
+	        $('#show-data').show();
+	    });*/
+
+		$('input[name=switch-medium]').change(function(){			
+	        confForm($(this).val());//set de idObject
+			$('#list-data').hide();
+			$('#formAddUser').hide();
+	        $('#show-data').show();
+
+			var check = $(this).val();
+			if (check == 1) {
+				$('.check1').addClass('checked');
+				$('.check2').removeClass('checked');
+				$('.check3').removeClass('checked');
+			}else if(check == 2){
+				$('.check2').addClass('checked');        
+		        $('.check1').removeClass('checked');
+				$('.check3').removeClass('checked');
+			}else if(check == 3){
+				$('.check3').addClass('checked');		
+		        $('.check1').removeClass('checked');
+				$('.check2').removeClass('checked');
+			};	
+		});
 		
-		$("#select-action").select2({
-            //minimumInputLength: 3,
-        });
+		$("input[name=button-radio]").click(function() {
+			$('#filterSet').val($(this).val());	        
+			findData($('#idObject').val());	        
+	    });
+
+		$("#select-action").select2({});		
 	    //var arraRoutes = {1:' ',2:'pequiven_configurations_get_to_programs',3:' '};
 	    //setRouteObjects(Routing.generate(arraRoutes[idObject]));
 	});
-
-	// Messages form
-		/*$('#show-not').click(function(event){
-			var positionHorizontal, positionVertical,
-				closeButton, showCloseOnHover;
-
-			event.preventDefault();
-
-			// Positions			
-			title = 'Notificación';
-			message = 'Pruebas';
-			positionVertical = 'top';			
-			positionHorizontal = 'right';
-			closeButton = true;
-			showCloseOnHover = true;
-			icon = false;//'img/demo/icon.png';
-
-			// Gather options
-			notify(title, message, {
-				system:				$('#system').prop('checked'),
-				vPos:				positionVertical,
-				hPos:				positionHorizontal,
-				autoClose:			true,
-				icon:				icon,
-				iconOutside:		false,
-				closeButton:		closeButton,
-				showCloseOnHover:	showCloseOnHover,
-				groupSimilar:		$('#group-similar').prop('checked')
-			});
-		});*/
 </script>   
 {% endblock %}

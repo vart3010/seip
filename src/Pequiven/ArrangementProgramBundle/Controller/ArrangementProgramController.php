@@ -798,9 +798,9 @@ class ArrangementProgramController extends SEIPController {
         $form->handleRequest($request);
 
         if ($request->isMethod('POST')) {
-            $data = $form->getData();
+            $data = $form->getData();            
             if ($form->isValid()) {
-                $autoOpenOnSave = $request->get('autoOpenOnSave', false);
+                $autoOpenOnSave = $request->get('autoOpenOnSave', false);                
                 if ($autoOpenOnSave == true) {
                     $this->setFlash('autoOpenOnSave', true);
                 }
