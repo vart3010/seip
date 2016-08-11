@@ -1,0 +1,68 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+
+
+{% block title %}Órdenes de Pedido{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('Órdenes de Pedido'|trans)
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+<div ng-controller="TableFormatController">
+{#    <div ng-controller="TableWorkStudyCircleController">#}
+        <div loading-container="tableParams.settings().$loading">
+            <table ng-table="tableParams" {#show-filter="false"#} template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
+                <tbody>
+                    <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                        <td data-title="'N° Orden'">
+                            <a href="{$ result._links.self.show $}">{$ result.nroOrder $}</a>
+                        </td>
+                        <td data-title="'CET'">
+                            <a href="{$ result._links.self.show $}">{$ result.workStudyCircle.codigo $}</a>
+                        </td>
+                        <td data-title="'Total Orden'">
+                            <a href="{$ result._links.self.show $}">{$ result.totalOrder|myNumberFormat $} Bs.</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+{#    </div>#}
+</div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        
+        $(document).ready(function()
+        {
+            charge();
+            
+            function charge(){
+               $('.select2').select2({
+                allowClear: true
+                });
+            }
+            
+        });
+        
+        function getTableExtraInfo(data)
+            {
+                
+                //console.log(data)
+                var response = '';
+
+                //response = response + 'Fórmula: ' + data.formula.equation;
+                
+                return response;
+            }
+    </script>
+    
+{% endblock %}

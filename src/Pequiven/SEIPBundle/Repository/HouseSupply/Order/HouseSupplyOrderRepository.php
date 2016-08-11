@@ -81,6 +81,23 @@ class HouseSupplyOrderRepository extends EntityRepository {
 
         return $result;
     }
+    
+    /**
+     * Crea un paginador para las Ordenes de Pedido
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    public function createPaginatorByHouseSupplyOrder(array $criteria = null, array $orderBy = null) {
+        return $this->createPaginator($criteria, $orderBy);
+    }
+    
+    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+
+        parent::applyCriteria($queryBuilder, $criteria->toArray());
+    }
 
     function getAlias() {
         return 'HSOrder';
