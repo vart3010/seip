@@ -17,8 +17,7 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyPayments;
  * @author Gilbert C. <glavrjk@gmail.com>
  * 
  * @ORM\Table(name="seip_gsh_order")
- * @ORM\Entity()
- * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Order\HouseSupplyOrderRepository")
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\HouseSupply\Order\HouseSupplyOrderRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class houseSupplyOrder {

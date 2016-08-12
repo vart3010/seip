@@ -1996,6 +1996,15 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             $child->addChild($child3);
         }
+        
+        $child4 = $this->factory->createItem('housesupply.order.list', $this->getSubLevelOptions(array(
+                            'route' => 'pequiven_housesupply_order_list',
+                            'labelAttributes' => array('icon' => 'fa fa-arrow-up')
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Órdenes de Pedido', $section)));
+        
+        $child->addChild($child4);
 
         if ($this->isGranted(array('ROLE_SEIP_HOUSESUPPLY_INVENTORY'))) {
             $child5 = $this->factory->createItem('housesupply.order.delivery', $this->getSubLevelOptions(array(
