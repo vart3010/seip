@@ -266,6 +266,13 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     private $showEvolutionView = false;
 
     /**
+     * ¿Mostar en Objetivo Padre?
+     * @var boolean
+     * @ORM\Column(name="showViewObjetive",type="boolean")
+     */
+    private $showViewObjetive = true;
+
+    /**
      * Standardization
      * 
      * @var \Pequiven\SIGBundle\Entity\Tracing\Standardization
@@ -779,6 +786,18 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
 
     function setShowEvolutionView($showEvolutionView) {
         $this->showEvolutionView = $showEvolutionView;
+    }
+
+    function getShowViewObjetive() {
+        return $this->showViewObjetive;
+    }
+
+    function isShowViewObjetive() {
+        return $this->showViewObjetive;
+    }
+
+    function setShowViewObjetive($showViewObjetive) {
+        $this->showViewObjetive = $showViewObjetive;
     }
 
     /**

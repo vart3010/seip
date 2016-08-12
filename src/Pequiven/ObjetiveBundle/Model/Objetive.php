@@ -193,11 +193,18 @@ abstract class Objetive implements ObjetiveInterface
      * Retorna los programas de gestion asociados al objetivo
      * @return type
      */
-    public function getArrangementPrograms()
-    {
+    public function getArrangementPrograms(){
         $objetiveLevel = $this->getObjetiveLevel();
         $arrangementPrograms = array();
-        if($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
+        if($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
+            $arrangementProgramsStrategic = [];
+            foreach ($this->getStrategicArrangementProgram() as $dataArrangementProgram) {                
+                if ($dataArrangementProgram->getShowViewObjetive() === true) {
+                    $arrangementProgramsStrategic[] = $dataArrangementProgram;
+                }
+            }
+            return $arrangementProgramsStrategic;
+        }elseif($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
             $arrangementProgramsResult = $this->getTacticalArrangementPrograms();
             foreach ($arrangementProgramsResult as $arrangementProgram) {
                 if($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
@@ -209,6 +216,24 @@ abstract class Objetive implements ObjetiveInterface
             $arrangementPrograms = $this->getOperationalArrangementPrograms();
         }
         return $arrangementPrograms;
+    }
+
+    /**
+     * Retorna los programas de gestion asociados al objetivo
+     * @return type
+     */
+    public function getArrangementProgramsIsAvailableInResult(){
+        $objetiveLevel = $this->getObjetiveLevel();        
+        $arrangementProgramsStrategic = [];
+        $validIsResult = false;
+        if($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
+            foreach ($this->getStrategicArrangementProgram() as $dataArrangementProgram) {                
+                if ($dataArrangementProgram->getIsAvailableInResult() === true) {
+                    $validIsResult = true;
+                }
+            }
+        }        
+        return $validIsResult;
     }
     
     public function getGerenciaByLevel() {

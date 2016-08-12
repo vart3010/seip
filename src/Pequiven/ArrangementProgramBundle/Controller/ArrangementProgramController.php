@@ -804,6 +804,10 @@ class ArrangementProgramController extends SEIPController {
                 if ($autoOpenOnSave == true) {
                     $this->setFlash('autoOpenOnSave', true);
                 }
+                if ($entity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC) {
+                    $entity->setIsAvailableInResult(false);                    
+                }
+
                 if ($entity->getTimeline() === null) {
                     $timeLine = new Timeline();
                     $entity->setTimeline($timeLine);
