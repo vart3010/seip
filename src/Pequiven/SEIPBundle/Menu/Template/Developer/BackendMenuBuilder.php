@@ -1549,9 +1549,10 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.main', $section)));
 
         // MENU CASA - ABASTO
-        //     if ($this->isGranted('ROLE_SEIP_HOUSE_SUPPLY_*')) {
-        $this->addMenuHouseSupply($menuWorkStudyCircles, $section);
-        //    }
+        $complejo = $user->getComplejo()->getId();
+        if (($complejo == 1) || ($complejo == 5)) {
+            $this->addMenuHouseSupply($menuWorkStudyCircles, $section);
+        }
 
         if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_CREATE')) && $this->getPeriodService()->isAllowLoadWorkStudyCircle()) {
 
