@@ -64,6 +64,25 @@ pequiven_housesupply_orderkitcheck_payment:
         _format: html|json|xml
     methods: [GET|POST]
     
+ #ENTREGA DE ORDENES DE PEDIDO
+pequiven_housesupply_orderkit_delivery:
+    path: /deliveryOrderKit/
+    defaults:
+        _controller: pequiven.controller.housesupply_orderkit:DeliveryOrderAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]   
+    
+pequiven_housesupply_orderkit_deliver:
+    path: /deliverOrderKit/{id}
+    defaults:
+        _controller: pequiven.controller.housesupply_orderkit:DelivererOrderAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]   
+    
 #ORDENES DE PEDIDO POR PRODUCTO    
 pequiven_housesupply_order_charge_add:
     path: /addItemOrderKit/

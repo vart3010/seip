@@ -1912,16 +1912,16 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         );
 
         $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($searchwsc);
-        
-       
-            $child = $this->factory->createItem('housesupply', $this->getSubLevelOptions(array(
-                                'uri' => null,
-                                'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
-                            ))
-                    )
-                    ->setLabel($this->translate(sprintf('Casa - Abasto', $section)));
 
-            if ($wsc != null) {
+
+        $child = $this->factory->createItem('housesupply', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                            'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Casa - Abasto', $section)));
+
+        if ($wsc != null) {
             $child2 = $this->factory->createItem('housesupply.order', $this->getSubLevelOptions(array(
                                 'uri' => null,
                                     // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
@@ -1955,7 +1955,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
                     ))
                     ->setLabel($this->translate(sprintf('Reportes', $section)));
-            
+
             $child->addChild($child2);
         }
 
@@ -1995,6 +1995,17 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('Reportes', $section)));
 
             $child->addChild($child3);
+        }
+
+        if ($this->isGranted(array('ROLE_SEIP_HOUSESUPPLY_INVENTORY'))) {
+            $child5 = $this->factory->createItem('housesupply.order.delivery', $this->getSubLevelOptions(array(
+                                'route' => 'pequiven_housesupply_orderkit_delivery',
+                                'labelAttributes' => array('icon' => 'fa fa-truck')
+                            ))
+                    )
+                    ->setLabel($this->translate(sprintf('Entrega de Pedidos', $section)));
+
+            $child->addChild($child5);
         }
 
         $menu->addChild($child);
