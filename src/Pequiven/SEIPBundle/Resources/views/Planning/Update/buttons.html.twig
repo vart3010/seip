@@ -1,4 +1,4 @@
-{% if is_granted('ROLE_WORKER_PLANNING') %}
+{% if is_granted('ROLE_WORKER_PLANNING') or is_granted('ROLE_SEIP_INDICATOR_RECALCULATE_RESULT') %}
     {{ buttons.generic(
         (path(routeUpdateResult, { 'id': entity.id,'referral':(urlUpdateResulReferral) })),
         ('result.recalculate'|trans({},'PequivenSEIPBundle')),

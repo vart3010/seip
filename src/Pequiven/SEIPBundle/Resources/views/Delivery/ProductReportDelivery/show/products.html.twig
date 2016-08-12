@@ -3,17 +3,17 @@
 <div class="block">
     <div class="block-title">
         <h3> {{ 'pequiven_seip.products'|trans }}&nbsp;
-            ({{ product|length}})
+            ({{ products|length}})
         </h3>
         <div class="button-group absolute-right compact">
-{#            {% if periodService().isAllowPlanningReport %}#}
-{#                {% if(plant_report.plant.childrens|length==0) %}#}
-                    <a class="button icon-list-add" href="{{ path("pequiven_product_group_report_create",{"productGroup":product_group_delivery.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
-{#                {% endif %}#}
-{#            {% endif %}#}
+            {#            {% if periodService().isAllowPlanningReport %}#}
+            {#                {% if(plant_report.plant.childrens|length==0) %}#}
+            <a class="button icon-list-add" href="{{ path("pequiven_product_group_report_create",{"productGroup":product_group_delivery.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {#                {% endif %}#}
+            {#            {% endif %}#}
         </div>
     </div>
-        
+
     <div class="with-padding">
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
@@ -26,14 +26,18 @@
             </thead>
             {% set colspan = 6 %}
             <tbody>
-                {#  {% for product in products %}
-                      <tr>
-                          <td>{{ loop.index }} - {{ generateLink(product.entityProductReport) }}</td>
-                          <td>{{ product.line }}</td>
-                          <td>{{ product.unit }}</td>
-                          <td>&nbsp;</td>
-                      </tr>
-                  {% endfor %}#}
+                
+                {% for product in products %}
+                    <tr>
+                        <td>{{ loop.index }} - {{ generateLink(product) }}</td>
+                        <td>{{ product.product.productionLine }}</td>
+                        <td>{{ product.product.productUnit.name}}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                {% endfor %}
+                
+            
+
             </tbody>
         </table>
 

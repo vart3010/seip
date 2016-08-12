@@ -448,15 +448,15 @@ class ObjetiveSigController extends EvolutionController
         $rowFinTac = $row;//Fila Final del Objetivo Táctico        
         $lastRowOpe = 7;        
         $idObjManagement = 0;
-        foreach($objetivesTactics as $objetiveTactic){//Recorremos los objetivos tácticos
+        foreach($objetivesTactics as $objetiveTactic){//Recorremos los objetivos tácticos            
             $indicatorsTactics = $objetiveTactic->getIndicators();
             $totalIndicatorTactics = count($indicatorsTactics);
             $objetivesOperatives = $objetiveTactic->getChildrens();
-            $totalObjetiveOperatives = count($objetivesOperatives);
+            $totalObjetiveOperatives = count($objetivesOperatives);            
             //sistema de la calidad de objetivo tactico
             foreach ($objetiveTactic->getManagementSystems() as $data) {
                 if ($data->getId() == $managementSystemId) {
-                    $idObjManagement = $data->getId();                            
+                    $idObjManagement = $data->getId();                    
                 }
             }
             //var_dump($totalObjetiveOperatives." ot ". $objetiveTactic->getRef());//Cantidad de hijos por objetivos Tacticos            
@@ -467,9 +467,7 @@ class ObjetiveSigController extends EvolutionController
                     foreach ($value->getManagementSystems() as $data) {
                         if ($data->getId() == $managementSystemId) {
                             $idObjManagement = $data->getId();                            
-                            $objetiveOperative = $value;
-                        }
-                    }
+                            $objetiveOperative = $value;                            
                     //var_dump("Ref object: ".$objetiveOperative->getRef() ."ManagementObjec: ".$idObjManagement." management set".$managementSystemId);
                     $cantOperative = count($objetiveOperative->getManagementSystems());  
                     if ($cantOperative !== 0 && $idObjManagement == $managementSystemId) {//Si el objetivo esta marcado con el sistema de la calidad                            
@@ -515,7 +513,14 @@ class ObjetiveSigController extends EvolutionController
                         $textArrangementProgramsOperatives = '';
                         if($totalArrangementProgramsOperatives > 0){//Si el Objetivo Operativo tiene al menos un Programa de Gestión
                             foreach($arrangementProgramsOperatives as $arrangementProgram){
-                                $textArrangementProgramsOperatives.= $arrangementProgram->getRef() . "\n";
+                                //validación programas de gestión
+                                if (count($arrangementProgram->getManagementSystems()) > 0) {
+                                    foreach ($arrangementProgram->getManagementSystems() as $arrangementProgramManagement) {
+                                        if ($arrangementProgramManagement->getId() == $managementSystemId) {
+                                            $textArrangementProgramsOperatives.= $arrangementProgram->getRef() . "\n";                                            
+                                        }
+                                    }
+                                }
                             }
                         } else{
                             $textArrangementProgramsOperatives = $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle');
@@ -541,7 +546,7 @@ class ObjetiveSigController extends EvolutionController
                             $dataProcess = $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle');//Seteamos el texto de que no hay cargado
                         }                            
                         
-                        //var_dump('row:'.$rowIniOpe.' -- '.$objetiveTactic->getRef()." -- ".$objetiveOperative->getRef());//con ref parents and childrens                            
+                        //var_dump('row:'.$rowIniOpe.' -tactic- '.$objetiveTactic->getRef()." -ope- ".$objetiveOperative->getRef());//con ref parents and childrens                            
                         $activeSheet->setCellValue('H'.$rowIniOpe, $dataProcess);//Seteamos el proceso
                         $activeSheet->setCellValue('I'.$rowIniOpe, $objetiveOperative->getRef().' '.$objetiveOperative->getDescription());//Seteamos el Objetivo Operativo
                         $activeSheet->setCellValue('L'.$rowIniOpe, $objetiveOperative->getGoal());//Seteamos el Peso del Objetivo Operativo
@@ -558,12 +563,15 @@ class ObjetiveSigController extends EvolutionController
                         }*/
                         $row++;             
                     }//if de managementsystems                                                        
+                        }
+                    }
                 }
                 
                 $idManagementsIndicator = 0;
                 $indicatorTacticsData = [];
                 if($totalIndicatorTactics > 0){//Si el Objetivo Táctico tiene Indicadores Táctico 
                     foreach($indicatorsTactics as $indicatorTactic){
+                        //validacion por sistema consultado
                         foreach ($indicatorTactic->getManagementSystems() as $dataManagement) {
                             if ($managementSystemId == $dataManagement->getId()) {                                
                                 $idManagementsIndicator = $dataManagement->getId();                            
@@ -649,8 +657,15 @@ class ObjetiveSigController extends EvolutionController
             $totalArrangementProgramsTactic = count($arrangementProgramsTactics);
             $textArrangementProgramsTactic = '';
             if($totalArrangementProgramsTactic > 0){//Si el Objetivo Táctico tiene al menos un Programa de Gestión
-                foreach($arrangementProgramsTactics as $arrangementProgram){
-                    $textArrangementProgramsTactic.= $arrangementProgram->getRef() . "\n";
+                foreach($arrangementProgramsTactics as $arrangementProgram){                    
+                    //validación de programas por sistema de calidad consultado
+                    if (count($arrangementProgram->getManagementSystems()) > 0) {
+                        foreach ($arrangementProgram->getManagementSystems() as $arrangementProgramManagement) {
+                            if ($arrangementProgramManagement->getId() == $managementSystemId) {                                
+                                $textArrangementProgramsTactic.= $arrangementProgram->getRef() . "\n";
+                            }
+                        }
+                    }
                 }
             } else {
                 $textArrangementProgramsTactic = $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle');

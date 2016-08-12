@@ -12,6 +12,10 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use TCPDF;
 
+/**
+ * HEADER Y FOOTER DE REPORTES DEL SEIP
+ * @author Gilbert C. <glavrjk@gmail.com>
+ */
 class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
 
     /**

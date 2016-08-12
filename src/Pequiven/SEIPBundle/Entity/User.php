@@ -263,6 +263,12 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     protected $movementFeeStructure;
 
     /**
+     * @var Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems",mappedBy="client",cascade={"persist"}))
+     */
+    protected $houseSupplyOrderItems;
+
+    /**
      * Trimestre que esta permitido notificar en el Módulo de Operaciones/Producción
      * @var integer
      *

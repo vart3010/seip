@@ -1,0 +1,72 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        { ( '*' ): ('Órdenes de Pedido') },
+         (' Lista')
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+    <div ng-controller="TableFormatController">        
+        <div loading-container="tableParams.settings().$loading">
+            <table ng-table="tableParams" {#show-filter="false"#} template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
+                <tbody>
+                    <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                        <td data-title="'N° Orden'" style="text-align: center;">
+                            <a href="{$ result._links.self.show $}">{$ result.orderNro $}</a>
+                        </td>
+                        <td data-title="'Fecha'" style="text-align: center;">
+                            {$ result.dateOrder $}
+                        </td>
+                        <td data-title="'CET'" style="text-align: left;">
+                            {$ result.workStudyCircle.codigo $} - {$ result.workStudyCircle.name $}
+                        </td>                        
+                        <td data-title="'Complejo'" style="text-align: left;">
+                            {$ result.workStudyCircle.complejo.description $}
+                        </td>                        
+                        <td data-title="'Estatus'" style="text-align: center;">
+                            {$ result.arrayStatus[result.type] $}
+                        </td>
+                        <td data-title="'Total Orden'" style="text-align: right;">
+                            {$ result.totalOrder|myNumberFormat $} Bs.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>      
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+        $(document).ready(function ()
+        {
+            charge();
+
+            function charge() {
+                $('.select2').select2({
+                    allowClear: true
+                });
+            }
+
+        });
+
+        function getTableExtraInfo(data)
+        {
+
+            //console.log(data)
+            var response = '';
+
+            //response = response + 'Fórmula: ' + data.formula.equation;
+
+            return response;
+        }
+    </script>
+
+{% endblock %}

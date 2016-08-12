@@ -162,7 +162,7 @@
                     <br/><br/>
                     <p class="inline-label">
                         <label class="label">{{ 'pequiven.arrangement_program.advances'|trans }}</label>
-                        {% set advances = entity.getResult %}
+                        {% set advances = entity.getResult*1 %}
                         {% if(entity.getResult < 0) %}
                             {% set advances = 0 %}
                         {% endif %}                        
@@ -180,7 +180,7 @@
                     <br/><br/>
                     <p class="inline-label">
                         <label class="label">Efectividad del Programa</label>
-                        {% set advances = totales.efectivity %}
+                        {% set advances = totales.efectivity*1 %} 
                         {% set advancesClass = 'red-gradient' %}
                         {% if advances > 50 and advances <= 80 %}
                             {% set advancesClass = 'orange-gradient' %}

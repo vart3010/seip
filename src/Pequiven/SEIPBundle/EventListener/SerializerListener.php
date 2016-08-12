@@ -62,6 +62,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeObservationsSip', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Center\Observations', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeInventorySip', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Center\Inventory', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeStandardization', 'class' => 'Pequiven\SIGBundle\Entity\Tracing\Standardization', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeHouseSupplyOrder', 'class' => 'Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder', 'format' => 'json'),
         );
     }
 
@@ -157,7 +158,6 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
 //            );            
 //            $data["Results"][$goal->getId()][$userobj->getId()] = $this->generateUrl('individual_value', $searchCriteria);
 //        }
-
         //Habilitar la carga de lo real
         $isLoadRealEnabled = false;
         //Habilitar la carga de los planeado
@@ -223,11 +223,11 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $isEnabledLoadByQuarterSecondReal = true;
 
         //Habilitar la carga del tercer trimestre (Requiere isEnabledLoadByQuarter)
-        $isEnabledLoadByQuarterThird = false;
+        $isEnabledLoadByQuarterThird = true;
         //Habilitar la carga de valores planificados del tercer trimestre (Requiere isEnabledLoadByQuarterThird)
         $isEnabledLoadByQuarterThirdPlanned = false;
         //Habilitar la carga de valores reales del tercer trimestre (Requiere isEnabledLoadByQuarterThird)
-        $isEnabledLoadByQuarterThirdReal = false;
+        $isEnabledLoadByQuarterThirdReal = true;
 
         //Habilitar la carga del cuarto trimestre (Requiere isEnabledLoadByQuarter)
         $isEnabledLoadByQuarterFourth = false;
@@ -411,11 +411,11 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         if ($details->getNotificationInProgressByUser() != null) {
 //            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 9))){
             //if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 35) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 35))){
-            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 21) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 21))){
+            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 27) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 27))){
            # if((($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 21) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 21))){
-                $data['januaryReal']['isEnabled'] = true;
-                $data['februaryReal']['isEnabled'] = true;
-                $data['marchReal']['isEnabled'] = true;
+                $data['januaryReal']['isEnabled'] = false;
+                $data['februaryReal']['isEnabled'] = false;
+                $data['marchReal']['isEnabled'] = false;
                 $data['aprilReal']['isEnabled'] = true;
                 $data['mayReal']['isEnabled'] = true;
                 $data['juneReal']['isEnabled'] = true;
@@ -661,7 +661,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $links = array(
             'show_result' => $this->generateUrl('pequiven_seip_result_visualize_gerencia', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND, 'id' => $object->getId()))
         );
-//        $event->getVisitor()->addData('linkToExportResult', $this->generateUrl('pequiven_seip_result_export', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND,'id' => $object->getId())));
+
         $event->getVisitor()->addData('_links', $links);
     }
 
@@ -718,19 +718,9 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
     public function onPostSerializeCenter(ObjectEvent $event) {
         $object = $event->getObject();
 
-//        $codEstado = $object->getCodigoEstado();
-//        $codMunicipio = $object->getCodigoMunicipio();
-//        $codParroquia = $object->getCodigoParroquia();
-//        $estado = $this->container->get('pequiven.repository.estado')->findOneBy(array('id' => $codEstado));
-//        $municipio = $this->container->get('pequiven.repository.municipio')->findOneBy(array('codigoMunicipio' => $codMunicipio));
-//        $parroquia = $this->container->get('pequiven.repository.parroquia')->findOneBy(array('codigoParroquia' => $codParroquia, 'codigoMunicipio' => $codMunicipio));
-
         $links['self']['show'] = $this->generateUrl('pequiven_sip_center_show', array('id' => $object->getId()));
 
         $event->getVisitor()->addData('_links', $links);
-//        $event->getVisitor()->addData('estado', $estado->getDescription());
-//        $event->getVisitor()->addData('municipio', $municipio->getDescription());
-//        $event->getVisitor()->addData('parroquia', $parroquia->getDescription());
     }
 
     public function onPostSerializeOnePerTen(ObjectEvent $event) {
@@ -790,10 +780,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             $textoVoto = 'SI';
         }
 
-//        $links['self']['show'] = $this->generateUrl('pequiven_search_members', array('user' => $user->getID()));
-
         $event->getVisitor()->addData('textoVoto', $textoVoto);
-//        $event->getVisitor()->addData('_links', $links);
     }
 
     public function onPostSerializeObservationsSip(ObjectEvent $event) {
@@ -802,10 +789,6 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
 
         $links['self']['show'] = "";
 
-        //$arrayLabel = Observations::getCategoriasObservations();
-        //$arrayStatus = Observations::getStatusObservations();
-        //$event->getVisitor()->addData('nombreCategoria', $arrayLabel[$object->getCategoria()]);
-        //$event->getVisitor()->addData('nombreStatus', $arrayStatus[$object->getStatus()]);
         $event->getVisitor()->addData('_links', $links);
     }
 
@@ -817,10 +800,6 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
 
         $links['self']['show'] = "";
 
-        //$arrayLabel = Observations::getCategoriasObservations();
-        //$arrayStatus = Observations::getStatusObservations();
-        //$event->getVisitor()->addData('nombreCategoria', $arrayLabel[$object->getCategoria()]);
-        //$event->getVisitor()->addData('nombreStatus', $arrayStatus[$object->getStatus()]);
         $event->getVisitor()->addData('_links', $links);
     }
 
@@ -831,7 +810,6 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $nameOriginal = $object->getNameFile();
         $workStudyCircle = $object->getMeeting()->getWorkStudyCircle();
 
-//        $links['self']['show'] = $this->generateUrl('pequiven_proposal_show', array('id' => $object->getId()));
         $links['self']['show'] = $this->generateUrl('pequiven_work_study_circle_download_file', array('id' => $object->getId()));
         $links['self']['circle'] = $this->generateUrl('pequiven_work_study_circle_show', array('id' => $workStudyCircle->getId()));
 
@@ -844,35 +822,42 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
 
     public function onPostSerializeStandardization(ObjectEvent $event) {
         $object = $event->getObject();
-        
-        $statusLoad = [0 => "Sin Notificar",1 => "Notificado"];
+
+        $statusLoad = [0 => "Sin Notificar", 1 => "Notificado"];
         $status = $statusLoad[$object->getStatus()];
 
-        $statusMaintanence = [0 => "Sin Carga",1 => "Abierta No Vencia",2 => "Cerrada",3 => "Abierta Vencida"];
+        $statusMaintanence = [0 => "Sin Carga", 1 => "Abierta No Vencia", 2 => "Cerrada", 3 => "Abierta Vencida"];
         $statusM = $statusMaintanence[0];
         $buttons = "";
-        foreach ($object->getMaintenance() as $value) { 
+        foreach ($object->getMaintenance() as $value) {
             $statusM = $statusMaintanence[$value->getStatus()];
             if ($value->getStatus() >= 2) {
-                 $buttons = '<a class="button icon-pencil" ng-click="loadTemplateMaintenanceVerification(id_maintenance='.$object->getId().')" href="">Verificar</a>';
-            } 
+                $buttons = '<a class="button icon-pencil" ng-click="loadTemplateMaintenanceVerification(id_maintenance=' . $object->getId() . ')" href="">Verificar</a>';
+            }
         }
         $statusCharge = $statusM;
-        
+
         if ($statusM == "Sin Carga" or $statusCharge == "Abierta No Vencia") {
-            $buttons = '<a class="button icon-pencil" ng-click="loadTemplateMaintenance(id_standardization='.$object->getId().')" href="">Cargar</a>';
+            $buttons = '<a class="button icon-pencil" ng-click="loadTemplateMaintenance(id_standardization=' . $object->getId() . ')" href="">Cargar</a>';
         }
         if ($object->getStatus() == 0) {
-            $buttons = '<a class="button icon-bell with-tooltip" ng-click="loadNotify(dataNotify='.$object->getId().')" href="" title="Notificar"></a>'.'<a class="button icon-trash with-tooltip confirm" ng-click="removeStandardization(dataMonitoring='.$object->getId().')" href="" title="Eliminar"></a>';    
+            $buttons = '<a class="button icon-bell with-tooltip" ng-click="loadNotify(dataNotify=' . $object->getId() . ')" href="" title="Notificar"></a>' . '<a class="button icon-trash with-tooltip confirm" ng-click="removeStandardization(dataMonitoring=' . $object->getId() . ')" href="" title="Eliminar"></a>';
         }
-        //$links['self']['show'] = $this->generateUrl('pequiven_proposal_show', array('id' => $object->getId()));
-        //$links['self']['show'] = $this->generateUrl('pequiven_work_study_circle_download_file', array('id' => $object->getId()));
-        //$links['self']['circle'] = $this->generateUrl('pequiven_work_study_circle_show', array('id' => $workStudyCircle->getId()));
 
-        //$event->getVisitor()->addData('_links', $links);
         $event->getVisitor()->addData('statusStandardization', $status);
         $event->getVisitor()->addData('statusCharge', $statusCharge);
         $event->getVisitor()->addData('buttons', $buttons);
+    }
+
+    public function onPostSerializeHouseSupplyOrder(ObjectEvent $event) {
+        $links = array();
+        $object = $event->getObject();
+        $orderNro = str_pad($object->getNroOrder(), 5, 0, STR_PAD_LEFT);
+        $links['self']['show'] = $this->generateUrl('pequiven_housesupply_orderkit_show', array('id' => $object->getId()));
+        $arrayStatus = \Pequiven\SEIPBundle\Model\HouseSupply\HouseSupplyOrder::getStatus();
+        $event->getVisitor()->addData('_links', $links);
+        $event->getVisitor()->addData('orderNro', $orderNro);
+        $event->getVisitor()->addData('arrayStatus', $arrayStatus);
     }
 
     public function setContainer(ContainerInterface $container = null) {

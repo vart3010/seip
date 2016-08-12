@@ -6,13 +6,13 @@
 
 {% block before_body %}
     {{ contentHeader(
-        {(path('pequiven_report_template_delivery_index')):("pequiven_seip.product_group_delivery.product_group"|trans )},
+        {(path('pequiven_report_template_delivery_show',{id:app.request.get("reportTemplateDelivery")})):("pequiven_seip.product_group_delivery.product_group"|trans )},
         ( 'pequiven.update'|trans({},'messages') )
     ) }}
 {% endblock %}
 
 {% block body -%}
-    <form method="POST" action="{{ path("pequiven_product_group_delivery_create",{reportTemplateDelivery:app.request.get("reportTemplateDelivery") }) }}">
+    <form method="POST" action="{{ path("pequiven_product_group_delivery_create",{reportTemplateDelivery:app.request.get("reportTemplateDelivery"),save_and_close: true }) }}">
         <br /><br />
         {% include 'PequivenSEIPBundle:Delivery/ProductGroupDelivery:_form.html.twig' %}
         {{ actions.create() }}
