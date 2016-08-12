@@ -51,7 +51,7 @@ a:hover {color:#ccc; text-decoration:none}
 <div class="with-padding">
 	<div class="columns">
 		{# formulario de consulta de programas de gestión #}
-		<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+		<div class="new-row-mobile six-columns twelve-columns-tablet twelve-columns-mobile-landscape twelve-columns-mobile twelve-columns-mobile-portrait">
 			<div id="show-data">				
 				<div class="block large-margin-bottom">
 					<div class="block-title"><h3 id="title-form"></h3></div>
@@ -85,7 +85,7 @@ a:hover {color:#ccc; text-decoration:none}
 			</div>
 		</div>
 		{# formulario de usuario #}
-		<div class="six-columns six-columns-tablet twelve-columns-mobile" id="formAddUser">
+		<div class="six-columns twelve-columns-tablet twelve-columns-mobile-landscape twelve-columns-mobile twelve-columns-mobile-portrait" id="formAddUser">
 			<div class="wrapped align-center progress-controls">
 				Seleccione Usuario:
 				<input type="text" id="data_user_select" name="data_user[select]" style="width: 270px">&nbsp;
@@ -100,7 +100,7 @@ a:hover {color:#ccc; text-decoration:none}
 			</div>
 		</div>
 		{# lista de usuario relacionado a acciones de programa #}
-		<div class="six-columns six-columns-tablet twelve-columns-mobile">
+		<div class="six-columns twelve-columns-tablet twelve-columns-mobile-landscape twelve-columns-mobile twelve-columns-mobile-portrait">
 			<div id="list-data">								
 				<div class="block large-margin-bottom">
 					{# acciones principales #}
@@ -154,7 +154,10 @@ a:hover {color:#ccc; text-decoration:none}
 		$('#list-data').hide();
 		$('#formAddUser').hide();
 		$('#details').hide();
-
+		/**********************************/
+		/*$('.check1').removeClass('checked');
+		$('.check2').removeClass('checked');
+		$('.check3').removeClass('checked');*/
 		/*$("input[name=objects]").click(function() {
 	        var idObject = $(this).val();
 	        confForm(idObject);//set de idObject
