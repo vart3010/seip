@@ -180,25 +180,35 @@
                         </td>
                     </tr>
                 </table>
-                <br>
-                <div class="new-row twelve-columns" style="width: 915px; text-align: right;">  
-                    <form action="{{ path("pequiven_housesupply_orderkit_export", { 'id': order.id }) }}">
-                        <button type="submit" class="button glossy mid-margin-right">
-                            <span class="button-icon blue-gradient"><span class="icon-download"></span></span>
-                            Exportar Orden de Pedido {{"%05d" | format(order.nroOrder) }}
-                        </button>    
-                    </form>
-                    {%if order.type==5%}   
-                        <form action="{{ path("pequiven_housesupply_orderkitdelivery_export", { 'id': order.id }) }}">
-                            <button type="submit" class="button glossy mid-margin-right">
-                                <span class="button-icon blue-gradient"><span class="icon-download"></span></span>
-                                Exportar Orden de Despacho {{"%05d" | format(order.nroOrder) }}
-                            </button>    
-                        </form>
-                    {%endif%}
-                </div>       
-            </center>            
-        </div>
-    </div>
+                <br><br>
+                <div class="new-row twelve-columns" style="width: 915px; text-align: right;">                      
+                    <table>
+                        <tr>
+                            <td>
+                                <form action="{{ path("pequiven_housesupply_orderkit_export", { 'id': order.id }) }}">
+                                    <button type="submit" class="button glossy mid-margin-right">
+                                        <span class="button-icon blue-gradient"><span class="icon-download"></span></span>
+                                        Orden de Pedido {{"%05d" | format(order.nroOrder) }}
+                                    </button>    
+                                </form>
+                            </td>
+                            {%if order.type==5 and is_granted('ROLE_SEIP_HOUSESUPPLY_VIEW_ALL_ORDERS') %}   
+                                <td>
+                                    <form action="{{ path("pequiven_housesupply_orderkitdelivery_export", { 'id': order.id }) }}">
+                                        <button type="submit" class="button glossy mid-margin-right">
+                                            <span class="button-icon blue-gradient"><span class="icon-download"></span></span>
+                                            Orden de Despacho
+                                        </button>    
+                                    </form>
+                                </td>
+                            {%endif%}
+                        </tr>
+                    </table>
+                </div>
+            </center>
+        </div>       
+    </center>            
+</div>
+</div>
 {% endblock %}
 

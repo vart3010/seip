@@ -82,7 +82,7 @@ class HouseSupplyOrderRepository extends EntityRepository {
 
         return $result;
     }
-    
+
     /**
      * Crea un paginador para las Ordenes de Pedido
      * 
@@ -93,9 +93,18 @@ class HouseSupplyOrderRepository extends EntityRepository {
     public function createPaginatorByHouseSupplyOrder(array $criteria = null, array $orderBy = null) {
         return $this->createPaginator($criteria, $orderBy);
     }
-    
+
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
+
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+
+        if (($wsc = $criteria->remove('ownWsc'))) {
+            $queryBuilder                    
+                    ->innerJoin('HSOrder.workStudyCircle', 'wsc')
+                    ->andWhere('wsc.id = :wsc')
+                    ->setParameter('wsc', $wsc)
+            ;
+        }
 
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }

@@ -1921,13 +1921,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 )
                 ->setLabel($this->translate(sprintf('Casa - Abasto', $section)));
 
+        $child2 = $this->factory->createItem('housesupply.order', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                                // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Pedidos', $section)));
+
         if ($wsc != null) {
-            $child2 = $this->factory->createItem('housesupply.order', $this->getSubLevelOptions(array(
-                                'uri' => null,
-                                    // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
-                            ))
-                    )
-                    ->setLabel($this->translate(sprintf('Pedidos', $section)));
             $child2
                     ->addChild('housesupply.order.create', array(
                         'route' => 'pequiven_housesupply_orderkit_charge',
@@ -1942,22 +1943,32 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         'labelAttributes' => array('icon' => 'fa fa-check-square-o')
                     ))
                     ->setLabel($this->translate(sprintf('Validar', $section)));
-
-            $child2
-                    ->addChild('housesupply.order.view', array(
-                            //'route' => 'pequiven_user_feestructure',
-                            //'labelAttributes' => array('icon' => 'fa fa-calculator')
-                    ))
-                    ->setLabel($this->translate(sprintf('Visualizar', $section)));
-            $child2
-                    ->addChild('housesupply.order.reports', array(
-                        //'route' => 'pequiven_user_feestructure',
-                        'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
-                    ))
-                    ->setLabel($this->translate(sprintf('Reportes', $section)));
-
-            $child->addChild($child2);
         }
+
+        $child2
+                ->addChild('housesupply.order.list', array(
+                    'route' => 'pequiven_housesupply_order_list',
+//                    'labelAttributes' => array('icon' => 'fa fa-arrow-up')
+                ))
+                ->setLabel($this->translate(sprintf('Lista', $section)));
+
+        $child2
+                ->addChild('housesupply.order.reports', array(
+                    //'route' => 'pequiven_user_feestructure',
+                    'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
+                ))
+                ->setLabel($this->translate(sprintf('Reportes', $section)));
+
+        if ($this->isGranted(array('ROLE_SEIP_HOUSESUPPLY_INVENTORY'))) {
+            $child2
+                    ->addChild('housesupply.order.delivery', array(
+                        'route' => 'pequiven_housesupply_orderkit_delivery',
+                        'labelAttributes' => array('icon' => 'fa fa-truck')
+                    ))
+                    ->setLabel($this->translate(sprintf('Entrega de Pedidos', $section)));
+        }
+
+        $child->addChild($child2);
 
         if ($this->isGranted(array('ROLE_SEIP_HOUSESUPPLY_INVENTORY'))) {
 
@@ -1995,26 +2006,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('Reportes', $section)));
 
             $child->addChild($child3);
-        }
-        
-        $child4 = $this->factory->createItem('housesupply.order.list', $this->getSubLevelOptions(array(
-                            'route' => 'pequiven_housesupply_order_list',
-                            'labelAttributes' => array('icon' => 'fa fa-arrow-up')
-                        ))
-                )
-                ->setLabel($this->translate(sprintf('Órdenes de Pedido', $section)));
-        
-        $child->addChild($child4);
-
-        if ($this->isGranted(array('ROLE_SEIP_HOUSESUPPLY_INVENTORY'))) {
-            $child5 = $this->factory->createItem('housesupply.order.delivery', $this->getSubLevelOptions(array(
-                                'route' => 'pequiven_housesupply_orderkit_delivery',
-                                'labelAttributes' => array('icon' => 'fa fa-truck')
-                            ))
-                    )
-                    ->setLabel($this->translate(sprintf('Entrega de Pedidos', $section)));
-
-            $child->addChild($child5);
         }
 
         $menu->addChild($child);

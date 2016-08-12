@@ -39,14 +39,14 @@ class HouseSupplyOrderKitController extends SEIPController {
 
         $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($searchwsc);
 
-        //VALIDO SI EN EL CICLO TIENE PEDIDOS REALIZADOS
+//VALIDO SI EN EL CICLO TIENE PEDIDOS REALIZADOS
         $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle(new \DateTime((date("Y-m-d h:m:s"))));
 
         if ($cycle) {
             $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('cycle' => $cycle[0]->getId(), 'workStudyCircle' => $wsc->getId()));
 
             if ((count($order) == 0) || ($order == null)) {
-                //NUEVO NUMERO DE PEDIDO
+//NUEVO NUMERO DE PEDIDO
                 $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
                 $neworder = str_pad((($neworderNro[0]['nro']) + 1), 5, 0, STR_PAD_LEFT);
                 $member = null;
@@ -78,10 +78,14 @@ class HouseSupplyOrderKitController extends SEIPController {
 
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
-        //$repository = $this->getRepository();
+//$repository = $this->getRepository();
         $repository = $this->get('pequiven.repository.housesupply_order');
-        //var_dump(get_class($repository));die();
-        //$orders = $this->get('pequiven.repository.housesupply_order')->findAll(); //Carga las Órdenes
+//var_dump(get_class($repository));die();
+//$orders = $this->get('pequiven.repository.housesupply_order')->findAll(); //Carga las Órdenes
+        $securityService = $this->getSecurityService();
+        if (!$securityService->isGranted(array("ROLE_SEIP_HOUSESUPPLY_VIEW_ALL_ORDERS"))) {
+            $criteria['ownWsc'] =$this->getUser()->getWorkStudyCircle()->getId();
+        }
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
@@ -119,7 +123,7 @@ class HouseSupplyOrderKitController extends SEIPController {
             );
             $view->setData($data);
         } else {
-            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'work_study_circle', 'house_supply_cycle', 'house_supply_product_kit', 'date'));
+            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'work_study_circle', 'house_supply_cycle', 'house_supply_product_kit', 'date', 'complejo'));
             $formatData = $request->get('_formatData', 'default');
 
             $view->setData($resources->toArray('', array(), $formatData));
@@ -234,11 +238,11 @@ class HouseSupplyOrderKitController extends SEIPController {
         $idwsc = $options['idWsc'];
         $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneById($idwsc);
 
-        //NUEVO NUMERO DE PEDIDO
+//NUEVO NUMERO DE PEDIDO
         $neworderNro = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->FindNextOrderNro($type);
         $idNewOrder = $neworderNro[0]['nro'] + 1;
 
-        //CICLO DE ORDENES
+//CICLO DE ORDENES
         $idCycle = $options['cycle'];
         $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->findOneById($idCycle);
 
@@ -247,10 +251,10 @@ class HouseSupplyOrderKitController extends SEIPController {
             'type' => 3,
         );
 
-        //TRAIGO LOS DOCUMENTOS EN ESPERA
+//TRAIGO LOS DOCUMENTOS EN ESPERA
         $waitingItems = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy($searchItems);
 
-        //COMIENZO A LLENAR EL ENCABEZADO DE LA ORDEN
+//COMIENZO A LLENAR EL ENCABEZADO DE LA ORDEN
         $order = new houseSupplyOrder();
         $order->setDateOrder($date);
         $order->setType($type);
@@ -293,7 +297,7 @@ class HouseSupplyOrderKitController extends SEIPController {
 
         $members = $request->get('members');
 
-        //REGISTRO LOS DOCUMENTOS DE LA ORDEN
+//REGISTRO LOS DOCUMENTOS DE LA ORDEN
         foreach ($members as $key => $member) {
             if ($member == 1) {
                 $options['idMember'] = $key;
@@ -406,7 +410,7 @@ class HouseSupplyOrderKitController extends SEIPController {
         $options['idMember'] = $idMember;
         $options['order'] = $order;
 
-        //AGREGO LOS DOCUMENTOS DE LA ORDEN                
+//AGREGO LOS DOCUMENTOS DE LA ORDEN                
         if ($status == 'true') {
             $this->addItemAction($options);
         } else {
@@ -428,7 +432,7 @@ class HouseSupplyOrderKitController extends SEIPController {
 
         $list = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy(array('order' => $order));
 
-        //TRAIGO LOS DOCUMENTOS EN ESPERA
+//TRAIGO LOS DOCUMENTOS EN ESPERA
         foreach ($list as $items) {
             $baseImponible+=$items->getTotalLine();
             $iva+=$items->getTotalLineTaxes();
@@ -459,7 +463,7 @@ class HouseSupplyOrderKitController extends SEIPController {
             $ref = $pay->ref;
             $monto = 1 * $pay->monto;
 
-            //COMIENZO A LLENAR LOS PAGOS DE LA ORDEN
+//COMIENZO A LLENAR LOS PAGOS DE LA ORDEN
             $payment = new houseSupplyPayments();
             $payment->setOrder($order);
             $payment->setType($concepto);
@@ -469,7 +473,7 @@ class HouseSupplyOrderKitController extends SEIPController {
             $em->persist($payment);
         }
 
-        //ACTUALIZO LOS DATOS DE LA ORDEN Y EL ESTATUS
+//ACTUALIZO LOS DATOS DE LA ORDEN Y EL ESTATUS
         $order->setType(4);
         $order->setDatePay($date);
         $order->setPaidBy($this->getUser());
@@ -542,7 +546,7 @@ class HouseSupplyOrderKitController extends SEIPController {
         $idOrder = $request->get('id');
         $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findOneById($idOrder);
 
-        //CALCULO EL NUEVO CORRELATIVO
+//CALCULO EL NUEVO CORRELATIVO
         $newnroobj = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventoryCharge')->FindNextInvChargeNro(2);
 
         if ($newnroobj[0]['nro']) {
@@ -556,17 +560,17 @@ class HouseSupplyOrderKitController extends SEIPController {
         );
 
 
-        //OBTENGO EL DEPOSITO        
+//OBTENGO EL DEPOSITO        
         $deposit = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyDeposit')->findOneBy($searchCriteria);
 
-        //OBTENGO LISTA DE PRODUCTOS
+//OBTENGO LISTA DE PRODUCTOS
         $orderDetails = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->TotalOrder($idOrder);
         $date = new \DateTime;
         $obs = 'Orden Nro. ' . str_pad($order->getNroOrder(), 5, 0, STR_PAD_LEFT) . ' del ' . ($order->getDateOrder()->format('d/m/Y'));
 
         $em->getConnection()->beginTransaction();
 
-        //CARGO LA OPERACION DE INVENTARIO EN LA BASE DE DATOS
+//CARGO LA OPERACION DE INVENTARIO EN LA BASE DE DATOS
         $charge = new houseSupplyInventoryCharge();
         $charge->setDate($date);
         $charge->setObservations($obs);
@@ -578,7 +582,7 @@ class HouseSupplyOrderKitController extends SEIPController {
         $charge->setCreatedBy($this->getUser());
         $em->persist($charge);
 
-        //CARGO LOS ITEMS DE LA OPERACION DE INVENTARIO;
+//CARGO LOS ITEMS DE LA OPERACION DE INVENTARIO;
         try {
             $em->flush();
             $em->getConnection()->commit();
@@ -587,7 +591,7 @@ class HouseSupplyOrderKitController extends SEIPController {
             throw $e;
         }
 
-        //CARGO LOS ITEMS DEL CARGO DE INVENTARIO
+//CARGO LOS ITEMS DEL CARGO DE INVENTARIO
         $line = 0;
         foreach ($orderDetails as $prod) {
 
@@ -608,7 +612,7 @@ class HouseSupplyOrderKitController extends SEIPController {
             $em->persist($inventorychargeitems);
             $em->flush();
 
-            //ACTUALIZO LAS EXISTENCIAS EN INVENTARIO            
+//ACTUALIZO LAS EXISTENCIAS EN INVENTARIO            
             $search = array(
                 'product' => $product->getId(),
                 'deposit' => $deposit->getId()
@@ -622,7 +626,7 @@ class HouseSupplyOrderKitController extends SEIPController {
             $em->flush();
         }
 
-        //ACTUALIZO LOS DATOS DE LA ORDEN Y EL ESTATUS
+//ACTUALIZO LOS DATOS DE LA ORDEN Y EL ESTATUS
         $order->setType(5);
         $order->setDateDelivery($date);
         $order->setDeliveredBy($this->getUser());
