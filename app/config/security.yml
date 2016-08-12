@@ -298,6 +298,7 @@ security:
                 
             #CASA ABASTO HOUSESUPPLY
             - ROLE_SEIP_HOUSESUPPLY_INVENTORY
+            - ROLE_SEIP_HOUSESUPPLY_VIEW_ALL_ORDERS            
                
             # Permisos especiales
             - ROLE_SEIP_UPDATE_RESULT_OBJECTS

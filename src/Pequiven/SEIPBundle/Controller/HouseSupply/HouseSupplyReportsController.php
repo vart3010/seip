@@ -51,4 +51,33 @@ class HouseSupplyReportsController extends SEIPController {
         $this->getReportService()->generateHouseSupplyPDF($data, $tittle, $twig, 'P', $archiveTittle);
     }
 
+    /**
+     * REPORTE DE LA CONSTANCIA DE DESPACHO
+     * @param Request $request
+     */
+    public function exportDeliveryOrderAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $id = $request->get('id');        
+        $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findOneById($id);        
+        $orderDetails = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->TotalOrder($id);
+        $productKit = $order->getProductKit();
+        $cantKits = count($order->getOrderItems()) / count($productKit->getProductKitItems());
+        $arrayStatus = HouseSupplyOrder::getStatus();
+        $arrayPays = HouseSupplyPayments::getPaymentsTypes();
+
+        $data = array(
+            'order' => $order,
+            'productKit' => $productKit,
+            'cantKits' => $cantKits,
+            'orderDetails' => $orderDetails,
+            'arrayStatus' => $arrayStatus,
+            'arrayPays' => $arrayPays,            
+        );
+
+        $twig = 'PequivenSEIPBundle:HouseSupply\Reports:exportOrderKitDelivery.html.twig';
+        $archiveTittle = 'Orden de Despacho ' . str_pad(($order->getNroOrder()), 5, 0, STR_PAD_LEFT);
+        $tittle = 'Ordenes de Despacho';
+        $this->getReportService()->generateHouseSupplyPDF($data, $tittle, $twig, 'P', $archiveTittle);
+    }
+
 }
