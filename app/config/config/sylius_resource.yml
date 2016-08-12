@@ -692,7 +692,7 @@ sylius_resource:
                 repository: Pequiven\SEIPBundle\Repository\HouseSupply\Order\HouseSupplyOrderRepository
         pequiven.housesupply_orderkit:
             driver: doctrine/orm
-            templates: PequivenSEIPBundle:HouseSupply/OrderKit
+            templates: PequivenSEIPBundle:HouseSupply/Order
             classes:
                 model: Pequiven\SEIPBundle\Entity\HouseSupply\Order\HouseSupplyOrderKit
                 controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyOrderKitController             

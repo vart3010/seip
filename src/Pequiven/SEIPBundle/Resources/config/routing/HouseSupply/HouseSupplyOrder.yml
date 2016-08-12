@@ -105,7 +105,7 @@ pequiven_housesupply_order_charge_delete:
 pequiven_housesupply_order_list:
     path: /list/.{_format}
     defaults:
-        _controller: pequiven.controller.housesupply_order:listAction  
+        _controller: pequiven.controller.housesupply_orderkit:listAction  
         _format: html
     requirements:
         _format: html|json|xml

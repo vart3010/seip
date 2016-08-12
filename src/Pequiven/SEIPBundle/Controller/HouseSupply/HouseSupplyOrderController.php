@@ -18,59 +18,6 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder;
  * @author Gilbert C. <glavrjk@gmail.com>
  */
 class HouseSupplyOrderController extends SEIPController {
-    
-    public function listAction(Request $request) {
-
-        $criteria = $request->get('filter', $this->config->getCriteria());
-        $sorting = $request->get('sorting', $this->config->getSorting());
-        //$repository = $this->getRepository();
-        $repository = $this->get('pequiven.repository.housesupply_order');
-        //var_dump(get_class($repository));die();
-        //$orders = $this->get('pequiven.repository.housesupply_order')->findAll(); //Carga las Órdenes
-
-        if ($this->config->isPaginated()) {
-            $resources = $this->resourceResolver->getResource(
-                    $repository, 'createPaginatorByHouseSupplyOrder', array($criteria, $sorting)
-            );
-
-            $maxPerPage = $this->config->getPaginationMaxPerPage();
-            if (($limit = $request->query->get('limit')) && $limit > 0) {
-                if ($limit > 100) {
-                    $limit = 100;
-                }
-                $maxPerPage = $limit;
-            }
-            $resources->setCurrentPage($request->get('page', 1), true, true);
-            $resources->setMaxPerPage($maxPerPage);
-        } else {
-            $resources = $this->resourceResolver->getResource(
-                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
-            );
-        }
-        $routeParameters = array(
-            '_format' => 'json',
-        );
-        $apiDataUrl = $this->generateUrl('pequiven_housesupply_order_list', $routeParameters);
-
-        $view = $this
-                ->view()
-                ->setTemplate($this->config->getTemplate('list.html'))
-                ->setTemplateVar($this->config->getPluralResourceName())
-        ;
-        if ($request->get('_format') == 'html') {
-            $data = array(
-                'apiDataUrl' => $apiDataUrl,
-                $this->config->getPluralResourceName() => $resources,
-            );
-            $view->setData($data);
-        } else {
-            $view->getSerializationContext()->setGroups(array('id', 'api_list','work_study_circle','house_supply_cycle','house_supply_product_kit','date'));
-            $formatData = $request->get('_formatData', 'default');
-
-            $view->setData($resources->toArray('', array(), $formatData));
-        }
-        return $this->handleView($view);
-    }
 
     public function chargeAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -343,6 +290,6 @@ class HouseSupplyOrderController extends SEIPController {
         return $this->render('PequivenSEIPBundle:HouseSupply\Order:show.html.twig', array(
                     'order' => $order
         ));
-    }    
+    }
 
 }
