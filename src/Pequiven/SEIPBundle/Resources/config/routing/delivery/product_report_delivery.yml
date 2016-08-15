@@ -13,5 +13,11 @@ pequiven_product_report_delivery_update:
         _sylius:
             form: pequiven_seipbundle_delivery_productreport
     methods: [GET|POST|PUT]
+    
+pequiven_product_report_delivery_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.product_report_delivery:showAction
+    methods: [GET|POST|PUT]
 
 

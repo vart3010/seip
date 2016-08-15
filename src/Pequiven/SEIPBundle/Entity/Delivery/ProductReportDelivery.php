@@ -11,6 +11,7 @@ use Pequiven\MasterBundle\Model\Base\ModelBaseMaster;
  * @author Victor Tortolero <vart10.30@gmail.com>
  * @ORM\Table(name="seip_delivery_product_report")
  * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  */
 class ProductReportDelivery extends ModelBaseMaster {
 
@@ -58,6 +59,14 @@ class ProductReportDelivery extends ModelBaseMaster {
     private $period;
 
     /**
+     * Tipo de producto de despacho(ENSACADO,GRANULADA)
+     * 
+     * @var integer
+     * @ORM\Column(name="type",type="integer")
+     */
+    protected $type;
+
+    /**
      * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductReportDelivery
      * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Delivery\ProductReportDelivery")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
@@ -91,6 +100,14 @@ class ProductReportDelivery extends ModelBaseMaster {
 
     function setId($id) {
         $this->id = $id;
+    }
+
+    function getType() {
+        return $this->type;
+    }
+
+    function setType($type) {
+        $this->type = $type;
     }
 
 //    function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator) {

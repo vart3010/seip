@@ -30,7 +30,8 @@
 
                 {% for product in products %}
                     <tr>
-                        <td>{{ loop.index }} - {{ generateLink(product) }}</td>
+{#                        <td><a href="{{ path("pequiven_product_report_delivery_show",{id:product.product.id}) }}">{{ loop.index }} - {{ product.product.name }}</a></td>#}
+                        <td>{{ loop.index }} - {{ product.product.name }}</td>
                         <td>{{ product.product.productionLine }}</td>
                         <td>{{ product.product.productUnit.name}}</td>
                         <td>&nbsp;</td>

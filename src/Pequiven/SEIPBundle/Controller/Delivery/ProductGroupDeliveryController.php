@@ -30,19 +30,18 @@ class ProductGroupDeliveryController extends SEIPController {
         $productGroupDelivery = $this->getRepository()->find($request->get("id"));
         $products = $productGroupDelivery->getProductsReportDelivery();
 
-        #var_dump($products[0]);die();
+        #var_dump(count($products));die();
 
         $data = array(
             "product_group_delivery" => $productGroupDelivery,
-            "products" => $products[0]
+            "products" => $products
         );
-
-        foreach ($products[0] as $p) {
+        /*
+        foreach ($products as $p) {
             var_dump($p);
         }
-        die();
-
-
+        die();*/
+        
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))

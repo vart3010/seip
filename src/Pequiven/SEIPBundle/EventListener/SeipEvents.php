@@ -211,5 +211,16 @@ final class SeipEvents {
      * @var string
      */
     const PLANT_STOP_PLANNING_PRE_UPDATE = 'pequiven.plant_stop_planning.pre_update';
+    
+    /**
+     * Este evento se ejecuta cuando se guarda un producto nuevo en despacho para guardar el periodo
+     *
+
+     *  * The event listener receives an
+     * Sylius\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     *
+     * @var string
+     */
+    const PRODUCT_REPORT_DELIVERY_PRE_PERSIST = 'pequiven.product_report_delivery.pre_create';
 
 }

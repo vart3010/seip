@@ -1,12 +1,12 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
 
-{% trans_default_domain 'PequivenSEIPBundle' %}
+{% trans_default_domain 'Delivery' %}
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
 {% block before_body %}
     {{ contentHeader(
-        ("pequiven_seip.product_report.product_report"|trans ),
+        ("delivery_product.product_report"|trans ),
         ( 'pequiven.add'|trans({},'messages') )
     ) }}
 {% endblock %}
