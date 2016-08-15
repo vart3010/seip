@@ -14,6 +14,7 @@
         </div>
     </div>
 
+
     <div class="with-padding">
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
@@ -26,7 +27,7 @@
             </thead>
             {% set colspan = 6 %}
             <tbody>
-                
+
                 {% for product in products %}
                     <tr>
                         <td>{{ loop.index }} - {{ generateLink(product) }}</td>
@@ -35,8 +36,8 @@
                         <td>&nbsp;</td>
                     </tr>
                 {% endfor %}
-                
-            
+
+
 
             </tbody>
         </table>

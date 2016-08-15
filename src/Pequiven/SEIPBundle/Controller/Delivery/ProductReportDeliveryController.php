@@ -27,13 +27,12 @@ class ProductReportDeliveryController extends SEIPController {
         $request = $this->getRequest();
         $productGroupDeliveryId = $request->get("productGroup");
         $data = array(
-            "id" => $productGroupDeliveryId,
-            "phpExcelReaderService" => $this->getPhpExcelReaderService()
+            "id" => $productGroupDeliveryId
         );
 
         if ($productGroupDeliveryId > 0) {
             $em = $this->getDoctrine()->getManager();
-            $productGroupDelivery = $em->find("Pequiven\SEIPBundle\views\Delivery\productGroupDelivery\create.html", $data);
+            $productGroupDelivery = $em->find("Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery", $data);
             $entity->setProductGroupDelivery($productGroupDelivery);
         }
 

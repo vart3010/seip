@@ -27,14 +27,21 @@ class ProductGroupDeliveryController extends SEIPController {
     }
 
     public function showAction(Request $request) {
-        $productGroupDelivery = $this->getRepository()->findOneBy(array("id" => $request->get("id")));
+        $productGroupDelivery = $this->getRepository()->find($request->get("id"));
         $products = $productGroupDelivery->getProductsReportDelivery();
 
+        #var_dump($products[0]);die();
 
         $data = array(
             "product_group_delivery" => $productGroupDelivery,
-            "products" => $products
+            "products" => $products[0]
         );
+
+        foreach ($products[0] as $p) {
+            var_dump($p);
+        }
+        die();
+
 
         $view = $this
                 ->view()
@@ -45,18 +52,32 @@ class ProductGroupDeliveryController extends SEIPController {
 
         return $this->handleView($view);
     }
-    
+
     public function readExcel() {
         $excelService = $this->getPhpExcelReaderService();
-        $path = "test.xlsx";
-        $excelService->getSheetValues($path);
-        
+
+        $fileData = array(
+            "file" => "test.xlsx",
+            "sheet" => 0,
+            "titles" => "A1:C1",
+            "data" => "A2:C19"
+        );
+        $fileData2 = array(
+            "file" => "test.xlsx",
+            "sheet" => 1,
+            "titles" => "A1:C1",
+            "data" => "A2:C19"
+        );
+        $datas = array($fileData, $fileData2);
+
+        $secciones = $excelService->getSheetValues($datas);
+
+        var_dump($secciones[0]["data"]);
+        die();
     }
-    
-    
+
     protected function getPhpExcelReaderService() {
         return $this->get('seip.service.phpexcelreader');
     }
-
 
 }
