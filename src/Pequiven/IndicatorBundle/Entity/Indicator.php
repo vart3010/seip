@@ -683,7 +683,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @var integer
      * @ORM\Column(name="numberValueIndicatorToForce",type="integer", nullable=true)
      */
-    private $numberValueIndicatorToForce = 1;
+    private $numberValueIndicatorToForce;
 
     /**
      * ¿Mostrar grafico de barras hasta mes consultado o global?

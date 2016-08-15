@@ -1,0 +1,48 @@
+Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        dateOrder:
+            expose: true
+            groups: [date]
+        datePay:
+            expose: true
+            groups: [date]
+        dateDelivery:
+            expose: true
+            groups: [date]
+        type:
+            expose: true
+            groups: [api_list]
+        sign:
+            expose: true
+            groups: [api_list]
+        workStudyCircle:
+            expose: true
+            groups: [work_study_circle]
+        cycle:
+            expose: true
+            groups: [house_supply_cycle]
+        productKit:
+            expose: true
+            groups: [house_supply_product_kit]
+        nroOrder:
+            expose: true
+            groups: [api_list]
+        taxable:
+            expose: true
+            groups: [api_list]
+        tax:
+            expose: true
+            groups: [api_list]
+        totalOrder:
+            expose: true
+            groups: [api_list]
+        paidBy:
+            expose: true
+            groups: [api_list]
+        deliveredBy:
+            expose: true
+            groups: [api_list]

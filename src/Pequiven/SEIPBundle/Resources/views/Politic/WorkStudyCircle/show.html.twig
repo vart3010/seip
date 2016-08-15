@@ -87,19 +87,19 @@
             <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ "workStudyCircle.form.coordinador.nombre"|trans }}</label>
-                    {{ workStudyCircle.createdBy.getFullNameUser }}
+                    {{ workStudyCircle.getCoordinator.getFullNameUser }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ "workStudyCircle.form.coordinador.telefono"|trans }}</label>
-                    {{ workStudyCircle.createdBy.cellphone }}
+                    {{ workStudyCircle.getCoordinator.getCellphone }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ "workStudyCircle.form.coordinador.ext"|trans }}</label>
-                    {{ workStudyCircle.createdBy.ext }}
+                    {{ workStudyCircle.getCoordinator.getExt }}
                 </p>
             </div>
         </div>
