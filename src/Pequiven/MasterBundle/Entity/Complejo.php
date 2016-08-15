@@ -98,6 +98,14 @@ class Complejo extends modelComplejo {
     private $numberMembersCET = 0;
 
     /**
+     * Depositos
+     * 
+     * @var houseSupplyDeposit
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyDeposit",mappedBy="complejo",cascade={"persist","remove"})
+     */
+    protected $deposit;
+
+    /**
      * Get id
      *
      * @return integer 

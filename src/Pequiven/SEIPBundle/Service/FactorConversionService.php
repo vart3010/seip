@@ -21,6 +21,21 @@ class FactorConversionService {
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
     }
+    
+    /**
+     *  SI TIENE FACTOR DE CONVERSION LO CONVIERTE Y LO RETORNA
+     * @param type $value
+     * @param ProductReport $productReport
+     * @return type
+     */
+    public function getConversionFactorValue($value, ProductReport $productReport) {
+        $rs = $value;
+
+        if ($this->hasFactorConversion($productReport)) {
+            $rs = $this->calculateFormulaValueFromFactor($value, $productReport);
+        }
+        return $rs;
+    }
 
     /**
      *  retorna si el product report tiene factor de conversion
@@ -39,8 +54,6 @@ class FactorConversionService {
 
         return $result;
     }
-
-    
 
     /**
      *  Retorna la unidad de conversion que tiene activa
@@ -61,7 +74,7 @@ class FactorConversionService {
     }
 
     /**
-     * 
+     * RETORNA EL VALOR Q ARROJA LA FORMULA DE CONVERSION
      * @param type $data
      * @param type $options
      * @return real
@@ -70,7 +83,7 @@ class FactorConversionService {
 
         $data = array();
         $name = "";
-        
+
         $factorEnable = new \Pequiven\SEIPBundle\Entity\CEI\FactorConversionValue();
         $factors = $productReport->getFactorConversionValue();
         foreach ($factors as $factor) {
@@ -79,8 +92,8 @@ class FactorConversionService {
                 $formula = $factor->getFactorConversion()->getFormula();
             }
         }
-        
-        
+
+
         $$name = 0;
         $data['val'] = $valueProduction;
         $data['factor'] = $factorEnable->getFactor();
@@ -93,12 +106,12 @@ class FactorConversionService {
                 //var_dump($data[$name]);
             }
         }
-        
-        
+
+
         $cardEquation = 0.0;
         //$cardEquation = $this->parseFormulaVars('(val*factor)/1000'); //'$val/$factor/1000';
         $cardEquation = $this->parseFormulaVars($formula); //'$val/$factor/1000';
-        
+
 
         $result_equation = 0.0;
 
