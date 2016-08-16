@@ -112,7 +112,8 @@
                             <!-- Main content -->
                             <section role="main" id="main" class="block main-frontend">
                                 <noscript class="message black-gradient simpler">Your browser does not support JavaScript! Some features won't work as expected...</noscript>
-                                {% include 'PequivenSEIPBundle:Block:headerSelectCompany.html.twig' %}
+                                {% set selectCompany=1%}
+                                {% include 'PequivenSEIPBundle:Block:header.html.twig' %}
                                 <div  class="content-container" id="contentP">
                                     {% block body %}
                                         Contenido (Sobrescribir el bloque "body")

@@ -5,13 +5,17 @@
 {% if app.user != null %}
     <table width="100%">
         <tr bgcolor="#FFFFFF">
-            <td width="12%" height="70px" style="text-align: center; vertical-align: middle; background-color: #B00000;">
-                <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/PQV_Diamante.png') }} " width="60px" height="65px">
+            <td width="12%" height="70px" style="text-align: center; vertical-align: middle; background-color: #C1242C;">
+                {% if((selectCompany is defined)and(selectCompany==1)) %}
+                    &nbsp;
+                {%else%}
+                    <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/PQV_Diamante.png') }} " width="60px" height="65px">
+                {%endif%}
             </td>
-            <td width="76%" height="70px" style="text-align: center; vertical-align: middle; background-color: #B00000; color: #FFFFFF; font-weight: bold; font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif; font-size: 16pt;">
+            <td width="76%" height="70px" style="text-align: center; vertical-align: middle; background-color: #C1242C; color: #FFFFFF; font-weight: bold; font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif; font-size: 16pt;">
                 SISTEMA ESTADÍSTICO DE INFORMACIÓN PETROQUÍMICA
             </td>
-            <td width="12%" height="70px" style="text-align: center; vertical-align: middle; font-size: 3pt; background-color: #B00000;">
+            <td width="12%" height="70px" style="text-align: center; vertical-align: middle; font-size: 3pt; background-color: #C1242C;">
                 <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/SEIP_Blanco.png') }} " width="65px" height="65px">
             </td>
         </tr>
@@ -26,13 +30,13 @@
 {% else %}
     <table width="100%">
         <tr bgcolor="#FFFFFF">
-            <td width="12%" height="70px" style="text-align: center; vertical-align: middle; background-color: #B00000;">
+            <td width="12%" height="70px" style="text-align: center; vertical-align: middle; background-color: #C1242C;">
                 <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/PQV_Diamante.png') }} " width="60px" height="65px">
             </td>
-            <td width="76%" height="70px" style="text-align: center; vertical-align: middle; background-color: #B00000; color: #FFFFFF; font-weight: bold; font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif; font-size: 18pt;">
+            <td width="76%" height="70px" style="text-align: center; vertical-align: middle; background-color: #C1242C; color: #FFFFFF; font-weight: bold; font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif; font-size: 16pt;">
                 SISTEMA ESTADÍSTICO DE INFORMACIÓN PETROQUÍMICA
             </td>
-            <td width="12%" height="70px" style="text-align: center; vertical-align: middle; font-size: 3pt; background-color: #B00000;">
+            <td width="12%" height="70px" style="text-align: center; vertical-align: middle; font-size: 3pt; background-color: #C1242C;">
                 <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/SEIP_Blanco.png') }} " width="65px" height="65px">
             </td>
         </tr>         

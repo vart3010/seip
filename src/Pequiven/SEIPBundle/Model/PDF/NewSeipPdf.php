@@ -46,7 +46,7 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
         $this->SetTextColor(0, 0, 0);
         // Title
         $text = '<table width="100%" cellpadding="2">'
-                . '<tr bgcolor="#B00000">'
+                . '<tr bgcolor="#C1242C">'
                 . '<td width="12%" height="65px" style="text-align: center;">'
                 . '<img src="' . $logopqv . '" width="45px" height="60px">'
                 . '</td>'
@@ -80,7 +80,7 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
         //. $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages() .
 
         $margin = $this->getPageDimensions();
-        $lineRed = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(192, 0, 0));
+        $lineRed = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(193, 36, 44));
         $text = $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages();
         $html = '<div style="text-align: center; font-size: 6pt; font-weight: bold; color: #B00000; vertical-align: middle; font-family: sans-serif;">'
                     . 'Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos'
