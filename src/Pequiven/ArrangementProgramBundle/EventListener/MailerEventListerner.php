@@ -154,10 +154,47 @@ class MailerEventListerner extends BaseEventListerner
         $this->mailerSendMessage($template, $context, null, $toEmail);
     }
 
-    private function getConfiguration(ArrangementProgram $entity)
-    {
-        $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
+    private function getConfiguration(ArrangementProgram $entity){
+        if ($entity->getType() == 0) {
+            $configuration = $this->getUserActions($entity)['userReview'];
+        }else{
+            $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();                    
+        }
+        
         return $configuration;
+    }
+
+    private function getUserActions($entity){
+        $rol = $userStrategic = null;
+        $configUsers = $userReview = $userNotify = $userAprobe = [];
+
+        $em = $this->getDoctrine()->getManager();
+        $config = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\ConfigurationNotification")->findBy(array('id' => $entity->getId(), 'typeObject' => 2));            
+        foreach ($config as $value) {
+            $configUser = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\NotificationUser")->findBy(array('idObject' => $value->getId()));
+            foreach ($configUser as $valueUsers) {                    
+                $userStrategic = $valueUsers->getUser()->getFullNamePersonalNumber();
+                switch ($valueUsers->getAction()) {
+                    case 1:                            
+                        $userReview[] = $userStrategic;                            
+                        break;
+                    case 2:
+                        $userNotify[] = $userStrategic;
+                        break;
+                    case 3:
+                        $userAprobe[] = $userStrategic;
+                        break;
+                }
+            }
+        }            
+        
+        
+        $configUsers = [
+            'userReview' => $userReview,
+            'userNotify' => $userNotify,
+            'userAprobe' => $userAprobe,
+        ];
+        return $configUsers;
     }
     
     /**
@@ -167,7 +204,7 @@ class MailerEventListerner extends BaseEventListerner
      * @return type
      */
     private function getUserToReviser(ArrangementProgram $entity) {
-        $configuration =  $this->getConfiguration($entity);
+        $configuration =  false;//$this->getConfiguration($entity);
         $users = array();
         if($entity->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
             $notifyToGerenciaSecond = $this->getNotifyToGerenciaSecond($entity);

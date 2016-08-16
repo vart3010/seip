@@ -12,6 +12,7 @@ use Pequiven\SEIPBundle\Service\ResultService;
  */
 abstract class ArrangementProgram {
 
+    const TYPE_ARRANGEMENT_PROGRAM_STRATEGIC = 0;
     const TYPE_ARRANGEMENT_PROGRAM_TACTIC = 1;
     const TYPE_ARRANGEMENT_PROGRAM_OPERATIVE = 2;
     const ASSOCIATE_ARRANGEMENT_PROGRAM_SIG = 1;
@@ -110,6 +111,7 @@ abstract class ArrangementProgram {
         $labels = array(
             self::TYPE_ARRANGEMENT_PROGRAM_TACTIC => 'pequiven.arrangement_program.type.tactic',
             self::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => 'pequiven.arrangement_program.type.operative',
+            self::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC => 'pequiven.arrangement_program.type.strategic',
         );
         if (isset($labels[$this->type])) {
             return $labels[$this->type];

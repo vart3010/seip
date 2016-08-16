@@ -15,7 +15,7 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-
+use Pequiven\ArrangementProgramBundle\Model\ArrangementProgram;
 /**
  * Administrador del programa de gestion
  *
@@ -52,13 +52,26 @@ class ArrangementProgramAdmin extends Admin
             ->tab("General")
             ->add('ref')
             ->add('period')
-            ->add('tacticalObjective','sonata_type_model_autocomplete',array(
-                'property' => array('ref','description')
-            ))
-            ->add('operationalObjective','sonata_type_model_autocomplete',array(
-                'required' => false,
-                'property' => array('ref','description')
-            ))
+        ;
+            if ($object->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC) {
+                $form->add('strategicObjetive','sonata_type_model_autocomplete',array(
+                    'property' => array('ref','description'),
+                    'required' => true,
+                ))
+                ;
+            }else{
+                $form
+                    ->add('tacticalObjective','sonata_type_model_autocomplete',array(
+                    'property' => array('ref','description'),
+                    'required' => true,
+                    ))
+                    ->add('operationalObjective','sonata_type_model_autocomplete',array(
+                        'required' => false,
+                        'property' => array('ref','description')
+                    ))
+                ;
+            }
+        $form
             ->add('description')
             ->add('isAvailableInResult',null,array(
                 'required' => false,
@@ -69,15 +82,18 @@ class ArrangementProgramAdmin extends Admin
             ->add('forcePenalize',null,array(
                 'required' => false,
             ))
-            ->add('showEvolutionView',null,array(
+            ->add('showViewObjetive',null,array(
                 'required' => false,
             ))
+            /*->add('showEvolutionView',null,array(
+                'required' => false,
+            ))*/
             ->add('managementSystems', 'sonata_type_model_autocomplete', array(
                     'property' => array('description'),
                     'multiple' => true,
                     'required' => false,                    
             ))            
-            ;
+        ;
         if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
             $form->add('updateResultByAdmin', null, array(
                 'required' => false,

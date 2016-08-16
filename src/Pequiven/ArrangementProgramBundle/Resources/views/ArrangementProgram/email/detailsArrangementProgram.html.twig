@@ -21,12 +21,15 @@
             {% endif %}
         </td>
     </tr>
+    {% if arrangementProgram.type != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC') %}    
     <tr>
         <th>Gerencia de primera linea</th>
         <td>
             {{ arrangementProgram.tacticalObjective.gerencia }}
         </td>
     </tr>
+    {% endif%}
+
     {% if arrangementProgram.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
         <tr>
             <th>Gerencia de segunda linea</th>

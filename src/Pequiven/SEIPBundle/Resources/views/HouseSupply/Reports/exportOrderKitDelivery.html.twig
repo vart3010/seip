@@ -133,18 +133,24 @@
             <th class="white-gradient text-center" width="20%">Cant</th>
             <th class="white-gradient" width="80%">Producto</th>                                                            
         </tr>
+        {% set cafe = 0 %}
         {% if (orderDetails) %}
-            {% for list in orderDetails %}                                                    
+            {% for list in orderDetails %}       
+                {% if list['prodID']==6 %}
+                    {% set cafe = list['cant'] %}
+                {%endif%}
                 <tr>
                     <td class="text-center" width="20%"> {{ list.cant }} </td>
-                    <td width="80%">{{ list.product }}</td>                                                
+                    <td width="80%">{{ list.product }}</td>                                                                  
                 </tr>                                                                                                    
             {% endfor %}   
         {% endif %}       
     </table>  
-    <br><br><br>
+    <br><br>
     - Productos Distribuidos en <b>{{cantKits}}</b> kits
-    <br><br><br><br>
+    <br>
+    - El Círculo posee para la Próxima Orden un Descuento de {{(cafe*240)|myNumberFormat}} Bs. motivado a la diferencia de Artículos Entregados.
+    <br><br><br><br><br><br>
     <table> 
         <tr>
             <td width="50%" style="text-align: center;">__________________________________</td>
