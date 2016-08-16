@@ -296,9 +296,11 @@ security:
             - ROLE_SEIP_SIP_SEACH_EMPLOYEES
             - ROLE_SEIP_VIEW_ALL_PERIODS
                 
-            #CASA ABASTO HOUSESUPPLY
+            # CASA ABASTO HOUSESUPPLY
             - ROLE_SEIP_HOUSESUPPLY_INVENTORY
-            - ROLE_SEIP_HOUSESUPPLY_VIEW_ALL_ORDERS            
+            - ROLE_SEIP_HOUSESUPPLY_VIEW_ALL_ORDERS  
+            - ROLE_SEIP_HOUSESUPPLY_DELIVERY_ORDERS
+            - ROLE_SEIP_HOUSESUPPLY_CANCEL_ORDERS
                
             # Permisos especiales
             - ROLE_SEIP_UPDATE_RESULT_OBJECTS
