@@ -248,6 +248,7 @@ security:
             - ROLE_SEIP_WORK_STUDY_CIRCLES_ADD_USERS
             - ROLE_SEIP_WORK_STUDY_CIRCLES_EDIT_USERS
             - ROLE_SEIP_WORK_STUDY_CIRCLES_DELETE_USERS
+            - ROLE_SEIP_WORK_STUDY_CIRCLES_EDIT_COORDINATOR
             
             # Lista de Propuestas (Planificación)
             - ROLE_SEIP_WORK_STUDY_CIRCLES_STRATEGIC_PLAN

@@ -83,6 +83,18 @@
     </fieldset>
     <fieldset class="fieldset">
         <legend class="legend" >{{ "workStudyCircle.form.coordinador.title"|trans }}&nbsp;</legend>
+        {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EDIT_COORDINATOR"])) %}
+            <div class="align-left">
+                {% set routeConfig = path('pequiven_work_study_circle_add_coordinator',{idWorkStudyCircle:workStudyCircle.id,typeCoordinator:1}) %}
+                {{ buttons.generic(
+                        (routeConfig),
+                        ('workStudyCircle.coordinator.edit'|trans({})),
+                        'icon-pencil'
+                     ) 
+                }}
+            </div>
+            <br>
+        {% endif %}
         <div class="columns">
             <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
