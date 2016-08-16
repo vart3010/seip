@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Pequiven\MasterBundle\Model\Base\ModelBaseMaster;
 
 /**
- * Reporte de planta
+ * Reporte de grupo de productos de despacho
  *
- * @author Carlos Mendoza <inhack20@gmail.com>
+ * @author Victor Tortolero <vart10.30@gmail.com>
  * @ORM\Table(name="seip_delivery_product_group")
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Delivery\ProductGroupDeliveryRepository")
  * @ORM\HasLifecycleCallbacks()
