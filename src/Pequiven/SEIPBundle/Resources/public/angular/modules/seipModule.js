@@ -5480,6 +5480,87 @@ angular.module('seipModule.controllers', [])
             });
 
         })
+        
+        .controller('TableHouseSupplyOrderKitController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            var selectComplejo = angular.element("#selectComplejos");
+            var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
+
+            $scope.data = {
+                complejos: null,
+                work_study_circles: null,
+            };
+            $scope.model = {
+                complejo: null,
+                workStudyCircle: null,
+            };
+
+            //Busca las localidades
+            $scope.getComplejos = function () {
+                var parameters = {
+                    filter: {}
+                };
+                $http.get(Routing.generate('pequiven_seip_complejos', parameters))
+                        .success(function (data) {
+                            $scope.data.complejos = data;
+                            if ($scope.model.complejo != null) {
+                                $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function (selected) {
+                                    $scope.model.complejo = selected;
+                                });
+                            }
+                        });
+            };
+            
+             //Busca los Círculos de Estudio de Trabajo
+            $scope.getWorkStudyCircle = function (complejo, phase) {
+                var parameters = {
+                    filter: {}
+                };
+                if ($scope.model.complejo != null) {
+                    parameters.filter['complejo'] = $scope.model.complejo.id;
+                }
+                if (phase != '' && phase != undefined) {
+                    parameters.filter['phase'] = phase;
+                }
+                $http.get(Routing.generate('pequiven_seip_work_study_circle', parameters))
+                        .success(function (data) {
+                            $scope.data.work_study_circles = data;
+                            if ($scope.model.workStudyCircle != null) {
+                                $scope.setValueSelect2("workStudyCircle", $scope.model.workStudyCircle, $scope.data.work_study_circles, function (selected) {
+                                    $scope.model.workStudyCircle = selected;
+                                });
+                            }
+                        });
+            };
+
+            $scope.getComplejos();
+
+            //Scope de Localidad
+            $scope.$watch("model.complejo", function (newParams, oldParams) {
+                if ($scope.model.complejo != null && $scope.model.complejo.id != undefined) {
+                    $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
+                    //Al cambiar el select de localidad
+                    selectComplejo.change(function () {
+                        selectFirstLineManagement.select2("val", '');
+                        selectSecondLineManagement.select2("val", '');
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['complejo'] = null;
+                }
+            });
+    
+            //Scope de Círculo de Estudio de Trabajo
+            $scope.$watch("model.workStudyCircle", function (newParams, oldParams) {
+                if ($scope.model.workStudyCircle != null && $scope.model.workStudyCircle.id != undefined) {
+                    $scope.tableParams.$params.filter['workStudyCircle'] = $scope.model.workStudyCircle.id;
+                    //Al cambiar el círculo de estudio de trabajo
+                    selectWorkStudyCircle.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['workStudyCircle'] = null;
+                }
+            });
+
+        })
 
         .controller('ReportSipController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var selectComplejo = angular.element("#selectComplejos");

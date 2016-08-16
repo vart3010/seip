@@ -97,6 +97,13 @@ class HouseSupplyOrderRepository extends EntityRepository {
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
 
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
+        if (($complejo = $criteria->remove('complejo'))) {
+            $queryBuilder->innerJoin('HSOrder.workStudyCircle', 'wsc');
+            $queryBuilder->andWhere('wsc.complejo = :complejo')
+                         ->setParameter('complejo', $complejo)
+                    ;
+        }
 
         if (($wsc = $criteria->remove('ownWsc'))) {
             $queryBuilder
