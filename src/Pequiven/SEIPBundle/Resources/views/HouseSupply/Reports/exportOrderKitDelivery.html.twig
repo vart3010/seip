@@ -100,7 +100,7 @@
             </td>
             <td width="15%" class="header">Fecha de Pago:</td>
             <td width="35%">
-                {%if order.getType==4%}                                
+                {%if ((order.getType==4) or (order.getType==5))%}                                
                     {{ order.getDatePay|date("d/m/Y h:i:s a") }} 
                 {%else%}
                     Sin Pagar
