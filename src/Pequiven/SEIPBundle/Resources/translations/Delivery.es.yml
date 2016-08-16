@@ -1,6 +1,9 @@
-## YAML Template.
-
-report_template_delivery: Planificación de Despacho
+report_template_delivery:
+    title: Planificación de Despacho
+    name: Nombre
+    period: Periodo
+    actions:
+        edit: Editar
 
 delivery_product:
     type:

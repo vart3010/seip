@@ -3,15 +3,15 @@
 namespace Pequiven\SEIPBundle\Entity\Delivery;
 
 use Doctrine\ORM\Mapping as ORM;
-use Pequiven\MasterBundle\Model\Base\ModelBaseMaster;
 
 /**
  * Producto de reporte despacho
  *
  * @author Victor Tortolero <vart10.30@gmail.com>
  * @ORM\Table(name="seip_delivery_product_report")
+ * @ORM\Entity()
  */
-class ProductReportDelivery extends ModelBaseMaster {
+class ProductReportDelivery {
 
     /**
      * @var integer
@@ -23,7 +23,7 @@ class ProductReportDelivery extends ModelBaseMaster {
     private $id;
 
     /**
-     * Plantilla de grupo de productos ventas
+     * Plantilla de grupo de productos despachos
      * 
      * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery",inversedBy="productsReportDelivery")
@@ -37,7 +37,6 @@ class ProductReportDelivery extends ModelBaseMaster {
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductDeliveryDetailDaily",mappedBy="productReportDelivery",cascade={"remove"})
      */
     private $productDeliveryDetailDaily;
-    
 
     /**
      * Producto
@@ -160,7 +159,7 @@ class ProductReportDelivery extends ModelBaseMaster {
 
         return $this;
     }
-    
+
     /**
      * 
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth $productDetailDailyMonth
@@ -168,7 +167,7 @@ class ProductReportDelivery extends ModelBaseMaster {
     public function removeProductDetailDailyMonth(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth $productDetailDailyMonth) {
         $this->productGroupDelivery->removeElement($productDetailDailyMonth);
     }
-    
+
     /**
      * 
      * @return type
