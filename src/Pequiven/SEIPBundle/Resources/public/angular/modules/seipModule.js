@@ -5333,18 +5333,21 @@ angular.module('seipModule.controllers', [])
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
             var selectSecondLineManagement = angular.element("#selectSecondLineManagement");
             var selectCoordinator = angular.element("#selectCoordinator");
+            var selectUser = angular.element("#selectUser");
 
             $scope.data = {
                 complejos: null,
                 first_line_managements: null,
                 second_line_managements: null,
                 coordinators: null,
+                members: null,
             };
             $scope.model = {
                 complejo: null,
                 firstLineManagement: null,
                 secondLineManagement: null,
                 coordinator: null,
+                user: null,
             };
 
             //Busca las localidades
@@ -5476,6 +5479,111 @@ angular.module('seipModule.controllers', [])
                     }
                 } else {
                     $scope.tableParams.$params.filter['coordinators'] = null;
+                }
+            });
+            
+            //Scope de usuarios
+            $scope.$watch("model.user", function (newParams, oldParams) {
+                if ($scope.model.user != null && $scope.model.user != undefined) {
+                    $scope.tableParams.$params.filter['members'] = $scope.model.user;
+                } else {
+                    $scope.tableParams.$params.filter['members'] = null;
+                }
+            });
+
+        })
+        
+        .controller('TableHouseSupplyOrderKitController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            var selectComplejo = angular.element("#selectComplejos");
+            var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
+            var selectStatusHouseSupplyOrder = angular.element("#selectStatusHouseSupplyOrder");
+
+            $scope.data = {
+                complejos: null,
+                work_study_circles: null,
+                status_house_supply_order: null,
+            };
+            $scope.model = {
+                complejo: null,
+                workStudyCircle: null,
+                statusHouseSupplyOrder: null,
+            };
+
+            //Busca las localidades
+            $scope.getComplejos = function () {
+                var parameters = {
+                    filter: {}
+                };
+                $http.get(Routing.generate('pequiven_seip_complejos', parameters))
+                        .success(function (data) {
+                            $scope.data.complejos = data;
+                            if ($scope.model.complejo != null) {
+                                $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function (selected) {
+                                    $scope.model.complejo = selected;
+                                });
+                            }
+                        });
+            };
+            
+             //Busca los Círculos de Estudio de Trabajo
+            $scope.getWorkStudyCircle = function (complejo, phase) {
+                var parameters = {
+                    filter: {}
+                };
+                if ($scope.model.complejo != null) {
+                    parameters.filter['complejo'] = $scope.model.complejo.id;
+                }
+                if (phase != '' && phase != undefined) {
+                    parameters.filter['phase'] = phase;
+                }
+                $http.get(Routing.generate('pequiven_seip_work_study_circle', parameters))
+                        .success(function (data) {
+                            $scope.data.work_study_circles = data;
+                            if ($scope.model.workStudyCircle != null) {
+                                $scope.setValueSelect2("workStudyCircle", $scope.model.workStudyCircle, $scope.data.work_study_circles, function (selected) {
+                                    $scope.model.workStudyCircle = selected;
+                                });
+                            }
+                        });
+            };
+
+            $scope.getComplejos();
+
+            //Scope de Localidad
+            $scope.$watch("model.complejo", function (newParams, oldParams) {
+                if ($scope.model.complejo != null && $scope.model.complejo.id != undefined) {
+                    $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
+                    //Al cambiar el select de localidad
+                    selectComplejo.change(function () {
+                        selectFirstLineManagement.select2("val", '');
+                        selectSecondLineManagement.select2("val", '');
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['complejo'] = null;
+                }
+            });
+    
+            //Scope de Círculo de Estudio de Trabajo
+            $scope.$watch("model.workStudyCircle", function (newParams, oldParams) {
+                if ($scope.model.workStudyCircle != null && $scope.model.workStudyCircle.id != undefined) {
+                    $scope.tableParams.$params.filter['workStudyCircle'] = $scope.model.workStudyCircle.id;
+                    //Al cambiar el círculo de estudio de trabajo
+                    selectWorkStudyCircle.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['workStudyCircle'] = null;
+                }
+            });
+            
+            //Scope de Status de Orden
+            $scope.$watch("model.statusHouseSupplyOrder", function (newParams, oldParams) {
+                if ($scope.model.statusHouseSupplyOrder != null && $scope.model.statusHouseSupplyOrder.id != undefined) {
+                    $scope.tableParams.$params.filter['statusHouseSupplyOrder'] = $scope.model.statusHouseSupplyOrder.id;
+                    //Al cambiar el Status Firma Revocatorio 2016
+                    selectStatusHouseSupplyOrder.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['statusHouseSupplyOrder'] = null;
                 }
             });
 
