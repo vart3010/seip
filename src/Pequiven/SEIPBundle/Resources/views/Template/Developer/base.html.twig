@@ -141,7 +141,9 @@
                                 <div id="message-errors"></div>
                                 <!-- Main content -->
                                 <section ng-cloak ng-controller="MainContentController" role="main" id="main" class="block main-frontend">
-                                    <noscript class="message black-gradient simpler">Your browser does not support JavaScript! Some features won't work as expected...</noscript>
+                                    <noscript class="message black-gradient simpler">
+                                    Your browser does not support JavaScript! Some features won't work as expected...
+                                    </noscript>
                                     {% include 'PequivenSEIPBundle:Block:header.html.twig' %}
                                     <div class="content-container" style="min-height: 740px !important;">
                                         {% block before_body '' %}
@@ -258,7 +260,7 @@
                                                         {% endfor %}
                                                     {% endfor %}
                                                 </script>
-                                                
+
                                             </body>
                                         </html>
                                         {% endspaceless %}
