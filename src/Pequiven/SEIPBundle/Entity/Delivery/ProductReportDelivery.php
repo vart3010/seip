@@ -32,11 +32,18 @@ class ProductReportDelivery {
     private $productGroupDelivery;
 
     /**
-     * Detalles del producto 
+     * Detalles del producto  diario
      * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductDeliveryDetailDaily
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductDeliveryDetailDaily",mappedBy="productReportDelivery",cascade={"remove"})
      */
     private $productDeliveryDetailDaily;
+
+    /**
+     * Detalles del producto mensual
+     * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductReportDetailMonth
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductReportDetailMonth",mappedBy="productReportDelivery",cascade={"remove"})
+     */
+    private $productDeliveryDetailMonth;
 
     /**
      * Producto
