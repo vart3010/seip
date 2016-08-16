@@ -5333,18 +5333,21 @@ angular.module('seipModule.controllers', [])
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
             var selectSecondLineManagement = angular.element("#selectSecondLineManagement");
             var selectCoordinator = angular.element("#selectCoordinator");
+            var selectUser = angular.element("#selectUser");
 
             $scope.data = {
                 complejos: null,
                 first_line_managements: null,
                 second_line_managements: null,
                 coordinators: null,
+                members: null,
             };
             $scope.model = {
                 complejo: null,
                 firstLineManagement: null,
                 secondLineManagement: null,
                 coordinator: null,
+                user: null,
             };
 
             //Busca las localidades
@@ -5476,6 +5479,15 @@ angular.module('seipModule.controllers', [])
                     }
                 } else {
                     $scope.tableParams.$params.filter['coordinators'] = null;
+                }
+            });
+            
+            //Scope de usuarios
+            $scope.$watch("model.user", function (newParams, oldParams) {
+                if ($scope.model.user != null && $scope.model.user != undefined) {
+                    $scope.tableParams.$params.filter['members'] = $scope.model.user;
+                } else {
+                    $scope.tableParams.$params.filter['members'] = null;
                 }
             });
 
