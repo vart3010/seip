@@ -4788,7 +4788,7 @@ angular.module('seipModule.controllers', [])
                 }
                 var url = Routing.generate('pequiven_value_indicator_get_form', parameters);
                 var url2 = Routing.generate('pequiven_feature_indicator_get_form', parameters);
-                var url2 = Routing.generate('pequiven_show_method_calcule_indicator_get_form', parameters);
+                var url3 = Routing.generate('pequiven_show_method_calcule_indicator_get_form', parameters);
                 $scope.templates = [
                     {
                         name: 'pequiven.modal.title.value_indicator',
@@ -4802,7 +4802,7 @@ angular.module('seipModule.controllers', [])
                     },
                     {
                         name: 'Método de Cálculo',
-                        url: url2,
+                        url: url3,
                         confirmCallBack: confirmCallBack2,
                     }
                 ];
