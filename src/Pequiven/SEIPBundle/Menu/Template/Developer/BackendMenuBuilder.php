@@ -1557,9 +1557,12 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.main', $section)));
 
         // MENU CASA - ABASTO
-        $complejo = $user->getComplejo()->getId();
-        if (($complejo == 1) || ($complejo == 5)) {
-            $this->addMenuHouseSupply($menuWorkStudyCircles, $section);
+        $wsc = $user->getWorkStudyCircle();
+        if ($wsc) {
+            $complejo = $wsc->getComplejo()->getId();
+            if (($complejo == 1) || ($complejo == 5)) {
+                $this->addMenuHouseSupply($menuWorkStudyCircles, $section);
+            }
         }
 
         if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_CREATE')) && $this->getPeriodService()->isAllowLoadWorkStudyCircle()) {
@@ -1968,13 +1971,22 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ))
                 ->setLabel($this->translate(sprintf('Reportes', $section)));
 
-        if ($this->isGranted(array('ROLE_SEIP_HOUSESUPPLY_INVENTORY'))) {
+        if ($this->isGranted(array('ROLE_SEIP_HOUSESUPPLY_DELIVERY_ORDERS'))) {
             $child2
                     ->addChild('housesupply.order.delivery', array(
                         'route' => 'pequiven_housesupply_orderkit_delivery',
                         'labelAttributes' => array('icon' => 'fa fa-truck')
                     ))
                     ->setLabel($this->translate(sprintf('Entrega de Pedidos', $section)));
+        }
+        
+        if ($this->isGranted(array('ROLE_SEIP_HOUSESUPPLY_CANCEL_ORDERS'))) {
+            $child2
+                    ->addChild('housesupply.order.cancel', array(
+                        'route' => 'pequiven_housesupply_orderkit_cancel',
+                        'labelAttributes' => array('icon' => 'fa fa-times')
+                    ))
+                    ->setLabel($this->translate(sprintf('Devolución de Pedidos', $section)));
         }
 
         $child->addChild($child2);

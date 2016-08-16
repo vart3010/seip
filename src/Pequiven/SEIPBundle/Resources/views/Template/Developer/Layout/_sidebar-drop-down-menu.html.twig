@@ -8,6 +8,7 @@
     <div id="menu-content">
 
         <header>
+            <a href="{{ path('seip_select_company') }}" style="color: #FFF">Pequiven</a><br/>
             {% if app.user.hasRole('ROLE_WORKER_PQV') %}
                 {{ 'pequiven_seip.role.worker_pqv'|trans }}
             {% elseif app.user.hasRole('ROLE_SUPERVISER') %}

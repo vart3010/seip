@@ -74,7 +74,7 @@ class HouseSupplyPdf extends TCPDF implements ContainerAwareInterface {
         //. $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages() .
 
         $margin = $this->getPageDimensions();
-        $lineRed = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(192, 0, 0));
+        $lineRed = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(193, 36, 44));
         $text = $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages();
 
         if ($margin['or'] == 'P') {

@@ -83,6 +83,27 @@ pequiven_housesupply_orderkit_deliver:
         _format: html|json|xml
     methods: [GET|POST]   
     
+# CANCELAR ORDENES DE PEDIDO    
+pequiven_housesupply_orderkit_cancel:
+    path: /cancelOrderKit/
+    defaults:
+        _controller: pequiven.controller.housesupply_orderkit:CancelOrderAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]   
+    
+pequiven_housesupply_orderkit_annul:
+    path: /annulOrderKit/{id}
+    defaults:
+        _controller: pequiven.controller.housesupply_orderkit:AnnulOrderAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]   
+    
+    
+    
 #ORDENES DE PEDIDO POR PRODUCTO    
 pequiven_housesupply_order_charge_add:
     path: /addItemOrderKit/
@@ -111,6 +132,6 @@ pequiven_housesupply_order_list:
         _format: html|json|xml
         phase: "\d+"
     methods: [GET]
-    
+ 
     
 

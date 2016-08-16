@@ -42,8 +42,14 @@ class HouseSupplyOrderKitController extends SEIPController {
 //VALIDO SI EN EL CICLO TIENE PEDIDOS REALIZADOS
         $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle(new \DateTime((date("Y-m-d h:m:s"))));
 
+        $searchCriteria = array(
+            'cycle' => $cycle[0]->getId(),
+            'workStudyCircle' => $wsc->getId(),
+            'type' => array(1, 4, 5),
+        );
+
         if ($cycle) {
-            $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('cycle' => $cycle[0]->getId(), 'workStudyCircle' => $wsc->getId()));
+            $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy($searchCriteria);
 
             if ((count($order) == 0) || ($order == null)) {
 //NUEVO NUMERO DE PEDIDO
@@ -84,7 +90,7 @@ class HouseSupplyOrderKitController extends SEIPController {
 //$orders = $this->get('pequiven.repository.housesupply_order')->findAll(); //Carga las Órdenes
         $securityService = $this->getSecurityService();
         if (!$securityService->isGranted(array("ROLE_SEIP_HOUSESUPPLY_VIEW_ALL_ORDERS"))) {
-            $criteria['ownWsc'] =$this->getUser()->getWorkStudyCircle()->getId();
+            $criteria['ownWsc'] = $this->getUser()->getWorkStudyCircle()->getId();
         }
 
         if ($this->config->isPaginated()) {
@@ -541,6 +547,12 @@ class HouseSupplyOrderKitController extends SEIPController {
         ));
     }
 
+    /**
+     * REGISTRA LA ENTREGA DE UN PEDIDO
+     * @param Request $request
+     * @return type
+     * @throws \Pequiven\SEIPBundle\Controller\HouseSupply\Exception
+     */
     public function DelivererOrderAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $idOrder = $request->get('id');
@@ -635,6 +647,76 @@ class HouseSupplyOrderKitController extends SEIPController {
 
         $this->get('session')->getFlashBag()->add('success', "Despacho de Orden Registrado Correctamente");
         return $this->redirect($this->generateUrl("pequiven_housesupply_orderkit_delivery", array("idOrder" => $idOrder)));
+    }
+
+    /**
+     * MUESTRA LA VISTA DE ANULACIÓN DE PEDIDOS
+     * @param Request $request
+     * @return type
+     */
+    public function CancelOrderAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $allOrders = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('type' => array(4)));
+        $members = array();
+
+        if ($request->get('idOrder')) {
+            $id = $request->get('idOrder');
+            $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findOneById($id);
+            foreach ($order->getOrderItems() as $items) {
+                if (!isset($members[$items->getClient()->getId()])) {
+                    $members[$items->getClient()->getId()] = $items->getClient();
+                }
+            }
+            $orderDetails = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->TotalOrder($id);
+            $productKit = $order->getProductKit();
+            $cantKits = count($order->getOrderItems()) / count($productKit->getProductKitItems());
+        } else {
+            $order = null;
+            $cantKits = null;
+            $orderDetails = null;
+            $members = null;
+        }
+
+        $arrayPayments = \Pequiven\SEIPBundle\Model\HouseSupply\HouseSupplyPayments::getPaymentsTypes();
+        $arrayStatus = \Pequiven\SEIPBundle\Model\HouseSupply\HouseSupplyOrder::getStatus();
+
+        return $this->render('PequivenSEIPBundle:HouseSupply\Order:cancelOrderkit.html.twig', array(
+                    'order' => $order,
+                    'ordersArray' => $allOrders,
+                    'cantKits' => $cantKits,
+                    'members' => $members,
+                    'orderDetails' => $orderDetails,
+                    'arrayPayments' => $arrayPayments,
+                    'arrayStatus' => $arrayStatus
+        ));
+    }
+
+    /**
+     * ANULACION DE ORDENES DE PEDIDO
+     * @param Request $request
+     * @return type
+     */
+    public function AnnulOrderAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $idOrder = $request->get('id');
+        $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findOneById($idOrder);
+        $date = new \DateTime((date("Y-m-d h:m:s")));
+
+        foreach ($order->getOrderItems() as $orderItems) {
+            $orderItems->setType(2);
+            $orderItems->setDeletedAt($date);
+            $orderItems->setDeletedBy($this->getUser());
+            $em->flush();
+        }
+
+        $order->setType(2);
+        $order->setDeletedAt($date);
+        $order->setDeletedBy($this->getUser());
+        $em->flush();
+
+        $this->get('session')->getFlashBag()->add('success', "Devolución de Orden Procesada Correctamente");
+        return $this->redirect($this->generateUrl("pequiven_housesupply_orderkit_cancel", array("idOrder" => $idOrder)));
     }
 
 }
