@@ -42,6 +42,17 @@
                                 </select>
                             </div>
                         </div>
+                            
+                        <!-- Filtro Status Orden -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">Status Orden</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectStatusHouseSupplyOrder" ng-model="model.statusHouseSupplyOrder" ng-options="value as value.description for (key,value) in data.statusHouseSupplyOrder" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -50,7 +61,7 @@
             
             
             <div loading-container="tableParams.settings().$loading">
-                <table ng-table="tableParams" {#show-filter="false"#} template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
+                <table ng-table="tableParams" {#show-filter="false"#} template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" ng-init="data.statusHouseSupplyOrder = {{ statusHouseSupplyOrder|serialize }};" >
                     <tbody>
                         <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
                             <td data-title="'N° Orden'" style="text-align: center;">

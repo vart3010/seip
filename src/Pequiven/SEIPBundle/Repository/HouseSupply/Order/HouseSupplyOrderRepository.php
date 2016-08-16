@@ -104,6 +104,12 @@ class HouseSupplyOrderRepository extends EntityRepository {
                          ->setParameter('complejo', $complejo)
                     ;
         }
+        
+        if (($statusHouseSupplyOrder = $criteria->remove('statusHouseSupplyOrder'))) {
+            $queryBuilder->andWhere('HSOrder.type = :statusHouseSupplyOrder')
+                         ->setParameter('statusHouseSupplyOrder', $statusHouseSupplyOrder)
+                    ;
+        }
 
         if (($wsc = $criteria->remove('ownWsc'))) {
             $queryBuilder

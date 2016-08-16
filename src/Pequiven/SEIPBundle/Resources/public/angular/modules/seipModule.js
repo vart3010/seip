@@ -5496,14 +5496,17 @@ angular.module('seipModule.controllers', [])
         .controller('TableHouseSupplyOrderKitController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var selectComplejo = angular.element("#selectComplejos");
             var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
+            var selectStatusHouseSupplyOrder = angular.element("#selectStatusHouseSupplyOrder");
 
             $scope.data = {
                 complejos: null,
                 work_study_circles: null,
+                status_house_supply_order: null,
             };
             $scope.model = {
                 complejo: null,
                 workStudyCircle: null,
+                statusHouseSupplyOrder: null,
             };
 
             //Busca las localidades
@@ -5569,6 +5572,18 @@ angular.module('seipModule.controllers', [])
                     });
                 } else {
                     $scope.tableParams.$params.filter['workStudyCircle'] = null;
+                }
+            });
+            
+            //Scope de Status de Orden
+            $scope.$watch("model.statusHouseSupplyOrder", function (newParams, oldParams) {
+                if ($scope.model.statusHouseSupplyOrder != null && $scope.model.statusHouseSupplyOrder.id != undefined) {
+                    $scope.tableParams.$params.filter['statusHouseSupplyOrder'] = $scope.model.statusHouseSupplyOrder.id;
+                    //Al cambiar el Status Firma Revocatorio 2016
+                    selectStatusHouseSupplyOrder.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['statusHouseSupplyOrder'] = null;
                 }
             });
 
