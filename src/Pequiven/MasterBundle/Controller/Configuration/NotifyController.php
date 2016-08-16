@@ -19,6 +19,7 @@ use Pequiven\MasterBundle\Entity\Configurations\NotificationUser;
  */
 class NotifyController extends ResourceController{
 	public function indexAction(Request $request){
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_MASTER_CONFIG_PERMISSIONS');
 		return $this->render('PequivenMasterBundle:Configuration:index.html.twig');
 	}
 
@@ -146,4 +147,12 @@ class NotifyController extends ResourceController{
 		die();
     	$filters = $session->get('filters', array());
 	}
+
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    protected function getSecurityService() {
+        return $this->container->get('seip.service.security');
+    }
 }
