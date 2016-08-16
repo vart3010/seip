@@ -1,0 +1,4 @@
+admin_master_configuration_index:
+    path: /configuration
+    defaults: 
+        _controller: pequiven.controller.configurationIndex:indexAction

@@ -104,6 +104,13 @@ sylius_resource:
                 controller: Pequiven\MasterBundle\Controller\GerenciaSecondController
                 repository: Pequiven\MasterBundle\Repository\GerenciaSecondRepository
         #Master de Configuraciones
+        pequiven.configurationIndex:
+            driver: doctrine/orm
+            templates: PequivenMasterBundle:Configuration
+            classes:
+                model: Pequiven\MasterBundle\Entity\GerenciaSecond
+                controller: Pequiven\MasterBundle\Controller\Configuration\ConfigurationController
+                repository: Pequiven\MasterBundle\Repository\GerenciaSecondRepository
         pequiven.configuration:
             driver: doctrine/orm
             templates: PequivenMasterBundle:Configuration
