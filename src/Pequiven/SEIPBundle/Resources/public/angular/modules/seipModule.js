@@ -337,12 +337,12 @@ angular.module('seipModule.controllers', [])
                 return false;
             };
             var managementSystem = angular.element('#arrangementprogram_managementSystem');
+            var strategicObjective = angular.element('#arrangementprogram_strategicObjetive');
             var tacticalObjective = angular.element('#arrangementprogram_tacticalObjective');
             var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
             var loadTemplateMetaButton = angular.element('#loadTemplateMeta');
             var categoryArrangementProgramId = angular.element('#categoryArrangementProgramValue');
             $scope.setOperationalObjective = function (tacticalObjetive, selected) {
-
                 if (tacticalObjetive) {
                     notificationBarService.getLoadStatus().loading();
                     $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives", {idObjetiveTactical: tacticalObjetive, idCategoryArrangementProgram: categoryArrangementProgramId.val()})).success(function (data) {
@@ -364,7 +364,7 @@ angular.module('seipModule.controllers', [])
             //$scope.setOperationalObjective();
 
             managementSystem.on('change', function (e) {
-                console.log(e.val);
+                //console.log(e.val);
                 if (e.val) {
                     var managementSystemId = e.val;
                     tacticalObjective.find('option').remove().end();
@@ -388,7 +388,10 @@ angular.module('seipModule.controllers', [])
                     tacticalObjective.select2('enable', false);
                 }
             });
-            tacticalObjective.on('change', function (e) {
+            strategicObjective.on('change', function (e) {                                
+                //$scope.getLocationByStrategic(e.val);                
+            });
+            tacticalObjective.on('change', function (e) {                
                 if (e.val) {
                     if ($scope.entityType == 1) {
                         $scope.getLocationByTactical(e.val);
@@ -449,6 +452,21 @@ angular.module('seipModule.controllers', [])
 //                    });
                 }
             };
+            $scope.getLocationByStrategic = function (value) {
+                //console.log(value);
+                if (value != '') {
+                    notificationBarService.getLoadStatus().loading();
+                    $http.get(Routing.generate("objetiveTactic_show", {id: value, _format: 'json', _groups: ['complejo']})).success(function (data) {
+                        var dataObject = data.entity.gerencia;
+                        angular.forEach(data, function (dataObject) {
+                            console.log(dataObject);
+                        });
+                        //$scope.complejo = data.entity.gerencia.complejo;
+                        //$scope.templateOptions.setVar('gerenciaOfObjetive', data.entity.gerencia);
+                        //notificationBarService.getLoadStatus().done();
+                    });
+                }
+            };
             $scope.getLocationByTactical = function (value) {
                 if (value != '') {
                     notificationBarService.getLoadStatus().loading();
@@ -471,6 +489,9 @@ angular.module('seipModule.controllers', [])
             };
             $scope.setEntityType = function (entity) {
                 $scope.entityType = entity;
+                if ($scope.entityType == 0) {                    
+                    $scope.getLocationByStrategic(strategicObjective.val());
+                }
                 if ($scope.entityType == 1) {
                     $scope.getLocationByTactical(tacticalObjective.val());
                 }
@@ -4767,7 +4788,7 @@ angular.module('seipModule.controllers', [])
                 }
                 var url = Routing.generate('pequiven_value_indicator_get_form', parameters);
                 var url2 = Routing.generate('pequiven_feature_indicator_get_form', parameters);
-                var url2 = Routing.generate('pequiven_show_method_calcule_indicator_get_form', parameters);
+                var url3 = Routing.generate('pequiven_show_method_calcule_indicator_get_form', parameters);
                 $scope.templates = [
                     {
                         name: 'pequiven.modal.title.value_indicator',
@@ -4781,7 +4802,7 @@ angular.module('seipModule.controllers', [])
                     },
                     {
                         name: 'Método de Cálculo',
-                        url: url2,
+                        url: url3,
                         confirmCallBack: confirmCallBack2,
                     }
                 ];

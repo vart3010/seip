@@ -21,6 +21,7 @@ pequiven:
         management: Gerencia
         management_second_line: Gerencia de segunda línea
         category_arrangement_program: Programa asociado a
+        strategic_objective: Objetivo estratégico
         tactical_objective: Objetivo táctico
         operational_objective: Objetivo operativo
         operating_indicator: Indicador operativo
@@ -96,6 +97,8 @@ pequiven:
             start_notification_process: Iniciar proceso de notificación
             end_notification_process: Finalizar proceso de notificación
         type:
+            strategic: Estratégico
+            strategics: Estratégicos
             tactic: Tactico
             tactics: Tacticos
             operative: Operativo

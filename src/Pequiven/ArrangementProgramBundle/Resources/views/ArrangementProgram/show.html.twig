@@ -4,6 +4,8 @@
 
 {% if entity.categoryArrangementProgram.id == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG') %}
     {% set configuration = gerenciaSIG.configuration %}
+{% elseif entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC') %}
+    {% set configuration = configUsers %}    
 {% else %}
     {% set configuration = entity.tacticalObjective.gerencia.configuration %}
 {% endif %}
@@ -80,12 +82,13 @@
                         </p>
                     {% endif %}
                 </div>
-                <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                    <p class="inline-label">
-                        <label class="label">{{ 'pequiven.arrangement_program.management'|trans }}</label>
-                        {{ entity.tacticalObjective.gerencia }}
-                    </p>
-                </div>
+                {% if entity.type != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC') %}
+                    <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                        <p class="inline-label">
+                            <label class="label">{{ 'pequiven.arrangement_program.management'|trans }}</label>
+                            {{ entity.tacticalObjective.gerencia }}
+                        </p>
+                    </div>
 
                 <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
@@ -95,6 +98,7 @@
                         {{ generateLink(entity.tacticalObjective) }}
                     </p>        
                 </div>
+                {% endif %}
                 {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
                     <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
                         <p class="inline-label">

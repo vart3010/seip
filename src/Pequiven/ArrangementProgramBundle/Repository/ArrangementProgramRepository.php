@@ -21,10 +21,10 @@ class ArrangementProgramRepository extends EntityRepository {
      * @param type $id
      * @return type
      */
-    public function findWithData($id) {
+    public function findWithData($id) {        
         $qb = $this->getQueryBuilder();
         $qb
-                ->addSelect('ap_r')
+                /*->addSelect('ap_r')
                 ->addSelect('ap_t')
                 ->addSelect('ap_ms')
                 ->addSelect('ap_t_g')
@@ -32,9 +32,11 @@ class ArrangementProgramRepository extends EntityRepository {
                 ->addSelect('ap_r_g')
                 ->addSelect('ap_t_g_r_g')
                 ->addSelect('ap_t_g_gd')
+                //->addSelect('ap_so')
                 ->addSelect('ap_to')
-                ->addSelect('ap_oo')
-                ->innerJoin('ap.tacticalObjective', 'ap_to')
+                ->addSelect('ap_oo')*/
+                //->innerJoin('ap.strategicObjetive', 'ap_so')
+                /*->innerJoin('ap.tacticalObjective', 'ap_to')
                 ->leftJoin('ap.operationalObjective', 'ap_oo')
                 ->leftJoin('ap.responsibles', 'ap_r')
                 ->leftJoin('ap_r.groups', 'ap_r_g')
@@ -43,7 +45,7 @@ class ArrangementProgramRepository extends EntityRepository {
                 ->leftJoin('ap_t.goals', 'ap_t_g')
                 ->leftJoin('ap_t_g.responsibles', 'ap_t_g_r')
                 ->leftJoin('ap_t_g.goalDetails', 'ap_t_g_gd')
-                ->leftJoin('ap_t_g_r.groups', 'ap_t_g_r_g')
+                ->leftJoin('ap_t_g_r.groups', 'ap_t_g_r_g')*/
                 ->andWhere('ap.id = :id')
                 ->setParameter('id', $id)
         ;
@@ -750,6 +752,40 @@ class ArrangementProgramRepository extends EntityRepository {
         ;
         
         return $queryBuilder;
+    }
+
+    /**
+     * Retornar los Programas de Gestión Estrategicos
+     * @return type
+     */
+    function findToArrangementProgramsStrategic(array $dataArrangementProgram = array(), array $criteria = array()) {
+        return $this->findQueryToArrangement($dataArrangementProgram, $criteria)->getQuery()->getResult();
+    }
+
+    /**
+     *
+     *
+     */
+    public function findQueryToArrangement(array $dataArrangementProgram, array $criteria = array()){        
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);                
+        $qb = $this->getQueryBuilder();        
+        $qb      
+            ->andWhere('ap.type = :type')
+            ->andWhere('ap.categoryArrangementProgram = :cat')
+            ->setParameter('type', 0)
+            ->setParameter('cat', 2)
+        ;        
+
+        $orX = $qb->expr()->orX();        
+        if (($ref = $criteria->remove('ref'))) {            
+            $orX->add($qb->expr()->like('ap.ref', "'%" . $ref . "%'"));
+        }
+        if (($description = $criteria->remove('description'))) {            
+            $orX->add($qb->expr()->like('ap.description', "'%" . $description . "%'"));
+        }
+        $qb->andWhere($orX);
+        $qb->setMaxResults(50);                
+        return $qb;
     }
 
     protected function getAlias() {

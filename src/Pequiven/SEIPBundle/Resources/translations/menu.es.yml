@@ -49,6 +49,7 @@ app:
                         temaplate: Desde plantilla
                         add:
                             main: Cargar
+                            strategic: Estrategico
                             tactic: Táctico
                             operative: Operativo
                             other: Otro

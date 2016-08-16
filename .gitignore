@@ -29,5 +29,10 @@ composer.lock
 /app/spool/
 /web/ext/SeipProduction/build/
 /web/uploads/documents/*
+.idea/copyright/
+.idea/modules.xml
+.idea/upgrade.iml
+.idea/workspace.xml
+
 
 

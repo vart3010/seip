@@ -367,13 +367,17 @@
                                 },
                                 Ext.create('Ext.form.ComboBox', {
                                     itemId: 'userSelect',
+        {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC') %}
+            {% set gerencia = 'strategic' %}
+        {% endif %}
         {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') %}
             {% set gerencia = APentity.tacticalObjective.gerencia %}
         {% endif %}
         {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
             {% set gerencia = APentity.operationalObjective.gerencia %}
-        {% endif %}        
-        {% if gerencia.getIndividualNotification == true %}
+        {% endif %}   
+
+        {% if ((gerencia == 'strategic') or (gerencia.getIndividualNotification == true))%}
                                     hidden: false,
         {% else %}
                                     hidden: true,

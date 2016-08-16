@@ -14,7 +14,7 @@ $("#dialog").dialog({
 });
 
 var default_attributes = {
-    fill: '#ffe6e6',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2'
 };
@@ -91,14 +91,15 @@ $.ajax({
     success: function (xml) {
         var rjs = Raphael('mapa');
         rjs.setViewBox(0, 0, 800, 780, true);
-        rjs.setSize('100%', '120%');
+        rjs.setSize('100%', '100%');
 
         $(xml).find('svg > g > g > path').each(function () {
             var path = $(this).attr('d');
             var pid = $(this).attr('id');
             var region = $(this).attr('class');
             var munic = rjs.path(path);
-            
+            munic.attr(default_attributes);
+            /*
             switch (region) {
                 case 'capital':
                     munic.attr(capital);
@@ -129,11 +130,13 @@ $.ajax({
                     break;
                 default:
                     munic.attr(default_attributes);
-            }
+            }*/
             
             munic.hover(function () {
-                this.animate({fill: '#C0C0C0'});
+                this.animate({fill: '#87CEFA'});
             }, function () {
+                this.animate({fill: default_attributes.fill, opacity: '1'});
+                /*
                     switch (region) {
                         case 'capital':
                             this.animate({fill: capital.fill, opacity: '1'});
@@ -164,7 +167,7 @@ $.ajax({
                             break;
                         default:
                             this.animate({fill: default_attributes.fill, opacity: '1'});
-                        }                
+                        }*/                
             }).click(function () {
                 //var urlAjax = '../app.php/selectCompanyC';
                  var urlAjax='';
@@ -179,7 +182,7 @@ $.ajax({
                         company_link = '../app.php/';
                     }
                     $.get(urlAjax, function (data, status) {
-                        $("#dialog").dialog("close");
+//                        $("#dialog").dialog("close");
                         var data = $.parseJSON(data);
                         var cont = '';
 
@@ -192,7 +195,7 @@ $.ajax({
                         }
                     });
                 });
-                $("#mensaje").animate({left: '35%'},3000);
+                $("#mensaje").animate({left: '61%'},3000);
             });
         }
     });
