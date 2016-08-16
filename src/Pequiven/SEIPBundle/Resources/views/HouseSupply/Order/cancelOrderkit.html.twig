@@ -108,7 +108,7 @@
 {% block before_body %}
     {{ contentHeader(
         { ( '*' ): ('Órdenes de Pedidos') },
-         (' Despachar')
+         (' Cancelar/Devolver')
     ) }}
 {% endblock %}
 
@@ -142,7 +142,7 @@
                 <table width="95%">
                     <tr>
                         <td>
-                            <form name="formula" method="POST" action="{{ path("pequiven_housesupply_orderkit_delivery")}}">
+                            <form name="formula" method="POST" action="{{ path("pequiven_housesupply_orderkit_cancel")}}">
                                 <select onchange="this.form.submit();" name="idOrder" id="idOrder" class="select2 input-large form-control" style="width: 100%">
                                     {% if(order) %}                        
                                         <option value="{{order.id}}" selected>Nro: {{"%05d" | format(order.nroOrder)}} | {{ order.getWorkStudyCircle.codigo }} | {{ order.getCreatedAt|date("d/m/Y h:i:s a") }} </option>                                           
@@ -312,10 +312,10 @@
                 <br>
                 <div class="new-row twelve-columns" style="text-align: right;">  
                     {%if order.getType==4 %}
-                        <form action="{{ path("pequiven_housesupply_orderkit_deliver", { 'id': order.id }) }}">
+                        <form action="{{ path("pequiven_housesupply_orderkit_annul", { 'id': order.id }) }}">
                             <button type="submit" class="button glossy mid-margin-right">
-                                <span class="button-icon green-gradient"><span class="icon-card"></span></span>
-                                Despachar Pedido {{"%05d" | format(order.nroOrder) }}
+                                <span class="button-icon red-gradient"><span class="icon-card"></span></span>
+                                Devolver Pedido {{"%05d" | format(order.nroOrder) }}
                             </button>    
                         </form>
                     {%endif%}

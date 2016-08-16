@@ -67,7 +67,11 @@
             <td colspan="2" rowspan="3" style="background-color: #D8D8D8;">
                 <br><br>
                 <span  style="font-size: 18pt; vertical-align: middle; text-align: center;">Orden Nro.:
-                    <span class="resultgreen">{{ "%05d" | format(order.nroOrder) }}</span>    
+                    {% if order.type == 2%}
+                        <span class="resultred">{{ "%05d" | format(order.nroOrder) }}</span>    
+                    {%else%}
+                        <span class="resultgreen">{{ "%05d" | format(order.nroOrder) }}</span>    
+                    {%endif%}
                 </span>
             </td>
         </tr>

@@ -51,7 +51,7 @@ class HouseSupplyOrderRepository extends EntityRepository {
                 . ' INNER JOIN'
                 . ' seip_gsh_product AS prod ON (item.product_id = prod.id)'
                 . ' WHERE'
-                . ' item.deletedAt is null';
+                . ' item.id > 0 ';
 
         if ($id != null) {
             $sql2 = ' AND item.order_id=' . $id;
@@ -99,7 +99,7 @@ class HouseSupplyOrderRepository extends EntityRepository {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
 
         if (($wsc = $criteria->remove('ownWsc'))) {
-            $queryBuilder                    
+            $queryBuilder
                     ->innerJoin('HSOrder.workStudyCircle', 'wsc')
                     ->andWhere('wsc.id = :wsc')
                     ->setParameter('wsc', $wsc)

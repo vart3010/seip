@@ -138,6 +138,7 @@ class WorkStudyCircleController extends SEIPController {
             if (isset($options['typeCoordinator'])) {
                 if ($options['typeCoordinator'] == WorkStudyCircle::TYPE_COORDINATOR) {
                     $workStudyCircle->setCoordinator($user);
+                    $workStudyCircle->setCreatedBy($user);
                 } elseif ($options['typeCoordinator'] == WorkStudyCircle::TYPE_COORDINATOR_DISCUSSION) {
                     $workStudyCircle->setCoordinatorDiscussion($user);
                 }
@@ -323,8 +324,13 @@ class WorkStudyCircleController extends SEIPController {
             } elseif ($typeCoordinator == WorkStudyCircle::TYPE_COORDINATOR_DISCUSSION) {
                 $this->get('session')->getFlashBag()->add('success', 'Coordinador de debate añadido con éxito');
             }
+            
+            if($workStudyCircleObject->getPhase() == 1){
+                return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $request->get("idWorkStudyCircle"))));
+            } else{
+                return $this->redirect($this->generateUrl('pequiven_work_study_circle_show_phase', array("id" => $request->get("idWorkStudyCircle"))));
+            }
             //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
-            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show_phase', array("id" => $request->get("idWorkStudyCircle"))));
         }
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\addCoordinator.html.twig', array(
