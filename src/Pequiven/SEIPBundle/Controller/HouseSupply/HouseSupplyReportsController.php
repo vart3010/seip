@@ -57,8 +57,8 @@ class HouseSupplyReportsController extends SEIPController {
      */
     public function exportDeliveryOrderAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $id = $request->get('id');        
-        $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findOneById($id);        
+        $id = $request->get('id');
+        $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findOneById($id);
         $orderDetails = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->TotalOrder($id);
         $productKit = $order->getProductKit();
         $cantKits = count($order->getOrderItems()) / count($productKit->getProductKitItems());
@@ -71,7 +71,7 @@ class HouseSupplyReportsController extends SEIPController {
             'cantKits' => $cantKits,
             'orderDetails' => $orderDetails,
             'arrayStatus' => $arrayStatus,
-            'arrayPays' => $arrayPays,            
+            'arrayPays' => $arrayPays,
         );
 
         $twig = 'PequivenSEIPBundle:HouseSupply\Reports:exportOrderKitDelivery.html.twig';
