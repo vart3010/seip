@@ -44,6 +44,9 @@
     </div>
     <br/><br/>
     <p class="button-height align-right">
+        {{ buttons.generic(path('pequiven_report_template_delivery_create'),('report_template_delivery.loadPlanification'|trans({},'Delivery')),'icon-tick' ) }}
+        
         {{ buttons.generic(path('pequiven_report_template_delivery_create'),('pequiven.add'|trans({},'messages')),'icon-tick' ) }}
     </p>
+    {#    pequiven_report_template_delivery_load_planification#}
 {% endblock %}
