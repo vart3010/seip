@@ -475,7 +475,7 @@ class IndicatorController extends ResourceController {
     }
 
     /**
-     * A
+     * Añadir Observación a un Indicador
      * @param \Pequiven\IndicatorBundle\Entity\Indicator $entity
      * @param type $description
      */
@@ -577,10 +577,6 @@ class IndicatorController extends ResourceController {
         $data["data"] = $rs;
         $response->setData($data);
         return $response;
-
-//        var_dump($rs);die();
-//
-//        return $rs;
     }
 
     /**
@@ -741,7 +737,6 @@ class IndicatorController extends ResourceController {
             //$this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));
         }
 
-        //$this->showAction($request);
         return $this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));
     }
 
