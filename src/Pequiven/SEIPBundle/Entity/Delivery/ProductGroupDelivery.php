@@ -75,6 +75,20 @@ class ProductGroupDelivery extends ModelBaseMaster {
     private $productsReportDelivery;
 
     /**
+     * Detalles del producto  diario
+     * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDeliveryDetailDaily
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDeliveryDetailDaily",mappedBy="productReportDelivery",cascade={"remove"})
+     */
+    private $productGroupDeliveryDetailDaily;
+
+    /**
+     * Detalles del producto mensual
+     * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupReportDetailMonth
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductGroupReportDetailMonth",mappedBy="productReportDelivery",cascade={"remove"})
+     */
+    private $productGroupDeliveryDetailMonth;
+
+    /**
      * Usuarios
      * @var type 
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="plantReports")
@@ -100,11 +114,25 @@ class ProductGroupDelivery extends ModelBaseMaster {
     private $productionLine;
 
     /**
-     * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductReportDelivery
-     * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Delivery\ProductReportDelivery")
+     * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
+     * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
     private $parent;
+
+    /**
+     * plan
+     * @var float
+     * @ORM\Column(name="plan",type="float")
+     */
+    private $plan = 0;
+
+    /**
+     * programa
+     * @var float
+     * @ORM\Column(name="programa",type="float")
+     */
+    private $program = 0;
 
     /**
      * Constructor
@@ -112,6 +140,74 @@ class ProductGroupDelivery extends ModelBaseMaster {
     public function __construct() {
         $this->productsReportDelivery = new \Doctrine\Common\Collections\ArrayCollection();
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->productDeliveryDetailDaily = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->productDeliveryDetailMonth = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailMonth $productGroupDetailMonth
+     * @return \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
+     */
+    public function addProductGroupDeliveryDetailMonth(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailMonth $productGroupDetailMonth) {
+        $productGroupDetailMonth->setProductReport($this);
+
+        $this->productDeliveryDetailMonth->add($productGroupDetailMonth);
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailGroup $productGroupDetailGroup
+     */
+    public function removeProductGroupDeliveryDetailGroup(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailGroup $productGroupDetailGroup) {
+        $this->productDeliveryDetailMonth->removeElement($productGroupDetailGroup);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    function getProductGroupDeliveryDetailMonth() {
+        return $this->productGroupDeliveryDetailMonth;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailDaily $productGroupDetailDaily
+     * @return \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
+     */
+    public function addProductGroupDeliveryDetailDaily(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailDaily $productGroupDetailDaily) {
+        $productGroupDetailDaily->setProductReport($this);
+
+        $this->productDeliveryDetailDaily->add($productGroupDetailDaily);
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailDaily $productGroupDetailDaily
+     */
+    public function removeProductGroupDeliveryDetailDaily(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailDaily $productGroupDetailDaily) {
+        $this->productDeliveryDetailDaily->removeElement($productGroupDetailDaily);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    function getProductGroupDeliveryDetailDaily() {
+        return $this->productGroupDeliveryDetailDaily;
+    }
+
+    function getPlan() {
+        return $this->plan;
+    }
+
+    function getProgram() {
+        return $this->program;
     }
 
     /**

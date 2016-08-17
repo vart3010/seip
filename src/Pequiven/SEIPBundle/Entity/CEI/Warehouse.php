@@ -8,7 +8,7 @@ use Pequiven\SEIPBundle\Model\CEI\Warehouse as Model;
 /**
  * almacen
  *
- * @author Victor Tortolero <vart10..30@gmail.com>
+ * @author Victor Tortolero <vart10.30@gmail.com>
  * @ORM\Table(name="seip_cei_Warehouse")
  * @ORM\Entity()
  */
@@ -31,11 +31,55 @@ class Warehouse extends Model {
     private $descripcion;
 
     /**
-     * User
-     * @var \Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint", inversedBy="warehouse")
-     */
+     * @var Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint", mappedBy="warehouse")
+     * */
     private $deliveryPoint;
+
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $period;
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->deliveryPoint = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint $deliveryPoint
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Warehouse
+     */
+    public function addDeliveryPoint(DeliveryPoint $deliveryPoint) {
+        $deliveryPoint->setDeliveryPoint($this);
+
+        $this->deliveryPoint->add($deliveryPoint);
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    function getDeliveryPoint() {
+        return $this->deliveryPoint;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint $deliveryPoint
+     */
+    public function removeDeliveryPoint(DeliveryPoint $deliveryPoint) {
+        $this->deliveryPoint->removeElement($deliveryPoint);
+    }
 
     function getId() {
         return $this->id;
@@ -53,16 +97,16 @@ class Warehouse extends Model {
         $this->descripcion = $descripcion;
     }
 
-    function getDeliveryPoint() {
-        return $this->deliveryPoint;
-    }
-
-    function setDeliveryPoint(\Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint $deliveryPoint) {
-        $this->deliveryPoint = $deliveryPoint;
-    }
-
     public function __toString() {
-        return $this->descripcion;
+        return $this->descripcion ? : '-';
+    }
+
+    function getPeriod() {
+        return $this->period;
+    }
+
+    function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
+        $this->period = $period;
     }
 
 }

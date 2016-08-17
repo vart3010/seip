@@ -12,6 +12,7 @@
 namespace Pequiven\MasterBundle\Admin\CEI;
 
 use Pequiven\MasterBundle\Admin\BaseAdmin;
+use Sonata\AdminBundle\Admin\Admin;
 //use Pequiven\SEIPBundle\Entity\CEI\Product;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -23,11 +24,13 @@ use Sonata\AdminBundle\Show\ShowMapper;
  *
  * @author Victor Tortolero <vart10.30@gmail.com>
  */
-class DeliveryPointAdmin extends BaseAdmin {
+class DeliveryPointAdmin extends Admin {
 
     protected function configureShowFields(ShowMapper $show) {
         $show
                 ->add("descripcion")
+                ->add("period")
+                ->add("delivery")
         ;
         parent::configureShowFields($show);
     }
@@ -37,9 +40,10 @@ class DeliveryPointAdmin extends BaseAdmin {
                 ->add("descripcion")
                 ->add('warehouse', 'sonata_type_model_autocomplete', array(
                     'property' => array('descripcion'),
-                    'multiple' => true,
-                    'required' => false,
+                    'multiple' => false,
+                    'required' => true,
                 ))
+                ->add("period")
 
         ;
         parent::configureFormFields($form);
@@ -48,6 +52,8 @@ class DeliveryPointAdmin extends BaseAdmin {
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
                 ->add("descripcion")
+                ->add("period")
+                ->add("warehouse")
         ;
         parent::configureDatagridFilters($filter);
     }
@@ -55,6 +61,8 @@ class DeliveryPointAdmin extends BaseAdmin {
     protected function configureListFields(ListMapper $list) {
         $list
                 ->addIdentifier("descripcion")
+                ->add("warehouse")
+                ->add("period")
         ;
         parent::configureListFields($list);
     }

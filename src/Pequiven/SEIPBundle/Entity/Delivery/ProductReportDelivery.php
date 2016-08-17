@@ -32,20 +32,6 @@ class ProductReportDelivery {
     private $productGroupDelivery;
 
     /**
-     * Detalles del producto  diario
-     * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductDeliveryDetailDaily
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductDeliveryDetailDaily",mappedBy="productReportDelivery",cascade={"remove"})
-     */
-    private $productDeliveryDetailDaily;
-
-    /**
-     * Detalles del producto mensual
-     * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductReportDetailMonth
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductReportDetailMonth",mappedBy="productReportDelivery",cascade={"remove"})
-     */
-    private $productDeliveryDetailMonth;
-
-    /**
      * Producto
      * @var \Pequiven\SEIPBundle\Entity\CEI\Product
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product",inversedBy="productReports")
@@ -85,10 +71,6 @@ class ProductReportDelivery {
      */
     private $parent;
     private $name = '';
-
-    public function __construct() {
-        $this->productDeliveryDetailDaily = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     function getId() {
         return $this->id;
@@ -152,35 +134,6 @@ class ProductReportDelivery {
 
     function setProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $product) {
         $this->product = $product;
-    }
-
-    /**
-     * 
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth $productDetailDailyMonth
-     * @return \Pequiven\SEIPBundle\Entity\Delivery\ProductReportDelivery
-     */
-    public function addProductDeliveryDetailDaily(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth $productDetailDailyMonth) {
-        $productDetailDailyMonth->setProductReport($this);
-
-        $this->productGroupDelivery->add($productDetailDailyMonth);
-
-        return $this;
-    }
-
-    /**
-     * 
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth $productDetailDailyMonth
-     */
-    public function removeProductDetailDailyMonth(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth $productDetailDailyMonth) {
-        $this->productGroupDelivery->removeElement($productDetailDailyMonth);
-    }
-
-    /**
-     * 
-     * @return type
-     */
-    function getProductDeliveryDetailDaily() {
-        return $this->productDeliveryDetailDaily;
     }
 
 }

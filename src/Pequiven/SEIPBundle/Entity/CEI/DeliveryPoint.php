@@ -8,7 +8,7 @@ use Pequiven\SEIPBundle\Model\CEI\DeliveryPoint as Model;
 /**
  * punto de despacho 
  *
- * @author Victor Tortolero <vart10..30@gmail.com>
+ * @author Victor Tortolero <vart10.30@gmail.com>
  * @ORM\Table(name="seip_cei_DeliveryPoint")
  * @ORM\Entity()
  */
@@ -31,41 +31,28 @@ class DeliveryPoint extends Model {
     private $descripcion;
 
     /**
-     * @var Pequiven\SEIPBundle\Entity\CEI\Warehouse
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Warehouse", mappedBy="deliveryPoint")
-     * */
-    private $warehouse;
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->warehouse = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
+     * Periodo.
      * 
-     * @param \Pequiven\SEIPBundle\Entity\CEI\Warehouse $warehouse
-     * @return \Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
      */
-    public function addWarehouse(Warehouse $warehouse) {
-        $warehouse->setDeliveryPoint($this);
+    private $period;
 
-        $this->warehouse->add($warehouse);
-
-        return $this;
-    }
+    /**
+     * Almacen
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Warehouse
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Warehouse")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $warehouse;
 
     function getWarehouse() {
         return $this->warehouse;
     }
 
-    /**
-     * 
-     * @param \Pequiven\SEIPBundle\Entity\CEI\Warehouse $warehouse
-     */
-    public function removeWarehouse(Warehouse $warehouse) {
-        $this->warehouse->removeElement($warehouse);
+    function setWarehouse(\Pequiven\SEIPBundle\Entity\CEI\Warehouse $warehouse) {
+        $this->warehouse = $warehouse;
     }
 
     function getId() {
@@ -82,6 +69,14 @@ class DeliveryPoint extends Model {
 
     function setDescripcion($descripcion) {
         $this->descripcion = $descripcion;
+    }
+
+    function getPeriod() {
+        return $this->period;
+    }
+
+    function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
+        $this->period = $period;
     }
 
 }

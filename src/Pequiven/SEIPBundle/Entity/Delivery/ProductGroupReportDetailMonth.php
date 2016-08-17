@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="seip_delivery_product_detail_month")
  * @ORM\Entity()
  */
-class ProductReportDetailMonth {
+class ProductGroupReportDetailMonth {
 
     /**
      * @var integer
@@ -24,8 +24,8 @@ class ProductReportDetailMonth {
 
     /**
      * Producto de reporte
-     * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductReportDelivery
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductReportDelivery",inversedBy="productDeliveryDetailMonth")
+     * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery",inversedBy="productGroupDeliveryDetailMonth")
      * @ORM\JoinColumn(nullable=false)
      */
     private $productReportDelivery;
@@ -57,6 +57,15 @@ class ProductReportDetailMonth {
      * @ORM\Column(name="totalReal",type="float")
      */
     private $totalReal = 0;
+
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $period;
 
     function getId() {
         return $this->id;
@@ -104,6 +113,14 @@ class ProductReportDetailMonth {
 
     function setTotalReal($totalReal) {
         $this->totalReal = $totalReal;
+    }
+
+    function getPeriod() {
+        return $this->period;
+    }
+
+    function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
+        $this->period = $period;
     }
 
 }
