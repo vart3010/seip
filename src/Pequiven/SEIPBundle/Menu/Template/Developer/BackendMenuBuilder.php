@@ -1165,6 +1165,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             ))->setLabel($this->translate(sprintf('Salud', $section)));
                     $gerencias->addChild($itemsTableros);
                 }
+                if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_PEND')) {
+                    $itemsTableros = $this->factory->createItem('results.visualize.tableros.pend', array(
+                                'route' => 'pequiven_dasboard_linestrategicbygroup',
+                                'routeParameters' => array('idGroup' => 13),
+                                'labelAttributes' => array('icon' => 'fa fa-cubes',),
+                            ))->setLabel($this->translate(sprintf('Planificación', $section)));
+                    $gerencias->addChild($itemsTableros);
+                }
                 $tableros->addChild($gerencias);
 
 
