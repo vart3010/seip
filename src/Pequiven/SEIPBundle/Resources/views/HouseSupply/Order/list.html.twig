@@ -12,31 +12,80 @@
 {% block body %}
 
     <div ng-controller="TableFormatController">        
-        <div loading-container="tableParams.settings().$loading">
-            <table ng-table="tableParams" {#show-filter="false"#} template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
-                <tbody>
-                    <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
-                        <td data-title="'N° Orden'" style="text-align: center;">
-                            <a href="{$ result._links.self.show $}">{$ result.orderNro $}</a>
-                        </td>
-                        <td data-title="'Fecha'" style="text-align: center;">
-                            {$ result.dateOrder $}
-                        </td>
-                        <td data-title="'CET'" style="text-align: left;">
-                            {$ result.workStudyCircle.codigo $} - {$ result.workStudyCircle.name $}
-                        </td>                        
-                        <td data-title="'Complejo'" style="text-align: left;">
-                            {$ result.workStudyCircle.complejo.description $}
-                        </td>                        
-                        <td data-title="'Estatus'" style="text-align: center;">
-                            {$ result.arrayStatus[result.type] $}
-                        </td>
-                        <td data-title="'Total Orden'" style="text-align: right;">
-                            {$ result.totalOrder|myNumberFormat $} Bs.
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div ng-controller="TableHouseSupplyOrderKitController">
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
+                </summary>
+
+                <div class="with-padding">
+                    <div class="columns">
+
+                        <!-- Filtro Localidad -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.complejo'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-options="value as value.description for (key,value) in data.complejos">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                            
+                        <!-- Filtro Círculos de Estudio de Trabajo -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.work_study_circle'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectWorkStudyCircle" ng-model="model.workStudyCircle" ng-init="getWorkStudyCircle('model.complejo.id','1')" ng-options="value as value.name group by model.complejo.description for (key,value) in data.work_study_circles" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                            
+                        <!-- Filtro Status Orden -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">Status Orden</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectStatusHouseSupplyOrder" ng-model="model.statusHouseSupplyOrder" ng-options="value as value.description for (key,value) in data.statusHouseSupplyOrder" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </details>
+            
+            
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" {#show-filter="false"#} template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" ng-init="data.statusHouseSupplyOrder = {{ statusHouseSupplyOrder|serialize }};" >
+                    <tbody>
+                        <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                            <td data-title="'N° Orden'" style="text-align: center;">
+                                <a href="{$ result._links.self.show $}">{$ result.orderNro $}</a>
+                            </td>
+                            <td data-title="'Fecha'" style="text-align: center;">
+                                {$ result.dateOrder $}
+                            </td>
+                            <td data-title="'CET'" style="text-align: left;">
+                                {$ result.workStudyCircle.codigo $} - {$ result.workStudyCircle.name $}
+                            </td>                        
+                            <td data-title="'Complejo'" style="text-align: left;">
+                                {$ result.workStudyCircle.complejo.description $}
+                            </td>                        
+                            <td data-title="'Estatus'" style="text-align: center;">
+                                {$ result.arrayStatus[result.type] $}
+                            </td>
+                            <td data-title="'Total Orden'" style="text-align: right;">
+                                {$ result.totalOrder|myNumberFormat $} Bs.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>      
     </div>
 {% endblock %}

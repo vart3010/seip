@@ -67,6 +67,15 @@
                                 <input type="text" name="coordinators" id="coordinators" ng-model="model.coordinator" style='width: 270px' />
                             </div>
                         </div>
+
+                        <!-- Filtro Usuarios -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">Empleado</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <input type="text" name="users" id="users" ng-model="model.user" style='width: 270px' />
+                            </div>
+                        </div>
                     {% endif %}
                       
                 </div>
@@ -140,8 +149,39 @@
                     return m;
                 } // we do not want to escape markup since we are displaying html in results
             };
+            
+            var urlResponsibles = '{{ path('pequiven_user_search_filter') }}';
+            var parametersSelectResponsibles = {
+                minimumInputLength: 3,
+                multiple: false,
+                allowClear: true,
+                ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
+                    url: urlResponsibles,
+                    dataType: 'json',
+                    quietMillis: 250,
+                    data: function (term, page) {
+                        return {
+                            query: term, // search term
+                        };
+                    },
+                    results: function (data, page) { // parse the results into the format expected by Select2.
+                        // since we are using custom formatting functions we do not need to alter the remote JSON data
+                        return {results: data};
+                        //console.log(data);
+                    },
+                    cache: true
+                },
+                initSelection: function (element, callback) {
+                },
+                formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
+                formatSelection: responsiblesFormatResult, // omitted for brevity, see the source of this page
+                escapeMarkup: function (m) {
+                    return m;
+                } // we do not want to escape markup since we are displaying html in results
+            };
 
             $('#coordinators').select2(parametersSelectCoordinators);
+            $('#users').select2(parametersSelectResponsibles);
             
         });
         

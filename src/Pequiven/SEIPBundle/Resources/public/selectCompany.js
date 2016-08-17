@@ -9,7 +9,7 @@ $("#dialog").dialog({
         effect: "explode",
         duration: 800
     },
-    width: 600,
+    width: 615,
     height: 350,
 });
 
@@ -185,14 +185,28 @@ $.ajax({
 //                        $("#dialog").dialog("close");
                         var data = $.parseJSON(data);
                         var cont = '';
-
-                        if (data.companies[0].enabled != 0) {
+                        for (var i = 0; i < data.companies.length; i++) {
+                            if (data.companies[i].enabled != 0) {
+                                if (data.companies[i].ubicacion == "-1" && data.companies[i].alias == "PEQUIVEN" && (region == "oriental" || region == "central" || region == "occidental" || region == "capital")) {
+                                    cont += '<div class="contentLogoCompany button contentLc"><a href="' + company_link + '"><div class=""><img class="logoCompany" src="' + data.companies[i].base64image + '"/></div><div class="button red-gradient glossy contentAlias"><p class="companyName title-icon-strategic" style="font-size: 13px; font-weight: bold;">' + data.companies[i].alias + '</p></div></a></div>';
+                                    $("#dialog").html(cont);
+                                    $("#dialog").dialog({title: "Región" + " " + region}).dialog("open");
+                                }
+                                if (data.companies[i].ubicacion == region) {
+                                    cont += '<div class="contentLogoCompany button disabled contentLc"><a href="#"><div class=""><img class="logoCompany" src="' + data.companies[i].base64image + '"/></div><div class="button red-gradient glossy contentAlias"><p class="companyName">' + data.companies[i].alias + '</p></div></a></div>';
+                                    $("#dialog").html(cont);
+                                    $("#dialog").dialog({title: "Región" + " " + region}).dialog("open");
+                                    //$("#divDatos").append(div);
+                                }
+                            }
+                        }//for
+                        /*if (data.companies[0].enabled != 0) {
                             if (data.companies[0].ubicacion == "-1" && data.companies[0].alias == "PEQUIVEN" && (region == "oriental" || region == "central" || region == "occidental" || region == "capital")) {
                                 cont += '<div class="contentLogoCompany"><a href="' + company_link + '"><div class="companySelected"><img class="logoCompany" src="' + data.companies[0].base64image + '"/></div><p class="companyName">' + data.companies[0].alias + '</p></a></div>';
                                 $("#dialog").html(cont);
                                 $("#dialog").dialog({title: "Región" + " " + region}).dialog("open");
                             }
-                        }
+                        }*/
                     });
                 });
                 $("#mensaje").animate({left: '61%'},3000);
