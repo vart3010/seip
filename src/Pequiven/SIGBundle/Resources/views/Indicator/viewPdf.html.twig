@@ -128,7 +128,7 @@
                 <td class="td-tittle" width="85%"> {{ name }}</td>                
             </tr>
             <tr>
-                <td class="subtittle" width="15%">MES DEL INFORME: </td>
+                <td class="subtittle" width="15%">MES: </td>
                 <td class="td-tittle" width="85%"> {{ setmonth  }} del {{ period }}</td>
             </tr>
         </tbody>
@@ -215,7 +215,7 @@
                 <td width="10%" class="subtittle" >Tipo de<br>Acción</td>
                 <td width="10%" class="subtittle" >Fecha Inicio</td>
                 <td width="10%" class="subtittle" >Fecha Cierre</td>
-                <td width="10%" class="subtittle" >Avance</td>
+                <td width="10%" class="subtittle" >% Avance</td>
                 <td width="10%" class="subtittle" >Responsable</td>
                 <td width="15%" class="subtittle" >Observaciones</td>
             </tr>
@@ -264,7 +264,7 @@
     </table>
 
     {# verificatión #}
-     <table style=" page-break-before: always;"></table>
+    {#<table style=" page-break-before: always;"></table>
     <br><br><br>
     <table class="table-planning">
         <tbody>
@@ -292,6 +292,6 @@
                 </tr>            
             {% endfor %}
         </tbody>
-    </table>     
+    </table>  #}   
 
 {% endblock %}
