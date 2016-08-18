@@ -14,7 +14,7 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  */
 class HouseSupplyOrderRepository extends EntityRepository {
 
-    function FindNextOrderNro($type) {
+    function FindNextOrderNro($type = null) {
 
         $qb = $this->getQueryBuilder();
         $qb
@@ -97,18 +97,18 @@ class HouseSupplyOrderRepository extends EntityRepository {
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
 
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        
+
         if (($complejo = $criteria->remove('complejo'))) {
             $queryBuilder->innerJoin('HSOrder.workStudyCircle', 'wsc');
             $queryBuilder->andWhere('wsc.complejo = :complejo')
-                         ->setParameter('complejo', $complejo)
-                    ;
+                    ->setParameter('complejo', $complejo)
+            ;
         }
-        
+
         if (($statusHouseSupplyOrder = $criteria->remove('statusHouseSupplyOrder'))) {
             $queryBuilder->andWhere('HSOrder.type = :statusHouseSupplyOrder')
-                         ->setParameter('statusHouseSupplyOrder', $statusHouseSupplyOrder)
-                    ;
+                    ->setParameter('statusHouseSupplyOrder', $statusHouseSupplyOrder)
+            ;
         }
 
         if (($wsc = $criteria->remove('ownWsc'))) {
