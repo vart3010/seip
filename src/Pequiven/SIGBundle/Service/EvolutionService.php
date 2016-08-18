@@ -570,6 +570,7 @@ class EvolutionService implements ContainerAwareInterface {
         
         $chart = array();
         $chart["valueFontColor"] = "#000000";
+        $chart["yaxisname"] = "VALOR PORCENTUAL DE LA CAUSA";
         $chart["showvalues"] = "0";
         $chart["showSum"] = "1";
         $chart["numberSuffix"] = "%";

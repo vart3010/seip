@@ -19,7 +19,14 @@ and open the template in the editor.
 }
 .companyName{
         text-align: center;
-        margin-top: 15px; 
+        /*margin-top: 15px;*/ 
+}
+
+.contentAlias{
+    height: auto;
+    width: 100px;
+    position: inherit;
+    margin-left:-10px
 }
 
 #contentP{
@@ -37,6 +44,12 @@ and open the template in the editor.
     margin-bottom: 10px;
     float: left;
     margin-left: 50px;
+}
+
+.contentLc{
+    height: 75px;
+    width: 100px;
+    margin-bottom:50px
 }
 
 .companySelected {

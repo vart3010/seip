@@ -10,6 +10,7 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyCycle;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKit;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyPayments;
+use Pequiven\SEIPBundle\Model\HouseSupply\HouseSupplyOrder AS modelHouseSupplyOrder;
 
 /**
  * Ordenes
@@ -19,7 +20,7 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyPayments;
  * @ORM\Table(name="seip_gsh_order")
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\HouseSupply\Order\HouseSupplyOrderRepository") 
  */
-class houseSupplyOrder {
+class houseSupplyOrder extends modelHouseSupplyOrder {
 
     /**
      *
