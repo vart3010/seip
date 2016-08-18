@@ -632,6 +632,13 @@ class HouseSupplyOrderKitController extends SEIPController {
             ;
 
             $inventory = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventory')->findOneBy($search);
+
+            if ($inventory->getAvailable() == null) {
+                $avaliable = 0;
+            } else {
+                $avaliable = $inventory->getAvailable();
+            }
+
             $disponible = ($inventory->getAvailable()) - ($prod["cant"]);
             $inventory->setAvailable($disponible);
             $em->persist($inventory);
@@ -639,6 +646,14 @@ class HouseSupplyOrderKitController extends SEIPController {
         }
 
 //ACTUALIZO LOS DATOS DE LA ORDEN Y EL ESTATUS
+        $waitingItems = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy(array('order' => $order));
+
+        foreach ($waitingItems as $items) {
+            $items->setType(5);
+            $em->persist($items);
+        }
+        $em->flush();
+
         $order->setType(5);
         $order->setDateDelivery($date);
         $order->setDeliveredBy($this->getUser());
