@@ -108,13 +108,13 @@
         </table>
 
         <br/><br/><br/>
-
+        {% if workStudyCircle.coordinatorDiscussion is not null %}
         <table width="100%">
             <tr>
                 <th class="title_bold">2.1 Datos del Coordinador o Líder de Debate </th>
             </tr>
         </table>
-
+        
         <br/><br/>
         <table width="95%" class="simple-table responsive-table tables-extras" > 
             <tr>
@@ -131,6 +131,7 @@
             </tr> 
         </table>
         <br/><br/><br/>
+        {% endif %}
 
     {% else %}
         <table width="95%" class="simple-table responsive-table tables-extras" > 
@@ -208,7 +209,7 @@
                         <td width="10%"> {{ miembro.ext }} </td>
                     </tr>
                 {%else%}
-                    {% if (userCreatedId != miembro.id) %}
+                    {% if (workStudyCircle.getCoordinator.getId != miembro.id) %}
                         <tr>
                             <td width="5%"> {{ count }} </td>
                             <td width="20%"> {{ miembro.getIndentification|number_format(0, ',', '.') }} </td>

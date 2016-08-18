@@ -15,6 +15,7 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyPayments;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryCharge;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyInventoryChargeItems;
+
 //use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrder;
 
 /**
@@ -89,16 +90,16 @@ class HouseSupplyOrderKitController extends SEIPController {
         $repository = $this->get('pequiven.repository.housesupply_order');
 //var_dump(get_class($repository));die();
 //$orders = $this->get('pequiven.repository.housesupply_order')->findAll(); //Carga las Órdenes
-        
+
         $arrayStatusHouseSupplyOrder = houseSupplyOrder::getStatus();
-        
+
         $statusHouseSupplyOrder = array();
-        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::REGISTRADA,'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::REGISTRADA]);
-        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::DEVUELTA,'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::DEVUELTA]);
-        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::ESPERA,'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::ESPERA]);
-        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::PAGADA,'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::PAGADA]);
-        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::ENTREGADA,'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::ENTREGADA]);
-        
+        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::REGISTRADA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::REGISTRADA]);
+        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::DEVUELTA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::DEVUELTA]);
+        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::ESPERA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::ESPERA]);
+        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::PAGADA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::PAGADA]);
+        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::ENTREGADA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::ENTREGADA]);
+
         $securityService = $this->getSecurityService();
         if (!$securityService->isGranted(array("ROLE_SEIP_HOUSESUPPLY_VIEW_ALL_ORDERS"))) {
             $criteria['ownWsc'] = $this->getUser()->getWorkStudyCircle()->getId();
@@ -644,6 +645,13 @@ class HouseSupplyOrderKitController extends SEIPController {
             ;
 
             $inventory = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventory')->findOneBy($search);
+
+            if ($inventory->getAvailable() == null) {
+                $avaliable = 0;
+            } else {
+                $avaliable = $inventory->getAvailable();
+            }
+
             $disponible = ($inventory->getAvailable()) - ($prod["cant"]);
             $inventory->setAvailable($disponible);
             $em->persist($inventory);
@@ -651,6 +659,14 @@ class HouseSupplyOrderKitController extends SEIPController {
         }
 
 //ACTUALIZO LOS DATOS DE LA ORDEN Y EL ESTATUS
+        $waitingItems = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrderItems')->findBy(array('order' => $order));
+
+        foreach ($waitingItems as $items) {
+            $items->setType(5);
+            $em->persist($items);
+        }
+        $em->flush();
+
         $order->setType(5);
         $order->setDateDelivery($date);
         $order->setDeliveredBy($this->getUser());
@@ -717,12 +733,14 @@ class HouseSupplyOrderKitController extends SEIPController {
 
         foreach ($order->getOrderItems() as $orderItems) {
             $orderItems->setType(2);
+            $orderItems->setSign(-1);
             $orderItems->setDeletedAt($date);
             $orderItems->setDeletedBy($this->getUser());
             $em->flush();
         }
 
         $order->setType(2);
+        $order->setSign(-1);
         $order->setDeletedAt($date);
         $order->setDeletedBy($this->getUser());
         $em->flush();
