@@ -35,9 +35,10 @@ class HouseSupplyPdf extends TCPDF implements ContainerAwareInterface {
 //        $logopqv = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Logo_Pequiven.jpg'); //K_PATH_IMAGES.'logo_example.jpg';
 //        $logoseip = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Logo_Seip.jpg'); //K_PATH_IMAGES.'logo_example.jpg';
 
-        $logopqv = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/housesupply/Casa_Abasto_Cintillo.png');
-        $logoseip = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/housesupply/Casa_Abasto.png');
-
+        //$logopqv = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/housesupply/Casa_Abasto_Cintillo.png');
+        //$logoseip = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/housesupply/Casa_Abasto.png');
+        $logopqv = 'bundles/pequivenseip/logotipos-pqv/logotipos-pdf/housesupply/Casa_Abasto_Cintillo.png';
+        $logoseip = 'bundles/pequivenseip/logotipos-pqv/logotipos-pdf/housesupply/Casa_Abasto.png';
 
         $tittle = $this->title;
 
