@@ -169,7 +169,8 @@ class EvolutionController extends ResourceController
                     $font = "3.png";
                     break;
             }
-            $font = $this->generateAsset('bundles/pequivensig/images/'.$font);
+            //$font = $this->generateAsset('bundles/pequivensig/images/'.$font);
+            $font = 'bundles/pequivensig/images/'.$font;
         } elseif ($typeObject == 2) {
             $ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($idObject);
             $name = $ArrangementProgram->getRef() . '' . $ArrangementProgram->getDescription();            
