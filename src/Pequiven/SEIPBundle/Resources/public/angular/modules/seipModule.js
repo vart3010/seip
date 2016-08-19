@@ -7554,6 +7554,170 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
+            
+            //34.- Gráfico para mostrar las categorias y subcategorias del indicador de resolución de casos de AIT
+            $scope.chargeChartPieMultilevelAit = function (indicatorId, render, width, height) {
+                FusionCharts.ready(function () {
+                    var widgetMultiLevelPieChart = new FusionCharts({
+                        "type": "multilevelpie",
+                        "renderAt": render,
+                        "width": '500',
+                        "height": '500',
+                        "dataFormat": "json",
+                        "dataSource": {
+                        "chart": {
+                          "caption": "Resolucion de Casos en la Región Oriente",
+                          "showPlotBorder": "1",
+                          "piefillalpha": "60",
+                          "pieborderthickness": "2",
+                          "piebordercolor": "#FFFFFF",
+                          "hoverfillcolor": "#CCCCCC",
+                          "numberprefix": "$",
+                          "plottooltext": "$label, $$valueK, $percentValue",
+                          "theme": "fint"
+                        },
+                        "category": [{
+                          "label": "Products",
+                          "color": "#ffffff",
+                          "value": "150",
+                          "category": [
+                          {
+                            "label": "Activos",
+                            "color": "#f8bd19",
+                            "value": "55.5",
+                            "tooltext": "Food & Beverages, $$valueK, $percentValue",
+                            "category": [
+                            {
+                              "label": "Asignado",
+                              "color": "#f8bd19",
+                              "value": "11.1"
+                            }, {
+                              "label": "Cerrado",
+                              "color": "#f8bd19",
+                              "value": "27.75"
+                            }, {
+                              "label": "En progreso",
+                              "color": "#f8bd19",
+                              "value": "9.99"
+                            }, {
+                              "label": "Nuevo",
+                              "color": "#f8bd19",
+                              "value": "6.66"
+                            }, {
+                              "label": "Pendiente",
+                              "color": "#f8bd19",
+                              "value": "6.66"
+                            }]
+                          }, {
+                            "label": "Soporte en Sitio",
+                            "color": "#33ccff",
+                            "value": "42",
+                            "tooltext": "Apparel & Accessories, $$valueK, $percentValue",
+                            "category": [{
+                              "label": "Asignado",
+                              "color": "#33ccff",
+                              "value": "10.08"
+                            }, {
+                              "label": "Cerrado",
+                              "color": "#33ccff",
+                              "value": "18.9"
+                            }, {
+                              "label": "En progreso",
+                              "color": "#33ccff",
+                              "value": "6.3"
+                            }, {
+                              "label": "Nuevo",
+                              "color": "#33ccff",
+                              "value": "6.72"
+                            },{
+                              "label": "Pendiente",
+                              "color": "#33ccff",
+                              "value": "6.72"
+                            }]
+                          }, {
+                            "label": "Infraestructura",
+                            "color": "#ccff66",
+                            "value": "30",
+                            "category": [{
+                              "label": "Asignado",
+                              "color": "#ccff66",
+                              "value": "10.08"
+                            }, {
+                              "label": "Cerrado",
+                              "color": "#ccff66",
+                              "value": "18.9"
+                            }, {
+                              "label": "En progreso",
+                              "color": "#ccff66",
+                              "value": "6.3"
+                            }, {
+                              "label": "Nuevo",
+                              "color": "#ccff66",
+                              "value": "6.72"
+                            },{
+                              "label": "Pendiente",
+                              "color": "#ccff66",
+                              "value": "6.72"
+                            }]
+                          }, {
+                            "label": "Aplicaciones",
+                            "color": "#ffcccc",
+                            "value": "22.5",
+                            "tooltext": "Baby Products, $$valueK, $percentValue",
+                            "category": [{
+                              "label": "Asignado",
+                              "color": "#ffcccc",
+                              "value": "10.08"
+                            }, {
+                              "label": "Cerrado",
+                              "color": "#ffcccc",
+                              "value": "18.9"
+                            }, {
+                              "label": "En progreso",
+                              "color": "#ffcccc",
+                              "value": "6.3"
+                            }, {
+                              "label": "Nuevo",
+                              "color": "#ffcccc",
+                              "value": "6.72"
+                            },{
+                              "label": "Pendiente",
+                              "color": "#ffcccc",
+                              "value": "6.72"
+                            }]
+                          }, {
+                            "label": "Telecom",
+                            "color": "#ccff66",
+                            "value": "30",
+                            "category": [{
+                              "label": "Asignado",
+                              "color": "#ccff66",
+                              "value": "10.08"
+                            }, {
+                              "label": "Cerrado",
+                              "color": "#ccff66",
+                              "value": "18.9"
+                            }, {
+                              "label": "En progreso",
+                              "color": "#ccff66",
+                              "value": "6.3"
+                            }, {
+                              "label": "Nuevo",
+                              "color": "#ccff66",
+                              "value": "6.72"
+                            },{
+                              "label": "Pendiente",
+                              "color": "#ccff66",
+                              "value": "6.72"
+                            }]
+                          }]
+                        }]
+                      }
+                    });
+                    widgetMultiLevelPieChart.setTransparent(true);
+                    widgetMultiLevelPieChart.render();
+                })
+            };
 
             //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
             $scope.chargeChartProductionReportTemplateByDate = function (reportTemplateId, dateSearch, render, width, height) {

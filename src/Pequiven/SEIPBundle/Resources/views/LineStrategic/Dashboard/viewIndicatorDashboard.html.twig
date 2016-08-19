@@ -144,7 +144,7 @@
                                                         {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH') or chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH') %}
                                                             <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ "now"|date("n") }}','{{ grafico }}','100','500')">
                                                             {% else %}
-                                                                <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ grafico }}','100','500')">
+                                                                <div id=""  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ grafico }}','100','500')">
                                                                 {% endif %}
                                                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH')  %}
                                                                     <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">

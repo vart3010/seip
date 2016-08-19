@@ -179,11 +179,14 @@ abstract class Chart
     const TYPE_CHART_STACKED_COLUMN_3D_BY_INDICATOR = 32;
     
     /**
-     * Gráfico tipo Cilindro Apilado
+     * Gráfico tipo Cilindro Apilado 33
      */
     const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL_AND_ONLY_RESULT = 33;
     
-    
+    /**
+     * Gráfico para mostrar las categorias y subcategorias del indicador de resolución de casos de AIT
+     */
+    const TYPE_CHART_PIE_MULTILEVEL_AIT = 34;
     
     const TYPE_EXAMPLE = 100;
        
@@ -257,6 +260,7 @@ abstract class Chart
             self::TYPE_CHART_PLAN_PYRAMID_3D_SECTIONED => 'chart.type.indicatorPyramidPlanSection',
             self::TYPE_CHART_STACKED_COLUMN_3D_BY_INDICATOR => 'chart.type.stackedColumn3dByIndicator',
             self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL_AND_ONLY_RESULT => 'chart.type.indicatorWithTrendlineHorizontalOnlyResult',
+            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL_AND_ONLY_RESULT => 'chart.type.multilevelPieAit',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          
