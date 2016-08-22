@@ -65,6 +65,17 @@ class HouseSupplyReportsController extends SEIPController {
         $arrayStatus = HouseSupplyOrder::getStatus();
         $arrayPays = HouseSupplyPayments::getPaymentsTypes();
 
+
+        if (($request->get('indv') != null) && ($request->get('indv') == '1')) {
+            $twig = 'PequivenSEIPBundle:HouseSupply\Reports:exportOrderKitInvididualDelivery.html.twig';
+            $tittle = 'Nota de Entrega';
+            $archiveTittle = 'Notas de Entrega de la Orden ' . str_pad(($order->getNroOrder()), 5, 0, STR_PAD_LEFT);
+        } else {
+            $twig = 'PequivenSEIPBundle:HouseSupply\Reports:exportOrderKitDelivery.html.twig';
+            $tittle = 'Ordenes de Despacho';
+            $archiveTittle = 'Orden de Despacho ' . str_pad(($order->getNroOrder()), 5, 0, STR_PAD_LEFT);
+        }
+
         $data = array(
             'order' => $order,
             'productKit' => $productKit,
@@ -74,9 +85,6 @@ class HouseSupplyReportsController extends SEIPController {
             'arrayPays' => $arrayPays,
         );
 
-        $twig = 'PequivenSEIPBundle:HouseSupply\Reports:exportOrderKitDelivery.html.twig';
-        $archiveTittle = 'Orden de Despacho ' . str_pad(($order->getNroOrder()), 5, 0, STR_PAD_LEFT);
-        $tittle = 'Ordenes de Despacho';
         $this->getReportService()->generateHouseSupplyPDF($data, $tittle, $twig, 'P', $archiveTittle);
     }
 

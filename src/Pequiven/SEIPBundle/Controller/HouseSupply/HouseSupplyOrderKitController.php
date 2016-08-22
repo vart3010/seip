@@ -355,8 +355,6 @@ class HouseSupplyOrderKitController extends SEIPController {
             $isCoord = false;
         }
 
-
-
         return $this->render('PequivenSEIPBundle:HouseSupply\Order:showkit.html.twig', array(
                     'order' => $order,
                     'productKit' => $productKit,

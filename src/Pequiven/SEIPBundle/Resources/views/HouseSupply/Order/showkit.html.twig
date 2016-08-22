@@ -196,9 +196,9 @@
                                     </button>    
                                 </form>
                             </td>
-                            {%if order.type==5 and (is_granted('ROLE_SEIP_HOUSESUPPLY_VIEW_ALL_ORDERS') or isCoord==true) %}   
+                            {%if order.type==5 and ((is_granted('ROLE_SEIP_HOUSESUPPLY_VIEW_ALL_ORDERS')) or (isCoord==true)) %}   
                                 <td>
-                                    <form action="{{ path("pequiven_housesupply_orderkitdelivery_export", { 'id': order.id }) }}">
+                                    <form method="POST" action="{{ path("pequiven_housesupply_orderkitdelivery_export", { 'id': order.id, 'indv': 1 }) }}">
                                         <button type="submit" class="button glossy mid-margin-right">
                                             <span class="button-icon blue-gradient"><span class="icon-download"></span></span>
                                             Nota de Entrega para los Miembros
