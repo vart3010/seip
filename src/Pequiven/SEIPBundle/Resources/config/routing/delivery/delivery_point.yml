@@ -1,0 +1,8 @@
+pequiven_delivery_point_index:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven.controller.delivery_point:indexAction
+        _format: html
+    requirements:
+        _format: json|html
+    methods: [GET]
