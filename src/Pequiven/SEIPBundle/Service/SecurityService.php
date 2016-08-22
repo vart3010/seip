@@ -60,6 +60,7 @@ class SecurityService implements ContainerAwareInterface
             'ROLE_SEIP_RESULT_VIEW_TACTIC' => 'evaluateTacticResult',
             'ROLE_SEIP_RESULT_VIEW_OPERATIVE' => 'evaluateTacticResult',
             
+            'ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_STRATEGIC' => 'evaluateStrategicArrangementProgram',
             'ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC' => 'evaluateTacticArrangementProgram',
             'ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE' => 'evaluateTacticArrangementProgram',
             'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_TACTIC' => 'evaluateTacticArrangementProgramSIG',
@@ -205,15 +206,16 @@ class SecurityService implements ContainerAwareInterface
      * @param ArrangementProgram $arrangementProgram
      * @return boolean
      */
-    private function evaluateTacticArrangementProgram($rol, ArrangementProgram $arrangementProgram)
-    {
+    private function evaluateTacticArrangementProgram($rol, ArrangementProgram $arrangementProgram){        
         $user = $this->getUser();
         $valid = false;
         $rol = $user->getLevelRealByGroup();
         if($rol === Rol::ROLE_DIRECTIVE){
             $valid = true;
         }else{
-            if($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
+            if($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC){
+                $valid = true;
+            }elseif($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
                 $objetive = $arrangementProgram->getTacticalObjective();
                 $gerencia = $objetive->getGerencia();
                 if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
@@ -279,7 +281,7 @@ class SecurityService implements ContainerAwareInterface
                     }
                 }
             }
-        }
+        }        
         if(!$valid){
             $this->checkSecurity();
         } else{

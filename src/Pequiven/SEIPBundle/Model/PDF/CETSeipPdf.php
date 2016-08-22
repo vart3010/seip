@@ -31,7 +31,8 @@ class CETSeipPdf extends TCPDF implements ContainerAwareInterface {
 //        $logopqv = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Logo_Pequiven.jpg'); //K_PATH_IMAGES.'logo_example.jpg';
 //        $logoseip = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Logo_Seip.jpg'); //K_PATH_IMAGES.'logo_example.jpg';
 
-        $logoCET = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/LogoCTE.png');
+        //$logoCET = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/LogoCTE.png');
+        $logoCET = 'bundles/pequivenseip/logotipos-pqv/logotipos-pdf/LogoCTE.png';
 
         $tittle = $this->title;
 
@@ -65,8 +66,10 @@ class CETSeipPdf extends TCPDF implements ContainerAwareInterface {
         $this->SetY(-30);
         // Set font
         $this->SetFont('helvetica', 'I', 8);
-        $logoeslogan = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Pueblo_Victorioso.png');
-        $logoministerio = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Ministerio.jpg');
+        //$logoeslogan = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Pueblo_Victorioso.png');
+        //$logoministerio = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Ministerio.jpg');
+        $logoeslogan = 'bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Pueblo_Victorioso.png';
+        $logoministerio = 'bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Ministerio.jpg';
         // Page number
         //. $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages() .
 

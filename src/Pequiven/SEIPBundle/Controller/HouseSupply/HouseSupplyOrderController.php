@@ -290,6 +290,6 @@ class HouseSupplyOrderController extends SEIPController {
         return $this->render('PequivenSEIPBundle:HouseSupply\Order:show.html.twig', array(
                     'order' => $order
         ));
-    }    
+    }
 
 }

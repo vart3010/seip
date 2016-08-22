@@ -27,22 +27,35 @@ class HouseSupplyProductAdmin extends Admin {
     protected function configureShowFields(ShowMapper $show) {
         $show
                 ->add('id')
-                ->add('instance')
                 ->add('code')
+                ->add('instance')
                 ->add('description')
                 ->add('price')
                 ->add('cost')
-                
+                ->add('taxes')
+                ->add('exento')
+                ->add('maxPerUserForce')
         ;
     }
 
     protected function configureFormFields(FormMapper $form) {
-        $form                
+        $form
                 ->add('code')
                 ->add('instance')
                 ->add('description')
-                ->add('price')
-                ->add('cost')                
+                ->add('price', null, array(
+                    'label' => 'Precio sin Impuestos',
+                ))
+                ->add('cost', null, array(
+                    'label' => 'Costo',
+                ))
+                ->add('taxes', null, array(
+                    'label' => 'Valor Impuestos',
+                ))
+                ->add('exento')
+                ->add('maxPerUserForce', null, array(
+                    'label' => 'Artículos Máximos por Persona',
+                ))
         ;
     }
 
@@ -52,19 +65,17 @@ class HouseSupplyProductAdmin extends Admin {
                 ->add('instance')
                 ->add('code')
                 ->add('description')
-                ->add('price')
-                ->add('cost')                
+                ->add('exento')
         ;
     }
 
     protected function configureListFields(ListMapper $list) {
         $list
                 ->addIdentifier('id')
-                ->add('instance')
                 ->add('code')
                 ->add('description')
+                ->add('exento')
                 ->add('price')
-                ->add('cost')
         ;
     }
 

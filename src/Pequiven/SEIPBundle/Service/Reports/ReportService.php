@@ -69,10 +69,12 @@ class ReportService implements \Symfony\Component\DependencyInjection\ContainerA
     }
 
     /**
-     * 
+     * FUNCION QUE CREA EL PDF DE LOS REPORTES DEL SEIP
      * @param type $data
      * @param type $title
      * @param type $template
+     * @param type $orientation
+     * @param type $archiveTittle
      */
     public function generatePDF($data, $title, $template, $orientation, $archiveTittle = null) {
 
@@ -104,6 +106,44 @@ class ReportService implements \Symfony\Component\DependencyInjection\ContainerA
         $pdf->Output(($archiveTittle) . '.pdf', 'D');
     }
 
+    /**
+     * FUNCION QUE CREA EL PDF DE LOS REPORTES DE HOUSESUPPLY
+     * @param type $data
+     * @param type $title
+     * @param type $template
+     * @param type $orientation
+     * @param type $archiveTittle
+     */
+    public function generateHouseSupplyPDF($data, $title, $template, $orientation, $archiveTittle = null) {
+
+        if ($archiveTittle == null) {
+            $archiveTittle = $title;
+        }
+
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\HouseSupplyPdf($orientation, 'mm', 'LETTER', true, 'UTF-8', false);
+        $pdf->setPrintLineFooter(false);
+        $pdf->setContainer($this->container);
+        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
+        $pdf->setFooterText('Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos');
+        $pdf->SetCreator('SEIP');
+        $pdf->SetAuthor('SEIP');
+        $pdf->setTitle($title);
+        $pdf->SetSubject($archiveTittle);
+        $pdf->SetKeywords('PDF, SEIP, Casa-Abasto');
+        $pdf->setHeaderFont(Array('helvetica', '', 10));
+        $pdf->setFooterFont(Array('helvetica', '', 8));
+        $pdf->SetDefaultMonospacedFont('courier');
+        $pdf->SetMargins(15, 42, 15);
+        $pdf->SetHeaderMargin(15);
+        $pdf->SetFooterMargin(15);
+        $pdf->SetAutoPageBreak(TRUE, 28);
+        $pdf->setImageScale(1.25);
+        $pdf->AddPage();
+        $html = $this->renderView($template, $data);
+        $pdf->writeHTML($html, true, false, true, false, '');
+        $pdf->Output(($archiveTittle) . '.pdf', 'D');
+    }
+
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
     }
@@ -111,9 +151,8 @@ class ReportService implements \Symfony\Component\DependencyInjection\ContainerA
     protected function getPeriodService() {
         return $this->container->get('pequiven_seip.service.period');
     }
-    
-    public function renderView($view, array $parameters = array())
-    {
+
+    public function renderView($view, array $parameters = array()) {
         if ($this->container->has('templating')) {
             return $this->container->get('templating')->render($view, $parameters);
         }

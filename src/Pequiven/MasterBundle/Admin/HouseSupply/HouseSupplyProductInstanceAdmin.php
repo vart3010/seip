@@ -26,22 +26,34 @@ class HouseSupplyProductInstanceAdmin extends Admin {
 
     protected function configureShowFields(ShowMapper $show) {
         $show
-                ->add('id')                
+                ->add('id')
                 ->add('code')
                 ->add('description')
-                ->add('available')
-                ->add('maxPerUser')
-                ->add('maxPerUserForce')
+                ->add('available', null, array(
+                    'label' => 'Cantidad Disponible',
+                ))
+                ->add('maxPerUser', null, array(
+                    'label' => 'Artículos Máximos por Persona',
+                ))
+                ->add('maxPerUserForce', null, array(
+                    'label' => 'Cantidad Máxima de Artículos Independientemente del Inventario',
+                ))
         ;
     }
 
     protected function configureFormFields(FormMapper $form) {
-        $form                
+        $form
                 ->add('code')
                 ->add('description')
-                ->add('available')
-                ->add('maxPerUser')
-                ->add('maxPerUserForce')
+                ->add('available', null, array(
+                    'label' => 'Cantidad Disponible',
+                ))
+                ->add('maxPerUser', null, array(
+                    'label' => 'Artículos Máximos por Persona',
+                ))
+                ->add('maxPerUserForce', null, array(
+                    'label' => 'Cantidad Máxima de Artículos Independientemente del Inventario',
+                ))
         ;
     }
 
@@ -62,8 +74,6 @@ class HouseSupplyProductInstanceAdmin extends Admin {
                 ->add('code')
                 ->add('description')
                 ->add('available')
-                ->add('maxPerUser')
-                ->add('maxPerUserForce')
         ;
     }
 

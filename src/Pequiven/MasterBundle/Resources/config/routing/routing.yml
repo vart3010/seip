@@ -28,3 +28,60 @@ gerenciaSecondList:
 pequiven_gerenciafirst:
     resource: "@PequivenMasterBundle/Resources/config/routing/gerenciafirst.yml"
     prefix: /master/gerencia-first
+#routes to config seip notifications users
+admin_master_configuration_notify:
+    path: /configuration/notify
+    defaults: 
+        _controller: pequiven.controller.configuration:indexAction
+pequiven_configurations_get_to_programs:
+    path: /program-get-to-data.{_format}
+    defaults:
+        _controller: pequiven.controller.configuration:getProgramAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_configuration_find_data:
+    path: /find-data-users.{_format}
+    defaults:
+        _controller: pequiven.controller.configuration:findByDataAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_configuration_set_data_users:
+    path: /set-data-users.{_format}
+    defaults: 
+        _controller: pequiven.controller.configuration:setDataUsersAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_configuration_get_data_users:
+    path: /get-data-users.{_format}
+    defaults: 
+        _controller: pequiven.controller.configuration:getDataUsersAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_configuration_delete_data_users:
+    path: /delete-data-users.{_format}
+    defaults: 
+        _controller: pequiven.controller.configuration:deleteDataUsersAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_seip_route:
+    resource: "@PequivenMasterBundle/Resources/config/routing/configuration.yml"

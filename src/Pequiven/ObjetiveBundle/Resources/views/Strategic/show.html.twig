@@ -76,7 +76,14 @@
             </div>
             <br>
         {% endif %}
+        
+        <!-- ¿Evaluación por Programas de Gestión? -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.evalByArrangementProgram'|trans }}</label>
+            {{ entity.arrangementPrograms|length > 0 and entity.ArrangementProgramsIsAvailableInResult == true ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}             
+        </p>
 
+        {% include 'PequivenObjetiveBundle:Common:arrangementPrograms.html.twig' %}
         {% include 'PequivenObjetiveBundle:Common:results.html.twig' %}
     </fieldset>    
 

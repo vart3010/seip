@@ -103,6 +103,21 @@ sylius_resource:
                 model: Pequiven\MasterBundle\Entity\GerenciaSecond
                 controller: Pequiven\MasterBundle\Controller\GerenciaSecondController
                 repository: Pequiven\MasterBundle\Repository\GerenciaSecondRepository
+        #Master de Configuraciones
+        pequiven.configurationIndex:
+            driver: doctrine/orm
+            templates: PequivenMasterBundle:Configuration
+            classes:
+                model: Pequiven\MasterBundle\Entity\GerenciaSecond
+                controller: Pequiven\MasterBundle\Controller\Configuration\ConfigurationController
+                repository: Pequiven\MasterBundle\Repository\GerenciaSecondRepository
+        pequiven.configuration:
+            driver: doctrine/orm
+            templates: PequivenMasterBundle:Configuration
+            classes:
+                model: Pequiven\MasterBundle\Entity\GerenciaSecond
+                controller: Pequiven\MasterBundle\Controller\Configuration\NotifyController
+                repository: Pequiven\MasterBundle\Repository\GerenciaSecondRepository
         #Nivel de Acceso por Usuario
         pequiven_seip.userpermission:
             driver: doctrine/orm
@@ -697,11 +712,18 @@ sylius_resource:
             templates: PequivenSEIPBundle:HouseSupply/Order
             classes:
                 model: Pequiven\SEIPBundle\Entity\HouseSupply\Order\HouseSupplyOrder
-                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyOrderController                  
+                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyOrderController
+                repository: Pequiven\SEIPBundle\Repository\HouseSupply\Order\HouseSupplyOrderRepository
         pequiven.housesupply_orderkit:
             driver: doctrine/orm
-            templates: PequivenSEIPBundle:HouseSupply/OrderKit
+            templates: PequivenSEIPBundle:HouseSupply/Order
             classes:
                 model: Pequiven\SEIPBundle\Entity\HouseSupply\Order\HouseSupplyOrderKit
                 controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyOrderKitController             
+        pequiven.housesupply_reports:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:HouseSupply/Reports
+            classes:
+                model: Pequiven\SEIPBundle\Entity\HouseSupply\HouseSupplyReports
+                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyReportsController             
        

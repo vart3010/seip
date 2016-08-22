@@ -12,6 +12,10 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use TCPDF;
 
+/**
+ * HEADER Y FOOTER DE REPORTES DEL SEIP
+ * @author Gilbert C. <glavrjk@gmail.com>
+ */
 class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
 
     /**
@@ -31,8 +35,10 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
 //        $logopqv = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Logo_Pequiven.jpg'); //K_PATH_IMAGES.'logo_example.jpg';
 //        $logoseip = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Logo_Seip.jpg'); //K_PATH_IMAGES.'logo_example.jpg';
 
-        $logopqv = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/PQV_Diamante.png');
-        $logoseip = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/SEIP_Blanco.png');
+        //$logopqv = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/PQV_Diamante.png');
+        //$logoseip = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/SEIP_Blanco.png');
+        $logopqv = 'bundles/pequivenseip/logotipos-pqv/logotipos-pdf/PQV_Diamante.png';
+        $logoseip = 'bundles/pequivenseip/logotipos-pqv/logotipos-pdf/SEIP_Blanco.png';
 
 
         $tittle = $this->title;
@@ -42,7 +48,7 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
         $this->SetTextColor(0, 0, 0);
         // Title
         $text = '<table width="100%" cellpadding="2">'
-                . '<tr bgcolor="#B00000">'
+                . '<tr bgcolor="#C1242C">'
                 . '<td width="12%" height="65px" style="text-align: center;">'
                 . '<img src="' . $logopqv . '" width="45px" height="60px">'
                 . '</td>'
@@ -70,13 +76,15 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
         //      $this->SetY(-30);
         // Set font
         $this->SetFont('helvetica', 'I', 8);
-        $logoeslogan = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Patriotas_Unidos.jpg');
-        $logoministerio = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Ministerio.jpg');
+        //$logoeslogan = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Patriotas_Unidos.jpg');
+        //$logoministerio = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Ministerio.jpg');
+        $logoeslogan = 'bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Patriotas_Unidos.jpg';
+        $logoministerio = 'bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Ministerio.jpg';
         // Page number
         //. $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages() .
 
         $margin = $this->getPageDimensions();
-        $lineRed = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(192, 0, 0));
+        $lineRed = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(193, 36, 44));
         $text = $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages();
         $html = '<div style="text-align: center; font-size: 6pt; font-weight: bold; color: #B00000; vertical-align: middle; font-family: sans-serif;">'
                     . 'Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos'

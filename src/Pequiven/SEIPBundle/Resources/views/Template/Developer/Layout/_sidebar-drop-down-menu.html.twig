@@ -8,6 +8,7 @@
     <div id="menu-content">
 
         <header>
+            <a href="{{ path('seip_select_company') }}" style="color: #FFF">Pequiven</a><br/>
             {% if app.user.hasRole('ROLE_WORKER_PQV') %}
                 {{ 'pequiven_seip.role.worker_pqv'|trans }}
             {% elseif app.user.hasRole('ROLE_SUPERVISER') %}
@@ -62,7 +63,7 @@
                 </a>
             </li>
             {% if is_granted('ROLE_WORKER_PLANNING') %}
-                <li><a href="{{ path('tecnocreaciones_box_index') }}" title="{{ 'pequiven_seip.profile.config'|trans }}"><span class="fa fa-wrench"></span></a></li>
+                <li><a href="{{ path('admin_master_configuration_index') }}" title="{{ 'pequiven_seip.profile.config'|trans }}"><span class="fa fa-wrench"></span></a></li>
             {% endif %}
             <li><a href="{{ path('fos_user_security_logout') }}" title="{{ 'pequiven_seip.logout'|trans }}" style="margin:8px"><img src="{{ asset('bundles/pequivenseip/logotipos-pqv/icon_application_exit.png') }}" width="32" height="32" /></a></li>
         </ul>

@@ -10,6 +10,7 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyOrderItems;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyCycle;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyProductKit;
 use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyPayments;
+use Pequiven\SEIPBundle\Model\HouseSupply\HouseSupplyOrder AS modelHouseSupplyOrder;
 
 /**
  * Ordenes
@@ -17,11 +18,9 @@ use Pequiven\SEIPBundle\Entity\HouseSupply\Order\houseSupplyPayments;
  * @author Gilbert C. <glavrjk@gmail.com>
  * 
  * @ORM\Table(name="seip_gsh_order")
- * @ORM\Entity()
- * @ORM\Entity("Pequiven\SEIPBundle\Repository\HouseSupply\Order\HouseSupplyOrderRepository")
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\HouseSupply\Order\HouseSupplyOrderRepository") 
  */
-class houseSupplyOrder {
+class houseSupplyOrder extends modelHouseSupplyOrder {
 
     /**
      *
@@ -171,6 +170,15 @@ class houseSupplyOrder {
      */
     private $deletedAt;
 
+    /**
+     * Devuelto por
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $deletedBy;
+
     function __construct() {
         $this->orderItems = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -259,6 +267,10 @@ class houseSupplyOrder {
         return $this->deletedAt;
     }
 
+    function getDeletedBy() {
+        return $this->deletedBy;
+    }
+
     function setId($id) {
         $this->id = $id;
     }
@@ -341,6 +353,10 @@ class houseSupplyOrder {
 
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
+    }
+
+    function setDeletedBy(User $deletedBy) {
+        $this->deletedBy = $deletedBy;
     }
 
 }

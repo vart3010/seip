@@ -4756,6 +4756,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart = array();
 
         $chart["palette"] = "1";
+        $chart["yaxisname"] = "UNIDAD DE MEDIDA";
         $chart["showvalues"] = "0";
         $chart["paletteColors"] = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
         $chart["yaxisvaluespadding"] = "10";

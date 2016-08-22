@@ -98,6 +98,14 @@ class WorkStudyCircleRepository extends EntityRepository {
                     ->setParameter('gerenciaSecond', $gerenciaSecond)
             ;
         }
+        
+        if (($member = $criteria->remove('members'))) {
+            $queryBuilder
+                    ->innerJoin('wsc.members', 'mb')
+                    ->andWhere('mb.id = :member')
+                    ->setParameter('member', $member)
+            ;
+        }
 
         if (($coordinators = $criteria->remove('coordinators'))) {
 

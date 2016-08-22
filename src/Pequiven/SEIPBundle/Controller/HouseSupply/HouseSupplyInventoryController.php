@@ -154,6 +154,7 @@ class HouseSupplyInventoryController extends SEIPController {
                 'deposit' => $deposit->getId()
                     )
             ;
+               
 
             $inventory = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyInventory')->findOneBy($search);
             $disponible = ($inventory->getAvailable()) + ($sign * $prod->cantidad);

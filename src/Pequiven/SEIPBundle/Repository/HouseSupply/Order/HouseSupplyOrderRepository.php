@@ -14,7 +14,7 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  */
 class HouseSupplyOrderRepository extends EntityRepository {
 
-    function FindNextOrderNro($type) {
+    function FindNextOrderNro($type = null) {
 
         $qb = $this->getQueryBuilder();
         $qb
@@ -36,7 +36,7 @@ class HouseSupplyOrderRepository extends EntityRepository {
         $stmt->execute();
     }
 
-    function TotalOrder($type = null, $id = null, $wsc = null) {
+    function TotalOrder($id = null, $type = null, $wsc = null) {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
@@ -44,36 +44,82 @@ class HouseSupplyOrderRepository extends EntityRepository {
                 . ' prod.description AS product,'
                 . ' SUM(item.cant) AS cant,'
                 . ' SUM(item.totalLine) totalLine,'
-                . ' SUM(item.totalLinetaxes) AS TotalLinetaxes'
+                . ' SUM(item.totalLinetaxes) AS TotalLinetaxes,'
+                . ' item.product_id as prodID'
                 . ' FROM'
                 . ' seip_gsh_order_items AS item'
                 . ' INNER JOIN'
                 . ' seip_gsh_product AS prod ON (item.product_id = prod.id)'
                 . ' WHERE'
-                . ' type >= ' . 0;
-
-        if ($wsc != null) {
-            $sql4 = ' AND workStudyCircle_id = ' . $wsc;
-        } else {
-            $sql4 = '';
-        }
-
+                . ' item.id > 0 ';
 
         if ($id != null) {
-            $sql2 = ' AND order_id=' . $id;
+            $sql2 = ' AND item.order_id=' . $id;
         } else {
             $sql2 = '';
         }
 
-        $sql3 = ' GROUP BY item.workStudyCircle_id, item.product_id';
+        if ($type != null) {
+            $sql3 = ' AND item.type=' . $type;
+        } else {
+            $sql3 = '';
+        }
 
-        $sql = $sql1 . $sql2 . $sql4 . $sql3;
+
+        if ($wsc != null) {
+            $sql4 = ' AND item.workStudyCircle_id = ' . $wsc;
+        } else {
+            $sql4 = '';
+        }
+
+        $sql5 = ' GROUP BY item.workStudyCircle_id, item.product_id';
+
+        $sql = $sql1 . $sql2 . $sql3 . $sql4 . $sql5;
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll();
 
         return $result;
+    }
+
+    /**
+     * Crea un paginador para las Ordenes de Pedido
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    public function createPaginatorByHouseSupplyOrder(array $criteria = null, array $orderBy = null) {
+        return $this->createPaginator($criteria, $orderBy);
+    }
+
+    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
+
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+
+        if (($complejo = $criteria->remove('complejo'))) {
+            $queryBuilder->innerJoin('HSOrder.workStudyCircle', 'wsc');
+            $queryBuilder->andWhere('wsc.complejo = :complejo')
+                    ->setParameter('complejo', $complejo)
+            ;
+        }
+
+        if (($statusHouseSupplyOrder = $criteria->remove('statusHouseSupplyOrder'))) {
+            $queryBuilder->andWhere('HSOrder.type = :statusHouseSupplyOrder')
+                    ->setParameter('statusHouseSupplyOrder', $statusHouseSupplyOrder)
+            ;
+        }
+
+        if (($wsc = $criteria->remove('ownWsc'))) {
+            $queryBuilder
+                    ->innerJoin('HSOrder.workStudyCircle', 'wsc')
+                    ->andWhere('wsc.id = :wsc')
+                    ->setParameter('wsc', $wsc)
+            ;
+        }
+
+        parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
 
     function getAlias() {

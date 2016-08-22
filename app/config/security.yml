@@ -57,9 +57,11 @@ security:
             - ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_ASSIGNED
             - ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_REVIEWING
             - ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_APPROVING
-            - ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_NOTIFYING            
+            - ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_NOTIFYING 
+            - ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_STRATEGIC           
             - ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC
             - ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE            
+            - ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_STRATEGIC
             - ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_TACTIC
             - ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE
             - ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_FROM_TEMPLATE
@@ -100,6 +102,7 @@ security:
             - ROLE_SEIP_INDICATOR_EDIT_SPECIAL      
             - ROLE_SEIP_INDICATOR_UPLOAD_FILES      
             - ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL
+            - ROLE_SEIP_INDICATOR_RECALCULATE_RESULT
             
 #            Menú de resultados
             - ROLE_SEIP_RESULT_LIST_BY_MANAGEMENT
@@ -115,6 +118,7 @@ security:
             - ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_FINANZAS
             - ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_SHA
             - ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_SALUD
+            - ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_PEND
             - ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_UNFER
             - ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_UNPI
             - ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_UNOP
@@ -158,6 +162,7 @@ security:
             - ROLE_SEIP_PLANNING_VIEW_INDICATOR_STRATEGIC
             - ROLE_SEIP_PLANNING_VIEW_INDICATOR_TACTIC
             - ROLE_SEIP_PLANNING_VIEW_INDICATOR_OPERATIVE
+            - ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_STRATEGIC
             - ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_TACTIC
             - ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_OPERATIVE
             - ROLE_SEIP_PLANNING_VIEW_RESULT_TACTIC
@@ -183,6 +188,7 @@ security:
             - ROLE_SEIP_SIG_OBJECTIVE_EXPORT_MATRIZ
             - ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM
             - ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW
+            - ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_STRATEGIC
             - ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_TACTIC
             - ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE
             - ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_TACTIC
@@ -247,6 +253,7 @@ security:
             - ROLE_SEIP_WORK_STUDY_CIRCLES_ADD_USERS
             - ROLE_SEIP_WORK_STUDY_CIRCLES_EDIT_USERS
             - ROLE_SEIP_WORK_STUDY_CIRCLES_DELETE_USERS
+            - ROLE_SEIP_WORK_STUDY_CIRCLES_EDIT_COORDINATOR
             
             # Lista de Propuestas (Planificación)
             - ROLE_SEIP_WORK_STUDY_CIRCLES_STRATEGIC_PLAN
@@ -295,11 +302,15 @@ security:
             - ROLE_SEIP_SIP_SEACH_EMPLOYEES
             - ROLE_SEIP_VIEW_ALL_PERIODS
                 
-            #CASA ABASTO HOUSESUPPLY
+            # CASA ABASTO HOUSESUPPLY
             - ROLE_SEIP_HOUSESUPPLY_INVENTORY
+            - ROLE_SEIP_HOUSESUPPLY_VIEW_ALL_ORDERS  
+            - ROLE_SEIP_HOUSESUPPLY_DELIVERY_ORDERS
+            - ROLE_SEIP_HOUSESUPPLY_CANCEL_ORDERS
                
             # Permisos especiales
             - ROLE_SEIP_UPDATE_RESULT_OBJECTS
+            - ROLE_SEIP_MASTER_CONFIG_PERMISSIONS
             
         ROLE_API: ROLE_USER
         ROLE_INDICATOR: [ROLE_INDICATOR_READ,ROLE_INDICATOR_ADD_RESULT,ROLE_INDICATOR_EDIT]
@@ -317,7 +328,7 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js|compiled|translations)/
             security: false
         login_firewall:
-            pattern: ^/(login$|register|resetting)
+            pattern: ^/(login$|resetting)
             anonymous: ~
         cache:
             pattern: ^/media/cache
@@ -370,8 +381,8 @@ security:
     access_control:
         - { path: ^/compiled, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/translations, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }        
+        - { path: ^/register/, role: ROLE_SUPER_ADMIN }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         # Admin login page needs to be access without credential
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
