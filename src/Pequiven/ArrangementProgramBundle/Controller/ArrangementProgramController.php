@@ -798,14 +798,14 @@ class ArrangementProgramController extends SEIPController {
         $form->handleRequest($request);
 
         if ($request->isMethod('POST')) {
-            $data = $form->getData();            
+            $data = $form->getData();
             if ($form->isValid()) {
-                $autoOpenOnSave = $request->get('autoOpenOnSave', false);                
+                $autoOpenOnSave = $request->get('autoOpenOnSave', false);
                 if ($autoOpenOnSave == true) {
                     $this->setFlash('autoOpenOnSave', true);
                 }
                 if ($entity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC) {
-                    $entity->setIsAvailableInResult(false);                    
+                    $entity->setIsAvailableInResult(false);
                 }
 
                 if ($entity->getTimeline() === null) {
@@ -864,14 +864,14 @@ class ArrangementProgramController extends SEIPController {
         if ($entity->getType() == 0) {
             $em = $this->getDoctrine()->getManager();
             $config = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\ConfigurationNotification")->findBy(array('id' => $entity->getId(), 'typeObject' => 2));
-            
+
             foreach ($config as $value) {
                 $configUser = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\NotificationUser")->findBy(array('idObject' => $value->getId()));
-                foreach ($configUser as $valueUsers) {                    
+                foreach ($configUser as $valueUsers) {
                     $userStrategic = $valueUsers->getUser()->getFullNamePersonalNumber();
                     switch ($valueUsers->getAction()) {
-                        case 1:                            
-                            $userReview[] = $userStrategic;                            
+                        case 1:
+                            $userReview[] = $userStrategic;
                             break;
                         case 2:
                             $userNotify[] = $userStrategic;
@@ -881,18 +881,18 @@ class ArrangementProgramController extends SEIPController {
                             break;
                     }
                 }
-            }            
+            }
         }
-        
+
         $configUsers = [
             'userReview' => $userReview,
             'userNotify' => $userNotify,
             'userAprobe' => $userAprobe,
         ];
-        /*if ($entity->getType() == 0) {
-            var_dump($configUsers);
-            die();
-        }*/
+        /* if ($entity->getType() == 0) {
+          var_dump($configUsers);
+          die();
+          } */
         $rolesByType = array(
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_STRATEGIC', 'ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_STRATEGIC', 'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_STRATEGIC'),
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC', 'ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_TACTIC', 'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_TACTIC'),
@@ -965,7 +965,8 @@ class ArrangementProgramController extends SEIPController {
         $resultService = $this->container->get('seip.service.result');
         $date = $entity->getLastDateCalculateResult();
         $totales = $resultService->CalculateAdvancePenaltyAP($entity, $date);
-        
+        $periodActive = $this->getPeriodService()->getPeriodActive();
+
         return array(
             'entity' => $entity,
             'individualValues' => $individualValues,
@@ -984,7 +985,8 @@ class ArrangementProgramController extends SEIPController {
             'isAllowToNotity' => $isAllowToNotity,
             'isAllowSuperAdmin' => $isAllowSuperAdmin,
             'gerenciaSIG' => $gerenciaSIG,
-            'configUsers' => $configUsers
+            'configUsers' => $configUsers,
+            'periodActive' => $periodActive
         );
     }
 

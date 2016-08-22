@@ -341,17 +341,28 @@ class HouseSupplyOrderKitController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $id = $request->get('id');
         $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findOneById($id);
-        $wsc = $order->getWorkStudyCircle()->getId();
         $orderDetails = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->TotalOrder($id);
         $productKit = $order->getProductKit();
         $cantKits = count($order->getOrderItems()) / count($productKit->getProductKitItems());
         $arrayStatus = \Pequiven\SEIPBundle\Model\HouseSupply\HouseSupplyOrder::getStatus();
+
+        $user = $this->getUser()->getId();
+        $coord = $order->getWorkStudyCircle()->getCoordinator()->getId();
+
+        if ($user == $coord) {
+            $isCoord = true;
+        } else {
+            $isCoord = false;
+        }
+
+
 
         return $this->render('PequivenSEIPBundle:HouseSupply\Order:showkit.html.twig', array(
                     'order' => $order,
                     'productKit' => $productKit,
                     'cantKits' => $cantKits,
                     'orderDetails' => $orderDetails,
+                    'isCoord' => $isCoord,
                     'arrayStatus' => $arrayStatus
         ));
     }
