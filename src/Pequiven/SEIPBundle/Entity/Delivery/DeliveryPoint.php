@@ -3,14 +3,14 @@
 namespace Pequiven\SEIPBundle\Entity\Delivery;
 
 use Doctrine\ORM\Mapping as ORM;
-use Pequiven\SEIPBundle\Model\CEI\DeliveryPoint as Model;
+use Pequiven\SEIPBundle\Model\Delivery\DeliveryPoint as Model;
 
 /**
  * punto de despacho 
  *
  * @author Victor Tortolero <vart10.30@gmail.com>
  * @ORM\Table(name="seip_cei_DeliveryPoint")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Delivery\DeliveryPointRepository")
  */
 class DeliveryPoint extends Model {
 
