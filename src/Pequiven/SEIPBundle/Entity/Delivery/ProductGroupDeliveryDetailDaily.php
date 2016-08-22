@@ -32,14 +32,6 @@ class ProductGroupDeliveryDetailDaily extends BaseModel {
     private $productReportDelivery;
 
     /**
-     * punto de despacho
-     * @var \Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $deliveryPonint;
-
-    /**
      * Mes
      * @var integer
      * @ORM\Column(name="month",type="integer",length=2,nullable=false)
@@ -70,10 +62,6 @@ class ProductGroupDeliveryDetailDaily extends BaseModel {
         return $this->productReportDelivery;
     }
 
-    function getDeliveryPonint() {
-        return $this->deliveryPonint;
-    }
-
     function getMonth() {
         return $this->month;
     }
@@ -88,10 +76,6 @@ class ProductGroupDeliveryDetailDaily extends BaseModel {
 
     function setProductReportDelivery(\Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery $productReportDelivery) {
         $this->productReportDelivery = $productReportDelivery;
-    }
-
-    function setDeliveryPonint(\Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint $deliveryPonint) {
-        $this->deliveryPonint = $deliveryPonint;
     }
 
     function setMonth($month) {

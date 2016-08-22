@@ -31,8 +31,8 @@ class Warehouse extends Model {
     private $descripcion;
 
     /**
-     * @var Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint", mappedBy="warehouse")
+     * @var Pequiven\SEIPBundle\Entity\Delivery\DeliveryPoint
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\DeliveryPoint", mappedBy="warehouse")
      * */
     private $deliveryPoint;
 

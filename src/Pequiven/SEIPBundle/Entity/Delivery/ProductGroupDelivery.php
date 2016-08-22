@@ -25,12 +25,12 @@ class ProductGroupDelivery extends ModelBaseMaster {
     private $id;
 
     /**
-     * Reporte de plantilla
-     * @var ReportTemplateDelivery
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery",inversedBy="productGroupDelivery")
+     * Reporte de delivery
+     * @var \Pequiven\SEIPBundle\Entity\Delivery\DeliveryPoint
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\DeliveryPoint",inversedBy="productGroupDelivery")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $reportTemplateDelivery;
+    private $deliveryPoint;
 
     /**
      * Empresa
@@ -268,10 +268,6 @@ class ProductGroupDelivery extends ModelBaseMaster {
         return $this->id;
     }
 
-    function getReportTemplateDelivery() {
-        return $this->reportTemplateDelivery;
-    }
-
     function getCompany() {
         return $this->company;
     }
@@ -298,10 +294,6 @@ class ProductGroupDelivery extends ModelBaseMaster {
 
     function setId($id) {
         $this->id = $id;
-    }
-
-    function setReportTemplateDelivery(ReportTemplateDelivery $reportTemplateDelivery) {
-        $this->reportTemplateDelivery = $reportTemplateDelivery;
     }
 
     function setCompany(\Pequiven\SEIPBundle\Entity\CEI\Company $company) {
@@ -334,6 +326,14 @@ class ProductGroupDelivery extends ModelBaseMaster {
 
     function setProductionLine(\Pequiven\SEIPBundle\Entity\CEI\ProductionLine $productionLine) {
         $this->productionLine = $productionLine;
+    }
+
+    function getDeliveryPoint() {
+        return $this->deliveryPoint;
+    }
+
+    function setDeliveryPoint(\Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint $deliveryPoint) {
+        $this->deliveryPoint = $deliveryPoint;
     }
 
     public function init(\Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplateDelivery) {

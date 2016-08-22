@@ -1312,8 +1312,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             }
 
             if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_DELIVERY'))) {
-                //pequiven_report_template_delivery_index
-                $delivery = $this->factory->createItem('operations.planning.delivery', $this->getSubLevelOptions(array("route" => "pequiven_report_template_delivery_index",
+                //pequiven_delivery_point_index
+                $delivery = $this->factory->createItem('operations.planning.delivery', $this->getSubLevelOptions(array("route" => "pequiven_delivery_point_index",
                                 ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.planning.delivery', $section)));
 
@@ -1912,16 +1912,16 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         );
 
         $wsc = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy($searchwsc);
-        
-       
-            $child = $this->factory->createItem('housesupply', $this->getSubLevelOptions(array(
-                                'uri' => null,
-                                'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
-                            ))
-                    )
-                    ->setLabel($this->translate(sprintf('Casa - Abasto', $section)));
 
-            if ($wsc != null) {
+
+        $child = $this->factory->createItem('housesupply', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                            'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Casa - Abasto', $section)));
+
+        if ($wsc != null) {
             $child2 = $this->factory->createItem('housesupply.order', $this->getSubLevelOptions(array(
                                 'uri' => null,
                                     // 'labelAttributes' => array('icon' => 'fa fa-shopping-basket',),
@@ -1955,7 +1955,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         'labelAttributes' => array('icon' => 'fa fa-file-pdf-o')
                     ))
                     ->setLabel($this->translate(sprintf('Reportes', $section)));
-            
+
             $child->addChild($child2);
         }
 
