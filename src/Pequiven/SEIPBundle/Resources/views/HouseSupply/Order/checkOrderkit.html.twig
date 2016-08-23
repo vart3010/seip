@@ -240,8 +240,8 @@
                             {%set checked = ''%}
                         {%endif%}
 
-                        {% if member.getId == order.getWorkStudyCircle.getCoordinator.getId %}
-                            {% set disabled = '' %}
+                        {% if member.getId == order.getWorkStudyCircle.getcoordinator.getId %}
+                            {% set disabled = '' %}                            
                         {%else%}
                             {% set disabled = 'disabled' %}
                         {%endif%}
