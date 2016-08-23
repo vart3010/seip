@@ -241,9 +241,9 @@
                         {%endif%}
 
                         {% if member.getId == order.getWorkStudyCircle.getCoordinator.getId %}
-                            {% set disabled = 'false' %}
+                            {% set disabled = '' %}
                         {%else%}
-                            {% set disabled = 'true' %}
+                            {% set disabled = 'disabled' %}
                         {%endif%}
 
                         <tr>
@@ -253,7 +253,7 @@
                                 <form name="editmember" id="editmember_{{ member.id  }}" method="POST" action="{{ path("pequiven_housesupply_orderkitcheck_edit", { 'idOrder': order.id , 'idMember': member.id , 'idKit': order.getProductKit.getId  })}}">
                                     <center>
                                         <p class="assistance button-height">
-                                            <input type="checkbox" disabled="{{disabled}}" name="members[{{ member.id}}]" data="{{ member.id}}" value="1" {{checked}} {{disabled}} class="switch green-active mid-margin-right" data-text-on="Si" data-text-off="No">
+                                            <input type="checkbox" {{disabled}} name="members[{{ member.id}}]" data="{{ member.id}}" value="1" {{checked}} {{disabled}} class="switch green-active mid-margin-right" data-text-on="Si" data-text-off="No">
                                         </p>
                                     </center>
                                 </form>
