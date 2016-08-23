@@ -54,10 +54,10 @@ class Warehouse extends Model {
 
     /**
      * 
-     * @param \Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint $deliveryPoint
+     * @param \Pequiven\SEIPBundle\Entity\Delivery\DeliveryPoint $deliveryPoint
      * @return \Pequiven\SEIPBundle\Entity\CEI\Warehouse
      */
-    public function addDeliveryPoint(DeliveryPoint $deliveryPoint) {
+    public function addDeliveryPoint(\Pequiven\SEIPBundle\Entity\Delivery\DeliveryPoint $deliveryPoint) {
         $deliveryPoint->setDeliveryPoint($this);
 
         $this->deliveryPoint->add($deliveryPoint);
@@ -67,18 +67,18 @@ class Warehouse extends Model {
 
     /**
      * 
-     * @return type
+     * @param \Pequiven\SEIPBundle\Entity\Delivery\DeliveryPoint $deliveryPoint
      */
-    function getDeliveryPoint() {
-        return $this->deliveryPoint;
+    public function removeDeliveryPoint(\Pequiven\SEIPBundle\Entity\Delivery\DeliveryPoint $deliveryPoint) {
+        $this->deliveryPoint->removeElement($deliveryPoint);
     }
 
     /**
      * 
-     * @param \Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint $deliveryPoint
+     * @return type
      */
-    public function removeDeliveryPoint(DeliveryPoint $deliveryPoint) {
-        $this->deliveryPoint->removeElement($deliveryPoint);
+    function getDeliveryPoint() {
+        return $this->deliveryPoint;
     }
 
     function getId() {

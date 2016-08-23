@@ -24,6 +24,13 @@ class DeliveryPoint extends Model {
     private $id;
 
     /**
+     * Referencia del punto de despacho 
+     * @var String 
+     * @ORM\Column(name="ref",type="string",nullable=false)
+     */
+    private $ref;
+
+    /**
      * Nombre del punto de despacho 
      * @var String 
      * @ORM\Column(name="descripcion",type="string",nullable=false)
@@ -150,6 +157,14 @@ class DeliveryPoint extends Model {
 
     function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
         $this->period = $period;
+    }
+
+    function getRef() {
+        return $this->ref;
+    }
+
+    function setRef(String $ref) {
+        $this->ref = $ref;
     }
 
 }

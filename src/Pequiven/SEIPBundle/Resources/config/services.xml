@@ -457,6 +457,8 @@
             </call>
         </service>
         
+        
+        
         <service id="seip.service.workStudyCircle" class="Pequiven\SEIPBundle\Service\Politic\WorkStudyCircleService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
@@ -508,6 +510,10 @@
         <!--SERVICIOS DE DESPACHO-->
         <service id="pequiven.repository.report_template_delivery" class="Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery" />
+        </service>
+        
+        <service id="pequiven.repository.delivery_point" class="Pequiven\SEIPBundle\Repository\Delivery\DeliveryPointRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Delivery\DeliveryPoint" />
         </service>
         
         <service id="pequiven.repository.report_product_group" class="Pequiven\SEIPBundle\Repository\Delivery\ProductGroupDeliveryRepository">
