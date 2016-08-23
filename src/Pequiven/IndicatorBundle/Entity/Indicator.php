@@ -735,6 +735,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     private $showIndicatorParent = false;
     
+     /**
+     * @var boolean
+     * @ORM\Column(name="showChartChildren", type="boolean")
+     */
+    private $showChartChildren = false;
+    
     /**
      * ¿El Valor Plan del Indicador no acumula?
      * @var boolean
@@ -2852,5 +2858,16 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
 
     function setShowIndicatorParent($showIndicatorParent) {
         $this->showIndicatorParent = $showIndicatorParent;
+    }
+    
+    /*
+     * Metodos set y get para para mostar/ocultar los gráficos de los indicadores hijos del tablero del CPJAA
+     */
+    function getShowChartChildren() {
+        return $this->showChartChildren;
+    }
+
+    function setShowChartChildren($showChartChildren) {
+        $this->showChartChildren = $showChartChildren;
     }
 }
