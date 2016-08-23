@@ -148,14 +148,19 @@
                                         <th width="25%">Teléfono</th>
                                         <th width="15%">&nbsp;</th>                                        
                                     </tr>
-                                    {% for member in wsc.getMembers %}                                
+                                    {% for member in wsc.getMembers %}    
+                                        {% if member.getId == wsc.getCoordinator.getId %}
+                                            {% set disabled = 'false' %}
+                                        {%else%}
+                                            {% set disabled = 'true' %}
+                                        {%endif%}
                                         <tr>
                                             <td>{{ loop.index  }}</td>
                                             <td>{{ member.getOnlyFullNameUser }}</td>
                                             <td>{{ member.getCellphone }}</td>
                                             <td>                                                
                                                 <p class="assistance button-height">
-                                                    <input type="checkbox" name="members[{{ member.id}}]" data="{{ member.id}}" value="1" class="check-kit switch green-active mid-margin-right" data-text-on="Si" data-text-off="No">
+                                                    <input type="checkbox" disabled="{{disabled}}" name="members[{{ member.id}}]" data="{{ member.id}}" value="1" class="check-kit switch green-active mid-margin-right" data-text-on="Si" data-text-off="No">
                                                 </p>                                                
                                             </td>                                            
                                         </tr>
