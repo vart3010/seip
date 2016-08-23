@@ -188,6 +188,11 @@ abstract class Chart
      */
     const TYPE_CHART_PIE_MULTILEVEL_AIT = 34;
     
+    /**
+     * Gráfico  no se que cosa AIT 35
+     */
+    const TYPE_MS_LINE_AIT = 35;
+    
     const TYPE_EXAMPLE = 100;
        
     /**
@@ -260,7 +265,8 @@ abstract class Chart
             self::TYPE_CHART_PLAN_PYRAMID_3D_SECTIONED => 'chart.type.indicatorPyramidPlanSection',
             self::TYPE_CHART_STACKED_COLUMN_3D_BY_INDICATOR => 'chart.type.stackedColumn3dByIndicator',
             self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL_AND_ONLY_RESULT => 'chart.type.indicatorWithTrendlineHorizontalOnlyResult',
-            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL_AND_ONLY_RESULT => 'chart.type.multilevelPieAit',
+            self::TYPE_CHART_PIE_MULTILEVEL_AIT => 'chart.type.multilevelPieAit',
+            self::TYPE_MS_LINE_AIT => 'chart.type.mslineAit',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

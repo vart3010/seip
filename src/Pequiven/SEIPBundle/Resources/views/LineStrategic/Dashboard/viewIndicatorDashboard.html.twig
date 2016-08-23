@@ -85,6 +85,8 @@
                                 <div ng-controller="ChartsDashboardController">
                                     {% set Charts = indicator.getCharts %}
                                     {% set indicatorsChartDetailsByOrderShow = indicatorService.obtainIndicatorChartDetailsByOrderShow(indicator) %}
+                                    {% set indicatorsChildrens = indicator.getChildrens %}
+                                    
                                     <div class="standard-tabs margin-bottom" {#style="height: 600px;"#}>
                                         <ul class="tabs">
                                             {% set cont = 1 %}
@@ -107,11 +109,34 @@
                                                         {% endif %}
                                                         {% set grafico = "grafico"~loop.index %}
                                                         <li {% if cont == 1 %} class="active" {% endif %}>
-                                                            <a style="color: #000000;" href="#tab-{{ grafico }}">{{ description }} </a>
+                                                            <a style="color: #000000;" href="#tab-{{ grafico }}">{{ description }}</a>
                                                         </li>
                                                         {% set cont = cont + 1 %}
                                                     {% endif %}
                                                 {% endfor %}
+                                                
+                                                {% if indicatorsChildrens|length >0 %}
+                                                    {% for childrens in indicatorsChildrens %}
+                                                        {% if childrens.showChartChildren != 0%}
+                                                            {% set chartsDetailsChildrens = indicatorService.obtainIndicatorChartDetailsByOrderShow(childrens) %}
+                                                            {% for data in chartsDetailsChildrens %}
+                                                                {% set chart = data.chart %}
+                                                                {% set description = chart.shortDescription %}
+
+                                                                {% if data != null %}
+                                                                    {% if data.description != null %}
+                                                                        {% set description = data.description %}
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                                <li>
+                                                                    <a style="color: #000000;" href="#tab-grafico{{ cont }}">{{ description }}</a>
+                                                                </li>
+                                                                {% set cont = cont + 1 %}
+                                                            {% endfor %}
+                                                       {% endif %} 
+                                                    {% endfor %}
+                                                {% endif %}
+                                                
                                             {% else %}
                                                 {% for chart in Charts %}
                                                     {% set description = chart.shortDescription %}
@@ -130,6 +155,7 @@
                                             {% endif %}
                                         </ul>
                                         <div class="tabs-content" {#style="min-height: 500px;"#}>
+                                            {% set cont = 1 %}
                                             {% if indicatorsChartDetailsByOrderShow|length > 0 %}
                                                 {% for indicatorChartDetailsByOrderShow in indicatorsChartDetailsByOrderShow %}
                                                     {% set showChart = false %}
@@ -144,7 +170,7 @@
                                                         {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH') or chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH') %}
                                                             <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ "now"|date("n") }}','{{ grafico }}','100','500')">
                                                             {% else %}
-                                                                <div id=""  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ grafico }}','100','500')">
+                                                                <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ grafico }}','100','500')">
                                                                 {% endif %}
                                                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH')  %}
                                                                     <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
@@ -162,8 +188,26 @@
                                                                 {% endif %}
                                                                 <span id="{{ grafico }}"></span>
                                                             </div>
+                                                            {% set cont = cont + 1 %}
                                                         {% endif %}
                                                     {% endfor %}
+                                                    
+                                                    {% if indicatorsChildrens|length >0 %}
+                                                        {% for childrens in indicatorsChildrens %}
+                                                            {% if childrens.showChartChildren != 0%}
+                                                                {% set chartsDetailsChildrens = indicatorService.obtainIndicatorChartDetailsByOrderShow(childrens) %}
+                                                                {% for data in chartsDetailsChildrens %}
+                                                                    {% set chart = data.chart %}
+                                                                    {% set grafico = "grafico"~cont %}
+                                                                        <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ childrens.id }},'{{ grafico }}','100','500')">
+                                                                            <span id="{{ grafico }}"></span>
+                                                                        </div>
+                                                                    {% set cont = cont + 1 %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                 
                                                 {% else %}
                                                     {% for chart in Charts %}
                                                         {% set grafico = "grafico"~loop.index %}
