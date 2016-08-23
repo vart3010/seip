@@ -150,20 +150,17 @@
                                     </tr>
                                     {% for member in wsc.getMembers %}    
                                         {% if member.getId == wsc.getCoordinator.getId %}
-                                            {% set disabled = '' %}
-                                        {%else%}
-                                            {% set disabled = 'disabled' %}
+                                            <tr>
+                                                <td>{{ loop.index  }}</td>
+                                                <td>{{ member.getOnlyFullNameUser }}</td>
+                                                <td>{{ member.getCellphone }}</td>
+                                                <td>                                                
+                                                    <p class="assistance button-height">
+                                                        <input type="checkbox" name="members[{{ member.id}}]" data="{{ member.id}}" value="1" class="check-kit switch green-active mid-margin-right" data-text-on="Si" data-text-off="No">
+                                                    </p>                                                
+                                                </td>                                            
+                                            </tr>
                                         {%endif%}
-                                        <tr>
-                                            <td>{{ loop.index  }}</td>
-                                            <td>{{ member.getOnlyFullNameUser }}</td>
-                                            <td>{{ member.getCellphone }}</td>
-                                            <td>                                                
-                                                <p class="assistance button-height">
-                                                    <input type="checkbox" {{disabled}} name="members[{{ member.id}}]" data="{{ member.id}}" value="1" class="check-kit switch green-active mid-margin-right" data-text-on="Si" data-text-off="No">
-                                                </p>                                                
-                                            </td>                                            
-                                        </tr>
                                     {% endfor %}
                                 </table>
                             </td>
