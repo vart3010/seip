@@ -4,6 +4,13 @@
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
+{% block before_body %}
+    {{ contentHeader(
+        ('Planificación de la Producción') ,
+         (plant_report.reportTemplate ~' / '~plant_report.plant)         
+    ) }}
+{% endblock %}
+
 {% block body %}
     <fieldset class="fieldset">
         <legend class="legend">{{ 'pequiven_seip.plant_report.plant_report'|trans }}</legend>
@@ -122,11 +129,11 @@
         {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/groupsProducts.html.twig' %}
         <br /><br />
     {% endif %}
-        {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/services.html.twig' %}
+    {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/services.html.twig' %}
     <br /><br />
-        {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/gasFlow.html.twig' %}
+    {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/gasFlow.html.twig' %}
     <br /><br />
-        {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/serviceFactor.html.twig' %}
+    {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/serviceFactor.html.twig' %}
     <br /><br />
     {% if(plant_report.plant.childrens|length==0) %}
         <p class="button-height align-right">

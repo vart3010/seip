@@ -53,6 +53,38 @@ class ProductReportController extends SEIPController {
         return $this->handleView($view);
     }
 
+    public function exportAction(Request $request) {
+        $periodService = $this->getPeriodService();
+        $factorConversionService = $this->getFactorConversionService();
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('show.html'))
+                ->setTemplateVar($this->config->getResourceName())
+                ->setData([
+            $this->config->getResourceName() => $this->findOr404($request),
+            'isAllowPlanningReport' => $periodService->isAllowPlanningReport(),
+            'factorConversionService' => $factorConversionService,
+            'productReportService' => $this->getProductReportService(),
+            'dateNow' => new \DateTime(date("Y-m-d", strtotime("-1 day")))
+                ])
+        ;
+
+        $data = array(
+            $this->config->getResourceName() => $this->findOr404($request),
+            'isAllowPlanningReport' => $periodService->isAllowPlanningReport(),
+            'factorConversionService' => $factorConversionService,
+            'productReportService' => $this->getProductReportService(),
+            'dateNow' => new \DateTime(date("Y-m-d", strtotime("-1 day")))
+        );
+        
+        $productPlant = 'hola';
+
+        $twig = 'PequivenSEIPBundle:HouseSupply\Reports:exportOrderKit.html.twig';
+        $archiveTittle = 'Planificación de la Producción de ' . $productPlant;
+        $tittle = 'Planificación de la Producción';
+        $this->getReportService()->generatePDF($data, $tittle, $twig, 'P', $archiveTittle);
+    }
+
     public function showGroupsAction(Request $request) {
 
         $productReport = $this->get("pequiven.repository.product_report")->findOneBy(array("id" => $request->get("id")));
