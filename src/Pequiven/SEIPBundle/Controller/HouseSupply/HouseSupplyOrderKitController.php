@@ -314,7 +314,7 @@ class HouseSupplyOrderKitController extends SEIPController {
         $options['idKit'] = $request->get('kit');
         $options['cycle'] = $request->get('cycle');
 
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
 
 //VALIDO SI EN EL CICLO TIENE PEDIDOS REALIZADOS
         $searchCriteria = array(
@@ -550,7 +550,7 @@ class HouseSupplyOrderKitController extends SEIPController {
     public function DeliveryOrderAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
 
-        $allOrders = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('type' => array(1, 4)));
+        $allOrders = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('type' => 4));
         $members = array();
 
         if ($request->get('idOrder')) {
@@ -710,7 +710,7 @@ class HouseSupplyOrderKitController extends SEIPController {
     public function CancelOrderAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
 
-        $allOrders = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('type' => array(4)));
+        $allOrders = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('type' => array(1, 4)));
         $members = array();
 
         if ($request->get('idOrder')) {
