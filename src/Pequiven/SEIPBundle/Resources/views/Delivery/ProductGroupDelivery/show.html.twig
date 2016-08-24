@@ -12,7 +12,7 @@
 {% endblock %}#}
 
 {% block before_body %}
-    {{ contentHeader(({(path("pequiven_report_template_delivery_show",{id: product_group_delivery.reportTemplateDelivery.id})):("Linea de Negocio"|trans)}),
+    {{ contentHeader(({(path("pequiven_delivery_point_show",{id: product_group_delivery.deliveryPoint.id})):("Linea de Negocio"|trans)}),
                         ("Detalle"|trans )  )}}
 {% endblock %}
 
@@ -24,9 +24,9 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'report_template_delivery.title'|trans }}</label>
-                    <a href="{{ path("pequiven_report_template_delivery_show",{"id":product_group_delivery.reportTemplateDelivery.id}) }}">
+                    <a href="{{ path("pequiven_report_template_delivery_show",{"id":product_group_delivery.deliveryPoint.id}) }}">
                         <i class="fa fa-file-o"></i>&nbsp;
-                        {{ product_group_delivery.reportTemplateDelivery }}
+                        {{ product_group_delivery.deliveryPoint }}
                     </a>
                 </p>
             </div>    
@@ -36,24 +36,7 @@
                     {{ product_group_delivery.productionLine }}
                 </p>
             </div>
-            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'Company'|trans }}</label>
-                    {{ product_group_delivery.company }}
-                </p>
-            </div>
-            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'Location'|trans }}</label>
-                    {{ product_group_delivery.location }}
-                </p>
-            </div>
-            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'Entity'|trans }}</label>
-                    {{ product_group_delivery.entity }}
-                </p>
-            </div>
+            
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Enabled'|trans }}</label>

@@ -233,5 +233,16 @@ final class SeipEvents {
      * @var string
      */
     const PRODUCT_DELIVERY_POINT_PRE_PERSIST = 'pequiven.delivery_point.pre_create';
+    
+    /**
+     * Este evento se ejecuta cuando se crea un grupo de productos - despacho
+     *
+
+     *  * The event listener receives an
+     * Sylius\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     *
+     * @var string
+     */
+    const PRODUCT_PRODUCT_GROUP_DELIVERY_PRE_PERSIST = 'pequiven.product_group_delivery.pre_create';
 
 }

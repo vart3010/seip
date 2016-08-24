@@ -1,5 +1,5 @@
 pequiven_product_group_delivery_create:
-    path: /{reportTemplateDelivery}/create
+    path: /{deliveryPoint}/create
     defaults:
         _controller: pequiven.controller.product_group_delivery:createAction
         _sylius:

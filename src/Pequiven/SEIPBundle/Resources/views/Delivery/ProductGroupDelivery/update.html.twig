@@ -6,7 +6,7 @@
 
 {% block before_body %}
     {{ contentHeader(
-        {(path('pequiven_report_template_delivery_show',{id:product_group_delivery.reportTemplateDelivery.id })):("pequiven_seip.product_group_delivery.product_group"|trans )},
+        {(path('pequiven_report_template_delivery_show',{id:product_group_delivery.deliveryPoint.id })):("pequiven_seip.product_group_delivery.product_group"|trans )},
         ( 'pequiven.update'|trans({},'messages') )
     ) }}
 {% endblock %}

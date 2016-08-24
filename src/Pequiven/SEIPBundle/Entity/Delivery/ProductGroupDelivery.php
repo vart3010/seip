@@ -32,40 +32,40 @@ class ProductGroupDelivery extends ModelBaseMaster {
      */
     private $deliveryPoint;
 
-    /**
-     * Empresa
-     * @var \Pequiven\SEIPBundle\Entity\CEI\Company
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Company")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $company;
-
-    /**
-     * Localizacion (complejo).
-     * @var \Pequiven\SEIPBundle\Entity\CEI\Location
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Location")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $location;
-
-    /**
-     * Entidad donde esta el producto
-     * 
-     * @var \Pequiven\SEIPBundle\Entity\CEI\Entity
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Entity")
-     */
-    private $entity;
-
-    /**
-     * Planta que hace el producto
-     * 
-     * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",inversedBy="plantReport")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $plant;
+//    /**
+//     * Empresa
+//     * @var \Pequiven\SEIPBundle\Entity\CEI\Company
+//     *
+//     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Company")
+//     * @ORM\JoinColumn(nullable=false)
+//     */
+//    private $company;
+//
+//    /**
+//     * Localizacion (complejo).
+//     * @var \Pequiven\SEIPBundle\Entity\CEI\Location
+//     *
+//     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Location")
+//     * @ORM\JoinColumn(nullable=false)
+//     */
+//    private $location;
+//
+//    /**
+//     * Entidad donde esta el producto
+//     * 
+//     * @var \Pequiven\SEIPBundle\Entity\CEI\Entity
+//     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Entity")
+//     */
+//    private $entity;
+//
+//    /**
+//     * Planta que hace el producto
+//     * 
+//     * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
+//     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",inversedBy="plantReport")
+//     * @ORM\JoinColumn(nullable=true)
+//     */
+//    private $plant;
 
     /**
      * Productos del reporte
@@ -133,6 +133,8 @@ class ProductGroupDelivery extends ModelBaseMaster {
      * @ORM\Column(name="programa",type="float")
      */
     private $program = 0;
+
+    
 
     /**
      * Constructor
@@ -268,22 +270,6 @@ class ProductGroupDelivery extends ModelBaseMaster {
         return $this->id;
     }
 
-    function getCompany() {
-        return $this->company;
-    }
-
-    function getLocation() {
-        return $this->location;
-    }
-
-    function getEntity() {
-        return $this->entity;
-    }
-
-    function getPlant() {
-        return $this->plant;
-    }
-
     function getUsers() {
         return $this->users;
     }
@@ -294,22 +280,6 @@ class ProductGroupDelivery extends ModelBaseMaster {
 
     function setId($id) {
         $this->id = $id;
-    }
-
-    function setCompany(\Pequiven\SEIPBundle\Entity\CEI\Company $company) {
-        $this->company = $company;
-    }
-
-    function setLocation(\Pequiven\SEIPBundle\Entity\CEI\Location $location) {
-        $this->location = $location;
-    }
-
-    function setEntity(\Pequiven\SEIPBundle\Entity\CEI\Entity $entity) {
-        $this->entity = $entity;
-    }
-
-    function setPlant(\Pequiven\SEIPBundle\Entity\CEI\Plant $plant) {
-        $this->plant = $plant;
     }
 
     function setUsers(\Pequiven\SEIPBundle\Entity\User $users) {
@@ -332,14 +302,16 @@ class ProductGroupDelivery extends ModelBaseMaster {
         return $this->deliveryPoint;
     }
 
-    function setDeliveryPoint(\Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint $deliveryPoint) {
+    function setDeliveryPoint(DeliveryPoint $deliveryPoint) {
         $this->deliveryPoint = $deliveryPoint;
     }
 
-    public function init(\Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplateDelivery) {
-        $this->setReportTemplateDelivery($reportTemplateDelivery);
-        $this->setCompany($reportTemplateDelivery->getCompany());
-        $this->setLocation($reportTemplateDelivery->getLocation());
-    }
-
+//    public function init(DeliveryPoint $deliveryPointId) {
+//        $this->setDeliveryPoint($deliveryPointId);
+//        $this->setCompany($deliveryPointId->getCompany());
+//        $this->setLocation($deliveryPointId->getLocation());
+//        #$this->setReportTemplateDelivery($reportTemplateDelivery);
+//        #$this->setCompany($reportTemplateDelivery->getCompany());
+//        #$this->setLocation($reportTemplateDelivery->getLocation());
+//    }
 }
