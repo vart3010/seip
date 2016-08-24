@@ -33,10 +33,15 @@
 
 {% block body %}    
 
-    {# {{ boxRender.renderBox('pequiven_seip_box_linestrategic_iconsnavbar')|raw }}#}    
-    <hr class="hr-linestrategic-icons" />
-    <br><br>
+    {# {{ boxRender.renderBox('pequiven_seip_box_linestrategic_iconsnavbar')|raw }}#}        
     <table width="100%">
+        <tr>
+            <td style="height: 4px; background-color: #585858; font-size: 1pt;">
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table width="100%">        
         <tr>
             <td width="30%" class="text-center" style="vertical-align: middle; min-height: 400px;">
                 <div style="display: inline-block; width: 100%; height: 100%" ng-controller="DashboardController" ng-init="renderWidgetIndicatorStrategic('{{ indicator.ref }}',{{ data|json_encode() }},'100%','150px')">
