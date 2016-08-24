@@ -371,6 +371,13 @@
         <service id="pequiven.form.detail_consumer_planning_servicefactor" class="Pequiven\SEIPBundle\Form\DataLoad\ServiceFactor\DetailConsumerPlanningServiceFactorType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_servicefactor_detailconsumerplanningservicefactor" />
         </service>
+        
+        <!--TYPES DESPACHO-->
+        <service id="pequiven.form.delivery.delivery_point" class="Pequiven\SEIPBundle\Form\Delivery\DeliveryPointType">
+            <tag name="form.type" alias="pequiven_seipbundle_delivery_deliverypoint" />
+        </service>
+        
+        
         <service id="pequiven_seip.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

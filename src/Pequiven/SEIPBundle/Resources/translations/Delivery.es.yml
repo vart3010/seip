@@ -1,5 +1,6 @@
 delivery_point:
     title: Puntos De Despacho
+    title2: Punto De Despacho
     name: Nombre
     period: Periodo
     actions:
@@ -10,7 +11,10 @@ delivery_point:
         name: Nombre
         warehouse: Almacen
         period: Periodo
-
+    add: Nuevo Punto de Despacho
+    form:
+        warehouse: Almacén
+        enabled: Activo
 delivery_product:
     type:
         type: Tipo

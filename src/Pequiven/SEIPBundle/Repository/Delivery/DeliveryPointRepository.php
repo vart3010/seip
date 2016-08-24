@@ -3,6 +3,7 @@
 namespace Pequiven\SEIPBundle\Repository\Delivery;
 
 use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Repositorio de report template despacho
@@ -19,7 +20,7 @@ class DeliveryPointRepository extends SeipEntityRepository {
 
         $queryBuilder = $this->getCollectionQueryBuilder();
 
-        $this->applyCriteria($queryBuilder, $criteria);
+
         $user = $this->getUser();
 
         if (!$this->getSecurityContext()->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_DELIVERY_TEMPLATES_ALL'))) {
@@ -30,16 +31,35 @@ class DeliveryPointRepository extends SeipEntityRepository {
             ;
         }
 
+        $this->applyCriteria($queryBuilder, $criteria);
         $this->applySorting($queryBuilder, $orderBy);
 
         return $this->getPaginator($queryBuilder);
     }
 
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
-        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $criteria = new ArrayCollection($criteria);
+        #$queryBuilder->leftJoin("rt.plantReports","rt_pr");
 
-        if (($description = $criteria->remove("dp.description"))) {
-            $queryBuilder->andWhere($queryBuilder->expr()->like("dp.descripcion", "'%" . $description . "%'"));
+        if (($ref = $criteria->remove("dp.ref"))) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like("dp.ref", "'%" . $ref . "%'"));
+        }
+        if (($descripcion = $criteria->remove("dp.descripcion"))) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like("dp.descripcion", "'%" . $descripcion . "%'"));
+        }
+        $warehouse = $criteria->remove("dp.warehouse");
+        if ($warehouse != null) {
+            $queryBuilder
+                    ->innerJoin('dp.warehouse', 'dp_w')
+                    ->andWhere($queryBuilder->expr()->like("dp_w.descripcion", $queryBuilder->expr()->literal("%" . $warehouse . "%")))
+            ;
+        }
+        $period = $criteria->remove("dp.period");
+        if ($period != null) {
+            $queryBuilder
+                    ->innerJoin('dp.period', 'dp_p')
+                    ->andWhere($queryBuilder->expr()->like("dp_p.name", $queryBuilder->expr()->literal("%" . $period . "%")))
+            ;
         }
 
         $applyPeriodCriteria = $criteria->remove('applyPeriodCriteria');

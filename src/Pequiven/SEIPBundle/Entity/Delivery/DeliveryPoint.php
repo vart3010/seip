@@ -4,6 +4,7 @@ namespace Pequiven\SEIPBundle\Entity\Delivery;
 
 use Doctrine\ORM\Mapping as ORM;
 use Pequiven\SEIPBundle\Model\Delivery\DeliveryPoint as Model;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * punto de despacho 
@@ -11,6 +12,7 @@ use Pequiven\SEIPBundle\Model\Delivery\DeliveryPoint as Model;
  * @author Victor Tortolero <vart10.30@gmail.com>
  * @ORM\Table(name="seip_cei_DeliveryPoint")
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Delivery\DeliveryPointRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class DeliveryPoint extends Model {
 
@@ -163,8 +165,16 @@ class DeliveryPoint extends Model {
         return $this->ref;
     }
 
-    function setRef(String $ref) {
+    function setRef($ref) {
         $this->ref = $ref;
+    }
+
+    public function __toString() {
+        $_toString = "-";
+        if ($this->getRef()) {
+            $_toString = (string) $this->getRef();
+        }
+        return $_toString;
     }
 
 }
