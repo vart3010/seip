@@ -189,9 +189,14 @@ abstract class Chart
     const TYPE_CHART_PIE_MULTILEVEL_AIT = 34;
     
     /**
-     * Gráfico  no se que cosa AIT 35
+     * Gráfico  para mostrar el %de meta de AIT
      */
     const TYPE_MS_LINE_AIT = 35;
+    
+    /**
+     * Gráfico  para mostrar el % de cumplimiento de los indicadores asociados (producción)
+     */
+    const TYPE_MS_LINE_PROD = 36;
     
     const TYPE_EXAMPLE = 100;
        
@@ -267,6 +272,7 @@ abstract class Chart
             self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL_AND_ONLY_RESULT => 'chart.type.indicatorWithTrendlineHorizontalOnlyResult',
             self::TYPE_CHART_PIE_MULTILEVEL_AIT => 'chart.type.multilevelPieAit',
             self::TYPE_MS_LINE_AIT => 'chart.type.mslineAit',
+            self::TYPE_MS_LINE_PROD => 'chart.type.mslineProd',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          
