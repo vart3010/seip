@@ -657,6 +657,8 @@ chart:
         stackedColumn3dByIndicator: Columna Apilada de Variables de Indicador
         indicatorWithTrendlineHorizontalOnlyResult: Indicador con una línea horizontal para comparar el valor de los resultados con algún valor fijo
         multilevelPieAit: Indicador tipo torta con subcategorias para AIT
+        mslineAit: Resultado del % de la meta de acuerdo a la resolución de casos (AIT)
+        mslineProd: Resultado del % de cumplimiento de los indicadores asociados con respecto a la meta fijada 
         example: Ejemplo
         
     

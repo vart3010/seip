@@ -7763,7 +7763,108 @@ angular.module('seipModule.controllers', [])
                     MsLineAit.render();
                 });
             };
+            
+//36.-Grafico para mostrar el % de cumplimiento de los indicadores hijos de produccion (3920)....
+            $scope.chargeMslineProd = function (indicatorId, render, width, height) {
+                FusionCharts.ready(function () {
+                    var MsLineProd = new FusionCharts({
+                        type: 'msline',
+                        renderAt: render,
+                        width: '100%',
+                        height: '350',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": {
+                                "caption": "% de Cumplimiento Producción CPJAA",
+                                "captionFontSize": "14",
+                                "subcaptionFontBold": "0",
+                                "paletteColors": "#8B0000,#1aaf5d,#6A5ACD",
+                                "bgcolor": "#ffffff",
+                                "showBorder": "0",
+                                "showShadow": "0",
+                                "showCanvasBorder": "0",
+                                "usePlotGradientColor": "0",
+                                "legendBorderAlpha": "0",
+                                "legendShadow": "0",
+                                "showAxisLines": "10",
+                                "showAlternateHGridColor": "0",
+                                "divlineThickness": "1",
+                                "divLineIsDashed": "1",
+                                "divLineDashLen": "1",
+                                "divLineGapLen": "0",
+                                "xAxisName": "Meses",
+                                "yAxisName": "% de cumplimiento",
+                                "showValues": "0",
+                            },
+                            "categories": [
+                                {
+                                    "category": [
+                                        { "label": "Enero" }, 
+                                        { "label": "Febrero" }, 
+                                        { "label": "Marzo" },
+                                        { "label": "Abril" }, 
+                                        { "label": "Mayo" }, 
+                                        { "label": "Junio" }, 
+                                        { "label": "Julio" },
 
+                                    ]
+                                }
+                            ],
+                            "dataset": [
+                                {
+                                    "seriesname": "Ejecución de Producción de Agua Industrial",
+                                    "data": [
+                                        { "value": "100" }, 
+                                        { "value": "94.01" }, 
+                                        { "value": "94.92" }, 
+                                        { "value": "95.08" }, 
+                                        { "value": "97.64" }, 
+                                        { "value": "99.14" }, 
+                                        { "value": "92.74" }
+                                    ]
+                                }, 
+                                {
+                                    "seriesname": "Ejecución de Producción de Energía Eléctrica",
+                                    "data": [
+                                        { "value": "110.63" }, 
+                                        { "value": "92.1" }, 
+                                        { "value": "94.65" }, 
+                                        { "value": "84.46" }, 
+                                        { "value": "88.28" }, 
+                                        { "value": "101.89" }, 
+                                        { "value": "80" }
+                                    ]
+                                },
+                                {
+                                    "seriesname": "Cumplimiento de Plan de Despacho del Terminal Maritimo",
+                                    "data": [
+                                        { "value": "104.08" }, 
+                                        { "value": "94.11" }, 
+                                        { "value": "86.76" }, 
+                                        { "value": "84.27" }, 
+                                        { "value": "87.23" }, 
+                                        { "value": "100.75" }, 
+                                        { "value": "107.8" }
+                                    ]
+                                }
+                            ], 
+                            "trendlines": [
+                                {
+                                    "line": [
+                                        {
+                                            "startvalue": "100",
+                                            "color": "#006400",
+                                            "valueOnRight": "1",
+                                            "displayvalue": "Meta (100%)"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    })
+                    MsLineProd.render();
+                });
+            };
 
             //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
             $scope.chargeChartProductionReportTemplateByDate = function (reportTemplateId, dateSearch, render, width, height) {
