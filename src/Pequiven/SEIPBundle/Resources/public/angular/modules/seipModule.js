@@ -7574,111 +7574,111 @@ angular.module('seipModule.controllers', [])
                                 "piebordercolor": "#FFFFFF",
                                 "hoverfillcolor": "#CCCCCC",
                                 "numberprefix": "$",
-                                "plottooltext": "$label, $value",
+//                                "plottooltext": "$label, $value",
                                 "theme": "fint"
                             },
                             "category": [{
                                     "label": "Resolución de Casos",
                                     "color": "#ffffff",
-                                    "value": "150",
+//                                    "value": "150",
                                     "category": [
                                         {
-                                            "label": "Activos",
+                                            "label": "Activos (35)",
                                             "color": "#f8bd19",
                                             "value": "35",
-                                            "tooltext": "Activos, $value",
+//                                            "tooltext": "Activos, $value",
                                             "category": [
                                                 {
-                                                    "label": "Asignado",
+                                                    "label": "Asignado (1)",
                                                     "color": "#f8bd19",
-                                                    "value": "1"
+                                                    "value": "7",
                                                 }, {
-                                                    "label": "Cerrado",
+                                                    "label": "Cerrado (27)",
                                                     "color": "#f8bd19",
                                                     "value": "27"
                                                 }, {
-                                                    "label": "Nuevo",
+                                                    "label": "Nuevo (7) ",
                                                     "color": "#f8bd19",
-                                                    "value": "7"
+                                                    "value": "15"
                                                 }]
                                         }, {
-                                            "label": "Soporte en Sitio",
+                                            "label": "Soporte en Sitio (176)",
                                             "color": "#33ccff",
                                             "value": "176",
-                                            "tooltext": "Soporte en sitio, $value",
+//                                            "tooltext": "Soporte en sitio, $value",
                                             "category": [{
-                                                    "label": "Asignado",
+                                                    "label": "Asignado (16)",
                                                     "color": "#33ccff",
                                                     "value": "16"
                                                 }, {
-                                                    "label": "Cerrado",
+                                                    "label": "Cerrado (135)",
                                                     "color": "#33ccff",
                                                     "value": "135"
                                                 }, {
-                                                    "label": "En progreso",
+                                                    "label": "En progreso (4)",
                                                     "color": "#33ccff",
-                                                    "value": "4"
+                                                    "value": "10"
                                                 }, {
-                                                    "label": "Nuevo",
+                                                    "label": "Nuevo (18)",
                                                     "color": "#33ccff",
                                                     "value": "18"
                                                 }, {
-                                                    "label": "Pendiente",
+                                                    "label": "Pendiente (3)",
                                                     "color": "#33ccff",
-                                                    "value": "3"
+                                                    "value": "10"
                                                 }]
                                         }, {
-                                            "label": "Infraestructura",
+                                            "label": "Infraestructura (133)",
                                             "color": "#ccff66",
                                             "value": "133",
-                                            "tooltext": "Infraestructura, $value",
+//                                            "tooltext": "Infraestructura, $value",
                                             "category": [{
-                                                    "label": "Asignado",
+                                                    "label": "Asignado (2)",
                                                     "color": "#ccff66",
-                                                    "value": "2"
+                                                    "value": "7"
                                                 }, {
-                                                    "label": "Cerrado",
+                                                    "label": "Cerrado (124)",
                                                     "color": "#ccff66",
                                                     "value": "124"
                                                 }, {
-                                                    "label": "En progreso",
+                                                    "label": "En progreso (2)",
                                                     "color": "#ccff66",
-                                                    "value": "2"
+                                                    "value": "7"
                                                 }, {
-                                                    "label": "Nuevo",
+                                                    "label": "Nuevo (5)",
                                                     "color": "#ccff66",
-                                                    "value": "5"
+                                                    "value": "10"
                                                 }]
                                         }, {
-                                            "label": "Aplicaciones",
+                                            "label": "Aplicaciones (41)",
                                             "color": "#ffcccc",
                                             "value": "41",
-                                            "tooltext": "Aplicaciones, $value",
+//                                            "tooltext": "Aplicaciones, $value",
                                             "category": [
                                                 {
-                                                    "label": "Cerrado",
+                                                    "label": "Cerrado (37)",
                                                     "color": "#ffcccc",
                                                     "value": "37"
                                                 }, {
-                                                    "label": "Nuevo",
+                                                    "label": "Nuevo (4)",
                                                     "color": "#ffcccc",
-                                                    "value": "4"
+                                                    "value": "10"
                                                 }]
                                         }, {
-                                            "label": "Telecom",
-                                            "color": "#ccff66",
+                                            "label": "Telecom (23)",
+                                            "color": "#6A5ACD",
                                             "value": "23",
-                                            "tooltext": "Telecom, $value",
+//                                            "tooltext": "Telecom, $value",
                                             "category": [
                                                 {
-                                                    "label": "Cerrado",
-                                                    "color": "#ccff66",
+                                                    "label": "Cerrado (21)",
+                                                    "color": "#6A5ACD",
                                                     "value": "21"
                                                 },
                                                 {
-                                                    "label": "Nuevo",
-                                                    "color": "#ccff66",
-                                                    "value": "2"
+                                                    "label": "Nuevo (2)",
+                                                    "color": "#6A5ACD",
+                                                    "value": "7"
                                                 }]
                                         }]
                                 }]
@@ -7700,7 +7700,7 @@ angular.module('seipModule.controllers', [])
                         dataFormat: 'json',
                         dataSource: {
                             "chart": {
-                                "caption": "% de Atención",
+                                "caption": "% de Meta AIT",
                                 "captionFontSize": "14",
                                 "subcaptionFontSize": "14",
                                 "subcaptionFontBold": "0",
@@ -7735,7 +7735,7 @@ angular.module('seipModule.controllers', [])
                             ],
                             "dataset": [
                                 {
-                                    "seriesname": "% de Meta AIT",
+                                    "seriesname": "% de cumplimiento de Meta",
                                     "data": [
                                         {"value": "98"},
                                         {"value": "62,67"},
