@@ -314,21 +314,37 @@ class HouseSupplyOrderKitController extends SEIPController {
         $options['idKit'] = $request->get('kit');
         $options['cycle'] = $request->get('cycle');
 
-        $members = $request->get('members');
+        $em = $this->getDoctrine()->getManager();
+
+//VALIDO SI EN EL CICLO TIENE PEDIDOS REALIZADOS
+        $searchCriteria = array(
+            'cycle' => $options['cycle'],
+            'workStudyCircle' => $options['idWsc'],
+            'type' => array(1, 4, 5),
+        );
+
+        $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy($searchCriteria);
+        $this->get('session')->getFlashBag()->add('success', "Pedido Registrado Exitosamente");
+
+        if ((count($order) == 0) || ($order == null)) {
+
+            $members = $request->get('members');
 
 //REGISTRO LOS DOCUMENTOS DE LA ORDEN
-        foreach ($members as $key => $member) {
-            if ($member == 1) {
-                $options['idMember'] = $key;
-                $this->addItemAction($options);
+            foreach ($members as $key => $member) {
+                if ($member == 1) {
+                    $options['idMember'] = $key;
+                    $this->addItemAction($options);
+                }
             }
+
+            $newOrder = $this->registerAction($options);
+            $this->refreshTotalOrder($newOrder);
+
+            return $this->redirect($this->generateUrl("pequiven_housesupply_orderkit_show", array("id" => $newOrder)));
+        } else {
+            return $this->redirect($this->generateUrl("pequiven_housesupply_orderkit_show", array("id" => $order[0]->getId())));
         }
-
-        $newOrder = $this->registerAction($options);
-        $this->refreshTotalOrder($newOrder);
-
-        $this->get('session')->getFlashBag()->add('success', "Pedido Registrado Exitosamente");
-        return $this->redirect($this->generateUrl("pequiven_housesupply_orderkit_show", array("id" => $newOrder)));
     }
 
     /**
@@ -694,7 +710,7 @@ class HouseSupplyOrderKitController extends SEIPController {
     public function CancelOrderAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
 
-        $allOrders = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('type' => array(4)));
+        $allOrders = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy(array('type' => array(1, 4)));
         $members = array();
 
         if ($request->get('idOrder')) {

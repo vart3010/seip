@@ -50,13 +50,11 @@
                         </span>
                     </a>
                     <span id="{{ indicator.ref }}">
-                    </span>  
-                    <br>
+                    </span>                      
                     <center>
                         <a href="javascript:history.back()" class="text-center button red-gradient glossy">
                             <li class="fa fa-undo" aria-hidden="true">
-                                <span style="font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;">
-                                    <b> Regresar</b>
+                                <span style="font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;">                                   
                                 </span>
                             </li>
                         </a>
@@ -124,7 +122,6 @@
                                                             {% for data in chartsDetailsChildrens %}
                                                                 {% set chart = data.chart %}
                                                                 {% set description = chart.shortDescription %}
-
                                                                 {% if data != null %}
                                                                     {% if data.description != null %}
                                                                         {% set description = data.description %}

@@ -224,10 +224,8 @@
                     </table>
                 </center>            
             </div>
-            {%set disabled='' %}
-            {%if order.type!=1%}  
-                {%set disabled='disabled' %}
-            {%endif%}  
+
+            {%set disabled='disabled' %}
             <div class="six-columns twelve-columns-mobile">
                 <table class="simple-table"  width="100%">
                     <tr style="height: 28px;">
@@ -311,7 +309,7 @@
                 </table>
                 <br>
                 <div class="new-row twelve-columns" style="text-align: right;">  
-                    {%if order.getType==4 %}
+                    {%if ((order.getType==4) or (order.getType==1)) %}
                         <form action="{{ path("pequiven_housesupply_orderkit_annul", { 'id': order.id }) }}">
                             <button type="submit" class="button glossy mid-margin-right">
                                 <span class="button-icon red-gradient"><span class="icon-card"></span></span>
