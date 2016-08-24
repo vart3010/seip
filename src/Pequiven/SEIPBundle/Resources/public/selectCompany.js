@@ -16,11 +16,13 @@ $("#dialog").dialog({
 var default_attributes = {
     fill: '#C6D5DA',
     stroke: 'white',
-    'stroke-width': '2'
+    'stroke-width': '2',
+    cursor: 'not-allowed',
 };
 
 var capital = {
-    fill: '#00FFFF',
+//    fill: '#00FFFF',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
     opacity:0.8,
@@ -28,21 +30,24 @@ var capital = {
 };
 
 var central = {
-    fill: '#ff9999',
+//    fill: '#ff9999',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
     cursor: 'pointer',
 };
 
 var occidental = {
-    fill: '#ff6666',
+//    fill: '#ff6666',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
     cursor: 'pointer',
 };
 
 var zuliana = {
-    fill: '#00CED1',
+//    fill: '#00CED1',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
     opacity:0.5,
@@ -50,38 +55,47 @@ var zuliana = {
 };
 
 var andina = {
-    fill: '#ffe6e6',
+//    fill: '#ffe6e6',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
 //    cursor: 'pointer',
+    cursor: 'not-allowed',
 };
 
 var oriental = {
-    fill: '#ffcccc',
+//    fill: '#ffcccc',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
     cursor: 'pointer',
 };
 
 var guayana = {
-    fill: '#ffe6e6',
+//    fill: '#ffe6e6',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
 //    cursor: 'pointer',
+    cursor: 'not-allowed',
 };
 
 var insular = {
-    fill: '#ffe6e6',
+//    fill: '#ffe6e6',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
 //    cursor: 'pointer',
+    cursor: 'not-allowed',
 };
 
 var llanera = {
-    fill: '#ffe6e6',
+//    fill: '#ffe6e6',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
 //    cursor: 'pointer',
+    cursor: 'not-allowed',
 };
 
 $.ajax({
@@ -98,8 +112,7 @@ $.ajax({
             var pid = $(this).attr('id');
             var region = $(this).attr('class');
             var munic = rjs.path(path);
-            munic.attr(default_attributes);
-            /*
+//            munic.attr(default_attributes);
             switch (region) {
                 case 'capital':
                     munic.attr(capital);
@@ -130,13 +143,12 @@ $.ajax({
                     break;
                 default:
                     munic.attr(default_attributes);
-            }*/
+            }
             
             munic.hover(function () {
                 this.animate({fill: '#87CEFA'});
             }, function () {
-                this.animate({fill: default_attributes.fill, opacity: '1'});
-                /*
+//                this.animate({fill: default_attributes.fill, opacity: '1'});
                     switch (region) {
                         case 'capital':
                             this.animate({fill: capital.fill, opacity: '1'});
@@ -167,7 +179,7 @@ $.ajax({
                             break;
                         default:
                             this.animate({fill: default_attributes.fill, opacity: '1'});
-                        }*/                
+                        }            
             }).click(function () {
                 //var urlAjax = '../app.php/selectCompanyC';
                  var urlAjax='';

@@ -656,6 +656,7 @@ chart:
         indicatorPyramidPlanSection: Pirámide 3D PLAN/COSTOS
         stackedColumn3dByIndicator: Columna Apilada de Variables de Indicador
         indicatorWithTrendlineHorizontalOnlyResult: Indicador con una línea horizontal para comparar el valor de los resultados con algún valor fijo
+        multilevelPieAit: Indicador tipo torta con subcategorias para AIT
         example: Ejemplo
         
     
