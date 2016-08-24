@@ -6,45 +6,39 @@
     <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/icons.css') }}">
 {% endblock %}
 
-{% block before_body %}
-    {{ contentHeader(
-        ('')
-    ) }}
-{% endblock %}
-
 {% block body %}   
-    {#TABLERO DE INDICADORES#}
+    {#TABLERO DE INDICADORES#}    
+    <div class="twelve-columns" style="font-size: 38px;"> 
+        {%if (group.color!=null) %}                            
+            {% set color= group.color %}
+        {%else%}                
+            {% set color= "#BCBCBC" %}
+        {%endif%}
+        <i class="fa {{ group.logo }}" style="color: {{color}}; font-size: 40px;" aria-hidden="true"></i>
+        {{group.description}}       
+    </div>    
     <br>
+    <table width="100%">
+        <tr>
+            <td style="height: 4px; background-color: #585858; font-size: 1pt;">
+            </td>
+        </tr>
+    </table>
     <br>
-    <div class="twelve-columns">         
-        <h1 class="thin breadcrumb">
-            {%if (group.color!=null) %}                            
-                {% set color= group.color %}
-            {%else%}                
-                {% set color= "#BCBCBC" %}
-            {%endif%}
-            <i class="fa {{ group.logo }}" style="color: {{color}}; font-size: 40px;" aria-hidden="true"></i>
-            {{group.description}}
-        </h1>
-    </div>
-    <hr class="hr-linestrategic-icons" />
-    <br>    
     {% set classColor = 'red-gradient' %}
     {% for t in tree %}
         {% set lineStrategic = t['parent'] %}     
-        <table width="100%">
+        <table width="100%">           
             <tr>
                 <td width="20%" class="text-center" style="vertical-align: middle;">
                     <span>
-                        <img class="icon-strategic" src="{{ asset(iconsLineStrategic[lineStrategic.level]) }}">
+                        <img class="icon-strategic" src="{{ asset(iconsLineStrategic[lineStrategic.level]) }}">                        
                     </span>
-                    <br>
-                    <p class="title-icon-strategic bold" style="font-size: 20px;">{{ lineStrategic.description }}</p>
-                    <br>                                         
+                    <br><br>
+                    <p class="title-icon-strategic bold" style="font-size: 20px; line-height: 120%;">{{ lineStrategic.description }}</p>                                                             
                     <a href="javascript:history.back()" class="align-left button red-gradient glossy">
                         <li class="fa fa-undo" aria-hidden="true">
-                            <span style="font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;">
-                                <b> Regresar</b>
+                            <span style="font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;">                              
                             </span>
                         </li>
                     </a>
