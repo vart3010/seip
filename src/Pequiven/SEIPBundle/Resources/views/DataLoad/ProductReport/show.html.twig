@@ -119,13 +119,6 @@
         {% set factor = true %}   
         {% set colspan = "2" %}
     {% endif %}
-    
-    <div class="six-columns padding-2">
-        
-    </div>
-    <div class="six-columns padding-2">
-        
-    </div>
 
     <table width="100%">
         <tr>
@@ -156,7 +149,16 @@
                 {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/unrealized_productions.html.twig' %}
             </td>
             <td width="50%" style="padding-left: 2px;">
-                {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/inventorys.html.twig' %}                
+                {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/inventorys.html.twig' %}
+               {# <br>
+                <span style="text-align: right">
+                    <form action="{{ path("pequiven_product_report_export", { 'id': product_report.id }) }}">
+                        <button type="submit" class="button glossy mid-margin-right">
+                            <span class="button-icon blue-gradient"><span class="icon-download"></span></span>
+                            Exportar a PDF
+                        </button>    
+                    </form>            
+                </span>#}
             </td>
         </tr>
     </table>

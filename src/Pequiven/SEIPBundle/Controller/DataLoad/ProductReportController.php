@@ -14,6 +14,7 @@ namespace Pequiven\SEIPBundle\Controller\DataLoad;
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
+use Pequiven\SEIPBundle\Service\ToolService;
 
 /**
  * Controlador de producto de reporte
@@ -56,30 +57,19 @@ class ProductReportController extends SEIPController {
     public function exportAction(Request $request) {
         $periodService = $this->getPeriodService();
         $factorConversionService = $this->getFactorConversionService();
-        $view = $this
-                ->view()
-                ->setTemplate($this->config->getTemplate('show.html'))
-                ->setTemplateVar($this->config->getResourceName())
-                ->setData([
-            $this->config->getResourceName() => $this->findOr404($request),
-            'isAllowPlanningReport' => $periodService->isAllowPlanningReport(),
-            'factorConversionService' => $factorConversionService,
-            'productReportService' => $this->getProductReportService(),
-            'dateNow' => new \DateTime(date("Y-m-d", strtotime("-1 day")))
-                ])
-        ;
-
+        $monthLabels = ToolService::getMonthsLabels();
+              
         $data = array(
             $this->config->getResourceName() => $this->findOr404($request),
             'isAllowPlanningReport' => $periodService->isAllowPlanningReport(),
             'factorConversionService' => $factorConversionService,
             'productReportService' => $this->getProductReportService(),
-            'dateNow' => new \DateTime(date("Y-m-d", strtotime("-1 day")))
+            'monthLabels' => $monthLabels
         );
-        
-        $productPlant = 'hola';
 
-        $twig = 'PequivenSEIPBundle:HouseSupply\Reports:exportOrderKit.html.twig';
+        $productPlant = $this->findOr404($request)->getProduct();
+
+        $twig = 'PequivenSEIPBundle:DataLoad\ProductReport:export.html.twig';
         $archiveTittle = 'Planificación de la Producción de ' . $productPlant;
         $tittle = 'Planificación de la Producción';
         $this->getReportService()->generatePDF($data, $tittle, $twig, 'P', $archiveTittle);
