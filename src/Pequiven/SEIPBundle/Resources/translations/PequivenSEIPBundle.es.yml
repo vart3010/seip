@@ -446,6 +446,7 @@ pequiven_seip:
     consumer_planning_gasflow:
         consumer_planning_gasflow: Consumo de flujo de gas
         details_consumer_planning_gasflow: Detalle de consumo de flujo de gas
+        upload_file: Cargar Flujo de Gas
         question:
             delete: Desea eliminar este detalle de consumo de flujo de gas
     gasflow_consumption_planning:
@@ -455,6 +456,7 @@ pequiven_seip:
     consumer_planning_servicefactor:
         consumer_planning_servicefactor: Consumo de factor de servicio
         details_consumer_planning_servicefactor: Detalle de consumo de factor de servicio
+        upload_file: Cargar Factor de Servicio
         question:
             delete: Desea eliminar este detalle de consumo de factor de servicio
     servicefactor_consumption_planning:

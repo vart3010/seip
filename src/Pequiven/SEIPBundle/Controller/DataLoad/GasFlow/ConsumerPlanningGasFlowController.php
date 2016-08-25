@@ -3,6 +3,7 @@
 namespace Pequiven\SEIPBundle\Controller\DataLoad\GasFlow;
 
 use Pequiven\SEIPBundle\Controller\SEIPController;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Controlador de consumo de flujo de gas
@@ -23,7 +24,7 @@ class ConsumerPlanningGasFlowController extends SEIPController
         return $entity;
     }
     
-    public function deleteAction(\Symfony\Component\HttpFoundation\Request $request) 
+    public function deleteAction(Request $request) 
     {
         $resource = $this->findOr404($request);
         
@@ -33,5 +34,13 @@ class ConsumerPlanningGasFlowController extends SEIPController
         
         $this->domainManager->delete($resource);
         return $this->redirect($url);
+    }
+    
+    public function uploadDataGasFlow(Request $request){
+        $excelService = $this->getPhpExcelReaderService();
+    }
+    
+    protected function getPhpExcelReaderService() {
+        return $this->get('seip.service.phpexcelreader');
     }
 }
