@@ -23,9 +23,7 @@ use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionVerification
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
  */
-
-class ReportEvolutionTrendController extends ResourceController
-{   
+class ReportEvolutionTrendController extends ResourceController{   
     
     /**
      * Retorna el formulario del analisis de la tendencia
@@ -33,8 +31,7 @@ class ReportEvolutionTrendController extends ResourceController
      * @param Request $request
      * @return type
      */
-    function getFormTrendAction(Request $request)
-    {
+    function getFormTrendAction(Request $request){
         
         $idObject = $request->get('idObject');
         $typeObject = $request->get('typeObj');
@@ -65,8 +62,7 @@ class ReportEvolutionTrendController extends ResourceController
      * @param Request $request
      * @return type
      */
-    public function addTrendAction(Request $request)
-    {   
+    public function addTrendAction(Request $request){   
         $idObject = $request->get('idObject');
         $typeObject = $request->get('typeObj');        
         $month = $request->get('set_data')['month'];//Carga de Mes pasado
@@ -76,20 +72,25 @@ class ReportEvolutionTrendController extends ResourceController
         $trend = new EvolutionTrend();
         $form  = $this->createForm(new EvolutionTrendType(), $trend);
         
-        $trend->setIdObject($idObject);
-        $trend->setCreatedBy($user);
-        $trend->setMonth($month);
-        $trend->setTypeObject($typeObject);
+        $dataTrend = $this->get('pequiven.repository.sig_trend_report_evolution')->findOneBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
+        if ($dataTrend) {
+            $this->get('session')->getFlashBag()->add('error', "Mes que intentas cargar ya cuenta con un Analisis de Tendencia.");
+        }else{
+            $trend->setIdObject($idObject);
+            $trend->setCreatedBy($user);
+            $trend->setMonth($month);
+            $trend->setTypeObject($typeObject);
 
-        $form->handleRequest($request);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {            
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($trend);
-            $em->flush(); 
-            $this->get('session')->getFlashBag()->add('success', "Analisis de Tendencia Añadido Exitosamente");                        
-            //return true;
-        }     
+            if ($form->isSubmitted()) {            
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($trend);
+                $em->flush(); 
+                $this->get('session')->getFlashBag()->add('success', "Analisis de Tendencia Añadido Exitosamente");                        
+                //return true;
+            }                
+        }
         die();
     }
 
@@ -99,8 +100,7 @@ class ReportEvolutionTrendController extends ResourceController
      * @param Request $request
      * @return type
      */
-    public function deletetrendAction(Request $request)
-    {   
+    public function deletetrendAction(Request $request){   
         $id = $request->get('id');
         
         $em = $this->getDoctrine()->getManager();
@@ -119,8 +119,7 @@ class ReportEvolutionTrendController extends ResourceController
      * @param Request $request
      * @return type
      */
-    function getFormVerificationAction(Request $request)
-    {
+    function getFormVerificationAction(Request $request){
         $id = $request->get('id');        
         $typeObject = $request->get('typeObj');
         
@@ -149,8 +148,7 @@ class ReportEvolutionTrendController extends ResourceController
      * @param Request $request
      * @return type
      */
-    public function addVerificationAction(Request $request)
-    {   
+    public function addVerificationAction(Request $request){   
         $id = $request->get('idObject');//Carga de indicador
         $typeObject = $request->get('typeObj');
         $month = $request->get('month');;//Mes
@@ -205,8 +203,7 @@ class ReportEvolutionTrendController extends ResourceController
      * @param Request $request
      * @return type
      */
-    public function deleteVerificationAction(Request $request)
-    {
+    public function deleteVerificationAction(Request $request){
         $id = $request->get('id');//id Verification                
         $em = $this->getDoctrine()->getManager();
         $verification = $this->get('pequiven.repository.sig_action_verification')->find($id);
@@ -257,6 +254,5 @@ class ReportEvolutionTrendController extends ResourceController
      */
     protected function getNotificationService() {        
         return $this->container->get('seip.service.notification');        
-    }
-   
+    }   
 }
