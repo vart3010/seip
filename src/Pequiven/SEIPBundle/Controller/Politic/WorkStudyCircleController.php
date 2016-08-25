@@ -324,10 +324,10 @@ class WorkStudyCircleController extends SEIPController {
             } elseif ($typeCoordinator == WorkStudyCircle::TYPE_COORDINATOR_DISCUSSION) {
                 $this->get('session')->getFlashBag()->add('success', 'Coordinador de debate añadido con éxito');
             }
-            
-            if($workStudyCircleObject->getPhase() == 1){
+
+            if ($workStudyCircleObject->getPhase() == 1) {
                 return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $request->get("idWorkStudyCircle"))));
-            } else{
+            } else {
                 return $this->redirect($this->generateUrl('pequiven_work_study_circle_show_phase', array("id" => $request->get("idWorkStudyCircle"))));
             }
             //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
@@ -530,7 +530,10 @@ class WorkStudyCircleController extends SEIPController {
             'lineas' => $lineas
         );
 
-        $this->generatePdf($data, 'Reporte de Círculo de Trabajo', 'PequivenSEIPBundle:Politic:WorkStudyCircle\viewPdf.html.twig');
+        $twig = 'PequivenSEIPBundle:Politic:WorkStudyCircle\viewPdf.html.twig';
+        $archiveTittle = 'Reporte de Círculo de Trabajo ' . $workStudyCircle->getCodigo();
+        $tittle = 'Reporte de Círculo de Trabajo';
+        $this->getReportService()->generateCETPDF($data, $tittle, $twig, 'P', $archiveTittle);
     }
 
     public function exportBackRestAction(Request $request) {
@@ -564,33 +567,10 @@ class WorkStudyCircleController extends SEIPController {
             'lineas' => $lineas
         );
 
-        $this->generatePdf($data, 'Constancia de Respaldo Revolucionario', 'PequivenSEIPBundle:Politic:WorkStudyCircle\BackRestPdf.html.twig');
-    }
-
-    public function generatePdf($data, $title, $template) {
-
-        $pdf = new \Pequiven\SEIPBundle\Model\PDF\CETSeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setPrintLineFooter(false);
-        $pdf->setContainer($this->container);
-        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
-        $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('SEIP');
-        $pdf->setTitle($title);
-        $pdf->SetSubject('Resultados SEIP');
-        $pdf->SetKeywords('PDF, SEIP, Resultados');
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-        $pdf->SetMargins(PDF_MARGIN_LEFT, 45, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-        $pdf->AddPage();
-        $html = $this->renderView($template, $data);
-        $pdf->writeHTML($html, true, false, true, false, '');
-        $pdf->Output(utf8_decode($title) . '.pdf', 'D');
+        $twig = 'PequivenSEIPBundle:Politic:WorkStudyCircle\BackRestPdf.html.twig';
+        $archiveTittle = 'Constancia de Respaldo Revolucionario ' . $workStudyCircle->getCodigo();
+        $tittle = 'Constancia de Respaldo Revolucionario';
+        $this->getReportService()->generateCETPDF($data, $tittle, $twig, 'P', $archiveTittle);        
     }
 
     /**

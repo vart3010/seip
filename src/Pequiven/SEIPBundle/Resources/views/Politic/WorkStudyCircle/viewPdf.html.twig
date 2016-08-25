@@ -11,6 +11,9 @@
     .body {
         font-size: 8px;
     }
+    td,th {
+        font-size: 8px;
+    }
     .title_bold {
         font-weight: bold;
     }
@@ -22,15 +25,10 @@
     }
 </style>
 {% block body %}
-    <table width="100%">
+    <table width="95%" class="simple-table responsive-table tables-extras"> 
         <tr>
             <th class="title_bold">1. Datos del Círculo de Estudio y Trabajo</th>
         </tr>
-    </table>
-
-    <br/><br/>
-
-    <table width="95%" class="simple-table responsive-table tables-extras"> 
         <tr>
             <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.code"|trans }}:</td>
             <td width="65%"> {{ workStudyCircle.codigo }}</td>                        
@@ -54,12 +52,12 @@
         {% if workStudyCircle.phase == 1 %}
             <tr>
                 <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.gerenciaFirst"|trans }}:</td>
-                <td width="65%"> {% for gerencia in  workStudyCircle.gerencias %} - {{ gerencia }}<br> {% endfor %}</td>
+                <td width="65%"> {% for gerencia in  workStudyCircle.gerencias %} - {{ gerencia }}<br/> {% endfor %}</td>
             </tr>
 
             <tr>
                 <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.gerenciaSecond"|trans }}:</td>
-                <td width="65%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br> {% endfor %}</td>
+                <td width="65%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br/> {% endfor %}</td>
             </tr>
 
             <tr>
@@ -80,19 +78,14 @@
 
     </table>
 
-    <br/><br/><br/>
-
-    <table width="100%">
-        <tr>
-            <th class="title_bold">2. Datos del Coordinador o Líder </th>
-        </tr>
-    </table>
-
-    <br/><br/>
+    <br/><br/> 
 
     {% if workStudyCircle.getphase < 4 %}
 
         <table width="95%" class="simple-table responsive-table tables-extras" > 
+            <tr>
+                <th class="title_bold">2. Datos del Coordinador o Líder </th>
+            </tr>
             <tr>
                 <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.nombre"|trans }}:</td>
                 <td width="65%"> {{ workStudyCircle.getCoordinator.getFullNameUser |upper}}</td>                        
@@ -109,32 +102,35 @@
 
         <br/><br/><br/>
         {% if workStudyCircle.coordinatorDiscussion is not null %}
-        <table width="100%">
-            <tr>
-                <th class="title_bold">2.1 Datos del Coordinador o Líder de Debate </th>
-            </tr>
-        </table>
-        
-        <br/><br/>
-        <table width="95%" class="simple-table responsive-table tables-extras" > 
-            <tr>
-                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.nombre"|trans }}:</td>
-                <td width="65%"> {{ workStudyCircle.coordinatorDiscussion.getFullNameUser |upper}}</td>                        
-            </tr>
-            <tr>
-                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.telefono"|trans }}:</td>
-                <td width="65%"> {{ workStudyCircle.coordinatorDiscussion.cellphone }}</td>
-            </tr>
-            <tr>
-                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.ext"|trans }}:</td>
-                <td width="65%"> {{ workStudyCircle.coordinatorDiscussion.ext }}</td>
-            </tr> 
-        </table>
-        <br/><br/><br/>
+            <table width="100%">
+                <tr>
+                    <th class="title_bold">2.1 Datos del Coordinador o Líder de Debate </th>
+                </tr>
+            </table>
+
+            <br/><br/>
+            <table width="95%" class="simple-table responsive-table tables-extras" > 
+                <tr>
+                    <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.nombre"|trans }}:</td>
+                    <td width="65%"> {{ workStudyCircle.coordinatorDiscussion.getFullNameUser |upper}}</td>                        
+                </tr>
+                <tr>
+                    <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.telefono"|trans }}:</td>
+                    <td width="65%"> {{ workStudyCircle.coordinatorDiscussion.cellphone }}</td>
+                </tr>
+                <tr>
+                    <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.ext"|trans }}:</td>
+                    <td width="65%"> {{ workStudyCircle.coordinatorDiscussion.ext }}</td>
+                </tr> 
+            </table>
+            <br/><br/><br/>
         {% endif %}
 
     {% else %}
         <table width="95%" class="simple-table responsive-table tables-extras" > 
+            <tr>
+                <th class="title_bold">2. Datos del Coordinador o Líder </th>
+            </tr>
             <tr>
                 <td class="title_bold" bgcolor="#F2F2F2" width="60%"> Nombre y Apellido </td>
                 <td class="title_bold" bgcolor="#F2F2F2" width="40%"> Cargo </td>                
@@ -178,9 +174,6 @@
             <th class="title_bold">3. Miembros del Círculo de Estudio de Trabajo</th>
         </tr>
     </table>    
-
-    <br/><br/>
-
     <table width="95%" class="simple-table responsive-table tables-extras">  
         <thead>
             <tr>
@@ -243,7 +236,7 @@
                 {% if prop.lineStrategic.description==key %}
                     <table width="100%">
                         <tr>
-                            <td width="100%" style="text-align: justify; font-size: 10px"><b>Propuesta {{loop.index}}: </b> {{prop.getDescription()|upper|raw|nl2br}}</td>                                
+                            <td width="100%" style="text-align: justify; font-size: 8px"><b>Propuesta {{loop.index}}: </b> {{prop.getDescription()|upper|raw|nl2br}}</td>                                
                         </tr>
                     </table>
                     <br/><br/>       
