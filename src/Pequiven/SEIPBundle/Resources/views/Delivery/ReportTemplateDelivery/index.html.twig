@@ -1,12 +1,12 @@
 {% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
 
-{% trans_default_domain 'PequivenSEIPBundle' %}
+{% trans_default_domain 'Delivery' %}
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
 {% block before_body %}
     {{ contentHeader(
-        ("pequiven_seip.report_template.report_template_delivery"|trans ),
+        ("report_template_delivery.title"|trans ),
         ( 'pequiven.list'|trans({},'messages') )
     ) }}
 {% endblock %}
@@ -22,7 +22,7 @@
                         <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'rtd.ref': 'text' }">
                             <a href="{$ result.id $}/show ">{$ result.ref $}</a>
                         </td>
-                        <td data-title="'{{ 'pequiven_seip.name'|trans }}'" sortable="'period'" filter="{ 'rtd.name': 'text' }">
+                        <td data-title="'{{ 'report_template_delivery.name'|trans }}'" sortable="'period'" filter="{ 'rtd.name': 'text' }">
                             {$ result.name $}
                         </td>
                         <td data-title="'{{ 'Location'|trans }}'">
@@ -31,11 +31,11 @@
                         <td data-title="'{{ 'Region'|trans }}'">
                             {$ result.region.name $}
                         </td>
-                        <td data-title="'{{ 'pequiven_seip.period'|trans }}'">
+                        <td data-title="'{{ 'report_template_delivery.period'|trans }}'">
                             {$ result.period.name $}
                         </td>
                         <td class="low-padding align-center">
-                            <a href=" {$ result.id $}/update " class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                            <a href=" {$ result.id $}/update " class="button compact icon-pencil">{{ "report_template_delivery.actions.edit"|trans }}</a>
                         </td>
                     </tr>
                 </table>
@@ -44,6 +44,9 @@
     </div>
     <br/><br/>
     <p class="button-height align-right">
+        {{ buttons.generic(path('pequiven_report_template_delivery_create'),('report_template_delivery.loadPlanification'|trans({},'Delivery')),'icon-tick' ) }}
+        
         {{ buttons.generic(path('pequiven_report_template_delivery_create'),('pequiven.add'|trans({},'messages')),'icon-tick' ) }}
     </p>
+    {#    pequiven_report_template_delivery_load_planification#}
 {% endblock %}

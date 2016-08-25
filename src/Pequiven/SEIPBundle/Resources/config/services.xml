@@ -371,6 +371,13 @@
         <service id="pequiven.form.detail_consumer_planning_servicefactor" class="Pequiven\SEIPBundle\Form\DataLoad\ServiceFactor\DetailConsumerPlanningServiceFactorType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_servicefactor_detailconsumerplanningservicefactor" />
         </service>
+        
+        <!--TYPES DESPACHO-->
+        <service id="pequiven.form.delivery.delivery_point" class="Pequiven\SEIPBundle\Form\Delivery\DeliveryPointType">
+            <tag name="form.type" alias="pequiven_seipbundle_delivery_deliverypoint" />
+        </service>
+        
+        
         <service id="pequiven_seip.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
@@ -457,6 +464,8 @@
             </call>
         </service>
         
+        
+        
         <service id="seip.service.workStudyCircle" class="Pequiven\SEIPBundle\Service\Politic\WorkStudyCircleService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
@@ -510,6 +519,10 @@
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery" />
         </service>
         
+        <service id="pequiven.repository.delivery_point" class="Pequiven\SEIPBundle\Repository\Delivery\DeliveryPointRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Delivery\DeliveryPoint" />
+        </service>
+        
         <service id="pequiven.repository.report_product_group" class="Pequiven\SEIPBundle\Repository\Delivery\ProductGroupDeliveryRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery" />
         </service>
@@ -527,6 +540,12 @@
         </service>
 
         <service id="seip.service.notification" class="Pequiven\SEIPBundle\Service\NotificationService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+        <service id="seip.service.phpexcelreader" class="Pequiven\SEIPBundle\Service\DataLoad\PhpExcelReaderService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>

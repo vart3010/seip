@@ -1320,8 +1320,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             }
 
             if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_DELIVERY'))) {
-                //pequiven_report_template_delivery_index
-                $delivery = $this->factory->createItem('operations.planning.delivery', $this->getSubLevelOptions(array("route" => "",
+                //pequiven_delivery_point_index
+                $delivery = $this->factory->createItem('operations.planning.delivery', $this->getSubLevelOptions(array("route" => "pequiven_delivery_point_index",
                                 ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.planning.delivery', $section)));
 

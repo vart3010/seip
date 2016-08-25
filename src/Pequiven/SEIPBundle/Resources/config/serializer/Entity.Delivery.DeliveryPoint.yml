@@ -1,0 +1,18 @@
+Pequiven\SEIPBundle\Entity\Delivery\DeliveryPoint:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        ref:
+            expose: true
+            groups: [ref]
+        descripcion:
+            expose: true
+            groups: [api_list]
+        period:
+            expose: true
+            groups: [api_period]
+        warehouse:
+            expose: true
+            groups: [api_warehouse]
