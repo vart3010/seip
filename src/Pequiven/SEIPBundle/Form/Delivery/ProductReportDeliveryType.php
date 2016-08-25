@@ -43,6 +43,16 @@ class ProductReportDeliveryType extends SeipAbstractForm {
                 return $repository->findQueryByProductionLine($productionLine);
             },
                 ))
+                ->add('type', 'choice', array(
+                    'label' => 'delivery_product.type.type',
+                    'label_attr' => array('class' => 'label'),
+                    "attr" => array("class" => "select2 input-large"),
+                    'translation_domain' => 'Delivery',
+                    'choices' => \Pequiven\SEIPBundle\Model\Delivery\ProductReportDelivery::getTypesProducts(),
+                    
+                ))
+
+
 //            ->add('indicator','tecno_ajax_autocomplete',array(
 //                'label_attr' => array('class' => 'label'),
 //                'entity_alias' => 'indicator_product_report_alias',

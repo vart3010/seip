@@ -1,0 +1,49 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'Delivery' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("delivery_point.title"|trans ),
+        ( 'pequiven.list'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    <div ng-controller="TableFormatController">
+        <div ng-controller="ReportTemplateIndexActionController">
+            {#            {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:filters.html.twig' %}#}
+
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_delivery_point_index',{_format:'json' }) }}" export-csv="csv" class="table table-responsive">
+                    <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                        <td data-title="'{{ 'delivery_point.list.ref' | trans }}'" sortable="'ref'" filter="{ 'dp.ref': 'text' }">
+                            <a href="{$ result.id $}/show ">{$ result.ref $}</a>
+                        </td>
+                        <td data-title="'{{ 'delivery_point.list.name' | trans }}'" sortable="'descripcion'" filter="{ 'dp.descripcion': 'text' }">
+                            {$ result.descripcion $}
+                        </td>
+                        <td data-title="'{{ 'delivery_point.list.warehouse' | trans }}'" sortable="'warehouse'" filter="{ 'dp.warehouse': 'text' }">
+                            {$ result.warehouse.descripcion $}
+                        </td>
+                        <td data-title="'{{ 'delivery_point.list.period' | trans }}'" sortable="'warehouse'" filter="{ 'dp.period': 'text' }">
+                            {$ result.period.name $}
+                        </td>
+                        <td class="low-padding align-center">
+                            <a href=" {$ result.id $}/update " class="button compact icon-pencil">{{ "delivery_point.actions.edit"|trans }}</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+    <p class="button-height align-right">
+        {{ buttons.generic(path('pequiven_report_template_delivery_create'),('delivery_point.actions.loadPlanification'|trans({},'Delivery')),'icon-tick' ) }}
+
+        {{ buttons.generic(path('pequiven_delivery_point_create'),('pequiven.add'|trans({},'messages')),'icon-tick' ) }}
+    </p>
+    {#    pequiven_report_template_delivery_load_planification#}
+{% endblock %}

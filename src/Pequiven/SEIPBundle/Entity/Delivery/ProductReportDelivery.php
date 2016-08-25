@@ -3,16 +3,15 @@
 namespace Pequiven\SEIPBundle\Entity\Delivery;
 
 use Doctrine\ORM\Mapping as ORM;
-use Pequiven\MasterBundle\Model\Base\ModelBaseMaster;
 
 /**
- * Producto de reporte
+ * Producto de reporte despacho
  *
  * @author Victor Tortolero <vart10.30@gmail.com>
  * @ORM\Table(name="seip_delivery_product_report")
  * @ORM\Entity()
  */
-class ProductReportDelivery extends ModelBaseMaster {
+class ProductReportDelivery {
 
     /**
      * @var integer
@@ -24,7 +23,7 @@ class ProductReportDelivery extends ModelBaseMaster {
     private $id;
 
     /**
-     * Plantilla de grupo de productos ventas
+     * Plantilla de grupo de productos despachos
      * 
      * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery",inversedBy="productsReportDelivery")
@@ -58,16 +57,20 @@ class ProductReportDelivery extends ModelBaseMaster {
     private $period;
 
     /**
+     * Tipo de producto de despacho(ENSACADO,GRANULADA)
+     * 
+     * @var integer
+     * @ORM\Column(name="type",type="integer")
+     */
+    protected $type;
+
+    /**
      * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductReportDelivery
      * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Delivery\ProductReportDelivery")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
     private $parent;
     private $name = '';
-
-    public function __construct() {
-        
-    }
 
     function getId() {
         return $this->id;
@@ -91,6 +94,14 @@ class ProductReportDelivery extends ModelBaseMaster {
 
     function setId($id) {
         $this->id = $id;
+    }
+
+    function getType() {
+        return $this->type;
+    }
+
+    function setType($type) {
+        $this->type = $type;
     }
 
 //    function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator) {

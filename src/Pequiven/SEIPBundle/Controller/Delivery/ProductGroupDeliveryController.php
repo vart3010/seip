@@ -14,28 +14,35 @@ use Pequiven\SEIPBundle\Form\DataLoad\PlantReportType;
  */
 class ProductGroupDeliveryController extends SEIPController {
 
-    public function createNew() {
-        $entity = parent::createNew();
-        $request = $this->getRequest();
-        $reportTemplateDeliveryId = $request->get("reportTemplateDelivery");
-        if ($reportTemplateDeliveryId > 0) {
-            $em = $this->getDoctrine()->getManager();
-            $reportTemplateDelivery = $em->find("Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery", $reportTemplateDeliveryId);
-            $entity->init($reportTemplateDelivery);
-        }
-        return $entity;
-    }
+//    public function createNew() {
+//        $entity = parent::createNew();
+//        $request = $this->getRequest();
+//        $deliveryPointId = $request->get("deliveryPoint");
+//        
+//        if ($deliveryPointId > 0) {
+//            $em = $this->getDoctrine()->getManager();
+//            $deliveryPoint = $em->find("Pequiven\SEIPBundle\Entity\Delivery\DeliveryPoint", $deliveryPointId);
+//            $entity->init($deliveryPoint);
+//        }
+//        return $entity;
+//    }
 
     public function showAction(Request $request) {
-        $productGroupDelivery = $this->getRepository()->findOneBy(array("id" => $request->get("id")));
+        $productGroupDelivery = $this->getRepository()->find($request->get("id"));
         $products = $productGroupDelivery->getProductsReportDelivery();
 
+        #var_dump(count($products));die();
 
         $data = array(
             "product_group_delivery" => $productGroupDelivery,
             "products" => $products
         );
-
+        /*
+        foreach ($products as $p) {
+            var_dump($p);
+        }
+        die();*/
+        
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
@@ -44,6 +51,33 @@ class ProductGroupDeliveryController extends SEIPController {
         ;
 
         return $this->handleView($view);
+    }
+
+    public function readExcel() {
+        $excelService = $this->getPhpExcelReaderService();
+
+        $fileData = array(
+            "file" => "test.xlsx",
+            "sheet" => 0,
+            "titles" => "A1:C1",
+            "data" => "A2:C19"
+        );
+        $fileData2 = array(
+            "file" => "test.xlsx",
+            "sheet" => 1,
+            "titles" => "A1:C1",
+            "data" => "A2:C19"
+        );
+        $datas = array($fileData, $fileData2);
+
+        $secciones = $excelService->getSheetValues($datas);
+
+        var_dump($secciones[0]["data"]);
+        die();
+    }
+
+    protected function getPhpExcelReaderService() {
+        return $this->get('seip.service.phpexcelreader');
     }
 
 }

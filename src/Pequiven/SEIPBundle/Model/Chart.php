@@ -198,6 +198,11 @@ abstract class Chart
      */
     const TYPE_MS_LINE_PROD = 36;
     
+    /**
+     * Gráfico para mostrar el % de cumplimiento del indicador padre (mantenimiento)
+     */
+    const TYPE_COLUMN_2D = 37;
+    
     const TYPE_EXAMPLE = 100;
        
     /**
@@ -273,6 +278,7 @@ abstract class Chart
             self::TYPE_CHART_PIE_MULTILEVEL_AIT => 'chart.type.multilevelPieAit',
             self::TYPE_MS_LINE_AIT => 'chart.type.mslineAit',
             self::TYPE_MS_LINE_PROD => 'chart.type.mslineProd',
+            self::TYPE_COLUMN_2D => 'chart.type.type_column_2d',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

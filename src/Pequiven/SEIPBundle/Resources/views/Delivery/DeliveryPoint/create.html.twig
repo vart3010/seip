@@ -6,7 +6,7 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("report_template_delivery.title"|trans ),
+        ("delivery_point.title2"|trans ),
         ( 'pequiven.add'|trans({},'messages') )
     ) }}
 {% endblock %}
@@ -17,9 +17,9 @@
 {% endblock stylesheets %}
 
 {% block body -%}
-    <form method="POST" action="{{ path("pequiven_report_template_delivery_create",{ save_and_close: true} ) }}">
+    <form method="POST" action="{{ path("pequiven_delivery_point_create",{ save_and_close: true} ) }}">
         <br /><br />
-        {% include 'PequivenSEIPBundle:Delivery/ReportTemplateDelivery:_form.html.twig' %}
+        {% include 'PequivenSEIPBundle:Delivery/DeliveryPoint:_form.html.twig' %}
         {{ actions.create() }}
         {{ form_rest(form) }}
     </form>

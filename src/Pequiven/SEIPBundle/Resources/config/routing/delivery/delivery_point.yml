@@ -1,0 +1,39 @@
+pequiven_delivery_point_index:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven.controller.delivery_point:listAction
+        _format: html
+    requirements:
+        _format: json|html
+    methods: [GET]
+
+pequiven_delivery_point_create:
+    path: /create
+    defaults:
+        _controller: pequiven.controller.delivery_point:createAction
+        _sylius:
+            form: pequiven_seipbundle_delivery_deliverypoint
+    methods: [GET|POST]
+
+pequiven_delivery_point_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.delivery_point:showAction
+        _format: html
+    requirements:
+        _format: json|html
+    methods: [GET|POST|PUT]
+
+pequiven_delivery_point_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.delivery_point:updateAction
+        _sylius:
+            form: pequiven_seipbundle_delivery_deliverypoint
+    methods: [GET|POST|PUT]
+
+pequiven_delivery_point_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.delivery_point:deleteAction
+    methods: [GET|DELETE]

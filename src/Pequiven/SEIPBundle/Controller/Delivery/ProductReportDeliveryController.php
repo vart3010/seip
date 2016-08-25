@@ -16,9 +16,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
- * Controlador de producto de reporte
+ * Controlador de productos despacho
  *
- * @author Carlos Mendoza <inhack20@gmail.com>
+ * @author Victor Tortolero <vart10.30@gmail.com>
  */
 class ProductReportDeliveryController extends SEIPController {
 
@@ -26,14 +26,25 @@ class ProductReportDeliveryController extends SEIPController {
         $entity = parent::createNew();
         $request = $this->getRequest();
         $productGroupDeliveryId = $request->get("productGroup");
-        
+        $data = array(
+            "id" => $productGroupDeliveryId
+        );
+
         if ($productGroupDeliveryId > 0) {
             $em = $this->getDoctrine()->getManager();
-            $productGroupDelivery = $em->find("Pequiven\SEIPBundle\Entity\Delivery\productGroupDelivery", $productGroupDeliveryId);
+            $productGroupDelivery = $em->find("Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery", $data);
             $entity->setProductGroupDelivery($productGroupDelivery);
         }
-        
+
         return $entity;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    protected function getPhpExcelReaderService() {
+        return $this->container->get('seip.service.phpexcelreader');
     }
 
 }
