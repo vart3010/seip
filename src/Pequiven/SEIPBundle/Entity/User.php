@@ -939,29 +939,29 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
 
     /**
      * 
-     * @param \Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplatesDelivery
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate
      * @return \Pequiven\SEIPBundle\Entity\User
      */
-    public function addReportTemplatesDelivery(\Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplatesDelivery) {
-        $this->reportTemplatesDelivery[] = $reportTemplatesDelivery;
+    public function addReportTemplates(DataLoad\ReportTemplate $reportTemplate) {
+        $this->reportTemplates[] = $reportTemplate;
 
         return $this;
     }
 
     /**
      * 
-     * @param \Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplatesDelivery
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate
      */
-    public function removeReportTemplatesDelivery(\Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplatesDelivery) {
-        $this->reportTemplatesDelivery->removeElement($reportTemplatesDelivery);
+    public function removeReportTemplates(DataLoad\ReportTemplate $reportTemplate) {
+        $this->reportTemplates->removeElement($reportTemplate);
     }
 
     /**
      * 
      * @return type
      */
-    public function getReportTemplatesDelivery() {
-        return $this->reportTemplatesDelivery;
+    public function getReportTemplates() {
+        return $this->reportTemplates;
     }
 
     /**

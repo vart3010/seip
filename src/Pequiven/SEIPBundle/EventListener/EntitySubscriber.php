@@ -120,7 +120,7 @@ class EntitySubscriber extends BaseEventListerner {
     public function onPoductDeliveryPointPrePersist(\Sylius\Bundle\ResourceBundle\Event\ResourceEvent $event) {
         $entity = $event->getSubject();
         $entity->setPeriod($this->getPeriodService()->getPeriodActive());
-        $ref = "D-".$this->getPeriodService()->getPeriodActive()->getName()."-xxx";
+        $ref = "D-".$this->getPeriodService()->getPeriodActive()->getName()."-".$this->getDeliveryPointService()->getNewRef();
         $entity->setRef($ref);
         
     }
