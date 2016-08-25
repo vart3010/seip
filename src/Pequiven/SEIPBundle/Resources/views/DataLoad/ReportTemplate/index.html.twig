@@ -44,6 +44,12 @@
     </div>
     <br/><br/>
     <p class="button-height align-right">
-        {{ buttons.generic(path('pequiven_report_template_create'),('pequiven.add'|trans({},'messages')),'icon-tick' ) }}
+        {{ buttons.generic(path('pequiven_report_template_create'),('pequiven.add'|trans({},'messages')),'icon-tick' ) }} 
+        {% if(is_granted('ROLE_SEIP_OPERATION_GAS_FLOW_UPLOAD_FILE')) %}
+            &nbsp;{{ buttons.generic(path(''),('pequiven_seip.consumer_planning_gasflow.upload_file'|trans({},'PequivenSEIPBundle')),'icon-outbox' ) }} 
+        {% endif %}
+        {% if(is_granted('ROLE_SEIP_OPERATION_SERVICE_FACTOR_UPLOAD_FILE')) %}
+            &nbsp;{{ buttons.generic(path(''),('pequiven_seip.consumer_planning_servicefactor.upload_file'|trans({},'PequivenSEIPBundle')),'icon-outbox' ) }}
+        {% endif %}
     </p>
 {% endblock %}
