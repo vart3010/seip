@@ -197,11 +197,11 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     private $reportTemplates;
 
     /**
-     * Reportes de plantas de despacho que puede carga el usuario
-     * @var Delivery\ReportTemplateDelivery
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery",inversedBy="users")
+     * puntos de despacho del usuario
+     * @var Delivery\DeliveryPoint
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\DeliveryPoint",inversedBy="users")
      */
-    private $reportTemplatesDelivery;
+    private $deliveryPoint;
 
     /**
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", inversedBy="userWorkerId")
@@ -320,7 +320,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
         $this->reportTemplates = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->reportTemplatesDelivery = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->deliveryPoint = new \Doctrine\Common\Collections\ArrayCollection();
         $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->evolutionAction = new \Doctrine\Common\Collections\ArrayCollection();
         $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
@@ -923,61 +923,45 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         return $this->plantReports;
     }
 
-    /**
-     * Add reportTemplates
-     *
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $reportTemplates
-     * @return User
-     */
-    public function addReportTemplates(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplates) {
-        $this->reportTemplates[] = $reportTemplates;
+    public function addDeliveryPoint(Delivery\DeliveryPoint $deliveryPoint) {
+        $this->deliveryPoint[] = $deliveryPoint;
 
         return $this;
     }
 
-    /**
-     * Remove reportTemplates
-     *
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplates
-     */
-    public function removeReportTemplates(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplates) {
-        $this->reportTemplates->removeElement($reportTemplates);
+    public function removeDeliveryPoint(Delivery\DeliveryPoint $deliveryPoint) {
+        $this->deliveryPoint->removeElement($deliveryPoint);
     }
 
-    /**
-     * Get reportTemplates
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getReportTemplates() {
-        return $this->reportTemplates;
+    public function getDeliveryPoint() {
+        return $this->deliveryPoint;
     }
 
     /**
      * 
-     * @param \Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplatesDelivery
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate
      * @return \Pequiven\SEIPBundle\Entity\User
      */
-    public function addReportTemplatesDelivery(\Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplatesDelivery) {
-        $this->reportTemplatesDelivery[] = $reportTemplatesDelivery;
+    public function addReportTemplates(DataLoad\ReportTemplate $reportTemplate) {
+        $this->reportTemplates[] = $reportTemplate;
 
         return $this;
     }
 
     /**
      * 
-     * @param \Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplatesDelivery
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate
      */
-    public function removeReportTemplatesDelivery(\Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplatesDelivery) {
-        $this->reportTemplatesDelivery->removeElement($reportTemplatesDelivery);
+    public function removeReportTemplates(DataLoad\ReportTemplate $reportTemplate) {
+        $this->reportTemplates->removeElement($reportTemplate);
     }
 
     /**
      * 
      * @return type
      */
-    public function getReportTemplatesDelivery() {
-        return $this->reportTemplatesDelivery;
+    public function getReportTemplates() {
+        return $this->reportTemplates;
     }
 
     /**

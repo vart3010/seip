@@ -14,6 +14,7 @@
         </div>
     </div>
 
+
     <div class="with-padding">
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
@@ -26,17 +27,18 @@
             </thead>
             {% set colspan = 6 %}
             <tbody>
-                
+
                 {% for product in products %}
                     <tr>
-                        <td>{{ loop.index }} - {{ generateLink(product) }}</td>
+{#                        <td><a href="{{ path("pequiven_product_report_delivery_show",{id:product.product.id}) }}">{{ loop.index }} - {{ product.product.name }}</a></td>#}
+                        <td>{{ loop.index }} - {{ product.product.name }}</td>
                         <td>{{ product.product.productionLine }}</td>
                         <td>{{ product.product.productUnit.name}}</td>
                         <td>&nbsp;</td>
                     </tr>
                 {% endfor %}
-                
-            
+
+
 
             </tbody>
         </table>

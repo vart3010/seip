@@ -1081,6 +1081,113 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
+        
+        .controller('DeliveryPoint', function ($scope) {
+            var format = function (data)
+            {
+                var text = data.name;
+                if (text == undefined && data.description != undefined) {
+                    text = data.description;
+                }
+                return text;
+            };
+            var buldSelect2 = function (id, data)
+            {
+                var myData = getDefaultSelect(data);
+                var select = $("#" + id).select2(myData)
+                        .on('change', function () {
+
+                            var me = $(this);
+                            var value = me.val();
+                            var multiple = me.attr('multiple');
+                            var name = me.attr('name');
+                            if (multiple != undefined && value != "") {
+                                value = angular.toJson(value.split(','));
+                            } else {
+
+                            }
+                            if (value != '') {
+                                $scope.tableParams.$params.filter[name] = value;
+                            } else {
+                                $scope.tableParams.$params.filter[name] = null;
+                            }
+                            $scope.tableParams.reload();
+                        })
+                        ;
+                select.attr('multiple', myData.multiple);
+                return select;
+            };
+            var urlSearchService = Routing.generate('pequiven_seip_search_service');
+            var urlSearchProduct = Routing.generate('pequiven_seip_search_product');
+            var urlSearchEntity = Routing.generate('pequiven_seip_search_entity');
+            var urlSearchPlant = Routing.generate('pequiven_seip_search_plant');
+            var urlSearchRegion = Routing.generate('pequiven_seip_search_region');
+            var urlSearchLocation = Routing.generate('pequiven_seip_search_location');
+            var urlSearchCompany = Routing.generate('pequiven_seip_search_company');
+            var urlSearchPeriod = Routing.generate('pequiven_seip_search_period');
+            function getDefaultSelect(data) {
+                var dataDefault = {
+                    placeholder: ' ',
+                    allowClear: true,
+                    minimumInputLength: 2,
+                    multiple: false,
+                    ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
+                        url: data.url,
+                        dataType: 'json',
+                        quietMillis: 250,
+                        data: function (term, page) {
+                            return {
+                                q: term, // search term
+                            };
+                        },
+                        results: function (data, page) { // parse the results into the format expected by Select2.
+                            // since we are using custom formatting functions we do not need to alter the remote JSON data
+                            return {results: data};
+                        },
+                        cache: true
+                    },
+                    initSelection: function (element, callback) {
+                        // the input tag has a value attribute preloaded that points to a preselected repository's id
+                        // this function resolves that id attribute to an object that select2 can render
+                        // using its formatResult renderer - that way the repository name is shown preselected
+                    },
+                    formatResult: format, // omitted for brevity, see the source of this page
+                    formatSelection: format, // omitted for brevity, see the source of this page
+                    escapeMarkup: function (m) {
+                        return m;
+                    } // we do not want to escape markup since we are displaying html in results
+                };
+                var result = $.extend(dataDefault, data);
+                return result;
+            }
+            buldSelect2('select-service', {
+                url: urlSearchService,
+                multiple: true
+            });
+            buldSelect2('select-product', {
+                url: urlSearchProduct,
+                multiple: true
+            });
+            buldSelect2('select-entity', {
+                url: urlSearchEntity
+            });
+            buldSelect2('select-plant', {
+                url: urlSearchPlant
+            });
+            buldSelect2('select-region', {
+                url: urlSearchRegion
+            });
+            buldSelect2('select-location', {
+                url: urlSearchLocation
+            });
+            buldSelect2('select-company', {
+                url: urlSearchCompany
+            });
+            buldSelect2('select-period', {
+                url: urlSearchPeriod
+            });
+        })
+        
         .controller('ReportTemplateIndexActionController', function ($scope) {
             var format = function (data)
             {
@@ -7763,30 +7870,184 @@ angular.module('seipModule.controllers', [])
                     MsLineAit.render();
                 });
             };
+            
+//36.-Grafico para mostrar el % de cumplimiento de los indicadores hijos de produccion (3920)....
+            $scope.chargeMslineProd = function (indicatorId, render, width, height) {
+                FusionCharts.ready(function () {
+                    var MsLineProd = new FusionCharts({
+                        type: 'msline',
+                        renderAt: render,
+                        width: '100%',
+                        height: '350',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": {
+                                "caption": "% de Cumplimiento Producción CPJAA",
+                                "captionFontSize": "14",
+                                "subcaptionFontBold": "0",
+                                "paletteColors": "#8B0000,#1aaf5d,#6A5ACD",
+                                "bgcolor": "#ffffff",
+                                "showBorder": "0",
+                                "showShadow": "0",
+                                "showCanvasBorder": "0",
+                                "usePlotGradientColor": "0",
+                                "legendBorderAlpha": "0",
+                                "legendShadow": "0",
+                                "showAxisLines": "10",
+                                "showAlternateHGridColor": "0",
+                                "divlineThickness": "1",
+                                "divLineIsDashed": "1",
+                                "divLineDashLen": "1",
+                                "divLineGapLen": "0",
+                                "xAxisName": "Meses",
+                                "yAxisName": "% de cumplimiento",
+                                "showValues": "0",
+                            },
+                            "categories": [
+                                {
+                                    "category": [
+                                        { "label": "Enero" }, 
+                                        { "label": "Febrero" }, 
+                                        { "label": "Marzo" },
+                                        { "label": "Abril" }, 
+                                        { "label": "Mayo" }, 
+                                        { "label": "Junio" }, 
+                                        { "label": "Julio" },
 
-
-            //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
-            $scope.chargeChartProductionReportTemplateByDate = function (reportTemplateId, dateSearch, render, width, height) {
-                var dateParse = $scope.parseDate(dateSearch);
-                var getDataChartProductionReportTemplateByDate = Routing.generate("getDataChartProductionReportTemplateByDate", {id: reportTemplateId, dateSearch: dateParse});
-
-                $http.get(getDataChartProductionReportTemplateByDate).success(function (data) {
-                    FusionCharts.ready(function () {
-                        var revenueChartProductionReportTemplateByDate = new FusionCharts({
-                            "type": "stackedcolumn3d",
-                            "renderAt": render,
-                            "width": width + "%",
-                            "height": height,
-                            "dataFormat": "json",
-                            "dataSource": {
-                                "chart": data.dataSource.chart,
-                                "categories": data.dataSource.categories,
-                                "dataset": data.dataSource.dataset
-                            }
-                        });
-                        revenueChartProductionReportTemplateByDate.setTransparent(true);
-                        revenueChartProductionReportTemplateByDate.render();
-                    });
+                                    ]
+                                }
+                            ],
+                            "dataset": [
+                                {
+                                    "seriesname": "Ejecución de Producción de Agua Industrial",
+                                    "data": [
+                                        { "value": "100" }, 
+                                        { "value": "94.01" }, 
+                                        { "value": "94.92" }, 
+                                        { "value": "95.08" }, 
+                                        { "value": "97.64" }, 
+                                        { "value": "99.14" }, 
+                                        { "value": "92.74" }
+                                    ]
+                                }, 
+                                {
+                                    "seriesname": "Ejecución de Producción de Energía Eléctrica",
+                                    "data": [
+                                        { "value": "110.63" }, 
+                                        { "value": "92.1" }, 
+                                        { "value": "94.65" }, 
+                                        { "value": "84.46" }, 
+                                        { "value": "88.28" }, 
+                                        { "value": "101.89" }, 
+                                        { "value": "80" }
+                                    ]
+                                },
+                                {
+                                    "seriesname": "Cumplimiento de Plan de Despacho del Terminal Maritimo",
+                                    "data": [
+                                        { "value": "104.08" }, 
+                                        { "value": "94.11" }, 
+                                        { "value": "86.76" }, 
+                                        { "value": "84.27" }, 
+                                        { "value": "87.23" }, 
+                                        { "value": "100.75" }, 
+                                        { "value": "107.8" }
+                                    ]
+                                }
+                            ], 
+                            "trendlines": [
+                                {
+                                    "line": [
+                                        {
+                                            "startvalue": "100",
+                                            "color": "#006400",
+                                            "valueOnRight": "1",
+                                            "displayvalue": "Meta (100%)"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    })
+                    MsLineProd.render();
+                });
+            };
+            
+     //37.-Grafico para mostrar el % de cumplimiento del indicador padre (mantenimiento, 3921)....
+            $scope.chargeColumn2d = function (indicatorId, render, width, height) {
+                FusionCharts.ready(function () {
+                    var MsColumn2d = new FusionCharts({
+                        type: 'column2d',
+                        renderAt: render,
+                        width: '100%',
+                        height: '350',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": {
+                                "caption": "% Cumplimiento Plan de Mantenimiento",
+                                "xAxisName": "Meses",
+                                "yAxisName": "% de cumpliento",
+                                "paletteColors": "#0075c2",
+                                "bgColor": "#ffffff",
+                                "borderAlpha": "0",
+                                "canvasBorderAlpha": "0",
+                                "usePlotGradientColor": "0",
+                                "plotBorderAlpha": "0",
+                                "placevaluesInside": "1",
+                                "rotatevalues": "1",
+                                "valueFontColor": "#ffffff",                
+                                "showXAxisLine": "1",
+                                "xAxisLineColor": "#999999",
+                                "divlineColor": "#999999",               
+                                "divLineIsDashed": "1",
+                                "showAlternateHGridColor": "0",
+                                "subcaptionFontBold": "0",
+                            },            
+                            "data": [
+                                {
+                                    "label": "Enero",
+                                    "value": "90.39"
+                                }, 
+                                {
+                                    "label": "Febrero",
+                                    "value": "90.94"
+                                }, 
+                                {
+                                    "label": "Marzo",
+                                    "value": "94.34"
+                                }, 
+                                {
+                                    "label": "Abril",
+                                    "value": "88.50"
+                                }, 
+                                {
+                                    "label": "Mayo",
+                                    "value": "92.31"
+                                }, 
+                                {
+                                    "label": "Junio",
+                                    "value": "94.51"
+                                }, 
+                                {
+                                    "label": "Julio",
+                                    "value": "90.99"
+                                },
+                            ],
+                            "trendlines": [
+                                {
+                                    "line": [
+                                        {
+                                            "startvalue": "100",
+                                            "color": "#1aaf5d",
+                                            "valueOnRight": "0",
+                                            "displayvalue": "Meta (100%)"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    })
+                    MsColumn2d.render();
                 });
             }
 

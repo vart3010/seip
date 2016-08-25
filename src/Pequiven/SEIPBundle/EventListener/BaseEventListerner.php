@@ -13,15 +13,14 @@ namespace Pequiven\SEIPBundle\EventListener;
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
-abstract class BaseEventListerner implements \Symfony\Component\EventDispatcher\EventSubscriberInterface, \Symfony\Component\DependencyInjection\ContainerAwareInterface
-{
+abstract class BaseEventListerner implements \Symfony\Component\EventDispatcher\EventSubscriberInterface, \Symfony\Component\DependencyInjection\ContainerAwareInterface {
+
     protected $container;
-    
-    protected function trans($id, $parameters = array(), $domain = 'PequivenSEIPBundle')
-    {
+
+    protected function trans($id, $parameters = array(), $domain = 'PequivenSEIPBundle') {
         return $this->container->get('translator')->trans($id, $parameters, $domain);
     }
-    
+
     /**
      * Get a user from the Security Context
      *
@@ -31,8 +30,7 @@ abstract class BaseEventListerner implements \Symfony\Component\EventDispatcher\
      *
      * @see Symfony\Component\Security\Core\Authentication\Token\TokenInterface::getUser()
      */
-    protected function getUser()
-    {
+    protected function getUser() {
         if (!$this->container->has('security.context')) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');
         }
@@ -51,14 +49,13 @@ abstract class BaseEventListerner implements \Symfony\Component\EventDispatcher\
     /**
      * Envia un mensaje de correo con el mailer
      */
-    protected function mailerSendMessage($templateName, $context, $fromEmail, $toEmail) 
-    {
-        if($fromEmail === null){
+    protected function mailerSendMessage($templateName, $context, $fromEmail, $toEmail) {
+        if ($fromEmail === null) {
             $fromEmail = $this->getSeipConfiguration()->getEmailFromDefault();
         }
         $this->container->get('pequiven_seip.mailer.twig_swift')->sendMessage($templateName, $context, $fromEmail, $toEmail);
     }
-    
+
     /**
      * Returns a AccessDeniedHttpException.
      *
@@ -71,11 +68,10 @@ abstract class BaseEventListerner implements \Symfony\Component\EventDispatcher\
      *
      * @return \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    protected function createAccessDeniedHttpException($message = 'Permission Denied!', \Exception $previous = null)
-    {
+    protected function createAccessDeniedHttpException($message = 'Permission Denied!', \Exception $previous = null) {
         return new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException($message, $previous);
     }
-    
+
     /**
      * Configuracion global del SEIP
      * 
@@ -84,39 +80,40 @@ abstract class BaseEventListerner implements \Symfony\Component\EventDispatcher\
     protected function getSeipConfiguration() {
         return $this->container->get('seip.configuration');
     }
-    
+
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
     }
-    
+
     /**
      * 
      * @return \Pequiven\SEIPBundle\Service\SequenceGenerator
      */
-    protected function getSequenceGenerator() 
-    {
+    protected function getSequenceGenerator() {
         return $this->container->get('seip.sequence_generator');
     }
-    
+
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    protected function getPeriodService()
-    {
+    protected function getPeriodService() {
         return $this->container->get('pequiven_seip.service.period');
     }
-    
+
+    protected function getDeliveryPointService() {
+        return $this->container->get('pequiven_seip.service.deliveryPointService');
+    }
+
     /**
      * Shortcut to return the request service.
      *
      * @return \Symfony\Component\HttpFoundation\Request
      *
      */
-    public function getRequest()
-    {
+    public function getRequest() {
         return $this->container->get('request_stack')->getCurrentRequest();
     }
-    
+
     /**
      * Shortcut to return the Doctrine Registry service.
      *
@@ -124,15 +121,14 @@ abstract class BaseEventListerner implements \Symfony\Component\EventDispatcher\
      *
      * @throws \LogicException If DoctrineBundle is not available
      */
-    public function getDoctrine()
-    {
+    public function getDoctrine() {
         if (!$this->container->has('doctrine')) {
             throw new \LogicException('The DoctrineBundle is not registered in your application.');
         }
 
         return $this->container->get('doctrine');
     }
-    
+
     /**
      * Returns true if the service id is defined.
      *
@@ -140,8 +136,7 @@ abstract class BaseEventListerner implements \Symfony\Component\EventDispatcher\
      *
      * @return bool    true if the service id is defined, false otherwise
      */
-    public function has($id)
-    {
+    public function has($id) {
         return $this->container->has($id);
     }
 
@@ -152,13 +147,12 @@ abstract class BaseEventListerner implements \Symfony\Component\EventDispatcher\
      *
      * @return object The service
      */
-    public function get($id)
-    {
+    public function get($id) {
         return $this->container->get($id);
     }
-    
-    protected function find($className, $id) 
-    {
+
+    protected function find($className, $id) {
         return $this->getDoctrine()->getManager()->find($className, $id);
     }
+
 }

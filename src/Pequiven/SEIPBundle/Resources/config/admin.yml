@@ -623,16 +623,16 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
-    sonata.admin.cei.delivery_point:
-        class: Pequiven\MasterBundle\Admin\CEI\DeliveryPointAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Punto de Despacho" }
-        arguments:
-            - ~
-            - Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint
-            - ~
-        calls:
-            - [ setTranslationDomain, [SonataAdminBundle]]
+#    sonata.admin.cei.delivery_point:
+#        class: Pequiven\MasterBundle\Admin\CEI\DeliveryPointAdmin
+#        tags:
+#            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Punto de Despacho" }
+#        arguments:
+#            - ~
+#            - Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint
+#            - ~
+#        calls:
+#            - [ setTranslationDomain, [SonataAdminBundle]]
             
     sonata.admin.configuration:
         class: Tecnocreaciones\Bundle\ToolsBundle\Admin\Configuration\ConfigurationAdmin

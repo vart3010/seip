@@ -1,5 +1,5 @@
 pequiven_product_group_delivery_create:
-    path: /{reportTemplateDelivery}/create
+    path: /{deliveryPoint}/create
     defaults:
         _controller: pequiven.controller.product_group_delivery:createAction
         _sylius:
@@ -19,3 +19,13 @@ pequiven_product_group_delivery_show:
     defaults:
         _controller: pequiven.controller.product_group_delivery:showAction
     methods: [GET]
+
+
+##PRUEBA DE LECTURA DE EXCEL
+pequiven_product_group_delivery_test:
+    path: /test
+    defaults:
+        _controller: pequiven.controller.product_group_delivery:readExcel
+    methods: [GET]
+    
+   
