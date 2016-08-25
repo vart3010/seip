@@ -19,11 +19,11 @@
 {% block body %}
 
     <fieldset class="fieldset">
-        <legend class="legend">{{ 'report_template_delivery.title'|trans }}</legend>
+        <legend class="legend">{{ 'delivery_product.product_group'|trans }}</legend>
         <div class="columns">
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">{{ 'report_template_delivery.title'|trans }}</label>
+                    <label class="label">{{ 'delivery_point.title2'|trans }}</label>
                     <a href="{{ path("pequiven_report_template_delivery_show",{"id":product_group_delivery.deliveryPoint.id}) }}">
                         <i class="fa fa-file-o"></i>&nbsp;
                         {{ product_group_delivery.deliveryPoint }}

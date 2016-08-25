@@ -20,12 +20,12 @@ class DeliveryPointType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
         $builder
-                ->add('ref', null, array(
-                    'label_attr' => array('class' => 'label'),
-                    'attr' => array(
-                        'class' => "input input-large"
-                    ),
-                ))
+//                ->add('ref', null, array(
+//                    'label_attr' => array('class' => 'label'),
+//                    'attr' => array(
+//                        'class' => "input input-large"
+//                    ),
+//                ))
                 ->add('descripcion', null, array(
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
