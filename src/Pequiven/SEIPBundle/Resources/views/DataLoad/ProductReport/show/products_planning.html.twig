@@ -13,14 +13,16 @@
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
                 <tr>
-                    <th scope="col" width="32%">{{ 'Month'|trans }}</th>
-                        {%if factor %}
-                            {% set cols = 2 %}
-                            {% set colspan = 5 %}
-                        {%else%}
-                            {% set cols = 1 %}
-                            {% set colspan = 3 %}
-                        {%endif%}
+                    {%if factor %}
+                        {% set cols = 2 %}
+                        {% set colspan = 5 %}
+                    {%else%}
+                        {% set cols = 1 %}
+                        {% set colspan = 3 %}
+                    {%endif%}
+
+                    <th scope="col" width="32%">{{ 'Month'|trans }}</th>                        
+
                     <th scope="col" colspan="{{ cols }}" width="34%" class="hide-on-mobile-portrait" align="center">{{ 'Total month'|trans }}</th>
                         {#{% if factor %}
                         <th scope="col" width="15%" class="hide-on-mobile-portrait" align="right"></th>
@@ -41,9 +43,11 @@
                 {% set  totalFactorDaily = 0.0 %}
                 {% for productPlanning in productPlannings %}
                     <tr>
+
                         <td>{{ loop.index }} - 
                             {{ generateLink(productPlanning) }}
                         </td>
+
                         <td scope="row" align="right">
                             {{ productPlanning.totalMonth|myNumberFormat }}&nbsp;{{ productUnit }}
                             {% set totalMonth = totalMonth + productPlanning.totalMonth %}

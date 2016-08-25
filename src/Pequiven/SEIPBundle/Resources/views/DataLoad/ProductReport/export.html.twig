@@ -413,7 +413,13 @@
     {% set typeProductionNet = "&nbsp;("~("pequiven_seip.net"|trans)~")" %}
     {% set productUnit = product_report.product.productUnit %}
 
-    <table width="100%" class="spacing">
+    {% if(factor) %}
+        {%set pageBreak='page-break-after: always;'%}
+    {%else%}
+        {%set pageBreak=''%}
+    {%endif%}
+
+    <table width="100%" class="spacing" style='{{pageBreak}}'>
         <tr>
             <td colspan="7" class="white-gradient-th center">Detalles de la Producción ({{productUnit}})</td>
         </tr>
@@ -469,9 +475,10 @@
         </tr>
     </table>
 
+    {% set unitFactor =  factorConversionService.unitToFactorConversion(product_report) %}
     {% if(factor) %}
         <br><br>
-        <table width="100%" class="spacing">
+        <table width="100%" class="spacing" style="page-break-after: always;">
             <tr>
                 <td colspan="7" class="white-gradient-th center">Detalles de la Producción ({{unitFactor}})</td>
             </tr>
@@ -533,4 +540,143 @@
             </tr>
         </table>
     {%endif%}
+    <br><br>
+    <table>
+        <tr>
+            <td width="50%">
+                <table width="100%" class="spacing" >
+                    {% set productUnit = product_report.product.productUnit %}
+                    {%if factor %}
+                        {% set cols = 2 %}
+                        {% set colspan = 3 %}
+                        {% set colsfactor = 'colspan="'~ cols ~'"' %}     
+                        {% set width='30%'%}
+                    {%else%}
+                        {% set cols = 1 %}
+                        {% set colspan = 2 %}
+                        {% set colsfactor = '' %}
+                        {% set width='60%'%}
+                    {%endif%}
+
+                    <tr>
+                        <td colspan="{{colspan}}" class="white-gradient-th center">Producción No Realizada (PNR)</td>
+                    </tr>
+                    <tr>
+                        <td class="white-gradient-th" width="40%">{{ 'Month'|trans }}</td>
+                        <td {{colsfactor}} width="{{width}}" class="white-gradient-th right">{{ 'pequiven_seip.total'|trans }} ({{productUnit}})</td>
+                        {%if factor %}
+                            <td width="30%" class="white-gradient-th right">{{ 'pequiven_seip.total'|trans }} ({{ factorConversionService.unitToFactorConversion(product_report) }})</td>    
+                        {%endif%}                        
+                    </tr>
+
+                    {% set totals = product_report.getTotalToDayUnrealizedProductions %}
+
+                    {# $excludePnr = $productReportService->getArrayByDateFromInternalCausesPnr($dateReport, $productReport);#}
+                    {# {% set excludePnr = productReportService.getArrayByDateFromInternalCausesPnr(dateNow, product_report) %}
+                    {{ dump(excludePnr) }} #}
+
+                    {% set productUnit = product_report.product.productUnit %}
+                    {% set unitToConvert =  factorConversionService.unitToFactorConversion(product_report) %}
+
+                    {% for unrealizedProduction in product_report.getUnrealizedProductionsSortByMonth %}
+                        {% set dateMonth = productReportService.getTimeNowMonth(loop.index,unrealizedProduction) %}
+                        {% set excludePnr = productReportService.getArrayByDateFromInternalCausesPnr(dateMonth, product_report) %}
+                        {% set overProductionMonth = excludePnr[0].total.month %}
+                        {# {{ dump(excludePnr[0].total.month) }} #}                  
+
+                        <tr>
+                            <td>{{ loop.index }} -                                 
+                                {{ unrealizedProduction | trans }}                                
+                            </td>
+                            <td class="right">
+                                {{ (unrealizedProduction.total - overProductionMonth)|myNumberFormat }}&nbsp;{{ productUnit }}
+                            </td>
+                            {% if factor %}
+                                <td class="right">
+                                    {% set factorUnrealizedProduction = factorConversionService.calculateFormulaValueFromFactor(unrealizedProduction.total,product_report) %}
+                                    {{ factorUnrealizedProduction|myNumberFormat }} {{ factorConversionService.unitToFactorConversion(product_report) }}
+                                </td>    
+                            {% endif %}                          
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="{{ colspan }}">
+                                {{ "empty.unrealized_productions"|trans }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    <tr style="font-weight: bold;">
+                        <td class="white-gradient-th right">{{ 'Total month before'|trans }}</td>
+                        <td class="white-gradient-th right">{{ totals['tr_b']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                        {% if (factor) %}
+                            {% set factorUnrealizedProductionTotalAnterior = factorConversionService.calculateFormulaValueFromFactor(totals['tr_b'],product_report) %}
+                            <td class="white-gradient-th right">{{ factorUnrealizedProductionTotalAnterior|myNumberFormat ~" "~ unitToConvert }}</td>
+                        {% endif %}                        
+                    </tr>
+                    <tr style="font-weight: bold;">
+                        <td class="white-gradient-th">{{ 'Total accumulated'|trans }}</td>
+                        <td class="white-gradient-th right">{{ totals['tr']|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                        {% if (factor) %}    
+                            {% set factorUnrealizedProductionTotal = factorConversionService.calculateFormulaValueFromFactor(totals['tr'],product_report) %}
+                            <td class="white-gradient-th right">{{ factorUnrealizedProductionTotal|myNumberFormat ~" "~ unitToConvert }}</td>
+                        {% endif %}                        
+                    </tr>
+                </table>
+            </td>
+            <td width="50%">
+                <table width="100%" class="spacing" >
+                    {% set productUnit = product_report.product.productUnit %}
+                    {%if factor %}
+                        {% set cols = 2 %}
+                        {% set colspan = 3 %}
+                        {% set colsfactor = 'colspan="'~ cols ~'"' %}     
+                        {% set width='30%'%}
+                    {%else%}
+                        {% set cols = 1 %}
+                        {% set colspan = 2 %}
+                        {% set colsfactor = '' %}
+                        {% set width='60%'%}
+                    {%endif%}
+                    <tr>
+                        <td colspan="{{ colspan }}" class="white-gradient-th center">
+                            Inventario
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="white-gradient-th" width="40%">{{ 'Month'|trans }}</td>
+                        <td {{colsfactor}} width="{{width}}" class="white-gradient-th right"> ({{productUnit}})</td>
+                        {%if factor %}
+                            <td width="30%" class="white-gradient-th right">{{ 'pequiven_seip.total'|trans }} ({{ factorConversionService.unitToFactorConversion(product_report) }})</td>    
+                        {%endif%}                        
+                    </tr>
+
+                    {% for inventory in product_report.getInventorySortByMonth %}
+                        <tr>
+                            <td>{{ loop.index }} - 
+                                {{ inventory|trans }}
+                            </td>
+                            <td class="right">
+                                {{ inventory.getTotalInventory|myNumberFormat }}&nbsp;{{ productUnit }}
+                            </td>
+                            {% if factor %}
+                                <td class="right">
+                                    {% set factorInventory = factorConversionService.calculateFormulaValueFromFactor(inventory.getTotalInventory,product_report) %}
+                                    {{ factorInventory|myNumberFormat }}&nbsp;{{ factorConversionService.unitToFactorConversion(product_report) }}    
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% else %}
+                        <tr >
+                            <td colspan="{{ colspan }}">
+                                {{ "empty.inventorys"|trans }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </td>
+
+        </tr>
+    </table>
+
 {% endblock %}
