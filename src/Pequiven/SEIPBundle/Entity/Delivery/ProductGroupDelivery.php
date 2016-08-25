@@ -32,41 +32,6 @@ class ProductGroupDelivery extends ModelBaseMaster {
      */
     private $deliveryPoint;
 
-//    /**
-//     * Empresa
-//     * @var \Pequiven\SEIPBundle\Entity\CEI\Company
-//     *
-//     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Company")
-//     * @ORM\JoinColumn(nullable=false)
-//     */
-//    private $company;
-//
-//    /**
-//     * Localizacion (complejo).
-//     * @var \Pequiven\SEIPBundle\Entity\CEI\Location
-//     *
-//     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Location")
-//     * @ORM\JoinColumn(nullable=false)
-//     */
-//    private $location;
-//
-//    /**
-//     * Entidad donde esta el producto
-//     * 
-//     * @var \Pequiven\SEIPBundle\Entity\CEI\Entity
-//     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Entity")
-//     */
-//    private $entity;
-//
-//    /**
-//     * Planta que hace el producto
-//     * 
-//     * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
-//     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",inversedBy="plantReport")
-//     * @ORM\JoinColumn(nullable=true)
-//     */
-//    private $plant;
-
     /**
      * Productos del reporte
      * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductReportDelivery
@@ -83,8 +48,8 @@ class ProductGroupDelivery extends ModelBaseMaster {
 
     /**
      * Detalles del producto mensual
-     * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupReportDetailMonth
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductGroupReportDetailMonth",mappedBy="productReportDelivery",cascade={"remove"})
+     * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDeliveryDetailMonth
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDeliveryDetailMonth",mappedBy="productReportDelivery",cascade={"remove"})
      */
     private $productGroupDeliveryDetailMonth;
 
@@ -134,8 +99,6 @@ class ProductGroupDelivery extends ModelBaseMaster {
      */
     private $program = 0;
 
-    
-
     /**
      * Constructor
      */
@@ -148,10 +111,10 @@ class ProductGroupDelivery extends ModelBaseMaster {
 
     /**
      * 
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailMonth $productGroupDetailMonth
+     * @param \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDeliveryDetailMonth $productGroupDetailDaily
      * @return \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
      */
-    public function addProductGroupDeliveryDetailMonth(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailMonth $productGroupDetailMonth) {
+    public function addProductGroupDeliveryDetailMonth(ProductGroupDeliveryDetailMonth $productGroupDetailMonth) {
         $productGroupDetailMonth->setProductReport($this);
 
         $this->productDeliveryDetailMonth->add($productGroupDetailMonth);
@@ -161,10 +124,10 @@ class ProductGroupDelivery extends ModelBaseMaster {
 
     /**
      * 
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailGroup $productGroupDetailGroup
+     * @param \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDeliveryDetailMonth $productGroupDetailMonth
      */
-    public function removeProductGroupDeliveryDetailGroup(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailGroup $productGroupDetailGroup) {
-        $this->productDeliveryDetailMonth->removeElement($productGroupDetailGroup);
+    public function removeProductGroupDeliveryDetailMonth(ProductGroupDeliveryDetailMonth $productGroupDetailMonth) {
+        $this->productDeliveryDetailMonth->removeElement($productGroupDetailMonth);
     }
 
     /**
@@ -177,10 +140,10 @@ class ProductGroupDelivery extends ModelBaseMaster {
 
     /**
      * 
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailDaily $productGroupDetailDaily
+     * @param \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDeliveryDetailDaily $productGroupDetailDaily
      * @return \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
      */
-    public function addProductGroupDeliveryDetailDaily(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailDaily $productGroupDetailDaily) {
+    public function addProductGroupDeliveryDetailDaily(ProductGroupDeliveryDetailDaily $productGroupDetailDaily) {
         $productGroupDetailDaily->setProductReport($this);
 
         $this->productDeliveryDetailDaily->add($productGroupDetailDaily);
@@ -190,9 +153,9 @@ class ProductGroupDelivery extends ModelBaseMaster {
 
     /**
      * 
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailDaily $productGroupDetailDaily
+     * @param \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDeliveryDetailDaily $productGroupDetailDaily
      */
-    public function removeProductGroupDeliveryDetailDaily(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductGroupDetailDaily $productGroupDetailDaily) {
+    public function removeProductGroupDeliveryDetailDaily(ProductGroupDeliveryDetailDaily $productGroupDetailDaily) {
         $this->productDeliveryDetailDaily->removeElement($productGroupDetailDaily);
     }
 

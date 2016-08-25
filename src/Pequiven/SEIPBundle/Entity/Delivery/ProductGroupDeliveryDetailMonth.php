@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="seip_delivery_product_detail_month")
  * @ORM\Entity()
  */
-class ProductGroupReportDetailMonth {
+class ProductGroupDeliveryDetailMonth {
 
     /**
      * @var integer
