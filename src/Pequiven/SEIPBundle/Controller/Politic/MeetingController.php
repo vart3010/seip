@@ -488,20 +488,6 @@ class MeetingController extends SEIPController {
                     'data' => $request->get("idMeeting"),
                     'form' => $form->createView()
         ));
-
-//        $band = false;
-////VALIDACION QUE SEA UN ARCHIVO PERMITIDO
-//        foreach ($request->files as $file) {
-//            if (in_array($file->guessExtension(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getTypesFile())) {
-//                $band = true;
-//            }
-//        }
-//
-//        if ($band) {
-//            
-//        } else {
-//            $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
-//        }
     }
 
     public function uploadAction(Request $request) {
