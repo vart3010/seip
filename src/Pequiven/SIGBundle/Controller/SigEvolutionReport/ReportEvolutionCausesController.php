@@ -23,17 +23,14 @@ use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionCauseAnalysisType;
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
  */
-
-class ReportEvolutionCausesController extends ResourceController
-{   
+class ReportEvolutionCausesController extends ResourceController{   
     /**
      * Retorna el formulario del analisis de la tendencia
      * 
      * @param Request $request
      * @return type
      */
-    function getFormAnalysisAction(Request $request)
-    {
+    function getFormAnalysisAction(Request $request){
         $idObject = $request->get('idObject');// Id generico pero debo cambiar
         $typeObject  = $request->get('typeObj');//tipo de Objeto
         
@@ -63,8 +60,7 @@ class ReportEvolutionCausesController extends ResourceController
      * @param Request $request
      * @return type
      */
-    public function addCauseAnalysisAction(Request $request)
-    {   
+    public function addCauseAnalysisAction(Request $request){   
         $idObject = $request->get('idObject');//Id
         $typeObject = $request->get('typeObj');//Tipo de Objeto
         $month = $request->get('set_data')['month'];//Carga de Mes pasado
@@ -73,21 +69,26 @@ class ReportEvolutionCausesController extends ResourceController
         $causeAnalysis = new EvolutionCauseAnalysis();
         $form  = $this->createForm(new EvolutionCauseAnalysisType(), $causeAnalysis);
 
-        $causeAnalysis->setIdObject($idObject);
-        $causeAnalysis->setCreatedBy($user);
-        $causeAnalysis->setMonth($month);
-        $causeAnalysis->setTypeObject($typeObject);        
+        $analysis = $this->get('pequiven.repository.sig_causes_analysis')->findOneBy(array('idObject' => $idObject, 'month' => $month, 'typeObject' => $typeObject));
+        if ($analysis) {
+            $this->get('session')->getFlashBag()->add('error', "Mes que intentas cargar ya cuenta con un Analisis de Causas.");            
+        }else{
+            $causeAnalysis->setIdObject($idObject);
+            $causeAnalysis->setCreatedBy($user);
+            $causeAnalysis->setMonth($month);
+            $causeAnalysis->setTypeObject($typeObject);        
 
-        $form->handleRequest($request);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($causeAnalysis);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add('success', "Analisis de Causas Cargado Correctamente");  
-            //return true;          
-        }     
+            if ($form->isSubmitted()) {
+                
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($causeAnalysis);
+                $em->flush();
+                $this->get('session')->getFlashBag()->add('success', "Analisis de Causas Cargado Correctamente");  
+                //return true;          
+            }   
+        }
         die();
     }
 
@@ -97,8 +98,7 @@ class ReportEvolutionCausesController extends ResourceController
      * @param Request $request
      * @return type
      */
-    public function deleteAnalysisCAction(Request $request)
-    {   
+    public function deleteAnalysisCAction(Request $request){
         $id = $request->get('id');
         
         $em = $this->getDoctrine()->getManager();
@@ -116,9 +116,7 @@ class ReportEvolutionCausesController extends ResourceController
      * @param Request $request
      * @return type
      */
-    function getFormCausesAction(Request $request)
-    {
-        
+    function getFormCausesAction(Request $request){        
         $typeObject = $request->get('typeObj');//tipo de Objeto
         $idObject = $request->get('idObject');// Id generico pero debo cambiar que diga id indicator
         
@@ -157,8 +155,7 @@ class ReportEvolutionCausesController extends ResourceController
      * @param Request $request
      * @return type
      */
-    public function addCausesAction(Request $request)
-    {   
+    public function addCausesAction(Request $request){   
         $idObject = $request->get('idObject');
         $typeObject = $request->get('typeObj');        
         $month = $request->get('set_data')['month'];//Carga de Mes pasado
@@ -189,8 +186,7 @@ class ReportEvolutionCausesController extends ResourceController
      * @param Request $request
      * @return type
      */
-    public function deleteCauseAction(Request $request)
-    {           
+    public function deleteCauseAction(Request $request){           
         $causeId = $request->get('id');
 
         $em = $this->getDoctrine()->getManager();
