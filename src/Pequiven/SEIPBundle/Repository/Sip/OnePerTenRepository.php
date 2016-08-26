@@ -36,7 +36,7 @@ class OnePerTenRepository extends EntityRepository {
 
         if(($for_one = $criteria->remove('for_one')) != null){
             $queryBuilder
-                    ->innerJoin('opt.user', 'u')
+                    ->leftJoin('opt.user', 'u')
 //                    ->innerJoin('opt.ten', 't')
             ;
         }
