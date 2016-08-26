@@ -114,7 +114,7 @@
             <tr bgcolor="#F2F2F2">
                 <td class="title_bold" width="10%" style="text-align: right;"> Asistencias </td>
                 {% set suma=0%}
-                {% for miembro in users %}
+                {% for miembro in users if totalMember[miembro.id] is defined %}
                     <th width="{{countMiembros}}%" style="text-align: center">
                         {{ totalMember[miembro.id] }}
                     </th>
@@ -125,7 +125,7 @@
             </tr>            
             <tr bgcolor="#F2F2F2">
                 <td class="title_bold" width="10%" style="text-align: right;"> (%) </td>                
-                {% for miembro in users %}
+                {% for miembro in users if totalMember[miembro.id] is defined %}
                     <th width="{{countMiembros}}%" style="text-align: center">
                         {{ (totalMember[miembro.id]*100/(fechas|length))|number_format(1, ',', '.') }}
                     </th>                    

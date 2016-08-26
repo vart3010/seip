@@ -570,7 +570,59 @@ class WorkStudyCircleController extends SEIPController {
         $twig = 'PequivenSEIPBundle:Politic:WorkStudyCircle\BackRestPdf.html.twig';
         $archiveTittle = 'Constancia de Respaldo Revolucionario ' . $workStudyCircle->getCodigo();
         $tittle = 'Constancia de Respaldo Revolucionario';
-        $this->getReportService()->generateCETPDF($data, $tittle, $twig, 'P', $archiveTittle);        
+        $this->getReportService()->generateCETPDF($data, $tittle, $twig, 'P', $archiveTittle);
+    }
+
+    /**
+     * Exportar la encuesta de Casa-Abasto
+     * @param Request $request
+     */
+    public function exportPollAction(Request $request) {        
+        $em = $this->getDoctrine()->getManager();
+        $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("idWorkStudyCircle")));
+
+
+        $path = $this->get('kernel')->locateResource('@PequivenSEIPBundle/Resources/Skeleton/workStudyCircle/Cuestionario_Casa_Abasto.xlsx');
+
+        $objPHPExcel = \PHPExcel_IOFactory::load($path);
+        $objPHPExcel
+                ->getProperties()
+                ->setCreator("SEIP")
+                ->setTitle('SEIP - Encuesta Casa Abasto')
+                ->setCreated()
+                ->setLastModifiedBy('SEIP')
+                ->setModified()
+        ;
+        $objPHPExcel
+                ->setActiveSheetIndex(0);
+        
+        $activeSheet = $objPHPExcel->getActiveSheet();
+        $user=$this->getUser();
+        $activeSheet->setCellValue('C12', $user->getNumPersonal());
+        $activeSheet->setCellValue('E12', $user->getFullNamePersonalNumber());
+        $activeSheet->setCellValue('C13', $workStudyCircle->getCodigo());
+        $activeSheet->setCellValue('E13', $workStudyCircle->getName());
+        $activeSheet->setCellValue('D37', $user->getId());
+        $activeSheet->setCellValue('F37', $workStudyCircle->getId());
+
+        $fileName = sprintf('Encuesta_Casa_Abasto_%s.xlsx', $user->getId());
+        // Redirect output to a client’s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $fileName . '"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 2017 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->setIncludeCharts(TRUE);
+        $objWriter->save('php://output');
+        exit;
     }
 
     /**
