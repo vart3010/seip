@@ -605,7 +605,7 @@ class WorkStudyCircleController extends SEIPController {
         $activeSheet->setCellValue('D37', $user->getId());
         $activeSheet->setCellValue('F37', $workStudyCircle->getId());
 
-        $fileName = sprintf('Encuesta_Casa_Abasto_%s.xls', $user->getId());
+        $fileName = sprintf('Encuesta_Casa_Abasto_%s.xlsx', $user->getId());
         // Redirect output to a client’s web browser (Excel5)
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $fileName . '"');
@@ -619,7 +619,7 @@ class WorkStudyCircleController extends SEIPController {
         header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
         header('Pragma: public'); // HTTP/1.0
 
-        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->setIncludeCharts(TRUE);
         $objWriter->save('php://output');
         exit;
