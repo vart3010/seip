@@ -605,13 +605,13 @@ class WorkStudyCircleController extends SEIPController {
         $activeSheet->setCellValue('D37', $user->getId());
         $activeSheet->setCellValue('F37', $workStudyCircle->getId());
 
-        $fileName = sprintf('Encuesta_Casa_Abasto_%s.xlsx', $user->getId());
+        $fileName = sprintf('Encuesta_Casa_Abasto_%s.xls', $user->getId());
         // Redirect output to a client’s web browser (Excel5)
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $fileName . '"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
-        header('Cache-Control: max-age=1');
+        //header('Cache-Control: max-age=1');
 
         // If you're serving to IE over SSL, then the following may be needed
         header('Expires: Mon, 26 Jul 2017 05:00:00 GMT'); // Date in the past
@@ -619,7 +619,7 @@ class WorkStudyCircleController extends SEIPController {
         header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
         header('Pragma: public'); // HTTP/1.0
 
-        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->setIncludeCharts(TRUE);
         $objWriter->save('php://output');
         exit;
