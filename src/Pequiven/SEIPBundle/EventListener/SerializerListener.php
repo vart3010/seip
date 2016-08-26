@@ -726,7 +726,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
     public function onPostSerializeOnePerTen(ObjectEvent $event) {
         $object = $event->getObject();
         $user = $this->container->get('pequiven.repository.user')->findOneBy(array('id' => $object->getUser()));
-        $links['self']['show'] = $this->generateUrl('pequiven_search_members', array('user' => $user->getId()));
+        $links['self']['show'] = $this->generateUrl('pequiven_search_members', array('user' => $user->getId(),'cedula' => $object->getCedula()));
 
         $gerencia = '';
         if ($user->getGerencia() != null) {
