@@ -128,15 +128,17 @@
     {% endif %}
     <br /><br />
 
-    <div class="align-right">
-        {% set routeConfigApoyo = path('pequiven_work_study_circle_export_housesupply_poll',{idWorkStudyCircle:workStudyCircle.id}) %}
-        {{ buttons.generic(
+    <div class="align-right">.
+      {#  {% if (workStudyCircle.phase==1)%}
+            {% set routeConfigApoyo = path('pequiven_work_study_circle_export_housesupply_poll',{idWorkStudyCircle:workStudyCircle.id}) %}
+            {{ buttons.generic(
                     (routeConfigApoyo),
                     ('Exportar Encuesta de Casa - Abasto'),
                     'icon-download'
                  ) 
-        }}
-         &nbsp;  
+            }}        
+            &nbsp;  
+        {%endif%}#}
         {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EXPORT_REPORT"])) %}
             {% if (workStudyCircle.phase==1)%}
                 {% set routeConfigApoyo = path('pequiven_work_study_circle_export_BackRestpdf',{idWorkStudyCircle:workStudyCircle.id}) %}
