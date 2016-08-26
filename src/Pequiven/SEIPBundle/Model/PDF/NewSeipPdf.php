@@ -32,20 +32,14 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
     public function Header() {
 
         // Logo SEIP
-//        $logopqv = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Logo_Pequiven.jpg'); //K_PATH_IMAGES.'logo_example.jpg';
-//        $logoseip = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Logo_Seip.jpg'); //K_PATH_IMAGES.'logo_example.jpg';
-
-        //$logopqv = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/PQV_Diamante.png');
-        //$logoseip = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/SEIP_Blanco.png');
         $logopqv = 'bundles/pequivenseip/logotipos-pqv/logotipos-pdf/PQV_Diamante.png';
         $logoseip = 'bundles/pequivenseip/logotipos-pqv/logotipos-pdf/SEIP_Blanco.png';
-
-
         $tittle = $this->title;
 
         // Set font
         $this->SetFont('helvetica', 'B', 8);
         $this->SetTextColor(0, 0, 0);
+
         // Title
         $text = '<table width="100%" cellpadding="2">'
                 . '<tr bgcolor="#C1242C">'
@@ -72,23 +66,18 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
 
     // Footer del pdf de resultados
     public function Footer() {
-        // Position at 27 mm from bottom
-        //      $this->SetY(-30);
+
         // Set font
         $this->SetFont('helvetica', 'I', 8);
-        //$logoeslogan = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Patriotas_Unidos.jpg');
-        //$logoministerio = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Ministerio.jpg');
         $logoeslogan = 'bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Patriotas_Unidos.jpg';
         $logoministerio = 'bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Ministerio.jpg';
-        // Page number
-        //. $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages() .
-
         $margin = $this->getPageDimensions();
+
         $lineRed = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(193, 36, 44));
         $text = $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages();
         $html = '<div style="text-align: center; font-size: 6pt; font-weight: bold; color: #B00000; vertical-align: middle; font-family: sans-serif;">'
-                    . 'Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos'
-                    . '</div>';
+                . 'Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos'
+                . '</div>';
 
         if ($margin['or'] == 'P') {
             $html = '<p style="text-align: center; font-size: 6pt; font-weight: bold; color: #B00000; vertical-align: middle; font-family: sans-serif;">'
@@ -105,18 +94,10 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
                     . '</div>';
             $this->Line(15, 192, 265, 192, $lineRed);
             $this->Image($logoministerio, 15, 193, 75, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-            $this->Image($logoeslogan, 225, 193, 40, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);            
+            $this->Image($logoeslogan, 225, 193, 40, 10, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
             $this->Text(150, 196, $text);
             $this->writeHTMLCell(100, 10, 105, 200, $html);
         }
-
-//        $footer = '<div style="text-align: rigth; margin-top: 100px; margin-left: 50px">'                
-//                . $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages()                
-//                . '</div>';
-////                . '<span style="color: #bb0707; font-size: 1.3em;font-weight: bold;font-variant: small-caps;">' . $this->footerText . '</span><br><span>' . $this->trans('pequiven_seip.pdf.pageFooter', array('%page%' => $this->getAliasNumPage(), '%totalPage%' => $this->getAliasNbPages()), 'PequivenSEIPBundle') . '</span></div>';
-//        $this->writeHTML($footer);
-        //);
-        //Línea HR
     }
 
     /**
