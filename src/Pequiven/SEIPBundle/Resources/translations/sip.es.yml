@@ -12,6 +12,7 @@ sip:
     miembros: Miembros
     miembro: Miembro
     busqueda: Búsqueda
+    profile_employee: Perfil %employee%
     cutl:
         title: CUTL        
         list: Listado de CUTL

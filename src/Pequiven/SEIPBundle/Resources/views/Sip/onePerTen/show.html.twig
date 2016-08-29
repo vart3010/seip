@@ -14,7 +14,7 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("sip.consulta"|trans )
+        ("sip.profile_employee"|trans({"%employee%":user.getOnlyFullNameUser}))
     ) }}
 {% endblock %}
 
