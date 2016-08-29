@@ -602,8 +602,8 @@ class WorkStudyCircleController extends SEIPController {
         $activeSheet->setCellValue('E12', $user->getFullNamePersonalNumber());
         $activeSheet->setCellValue('C13', $workStudyCircle->getCodigo());
         $activeSheet->setCellValue('E13', $workStudyCircle->getName());
-        $activeSheet->setCellValue('D37', $user->getId());
-        $activeSheet->setCellValue('F37', $workStudyCircle->getId());
+        $activeSheet->setCellValue('D35', $user->getId());
+        $activeSheet->setCellValue('F35', $workStudyCircle->getId());
 
         $fileName = sprintf('Encuesta_Casa_Abasto_%s.xlsx', $user->getId());
         // Redirect output to a client’s web browser (Excel5)
@@ -611,7 +611,7 @@ class WorkStudyCircleController extends SEIPController {
         header('Content-Disposition: attachment;filename="' . $fileName . '"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
-        header('Cache-Control: max-age=1');
+        //header('Cache-Control: max-age=1');
 
         // If you're serving to IE over SSL, then the following may be needed
         header('Expires: Mon, 26 Jul 2017 05:00:00 GMT'); // Date in the past
