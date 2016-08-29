@@ -2062,7 +2062,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuSip->addChild('sip.list_pqv', array(
                 'route' => 'pequiven_onePerTen_list',
                 'labelAttributes' => array('icon' => 'fa fa-table',)
-            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_pqv', $section)));
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_profile', $section)));
         }
 
         if ($this->isGranted(array('ROLE_SEIP_SIP_CENTRO'))) {
@@ -2081,7 +2081,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             $centro->addChild($centroMenu);
 
-            $menuSip->addChild($centro);
+            //$menuSip->addChild($centro);
         }
 
 //        if ($this->isGranted(array('ROLE_SEIP_SIP_ONEPERTEN'))) {
@@ -2122,7 +2122,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             $cutl->addChild($cutlMenu);
 
-            $menuSip->addChild($cutl);
+            //$menuSip->addChild($cutl);
         }
 
         if ($this->isGranted(array('ROLE_SEIP_SIP_REQ'))) {
@@ -2149,7 +2149,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             $request->addChild($requestMenu);
 
-            $menuSip->addChild($request);
+            //$menuSip->addChild($request);
         }
 
         if ($this->isGranted(array('ROLE_SEIP_SIP_REPORTS'))) {
@@ -2159,7 +2159,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 'labelAttributes' => array('icon' => 'fa fa-file-excel-o',),
                             ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.report', $section)));
-            $menuSip->addChild($report);
+            //$menuSip->addChild($report);
         }
 
         if ($this->isGranted(array('ROLE_SEIP_SIP_REGISTER_VOTE'))) {
@@ -2169,7 +2169,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 'labelAttributes' => array('icon' => 'fa fa-pencil-square-o',),
                             ))
                     )->setLabel($this->translate(sprintf('6D - Reporte Voto', $section)));
-            $menuSip->addChild($voto);
+            //$menuSip->addChild($voto);
         }
 
         if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_*'))) {
@@ -2271,7 +2271,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             $display->addChild($displayList);
 
-            $menuSip->addChild($display);
+            //$menuSip->addChild($display);
         }
 
         $menu->addChild($menuSip);
