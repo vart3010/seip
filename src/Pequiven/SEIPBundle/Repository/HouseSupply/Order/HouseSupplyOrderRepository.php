@@ -94,9 +94,9 @@ class HouseSupplyOrderRepository extends EntityRepository {
         return $this->createPaginator($criteria, $orderBy);
     }
 
-    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
+    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $critery = null) {
 
-        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($critery);
 
         if (($complejo = $criteria->remove('complejo'))) {
             $queryBuilder->innerJoin('HSOrder.workStudyCircle', 'wsc');
@@ -116,6 +116,18 @@ class HouseSupplyOrderRepository extends EntityRepository {
                     ->innerJoin('HSOrder.workStudyCircle', 'wsc')
                     ->andWhere('wsc.id = :wsc')
                     ->setParameter('wsc', $wsc)
+            ;
+        }
+
+        if (($cycle = $criteria->remove('cycle'))) {
+            $queryBuilder->andWhere('HSOrder.cycle = :cycle')
+                    ->setParameter('cycle', $cycle)
+            ;
+        }
+
+        if (($productKit = $criteria->remove('productKit'))) {
+            $queryBuilder->andWhere('HSOrder.productKit = :productKit')
+                    ->setParameter('productKit', $productKit)
             ;
         }
 

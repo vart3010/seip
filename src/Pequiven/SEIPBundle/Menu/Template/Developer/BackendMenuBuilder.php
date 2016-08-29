@@ -104,7 +104,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
 
         //Menú Círculos de Estudio de Trabajo
-        if ($this->isGranted('ROLE_SEIP_WORK_STUDY_CIRCLES_*')) {
+        $wsc = $user->getWorkStudyCircle();
+        if ($wsc) {
             $this->addMenuWorkStudyCircles($menu, $section);
         }
 
@@ -1987,7 +1988,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ))
                     ->setLabel($this->translate(sprintf('Entrega de Pedidos', $section)));
         }
-        
+
         if ($this->isGranted(array('ROLE_SEIP_HOUSESUPPLY_CANCEL_ORDERS'))) {
             $child2
                     ->addChild('housesupply.order.cancel', array(

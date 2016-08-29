@@ -197,6 +197,28 @@ pequiven_seip_work_study_circle:
     options:
         expose: true
         
+pequiven_seip_house_supply_cycle:
+    path: /house-supply-cycle.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getAllHouseSupplyCycle
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_seip_house_supply_product_kit:
+    path: /house-supply-product-kit.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getAllProductKit
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
 pequiven_seip_profiles_politic_evaluation:
     path: /profile-politic-evaluation.{_format}
     defaults: 

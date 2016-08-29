@@ -86,17 +86,14 @@ class HouseSupplyOrderKitController extends SEIPController {
 
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
-//$repository = $this->getRepository();
         $repository = $this->get('pequiven.repository.housesupply_order');
-//var_dump(get_class($repository));die();
-//$orders = $this->get('pequiven.repository.housesupply_order')->findAll(); //Carga las Órdenes
+
 
         $arrayStatusHouseSupplyOrder = houseSupplyOrder::getStatus();
 
         $statusHouseSupplyOrder = array();
         $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::REGISTRADA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::REGISTRADA]);
-        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::DEVUELTA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::DEVUELTA]);
-        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::ESPERA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::ESPERA]);
+        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::DEVUELTA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::DEVUELTA]);        
         $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::PAGADA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::PAGADA]);
         $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::ENTREGADA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::ENTREGADA]);
 
@@ -111,11 +108,11 @@ class HouseSupplyOrderKitController extends SEIPController {
             );
 
             $maxPerPage = $this->config->getPaginationMaxPerPage();
-            if (($limit = $request->query->get('limit')) && $limit > 0) {
+            if (($limit = $request->get('limit')) && $limit > 0) {
                 if ($limit > 100) {
                     $limit = 100;
                 }
-                $maxPerPage = $limit;
+                $maxPerPage = 25;
             }
             $resources->setCurrentPage($request->get('page', 1), true, true);
             $resources->setMaxPerPage($maxPerPage);
