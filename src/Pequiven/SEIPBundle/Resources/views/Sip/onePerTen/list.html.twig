@@ -9,8 +9,8 @@
 
 {% block before_body %}
     {{ contentHeader(
-    	"Votantes Pequiven",
-        ("sip.list"|trans )
+    	("sip.list_profile"|trans({},'sip')),
+        ("sip.list"|trans({},'sip'))
     ) }}
 {% endblock %}
 

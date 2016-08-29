@@ -5687,7 +5687,7 @@ angular.module('seipModule.controllers', [])
                                 });
                             }
                         });
-            };            
+            };
             $scope.getHouseSupplyProductKit();
 
             //Scope de ProductKit
@@ -8098,7 +8098,7 @@ angular.module('seipModule.controllers', [])
                                 }
                             ]
                         }
-                    })
+                    });
                     MsColumn2d.render();
                 });
             }
