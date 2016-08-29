@@ -7976,79 +7976,82 @@ angular.module('seipModule.controllers', [])
      //37.-Grafico para mostrar el % de cumplimiento del indicador padre (mantenimiento, 3921)....
             $scope.chargeColumn2d = function (indicatorId, render, width, height) {
                 FusionCharts.ready(function () {
-                    var MsColumn2d = new FusionCharts({
-                        type: 'column2d',
-                        renderAt: render,
-                        width: '100%',
-                        height: '350',
-                        dataFormat: 'json',
-                        dataSource: {
-                            "chart": {
-                                "caption": "% Cumplimiento Plan de Mantenimiento",
-                                "xAxisName": "Meses",
-                                "yAxisName": "% de cumpliento",
-                                "paletteColors": "#0075c2",
-                                "bgColor": "#ffffff",
-                                "borderAlpha": "0",
-                                "canvasBorderAlpha": "0",
-                                "usePlotGradientColor": "0",
-                                "plotBorderAlpha": "0",
-                                "placevaluesInside": "1",
-                                "rotatevalues": "1",
-                                "valueFontColor": "#ffffff",                
-                                "showXAxisLine": "1",
-                                "xAxisLineColor": "#999999",
-                                "divlineColor": "#999999",               
-                                "divLineIsDashed": "1",
-                                "showAlternateHGridColor": "0",
-                                "subcaptionFontBold": "0",
-                            },            
-                            "data": [
-                                {
-                                    "label": "Enero",
-                                    "value": "90.39"
-                                }, 
-                                {
-                                    "label": "Febrero",
-                                    "value": "90.94"
-                                }, 
-                                {
-                                    "label": "Marzo",
-                                    "value": "94.34"
-                                }, 
-                                {
-                                    "label": "Abril",
-                                    "value": "88.50"
-                                }, 
-                                {
-                                    "label": "Mayo",
-                                    "value": "92.31"
-                                }, 
-                                {
-                                    "label": "Junio",
-                                    "value": "94.51"
-                                }, 
-                                {
-                                    "label": "Julio",
-                                    "value": "90.99"
-                                },
-                            ],
-                            "trendlines": [
-                                {
-                                    "line": [
-                                        {
-                                            "startvalue": "100",
-                                            "color": "#1aaf5d",
-                                            "valueOnRight": "0",
-                                            "displayvalue": "Meta (100%)"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    })
-                    MsColumn2d.render();
+                var MsColumn2d = new FusionCharts({
+                    type: 'column3d',
+                    renderAt: render,
+                    width: '100%',
+                    height: '300',
+                    dataFormat: 'json',
+                    dataSource: {
+                        "chart": {
+                            "caption": "% Cumplimiento Plan de Mantenimiento",
+                            "xAxisName": "Meses",
+                            "yAxisName": "% de cumpliento",
+                            "yaxismaxvalue": "100",
+                            "paletteColors": "#0075c2",
+                            "valueFontColor": "#ffffff",
+                            "baseFont": "Helvetica Neue,Arial",
+                            "captionFontSize": "14",
+                            "subcaptionFontSize": "14",
+                            "subcaptionFontBold": "0",
+                            "placeValuesInside": "1",
+                            "rotateValues": "1",
+                            "showShadow": "0",
+                            "divlineColor": "#999999",               
+                            "divLineIsDashed": "1",
+                            "divlineThickness": "1",
+                            "divLineDashLen": "1",
+                            "divLineGapLen": "1",
+                            "canvasBgColor": "#ffffff",
+                             "decimalSeparator" : ",",
+                             "showHoverEffect" : "1"
+                        },
+                        "data": [
+                           {
+                             "label": "Enero",
+                             "value": "90.39"
+                           }, 
+                           {
+                             "label": "Febrero",
+                             "value": "90.94"
+                           }, 
+                           {
+                             "label": "Marzo",
+                             "value": "94.34"
+                           }, 
+                           {
+                             "label": "Abril",
+                             "value": "88.50"
+                           }, 
+                           {
+                             "label": "Mayo",
+                             "value": "92.31"
+                           }, 
+                           {
+                             "label": "Junio",
+                             "value": "94.51"
+                           }, 
+                           {
+                             "label": "Julio",
+                             "value": "90.99"
+                           },
+                         ],
+                          "trendlines": [
+                              {
+                                "line": [
+                                  {
+                                    "startvalue": "100",
+                                    "color": "#1aaf5d",
+                                    "valueOnRight": "1",
+                                    "displayvalue": "Meta (100%)"
+                                  }
+                                ]
+                              }
+                               ]
+                    }
                 });
+                MsColumn2d.render();
+            });
             }
 
             //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
