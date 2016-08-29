@@ -1969,7 +1969,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         $child2
                 ->addChild('housesupply.order.list', array(
                     'route' => 'pequiven_housesupply_order_list',
-//                    'labelAttributes' => array('icon' => 'fa fa-arrow-up')
+                    'labelAttributes' => array('icon' => 'fa fa-list')
                 ))
                 ->setLabel($this->translate(sprintf('Lista', $section)));
 
