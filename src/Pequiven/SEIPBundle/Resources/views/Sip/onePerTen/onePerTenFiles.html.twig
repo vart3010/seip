@@ -12,7 +12,7 @@
                     </a>
                 {% endif %}
 
-                <form style="display: none" id="forma" action="{{ path('pequiven_search_members',{user:onePerTen.user.id})}}" method="POST" enctype="multipart/form-data">
+                <form style="display: none" id="forma" action="{{ path('pequiven_onePerTen_show',{id:onePerTen.id})}}" method="POST" enctype="multipart/form-data">
                     <input name="fileUpload" id="onePerTenFilePdf" type="file">
                 </form>
             </div>
