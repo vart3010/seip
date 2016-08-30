@@ -1081,7 +1081,7 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
-        
+
         .controller('DeliveryPoint', function ($scope) {
             var format = function (data)
             {
@@ -1187,7 +1187,7 @@ angular.module('seipModule.controllers', [])
                 url: urlSearchPeriod
             });
         })
-        
+
         .controller('ReportTemplateIndexActionController', function ($scope) {
             var format = function (data)
             {
@@ -5605,16 +5605,22 @@ angular.module('seipModule.controllers', [])
             var selectComplejo = angular.element("#selectComplejos");
             var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
             var selectStatusHouseSupplyOrder = angular.element("#selectStatusHouseSupplyOrder");
+            var selectCycle = angular.element("#selectCycle");
+            var selectProductKit = angular.element("#selectProductKit");
 
             $scope.data = {
                 complejos: null,
                 work_study_circles: null,
                 status_house_supply_order: null,
+                cycle: null,
+                productKit: null,
             };
             $scope.model = {
                 complejo: null,
                 workStudyCircle: null,
                 statusHouseSupplyOrder: null,
+                cycle: null,
+                productKit: null,
             };
 
             //Busca las localidades
@@ -5632,6 +5638,8 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
+
+            $scope.getComplejos();
 
             //Busca los Círculos de Estudio de Trabajo
             $scope.getWorkStudyCircle = function (complejo, phase) {
@@ -5655,7 +5663,54 @@ angular.module('seipModule.controllers', [])
                         });
             };
 
-            $scope.getComplejos();
+            $scope.getHouseSupplyCycle = function () {
+
+                $http.get(Routing.generate('pequiven_seip_house_supply_cycle'))
+                        .success(function (data) {
+                            $scope.data.cycle = data;
+                            if ($scope.model.cycle != null) {
+                                $scope.setValueSelect2("selectCycle", $scope.model.cycle, $scope.data.cycle, function (selected) {
+                                    $scope.model.cycle = selected;
+                                });
+                            }
+                        });
+            };
+            $scope.getHouseSupplyCycle();
+
+            $scope.getHouseSupplyProductKit = function () {
+                $http.get(Routing.generate('pequiven_seip_house_supply_product_kit'))
+                        .success(function (data) {
+                            $scope.data.productKit = data;
+                            if ($scope.model.productKit != null) {
+                                $scope.setValueSelect2("selectProductKit", $scope.model.productKit, $scope.data.productKit, function (selected) {
+                                    $scope.model.productKit = selected;
+                                });
+                            }
+                        });
+            };
+            $scope.getHouseSupplyProductKit();
+
+            //Scope de ProductKit
+            $scope.$watch("model.productKit", function (newParams, oldParams) {
+                if ($scope.model.productKit != null && $scope.model.productKit.id != undefined) {
+                    $scope.tableParams.$params.filter['productKit'] = $scope.model.productKit.id;
+                    selectProductKit.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['productKit'] = null;
+                }
+            });
+
+            //Scope de Ciclos de Pedido
+            $scope.$watch("model.cycle", function (newParams, oldParams) {
+                if ($scope.model.cycle != null && $scope.model.cycle.id != undefined) {
+                    $scope.tableParams.$params.filter['cycle'] = $scope.model.cycle.id;
+                    selectCycle.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['cycle'] = null;
+                }
+            });
 
             //Scope de Localidad
             $scope.$watch("model.complejo", function (newParams, oldParams) {
@@ -5687,14 +5742,12 @@ angular.module('seipModule.controllers', [])
             $scope.$watch("model.statusHouseSupplyOrder", function (newParams, oldParams) {
                 if ($scope.model.statusHouseSupplyOrder != null && $scope.model.statusHouseSupplyOrder.id != undefined) {
                     $scope.tableParams.$params.filter['statusHouseSupplyOrder'] = $scope.model.statusHouseSupplyOrder.id;
-                    //Al cambiar el Status Firma Revocatorio 2016
                     selectStatusHouseSupplyOrder.change(function () {
                     });
                 } else {
                     $scope.tableParams.$params.filter['statusHouseSupplyOrder'] = null;
                 }
             });
-
         })
 
         .controller('ReportSipController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
@@ -7870,7 +7923,7 @@ angular.module('seipModule.controllers', [])
                     MsLineAit.render();
                 });
             };
-            
+
 //36.-Grafico para mostrar el % de cumplimiento de los indicadores hijos de produccion (3920)....
             $scope.chargeMslineProd = function (indicatorId, render, width, height) {
                 FusionCharts.ready(function () {
@@ -7906,14 +7959,13 @@ angular.module('seipModule.controllers', [])
                             "categories": [
                                 {
                                     "category": [
-                                        { "label": "Enero" }, 
-                                        { "label": "Febrero" }, 
-                                        { "label": "Marzo" },
-                                        { "label": "Abril" }, 
-                                        { "label": "Mayo" }, 
-                                        { "label": "Junio" }, 
-                                        { "label": "Julio" },
-
+                                        {"label": "Enero"},
+                                        {"label": "Febrero"},
+                                        {"label": "Marzo"},
+                                        {"label": "Abril"},
+                                        {"label": "Mayo"},
+                                        {"label": "Junio"},
+                                        {"label": "Julio"},
                                     ]
                                 }
                             ],
@@ -7921,40 +7973,40 @@ angular.module('seipModule.controllers', [])
                                 {
                                     "seriesname": "Ejecución de Producción de Agua Industrial",
                                     "data": [
-                                        { "value": "100" }, 
-                                        { "value": "94.01" }, 
-                                        { "value": "94.92" }, 
-                                        { "value": "95.08" }, 
-                                        { "value": "97.64" }, 
-                                        { "value": "99.14" }, 
-                                        { "value": "92.74" }
+                                        {"value": "100"},
+                                        {"value": "94.01"},
+                                        {"value": "94.92"},
+                                        {"value": "95.08"},
+                                        {"value": "97.64"},
+                                        {"value": "99.14"},
+                                        {"value": "92.74"}
                                     ]
-                                }, 
+                                },
                                 {
                                     "seriesname": "Ejecución de Producción de Energía Eléctrica",
                                     "data": [
-                                        { "value": "110.63" }, 
-                                        { "value": "92.1" }, 
-                                        { "value": "94.65" }, 
-                                        { "value": "84.46" }, 
-                                        { "value": "88.28" }, 
-                                        { "value": "101.89" }, 
-                                        { "value": "80" }
+                                        {"value": "110.63"},
+                                        {"value": "92.1"},
+                                        {"value": "94.65"},
+                                        {"value": "84.46"},
+                                        {"value": "88.28"},
+                                        {"value": "101.89"},
+                                        {"value": "80"}
                                     ]
                                 },
                                 {
                                     "seriesname": "Cumplimiento de Plan de Despacho del Terminal Maritimo",
                                     "data": [
-                                        { "value": "104.08" }, 
-                                        { "value": "94.11" }, 
-                                        { "value": "86.76" }, 
-                                        { "value": "84.27" }, 
-                                        { "value": "87.23" }, 
-                                        { "value": "100.75" }, 
-                                        { "value": "107.8" }
+                                        {"value": "104.08"},
+                                        {"value": "94.11"},
+                                        {"value": "86.76"},
+                                        {"value": "84.27"},
+                                        {"value": "87.23"},
+                                        {"value": "100.75"},
+                                        {"value": "107.8"}
                                     ]
                                 }
-                            ], 
+                            ],
                             "trendlines": [
                                 {
                                     "line": [
@@ -7972,8 +8024,8 @@ angular.module('seipModule.controllers', [])
                     MsLineProd.render();
                 });
             };
-            
-     //37.-Grafico para mostrar el % de cumplimiento del indicador padre (mantenimiento, 3921)....
+
+            //37.-Grafico para mostrar el % de cumplimiento del indicador padre (mantenimiento, 3921)....
             $scope.chargeColumn2d = function (indicatorId, render, width, height) {
                 FusionCharts.ready(function () {
                     var MsColumn2d = new FusionCharts({
@@ -7995,39 +8047,39 @@ angular.module('seipModule.controllers', [])
                                 "plotBorderAlpha": "0",
                                 "placevaluesInside": "1",
                                 "rotatevalues": "1",
-                                "valueFontColor": "#ffffff",                
+                                "valueFontColor": "#ffffff",
                                 "showXAxisLine": "1",
                                 "xAxisLineColor": "#999999",
-                                "divlineColor": "#999999",               
+                                "divlineColor": "#999999",
                                 "divLineIsDashed": "1",
                                 "showAlternateHGridColor": "0",
                                 "subcaptionFontBold": "0",
-                            },            
+                            },
                             "data": [
                                 {
                                     "label": "Enero",
                                     "value": "90.39"
-                                }, 
+                                },
                                 {
                                     "label": "Febrero",
                                     "value": "90.94"
-                                }, 
+                                },
                                 {
                                     "label": "Marzo",
                                     "value": "94.34"
-                                }, 
+                                },
                                 {
                                     "label": "Abril",
                                     "value": "88.50"
-                                }, 
+                                },
                                 {
                                     "label": "Mayo",
                                     "value": "92.31"
-                                }, 
+                                },
                                 {
                                     "label": "Junio",
                                     "value": "94.51"
-                                }, 
+                                },
                                 {
                                     "label": "Julio",
                                     "value": "90.99"
@@ -8046,7 +8098,7 @@ angular.module('seipModule.controllers', [])
                                 }
                             ]
                         }
-                    })
+                    });
                     MsColumn2d.render();
                 });
             }
