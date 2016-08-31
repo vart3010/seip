@@ -149,7 +149,7 @@
                                         <th width="15%">&nbsp;</th>                                        
                                     </tr>
                                     {% for member in wsc.getMembers %}    
-                                        {% if member.getId == wsc.getCoordinator.getId %}
+                                        {#{% if member.getId == wsc.getCoordinator.getId %}#}
                                             <tr>
                                                 <td>{{ loop.index  }}</td>
                                                 <td>{{ member.getOnlyFullNameUser }}</td>
@@ -160,7 +160,7 @@
                                                     </p>                                                
                                                 </td>                                            
                                             </tr>
-                                        {%endif%}
+                                      {#  {%endif%}#}
                                     {% endfor %}
                                 </table>
                             </td>
