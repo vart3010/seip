@@ -7,6 +7,9 @@ Pequiven\SEIPBundle\Entity\Sip\OnePerTen:
         cedula:
             expose: true
             groups: [api_list]
+        nameEmployee:
+            expose: true
+            groups: [api_list]
         user:
             expose: true
             groups: [api_list]

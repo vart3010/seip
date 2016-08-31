@@ -105,7 +105,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
         //Menú Círculos de Estudio de Trabajo
         $wsc = $user->getWorkStudyCircle();
-        if ($wsc) {
+        if ($wsc || $this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_CREATE'))) {
             $this->addMenuWorkStudyCircles($menu, $section);
         }
 

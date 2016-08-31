@@ -432,7 +432,7 @@ class ResultController extends ResourceController {
         //Perfiles Políticos
         if ($isAllowPolitic) {
             $qbOnePerTen = $onePerTenRepository->findQueryWithResultNull($period);
-            $qbOnePerTen->select('opt.id,u.firstname,u.lastname');
+            $qbOnePerTen->select('opt.id,opt.nameEmployee');
             $resultsOnePerTen = $qbOnePerTen->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         }
 

@@ -24,7 +24,7 @@ class OnePerTenRepository extends EntityRepository {
     public function findQueryWithResultNull(\Pequiven\SEIPBundle\Entity\Period $period) {
         $qb = $this->getQueryBuilder();
         $qb
-                ->innerJoin('opt.user', 'u')
+                ->leftJoin('opt.user', 'u')
                 ->andWhere($qb->expr()->isNull('opt.lastDateCalculateProfile'))
         ;
 
@@ -41,9 +41,15 @@ class OnePerTenRepository extends EntityRepository {
             ;
         }
         
+        if(($cedula = $criteria->remove('cedula')) != null){
+            $queryBuilder
+                    ->andWhere($queryBuilder->expr()->like('opt.cedula', "'%".$cedula."%'"));
+        }
+        
         if (($description = $criteria->remove('userName')) != null) {
             $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('u.firstname', "'%" . $description . "%'"), $queryBuilder->expr()->like('u.lastname', "'%" . $description . "%'")));
         }
+        
         if (($complejo = $criteria->remove('complejo')) != null) {
             $queryBuilder
                     ->andWhere("u.complejo = :complejo")

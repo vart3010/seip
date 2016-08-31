@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\MasterBundle\Model\Complejo as modelComplejo;
 
-/**
+/** 
  * Localidad
  *
  * @ORM\Table(name="seip_c_complejo")
