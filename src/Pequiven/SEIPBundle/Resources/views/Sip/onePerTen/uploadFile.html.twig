@@ -1,6 +1,6 @@
 {% trans_default_domain 'sip' %}
 <div ng-controller="TableWorkStudyCircleFileController">
-    <form action="{{ path('pequiven_search_members',{'user':data}) }}" method="POST" id="formFile" enctype="multipart/form-data">
+    <form action="{{ path('pequiven_onePerTen_show',{'id':data}) }}" method="POST" id="formFile" enctype="multipart/form-data">
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ "sip.expedientes.add"|trans }}</legend>
             <div class="columns">
