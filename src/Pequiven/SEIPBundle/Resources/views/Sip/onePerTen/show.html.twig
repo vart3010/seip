@@ -208,7 +208,7 @@
         {% endif %}
         {% if is_granted(['ROLE_SEIP_SIP_ONEPERTEN_EXPORT']) %}
         <p class="button-height float-right" style="margin: 2px;">
-            <a id="btnExportToExcel" href="{{ path("pequiven_export_onePerTen",{idOne:onePerTen.id}) }}" class="button">
+            <a id="btnExportToExcel" href="{{ path("pequiven_export_onePerTen",{id:onePerTen.id}) }}" class="button">
                 <span class="button-icon"><span class="icon-download"></span></span>
                     {{ "sip.export.exportpdf"|trans }}
             </a>
