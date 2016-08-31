@@ -24,7 +24,7 @@ class OnePerTenRepository extends EntityRepository {
     public function findQueryWithResultNull(\Pequiven\SEIPBundle\Entity\Period $period) {
         $qb = $this->getQueryBuilder();
         $qb
-                ->innerJoin('opt.user', 'u')
+                ->leftJoin('opt.user', 'u')
                 ->andWhere($qb->expr()->isNull('opt.lastDateCalculateProfile'))
         ;
 
