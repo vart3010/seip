@@ -34,6 +34,14 @@ class OnePerTen extends modelOnePerTen {
      * @ORM\Column(name="nameEmployee", type="string", length=100, nullable=true)
      */
     private $nameEmployee;
+    
+    /**
+     * Nómina(s) a la(s) que pertenece el Empleado
+     * @var string
+     * 
+     * @ORM\Column(name="nomina", type="string", length=150, nullable=true)
+     */
+    private $nomina;
 
     /**
      * Cédula del Empleado
@@ -733,5 +741,14 @@ class OnePerTen extends modelOnePerTen {
     function setNameEmployee($nameEmployee){
         $this->nameEmployee = $nameEmployee;
     }
-
+    
+    
+    function getNomina(){
+        return $this->nomina;
+    }
+    
+    function setNomina($nomina){
+        $this->nomina = $nomina;
+    }
+    
 }
