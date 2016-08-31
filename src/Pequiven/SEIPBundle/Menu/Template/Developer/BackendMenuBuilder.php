@@ -104,7 +104,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
 
         //Menú Círculos de Estudio de Trabajo
-        if ($this->isGranted('ROLE_SEIP_WORK_STUDY_CIRCLES_*')) {
+        $wsc = $user->getWorkStudyCircle();
+        if ($wsc) {
             $this->addMenuWorkStudyCircles($menu, $section);
         }
 
@@ -1968,7 +1969,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         $child2
                 ->addChild('housesupply.order.list', array(
                     'route' => 'pequiven_housesupply_order_list',
-//                    'labelAttributes' => array('icon' => 'fa fa-arrow-up')
+                    'labelAttributes' => array('icon' => 'fa fa-list')
                 ))
                 ->setLabel($this->translate(sprintf('Lista', $section)));
 
@@ -1987,7 +1988,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ))
                     ->setLabel($this->translate(sprintf('Entrega de Pedidos', $section)));
         }
-        
+
         if ($this->isGranted(array('ROLE_SEIP_HOUSESUPPLY_CANCEL_ORDERS'))) {
             $child2
                     ->addChild('housesupply.order.cancel', array(
@@ -2062,7 +2063,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuSip->addChild('sip.list_pqv', array(
                 'route' => 'pequiven_onePerTen_list',
                 'labelAttributes' => array('icon' => 'fa fa-table',)
-            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_pqv', $section)));
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_profile', $section)));
         }
 
         if ($this->isGranted(array('ROLE_SEIP_SIP_CENTRO'))) {
@@ -2081,7 +2082,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             $centro->addChild($centroMenu);
 
-            $menuSip->addChild($centro);
+            //$menuSip->addChild($centro);
         }
 
 //        if ($this->isGranted(array('ROLE_SEIP_SIP_ONEPERTEN'))) {
@@ -2122,7 +2123,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             $cutl->addChild($cutlMenu);
 
-            $menuSip->addChild($cutl);
+            //$menuSip->addChild($cutl);
         }
 
         if ($this->isGranted(array('ROLE_SEIP_SIP_REQ'))) {
@@ -2149,7 +2150,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             $request->addChild($requestMenu);
 
-            $menuSip->addChild($request);
+            //$menuSip->addChild($request);
         }
 
         if ($this->isGranted(array('ROLE_SEIP_SIP_REPORTS'))) {
@@ -2159,7 +2160,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 'labelAttributes' => array('icon' => 'fa fa-file-excel-o',),
                             ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.report', $section)));
-            $menuSip->addChild($report);
+            //$menuSip->addChild($report);
         }
 
         if ($this->isGranted(array('ROLE_SEIP_SIP_REGISTER_VOTE'))) {
@@ -2169,7 +2170,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 'labelAttributes' => array('icon' => 'fa fa-pencil-square-o',),
                             ))
                     )->setLabel($this->translate(sprintf('6D - Reporte Voto', $section)));
-            $menuSip->addChild($voto);
+            //$menuSip->addChild($voto);
         }
 
         if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_*'))) {
@@ -2271,7 +2272,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             $display->addChild($displayList);
 
-            $menuSip->addChild($display);
+            //$menuSip->addChild($display);
         }
 
         $menu->addChild($menuSip);

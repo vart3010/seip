@@ -9,8 +9,8 @@
 
 {% block before_body %}
     {{ contentHeader(
-    	"Votantes Pequiven",
-        ("sip.list"|trans )
+    	("sip.list_profile"|trans({},'sip')),
+        ("sip.list"|trans({},'sip'))
     ) }}
 {% endblock %}
 
@@ -64,7 +64,7 @@
                             <label class="bold">{{ 'pequiven_seip.filters.work_study_circle'|trans({},'PequivenSEIPBundle') }}</label>
                             <br/>
                             <div class="with-mid-padding">
-                                <select class="select2 input-xlarge" id="selectWorkStudyCircle" ng-model="model.workStudyCircle" ng-init="getWorkStudyCircle('model.complejo.id','1')" ng-options="value as value.name group by model.complejo.description for (key,value) in data.work_study_circles" >
+                                <select class="select2 input-xlarge" id="selectWorkStudyCircle" ng-model="model.workStudyCircle" ng-init="getWorkStudyCircle('model.complejo.id','1')" ng-options='value as value.codigo + " - " + value.name group by model.complejo.description for (key,value) in data.work_study_circles' >
                                     <option value=''></option>
                                 </select>
                             </div>
@@ -120,7 +120,7 @@
                             </td>
                             <td data-title="'Nombre'" filter="{'userName' : 'text'}">
                                 <a href="{$ result._links.self.show $}">
-                                    {$ result.userName $}
+                                    {$ result.nameEmployee $}
                                 </a>
                             </td>
                             <td data-title="'Votó'" filter="{'voto' : 'text'}">

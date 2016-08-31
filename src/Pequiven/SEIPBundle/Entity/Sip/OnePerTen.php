@@ -26,9 +26,17 @@ class OnePerTen extends modelOnePerTen {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * Nombre del Empleado
+     * @var string
+     * 
+     * @ORM\Column(name="nameEmployee", type="string", length=100, nullable=true)
+     */
+    private $nameEmployee;
 
     /**
-     * cedula del 1
+     * Cédula del Empleado
      * @var string
      *
      * @ORM\Column(name="cedula", type="string", length=12,nullable=true)
@@ -36,7 +44,7 @@ class OnePerTen extends modelOnePerTen {
     private $cedula;
 
     /**
-     * Usuario con 1x10
+     * Empleado
      * @var \Pequiven\SEIPBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
@@ -89,6 +97,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Reporte del voto por mensaje o llamada en las elecciones de la asamblea 2015
      * voto
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="voto", type="integer", nullable=true)
@@ -98,6 +107,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Inscrito en el PSUV (Militante)
      * psuv
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="psuv", type="integer", nullable=true)
@@ -107,6 +117,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Votó en las internas del PSUV rumbo a las elecciones asamblea 2015
      * intPsuv
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="intPsuv", type="integer", nullable=true)
@@ -116,6 +127,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Votó en las internas de la MUD rumbo a las elecciones asamblea 2015
      * intOpo
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="intOpo", type="integer", nullable=true)
@@ -125,6 +137,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * ¿La persona se reubicó para las elecciones asamblea 2015?
      * reubicado
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="reubicado", type="integer", nullable=true)
@@ -134,6 +147,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Firma del decreto Esperanza
      * esperanza
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="esperanza", type="integer", nullable=true)
@@ -143,6 +157,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Votó en las elecciones presidenciales 2012
      * vpresidencial1
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="vpresidencial1", type="integer", nullable=true)
@@ -152,6 +167,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Votó en las elecciones regionales 2012
      * vregionales
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="vregionales", type="integer", nullable=true)
@@ -161,6 +177,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Votó en las elecciones presidenciales 2013
      * vpresidencial2
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="vpresidencial2", type="integer", nullable=true)
@@ -170,6 +187,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Votó en las elecciones municipales 2013
      * vmunicipales
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="vmunicipales", type="integer", nullable=true)
@@ -179,6 +197,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Firmó en la Lista Sumate 2002
      * fref
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="fref", type="integer", nullable=true)
@@ -188,6 +207,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * ¿Es vanguardia PSUV?
      * vanguardia
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="vanguardia", type="integer", nullable=true)
@@ -197,6 +217,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * ¿Es miembro de alguna UBCH?
      * ubch
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="ubch", type="integer", nullable=true)
@@ -204,8 +225,9 @@ class OnePerTen extends modelOnePerTen {
     private $ubch;
     
     /**
-     * 
+     * Firmó el Compromiso de Respaldo al Gobierno Revolucionario
      * firmaCompromiso
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="firmaCompromiso", type="integer", nullable=true)
@@ -213,6 +235,7 @@ class OnePerTen extends modelOnePerTen {
     private $firmaCompromiso;
 
     /**
+     * Relación del Empleado con su 1x10
      * @var \Pequiven\SEIPBundle\Entity\Sip\OnerPerTenMembers
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers", mappedBy="one", cascade={"persist","remove"})
      */
@@ -221,6 +244,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Votó en las elecciones asamblea 2015
      * vasamblea6
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="vasamblea6", type="integer", nullable=true)
@@ -230,6 +254,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Realizó 1x10 en el PSUV
      * onePerTenPsuv
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="onePerTenPsuv", type="integer", nullable=true)
@@ -239,6 +264,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Fue Miembro de algún 1x10 en el PSUV
      * memberOnePerTenPsuv
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="memberOnePerTenPsuv", type="integer", nullable=true)
@@ -248,6 +274,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Fue CUTL en las elecciones asamblea 2015
      * cutl
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="cutl", type="integer", nullable=true)
@@ -257,6 +284,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Fue Trabajador de Sala Situacional en las elecciones asamblea 2015
      * sala
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="sala", type="integer", nullable=true)
@@ -266,6 +294,7 @@ class OnePerTen extends modelOnePerTen {
     /**
      * Fue Trabajador por el CNE en las elecciones asamblea 2015
      * cne
+     * 0 --> No : 1 --> Sí
      * @var integer
      *
      * @ORM\Column(name="cne", type="integer", nullable=true)
@@ -288,6 +317,7 @@ class OnePerTen extends modelOnePerTen {
     private $ageSignatureSumate;
     
     /**
+     * Eficiencia de trabajo en las Elecciones Asamblea 2015
      * @var float
      * workEfficiencyAssemblyElections
      * @ORM\Column(name="workEfficiencyAssemblyElections", type="float", nullable=true)
@@ -694,6 +724,14 @@ class OnePerTen extends modelOnePerTen {
 
     function setFirmaRevocatorio($firmaRevocatorio) {
         $this->firmaRevocatorio = $firmaRevocatorio;
+    }
+    
+    function getNameEmployee(){
+        return $this->nameEmployee;
+    }
+    
+    function setNameEmployee($nameEmployee){
+        $this->nameEmployee = $nameEmployee;
     }
 
 }

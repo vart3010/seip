@@ -29,7 +29,7 @@ class GenericDataController extends SEIPController {
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'gerencias'));
         return $this->handleView($view);
     }
-    
+
     /**
      * Obtiene las categorias de archivos de worStudyCircle
      * @param Request $request
@@ -92,10 +92,44 @@ class GenericDataController extends SEIPController {
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'complejo'));
         return $this->handleView($view);
     }
-    
-    function getProfilesPoliticEvaluationAction(Request $request){
+
+    /**
+     * Retorna los Ciclos de Casa Abasto
+     * @param Request $request
+     * @return type
+     */
+    function getAllHouseSupplyCycle(Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+        $results = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->findAll();
+        foreach ($results as $cycle) {
+            $data[] = ['id' => $cycle->getId(), 'dateBeginOrder' => $cycle->getDateBeginOrder()->format('d/m/Y'), 'dateEndOrder' => $cycle->getDateEndOrder()->format('d/m/Y')];
+        }
+        $view = $this->view();
+        $view->setData($data);
+        return $this->handleView($view);
+    }
+
+    /**
+     * Retorna los Kit de Productos
+     * @param Request $request
+     * @return type
+     */
+    function getAllProductKit(Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+        $results = $em->getRepository('PequivenSEIPBundle:HouseSupply\Inventory\HouseSupplyProductKit')->findAll();
+        foreach ($results as $productKit) {
+            $data[] = ['id' => $productKit->getId(), 'description' => $productKit->getDescription(), 'price' => number_format($productKit->getPrice(),'2',',','.')];
+        }
+        $view = $this->view();
+        $view->setData($data);
+        return $this->handleView($view);
+    }
+
+    function getProfilesPoliticEvaluationAction(Request $request) {
         $criteria = $request->get('filter', $this->config->getCriteria());
-        
+
         $dataArray = array();
 //        $objects = new \stdClass();
 //        $objects->id = 1;
@@ -117,16 +151,15 @@ class GenericDataController extends SEIPController {
 //        $objects->id = 5;
 //        $objects->description = 'Perfil 5';
 //        $dataArray[] = $objects;
-        
-        $dataArray[] = array('id' => 1,'description' => 'Perfil 1');
-        $dataArray[] = array('id' => 2,'description' => 'Perfil 2');
-        $dataArray[] = array('id' => 3,'description' => 'Perfil 3');
-        $dataArray[] = array('id' => 4,'description' => 'Perfil 4');
-        $dataArray[] = array('id' => 5,'description' => 'Perfil 5');
-        
+
+        $dataArray[] = array('id' => 1, 'description' => 'Perfil 1');
+        $dataArray[] = array('id' => 2, 'description' => 'Perfil 2');
+        $dataArray[] = array('id' => 3, 'description' => 'Perfil 3');
+        $dataArray[] = array('id' => 4, 'description' => 'Perfil 4');
+        $dataArray[] = array('id' => 5, 'description' => 'Perfil 5');
+
 //        var_dump($dataArray);
 //        die();
-        
         //$results->setData($dataArray);
         $view = $this->view();
         $view->setData($dataArray);

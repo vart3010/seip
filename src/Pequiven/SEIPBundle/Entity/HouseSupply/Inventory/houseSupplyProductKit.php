@@ -43,6 +43,13 @@ class houseSupplyProductKit {
      * @ORM\Column(name="description",type="string",nullable=false)
      */
     private $description;
+    
+    /**
+     *
+     * @var float
+     * @ORM\Column(name="price",type="float",nullable=false)
+     */
+    private $price;
 
     /**
      * @var houseSupplyProductKitItems
@@ -90,6 +97,18 @@ class houseSupplyProductKit {
 
     public function __toString() {
         return $this->description;
+    }
+    
+    function getPrice(){
+        return $this->price;
+    }
+
+    function setPrice() {
+        $total = 0;
+        foreach ($this->getProductKitItems() as $item) {
+            $total+=$item->getProduct()->getPrice()*$item->getProduct()->getPrice();
+        }
+        return $total;
     }
 
     function getId() {

@@ -70,17 +70,17 @@
                     <td>
                         <div class="six-columns">
                             <label class="label">Nombre: </label>
-                            {{ one.firstname }} {{ one.lastname  }}
+                            {{ object.nameEmployee  }}
                         </div>
                         <div class="six-columns">
                             <label class="label">Cédula </label>
-                            {{ one.getIndentification }} 
+                            {{ object.cedula }} 
                         </div>
                     </td>
                     <td>
                         <div class="six-columns">
                             <label class="label">Teléfono: </label>
-                            {{ one.cellphone }}
+                            {% if one != null %} {{ one.cellphone }} {% else %} No Aplica {% endif %}
                         </div>
                         <div class="six-columns">
                             <label class="label">Fecha Emisión: </label>
@@ -92,11 +92,7 @@
                     <td>
                         <div class="six-columns">
                             <label class="label">¿Reportó Voto Elecciones Asamblea Nacional 2015?: </label>
-                            {% set textoVoto = 'NO' %}
-                            {% if voto == 1 %}
-                                {% set textoVoto = 'SI' %}
-                            {% endif %}
-                            {{ textoVoto }}
+                            {{ texts[object.voto] }}
                         </div>
                         <div class="six-columns">
                             <label class="label">Círculo de Estudio y Trabajo: </label>
@@ -110,27 +106,10 @@
                         </div>
                         <div class="six-columns">
                             <label class="label">Resultado Perfil Político </label>
-{#                            {{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['profileValue'] }}#}
                             {{ object.profileValue }}
                         </div>
                     </td>
                 </tr>
-                {#<tr>
-                    <td>
-                        <div class="six-columns">
-                            <label class="label">Localidad: </label>
-                            {% if one.complejo != null %}
-                                {{ one.complejo.description }}
-                            {% endif %}
-                        </div>
-                        <div class="six-columns">
-                            <label class="label">Gerencia: </label>
-                            {% if one.gerencia != null %}
-                                {{ one.gerencia.description }}
-                            {% endif %}
-                        </div>
-                    </td>
-                </tr>#}
             </table>
         </td>
     </tr>
@@ -156,16 +135,8 @@
                     <td style="text-align: center;">{{ member.cedula }}</td>
                     <td>{{ member.nombre }}</td>
                     <td>{{ member.nombreCentro }}</td>
-                    {% set textoReporteVoto = 'No' %}
-                    {% if member.voto == 1 %}
-                        {% set textoReporteVoto = 'Sí' %}
-                    {% endif %}
-                    <td>{{ textoReporteVoto }}</td>
-                    {% set textoVoto = 'No' %}
-                    {% if member.vasamblea6 == 1 %}
-                        {% set textoVoto = 'Sí' %}
-                    {% endif %}
-                    <td>{{ textoVoto }}</td>
+                    <td>{{ texts[member.voto] }}</td>
+                    <td>{{ texts[member.vasamblea6] }}</td>
                     <td style="text-align: center;">{{ member.telefono }}</td>
                 </tr>
             {% endfor%}

@@ -237,10 +237,9 @@ class OnePerTenService {
      * @param OnePerTen $onePerTen
      * @param type $profileItemsWithWeight
      * @param type $members
-     * @param type $type
      * @return type
      */
-    public function obtainProfileItemsWithResult(OnePerTen $onePerTen,$profileItemsWithWeight = array(), $members, $type = 'array'){
+    public function obtainProfileItemsWithResult(OnePerTen $onePerTen,$profileItemsWithWeight = array(), $members){
         $profileItemsWithResult = $profileItemsWithWeight;
         $supportAssemblyElections = array();
         $supportAssemblyElections = $this->obtainWhichSupportAssemblyElections($onePerTen);
@@ -331,7 +330,7 @@ class OnePerTenService {
         }
         if($profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::PATRULLA_PQV]['enabled']){
             if(count($members) > 0){
-                $efectividad = (float)$this->obtainEfficiencyOnePerTen($members,$type);
+                $efectividad = (float)$this->obtainEfficiencyOnePerTen($members);
                 $profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::PATRULLA_PQV]['resultWithPercentage'] = round(($profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::PATRULLA_PQV]['percentageValue']*$efectividad)/100,2);
                 $profileItemsWithResult[OnePerTen::TYPE_COMPROMISO][OnePerTen::PATRULLA_PQV]['text'] = 'Sí';
             }
@@ -504,21 +503,16 @@ class OnePerTenService {
     /**
      * 
      * @param type $members
-     * @param type $type
      * @return string
      */
-    public function obtainEfficiencyOnePerTen($members, $type='array'){
+    public function obtainEfficiencyOnePerTen($members){
         
         $efectividad = number_format(0, 2, ',', '.') . '%';
         if(count($members) > 0){
             $contVotos = 0;
             $totalMiembros = count($members);
             foreach($members as $member){
-                if($type == 'array'){
-                    $contVotos = $member['voto'] == "Sí" ? $contVotos+1 : $contVotos;
-                } elseif ($type == 'class'){
-                    $contVotos = $member->getVasamblea6() == 1 ? $contVotos+1 : $contVotos;
-                }
+                $contVotos = $member->getVasamblea6() == 1 ? $contVotos+1 : $contVotos;
             }
             $efectividad = number_format(($contVotos/$totalMiembros)*100, 2, ',', '.') . '%';
         }
