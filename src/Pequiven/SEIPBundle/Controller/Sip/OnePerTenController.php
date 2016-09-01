@@ -68,6 +68,8 @@ class OnePerTenController extends SEIPController {
         $statusRevocatorySignature[] = array('id' => 1,'description' => 'Firmó');
         $statusRevocatorySignature[] = array('id' => 2,'description' => 'R');
         
+        
+        
         if ($request->get('_format') == 'html') {
             $data = array(
                 'apiDataUrl' => $apiDataUrl,

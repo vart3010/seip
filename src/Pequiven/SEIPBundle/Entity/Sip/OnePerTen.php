@@ -163,7 +163,7 @@ class OnePerTen extends modelOnePerTen {
     private $esperanza;
     
     /**
-     * Votó en las elecciones presidenciales 2012
+     * Votó en las elecciones presidenciales 2012 (07-10-2012)
      * vpresidencial1
      * 0 --> No : 1 --> Sí
      * @var integer
@@ -173,7 +173,7 @@ class OnePerTen extends modelOnePerTen {
     private $vpresidencial1;
     
     /**
-     * Votó en las elecciones regionales 2012
+     * Votó en las elecciones regionales 2012 (16-12-2012)
      * vregionales
      * 0 --> No : 1 --> Sí
      * @var integer
@@ -183,7 +183,7 @@ class OnePerTen extends modelOnePerTen {
     private $vregionales;
     
     /**
-     * Votó en las elecciones presidenciales 2013
+     * Votó en las elecciones presidenciales 2013 (14-04-2013)
      * vpresidencial2
      * 0 --> No : 1 --> Sí
      * @var integer
@@ -193,7 +193,7 @@ class OnePerTen extends modelOnePerTen {
     private $vpresidencial2;
     
     /**
-     * Votó en las elecciones municipales 2013
+     * Votó en las elecciones municipales 2013 (08-12-2013)
      * vmunicipales
      * 0 --> No : 1 --> Sí
      * @var integer

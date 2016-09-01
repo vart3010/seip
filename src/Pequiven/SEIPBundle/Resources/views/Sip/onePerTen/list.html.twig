@@ -103,6 +103,11 @@
                     <tbody> 
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
 
+                            <td data-title="'Nómina'">
+                                <a href="{$ result._links.self.show $}">
+                                    {$ result.nomina $}
+                                </a>
+                            </td>
                             <td data-title="'Localidad'">
                                 <a href="{$ result._links.self.show $}">
                                     {$ result.localidad $}
