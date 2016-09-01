@@ -8029,7 +8029,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeColumn2d = function (indicatorId, render, width, height) {
                 FusionCharts.ready(function () {
                     var MsColumn2d = new FusionCharts({
-                        type: 'column2d',
+                        type: 'column3d',
                         renderAt: render,
                         width: '100%',
                         height: '350',
@@ -8039,51 +8039,54 @@ angular.module('seipModule.controllers', [])
                                 "caption": "% Cumplimiento Plan de Mantenimiento",
                                 "xAxisName": "Meses",
                                 "yAxisName": "% de cumpliento",
+                                "yaxismaxvalue": "100",
                                 "paletteColors": "#0075c2",
-                                "bgColor": "#ffffff",
-                                "borderAlpha": "0",
-                                "canvasBorderAlpha": "0",
-                                "usePlotGradientColor": "0",
-                                "plotBorderAlpha": "0",
-                                "placevaluesInside": "1",
-                                "rotatevalues": "1",
                                 "valueFontColor": "#ffffff",
-                                "showXAxisLine": "1",
-                                "xAxisLineColor": "#999999",
+                                "baseFont": "Helvetica Neue,Arial",
+                                "captionFontSize": "14",
+                                "subcaptionFontSize": "14",
+                                "subcaptionFontBold": "0",
+                                "placeValuesInside": "1",
+                                "rotateValues": "1",
+                                "showShadow": "0",
                                 "divlineColor": "#999999",
                                 "divLineIsDashed": "1",
-                                "showAlternateHGridColor": "0",
-                                "subcaptionFontBold": "0",
+                                "divlineThickness": "1",
+                                "divLineDashLen": "1",
+                                "divLineGapLen": "1",
+                                "canvasBgColor": "#ffffff",
+                                "decimalSeparator": ",",
+                                "showHoverEffect": "1"
                             },
                             "data": [
                                 {
                                     "label": "Enero",
-                                    "value": "90.39"
+                                    "value": "95.31"
                                 },
                                 {
                                     "label": "Febrero",
-                                    "value": "90.94"
+                                    "value": "93.78"
                                 },
                                 {
                                     "label": "Marzo",
-                                    "value": "94.34"
+                                    "value": "97.92"
                                 },
                                 {
                                     "label": "Abril",
-                                    "value": "88.50"
+                                    "value": "90.29"
                                 },
                                 {
                                     "label": "Mayo",
-                                    "value": "92.31"
+                                    "value": "90.74"
                                 },
                                 {
                                     "label": "Junio",
-                                    "value": "94.51"
+                                    "value": "96.91"
                                 },
-                                {
+                                /*{
                                     "label": "Julio",
                                     "value": "90.99"
-                                },
+                                },*/
                             ],
                             "trendlines": [
                                 {
@@ -8091,7 +8094,7 @@ angular.module('seipModule.controllers', [])
                                         {
                                             "startvalue": "100",
                                             "color": "#1aaf5d",
-                                            "valueOnRight": "0",
+                                            "valueOnRight": "1",
                                             "displayvalue": "Meta (100%)"
                                         }
                                     ]
