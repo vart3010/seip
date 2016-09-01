@@ -91,18 +91,34 @@
                                 </select>
                             </div>
                         </div>
+                            
+                        <!-- Filtro Nóminas a las que pertenece el Empleado-->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.nomina'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectStatusRevocatorySignature" ng-model="model.nomina" ng-options="value as value.description for (key,value) in data.nominas" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
             </details>
 
 
-            <div loading-container="tableParams.settings().$loading" ng-init="data.profilesPoliticEvaluation = {{ profilesPoliticEvaluation|serialize }};data.statusRevocatorySignature = {{ statusRevocatorySignature|serialize }};">
+            <div loading-container="tableParams.settings().$loading" ng-init="data.profilesPoliticEvaluation = {{ profilesPoliticEvaluation|serialize }};data.statusRevocatorySignature = {{ statusRevocatorySignature|serialize }}; data.nominas = {{ nominas|serialize }};">
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header"
                        api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
                     <tbody> 
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
 
+                            <td data-title="'Nómina'">
+                                <a href="{$ result._links.self.show $}">
+                                    {$ result.nomina $}
+                                </a>
+                            </td>
                             <td data-title="'Localidad'">
                                 <a href="{$ result._links.self.show $}">
                                     {$ result.localidad $}

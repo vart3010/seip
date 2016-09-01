@@ -6044,6 +6044,7 @@ angular.module('seipModule.controllers', [])
             var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
             var selectProfilesPoliticEvaluation = angular.element("#selectProfilesPoliticEvaluation");
             var selectStatusRevocatorySignature = angular.element("#selectStatusRevocatorySignature");
+            var selectNomina = angular.element("#selectNomina");
 
 
             $scope.data = {
@@ -6053,6 +6054,7 @@ angular.module('seipModule.controllers', [])
                 work_study_circles: null,
                 profiles_politic_evaluation: null,
                 status_revocatory_signature: null,
+                nominas: null,
             };
 
             $scope.model = {
@@ -6062,6 +6064,7 @@ angular.module('seipModule.controllers', [])
                 workStudyCircle: null,
                 profilesPoliticEvaluation: null,
                 statusRevocatorySignature: null,
+                nomina: null,
             };
 
             //Busca las localidades
@@ -6210,8 +6213,7 @@ angular.module('seipModule.controllers', [])
                 if ($scope.model.workStudyCircle != null && $scope.model.workStudyCircle.id != undefined) {
                     $scope.tableParams.$params.filter['workStudyCircle'] = $scope.model.workStudyCircle.id;
                     //Al cambiar el círculo de estudio de trabajo
-                    selectWorkStudyCircle.change(function () {
-                    });
+                    selectWorkStudyCircle.change(function () {});
                 } else {
                     $scope.tableParams.$params.filter['workStudyCircle'] = null;
                 }
@@ -6222,8 +6224,7 @@ angular.module('seipModule.controllers', [])
                 if ($scope.model.profilesPoliticEvaluation != null && $scope.model.profilesPoliticEvaluation.id != undefined) {
                     $scope.tableParams.$params.filter['profilesPoliticEvaluation'] = $scope.model.profilesPoliticEvaluation.id;
                     //Al cambiar el Perfil Político
-                    selectProfilesPoliticEvaluation.change(function () {
-                    });
+                    selectProfilesPoliticEvaluation.change(function () {});
                 } else {
                     $scope.tableParams.$params.filter['profilesPoliticEvaluation'] = null;
                 }
@@ -6234,11 +6235,20 @@ angular.module('seipModule.controllers', [])
                 if ($scope.model.statusRevocatorySignature != null && $scope.model.statusRevocatorySignature.id != undefined) {
                     $scope.tableParams.$params.filter['statusRevocatorySignature'] = $scope.model.statusRevocatorySignature.id;
                     //Al cambiar el Status Firma Revocatorio 2016
-                    selectStatusRevocatorySignature.change(function () {
-                    });
+                    selectStatusRevocatorySignature.change(function () {});
                 } else {
                     $scope.tableParams.$params.filter['statusRevocatorySignature'] = null;
                 }
+            });
+            
+            //Scope de Nóminas
+            $scope.$watch("model.nomina", function (newParams, oldParams) {
+               if($scope.model.nomina != null && $scope.model.nomina != undefined) {
+                   $scope.tableParams.$params.filter['nomina'] = $scope.model.nomina.id;
+                   selectNomina.change(function() {});
+               } else {
+                   $scope.tableParams.$params.filter['nomina'] = null;
+               } 
             });
 
 

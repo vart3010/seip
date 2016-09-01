@@ -14,7 +14,7 @@ use Pequiven\SEIPBundle\Model\HouseSupply\HouseSupplyPayments;
 use Pequiven\SEIPBundle\Model\HouseSupply\HouseSupplyOrder;
 
 /**
- * CONTROLADOR DE PEDIDOS DE CASA - ABASTO
+ * CONTROLADOR DE REPORTES DE CASA - ABASTO
  * @author Gilbert C. <glavrjk@gmail.com>
  */
 class HouseSupplyReportsController extends SEIPController {

@@ -240,7 +240,7 @@
                             {%set checked = ''%}
                         {%endif%}
 
-                        {% if member.getId == order.getWorkStudyCircle.getcoordinator.getId %}
+                        {#{% if member.getId == order.getWorkStudyCircle.getcoordinator.getId %}#}
                             <tr>
                                 <td>{{ loop.index  }}</td>
                                 <td>{{ member.getOnlyFullNameUser }}</td>                                           
@@ -254,7 +254,7 @@
                                     </form>
                                 </td>                                            
                             </tr>
-                        {%endif%}
+                        {#{%endif%}#}
                     {% endfor %}
                 </table>
             </div>

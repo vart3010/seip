@@ -74,8 +74,8 @@ class ArrangementProgramManager implements ContainerAwareInterface {
         $user = $this->getUser();
 
         if ($entity->getCategoryArrangementProgram()->getId() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA) {
-            if ($entity->getType() == 0) {            
-                $configuration = $this->getUserActions($entity)['userNotify'];
+            if ($entity->getType() == 0) {   
+                $configuration = $this->getUserActions($entity)['userAprobe'];
             }else{
                 $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();                
             }
