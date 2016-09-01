@@ -44,13 +44,14 @@ class HouseSupplyOrderKitController extends SEIPController {
 //VALIDO SI EN EL CICLO TIENE PEDIDOS REALIZADOS
         $cycle = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyCycle')->FindCycle(new \DateTime((date("Y-m-d h:m:s"))));
 
-        $searchCriteria = array(
-            'cycle' => $cycle[0]->getId(),
-            'workStudyCircle' => $wsc->getId(),
-            'type' => array(1, 4, 5),
-        );
-
         if ($cycle) {
+
+            $searchCriteria = array(
+                'cycle' => $cycle[0]->getId(),
+                'workStudyCircle' => $wsc->getId(),
+                'type' => array(1, 4, 5),
+            );
+            
             $order = $em->getRepository('PequivenSEIPBundle:HouseSupply\Order\HouseSupplyOrder')->findBy($searchCriteria);
 
             if ((count($order) == 0) || ($order == null)) {
@@ -93,7 +94,7 @@ class HouseSupplyOrderKitController extends SEIPController {
 
         $statusHouseSupplyOrder = array();
         $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::REGISTRADA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::REGISTRADA]);
-        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::DEVUELTA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::DEVUELTA]);        
+        $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::DEVUELTA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::DEVUELTA]);
         $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::PAGADA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::PAGADA]);
         $statusHouseSupplyOrder[] = array('id' => houseSupplyOrder::ENTREGADA, 'description' => $arrayStatusHouseSupplyOrder[houseSupplyOrder::ENTREGADA]);
 
