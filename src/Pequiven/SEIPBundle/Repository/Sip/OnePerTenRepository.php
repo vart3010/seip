@@ -46,8 +46,13 @@ class OnePerTenRepository extends EntityRepository {
                     ->andWhere($queryBuilder->expr()->like('opt.cedula', "'%".$cedula."%'"));
         }
         
-        if (($description = $criteria->remove('userName')) != null) {
-            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('u.firstname', "'%" . $description . "%'"), $queryBuilder->expr()->like('u.lastname', "'%" . $description . "%'")));
+        if (($nameEmployee = $criteria->remove('userName')) != null) {
+//            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('u.firstname', "'%" . $description . "%'"), $queryBuilder->expr()->like('u.lastname', "'%" . $description . "%'")));
+            $queryBuilder->andWhere($queryBuilder->expr()->like('opt.nameEmployee', "'%".$nameEmployee."%'"));
+        }
+        
+        if(($nomina = $criteria->remove('nomina')) != null){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('opt.nomina', "'%".$nomina."%'"));
         }
         
         if (($complejo = $criteria->remove('complejo')) != null) {
