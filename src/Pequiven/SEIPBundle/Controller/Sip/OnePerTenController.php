@@ -447,10 +447,11 @@ class OnePerTenController extends SEIPController {
         $profileItemsWithWeight = $onePerTenService->obtainProfileItemsWithWeight($onePerTen, $profileItemsAvailables);
         $profileItemsWithResult = $onePerTenService->obtainProfileItemsWithResult($onePerTen, $profileItemsWithWeight,$members);
 
-        $texts = array();
-        $texts[-1] = 'Sin Información';
-        $texts[0] = 'No';
-        $texts[1] = 'Sí';
+        $texts = array(
+            -1 => 'Sin Información',
+            0 => 'No',
+            1 => 'Sí',
+        );
         
         $textsFirmaRevocatorio = array(
             -1 => 'Sin Información',
