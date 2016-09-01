@@ -252,6 +252,7 @@ pequiven_seip:
         status_revocatory_signature: Status Firma Revocatorio
         line_strategic: Línea Estratégica
         categoryFile: Categorias de Archivo
+        nomina: Nómina
     tooltips:
         click_to_show: Click para ver
     area:
