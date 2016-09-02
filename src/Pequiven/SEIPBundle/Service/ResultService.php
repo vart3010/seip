@@ -2004,6 +2004,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $results = $resultsItems[$i];
                 $totalRealChild = $totalPlanChild = 0.0;
                 $totalChild = count($results);
+                $variables = $formulaUsed->getVariables();
+                if(count($variables) == 1){
+                    $realVariableName = $variables[0]->getName();
+                }
+                
                 foreach ($results as $childValueIndicator) {
                     $formulaChild = $childValueIndicator->getIndicator()->getFormula();
                     $value = $indicatorService->calculateFormulaValue($formulaChild, $childValueIndicator->getFormulaParameters());
