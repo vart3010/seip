@@ -12,6 +12,11 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  */
 abstract class OnePerTen  {
     
+    /*Premisas de Evaluación de Perfil Político
+     - IF firmaRevocatorio IN (1,2) AND realProfileValue < 3 THEN profileValue = 3
+     */
+     
+    
     //COMPROMISO REVOLUCIONARIO
     const LISTA_SUMATE = 1;
     const INSCRITO_GPP = 2;
