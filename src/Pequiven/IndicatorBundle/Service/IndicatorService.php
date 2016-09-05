@@ -692,7 +692,13 @@ class IndicatorService implements ContainerAwareInterface {
             $errorArrangementRange = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendency);
             if ($errorArrangementRange == null) {
                 if ($indicator->getEvaluateInPeriod()) {//En caso de que sea medidio en el período actual
-                    $value = number_format($indicator->getResultReal(), 2, ',', '.') . '%';
+                    if($indicator->getNotShowDecimals()){
+                        $value = number_format($indicator->getResultReal()) . '%';
+                    }
+                    else{
+                        $value = number_format($indicator->getResultReal(), 2, ',', '.') . '%';
+                    }
+                    
                     if ($indicator->getShowTagInDashboardResult()) {
                         foreach ($indicator->getTagsIndicator() as $tagIndicator) {
                             if ($tagIndicator->getShowInIndicatorDashboardResult()) {
@@ -705,8 +711,13 @@ class IndicatorService implements ContainerAwareInterface {
                             }
                         }
                     }
+                    
                     if ($indicator->getShowResultWithoutPercentageInDashboard()) {
-                        $value = number_format($indicator->getResultReal(), 2, ',', '.');
+                        if($indicator->getNotShowDecimals()){
+                            $value = number_format($indicator->getResultReal());
+                        }else{
+                            $value = number_format($indicator->getResultReal(), 2, ',', '.');
+                        }
                     }
                     $colorData["label"] = $value;
                     if ($resultService->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {

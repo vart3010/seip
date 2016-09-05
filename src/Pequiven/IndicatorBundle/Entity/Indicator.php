@@ -742,6 +742,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $showChartChildren = false;
     
     /**
+     * @var boolean
+     * @ORM\Column(name="notShowDecimals", type="boolean")
+     */
+    private $notShowDecimals = false;
+    
+    /**
      * ¿El Valor Plan del Indicador no acumula?
      * @var boolean
      * @ORM\Column(name="planIsNotAccumulative",type="boolean")
@@ -2869,5 +2875,16 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
 
     function setShowChartChildren($showChartChildren) {
         $this->showChartChildren = $showChartChildren;
+    }
+    
+    /*
+     * Metodos set y get para para ocultar los decimales de los resultados de las esferas del tablero
+     */
+    function getNotShowDecimals() {
+        return $this->notShowDecimals;
+    }
+
+    function setNotShowDecimals($notShowDecimals) {
+        $this->notShowDecimals = $notShowDecimals;
     }
 }

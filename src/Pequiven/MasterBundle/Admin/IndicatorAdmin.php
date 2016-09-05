@@ -197,6 +197,10 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('isValueFromTextReal', null, array(
                     'required' => false,
                 ))
+                ->add('notShowDecimals', null, array(
+                    'required' => false,
+                    'label' => 'Ocultar decimales',
+                ))
                 ->add('textValueFromVariableReal', null, array(
                     'required' => false,
                 ))
