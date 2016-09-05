@@ -7737,15 +7737,16 @@ angular.module('seipModule.controllers', [])
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": {
-                                "caption": "Resolucion de Casos en la Región Oriente",
+                                "caption": "Resolucion de Casos en la Región Oriente (Trimestre II)",
                                 "showPlotBorder": "1",
                                 "piefillalpha": "60",
                                 "pieborderthickness": "2",
                                 "piebordercolor": "#FFFFFF",
                                 "hoverfillcolor": "#CCCCCC",
-                                "numberprefix": "$",
+//                                "numberprefix": "$",
 //                                "plottooltext": "$label, $value",
-                                "theme": "fint"
+                                "theme": "fint",
+                                "showValues": "1",
                             },
                             "category": [{
                                     "label": "Resolución de Casos",
@@ -7753,103 +7754,79 @@ angular.module('seipModule.controllers', [])
 //                                    "value": "150",
                                     "category": [
                                         {
-                                            "label": "Activos (35)",
+                                            "label": "Activos",
                                             "color": "#f8bd19",
-                                            "value": "35",
+                                            "value": "18",
 //                                            "tooltext": "Activos, $value",
                                             "category": [
-                                                {
-                                                    "label": "Asignado (1)",
+                                               {
+                                                    "label": "Cerrado",
                                                     "color": "#f8bd19",
-                                                    "value": "7",
-                                                }, {
-                                                    "label": "Cerrado (27)",
-                                                    "color": "#f8bd19",
-                                                    "value": "27"
-                                                }, {
-                                                    "label": "Nuevo (7) ",
-                                                    "color": "#f8bd19",
-                                                    "value": "15"
-                                                }]
+                                                    "value": "18"
+                                                },
+                                            ]
                                         }, {
-                                            "label": "Soporte en Sitio (176)",
+                                            "label": "Soporte en Sitio",
                                             "color": "#33ccff",
-                                            "value": "176",
+                                            "value": "117",
 //                                            "tooltext": "Soporte en sitio, $value",
                                             "category": [{
-                                                    "label": "Asignado (16)",
+                                                    "label": "Asignado",
                                                     "color": "#33ccff",
-                                                    "value": "16"
+                                                    "value": "2"
                                                 }, {
-                                                    "label": "Cerrado (135)",
+                                                    "label": "Cerrado",
                                                     "color": "#33ccff",
-                                                    "value": "135"
+                                                    "value": "112"
                                                 }, {
-                                                    "label": "En progreso (4)",
+                                                    "label": "Nuevo",
                                                     "color": "#33ccff",
-                                                    "value": "10"
+                                                    "value": "1"
                                                 }, {
-                                                    "label": "Nuevo (18)",
+                                                    "label": "Pendiente",
                                                     "color": "#33ccff",
-                                                    "value": "18"
-                                                }, {
-                                                    "label": "Pendiente (3)",
-                                                    "color": "#33ccff",
-                                                    "value": "10"
+                                                    "value": "2"
                                                 }]
                                         }, {
-                                            "label": "Infraestructura (133)",
+                                            "label": "Infraestructura",
                                             "color": "#ccff66",
-                                            "value": "133",
+                                            "value": "73",
 //                                            "tooltext": "Infraestructura, $value",
-                                            "category": [{
-                                                    "label": "Asignado (2)",
+                                            "category": [
+                                                {
+                                                    "label": "Cerrado",
                                                     "color": "#ccff66",
-                                                    "value": "7"
-                                                }, {
-                                                    "label": "Cerrado (124)",
+                                                    "value": "72"
+                                                }, 
+                                                {
+                                                    "label": "Nuevo",
                                                     "color": "#ccff66",
-                                                    "value": "124"
-                                                }, {
-                                                    "label": "En progreso (2)",
-                                                    "color": "#ccff66",
-                                                    "value": "7"
-                                                }, {
-                                                    "label": "Nuevo (5)",
-                                                    "color": "#ccff66",
-                                                    "value": "10"
+                                                    "value": "1"
                                                 }]
                                         }, {
-                                            "label": "Aplicaciones (41)",
+                                            "label": "Aplicaciones",
                                             "color": "#ffcccc",
-                                            "value": "41",
+                                            "value": "20",
 //                                            "tooltext": "Aplicaciones, $value",
                                             "category": [
                                                 {
-                                                    "label": "Cerrado (37)",
+                                                    "label": "Cerrado",
                                                     "color": "#ffcccc",
-                                                    "value": "37"
-                                                }, {
-                                                    "label": "Nuevo (4)",
-                                                    "color": "#ffcccc",
-                                                    "value": "10"
-                                                }]
+                                                    "value": "20"
+                                                },
+                                            ]
                                         }, {
-                                            "label": "Telecom (23)",
+                                            "label": "Telecom",
                                             "color": "#6A5ACD",
-                                            "value": "23",
+                                            "value": "11",
 //                                            "tooltext": "Telecom, $value",
                                             "category": [
                                                 {
-                                                    "label": "Cerrado (21)",
+                                                    "label": "Cerrado",
                                                     "color": "#6A5ACD",
-                                                    "value": "21"
+                                                    "value": "11"
                                                 },
-                                                {
-                                                    "label": "Nuevo (2)",
-                                                    "color": "#6A5ACD",
-                                                    "value": "7"
-                                                }]
+                                            ]
                                         }]
                                 }]
                         }
@@ -7870,11 +7847,11 @@ angular.module('seipModule.controllers', [])
                         dataFormat: 'json',
                         dataSource: {
                             "chart": {
-                                "caption": "% de Meta AIT",
+                                "caption": "% de Cumplimiento / mes",
                                 "captionFontSize": "14",
                                 "subcaptionFontSize": "14",
                                 "subcaptionFontBold": "0",
-                                "paletteColors": "#0075c2,#1aaf5d",
+                                "paletteColors": "#8B0000,#1aaf5d,#6A5ACD",
                                 "bgcolor": "#ffffff",
                                 "showBorder": "0",
                                 "showShadow": "0",
@@ -7905,14 +7882,36 @@ angular.module('seipModule.controllers', [])
                             ],
                             "dataset": [
                                 {
-                                    "seriesname": "% de cumplimiento de Meta",
+                                    "seriesname": "% de cumplimiento de Meta General",
                                     "data": [
-                                        {"value": "98"},
+                                        {"value": "96"},
                                         {"value": "62,67"},
                                         {"value": "78,43"},
-                                        {"value": "84,93"},
-                                        {"value": "90"},
-                                        {"value": "98"},
+                                        {"value": "86,08"},
+                                        {"value": "92,93"},
+                                        {"value": "92,41"},
+                                    ]
+                                },
+                                {
+                                    "seriesname": "% de cumplimiento de Meta - Activos",
+                                    "data": [
+                                        {"value": "100"},
+                                        {"value": "50"},
+                                        {"value": "33,33"},
+                                        {"value": "100"},
+                                        {"value": "100"},
+                                        {"value": "100"},
+                                    ]
+                                },
+                                {
+                                    "seriesname": "% de cumplimiento de Meta - Soporte",
+                                    "data": [
+                                        {"value": "100"},
+                                        {"value": "38,71"},
+                                        {"value": "69,23"},
+                                        {"value": "75,68"},
+                                        {"value": "92.86"},
+                                        {"value": "86,49"},
                                     ]
                                 },
                             ],
@@ -7923,7 +7922,7 @@ angular.module('seipModule.controllers', [])
                                             "startvalue": "90",
                                             "color": "#6baa01",
                                             "valueOnRight": "1",
-                                            "displayvalue": "Meta"
+                                            "displayvalue": "Meta (90%)"
                                         }
                                     ]
                                 }
@@ -8039,7 +8038,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeColumn2d = function (indicatorId, render, width, height) {
                 FusionCharts.ready(function () {
                     var MsColumn2d = new FusionCharts({
-                        type: 'column2d',
+                        type: 'column3d',
                         renderAt: render,
                         width: '100%',
                         height: '350',
@@ -8049,51 +8048,54 @@ angular.module('seipModule.controllers', [])
                                 "caption": "% Cumplimiento Plan de Mantenimiento",
                                 "xAxisName": "Meses",
                                 "yAxisName": "% de cumpliento",
+                                "yaxismaxvalue": "100",
                                 "paletteColors": "#0075c2",
-                                "bgColor": "#ffffff",
-                                "borderAlpha": "0",
-                                "canvasBorderAlpha": "0",
-                                "usePlotGradientColor": "0",
-                                "plotBorderAlpha": "0",
-                                "placevaluesInside": "1",
-                                "rotatevalues": "1",
                                 "valueFontColor": "#ffffff",
-                                "showXAxisLine": "1",
-                                "xAxisLineColor": "#999999",
+                                "baseFont": "Helvetica Neue,Arial",
+                                "captionFontSize": "14",
+                                "subcaptionFontSize": "14",
+                                "subcaptionFontBold": "0",
+                                "placeValuesInside": "1",
+                                "rotateValues": "1",
+                                "showShadow": "0",
                                 "divlineColor": "#999999",
                                 "divLineIsDashed": "1",
-                                "showAlternateHGridColor": "0",
-                                "subcaptionFontBold": "0",
+                                "divlineThickness": "1",
+                                "divLineDashLen": "1",
+                                "divLineGapLen": "1",
+                                "canvasBgColor": "#ffffff",
+                                "decimalSeparator": ",",
+                                "showHoverEffect": "1"
                             },
                             "data": [
                                 {
                                     "label": "Enero",
-                                    "value": "90.39"
+                                    "value": "95.31"
                                 },
                                 {
                                     "label": "Febrero",
-                                    "value": "90.94"
+                                    "value": "93.78"
                                 },
                                 {
                                     "label": "Marzo",
-                                    "value": "94.34"
+                                    "value": "97.92"
                                 },
                                 {
                                     "label": "Abril",
-                                    "value": "88.50"
+                                    "value": "90.29"
                                 },
                                 {
                                     "label": "Mayo",
-                                    "value": "92.31"
+                                    "value": "90.74"
                                 },
                                 {
                                     "label": "Junio",
-                                    "value": "94.51"
+                                    "value": "96.91"
                                 },
-                                {
+                                /*{
                                     "label": "Julio",
-                                    "value": "90.99"
-                                },
+                                    "value": "94.22"
+                                },*/
                             ],
                             "trendlines": [
                                 {
@@ -8101,7 +8103,7 @@ angular.module('seipModule.controllers', [])
                                         {
                                             "startvalue": "100",
                                             "color": "#1aaf5d",
-                                            "valueOnRight": "0",
+                                            "valueOnRight": "1",
                                             "displayvalue": "Meta (100%)"
                                         }
                                     ]
@@ -8110,6 +8112,87 @@ angular.module('seipModule.controllers', [])
                         }
                     });
                     MsColumn2d.render();
+                });
+            }
+            
+            //38.-Grafico para mostrar el % de cumplimiento del indicador padre (materiales, 3922)....
+            $scope.chargeColumn3dMateriales = function (indicatorId, render, width, height) {
+                FusionCharts.ready(function () {
+                    var MsColumn3d = new FusionCharts({
+                        type: 'column3d',
+                        renderAt: render,
+                        width: '100%',
+                        height: '350',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": {
+                                "caption": "% Cumplimiento Plan de Mantenimiento",
+                                "xAxisName": "Meses",
+                                "yAxisName": "% de cumpliento",
+                                "yaxismaxvalue": "100",
+                                "paletteColors": "#0075c2",
+                                "valueFontColor": "#ffffff",
+                                "baseFont": "Helvetica Neue,Arial",
+                                "captionFontSize": "14",
+                                "subcaptionFontSize": "14",
+                                "subcaptionFontBold": "0",
+                                "placeValuesInside": "1",
+                                "rotateValues": "1",
+                                "showShadow": "0",
+                                "divlineColor": "#999999",
+                                "divLineIsDashed": "1",
+                                "divlineThickness": "1",
+                                "divLineDashLen": "1",
+                                "divLineGapLen": "1",
+                                "canvasBgColor": "#ffffff",
+                                "decimalSeparator": ",",
+                                "showHoverEffect": "1"
+                            },
+                            "data": [
+                                {
+                                    "label": "Enero",
+                                    "value": "99.28"
+                                },
+                                {
+                                    "label": "Febrero",
+                                    "value": "99.63"
+                                },
+                                {
+                                    "label": "Marzo",
+                                    "value": "99.08"
+                                },
+                                {
+                                    "label": "Abril",
+                                    "value": "99.13"
+                                },
+                                {
+                                    "label": "Mayo",
+                                    "value": "99.48"
+                                },
+                                {
+                                    "label": "Junio",
+                                    "value": "99.55"
+                                },
+                                /*{
+                                    "label": "Julio",
+                                    "value": "91.13"
+                                },*/
+                            ],
+                            "trendlines": [
+                                {
+                                    "line": [
+                                        {
+                                            "startvalue": "100",
+                                            "color": "#1aaf5d",
+                                            "valueOnRight": "1",
+                                            "displayvalue": "Meta (100%)"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    });
+                    MsColumn3d.render();
                 });
             }
 

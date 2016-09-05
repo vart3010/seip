@@ -659,8 +659,9 @@ chart:
         indicatorWithTrendlineHorizontalOnlyResult: Indicador con una línea horizontal para comparar el valor de los resultados con algún valor fijo
         multilevelPieAit: Indicador tipo torta con subcategorias para AIT
         mslineAit: Resultado del % de la meta de acuerdo a la resolución de casos (AIT)
-        mslineProd: Resultado del % de cumplimiento de los indicadores asociados con respecto a la meta fijada
-        type_column_2d: Resultado del % de cumpliento del indicador padre en grafico de barras
+        mslineProd: Resultado del % de cumplimiento de los indicadores asociados con respecto a la meta fijada (Producción)
+        type_column_2d: Resultado del % de cumpliento del indicador padre en grafico de barras (Mantenimiento),
+        type_column_3d_mat: Cumplimiento del indicador padre (Materiales)
         example: Ejemplo
         
     

@@ -203,6 +203,11 @@ abstract class Chart
      */
     const TYPE_COLUMN_2D = 37;
     
+    /**
+     * Gráfico para mostrar el % de cumplimiento del indicador padre (materiales)
+     */
+    const TYPE_COLUMN_3D_MAT = 38;
+    
     const TYPE_EXAMPLE = 100;
        
     /**
@@ -279,6 +284,7 @@ abstract class Chart
             self::TYPE_MS_LINE_AIT => 'chart.type.mslineAit',
             self::TYPE_MS_LINE_PROD => 'chart.type.mslineProd',
             self::TYPE_COLUMN_2D => 'chart.type.type_column_2d',
+            self::TYPE_COLUMN_3D_MAT => 'chart.type.type_column_3d_mat',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          
