@@ -683,7 +683,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @var integer
      * @ORM\Column(name="numberValueIndicatorToForce",type="integer", nullable=true)
      */
-    private $numberValueIndicatorToForce = 1;
+    private $numberValueIndicatorToForce;
 
     /**
      * ¿Mostrar grafico de barras hasta mes consultado o global?
@@ -734,6 +734,18 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="showIndicatorParent", type="boolean")
      */
     private $showIndicatorParent = false;
+    
+     /**
+     * @var boolean
+     * @ORM\Column(name="showChartChildren", type="boolean")
+     */
+    private $showChartChildren = false;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(name="notShowDecimals", type="boolean")
+     */
+    private $notShowDecimals = false;
     
     /**
      * ¿El Valor Plan del Indicador no acumula?
@@ -2852,5 +2864,27 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
 
     function setShowIndicatorParent($showIndicatorParent) {
         $this->showIndicatorParent = $showIndicatorParent;
+    }
+    
+    /*
+     * Metodos set y get para para mostar/ocultar los gráficos de los indicadores hijos del tablero del CPJAA
+     */
+    function getShowChartChildren() {
+        return $this->showChartChildren;
+    }
+
+    function setShowChartChildren($showChartChildren) {
+        $this->showChartChildren = $showChartChildren;
+    }
+    
+    /*
+     * Metodos set y get para para ocultar los decimales de los resultados de las esferas del tablero
+     */
+    function getNotShowDecimals() {
+        return $this->notShowDecimals;
+    }
+
+    function setNotShowDecimals($notShowDecimals) {
+        $this->notShowDecimals = $notShowDecimals;
     }
 }

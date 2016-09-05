@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\MasterBundle\Model\Complejo as modelComplejo;
 
-/**
+/** 
  * Localidad
  *
  * @ORM\Table(name="seip_c_complejo")
@@ -96,6 +96,14 @@ class Complejo extends modelComplejo {
      * @ORM\Column(name="numberMembersCET", type="integer", nullable=true)
      */
     private $numberMembersCET = 0;
+
+    /**
+     * Depositos
+     * 
+     * @var houseSupplyDeposit
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\houseSupplyDeposit",mappedBy="complejo",cascade={"persist","remove"})
+     */
+    protected $deposit;
 
     /**
      * Get id

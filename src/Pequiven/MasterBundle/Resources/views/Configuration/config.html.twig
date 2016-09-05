@@ -1,0 +1,26 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+{% block before_body %}
+    {{ contentHeader("Configuraciones Generales" | trans({}))   }}
+{% endblock %}
+{% block body %}
+<hr>
+<!-- Main content -->
+<section role="main" id="main">	
+	<div class="with-padding">
+		{#<p>The template includes a complete icon set from the awesome icon font <a href="http://www.entypo.com/">Entypo</a>, with <strong>122</strong> available symbols:</p>#}
+		<ul class="blocks-list square-90">			
+			<li><a href="{{path('tecnocreaciones_box_index')}}"><span class="icon-eye icon-size5 black large-text-shadow"></span>Boxes</a></li>
+			{% if is_granted('ROLE_SEIP_MASTER_CONFIG_PERMISSIONS') %}
+				<li><a href="{{path('admin_master_configuration_notify')}}"><span class="icon-unlock icon-size5 black large-text-shadow"></span>Permisos</a></li>
+			{% endif %}
+			{% if is_granted(['ROLE_SONATA_ADMIN_CORE_PERIOD_ADMIN','ROLE_SUPER_ADMIN']) %}			
+				<li><a href="{{path('admin_pequiven_seip_period_list')}}"><span class="icon-calendar icon-size5 black large-text-shadow"></span>Período</a></li>
+			{% endif %}
+			{% if is_granted(['ROLE_SONATA_ADMIN_CONFIGURATION_ADMIN','ROLE_SUPER_ADMIN']) %}
+				<li><a href="{{path('admin_tecnocreaciones_tools_configuration_configuration_list')}}"><span class="icon-gear icon-size5 black large-text-shadow"></span>Configuración</a></li>			
+			{% endif %}
+		</ul>
+	</div>
+</section>
+<!-- End main content -->
+{% endblock %}

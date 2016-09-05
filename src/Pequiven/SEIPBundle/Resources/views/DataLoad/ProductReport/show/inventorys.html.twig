@@ -11,31 +11,42 @@
     </div>
     <div class="with-padding">
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            {% set productUnit = product_report.product.productUnit %}
+            {%if factor %}
+                {% set cols = 2 %}
+                {% set colspan = 3 %}
+                {% set colsfactor = 'colspan="'~ cols ~'"' %}
+            {%else%}
+                {% set cols = 1 %}
+                {% set colspan = 2 %}
+                {% set colsfactor = '' %}
+            {%endif%}
             <thead>
                 <tr>
-                    <th scope="col" width="40%">{{ 'Month'|trans }}</th>
-                    <td align="right" colspan="{{ colspan }}" scope="col" width="20%" class="hide-on-mobile-portrait">{{ 'pequiven_seip.total'|trans }}</td>
+                    <th scope="col" width="30%">{{ 'Month'|trans }}</th>
+                    <td align="right" {{colsfactor}} scope="col" width="30%" class="hide-on-mobile-portrait">{{ 'pequiven_seip.total'|trans }} ({{productUnit}})</td>
+                    {%if factor %}
+                        <td align="right" scope="col" width="30%" class="hide-on-mobile-portrait">{{ 'pequiven_seip.total'|trans }} ({{ factorConversionService.unitToFactorConversion(product_report) }})</td>    
+                    {%endif%}
                     <th scope="col" width="10%">&nbsp;</th>
                 </tr>
             </thead>
             {% set colspan = 6 %}
             <tbody>
-                {% set productUnit = product_report.product.productUnit %}
                 {% for inventory in product_report.getInventorySortByMonth %}
                     <tr>
                         <td>{{ loop.index }} - 
                             {{ inventory|trans }}
                         </td>
-                        <td scope="row" align="right" style="font-weight: bold;">
+                        <td scope="row" align="right">
                             {{ inventory.getTotalInventory|myNumberFormat }}&nbsp;{{ productUnit }}
                         </td>
-                        <td scope="row" align="right" style="font-weight: bold;" >
-                            {% if factor %}
-                                 {% set factorInventory = factorConversionService.calculateFormulaValueFromFactor(inventory.getTotalInventory,product_report) %}
-                                {{ factorInventory|myNumberFormat }} {{ factorConversionService.unitToFactorConversion(product_report) }}
-                                
-                            {% endif %}
-                        </td>
+                        {% if factor %}
+                            <td scope="row" align="right">
+                                {% set factorInventory = factorConversionService.calculateFormulaValueFromFactor(inventory.getTotalInventory,product_report) %}
+                                {{ factorInventory|myNumberFormat }}&nbsp;{{ factorConversionService.unitToFactorConversion(product_report) }}                                                           
+                            </td>
+                        {% endif %}
                         <td class="low-padding align-center">
                             {% if isAllowPlanningReport %}
                                 <a href="{{ path("pequiven_inventory_update",{id: inventory.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
@@ -43,7 +54,7 @@
                         </td>
                     </tr>
                 {% else %}
-                    <tr >
+                    <tr>
                         <td colspan="{{ colspan }}" class="empty_row">
                             {{ "empty.inventorys"|trans }}
                         </td>
@@ -51,6 +62,5 @@
                 {% endfor %}
             </tbody>
         </table>
-
     </div>
 </div>

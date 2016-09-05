@@ -3,6 +3,7 @@ sip:
     consulta: Consulta de 1x10
     onePerTen: 1x10
     list: Lista
+    list_profile: Perfiles Empleados
     list_inventory: Lista Inventario
     cedula: Cédula
     centro: Centro
@@ -11,6 +12,7 @@ sip:
     miembros: Miembros
     miembro: Miembro
     busqueda: Búsqueda
+    profile_employee: Perfil %employee%
     cutl:
         title: CUTL        
         list: Listado de CUTL

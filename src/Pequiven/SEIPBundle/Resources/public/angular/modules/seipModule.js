@@ -19,17 +19,18 @@ seipModule
             };
         });
 seipModule.directive('compile', ['$compile', function ($compile) {
-  return function(scope, element, attrs) {
-    scope.$watch(
-      function(scope) {
-        return scope.$eval(attrs.compile);
-      },
-      function(value) {
-        element.html(value);
-        $compile(element.contents())(scope);
-      }
-   )};
-}]);
+        return function (scope, element, attrs) {
+            scope.$watch(
+                    function (scope) {
+                        return scope.$eval(attrs.compile);
+                    },
+                    function (value) {
+                        element.html(value);
+                        $compile(element.contents())(scope);
+                    }
+            )
+        };
+    }]);
 
 function confirm() {
 
@@ -337,12 +338,12 @@ angular.module('seipModule.controllers', [])
                 return false;
             };
             var managementSystem = angular.element('#arrangementprogram_managementSystem');
+            var strategicObjective = angular.element('#arrangementprogram_strategicObjetive');
             var tacticalObjective = angular.element('#arrangementprogram_tacticalObjective');
             var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
             var loadTemplateMetaButton = angular.element('#loadTemplateMeta');
             var categoryArrangementProgramId = angular.element('#categoryArrangementProgramValue');
             $scope.setOperationalObjective = function (tacticalObjetive, selected) {
-
                 if (tacticalObjetive) {
                     notificationBarService.getLoadStatus().loading();
                     $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives", {idObjetiveTactical: tacticalObjetive, idCategoryArrangementProgram: categoryArrangementProgramId.val()})).success(function (data) {
@@ -364,7 +365,7 @@ angular.module('seipModule.controllers', [])
             //$scope.setOperationalObjective();
 
             managementSystem.on('change', function (e) {
-                console.log(e.val);
+                //console.log(e.val);
                 if (e.val) {
                     var managementSystemId = e.val;
                     tacticalObjective.find('option').remove().end();
@@ -387,6 +388,9 @@ angular.module('seipModule.controllers', [])
                     tacticalObjective.select2('val', '');
                     tacticalObjective.select2('enable', false);
                 }
+            });
+            strategicObjective.on('change', function (e) {
+                //$scope.getLocationByStrategic(e.val);                
             });
             tacticalObjective.on('change', function (e) {
                 if (e.val) {
@@ -449,6 +453,21 @@ angular.module('seipModule.controllers', [])
 //                    });
                 }
             };
+            $scope.getLocationByStrategic = function (value) {
+                //console.log(value);
+                if (value != '') {
+                    notificationBarService.getLoadStatus().loading();
+                    $http.get(Routing.generate("objetiveTactic_show", {id: value, _format: 'json', _groups: ['complejo']})).success(function (data) {
+                        var dataObject = data.entity.gerencia;
+                        angular.forEach(data, function (dataObject) {
+                            console.log(dataObject);
+                        });
+                        //$scope.complejo = data.entity.gerencia.complejo;
+                        //$scope.templateOptions.setVar('gerenciaOfObjetive', data.entity.gerencia);
+                        //notificationBarService.getLoadStatus().done();
+                    });
+                }
+            };
             $scope.getLocationByTactical = function (value) {
                 if (value != '') {
                     notificationBarService.getLoadStatus().loading();
@@ -471,6 +490,9 @@ angular.module('seipModule.controllers', [])
             };
             $scope.setEntityType = function (entity) {
                 $scope.entityType = entity;
+                if ($scope.entityType == 0) {
+                    $scope.getLocationByStrategic(strategicObjective.val());
+                }
                 if ($scope.entityType == 1) {
                     $scope.getLocationByTactical(tacticalObjective.val());
                 }
@@ -1059,6 +1081,113 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
+
+        .controller('DeliveryPoint', function ($scope) {
+            var format = function (data)
+            {
+                var text = data.name;
+                if (text == undefined && data.description != undefined) {
+                    text = data.description;
+                }
+                return text;
+            };
+            var buldSelect2 = function (id, data)
+            {
+                var myData = getDefaultSelect(data);
+                var select = $("#" + id).select2(myData)
+                        .on('change', function () {
+
+                            var me = $(this);
+                            var value = me.val();
+                            var multiple = me.attr('multiple');
+                            var name = me.attr('name');
+                            if (multiple != undefined && value != "") {
+                                value = angular.toJson(value.split(','));
+                            } else {
+
+                            }
+                            if (value != '') {
+                                $scope.tableParams.$params.filter[name] = value;
+                            } else {
+                                $scope.tableParams.$params.filter[name] = null;
+                            }
+                            $scope.tableParams.reload();
+                        })
+                        ;
+                select.attr('multiple', myData.multiple);
+                return select;
+            };
+            var urlSearchService = Routing.generate('pequiven_seip_search_service');
+            var urlSearchProduct = Routing.generate('pequiven_seip_search_product');
+            var urlSearchEntity = Routing.generate('pequiven_seip_search_entity');
+            var urlSearchPlant = Routing.generate('pequiven_seip_search_plant');
+            var urlSearchRegion = Routing.generate('pequiven_seip_search_region');
+            var urlSearchLocation = Routing.generate('pequiven_seip_search_location');
+            var urlSearchCompany = Routing.generate('pequiven_seip_search_company');
+            var urlSearchPeriod = Routing.generate('pequiven_seip_search_period');
+            function getDefaultSelect(data) {
+                var dataDefault = {
+                    placeholder: ' ',
+                    allowClear: true,
+                    minimumInputLength: 2,
+                    multiple: false,
+                    ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
+                        url: data.url,
+                        dataType: 'json',
+                        quietMillis: 250,
+                        data: function (term, page) {
+                            return {
+                                q: term, // search term
+                            };
+                        },
+                        results: function (data, page) { // parse the results into the format expected by Select2.
+                            // since we are using custom formatting functions we do not need to alter the remote JSON data
+                            return {results: data};
+                        },
+                        cache: true
+                    },
+                    initSelection: function (element, callback) {
+                        // the input tag has a value attribute preloaded that points to a preselected repository's id
+                        // this function resolves that id attribute to an object that select2 can render
+                        // using its formatResult renderer - that way the repository name is shown preselected
+                    },
+                    formatResult: format, // omitted for brevity, see the source of this page
+                    formatSelection: format, // omitted for brevity, see the source of this page
+                    escapeMarkup: function (m) {
+                        return m;
+                    } // we do not want to escape markup since we are displaying html in results
+                };
+                var result = $.extend(dataDefault, data);
+                return result;
+            }
+            buldSelect2('select-service', {
+                url: urlSearchService,
+                multiple: true
+            });
+            buldSelect2('select-product', {
+                url: urlSearchProduct,
+                multiple: true
+            });
+            buldSelect2('select-entity', {
+                url: urlSearchEntity
+            });
+            buldSelect2('select-plant', {
+                url: urlSearchPlant
+            });
+            buldSelect2('select-region', {
+                url: urlSearchRegion
+            });
+            buldSelect2('select-location', {
+                url: urlSearchLocation
+            });
+            buldSelect2('select-company', {
+                url: urlSearchCompany
+            });
+            buldSelect2('select-period', {
+                url: urlSearchPeriod
+            });
+        })
+
         .controller('ReportTemplateIndexActionController', function ($scope) {
             var format = function (data)
             {
@@ -1518,13 +1647,13 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
-        
+
         //Controladores Trello
         .controller('TrelloTicketController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
-            
-        })        
+
+        })
         //Fin Controladores Trello
-        
+
         //Controladores SIG
         .controller('IndicatorSigEvolutionController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
             $scope.urlCausesEvolutionForm = null;
@@ -2976,7 +3105,6 @@ angular.module('seipModule.controllers', [])
 
                 var parameters = {
                     id: $scope.id_managementSystem,
-                    type: $scope.type,
                     _dc: numero
                 };
                 if (resource) {
@@ -3014,9 +3142,9 @@ angular.module('seipModule.controllers', [])
                 $scope.templateOptions.setTemplate($scope.templates[0]);
             };
             //Carga de html botones
-            $scope.but = function(){
+            $scope.but = function () {
                 var button = angular.element('#buttons');
-                console.log($('#textPrueba').html());                
+                console.log($('#textPrueba').html());
                 $scope.myHTML = '<a class="button icon-pencil" ng-click="loadTemplateMaintenanceVerification(id_maintenance=64)" href="">Verificar</a>';
             }
 
@@ -4277,7 +4405,7 @@ angular.module('seipModule.controllers', [])
                 );
             }
         })
-        
+
         .controller('OnePerTenController', function ($scope, $http) {
             var formFile = angular.element('form#formFile');
             $scope.idOnePerTen = null;
@@ -4358,7 +4486,7 @@ angular.module('seipModule.controllers', [])
                 );
             }
         })
-        
+
         .controller('FeeStructureController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
             var isInit = false;
@@ -4575,8 +4703,8 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
-            
-             //Carga la formula del metodo de calculo 
+
+            //Carga la formula del metodo de calculo 
             $scope.loadEcuationMethod = function (resource) {
                 $scope.initForm(resource);
                 if (isInit == false) {
@@ -4592,7 +4720,7 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
-            
+
             $scope.removeFeatureIndicator = function (featureIndicator) {
                 $scope.openModalConfirm('pequiven.modal.confirm.indicator.delete_feature', function () {
                     notificationBarService.getLoadStatus().loading();
@@ -4768,7 +4896,7 @@ angular.module('seipModule.controllers', [])
                 }
                 var url = Routing.generate('pequiven_value_indicator_get_form', parameters);
                 var url2 = Routing.generate('pequiven_feature_indicator_get_form', parameters);
-                var url2 = Routing.generate('pequiven_show_method_calcule_indicator_get_form', parameters);
+                var url3 = Routing.generate('pequiven_show_method_calcule_indicator_get_form', parameters);
                 $scope.templates = [
                     {
                         name: 'pequiven.modal.title.value_indicator',
@@ -4782,7 +4910,7 @@ angular.module('seipModule.controllers', [])
                     },
                     {
                         name: 'Método de Cálculo',
-                        url: url2,
+                        url: url3,
                         confirmCallBack: confirmCallBack2,
                     }
                 ];
@@ -5313,18 +5441,21 @@ angular.module('seipModule.controllers', [])
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
             var selectSecondLineManagement = angular.element("#selectSecondLineManagement");
             var selectCoordinator = angular.element("#selectCoordinator");
+            var selectUser = angular.element("#selectUser");
 
             $scope.data = {
                 complejos: null,
                 first_line_managements: null,
                 second_line_managements: null,
                 coordinators: null,
+                members: null,
             };
             $scope.model = {
                 complejo: null,
                 firstLineManagement: null,
                 secondLineManagement: null,
                 coordinator: null,
+                user: null,
             };
 
             //Busca las localidades
@@ -5459,6 +5590,164 @@ angular.module('seipModule.controllers', [])
                 }
             });
 
+            //Scope de usuarios
+            $scope.$watch("model.user", function (newParams, oldParams) {
+                if ($scope.model.user != null && $scope.model.user != undefined) {
+                    $scope.tableParams.$params.filter['members'] = $scope.model.user;
+                } else {
+                    $scope.tableParams.$params.filter['members'] = null;
+                }
+            });
+
+        })
+
+        .controller('TableHouseSupplyOrderKitController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            var selectComplejo = angular.element("#selectComplejos");
+            var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
+            var selectStatusHouseSupplyOrder = angular.element("#selectStatusHouseSupplyOrder");
+            var selectCycle = angular.element("#selectCycle");
+            var selectProductKit = angular.element("#selectProductKit");
+
+            $scope.data = {
+                complejos: null,
+                work_study_circles: null,
+                status_house_supply_order: null,
+                cycle: null,
+                productKit: null,
+            };
+            $scope.model = {
+                complejo: null,
+                workStudyCircle: null,
+                statusHouseSupplyOrder: null,
+                cycle: null,
+                productKit: null,
+            };
+
+            //Busca las localidades
+            $scope.getComplejos = function () {
+                var parameters = {
+                    filter: {}
+                };
+                $http.get(Routing.generate('pequiven_seip_complejos', parameters))
+                        .success(function (data) {
+                            $scope.data.complejos = data;
+                            if ($scope.model.complejo != null) {
+                                $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function (selected) {
+                                    $scope.model.complejo = selected;
+                                });
+                            }
+                        });
+            };
+
+            $scope.getComplejos();
+
+            //Busca los Círculos de Estudio de Trabajo
+            $scope.getWorkStudyCircle = function (complejo, phase) {
+                var parameters = {
+                    filter: {}
+                };
+                if ($scope.model.complejo != null) {
+                    parameters.filter['complejo'] = $scope.model.complejo.id;
+                }
+                if (phase != '' && phase != undefined) {
+                    parameters.filter['phase'] = phase;
+                }
+                $http.get(Routing.generate('pequiven_seip_work_study_circle', parameters))
+                        .success(function (data) {
+                            $scope.data.work_study_circles = data;
+                            if ($scope.model.workStudyCircle != null) {
+                                $scope.setValueSelect2("workStudyCircle", $scope.model.workStudyCircle, $scope.data.work_study_circles, function (selected) {
+                                    $scope.model.workStudyCircle = selected;
+                                });
+                            }
+                        });
+            };
+
+            $scope.getHouseSupplyCycle = function () {
+
+                $http.get(Routing.generate('pequiven_seip_house_supply_cycle'))
+                        .success(function (data) {
+                            $scope.data.cycle = data;
+                            if ($scope.model.cycle != null) {
+                                $scope.setValueSelect2("selectCycle", $scope.model.cycle, $scope.data.cycle, function (selected) {
+                                    $scope.model.cycle = selected;
+                                });
+                            }
+                        });
+            };
+            $scope.getHouseSupplyCycle();
+
+            $scope.getHouseSupplyProductKit = function () {
+                $http.get(Routing.generate('pequiven_seip_house_supply_product_kit'))
+                        .success(function (data) {
+                            $scope.data.productKit = data;
+                            if ($scope.model.productKit != null) {
+                                $scope.setValueSelect2("selectProductKit", $scope.model.productKit, $scope.data.productKit, function (selected) {
+                                    $scope.model.productKit = selected;
+                                });
+                            }
+                        });
+            };
+            $scope.getHouseSupplyProductKit();
+
+            //Scope de ProductKit
+            $scope.$watch("model.productKit", function (newParams, oldParams) {
+                if ($scope.model.productKit != null && $scope.model.productKit.id != undefined) {
+                    $scope.tableParams.$params.filter['productKit'] = $scope.model.productKit.id;
+                    selectProductKit.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['productKit'] = null;
+                }
+            });
+
+            //Scope de Ciclos de Pedido
+            $scope.$watch("model.cycle", function (newParams, oldParams) {
+                if ($scope.model.cycle != null && $scope.model.cycle.id != undefined) {
+                    $scope.tableParams.$params.filter['cycle'] = $scope.model.cycle.id;
+                    selectCycle.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['cycle'] = null;
+                }
+            });
+
+            //Scope de Localidad
+            $scope.$watch("model.complejo", function (newParams, oldParams) {
+                if ($scope.model.complejo != null && $scope.model.complejo.id != undefined) {
+                    $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
+                    //Al cambiar el select de localidad
+                    selectComplejo.change(function () {
+                        selectFirstLineManagement.select2("val", '');
+                        selectSecondLineManagement.select2("val", '');
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['complejo'] = null;
+                }
+            });
+
+            //Scope de Círculo de Estudio de Trabajo
+            $scope.$watch("model.workStudyCircle", function (newParams, oldParams) {
+                if ($scope.model.workStudyCircle != null && $scope.model.workStudyCircle.id != undefined) {
+                    $scope.tableParams.$params.filter['workStudyCircle'] = $scope.model.workStudyCircle.id;
+                    //Al cambiar el círculo de estudio de trabajo
+                    selectWorkStudyCircle.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['workStudyCircle'] = null;
+                }
+            });
+
+            //Scope de Status de Orden
+            $scope.$watch("model.statusHouseSupplyOrder", function (newParams, oldParams) {
+                if ($scope.model.statusHouseSupplyOrder != null && $scope.model.statusHouseSupplyOrder.id != undefined) {
+                    $scope.tableParams.$params.filter['statusHouseSupplyOrder'] = $scope.model.statusHouseSupplyOrder.id;
+                    selectStatusHouseSupplyOrder.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['statusHouseSupplyOrder'] = null;
+                }
+            });
         })
 
         .controller('ReportSipController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
@@ -5755,6 +6044,7 @@ angular.module('seipModule.controllers', [])
             var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
             var selectProfilesPoliticEvaluation = angular.element("#selectProfilesPoliticEvaluation");
             var selectStatusRevocatorySignature = angular.element("#selectStatusRevocatorySignature");
+            var selectNomina = angular.element("#selectNomina");
 
 
             $scope.data = {
@@ -5764,6 +6054,7 @@ angular.module('seipModule.controllers', [])
                 work_study_circles: null,
                 profiles_politic_evaluation: null,
                 status_revocatory_signature: null,
+                nominas: null,
             };
 
             $scope.model = {
@@ -5773,6 +6064,7 @@ angular.module('seipModule.controllers', [])
                 workStudyCircle: null,
                 profilesPoliticEvaluation: null,
                 statusRevocatorySignature: null,
+                nomina: null,
             };
 
             //Busca las localidades
@@ -5921,8 +6213,7 @@ angular.module('seipModule.controllers', [])
                 if ($scope.model.workStudyCircle != null && $scope.model.workStudyCircle.id != undefined) {
                     $scope.tableParams.$params.filter['workStudyCircle'] = $scope.model.workStudyCircle.id;
                     //Al cambiar el círculo de estudio de trabajo
-                    selectWorkStudyCircle.change(function () {
-                    });
+                    selectWorkStudyCircle.change(function () {});
                 } else {
                     $scope.tableParams.$params.filter['workStudyCircle'] = null;
                 }
@@ -5933,8 +6224,7 @@ angular.module('seipModule.controllers', [])
                 if ($scope.model.profilesPoliticEvaluation != null && $scope.model.profilesPoliticEvaluation.id != undefined) {
                     $scope.tableParams.$params.filter['profilesPoliticEvaluation'] = $scope.model.profilesPoliticEvaluation.id;
                     //Al cambiar el Perfil Político
-                    selectProfilesPoliticEvaluation.change(function () {
-                    });
+                    selectProfilesPoliticEvaluation.change(function () {});
                 } else {
                     $scope.tableParams.$params.filter['profilesPoliticEvaluation'] = null;
                 }
@@ -5945,11 +6235,20 @@ angular.module('seipModule.controllers', [])
                 if ($scope.model.statusRevocatorySignature != null && $scope.model.statusRevocatorySignature.id != undefined) {
                     $scope.tableParams.$params.filter['statusRevocatorySignature'] = $scope.model.statusRevocatorySignature.id;
                     //Al cambiar el Status Firma Revocatorio 2016
-                    selectStatusRevocatorySignature.change(function () {
-                    });
+                    selectStatusRevocatorySignature.change(function () {});
                 } else {
                     $scope.tableParams.$params.filter['statusRevocatorySignature'] = null;
                 }
+            });
+            
+            //Scope de Nóminas
+            $scope.$watch("model.nomina", function (newParams, oldParams) {
+               if($scope.model.nomina != null && $scope.model.nomina != undefined) {
+                   $scope.tableParams.$params.filter['nomina'] = $scope.model.nomina.id;
+                   selectNomina.change(function() {});
+               } else {
+                   $scope.tableParams.$params.filter['nomina'] = null;
+               } 
             });
 
 
@@ -6589,7 +6888,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartDoughnut2dIndicatorsAssociated = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartDoughnutIndicatorsAssociated = Routing.generate("getDataChartDoughnutIndicatorsAssociated", {id: indicatorId,tablero: tablero});
+                var getDataChartDoughnutIndicatorsAssociated = Routing.generate("getDataChartDoughnutIndicatorsAssociated", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartDoughnutIndicatorsAssociated).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartDoughnutIndicatorsAssociated = new FusionCharts({
@@ -6613,7 +6912,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartColumnLineDualAxisIndicatorsAssociated = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartColumnLineDualAxisIndicatorsAssociated = Routing.generate("getDataChartColumnLineDualAxisIndicatorsAssociated", {id: indicatorId,tablero: tablero});
+                var getDataChartColumnLineDualAxisIndicatorsAssociated = Routing.generate("getDataChartColumnLineDualAxisIndicatorsAssociated", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartColumnLineDualAxisIndicatorsAssociated).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnLineDualAxisIndicatorsAssociated = new FusionCharts({
@@ -6638,7 +6937,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartDoughnut2dWithVariablesRealPlan = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getdataChartDoughnut2dWithVariablesRealPlan = Routing.generate("getDataChartDoughnutWithVariablesRealPlan", {id: indicatorId,tablero: tablero});
+                var getdataChartDoughnut2dWithVariablesRealPlan = Routing.generate("getDataChartDoughnutWithVariablesRealPlan", {id: indicatorId, tablero: tablero});
                 $http.get(getdataChartDoughnut2dWithVariablesRealPlan).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartDoughnut2dWithVariablesRealPlan = new FusionCharts({
@@ -6662,7 +6961,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartPieVariablesMarkedReal = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartPieVariablesMarkedReal = Routing.generate("getDataChartPieVariablesMarkedReal", {id: indicatorId,tablero: tablero});
+                var getDataChartPieVariablesMarkedReal = Routing.generate("getDataChartPieVariablesMarkedReal", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartPieVariablesMarkedReal).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartPieVariablesMarkedReal = new FusionCharts({
@@ -6686,7 +6985,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartColumnLineDualAxisRealPlan = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartColumnLineDualAxisRealPlan = Routing.generate("getDataChartColumnLineDualAxisRealPlan", {id: indicatorId,tablero: tablero});
+                var getDataChartColumnLineDualAxisRealPlan = Routing.generate("getDataChartColumnLineDualAxisRealPlan", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartColumnLineDualAxisRealPlan).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnLineDualAxisRealPlan = new FusionCharts({
@@ -6711,7 +7010,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartPieVariablesMarkedPlan = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartPieVariablesMarkedPlan = Routing.generate("getDataChartPieVariablesMarkedPlan", {id: indicatorId,tablero: tablero});
+                var getDataChartPieVariablesMarkedPlan = Routing.generate("getDataChartPieVariablesMarkedPlan", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartPieVariablesMarkedPlan).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartPieVariablesMarkedPlan = new FusionCharts({
@@ -6735,7 +7034,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartBarsAreaVariablesRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartBarsAreaVariablesRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesRealPlanByFrequencyNotification", {id: indicatorId,tablero: tablero});
+                var getDataChartBarsAreaVariablesRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesRealPlanByFrequencyNotification", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartBarsAreaVariablesRealPlanByFrequencyNotification).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartBarsAreaVariablesRealPlanByFrequencyNotification = new FusionCharts({
@@ -6760,7 +7059,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartPieVariablesPlanFromEquation = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartPieVariablesPlanFromEquation = Routing.generate("getDataChartPieVariablesPlanFromEquation", {id: indicatorId,tablero: tablero});
+                var getDataChartPieVariablesPlanFromEquation = Routing.generate("getDataChartPieVariablesPlanFromEquation", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartPieVariablesPlanFromEquation).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartPieVariablesPlanFromEquation = new FusionCharts({
@@ -6784,7 +7083,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartPieVariablesRealFromEquation = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartPieVariablesRealFromEquation = Routing.generate("getDataChartPieVariablesRealFromEquation", {id: indicatorId,tablero: tablero});
+                var getDataChartPieVariablesRealFromEquation = Routing.generate("getDataChartPieVariablesRealFromEquation", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartPieVariablesRealFromEquation).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartPieVariablesRealFromEquation = new FusionCharts({
@@ -6808,7 +7107,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartColumnLineDualAxisByFrequencyNotification = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartColumnLineDualAxisByFrequencyNotification = Routing.generate("getDataChartColumnLineDualAxisByFrequencyNotification", {id: indicatorId,tablero: tablero});
+                var getDataChartColumnLineDualAxisByFrequencyNotification = Routing.generate("getDataChartColumnLineDualAxisByFrequencyNotification", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartColumnLineDualAxisByFrequencyNotification).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnLineDualAxisByFrequencyNotification = new FusionCharts({
@@ -6833,7 +7132,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification", {id: indicatorId,tablero: tablero});
+                var getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = new FusionCharts({
@@ -6858,7 +7157,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartColumnVariablesMarkedRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification = Routing.generate("getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification", {id: indicatorId,tablero: tablero});
+                var getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification = Routing.generate("getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnVariablesMarkedRealPlanByFrequencyNotification = new FusionCharts({
@@ -6883,7 +7182,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartVariablesRealPlanFromDashboardEquationDoughnut = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getdataChartVariablesRealPlanFromDashboardEquationDoughnut = Routing.generate("getDataChartVariablesRealPlanFromDashboardEquationDoughnut", {id: indicatorId,tablero: tablero});
+                var getdataChartVariablesRealPlanFromDashboardEquationDoughnut = Routing.generate("getDataChartVariablesRealPlanFromDashboardEquationDoughnut", {id: indicatorId, tablero: tablero});
                 $http.get(getdataChartVariablesRealPlanFromDashboardEquationDoughnut).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartVariablesRealPlanFromDashboardEquationDoughnut = new FusionCharts({
@@ -6907,7 +7206,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = Routing.generate("getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation", {id: indicatorId,tablero: tablero});
+                var getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = Routing.generate("getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = new FusionCharts({
@@ -6932,7 +7231,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = Routing.generate("getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation", {id: indicatorId,tablero: tablero});
+                var getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = Routing.generate("getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = new FusionCharts({
@@ -6957,7 +7256,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartStackedColumnVariableByFrequencyNotificationWithTotal = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartStackedColumnVariableByFrequencyNotificationWithTotal = Routing.generate("getDataChartStackedColumnVariableByFrequencyNotificationWithTotal", {id: indicatorId,tablero: tablero});
+                var getDataChartStackedColumnVariableByFrequencyNotificationWithTotal = Routing.generate("getDataChartStackedColumnVariableByFrequencyNotificationWithTotal", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartStackedColumnVariableByFrequencyNotificationWithTotal).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartStackedColumnVariableByFrequencyNotificationWithTotal = new FusionCharts({
@@ -6982,7 +7281,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth = function (indicatorId, month, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth = Routing.generate("getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth", {id: indicatorId, month: month,tablero: tablero});
+                var getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth = Routing.generate("getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth", {id: indicatorId, month: month, tablero: tablero});
                 $http.get(getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnResultIndicatorsAssociatedWithTotalByMonth = new FusionCharts({
@@ -7006,7 +7305,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = function (indicatorId, month, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = Routing.generate("getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth", {id: indicatorId, month: month,tablero: tablero});
+                var getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = Routing.generate("getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth", {id: indicatorId, month: month, tablero: tablero});
                 $http.get(getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = new FusionCharts({
@@ -7030,7 +7329,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime", {id: indicatorId,tablero: tablero});
+                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = new FusionCharts({
@@ -7055,7 +7354,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime", {id: indicatorId,tablero: tablero});
+                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = new FusionCharts({
@@ -7080,7 +7379,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens", {id: indicatorId,tablero: tablero});
+                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = new FusionCharts({
@@ -7105,7 +7404,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartMultiSeriesLineIndicatorLostDaysAccumulatedTime = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime", {id: indicatorId,tablero: tablero});
+                var getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesLineIndicatorLostDaysAccumulatedTime = new FusionCharts({
@@ -7130,7 +7429,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated", {id: indicatorId,tablero: tablero});
+                var getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated = new FusionCharts({
@@ -7155,7 +7454,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated", {id: indicatorId,tablero: tablero});
+                var getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated = new FusionCharts({
@@ -7180,7 +7479,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated", {id: indicatorId,tablero: tablero});
+                var getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated = new FusionCharts({
@@ -7205,7 +7504,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated", {id: indicatorId,tablero: tablero});
+                var getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated = new FusionCharts({
@@ -7230,7 +7529,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated", {id: indicatorId,tablero: tablero});
+                var getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated = new FusionCharts({
@@ -7255,7 +7554,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartProgressProjectsByFrequencyNotification = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartProgressProjectsByFrequencyNotification = Routing.generate("getDataChartChartProgressProjectsByFrequencyNotification", {id: indicatorId,tablero: tablero});
+                var getDataChartProgressProjectsByFrequencyNotification = Routing.generate("getDataChartChartProgressProjectsByFrequencyNotification", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartProgressProjectsByFrequencyNotification).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartProgressProjectsByFrequencyNotification = new FusionCharts({
@@ -7280,7 +7579,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartColumnLineDualAxisByDifferentFrequencyNotification = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartColumnLineDualAxisByDifferentFrequencyNotification = Routing.generate("getDataChartColumnLineDualAxisByDifferentFrequencyNotification", {id: indicatorId,tablero: tablero});
+                var getDataChartColumnLineDualAxisByDifferentFrequencyNotification = Routing.generate("getDataChartColumnLineDualAxisByDifferentFrequencyNotification", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartColumnLineDualAxisByDifferentFrequencyNotification).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartColumnLineDualAxisByDifferentFrequencyNotification = new FusionCharts({
@@ -7305,7 +7604,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartMultiSeriesLineIndicatorWithTrendlineHorizontal = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal = Routing.generate("getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal", {id: indicatorId,tablero: tablero});
+                var getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal = Routing.generate("getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontal = new FusionCharts({
@@ -7331,7 +7630,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartRealPyramid3DSectioned = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId, type: 'real',tablero: tablero});
+                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId, type: 'real', tablero: tablero});
                 $http.get(getDataPyramid3DSectioned).success(function (data) {
                     FusionCharts.ready(function () {
 //                        console.log(data.dataSource.data);
@@ -7355,7 +7654,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartPlanPyramid3DSectioned = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId, type: 'plan',tablero: tablero});
+                var getDataPyramid3DSectioned = Routing.generate("getDataPyramid3DSectioned", {id: indicatorId, type: 'plan', tablero: tablero});
                 $http.get(getDataPyramid3DSectioned).success(function (data) {
                     FusionCharts.ready(function () {
 //                        console.log(data.dataSource.data);
@@ -7380,7 +7679,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartStackedColumn3DbyIndicator = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataStackedColumn3DbyIndicator = Routing.generate("getDataStackedColumn3DbyIndicator", {id: indicatorId,tablero: tablero});
+                var getDataStackedColumn3DbyIndicator = Routing.generate("getDataStackedColumn3DbyIndicator", {id: indicatorId, tablero: tablero});
                 $http.get(getDataStackedColumn3DbyIndicator).success(function (data) {
                     FusionCharts.ready(function () {
                         var ChartStackedColumn3DbyIndicator = new FusionCharts({
@@ -7405,7 +7704,7 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = function (indicatorId, render, width, height) {
                 var tableroFlag = angular.element('#tableroFlag');
                 var tablero = tableroFlag.val();
-                var getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = Routing.generate("getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult", {id: indicatorId,tablero: tablero});
+                var getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = Routing.generate("getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult", {id: indicatorId, tablero: tablero});
                 $http.get(getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontalOnlyResult = new FusionCharts({
@@ -7427,28 +7726,473 @@ angular.module('seipModule.controllers', [])
                 });
             }
 
-            //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
-            $scope.chargeChartProductionReportTemplateByDate = function (reportTemplateId, dateSearch, render, width, height) {
-                var dateParse = $scope.parseDate(dateSearch);
-                var getDataChartProductionReportTemplateByDate = Routing.generate("getDataChartProductionReportTemplateByDate", {id: reportTemplateId, dateSearch: dateParse});
-
-                $http.get(getDataChartProductionReportTemplateByDate).success(function (data) {
-                    FusionCharts.ready(function () {
-                        var revenueChartProductionReportTemplateByDate = new FusionCharts({
-                            "type": "stackedcolumn3d",
-                            "renderAt": render,
-                            "width": width + "%",
-                            "height": height,
-                            "dataFormat": "json",
-                            "dataSource": {
-                                "chart": data.dataSource.chart,
-                                "categories": data.dataSource.categories,
-                                "dataset": data.dataSource.dataset
-                            }
-                        });
-                        revenueChartProductionReportTemplateByDate.setTransparent(true);
-                        revenueChartProductionReportTemplateByDate.render();
+            //34.- Gráfico para mostrar las categorias y subcategorias del indicador de resolución de casos de AIT
+            $scope.chargeChartPieMultilevelAit = function (indicatorId, render, width, height) {
+                FusionCharts.ready(function () {
+                    var widgetMultiLevelPieChart = new FusionCharts({
+                        "type": "multilevelpie",
+                        "renderAt": render,
+                        "width": '100%',
+                        "height": '500',
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": {
+                                "caption": "Resolucion de Casos en la Región Oriente (Trimestre II)",
+                                "showPlotBorder": "1",
+                                "piefillalpha": "60",
+                                "pieborderthickness": "2",
+                                "piebordercolor": "#FFFFFF",
+                                "hoverfillcolor": "#CCCCCC",
+//                                "numberprefix": "$",
+//                                "plottooltext": "$label, $value",
+                                "theme": "fint",
+                                "showValues": "1",
+                            },
+                            "category": [{
+                                    "label": "Resolución de Casos",
+                                    "color": "#ffffff",
+//                                    "value": "150",
+                                    "category": [
+                                        {
+                                            "label": "Activos",
+                                            "color": "#f8bd19",
+                                            "value": "18",
+//                                            "tooltext": "Activos, $value",
+                                            "category": [
+                                               {
+                                                    "label": "Cerrado",
+                                                    "color": "#f8bd19",
+                                                    "value": "18"
+                                                },
+                                            ]
+                                        }, {
+                                            "label": "Soporte en Sitio",
+                                            "color": "#33ccff",
+                                            "value": "117",
+//                                            "tooltext": "Soporte en sitio, $value",
+                                            "category": [{
+                                                    "label": "Asignado",
+                                                    "color": "#33ccff",
+                                                    "value": "2"
+                                                }, {
+                                                    "label": "Cerrado",
+                                                    "color": "#33ccff",
+                                                    "value": "112"
+                                                }, {
+                                                    "label": "Nuevo",
+                                                    "color": "#33ccff",
+                                                    "value": "1"
+                                                }, {
+                                                    "label": "Pendiente",
+                                                    "color": "#33ccff",
+                                                    "value": "2"
+                                                }]
+                                        }, {
+                                            "label": "Infraestructura",
+                                            "color": "#ccff66",
+                                            "value": "73",
+//                                            "tooltext": "Infraestructura, $value",
+                                            "category": [
+                                                {
+                                                    "label": "Cerrado",
+                                                    "color": "#ccff66",
+                                                    "value": "72"
+                                                }, 
+                                                {
+                                                    "label": "Nuevo",
+                                                    "color": "#ccff66",
+                                                    "value": "1"
+                                                }]
+                                        }, {
+                                            "label": "Aplicaciones",
+                                            "color": "#ffcccc",
+                                            "value": "20",
+//                                            "tooltext": "Aplicaciones, $value",
+                                            "category": [
+                                                {
+                                                    "label": "Cerrado",
+                                                    "color": "#ffcccc",
+                                                    "value": "20"
+                                                },
+                                            ]
+                                        }, {
+                                            "label": "Telecom",
+                                            "color": "#6A5ACD",
+                                            "value": "11",
+//                                            "tooltext": "Telecom, $value",
+                                            "category": [
+                                                {
+                                                    "label": "Cerrado",
+                                                    "color": "#6A5ACD",
+                                                    "value": "11"
+                                                },
+                                            ]
+                                        }]
+                                }]
+                        }
                     });
+                    widgetMultiLevelPieChart.setTransparent(true);
+                    widgetMultiLevelPieChart.render();
+                })
+            };
+
+            //35.-Grafico para mostrar el % de meta de AIT....
+            $scope.chargeMslineAit = function (indicatorId, render, width, height) {
+                FusionCharts.ready(function () {
+                    var MsLineAit = new FusionCharts({
+                        type: 'msline',
+                        renderAt: render,
+                        width: '100%',
+                        height: '500',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": {
+                                "caption": "% de Cumplimiento / mes",
+                                "captionFontSize": "14",
+                                "subcaptionFontSize": "14",
+                                "subcaptionFontBold": "0",
+                                "paletteColors": "#8B0000,#1aaf5d,#6A5ACD",
+                                "bgcolor": "#ffffff",
+                                "showBorder": "0",
+                                "showShadow": "0",
+                                "showCanvasBorder": "0",
+                                "usePlotGradientColor": "0",
+                                "legendBorderAlpha": "0",
+                                "legendShadow": "0",
+                                "showAxisLines": "0",
+                                "showAlternateHGridColor": "0",
+                                "divlineThickness": "1",
+                                "divLineIsDashed": "1",
+                                "divLineDashLen": "1",
+                                "divLineGapLen": "1",
+                                "xAxisName": "Meses",
+                                "showValues": "0"
+                            },
+                            "categories": [
+                                {
+                                    "category": [
+                                        {"label": "Enero"},
+                                        {"label": "Febrero"},
+                                        {"label": "Marzo"},
+                                        {"label": "Abril"},
+                                        {"label": "Mayo"},
+                                        {"label": "Junio"},
+                                    ]
+                                }
+                            ],
+                            "dataset": [
+                                {
+                                    "seriesname": "% de cumplimiento de Meta General",
+                                    "data": [
+                                        {"value": "96"},
+                                        {"value": "62,67"},
+                                        {"value": "78,43"},
+                                        {"value": "86,08"},
+                                        {"value": "92,93"},
+                                        {"value": "92,41"},
+                                    ]
+                                },
+                                {
+                                    "seriesname": "% de cumplimiento de Meta - Activos",
+                                    "data": [
+                                        {"value": "100"},
+                                        {"value": "50"},
+                                        {"value": "33,33"},
+                                        {"value": "100"},
+                                        {"value": "100"},
+                                        {"value": "100"},
+                                    ]
+                                },
+                                {
+                                    "seriesname": "% de cumplimiento de Meta - Soporte",
+                                    "data": [
+                                        {"value": "100"},
+                                        {"value": "38,71"},
+                                        {"value": "69,23"},
+                                        {"value": "75,68"},
+                                        {"value": "92.86"},
+                                        {"value": "86,49"},
+                                    ]
+                                },
+                            ],
+                            "trendlines": [
+                                {
+                                    "line": [
+                                        {
+                                            "startvalue": "90",
+                                            "color": "#6baa01",
+                                            "valueOnRight": "1",
+                                            "displayvalue": "Meta (90%)"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    });
+                    MsLineAit.render();
+                });
+            };
+
+//36.-Grafico para mostrar el % de cumplimiento de los indicadores hijos de produccion (3920)....
+            $scope.chargeMslineProd = function (indicatorId, render, width, height) {
+                FusionCharts.ready(function () {
+                    var MsLineProd = new FusionCharts({
+                        type: 'msline',
+                        renderAt: render,
+                        width: '100%',
+                        height: '350',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": {
+                                "caption": "% de Cumplimiento Producción CPJAA",
+                                "captionFontSize": "14",
+                                "subcaptionFontBold": "0",
+                                "paletteColors": "#8B0000,#1aaf5d,#6A5ACD",
+                                "bgcolor": "#ffffff",
+                                "showBorder": "0",
+                                "showShadow": "0",
+                                "showCanvasBorder": "0",
+                                "usePlotGradientColor": "0",
+                                "legendBorderAlpha": "0",
+                                "legendShadow": "0",
+                                "showAxisLines": "10",
+                                "showAlternateHGridColor": "0",
+                                "divlineThickness": "1",
+                                "divLineIsDashed": "1",
+                                "divLineDashLen": "1",
+                                "divLineGapLen": "0",
+                                "xAxisName": "Meses",
+                                "yAxisName": "% de cumplimiento",
+                                "showValues": "0",
+                            },
+                            "categories": [
+                                {
+                                    "category": [
+                                        {"label": "Enero"},
+                                        {"label": "Febrero"},
+                                        {"label": "Marzo"},
+                                        {"label": "Abril"},
+                                        {"label": "Mayo"},
+                                        {"label": "Junio"},
+                                        {"label": "Julio"},
+                                    ]
+                                }
+                            ],
+                            "dataset": [
+                                {
+                                    "seriesname": "Ejecución de Producción de Agua Industrial",
+                                    "data": [
+                                        {"value": "100"},
+                                        {"value": "94.01"},
+                                        {"value": "94.92"},
+                                        {"value": "95.08"},
+                                        {"value": "97.64"},
+                                        {"value": "99.14"},
+                                        {"value": "92.74"}
+                                    ]
+                                },
+                                {
+                                    "seriesname": "Ejecución de Producción de Energía Eléctrica",
+                                    "data": [
+                                        {"value": "110.63"},
+                                        {"value": "92.1"},
+                                        {"value": "94.65"},
+                                        {"value": "84.46"},
+                                        {"value": "88.28"},
+                                        {"value": "101.89"},
+                                        {"value": "80"}
+                                    ]
+                                },
+                                {
+                                    "seriesname": "Cumplimiento de Plan de Despacho del Terminal Maritimo",
+                                    "data": [
+                                        {"value": "104.08"},
+                                        {"value": "94.11"},
+                                        {"value": "86.76"},
+                                        {"value": "84.27"},
+                                        {"value": "87.23"},
+                                        {"value": "100.75"},
+                                        {"value": "107.8"}
+                                    ]
+                                }
+                            ],
+                            "trendlines": [
+                                {
+                                    "line": [
+                                        {
+                                            "startvalue": "100",
+                                            "color": "#006400",
+                                            "valueOnRight": "1",
+                                            "displayvalue": "Meta (100%)"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    })
+                    MsLineProd.render();
+                });
+            };
+
+            //37.-Grafico para mostrar el % de cumplimiento del indicador padre (mantenimiento, 3921)....
+            $scope.chargeColumn2d = function (indicatorId, render, width, height) {
+                FusionCharts.ready(function () {
+                    var MsColumn2d = new FusionCharts({
+                        type: 'column3d',
+                        renderAt: render,
+                        width: '100%',
+                        height: '350',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": {
+                                "caption": "% Cumplimiento Plan de Mantenimiento",
+                                "xAxisName": "Meses",
+                                "yAxisName": "% de cumpliento",
+                                "yaxismaxvalue": "100",
+                                "paletteColors": "#0075c2",
+                                "valueFontColor": "#ffffff",
+                                "baseFont": "Helvetica Neue,Arial",
+                                "captionFontSize": "14",
+                                "subcaptionFontSize": "14",
+                                "subcaptionFontBold": "0",
+                                "placeValuesInside": "1",
+                                "rotateValues": "1",
+                                "showShadow": "0",
+                                "divlineColor": "#999999",
+                                "divLineIsDashed": "1",
+                                "divlineThickness": "1",
+                                "divLineDashLen": "1",
+                                "divLineGapLen": "1",
+                                "canvasBgColor": "#ffffff",
+                                "decimalSeparator": ",",
+                                "showHoverEffect": "1"
+                            },
+                            "data": [
+                                {
+                                    "label": "Enero",
+                                    "value": "95.31"
+                                },
+                                {
+                                    "label": "Febrero",
+                                    "value": "93.78"
+                                },
+                                {
+                                    "label": "Marzo",
+                                    "value": "97.92"
+                                },
+                                {
+                                    "label": "Abril",
+                                    "value": "90.29"
+                                },
+                                {
+                                    "label": "Mayo",
+                                    "value": "90.74"
+                                },
+                                {
+                                    "label": "Junio",
+                                    "value": "96.91"
+                                },
+                                /*{
+                                    "label": "Julio",
+                                    "value": "94.22"
+                                },*/
+                            ],
+                            "trendlines": [
+                                {
+                                    "line": [
+                                        {
+                                            "startvalue": "100",
+                                            "color": "#1aaf5d",
+                                            "valueOnRight": "1",
+                                            "displayvalue": "Meta (100%)"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    });
+                    MsColumn2d.render();
+                });
+            }
+            
+            //38.-Grafico para mostrar el % de cumplimiento del indicador padre (materiales, 3922)....
+            $scope.chargeColumn3dMateriales = function (indicatorId, render, width, height) {
+                FusionCharts.ready(function () {
+                    var MsColumn3d = new FusionCharts({
+                        type: 'column3d',
+                        renderAt: render,
+                        width: '100%',
+                        height: '350',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": {
+                                "caption": "% Cumplimiento Plan de Mantenimiento",
+                                "xAxisName": "Meses",
+                                "yAxisName": "% de cumpliento",
+                                "yaxismaxvalue": "100",
+                                "paletteColors": "#0075c2",
+                                "valueFontColor": "#ffffff",
+                                "baseFont": "Helvetica Neue,Arial",
+                                "captionFontSize": "14",
+                                "subcaptionFontSize": "14",
+                                "subcaptionFontBold": "0",
+                                "placeValuesInside": "1",
+                                "rotateValues": "1",
+                                "showShadow": "0",
+                                "divlineColor": "#999999",
+                                "divLineIsDashed": "1",
+                                "divlineThickness": "1",
+                                "divLineDashLen": "1",
+                                "divLineGapLen": "1",
+                                "canvasBgColor": "#ffffff",
+                                "decimalSeparator": ",",
+                                "showHoverEffect": "1"
+                            },
+                            "data": [
+                                {
+                                    "label": "Enero",
+                                    "value": "99.28"
+                                },
+                                {
+                                    "label": "Febrero",
+                                    "value": "99.63"
+                                },
+                                {
+                                    "label": "Marzo",
+                                    "value": "99.08"
+                                },
+                                {
+                                    "label": "Abril",
+                                    "value": "99.13"
+                                },
+                                {
+                                    "label": "Mayo",
+                                    "value": "99.48"
+                                },
+                                {
+                                    "label": "Junio",
+                                    "value": "99.55"
+                                },
+                                /*{
+                                    "label": "Julio",
+                                    "value": "91.13"
+                                },*/
+                            ],
+                            "trendlines": [
+                                {
+                                    "line": [
+                                        {
+                                            "startvalue": "100",
+                                            "color": "#1aaf5d",
+                                            "valueOnRight": "1",
+                                            "displayvalue": "Meta (100%)"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    });
+                    MsColumn3d.render();
                 });
             }
 
@@ -8314,7 +9058,7 @@ angular.module('seipModule.controllers', [])
                         "type": "mscolumnline3d",
                         "renderAt": id,
                         "width": "95%",
-                        //"height": "400%",
+                        "height": "400%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "Gráfico Evolución Indicador",
                         "exporthandler": urlExportFromChart,

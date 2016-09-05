@@ -419,11 +419,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         foreach ($AP->getTimeline()->getGoals() as $meta) {
 //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA Y VOY SUMANDO POR META
             $datosAP = $this->CalculateAdvancePenalty($meta, $date);
-            $goalValue = $this->rescaleValue($datosAP);            
+            $goalValue = $this->rescaleValue($datosAP);
             $realResult+=$goalValue * $meta->getWeight();
             $plannedResult+=(($datosAP['plannedResult'] * $meta->getWeight())) / 100;
         }
-        
+
         $realResult/=100;
 
         if ($plannedResult > 0) {
@@ -2004,6 +2004,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $results = $resultsItems[$i];
                 $totalRealChild = $totalPlanChild = 0.0;
                 $totalChild = count($results);
+                $variables = $formulaUsed->getVariables();
+                if(count($variables) == 1){
+                    $realVariableName = $variables[0]->getName();
+                }
+                
                 foreach ($results as $childValueIndicator) {
                     $formulaChild = $childValueIndicator->getIndicator()->getFormula();
                     $value = $indicatorService->calculateFormulaValue($formulaChild, $childValueIndicator->getFormulaParameters());
@@ -2427,34 +2432,18 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //    public function getUserItems($numPersonal, $periodName) {
     public function getUserItems($idUser, $periodName) {
         $this->errors = array();
-//$numPersonal = $request->get('numPersonal');
-//$periodName = $request->get('period');
-//$status = self::RESULT_OK;
         $status = \Pequiven\SEIPBundle\Controller\Api\ResultApiController::RESULT_OK;
-
         $criteria = $arrangementPrograms = $objetives = $goals = $arrangementProgramsForObjetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
 
         if ($periodName === null) {
             $this->addErrorTrans('pequiven_seip.errors.you_must_specify_the_period_inquiry');
         }
 
-//        if ($numPersonal === null) {
-//            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_number_staff_consult');
-//        }
-
         $period = $this->container->get('pequiven.repository.period')->findOneBy(array(
             'name' => $periodName,
         ));
 
-//        $user = $this->container->get('pequiven_seip.repository.user')->findUserByNumPersonal($numPersonal);
-        $user = $this->container->get('pequiven_seip.repository.user')->find($idUser);
-
-//        if (!$user && $numPersonal != '') {
-//            $this->addErrorTrans('pequiven_seip.errors.the_number_staff_does_not_exist', array(
-//                '%numPersonal%' => $numPersonal,
-//            ));
-//            $status = \Pequiven\SEIPBundle\Controller\Api\ResultApiController::RESULT_NUM_PERSONAL_NOT_EXIST;
-//        }
+        $user = $this->container->get('pequiven_seip.repository.user')->findOneById($idUser);
 
         if ($periodName != '' && !$period) {
             $this->addErrorTrans('pequiven_seip.errors.the_period_does_not_exist', array(
@@ -2647,7 +2636,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $aportePlan = $advanceToDate;
                 }
 
-
                 $arrangementPrograms[$key] = array(
                     'id' => sprintf('PG-%s', $arrangementProgram->getId()),
                     'ref' => $arrangementProgram->getRef(),
@@ -2765,7 +2753,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }
 
             foreach ($goals as $key => $goal) {
+
+
                 $goalDetails = $goal->getGoalDetails();
+
                 $summary = $goalDetails->getSummary();
 
                 $planDateStart = $goal->getStartDate();
@@ -2934,7 +2925,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     'observaciones' => $movements,
                     'tipo' => $status,
                 );
-            }
+            }            
 
             $referenceType = \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL;
             foreach ($allArrangementPrograms as $arrangementProgram) {
@@ -3002,9 +2993,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 '%user%' => $user,
             ));
         }
-//        if (!$canBeEvaluated || count($this->errors) > 0) {
-//            $goals = $arrangementPrograms = $objetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
-//        }
 
         $data = array(
             'data' => array(
@@ -3028,9 +3016,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             'errors' => $this->errors,
             'success' => true,
         );
-//        if (!$canBeEvaluated || count($this->errors) > 0) {
-//            $data['success'] = false;
-//        }
 
         return $data;
     }

@@ -1,3 +1,4 @@
+function loadMapa(envi){
 $("#dialog").dialog({
     autoOpen: false,
     show: {
@@ -8,18 +9,20 @@ $("#dialog").dialog({
         effect: "explode",
         duration: 800
     },
-    width: 600,
+    width: 615,
     height: 350,
 });
 
 var default_attributes = {
-    fill: '#ffe6e6',
+    fill: '#C6D5DA',
     stroke: 'white',
-    'stroke-width': '2'
+    'stroke-width': '2',
+    cursor: 'not-allowed',
 };
 
 var capital = {
-    fill: '#00FFFF',
+//    fill: '#00FFFF',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
     opacity:0.8,
@@ -27,21 +30,24 @@ var capital = {
 };
 
 var central = {
-    fill: '#ff9999',
+//    fill: '#ff9999',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
     cursor: 'pointer',
 };
 
 var occidental = {
-    fill: '#ff6666',
+//    fill: '#ff6666',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
     cursor: 'pointer',
 };
 
 var zuliana = {
-    fill: '#00CED1',
+//    fill: '#00CED1',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
     opacity:0.5,
@@ -49,38 +55,47 @@ var zuliana = {
 };
 
 var andina = {
-    fill: '#ffe6e6',
+//    fill: '#ffe6e6',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
 //    cursor: 'pointer',
+    cursor: 'not-allowed',
 };
 
 var oriental = {
-    fill: '#ffcccc',
+//    fill: '#ffcccc',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
     cursor: 'pointer',
 };
 
 var guayana = {
-    fill: '#ffe6e6',
+//    fill: '#ffe6e6',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
 //    cursor: 'pointer',
+    cursor: 'not-allowed',
 };
 
 var insular = {
-    fill: '#ffe6e6',
+//    fill: '#ffe6e6',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
 //    cursor: 'pointer',
+    cursor: 'not-allowed',
 };
 
 var llanera = {
-    fill: '#ffe6e6',
+//    fill: '#ffe6e6',
+    fill: '#C6D5DA',
     stroke: 'white',
     'stroke-width': '2',
 //    cursor: 'pointer',
+    cursor: 'not-allowed',
 };
 
 $.ajax({
@@ -97,7 +112,7 @@ $.ajax({
             var pid = $(this).attr('id');
             var region = $(this).attr('class');
             var munic = rjs.path(path);
-            
+//            munic.attr(default_attributes);
             switch (region) {
                 case 'capital':
                     munic.attr(capital);
@@ -131,8 +146,9 @@ $.ajax({
             }
             
             munic.hover(function () {
-                this.animate({fill: '#C0C0C0'});
+                this.animate({fill: '#87CEFA'});
             }, function () {
+//                this.animate({fill: default_attributes.fill, opacity: '1'});
                     switch (region) {
                         case 'capital':
                             this.animate({fill: capital.fill, opacity: '1'});
@@ -163,60 +179,50 @@ $.ajax({
                             break;
                         default:
                             this.animate({fill: default_attributes.fill, opacity: '1'});
-                        }                
+                        }            
             }).click(function () {
-                var urlAjax = '../app.php/selectCompanyC';
-
-                $.get(urlAjax, function (data, status) {
-                    $("#dialog").dialog("close");
-                    var data = $.parseJSON(data);
-                    //var company_link= document.location.origin+"/app_dev.php/";
-                    var company_link = '../app.php/';
-                    //var company_link = "http://localhost/multiempresa/web/app_dev.php/";
-                    var cont = '';
-
-                    if (data.companies[0].enabled != 0) {
-                        if (data.companies[0].ubicacion == "-1" && data.companies[0].alias == "PEQUIVEN" && (region == "oriental" || region == "central" || region == "occidental" || region == "capital")) {
-                            cont += '<div class="contentLogoCompany"><a href="' + company_link + '"><div class="companySelected"><img class="logoCompany" src="' + data.companies[0].base64image + '"/></div><p class="companyName">' + data.companies[0].alias + '</p></a></div>';
-                            $("#dialog").html(cont);
-                            $("#dialog").dialog({title: "Región" + " " + region}).dialog("open");
-                        }
+                //var urlAjax = '../app.php/selectCompanyC';
+                 var urlAjax='';
+                 var company_link='';
+                 
+                    if(envi == 'dev'){
+                        urlAjax = '../app_dev.php/selectCompanyC';
+                        company_link = '../app_dev.php/';
                     }
-                    /*
-                     
-                     for(var i=0; i<data.companies.length; i++){
-                     var company_link = "#!";
-                     var ban = false;
-                     
-                     for (var j=0; j<data.available.length; j++){
-                     if(ban == false){
-                     if(data.available[j].company == data.companies[i].id){
-                     company_link = "http://localhost/multiempresa/web/app_dev.php/setCompany/"+data.available[j].server+"?url="+lastUrl;
-                     //company_link = document.location.origin+"/app_dev.php/setCompany/"+data.available[j].server+"?url="+lastUrl;
-                     ban = true;
-                     }
-                     } 
-                     }
-                     
-                     if(data.companies[i].enabled != 0){
-                     if(data.companies[i].ubicacion == region){
-                     var selectOrNot = ( company_link != "#!")? "companySelected" :"companyNotSelected" ;
-                     cont += '<div class="contentLogoCompany"><a href="'+company_link+'"><div class="'+selectOrNot+'"><img class="logoCompany" src="'+data.companies[i].base64image+'"/></div><p class="companyName">'+data.companies[i].alias+'</p></a></div>';
-                     $("#dialog").html(cont);
-                     $("#dialog").dialog({title:"Región"+" "+region}).dialog("open");
-                     //$("#divDatos").append(div);
-                     }
-                     if(data.companies[i].ubicacion == "-1" && data.companies[i].alias == "PEQUIVEN" && (region == "oriental" || region =="central" || region =="zuliana")){
-                     var selectOrNot = ( company_link != "#!")? "companySelected" :"companyNotSelected" ;
-                     cont = '<div class="contentLogoCompany"><a href="'+company_link+'"><div class="'+selectOrNot+'"><img class="logoCompany" src="'+data.companies[i].base64image+'"/></div><p class="companyName">'+data.companies[i].alias+'</p></a></div>';
-                     $("#dialog").html(cont);
-                     $("#dialog").dialog("open");
-                     }
-                     }
-                     }*/
+                    else{
+                        urlAjax = '../app.php/selectCompanyC';
+                        company_link = '../app.php/';
+                    }
+                    $.get(urlAjax, function (data, status) {
+//                        $("#dialog").dialog("close");
+                        var data = $.parseJSON(data);
+                        var cont = '';
+                        for (var i = 0; i < data.companies.length; i++) {
+                            if (data.companies[i].enabled != 0) {
+                                if (data.companies[i].ubicacion == "-1" && data.companies[i].alias == "PEQUIVEN" && (region == "oriental" || region == "central" || region == "occidental" || region == "capital")) {
+                                    cont += '<div class="contentLogoCompany button contentLc"><a href="' + company_link + '"><div class=""><img class="logoCompany" src="' + data.companies[i].base64image + '"/></div><div class="button red-gradient glossy contentAlias"><p class="companyName title-icon-strategic" style="font-size: 13px; font-weight: bold;">' + data.companies[i].alias + '</p></div></a></div>';
+                                    $("#dialog").html(cont);
+                                    $("#dialog").dialog({title: "Región" + " " + region}).dialog("open");
+                                }
+                                if (data.companies[i].ubicacion == region) {
+                                    cont += '<div class="contentLogoCompany button disabled contentLc"><a href="#"><div class=""><img class="logoCompany" src="' + data.companies[i].base64image + '"/></div><div class="button red-gradient glossy contentAlias"><p class="companyName">' + data.companies[i].alias + '</p></div></a></div>';
+                                    $("#dialog").html(cont);
+                                    $("#dialog").dialog({title: "Región" + " " + region}).dialog("open");
+                                    //$("#divDatos").append(div);
+                                }
+                            }
+                        }//for
+                        /*if (data.companies[0].enabled != 0) {
+                            if (data.companies[0].ubicacion == "-1" && data.companies[0].alias == "PEQUIVEN" && (region == "oriental" || region == "central" || region == "occidental" || region == "capital")) {
+                                cont += '<div class="contentLogoCompany"><a href="' + company_link + '"><div class="companySelected"><img class="logoCompany" src="' + data.companies[0].base64image + '"/></div><p class="companyName">' + data.companies[0].alias + '</p></a></div>';
+                                $("#dialog").html(cont);
+                                $("#dialog").dialog({title: "Región" + " " + region}).dialog("open");
+                            }
+                        }*/
+                    });
                 });
+                $("#mensaje").animate({left: '61%'},3000);
             });
-             $("#mensaje").animate({left: '35.7%'});
-        });
-    }
-});
+        }
+    });
+}

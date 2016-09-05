@@ -103,6 +103,21 @@ sylius_resource:
                 model: Pequiven\MasterBundle\Entity\GerenciaSecond
                 controller: Pequiven\MasterBundle\Controller\GerenciaSecondController
                 repository: Pequiven\MasterBundle\Repository\GerenciaSecondRepository
+        #Master de Configuraciones
+        pequiven.configurationIndex:
+            driver: doctrine/orm
+            templates: PequivenMasterBundle:Configuration
+            classes:
+                model: Pequiven\MasterBundle\Entity\GerenciaSecond
+                controller: Pequiven\MasterBundle\Controller\Configuration\ConfigurationController
+                repository: Pequiven\MasterBundle\Repository\GerenciaSecondRepository
+        pequiven.configuration:
+            driver: doctrine/orm
+            templates: PequivenMasterBundle:Configuration
+            classes:
+                model: Pequiven\MasterBundle\Entity\GerenciaSecond
+                controller: Pequiven\MasterBundle\Controller\Configuration\NotifyController
+                repository: Pequiven\MasterBundle\Repository\GerenciaSecondRepository
         #Nivel de Acceso por Usuario
         pequiven_seip.userpermission:
             driver: doctrine/orm
@@ -652,16 +667,23 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery
                 controller: Pequiven\SEIPBundle\Controller\Delivery\ReportTemplateDeliveryController
-                repository: Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository
-        
+                repository: Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository        
+                
+        pequiven.delivery_point:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Delivery/DeliveryPoint
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Delivery\DeliveryPoint
+                controller: Pequiven\SEIPBundle\Controller\Delivery\DeliveryPointController
+                repository: Pequiven\SEIPBundle\Repository\Delivery\DeliveryPointRepository                
+                
         pequiven.product_group_delivery:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Delivery/ProductGroupDelivery
             classes:
                 model: Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
                 controller: Pequiven\SEIPBundle\Controller\Delivery\ProductGroupDeliveryController
-                repository: Pequiven\SEIPBundle\Repository\Delivery\ProductGroupDeliveryRepository
-                
+                repository: Pequiven\SEIPBundle\Repository\Delivery\ProductGroupDeliveryRepository                
         pequiven.product_report_delivery:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Delivery/ProductReportDelivery
@@ -670,10 +692,38 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Delivery\ProductReportDeliveryController
                 repository: Pequiven\SEIPBundle\Repository\Delivery\ProductReportDeliveryRepository
                 
-        #TRELLO
+        # TRELLO
         pequiven.trello:
             driver: doctrine/orm
             templates: PequivenTrelloBundle:Task
             classes:
                 controller: Pequiven\TrelloBundle\Controller\TrelloController
                 model: Pequiven\TrelloBundle\Entity\TaskTrello
+                
+        # CASA-ABASTO
+        pequiven.housesupply_inventory:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:HouseSupply/Inventory
+            classes:
+                model: Pequiven\SEIPBundle\Entity\HouseSupply\Inventory\HouseSupplyInventoryCharge
+                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyInventoryController
+        pequiven.housesupply_order:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:HouseSupply/Order
+            classes:
+                model: Pequiven\SEIPBundle\Entity\HouseSupply\Order\HouseSupplyOrder
+                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyOrderController
+                repository: Pequiven\SEIPBundle\Repository\HouseSupply\Order\HouseSupplyOrderRepository
+        pequiven.housesupply_orderkit:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:HouseSupply/Order
+            classes:
+                model: Pequiven\SEIPBundle\Entity\HouseSupply\Order\HouseSupplyOrderKit
+                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyOrderKitController             
+        pequiven.housesupply_reports:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:HouseSupply/Reports
+            classes:
+                model: Pequiven\SEIPBundle\Entity\HouseSupply\HouseSupplyReports
+                controller: Pequiven\SEIPBundle\Controller\HouseSupply\HouseSupplyReportsController             
+       

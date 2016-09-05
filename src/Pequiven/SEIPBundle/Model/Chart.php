@@ -179,11 +179,34 @@ abstract class Chart
     const TYPE_CHART_STACKED_COLUMN_3D_BY_INDICATOR = 32;
     
     /**
-     * Gráfico tipo Cilindro Apilado
+     * Gráfico tipo Cilindro Apilado 33
      */
     const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL_AND_ONLY_RESULT = 33;
     
+    /**
+     * Gráfico para mostrar las categorias y subcategorias del indicador de resolución de casos de AIT
+     */
+    const TYPE_CHART_PIE_MULTILEVEL_AIT = 34;
     
+    /**
+     * Gráfico  para mostrar el %de meta de AIT
+     */
+    const TYPE_MS_LINE_AIT = 35;
+    
+    /**
+     * Gráfico  para mostrar el % de cumplimiento de los indicadores asociados (producción)
+     */
+    const TYPE_MS_LINE_PROD = 36;
+    
+    /**
+     * Gráfico para mostrar el % de cumplimiento del indicador padre (mantenimiento)
+     */
+    const TYPE_COLUMN_2D = 37;
+    
+    /**
+     * Gráfico para mostrar el % de cumplimiento del indicador padre (materiales)
+     */
+    const TYPE_COLUMN_3D_MAT = 38;
     
     const TYPE_EXAMPLE = 100;
        
@@ -257,6 +280,11 @@ abstract class Chart
             self::TYPE_CHART_PLAN_PYRAMID_3D_SECTIONED => 'chart.type.indicatorPyramidPlanSection',
             self::TYPE_CHART_STACKED_COLUMN_3D_BY_INDICATOR => 'chart.type.stackedColumn3dByIndicator',
             self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_WITH_TRENDLINE_HORIZONTAL_AND_ONLY_RESULT => 'chart.type.indicatorWithTrendlineHorizontalOnlyResult',
+            self::TYPE_CHART_PIE_MULTILEVEL_AIT => 'chart.type.multilevelPieAit',
+            self::TYPE_MS_LINE_AIT => 'chart.type.mslineAit',
+            self::TYPE_MS_LINE_PROD => 'chart.type.mslineProd',
+            self::TYPE_COLUMN_2D => 'chart.type.type_column_2d',
+            self::TYPE_COLUMN_3D_MAT => 'chart.type.type_column_3d_mat',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

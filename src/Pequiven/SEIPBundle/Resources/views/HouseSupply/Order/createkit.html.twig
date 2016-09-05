@@ -1,0 +1,252 @@
+{# empty Twig template #}
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block javascript %}
+    {{ parent() }}    
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/jQuery-Mask-Plugin-master/jquery.mask.min.js') }}"></script>   
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            validaCheck();
+
+            $("p.assistance input").change(function () {
+                validaCheck();
+            });
+
+        });
+
+        function validaCheck() {
+            var cont = 0;
+            $("p.assistance input").each(function () {
+                var check = $(this).is(':checked');
+                if (check) {
+                    cont += 1;
+                }
+            });
+
+            if (cont >= 1) {
+                $("#register").prop('disabled', false);
+            } else {
+                $("#register").prop('disabled', true);
+            }
+
+            $("span#totales_2").html(cont);
+            var total = $("td#total_kit").attr("data") * cont;
+            $("span#totales_3").html($.number(total, 2, ',', '.'));
+        }
+
+    </script>    
+{% endblock javascript %}
+
+{% block before_body %}
+    {{ contentHeader(
+        { ( '*' ): ('Ordenes Kit de Pedidos') },
+         (' Crear')
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+    <style>
+        table#datos{
+            border-collapse:separate;
+            border-spacing: 0px 10px;
+        }
+        .fa-trash{
+            color: red;    
+        }
+        table#table1 tbody tr td.gridTd {
+            text-align: right;
+        }
+        .members{
+            background-color: #AA0000; 
+            color: #FFFFFF; 
+            font-size: 20pt; 
+            vertical-align: middle; 
+            padding-left:8px;                
+        }
+    </style>   
+
+    <form method="POST" id="form_order" action="{{ path("pequiven_housesupply_orderkit_charge_total") }}">
+        <div class="columns">
+            <div class="twelve-columns">            
+                <center>
+                    <table style="width: 915px; border: 1px #D8D8D8 solid;">
+                        <tr style="height: 30px;">
+                            <td colspan="2" class="members">                                
+                                Datos del Pedido                                                                  
+                            </td>         
+                        </tr>
+                        <tr>
+                            <td width="60%" style="border-right: 1px #D8D8D8 solid;">
+                                <table width="100%" class="simple-table" style="background-color: #FFFFFF; border: hidden;">   
+                                    <tr>
+                                        <td width="25%" class="header bold">Localidad:</td>
+                                        <td width="75%">
+                                            {{ wsc.getComplejo.getdescription }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="25%" class="header bold">C.E.T.:</td>
+                                        <td width="75%">
+                                            {{ wsc.codigo }} - {{ wsc.name }}
+                                        </td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td width="25%" class="header bold">Coordinador:</td>
+                                        <td width="75%">
+                                            {{ wsc.getcoordinator.getfullname }}
+                                        </td>
+                                    </tr>
+                                </table> 
+                            </td>
+                            <td width="40%">
+                                <table width="100%" class="simple-table" style="height: content-box;">
+                                    <tr>
+                                        <td style="background-color: #D8D8D8; font-size: 30pt; vertical-align: middle; text-align: center; height: 80px;" colspan="2">                                                           
+                                            Orden:
+                                            <span class="green bold">{{ neworder }}</span>              
+                                        </td>                                        
+                                    </tr>
+                                    {# {% if (lastorder) %}
+                                         <tr>
+                                             <td class="header bold">
+                                                 Última Orden Realizada                                        
+                                             </td>
+                                             <td>{{ lastorder.getdate| date("d/m/Y") }}</td>
+                                         </tr>
+                                         <tr>
+                                             <td class="header bold">Total:</td>
+                                             <td class="text-left">{{ lastorder.totalCharge}}</td>
+                                         </tr>
+                                         <tr>
+                                             <td class="header bold">Nro. Ítems:</td>
+                                             <td class="text-left">{{ lastorder.getOrderItems|length }}</td>
+                                         </tr>
+                                     {% endif %}#}
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <br>
+                    <table style="width: 915px; border: 1px #D8D8D8 solid;">
+                        <tr style="height: 30px;">
+                            <td colspan="2" class="members">                                
+                                Contenido del Pedido
+                            </td>         
+                        </tr>
+                        <tr>
+                            <td width="60%" style="border-right: 1px #D8D8D8 solid;">
+                                <table class="simple-table">
+                                    <tr>
+                                        <th width="5%">&nbsp;</th>
+                                        <th width="55%">Miembro</th>
+                                        <th width="25%">Teléfono</th>
+                                        <th width="15%">&nbsp;</th>                                        
+                                    </tr>
+                                    {% for member in wsc.getMembers %}    
+                                        {#{% if member.getId == wsc.getCoordinator.getId %}#}
+                                            <tr>
+                                                <td>{{ loop.index  }}</td>
+                                                <td>{{ member.getOnlyFullNameUser }}</td>
+                                                <td>{{ member.getCellphone }}</td>
+                                                <td>                                                
+                                                    <p class="assistance button-height">
+                                                        <input type="checkbox" name="members[{{ member.id}}]" data="{{ member.id}}" value="1" class="check-kit switch green-active mid-margin-right" data-text-on="Si" data-text-off="No">
+                                                    </p>                                                
+                                                </td>                                            
+                                            </tr>
+                                      {#  {%endif%}#}
+                                    {% endfor %}
+                                </table>
+                            </td>
+                            <td width="40%">  
+                                <br><br>
+                        <center>
+                            <table width="90%">  
+                                <tr>
+                                    <td width="25%" style="font-weight: bold; height: 50px;">Cant. Kits</td>
+                                    <td width="75%" style="color: #002a80; font-size: 25pt; text-align: right; font-weight: bold; height: 50px;">                                       
+                                        <span id="totales_2">
+                                            0
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="25%" style="font-weight: bold; height: 50px;">Total:</td>
+                                    <td width="75%" style="color: #002a80; font-size: 25pt; text-align: right; font-weight: bold; height: 100px;">
+                                        Bs. 
+                                        <span id="totales_3">
+                                            0,00
+                                        </span>
+                                    </td>
+                                </tr>  
+                                <tr>
+                                    <td colspan="2" class="bold">                                       
+                                        Kit para la Jornada:                                    
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">   
+                                        <table class="simple-table">
+                                            <tr>
+                                                <th style="text-align: center;">Cant</th>
+                                                <th>Producto</th>
+                                                <th style="text-align: right;">Precio</th>
+                                            </tr>
+
+                                            {%set subTotal=0 %}
+                                            {%set iva=0 %}
+
+                                            {% for product in kit.getProductKitItems%}  
+                                                {%set subTotal=subTotal+(product.getProduct.getPrice*product.getCant) %}
+                                                {%set iva=iva+(product.getProduct.getTaxes*product.getCant) %}
+                                                <tr>
+                                                    <td style="text-align: center;">{{product.getCant}}</td>
+                                                    <td>{{product.getProduct.getDescription}}</td>
+                                                    <td style="text-align: right;">{{(product.getCant*product.getProduct.getPrice)|myNumberFormat}}</td>
+                                                </tr>
+                                            {%endfor%}
+                                            <tr>
+                                                <td colspan="2" style="text-align: right; font-weight: bold;">Sub - Total</td>                                                    
+                                                <td style="text-align: right;">{{subTotal|myNumberFormat}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="text-align: right; font-weight: bold;">Impuestos</td>                                                    
+                                                <td style="text-align: right;">{{iva|myNumberFormat}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="text-align: right; font-weight: bold;">Total</td>                                                    
+                                                <td id="total_kit" data="{{ subTotal+iva }}" style="text-align: right;">{{(subTotal+iva)|myNumberFormat}}</td>
+                                            </tr>
+                                        </table>
+                                        <input type='text' hidden name="wsc" value="{{wsc.id}}">
+                                        <input type='text' hidden name="kit" value="{{kit.id}}">           
+                                        <input type='text' hidden name="cycle" value="{{cycle.id}}">           
+                                    </td>
+                                </tr>
+                            </table>  
+                        </center>
+                        </td>
+                        </tr>  
+                    </table>
+                </center>            
+            </div>
+            <br>
+            <div class="new-row twelve-columns" style="text-align: right;">                      
+                <button id="register" disabled type="submit" class="button glossy mid-margin-right">
+                    <span class="button-icon green-gradient">
+                        <span class="icon-tick">                            
+                        </span>                            
+                    </span>
+                    Registrar Orden
+                </button>                        
+            </div>      
+        </div>
+    </form>  
+{% endblock %}
+

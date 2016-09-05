@@ -11,7 +11,7 @@
             <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery-1.8.2.min.js') }}"></script>
             {#<script src="{{ asset('bundles/pequivenseip/jquerySvg/jquery.svg.min.js') }}" type="text/javascript"></script>
             <script src="{{ asset('bundles/pequivenseip/jquerySvg/jquery.svgdom.min.js') }}" type="text/javascript"></script>#}
-            
+
             {% block head_base '' %}
                 {% block head '' %}
                     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -39,8 +39,8 @@
                         filter='cssrewrite'
                         filter='uglifycss'
                         output='compiled/main_base.css'
-                               %}
-                               <link rel="stylesheet" href="{{ asset_url }}" />
+                    %}
+                    <link rel="stylesheet" href="{{ asset_url }}" />
                     {% endstylesheets %}
 
                     <!-- Webfonts -->
@@ -61,81 +61,82 @@
                             'bundles/pequivenseip/login/fonts/header.css'
                         %}
                         <link rel="stylesheet" href="{{ asset_url }}" />
-                   {% endstylesheets %}
-                   
-                    <!-- JavaScript at bottom except for Modernizr -->
-                            <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/modernizr.custom.js') }}"></script>
-                            <!-- For Modern Browsers -->
-                            <link rel="shortcut icon" href="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.ico') }}">
-                            <!-- For everything else -->
-                            <link rel="shortcut icon" href="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.ico') }}">
-                            <!-- For retina screens -->
-                            <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/favicons/apple-touch-icon-retina.png') }}">
-                            <!-- For iPad 1-->
-                            <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/favicons/apple-touch-icon-ipad.png') }}">
-                            <!-- For iPhone 3G, iPod Touch and Android -->
-                            <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/favicons/apple-touch-icon.png') }}">
+                        {% endstylesheets %}
 
-                            <!-- iOS web-app metas -->
-                            <meta name="apple-mobile-web-app-capable" content="yes">
-                            <meta name="apple-mobile-web-app-status-bar-style" content="black">
+                        <!-- JavaScript at bottom except for Modernizr -->
+                        <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/modernizr.custom.js') }}"></script>
+                        <!-- For Modern Browsers -->
+                        <link rel="shortcut icon" href="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.ico') }}">
+                        <!-- For everything else -->
+                        <link rel="shortcut icon" href="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.ico') }}">
+                        <!-- For retina screens -->
+                        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/favicons/apple-touch-icon-retina.png') }}">
+                        <!-- For iPad 1-->
+                        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/favicons/apple-touch-icon-ipad.png') }}">
+                        <!-- For iPhone 3G, iPod Touch and Android -->
+                        <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/favicons/apple-touch-icon.png') }}">
 
-                            <!-- Startup image for web apps -->
-                            <link rel="apple-touch-startup-image" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/splash/ipad-landscape.png') }}" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
-                            <link rel="apple-touch-startup-image" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/splash/ipad-portrait.png') }}" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
-                            <link rel="apple-touch-startup-image" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/splash/iphone.png') }}" media="screen and (max-device-width: 320px)">
+                        <!-- iOS web-app metas -->
+                        <meta name="apple-mobile-web-app-capable" content="yes">
+                        <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-                            <!-- Microsoft clear type rendering -->
-                            <meta http-equiv="cleartype" content="on">
+                        <!-- Startup image for web apps -->
+                        <link rel="apple-touch-startup-image" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/splash/ipad-landscape.png') }}" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+                        <link rel="apple-touch-startup-image" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/splash/ipad-portrait.png') }}" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+                        <link rel="apple-touch-startup-image" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/splash/iphone.png') }}" media="screen and (max-device-width: 320px)">
 
-                            <!-- IE9 Pinned Sites: http://msdn.microsoft.com/en-us/library/gg131029.aspx -->
-                            <meta name="application-name" content="">
-                            <meta name="msapplication-tooltip" content="Cross-platform admin template.">
-                            <meta name="msapplication-starturl" content="http://www.display-inline.fr/demo/developr">
-                            <!-- These custom tasks are examples, you need to edit them to show actual pages -->
-                            <meta name="msapplication-task" content="name=Agenda;action-uri=http://www.display-inline.fr/demo/developr/agenda.html;icon-uri=http://www.display-inline.fr/demo/developr/img/favicons/favicon.ico">
-                            <meta name="msapplication-task" content="name=My profile;action-uri=http://www.display-inline.fr/demo/developr/profile.html;icon-uri=http://www.display-inline.fr/demo/developr/img/favicons/favicon.ico">
-                        </head>
+                        <!-- Microsoft clear type rendering -->
+                        <meta http-equiv="cleartype" content="on">
 
-                        <body class="clearfix with-menu menu-hidden height-control">
-                            {% block content %}
-                                <!-- Title bar -->
-                                <header role="banner" id="title-bar" class="hidden-on-desktop">
-                                    <h2 style="font-family: 'Neuropol';">{% block appTitle %}{{ templateConfig.getTemplateOption('developer','app_title') }}{% endblock %}</h2>
-                                </header>
+                        <!-- IE9 Pinned Sites: http://msdn.microsoft.com/en-us/library/gg131029.aspx -->
+                        <meta name="application-name" content="">
+                        <meta name="msapplication-tooltip" content="Cross-platform admin template.">
+                        <meta name="msapplication-starturl" content="http://www.display-inline.fr/demo/developr">
+                        <!-- These custom tasks are examples, you need to edit them to show actual pages -->
+                        <meta name="msapplication-task" content="name=Agenda;action-uri=http://www.display-inline.fr/demo/developr/agenda.html;icon-uri=http://www.display-inline.fr/demo/developr/img/favicons/favicon.ico">
+                        <meta name="msapplication-task" content="name=My profile;action-uri=http://www.display-inline.fr/demo/developr/profile.html;icon-uri=http://www.display-inline.fr/demo/developr/img/favicons/favicon.ico">
+                    </head>
 
-                                <!-- Button to open/hide shortcuts -->
-                                <div class="hidden-on-desktop">
-                                    <img class="logo-menu-mobile" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.ico') }}" height="24px" width="24px" />
+                    <body class="clearfix with-menu menu-hidden height-control">
+                        {% block content %}
+                            <!-- Title bar -->
+                            <header role="banner" id="title-bar" class="hidden-on-desktop">
+                                <h2 style="font-family: 'Neuropol';">{% block appTitle %}{{ templateConfig.getTemplateOption('developer','app_title') }}{% endblock %}</h2>
+                            </header>
+
+                            <!-- Button to open/hide shortcuts -->
+                            <div class="hidden-on-desktop">
+                                <img class="logo-menu-mobile" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.ico') }}" height="24px" width="24px" />
+                            </div>
+
+                            <!-- Main content -->
+                            <section role="main" id="main" class="block main-frontend">
+                                <noscript class="message black-gradient simpler">Your browser does not support JavaScript! Some features won't work as expected...</noscript>
+                                {% set selectCompany=1%}
+                                {% include 'PequivenSEIPBundle:Block:header.html.twig' %}
+                                <div  class="content-container" id="contentP">
+                                    {% block body %}
+                                        Contenido (Sobrescribir el bloque "body")
+                                    {% endblock %}
                                 </div>
-                                
-                                <!-- Main content -->
-                                <section role="main" id="main" class="block main-frontend">
-                                    <noscript class="message black-gradient simpler">Your browser does not support JavaScript! Some features won't work as expected...</noscript>
-                                    {% include 'PequivenSEIPBundle:Block:headerSelectCompany.html.twig' %}
-                                    <div  class="content-container" style="min-height: 680px;" id="contentP">
-                                        {% block body %}
-                                            Contenido (Sobrescribir el bloque "body")
-                                        {% endblock %}
-                                    </div>
-                                         {% include 'PequivenSEIPBundle:Block:footerGestion.html.twig' %}
-                                        <div id="dialog-form">
-                                            <div ng-include="template.url" onload="templateLoad(template)"></div>
-                                        </div>
-                                  </section>
-                          {% endblock content %}
-                                    {# Bloque para cargar archivos javascript bases #}
+                                {% include 'PequivenSEIPBundle:Block:footer.html.twig' %}
+                                <div id="dialog-form">
+                                    <div ng-include="template.url" onload="templateLoad(template)"></div>
+                                </div>
+                            </section>
+                        {% endblock content %}
+                        {# Bloque para cargar archivos javascript bases #}
 
-                                    {# Template base functions #}
-                                    {% block javascripts_base '' %}
-                                        
+                        {# Template base functions #}
+                        {% block javascripts_base '' %}
 
-                                        {# Bloque para cargar archivos javascript adicionales despues del core #}
-                                        {% block javascripts '' %}
-                                            {# Bloque para escribir javascript #}    
-                                            {% block javascript '' %}
-                                                <script>
-                                                </script>
-                                            </body>
-                                        </html>
-                                        {% endspaceless %}
+
+                            {# Bloque para cargar archivos javascript adicionales despues del core #}
+                            {% block javascripts '' %}
+                                {# Bloque para escribir javascript #}    
+                                {% block javascript '' %}
+                                    <script>
+                                    </script>
+                                </body>
+                            </html>
+                            {% endspaceless %}

@@ -52,51 +52,51 @@ class ProposalController extends SEIPController {
             $proposal10 = strtoupper($request->get("proposal_data")["description10"]);
 
 //            if (strlen($proposal1) > 20 && strlen($proposal2) > 20 && strlen($proposal3) > 20) {
-                $proposals = array();
-                array_push($proposals, $proposal1);
-                array_push($proposals, $proposal2);
-                array_push($proposals, $proposal3);
-                array_push($proposals, $proposal4);
-                array_push($proposals, $proposal5);
-                array_push($proposals, $proposal6);
-                array_push($proposals, $proposal7);
-                array_push($proposals, $proposal8);
-                array_push($proposals, $proposal9);
-                array_push($proposals, $proposal10);
+            $proposals = array();
+            array_push($proposals, $proposal1);
+            array_push($proposals, $proposal2);
+            array_push($proposals, $proposal3);
+            array_push($proposals, $proposal4);
+            array_push($proposals, $proposal5);
+            array_push($proposals, $proposal6);
+            array_push($proposals, $proposal7);
+            array_push($proposals, $proposal8);
+            array_push($proposals, $proposal9);
+            array_push($proposals, $proposal10);
 
-                //Obtenemos Línea Estratégica
-                $LineStrategicRepository = $em->getRepository('PequivenMasterBundle:LineStrategic');
-                $lineStrategicObject = $LineStrategicRepository->findOneBy(array('id' => $request->get("proposal_data")["lineStrategic"]));
+            //Obtenemos Línea Estratégica
+            $LineStrategicRepository = $em->getRepository('PequivenMasterBundle:LineStrategic');
+            $lineStrategicObject = $LineStrategicRepository->findOneBy(array('id' => $request->get("proposal_data")["lineStrategic"]));
 
 //                if (strlen($proposal1) > 0 && strlen($proposal2) > 0 && strlen($proposal3) > 0 && strlen($proposal4) > 0 && strlen($proposal5) > 0) {
 //                    if (array_key_exists($request->get("proposal_data")["lineStrategic"], $proposalsArray)) {
 //                        $this->get('session')->getFlashBag()->add('error', 'La Línea Estratégica ya tiene sus 5 propuestas');
 //                    } else {
-                        for ($i = 1; $i <= 10; $i++) {
-                            if(strlen($proposals[$i-1]) > 0){
-                                $proposalObject = new Proposal();
-                                $proposalObject->setCreatedBy($user);
-                                $proposalObject->setPeriod($period = $this->getPeriodService()->getPeriodActive());
-                                $proposalObject->setWorkStudyCircle($workStudyCircle);
-                                $proposalObject->setLineStrategic($lineStrategicObject);
-                                $proposalObject->setDescription($proposals[$i - 1]);
-                                $em->persist($proposalObject);
-                            }
-                        }
+            for ($i = 1; $i <= 10; $i++) {
+                if (strlen($proposals[$i - 1]) > 0) {
+                    $proposalObject = new Proposal();
+                    $proposalObject->setCreatedBy($user);
+                    $proposalObject->setPeriod($period = $this->getPeriodService()->getPeriodActive());
+                    $proposalObject->setWorkStudyCircle($workStudyCircle);
+                    $proposalObject->setLineStrategic($lineStrategicObject);
+                    $proposalObject->setDescription($proposals[$i - 1]);
+                    $em->persist($proposalObject);
+                }
+            }
 
-                        $em->flush();
+            $em->flush();
 
-                        try {
-                            $em->flush();
-                            $em->getConnection()->commit();
-                        } catch (Exception $e) {
-                            $em->getConnection()->rollback();
-                            throw $e;
-                        }
+            try {
+                $em->flush();
+                $em->getConnection()->commit();
+            } catch (Exception $e) {
+                $em->getConnection()->rollback();
+                throw $e;
+            }
 
-                        $this->get('session')->getFlashBag()->add('success', 'Propuestas guardadas correctamente');
+            $this->get('session')->getFlashBag()->add('success', 'Propuestas guardadas correctamente');
 
-                        return $this->redirect($this->generateUrl('pequiven_work_study_circle_show_phase', array("id" => $workStudyCircle->getId())));
+            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show_phase', array("id" => $workStudyCircle->getId())));
 //                    }
 //                } else {
 //                    $this->get('session')->getFlashBag()->add('error', 'Debe agregar 5 propuestas por línea estratégica');
@@ -232,7 +232,10 @@ class ProposalController extends SEIPController {
             'lineas' => $lineas
         );
 
-        $this->generatePdf($data, 'Reporte de Propuestas de Círculo de Estudio y Trabajo', 'PequivenSEIPBundle:Politic:Proposal\viewPdf.html.twig');
+        $twig = 'PequivenSEIPBundle:Politic:Proposal\viewPdf.html.twig';
+        $archiveTittle = 'Reporte de Propuestas de Círculo de Estudio y Trabajo ' . $workStudyCircle->getCodigo();
+        $tittle = 'Reporte de Propuestas de Círculo de Estudio y Trabajo';
+        $this->getReportService()->generateCETPDF($data, $tittle, $twig, 'P', $archiveTittle);
     }
 
     /**
@@ -376,53 +379,6 @@ class ProposalController extends SEIPController {
             $view->setData($resources->toArray('', array(), $formatData));
         }
         return $this->handleView($view);
-    }
-
-    public function generatePdf($data, $title, $template) {
-        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setPrintLineFooter(false);
-        $pdf->setContainer($this->container);
-        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
-        $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
-
-// set document information
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('SEIP');
-        $pdf->setTitle($title);
-        $pdf->SetSubject('Resultados SEIP');
-        $pdf->SetKeywords('PDF, SEIP, Resultados');
-
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-// set default monospaced font
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-// set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-// set auto page breaks
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-// set image scale factor
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-// set font
-//            $pdf->SetFont('times', 'BI', 12);
-// add a page
-        $pdf->AddPage();
-
-// set some text to print
-
-        $html = $this->renderView($template, $data);
-
-// print a block of text using Write()
-        $pdf->writeHTML($html, true, false, true, false, '');
-
-//            $pdf->Output('Reporte del dia'.'.pdf', 'I');
-        $pdf->Output($title . '.pdf', 'D');
     }
 
     protected function getWorkStudyCircleService() {

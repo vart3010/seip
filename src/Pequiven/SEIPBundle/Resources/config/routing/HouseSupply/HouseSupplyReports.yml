@@ -1,0 +1,21 @@
+#REPORTES CASA - ABASTO  
+
+#ORDENES DE KIT DE PRODUCTOS
+pequiven_housesupply_orderkit_export:
+    path: /exportOrderKit/{id}
+    defaults:
+        _controller: pequiven.controller.housesupply_reports:exportOrderAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
+#ORDENES DE DESPACHO DE KIT DE PRODUCTOS
+pequiven_housesupply_orderkitdelivery_export:
+    path: /exportOrderKitDelivery/{id}
+    defaults:
+        _controller: pequiven.controller.housesupply_reports:exportDeliveryOrderAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]

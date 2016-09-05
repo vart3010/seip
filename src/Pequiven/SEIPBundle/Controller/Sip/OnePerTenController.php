@@ -68,12 +68,21 @@ class OnePerTenController extends SEIPController {
         $statusRevocatorySignature[] = array('id' => 1,'description' => 'Firmó');
         $statusRevocatorySignature[] = array('id' => 2,'description' => 'R');
         
+        $nominas = array();
+        $nominas[] = array('id' => 'CORAMER','description' => 'CORAMER');
+        $nominas[] = array('id' => 'MIXTAS CENTRO','description' => 'MIXTAS CENTRO');
+        $nominas[] = array('id' => 'MIXTAS OCCIDENTE','description' => 'MIXTAS OCCIDENTE');
+        $nominas[] = array('id' => 'MIXTAS ORIENTE','description' => 'MIXTAS ORIENTE');
+        $nominas[] = array('id' => 'PEQUIVEN','description' => 'PEQUIVEN');
+        $nominas[] = array('id' => 'PETROCASA','description' => 'PETROCASA');
+        
         if ($request->get('_format') == 'html') {
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
                 $this->config->getPluralResourceName() => $resources,
                 'profilesPoliticEvaluation' => $profilesPoliticEvaluation,
                 'statusRevocatorySignature' => $statusRevocatorySignature,
+                'nominas' => $nominas,
             );
             $view->setData($data);
         } else {
@@ -400,26 +409,16 @@ class OnePerTenController extends SEIPController {
         return $this->redirect($this->generateUrl('pequiven_search_members', array("user" => $idUserOne)));
     }
 
-    public function searchMembersAction(Request $request) {
+    public function showAction(Request $request) {
         $em = $this->getDoctrine()->getEntityManager();
         $onePerTenService = $this->getOnePerTenService();
-        if ($request->get("user") == NULL) {
-            if (!isset($request->get("onePerTen_search")["user"])) {
-                $user = $this->getUser();
-                $idUser = $user->getId();
-            } else {
-                $idUser = $request->get("onePerTen_search")["user"]; //Pequiven\SEIPBundle\Entity
-            }
-        } else {
-            $idUser = $request->get("user");
-        }
-        
-        //Obtenemos el objeto usuario
-        $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("id" => $idUser));
+        $onePerTen = $this->findOr404($request);//Obtenemos el objeto OnePerTen
+        $user = $onePerTen->getUser();//Obtenemos el objeto usuario
+        $members = $onePerTen->getTen();//Miembros del 1x10 del empleado
 
         $isCoordinator = 'No Aplica';
         $textWorkStudyCircle = 'No Aplica';
-        $workStudyCircle = $user->getWorkStudyCircle();
+        $workStudyCircle = is_null($user) ? $user : $user->getWorkStudyCircle();
         if(!is_null($workStudyCircle)){
             $isCoordinator = $workStudyCircle->getCoordinator()->getId() == $user->getId() ? 'Sí' :'No';
             $textWorkStudyCircle = $workStudyCircle->getCodigo().$workStudyCircle->getName();
@@ -427,71 +426,32 @@ class OnePerTenController extends SEIPController {
         
         //Inicio de variable para saber si la persona trabajó como CUTL, Sala o CNE en las elecciones asamblea 2015
         $wasSupportAssemblyElections = 0;
-
-        $members = array();
-
-        $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $idUser));
-        if (!is_null($onePerTen)) {
             
-            //Determinamos si fue CUTL en las elecciones asamblea 2015
-            if($onePerTen->getCutl() == 1){
-                $wasSupportAssemblyElections = 1;
-            }
-            //Determinamos si trabajó en la Sala Situacional en las elecciones asamblea 2015
-            if($onePerTen->getSala() == 1){
-                $wasSupportAssemblyElections = 1;
-            }
-            //Determinamos si trabajo como miembro del CNE en las elecciones asamblea 2015
-            if($onePerTen->getCne() == 1){
-                $wasSupportAssemblyElections = 1;
-            }
-            
-            $onePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(array("one" => $onePerTen->getId()));
-            if (count($onePerTenMembers) > 1) {
-                foreach ($onePerTenMembers as $member) {
-                    $members[] = array(
-                        "id" => $member->getId(),
-                        "cedula" => $member->getCedula(),
-                        "nombre" => $member->getNombre(),
-                        "telefono" => $member->getTelefono(),
-                        "idCentro" => $member->getCodCentro(),
-                        "reporteVoto" => $member->getVoto() == 1 ? 'Sí' : ($member->getVoto() == 0 ? 'No' : 'Sin info'),
-                        "voto" => $member->getVasamblea6() == 1 ? 'Sí' : ($member->getVasamblea6() == 0 ? 'No' : 'Sin info'),
-                        "centro" => $member->getNombreCentro()
-                    );
-                }
-            } else if (count($onePerTenMembers) == 1) {
-                $members[] = array(
-                    "id" => $onePerTenMembers[0]->getId(),
-                    "cedula" => $onePerTenMembers[0]->getCedula(),
-                    "nombre" => $onePerTenMembers[0]->getNombre(),
-                    "telefono" => $onePerTenMembers[0]->getTelefono(),
-                    "idCentro" => $onePerTenMembers[0]->getCodCentro(),
-                    "reporteVoto" => $onePerTenMembers[0]->getVoto() == 1 ? 'Sí' : ($onePerTenMembers[0]->getVoto() == 0 ? 'No' : 'Sin info'),
-                    "voto" => $onePerTenMembers[0]->getVasamblea6() == 1 ? 'Sí' : ($onePerTenMembers[0]->getVasamblea6() == 0 ? 'No' : 'Sin info'),
-                    "centro" => $onePerTenMembers[0]->getNombreCentro()
-                );
-            }
+        //Determinamos si fue CUTL en las elecciones asamblea 2015
+        if($onePerTen->getCutl() == 1){
+            $wasSupportAssemblyElections = 1;
+        }
+        //Determinamos si trabajó en la Sala Situacional en las elecciones asamblea 2015
+        if($onePerTen->getSala() == 1){
+            $wasSupportAssemblyElections = 1;
+        }
+        //Determinamos si trabajo como miembro del CNE en las elecciones asamblea 2015
+        if($onePerTen->getCne() == 1){
+            $wasSupportAssemblyElections = 1;
         }
         
         //Obtenemos efectividad del 1x10 registrado en PQV
         $efectividad = $onePerTenService->obtainEfficiencyOnePerTen($members);
         
-        if(!is_null($onePerTen)){
-            $profileItemsAvailables = $onePerTenService->obtainProfileItemsAvailables($onePerTen);
-            $profileItemsWithWeight = $onePerTenService->obtainProfileItemsWithWeight($onePerTen, $profileItemsAvailables);
-            $profileItemsWithResult = $onePerTenService->obtainProfileItemsWithResult($onePerTen, $profileItemsWithWeight,$members);
-//            var_dump($profileItems);
-//            var_dump($profileItemsAvailables);
-//            var_dump($profileItemsWithWeight);
-//            var_dump($profileItemsWithResult);
-//            die();
-        }
+        $profileItemsAvailables = $onePerTenService->obtainProfileItemsAvailables($onePerTen);
+        $profileItemsWithWeight = $onePerTenService->obtainProfileItemsWithWeight($onePerTen, $profileItemsAvailables);
+        $profileItemsWithResult = $onePerTenService->obtainProfileItemsWithResult($onePerTen, $profileItemsWithWeight,$members);
 
-        $texts = array();
-        $texts[-1] = 'Sin Información';
-        $texts[0] = 'No';
-        $texts[1] = 'Sí';
+        $texts = array(
+            -1 => 'Sin Información',
+            0 => 'No',
+            1 => 'Sí',
+        );
         
         $textsFirmaRevocatorio = array(
             -1 => 'Sin Información',
@@ -501,7 +461,7 @@ class OnePerTenController extends SEIPController {
         );
         
         $isAllowToAddAnalisis = false;
-        if($user->getId() == 70 || $user->getId() == 112){
+        if(!is_null($user) && ($user->getId() == 70 || $user->getId() == 112)){
             $isAllowToAddAnalisis = true;
         }
         
@@ -524,7 +484,7 @@ class OnePerTenController extends SEIPController {
                 $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
             }
         }
-        $files = $onePerTen->getOnePerTenFile();
+        $files = !(is_null($onePerTen)) ? $onePerTen->getOnePerTenFile() : null;
         
         $formSearchOne = $this->createForm(new OnePerTenType);
         return $this->render('PequivenSEIPBundle:Sip:onePerTen\show.html.twig', array(
@@ -549,10 +509,10 @@ class OnePerTenController extends SEIPController {
         $onePerTenFile = new \Pequiven\SEIPBundle\Entity\Sip\OnePerTenFile();
         $form = $this->createForm(new \Pequiven\SEIPBundle\Form\Sip\OnePerTenFileType(), $onePerTenFile);
         $em = $this->getDoctrine();
-        $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->find($request->get("idOnePerTen"));
+        //$onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->find($request->get("idOnePerTen"));
 
         return $this->render('PequivenSEIPBundle:Sip:onePerTen\uploadFile.html.twig', array(
-                    'data' => $onePerTen->getUser()->getId(),
+                    'data' => $request->get("idOnePerTen"),
                     'form' => $form->createView()
         ));
     }
@@ -573,7 +533,7 @@ class OnePerTenController extends SEIPController {
         $form->handleRequest($request);
         $idOnePerTen = $request->get("idOnePerTen");
 
-        $onePerTen = $em->getRepository('PequivenSEIPBundle:Sip\OnePerTen')->findOneBy(array('user' => $request->get("idOnePerTen")));
+        $onePerTen = $em->getRepository('PequivenSEIPBundle:Sip\OnePerTen')->findOneBy(array('id' => $request->get("idOnePerTen")));
 
         if ($form->isSubmitted()) {
 
@@ -590,7 +550,7 @@ class OnePerTenController extends SEIPController {
             }
             $this->get('session')->getFlashBag()->add('success', 'Análisis agregado con éxito ');
             
-            return $this->redirect($this->generateUrl('pequiven_search_members', array("user" => $idOnePerTen)));
+            return $this->redirect($this->generateUrl('pequiven_onePerTen_show', array("id" => $idOnePerTen)));
         }
 
         return $this->render('PequivenSEIPBundle:Sip:onePerTen\addAnalisis.html.twig', array(
@@ -614,19 +574,17 @@ class OnePerTenController extends SEIPController {
     }
 
     public function exportAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-//var_dump('epa');die();
-        $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->getOnePerTen($request->get("idOne"));
-        $members = $onePerTen[0]->getTen();
-        $one = $onePerTen[0]->getUser();
-        $voto = $onePerTen[0]->getVoto();
-        $object = $onePerTen[0];
+        $onePerTen = $this->findOr404($request);
+        
+        $members = $onePerTen->getTen();
+        $one = $onePerTen->getUser();
+        $voto = $onePerTen->getVoto();
         
         $onePerTenService = $this->getOnePerTenService();
         
         $isCoordinator = 'No Aplica';
         $textWorkStudyCircle = 'No Aplica';
-        $workStudyCircle = $one->getWorkStudyCircle();
+        $workStudyCircle = is_null($one) ? $one : $one->getWorkStudyCircle();
         if(!is_null($workStudyCircle)){
             $isCoordinator = $workStudyCircle->getCoordinator()->getId() == $one->getId() ? 'Sí' :'No';
             $textWorkStudyCircle = $workStudyCircle->getCodigo().$workStudyCircle->getName();
@@ -635,45 +593,25 @@ class OnePerTenController extends SEIPController {
         //Inicio de variable para saber si la persona trabajó como CUTL, Sala o CNE en las elecciones asamblea 2015
         $wasSupportAssemblyElections = 0;
 
-        if(!is_null($onePerTen[0])){
-            //Determinamos si fue CUTL en las elecciones asamblea 2015
-            if($onePerTen[0]->getCutl() == 1){
-                $wasSupportAssemblyElections = 1;
-            }
-            //Determinamos si trabajó en la Sala Situacional en las elecciones asamblea 2015
-            if($onePerTen[0]->getSala() == 1){
-                $wasSupportAssemblyElections = 1;
-            }
-            //Determinamos si trabajo como miembro del CNE en las elecciones asamblea 2015
-            if($onePerTen[0]->getCne() == 1){
-                $wasSupportAssemblyElections = 1;
-            }
+        //Determinamos si fue CUTL en las elecciones asamblea 2015
+        if($onePerTen->getCutl() == 1){
+            $wasSupportAssemblyElections = 1;
         }
-        
-//        $efectividad = number_format(0, 2, ',', '.') . '%';
-//        if(count($members) > 0){
-//            //Obtenemos efectividad del 1x10 registrado en PQV
-//            $contVotos = 0;
-//            $totalMiembros = count($members);
-//            foreach($members as $member){
-//                $contVotos = $member->getVasamblea6() == 1 ? $contVotos+1 : $contVotos;
-//            }
-//            $efectividad = number_format(($contVotos/$totalMiembros)*100, 2, ',', '.') . '%';
-//        }
+        //Determinamos si trabajó en la Sala Situacional en las elecciones asamblea 2015
+        if($onePerTen->getSala() == 1){
+            $wasSupportAssemblyElections = 1;
+        }
+        //Determinamos si trabajo como miembro del CNE en las elecciones asamblea 2015
+        if($onePerTen->getCne() == 1){
+            $wasSupportAssemblyElections = 1;
+        }
+
         //Obtenemos efectividad del 1x10 registrado en PQV
-        $efectividad = $onePerTenService->obtainEfficiencyOnePerTen($members,'class');
-        $profileItemsWithResult = array();
+        $efectividad = $onePerTenService->obtainEfficiencyOnePerTen($members);
         
-//        if(!is_null($onePerTen[0])){
-            $profileItemsAvailables = $onePerTenService->obtainProfileItemsAvailables($onePerTen[0]);
-            $profileItemsWithWeight = $onePerTenService->obtainProfileItemsWithWeight($onePerTen[0], $profileItemsAvailables);
-            $profileItemsWithResult = $onePerTenService->obtainProfileItemsWithResult($onePerTen[0],$profileItemsWithWeight,$members,'class');
-//            var_dump($profileItems);
-//            var_dump($profileItemsAvailables);
-//            var_dump($profileItemsWithWeight);
-//            var_dump($profileItemsWithResult);
-//            die();
-//        }
+        $profileItemsAvailables = $onePerTenService->obtainProfileItemsAvailables($onePerTen);
+        $profileItemsWithWeight = $onePerTenService->obtainProfileItemsWithWeight($onePerTen, $profileItemsAvailables);
+        $profileItemsWithResult = $onePerTenService->obtainProfileItemsWithResult($onePerTen,$profileItemsWithWeight,$members);
 
         $pdf = new \Pequiven\SEIPBundle\Model\PDF\SipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->setPrintLineFooter(false);
@@ -708,7 +646,7 @@ class OnePerTenController extends SEIPController {
             "one" => $one,
             "workStudyCircle" => $workStudyCircle,
             "voto" => $voto,
-            "object" => $object,
+            "object" => $onePerTen,
             "texts" => $texts,
             "wasSupportAssemblyElections" => $wasSupportAssemblyElections,
             "isCoordinator" => $isCoordinator,
@@ -726,7 +664,7 @@ class OnePerTenController extends SEIPController {
     
     public function createOnePerTenFile(OnePerTen $onePerTen, $files, $categoryFiles) {
         $user = $onePerTen->getUser();
-        $fileName = $user->getId() . "_" . $onePerTen->getId();
+        $fileName = $onePerTen->getId() . "_" . $onePerTen->getCedula();
         $fileUploaded = false;
         $fileExist = false;
         $em = $this->getDoctrine()->getEntityManager();
@@ -764,15 +702,15 @@ class OnePerTenController extends SEIPController {
                 $em->flush();
 
                 $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.saveFileSuccess', array(), 'PequivenIndicatorBundle'));
-                $this->redirect($this->generateUrl('pequiven_search_members', array('user' => $user->getId())));
+                $this->redirect($this->generateUrl('pequiven_onePerTen_show', array('id' => $onePerTen->getId())));
             } else {
                 $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.errorFileUpload', array(), 'PequivenIndicatorBundle'));
                 //$request->request->set("uploadFile", "");
-                $this->redirect($this->generateUrl('pequiven_search_members', array('user' => $user->getId())));
+                $this->redirect($this->generateUrl('pequiven_onePerTen_show', array('id' => $onePerTen->getId())));
             }
         } else {
             $this->get('session')->getFlashBag()->add('error', "El archivo ya existe.");
-            $this->redirect($this->generateUrl('pequiven_search_members', array('user' => $user->getId())));
+            $this->redirect($this->generateUrl('pequiven_onePerTen_show', array('id' => $onePerTen->getId())));
         }
     }
     
@@ -793,10 +731,9 @@ class OnePerTenController extends SEIPController {
 
         $path = \Pequiven\SEIPBundle\Model\Sip\OnePerTenFile::LOCATION_UPLOAD_FILE;
         $name = \Pequiven\SEIPBundle\Model\Sip\OnePerTenFile::NAME_FILE;
-        $idOnePerTen = $file->getOnePerTen();
-        $user = $file->getOnePerTen()->getUser();
+        $onePerTen = $file->getOnePerTen();
 
-        $ruta = $this->container->getParameter("kernel.root_dir") . '/../web/' . $path . "/" . $name . $user->getId() . "_" . $idOnePerTen->getId() . "_" . base64_encode($file->getNameFile());
+        $ruta = $this->container->getParameter("kernel.root_dir") . '/../web/' . $path . "/" . $name . $onePerTen->getId() . "_" . $onePerTen->getCedula() . "_" . base64_encode($file->getNameFile());
 
         header('Content-type: application/pdf');
         readfile($ruta);

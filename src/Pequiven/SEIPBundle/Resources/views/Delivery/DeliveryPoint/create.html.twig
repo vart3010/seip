@@ -1,0 +1,26 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'Delivery' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("delivery_point.title2"|trans ),
+        ( 'pequiven.add'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/table3860.css?v=1') }}">
+{% endblock stylesheets %}
+
+{% block body -%}
+    <form method="POST" action="{{ path("pequiven_delivery_point_create",{ save_and_close: true} ) }}">
+        <br /><br />
+        {% include 'PequivenSEIPBundle:Delivery/DeliveryPoint:_form.html.twig' %}
+        {{ actions.create() }}
+        {{ form_rest(form) }}
+    </form>
+{% endblock %}

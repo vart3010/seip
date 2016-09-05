@@ -1,0 +1,56 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'Delivery' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block before_body %}
+    {{ contentHeader(({(path("pequiven_delivery_point_index")):("Planificación de Despacho"|trans)}),
+                        ("Detalle"|trans )  )}}
+{% endblock %}
+
+
+
+{% block body %}
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'delivery_point.title2'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
+                    {#                    {{ generateLink(delivery_point) }}#}
+                    {{ delivery_point }}
+                </p>
+            </div>
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'delivery_point.period'|trans }}</label>
+                    {{ delivery_point.period }}
+                </p>
+            </div>
+            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'delivery_point.name'|trans }}</label>
+                    {{ delivery_point.descripcion }}
+                </p>
+            </div>
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'delivery_point.form.warehouse'|trans }}</label>
+                    {{ delivery_point.warehouse.descripcion }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+
+
+    {% include 'PequivenSEIPBundle:Delivery:ProductGroupDelivery/groupProduct.html.twig' %}
+    <br /><br />
+
+    <br /><br />
+    <p class="button-height align-right">
+        {{ buttons.generic(path('pequiven_delivery_point_update', { 'id': delivery_point.id }),('pequiven.edit'|trans({},'messages'))) }}
+        &nbsp;
+        {{ buttons.delete(path('pequiven_delivery_point_delete', { 'id': delivery_point.id })) }}
+    </p>
+{% endblock %}

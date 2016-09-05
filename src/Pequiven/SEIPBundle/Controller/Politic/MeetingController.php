@@ -389,27 +389,28 @@ class MeetingController extends SEIPController {
 
         $fechameeting = array();
         $asistencia = array();
-        $totalAR = array();
-        $totalAT = array();
+        $totalMember = array();
 
         foreach ($meeting as $meet) {
 
             $fechameeting[] = $meet;
             $assistance = $meet->getAssistances();
-            $total = 0;
-            $totalneto = 0;
+            $total = 0;            
 
             foreach ($assistance as $assis) {
                 $asistencia[$assis->getUser()->getId()][$meet->getId()] = $assis->getAssistance();
-
+                if (isset($totalMember[$assis->getUser()->getId()])) {
+                    $subtotalMember = $totalMember[$assis->getUser()->getId()];
+                } else {
+                    $subtotalMember = 0;
+                }
                 if ($assis->getAssistance() == true) {
                     $total++;
+                    $subtotalMember ++;
                 }
-                $totalneto++;
+                
+                $totalMember[$assis->getUser()->getId()] = $subtotalMember;
             }
-
-            $totalAR[$meet->getId()] = $total;
-            $totalAT[$meet->getId()] = $totalneto;
         }
 
 //        var_dump($fechameeting);
@@ -421,11 +422,13 @@ class MeetingController extends SEIPController {
             'asistencia' => $asistencia,
             'meeting' => $meeting,
             'fechas' => $fechameeting,
-            'totalAR' => $totalAR,
-            'totalAT' => $totalAT
+            'totalMember' => $totalMember
         );
 
-        $this->generatePdf($data, 'Reporte de Asistencias a Reuniones', 'PequivenSEIPBundle:Politic:Meeting\exportAllpdf.html.twig', array('ORIENTATION' => 'P'));
+        $twig = 'PequivenSEIPBundle:Politic:Meeting\exportAllpdf.html.twig';
+        $archiveTittle = 'Asistencias a Reuniones ' . $workStudyCircle->getCodigo();
+        $tittle = 'Reporte de Asistencias a Reuniones';
+        $this->getReportService()->generateCETPDF($data, $tittle, $twig, 'L', $archiveTittle);
     }
 
     public function generatePdf($data, $title, $template, $options = array()) {
@@ -488,20 +491,6 @@ class MeetingController extends SEIPController {
                     'data' => $request->get("idMeeting"),
                     'form' => $form->createView()
         ));
-
-//        $band = false;
-////VALIDACION QUE SEA UN ARCHIVO PERMITIDO
-//        foreach ($request->files as $file) {
-//            if (in_array($file->guessExtension(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getTypesFile())) {
-//                $band = true;
-//            }
-//        }
-//
-//        if ($band) {
-//            
-//        } else {
-//            $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
-//        }
     }
 
     public function uploadAction(Request $request) {

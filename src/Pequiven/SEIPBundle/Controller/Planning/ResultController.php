@@ -115,7 +115,7 @@ class ResultController extends ResourceController {
 
         if ($this->getRequest()->get('idUser') != null) {
             $idUser = $this->getRequest()->get('idUser');
-            $searchUser = $this->container->get("pequiven.repository.user")->find($idUser);
+            $searchUser = $this->container->get("pequiven.repository.user")->findOneById($idUser);
             $datosUser = array("nombre" => $searchUser->getFullNameUser());
         } else {
             $idUser = $this->getUser()->getId();
@@ -432,7 +432,7 @@ class ResultController extends ResourceController {
         //Perfiles Políticos
         if ($isAllowPolitic) {
             $qbOnePerTen = $onePerTenRepository->findQueryWithResultNull($period);
-            $qbOnePerTen->select('opt.id,u.firstname,u.lastname');
+            $qbOnePerTen->select('opt.id,opt.nameEmployee');
             $resultsOnePerTen = $qbOnePerTen->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         }
 

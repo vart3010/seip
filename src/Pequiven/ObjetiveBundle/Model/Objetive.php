@@ -34,6 +34,14 @@ abstract class Objetive implements ObjetiveInterface
      * Programas de gestion a nivel tactico
      * 
      * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",mappedBy="strategicObjetive",cascade={"remove"})
+     */
+    protected $strategicArrangementPrograms;
+
+    /**
+     * Programas de gestion a nivel tactico
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
      * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",mappedBy="tacticalObjective",cascade={"remove"})
      */
     protected $tacticalArrangementPrograms;
@@ -80,6 +88,39 @@ abstract class Objetive implements ObjetiveInterface
      */
     public function getObjetiveLevel() {
         return $this->objetiveLevel;
+    }
+
+    /**
+     * Add strategicArrangementPrograms
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $strategicArrangementPrograms
+     * @return Objetive
+     */
+    public function addStrategicArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $strategicArrangementPrograms)
+    {
+        $this->strategicArrangementPrograms->add($strategicArrangementPrograms);
+
+        return $this;
+    }
+
+    /**
+     * Remove strategicArrangementPrograms
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $strategicArrangementPrograms
+     */
+    public function removeStrategicArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $strategicArrangementPrograms)
+    {
+        $this->strategicArrangementPrograms->removeElement($strategicArrangementPrograms);
+    }
+
+    /**
+     * Get strategicArrangementPrograms
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getStrategicArrangementProgram()
+    {
+        return $this->strategicArrangementPrograms;
     }
     
     /**
@@ -152,11 +193,18 @@ abstract class Objetive implements ObjetiveInterface
      * Retorna los programas de gestion asociados al objetivo
      * @return type
      */
-    public function getArrangementPrograms()
-    {
+    public function getArrangementPrograms(){
         $objetiveLevel = $this->getObjetiveLevel();
         $arrangementPrograms = array();
-        if($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
+        if($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
+            $arrangementProgramsStrategic = [];
+            foreach ($this->getStrategicArrangementProgram() as $dataArrangementProgram) {                
+                if ($dataArrangementProgram->getShowViewObjetive() === true) {
+                    $arrangementProgramsStrategic[] = $dataArrangementProgram;
+                }
+            }
+            return $arrangementProgramsStrategic;
+        }elseif($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
             $arrangementProgramsResult = $this->getTacticalArrangementPrograms();
             foreach ($arrangementProgramsResult as $arrangementProgram) {
                 if($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
@@ -168,6 +216,24 @@ abstract class Objetive implements ObjetiveInterface
             $arrangementPrograms = $this->getOperationalArrangementPrograms();
         }
         return $arrangementPrograms;
+    }
+
+    /**
+     * Retorna los programas de gestion asociados al objetivo
+     * @return type
+     */
+    public function getArrangementProgramsIsAvailableInResult(){
+        $objetiveLevel = $this->getObjetiveLevel();        
+        $arrangementProgramsStrategic = [];
+        $validIsResult = false;
+        if($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
+            foreach ($this->getStrategicArrangementProgram() as $dataArrangementProgram) {                
+                if ($dataArrangementProgram->getIsAvailableInResult() === true) {
+                    $validIsResult = true;
+                }
+            }
+        }        
+        return $validIsResult;
     }
     
     public function getGerenciaByLevel() {

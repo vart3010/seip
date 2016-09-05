@@ -20,7 +20,7 @@ pequiven_sig_monitoring_list_standardization:
     options:
         expose: true
 pequiven_sig_monitoring_show:
-    path: /sig/monitoring/list/shows/{type}/{id}
+    path: /sig/monitoring/list/shows/{id}
     defaults:
         _controller: pequiven.controller.monitoring_sig:showAction
         _format: html    
@@ -44,7 +44,7 @@ pequiven_sig_monitoring_export:
         _format: html    
     methods: [GET]
 pequiven_sig_monitoring_add:
-    path: /{id}/{type}/get-monitoring.{_format}
+    path: /{id}/get-monitoring.{_format}
     defaults:
         _controller: pequiven.controller.monitoring_sig:addAction
         _format: html

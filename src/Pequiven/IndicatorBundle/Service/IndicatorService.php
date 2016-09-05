@@ -692,7 +692,13 @@ class IndicatorService implements ContainerAwareInterface {
             $errorArrangementRange = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendency);
             if ($errorArrangementRange == null) {
                 if ($indicator->getEvaluateInPeriod()) {//En caso de que sea medidio en el período actual
-                    $value = number_format($indicator->getResultReal(), 2, ',', '.') . '%';
+                    if($indicator->getNotShowDecimals()){
+                        $value = number_format($indicator->getResultReal()) . '%';
+                    }
+                    else{
+                        $value = number_format($indicator->getResultReal(), 2, ',', '.') . '%';
+                    }
+                    
                     if ($indicator->getShowTagInDashboardResult()) {
                         foreach ($indicator->getTagsIndicator() as $tagIndicator) {
                             if ($tagIndicator->getShowInIndicatorDashboardResult()) {
@@ -705,8 +711,13 @@ class IndicatorService implements ContainerAwareInterface {
                             }
                         }
                     }
+                    
                     if ($indicator->getShowResultWithoutPercentageInDashboard()) {
-                        $value = number_format($indicator->getResultReal(), 2, ',', '.');
+                        if($indicator->getNotShowDecimals()){
+                            $value = number_format($indicator->getResultReal());
+                        }else{
+                            $value = number_format($indicator->getResultReal(), 2, ',', '.');
+                        }
                     }
                     $colorData["label"] = $value;
                     if ($resultService->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {
@@ -3443,8 +3454,15 @@ class IndicatorService implements ContainerAwareInterface {
                 foreach ($indicatorsChildrens as $indicatorChildren) {
                     $label = $dataReal = $dataPlan = $dataMedition = array();
                     $label["label"] = $indicatorChildren->getSummary();
-                    $dataReal["value"] = number_format($indicatorChildren->getValueFinal(), 2, ',', '.');
-                    $dataPlan["value"] = number_format($indicatorChildren->getTotalPlan(), 2, ',', '.');
+                    if($indicatorChildren->getId() == "3125"){
+                        $dataReal["value"] = number_format($indicatorChildren->getValueFinal()/1000000, 2, ',', '.');
+                        $dataPlan["value"] = number_format($indicatorChildren->getTotalPlan()/1000000, 2, ',', '.');
+                    }
+                    else{
+                        $dataReal["value"] = number_format($indicatorChildren->getValueFinal(), 2, ',', '.');
+                        $dataPlan["value"] = number_format($indicatorChildren->getTotalPlan(), 2, ',', '.');
+                    }
+                    
                     $dataMedition["value"] = number_format($indicatorChildren->getResultReal(), 2, ',', '.');
                     if (count($indicatorChildren->getCharts()) > 0) {
                         $label["link"] = $this->generateUrl($url, array('id' => $indicatorChildren->getId(), 'tablero' => $options['tablero']));
@@ -4756,6 +4774,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart = array();
 
         $chart["palette"] = "1";
+        $chart["yaxisname"] = "UNIDAD DE MEDIDA";
         $chart["showvalues"] = "0";
         $chart["paletteColors"] = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
         $chart["yaxisvaluespadding"] = "10";

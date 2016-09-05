@@ -14,7 +14,7 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("sip.consulta"|trans )
+        ("sip.profile_employee"|trans({"%employee%":onePerTen.nameEmployee}))
     ) }}
 {% endblock %}
 
@@ -46,13 +46,13 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Nombre</label>
-                    {{ user.firstname }} {{ user.lastname }}
+                    {{ onePerTen.nameEmployee }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Cédula</label>
-                    {{ user.indentification }}
+                    {{ onePerTen.cedula }}
                 </p>
             </div>
             {#<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -114,6 +114,24 @@
                     <span class="{{ class }}"><b>{{ textsFirmaRevocatorio[onePerTen.firmaRevocatorio] }}</b></span>
                 </p>
             </div>
+                
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <a href="javascript:history.back()" class="align-left button red-gradient glossy">
+                    <li class="fa fa-undo" aria-hidden="true">
+                        <span style="font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;">
+                            Regresar
+                        </span>
+                    </li>
+                </a>
+            </div>
+            
+            {#<a href="javascript:history.back()" class="align-left button red-gradient glossy">
+                <li class="fa fa-undo" aria-hidden="true">
+                    <span style="font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;">
+                        Regresar
+                    </span>
+                </li>
+            </a>#}
             
             <div class="new-row-mobile new-row twelve-columns twelve-columns-tablet twelve-columns-mobile {{ profileItemsWithResult[constant('Pequiven\\SEIPBundle\\Model\\Sip\\OnePerTen::TYPE_GLOBAL')]['class'] }}" align="center">
                 <h1>Perfil Político:
@@ -134,10 +152,10 @@
     <div class="block" >
         <div class="block-title">
 
-            <h3 class="ng-binding">1x10 de {{ user }} - Teléfono: {{ user.cellphone }}</h3>
+            <h3 class="ng-binding">1x10 de {{ onePerTen.nameEmployee }} {% if user != null %} - Teléfono: {{ user.cellphone }}{% endif %}</h3>
 
-            {% if user.indentification %}
-                - CI:{{ user.indentification }}</h3>
+            {% if onePerTen.cedula %}
+                - CI:{{ onePerTen.cedula }}</h3>
             {% endif %}
             
         <div class="absolute-right"><h3>Efectividad Voto 1x10= {{ efectividad }}</h3></div>
@@ -172,9 +190,9 @@
                                 <td>{{ loop.index }}</td>
                                 <td>{{ member.cedula}}</td>
                                 <td>{{ member.nombre}}</td>
-                                <td>{{ member.centro}}</td>
-                                <td>{{ member.reporteVoto}}</td>
-                                <td>{{ member.voto}}</td>
+                                <td>{{ member.nombreCentro}}</td>
+                                <td>{{ texts[member.voto]}}</td>
+                                <td>{{ texts[member.vasamblea6]}}</td>
                                 <td>{{ member.telefono}}</td>
                                 {#<td> 
                                     <button  class="button del" data="{{ member.id  }}" type="button">Eliminar</button>
@@ -190,7 +208,7 @@
         {% endif %}
         {% if is_granted(['ROLE_SEIP_SIP_ONEPERTEN_EXPORT']) %}
         <p class="button-height float-right" style="margin: 2px;">
-            <a id="btnExportToExcel" href="{{ path("pequiven_export_onePerTen",{idOne:user.id}) }}" class="button">
+            <a id="btnExportToExcel" href="{{ path("pequiven_export_onePerTen",{id:onePerTen.id}) }}" class="button">
                 <span class="button-icon"><span class="icon-download"></span></span>
                     {{ "sip.export.exportpdf"|trans }}
             </a>

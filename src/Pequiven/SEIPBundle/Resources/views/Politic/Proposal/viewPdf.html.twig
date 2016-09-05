@@ -1,14 +1,17 @@
 {% trans_default_domain 'workStudyCircle' %}
 {% if (workStudyCircle.getphase < 4) %}
-{% if workStudyCircle.getphase > 1 %}
-    {% set userCreatedId = workStudyCircle.getCoordinator.id %}
-{% else %}
-    {% set userCreatedId = workStudyCircle.getCreatedBy.id %}
-{% endif %}
+    {% if workStudyCircle.getphase > 1 %}
+        {% set userCreatedId = workStudyCircle.getCoordinator.id %}
+    {% else %}
+        {% set userCreatedId = workStudyCircle.getCreatedBy.id %}
+    {% endif %}
 {% endif %}
 
 <style>
     .body {
+        font-size: 8px;
+    }
+    td,th {
         font-size: 8px;
     }
     .title_bold {
@@ -51,12 +54,12 @@
 
             <tr>
                 <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaSecond"|trans }}:</td>
-                <td width="70%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br> {% endfor %}</td>
+                <td width="70%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br/> {% endfor %}</td>
             </tr>
         {% endif %}
     </table>
 
-    <br/><br/><br/>
+    <br/><br/>
 
     <table width="100%">
         <tr>
@@ -64,29 +67,25 @@
         </tr>
     </table> 
 
-    <br/><br/>  
-
-
+    <br/><br/>
     {% for key,value in lineas %}        
         <table width="100%"> 
             <tr>
                 <td bgcolor="#F2F2F2" width="100%"><b>Línea Estratégica: </b>{{ key }}</td>
             </tr>
-        </table>
+        </table>            
         {% for prop in proposals %}
             {% if prop.lineStrategic.description==key %}
                 <table width="100%">
                     <tr>
-                        <td width="100%" style="text-align: justify; font-size: 10px"><b>Propuesta {{loop.index}}:</b> {{prop.getDescription()|upper|raw|nl2br}}</td>                                
+                        <td width="100%" style="text-align: justify; font-size: 8px"><b>Propuesta {{loop.index}}:</b> {{prop.getDescription()|upper|raw|nl2br}}</td>                                
                     </tr>
                 </table>
-                <br/><br/>       
+                <br/><br/>    
             {% endif %}
         {% endfor%}
-        <br/>
     {% endfor %} 
 
-    <br/>
 
     <table width="95%">
         <tr>

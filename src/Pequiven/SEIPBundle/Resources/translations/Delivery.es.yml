@@ -1,0 +1,25 @@
+delivery_point:
+    title: Puntos De Despacho
+    title2: Punto De Despacho
+    name: Nombre
+    period: Periodo
+    actions:
+        edit: Editar
+        loadPlanification: Cargar Planificación
+    list:
+        ref: Referencia
+        name: Nombre
+        warehouse: Almacen
+        period: Periodo
+    add: Nuevo Punto de Despacho
+    form:
+        warehouse: Almacén
+        enabled: Activo
+delivery_product:
+    type:
+        type: Tipo
+        bulk: Granulado
+        bagged: Ensacado
+    product_group: Linea de Negocio
+    product_report: Producto
+    production_line: Linea de Producto

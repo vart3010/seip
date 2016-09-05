@@ -82,19 +82,19 @@ class ReportTemplateDelivery extends BaseModel {
      */
     private $region;
 
-    /**
-     * Plantillas de plantas
-     * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery",mappedBy="reportTemplateDelivery",cascade={"remove"})
-     */
-    private $productGroupDelivery;
-
-    /**
-     * Usuarios
-     * @var type 
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="reportTemplatesDelivery")
-     */
-    private $users;
+//    /**
+//     * Plantillas de plantas
+//     * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
+//     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery",mappedBy="reportTemplateDelivery",cascade={"remove"})
+//     */
+//    private $productGroupDelivery;
+//
+//    /**
+//     * Usuarios
+//     * @var type 
+//     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="reportTemplatesDelivery")
+//     */
+//    private $users;
 
     /**
      * Nombre Corto del reporte
@@ -124,35 +124,35 @@ class ReportTemplateDelivery extends BaseModel {
      */
     public function __construct() {
         $this->productGroupDelivery = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        //$this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
-    /**
-     * 
-     * @param \Pequiven\SEIPBundle\Entity\User $user
-     * @return \Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery
-     */
-    public function addUser(\Pequiven\SEIPBundle\Entity\User $user) {
-        $this->users[] = $user;
-
-        return $this;
-    }
-
-    /**
-     * 
-     * @param \Pequiven\SEIPBundle\Entity\User $user
-     */
-    public function removeUser(\Pequiven\SEIPBundle\Entity\User $user) {
-        $this->users->removeElement($user);
-    }
-
-    /**
-     * 
-     * @return type
-     */
-    public function getUser() {
-        return $this->users;
-    }
+//
+//    /**
+//     * 
+//     * @param \Pequiven\SEIPBundle\Entity\User $user
+//     * @return \Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery
+//     */
+//    public function addUser(\Pequiven\SEIPBundle\Entity\User $user) {
+//        $this->users[] = $user;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * 
+//     * @param \Pequiven\SEIPBundle\Entity\User $user
+//     */
+//    public function removeUser(\Pequiven\SEIPBundle\Entity\User $user) {
+//        $this->users->removeElement($user);
+//    }
+//
+//    /**
+//     * 
+//     * @return type
+//     */
+//    public function getUser() {
+//        return $this->users;
+//    }
 
     /**
      * Get id

@@ -9,7 +9,7 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  *
  * @author Gilbert C.
  */
-class reportSIPRepository extends EntityRepository {
+class ReportSIPRepository extends EntityRepository {
 
     public function getAsist($fecha) {
 

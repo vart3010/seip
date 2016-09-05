@@ -13,35 +13,34 @@ class ProductGroupDeliveryType extends SeipAbstractForm {
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $entity = $builder->getData();
+        #$entity = $builder->getData();
 
-        $location = $entity->getReportTemplateDelivery()->getLocation();
+        #$location = $entity->getReportTemplateDelivery()->getLocation();
 
         $parametersPreSet = array(
             'label_attr' => array('class' => 'label'),
-            "empty_value" => "",
-            "attr" => array("class" => "select2 input-large"),
+            "attr" => array("class" => "select2 input-xlarge"),
             "disabled" => true,
         );
 
         $parametersToSet = array(
             'label_attr' => array('class' => 'label'),
             "empty_value" => "",
-            "attr" => array("class" => "select2 input-large"),
+            "attr" => array("class" => "select2 input-xlarge"),
         );
 
         $builder
-                ->add('reportTemplateDelivery', null, $parametersPreSet)
-                ->add('company', null, $parametersPreSet)
-                ->add('location', null, $parametersPreSet)
-                ->add('entity', null, array(
-                    'label_attr' => array('class' => 'label'),
-                    "empty_value" => "",
-                    "attr" => array("class" => "select2 input-large"),
-                    "query_builder" => function (\Pequiven\SEIPBundle\Repository\CEI\EntityRepository $repository) use ($location) {
-                return $repository->findQueryByLocation($location);
-            },
-                ))
+                ->add('deliveryPoint', null, $parametersPreSet)
+//                ->add('company', null, $parametersPreSet)
+//                ->add('location', null, $parametersPreSet)
+//                ->add('entity', null, array(
+//                    'label_attr' => array('class' => 'label'),
+//                    "empty_value" => "",
+//                    "attr" => array("class" => "select2 input-large"),
+//                    "query_builder" => function (\Pequiven\SEIPBundle\Repository\CEI\EntityRepository $repository) use ($location) {
+//                return $repository->findQueryByLocation($location);
+//            },
+//                ))
                 //->add('plant', null, $parametersToSet)
                 ->add('productionLine', null, $parametersToSet)
                 ->add('enabled', null, array(

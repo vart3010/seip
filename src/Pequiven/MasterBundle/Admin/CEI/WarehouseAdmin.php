@@ -37,6 +37,7 @@ class WarehouseAdmin extends BaseAdmin {
     protected function configureFormFields(FormMapper $form) {
         $form
                 ->add("descripcion")
+                ->add("period")
         ;
         parent::configureFormFields($form);
     }
@@ -45,6 +46,7 @@ class WarehouseAdmin extends BaseAdmin {
         $filter
                 ->add("id")
                 ->add("descripcion")
+                ->add("period")
         ;
         parent::configureDatagridFilters($filter);
     }
@@ -53,6 +55,7 @@ class WarehouseAdmin extends BaseAdmin {
         $list
                 ->addIdentifier("id")
                 ->addIdentifier("descripcion")
+                ->add("period")
         ;
         parent::configureListFields($list);
     }

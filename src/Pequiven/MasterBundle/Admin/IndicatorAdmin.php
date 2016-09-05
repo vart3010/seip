@@ -197,6 +197,10 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('isValueFromTextReal', null, array(
                     'required' => false,
                 ))
+                ->add('notShowDecimals', null, array(
+                    'required' => false,
+                    'label' => 'Ocultar decimales',
+                ))
                 ->add('textValueFromVariableReal', null, array(
                     'required' => false,
                 ))
@@ -240,8 +244,15 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('showResultWithoutPercentageInDashboard', null, array(
                     'required' => false,
                 ))
-                ->end()
                 ->end();
+        $form
+                ->with('Gráfico Indicadores Hijos')
+                ->add('showChartChildren', null, array(
+                    'label' => 'Visualizar/ocultar gráfico de indicadores hijos',
+                    'required' => false,
+                ))
+                ->end()
+         ->end();
 
 
         $form

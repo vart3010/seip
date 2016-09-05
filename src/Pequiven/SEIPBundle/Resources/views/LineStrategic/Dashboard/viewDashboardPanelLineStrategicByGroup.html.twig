@@ -6,29 +6,27 @@
     <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/icons.css') }}">
 {% endblock %}
 
-{% block before_body %}
-    {{ contentHeader(
-        ('')
-    ) }}  
-{% endblock %}
-
-
 {% block body %}    
-    {#{{ boxRender.renderBox('pequiven_seip_box_linestrategic_iconsnavbar')|raw }}#}   
-    <br><br>
-    <div class="ten-columns">         
-        <h1 class="thin breadcrumb">
-            {%if (group.color!=null) %}                            
-                {% set color= group.color %}
-            {%else%}                
-                {% set color= "#BCBCBC" %}
-            {%endif%}
-            <i class="fa {{ group.logo }}" style="color: {{color}}; font-size: 50px;" aria-hidden="true"></i>
-            {{group.description}}
-        </h1>
+    {#{{ boxRender.renderBox('pequiven_seip_box_linestrategic_iconsnavbar')|raw }}#}      
+    <div class="twelve-columns" style="font-size: 38px;">     
+
+        {%if (group.color!=null) %}                            
+            {% set color= group.color %}
+        {%else%}                
+            {% set color= "#BCBCBC" %}
+        {%endif%}
+        <i class="fa {{ group.logo }}" style="color: {{color}}; font-size: 50px;" aria-hidden="true"></i>
+        {{group.description}}
+
     </div>
-    <hr class="hr-linestrategic-icons" />       
     <br>
+    <table width="100%">
+        <tr>
+            <td style="height: 4px; background-color: #585858; font-size: 1pt;">
+            </td>
+        </tr>
+    </table>
+    <br> <br>
     <div class="new-row twelve-columns">
         {% for key, line in alllineStrategic %}
             {% set styleIcon= 'background: none' %}

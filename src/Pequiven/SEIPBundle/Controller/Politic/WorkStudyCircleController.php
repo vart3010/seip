@@ -90,6 +90,7 @@ class WorkStudyCircleController extends SEIPController {
 
 
                 $workStudyCircle->setCreatedBy($user);
+                $workStudyCircle->setCoordinator($user);
                 $workStudyCircle->setPeriod($period = $this->getPeriodService()->getPeriodActive());
                 $workStudyCircle->setCodigo($this->setNewRef($request->get("workStudyCircle_data")["complejo"]));
 
@@ -137,6 +138,7 @@ class WorkStudyCircleController extends SEIPController {
             if (isset($options['typeCoordinator'])) {
                 if ($options['typeCoordinator'] == WorkStudyCircle::TYPE_COORDINATOR) {
                     $workStudyCircle->setCoordinator($user);
+                    $workStudyCircle->setCreatedBy($user);
                 } elseif ($options['typeCoordinator'] == WorkStudyCircle::TYPE_COORDINATOR_DISCUSSION) {
                     $workStudyCircle->setCoordinatorDiscussion($user);
                 }
@@ -322,8 +324,13 @@ class WorkStudyCircleController extends SEIPController {
             } elseif ($typeCoordinator == WorkStudyCircle::TYPE_COORDINATOR_DISCUSSION) {
                 $this->get('session')->getFlashBag()->add('success', 'Coordinador de debate añadido con éxito');
             }
+
+            if ($workStudyCircleObject->getPhase() == 1) {
+                return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $request->get("idWorkStudyCircle"))));
+            } else {
+                return $this->redirect($this->generateUrl('pequiven_work_study_circle_show_phase', array("id" => $request->get("idWorkStudyCircle"))));
+            }
             //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
-            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show_phase', array("id" => $request->get("idWorkStudyCircle"))));
         }
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\addCoordinator.html.twig', array(
@@ -523,7 +530,10 @@ class WorkStudyCircleController extends SEIPController {
             'lineas' => $lineas
         );
 
-        $this->generatePdf($data, 'Reporte de Círculo de Trabajo', 'PequivenSEIPBundle:Politic:WorkStudyCircle\viewPdf.html.twig');
+        $twig = 'PequivenSEIPBundle:Politic:WorkStudyCircle\viewPdf.html.twig';
+        $archiveTittle = 'Reporte de Círculo de Trabajo ' . $workStudyCircle->getCodigo();
+        $tittle = 'Reporte de Círculo de Trabajo';
+        $this->getReportService()->generateCETPDF($data, $tittle, $twig, 'P', $archiveTittle);
     }
 
     public function exportBackRestAction(Request $request) {
@@ -557,33 +567,62 @@ class WorkStudyCircleController extends SEIPController {
             'lineas' => $lineas
         );
 
-        $this->generatePdf($data, 'Constancia de Respaldo Revolucionario', 'PequivenSEIPBundle:Politic:WorkStudyCircle\BackRestPdf.html.twig');
+        $twig = 'PequivenSEIPBundle:Politic:WorkStudyCircle\BackRestPdf.html.twig';
+        $archiveTittle = 'Constancia de Respaldo Revolucionario ' . $workStudyCircle->getCodigo();
+        $tittle = 'Constancia de Respaldo Revolucionario';
+        $this->getReportService()->generateCETPDF($data, $tittle, $twig, 'P', $archiveTittle);
     }
 
-    public function generatePdf($data, $title, $template) {
+    /**
+     * Exportar la encuesta de Casa-Abasto
+     * @param Request $request
+     */
+    public function exportPollAction(Request $request) {        
+        $em = $this->getDoctrine()->getManager();
+        $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("idWorkStudyCircle")));
 
-        $pdf = new \Pequiven\SEIPBundle\Model\PDF\CETSeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setPrintLineFooter(false);
-        $pdf->setContainer($this->container);
-        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
-        $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('SEIP');
-        $pdf->setTitle($title);
-        $pdf->SetSubject('Resultados SEIP');
-        $pdf->SetKeywords('PDF, SEIP, Resultados');
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-        $pdf->SetMargins(PDF_MARGIN_LEFT, 45, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-        $pdf->AddPage();
-        $html = $this->renderView($template, $data);
-        $pdf->writeHTML($html, true, false, true, false, '');
-        $pdf->Output(utf8_decode($title) . '.pdf', 'D');
+
+        $path = $this->get('kernel')->locateResource('@PequivenSEIPBundle/Resources/Skeleton/workStudyCircle/Cuestionario_Casa_Abasto.xlsx');
+
+        $objPHPExcel = \PHPExcel_IOFactory::load($path);
+        $objPHPExcel
+                ->getProperties()
+                ->setCreator("SEIP")
+                ->setTitle('SEIP - Encuesta Casa Abasto')
+                ->setCreated()
+                ->setLastModifiedBy('SEIP')
+                ->setModified()
+        ;
+        $objPHPExcel
+                ->setActiveSheetIndex(0);
+        
+        $activeSheet = $objPHPExcel->getActiveSheet();
+        $user=$this->getUser();
+        $activeSheet->setCellValue('C12', $user->getNumPersonal());
+        $activeSheet->setCellValue('E12', $user->getFullNamePersonalNumber());
+        $activeSheet->setCellValue('C13', $workStudyCircle->getCodigo());
+        $activeSheet->setCellValue('E13', $workStudyCircle->getName());
+        $activeSheet->setCellValue('D35', $user->getId());
+        $activeSheet->setCellValue('F35', $workStudyCircle->getId());
+
+        $fileName = sprintf('Encuesta_Casa_Abasto_%s.xlsx', $user->getId());
+        // Redirect output to a client’s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $fileName . '"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        //header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 2017 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->setIncludeCharts(TRUE);
+        $objWriter->save('php://output');
+        exit;
     }
 
     /**

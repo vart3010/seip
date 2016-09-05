@@ -31,6 +31,7 @@ workStudyCircle:
             ext: Extensión
     coordinator:
         add: Añadir Coordinador
+        edit: Cambiar Coordinador
     coordinatorDiscussion:
         add: Añadir Coordinador de Debate
     members:

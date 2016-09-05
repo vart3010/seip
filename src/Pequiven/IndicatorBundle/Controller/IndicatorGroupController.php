@@ -210,6 +210,10 @@ class IndicatorGroupController extends SEIPController {
         $indicatorsGroup = $dataWidget = array(); //Grupo de Indicadores a mostrar en la barra lateral izquierda de la plantilla
         $indicatorService = $this->getIndicatorService();
         $labelsMonths = array();
+        
+        //Actualizamos las posibles etiquetas del indicador
+        $indicatorService->updateTagIndicator($indicator);
+        $indicatorService->updateIndicatorChartDetails($indicator);
         foreach (\Pequiven\SEIPBundle\Model\Common\CommonObject::getLabelsMonths() as $key => $value) {
             $labelsMonths[$key] = array(
                 'id' => $key,

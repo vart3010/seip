@@ -742,6 +742,7 @@ class ArrangementProgramController extends SEIPController {
 
         $rol = null;
         $rolesByType = array(
+            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_STRATEGIC'),
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_TACTIC', 'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_TACTIC'),
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE', 'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE'),
         );
@@ -803,6 +804,10 @@ class ArrangementProgramController extends SEIPController {
                 if ($autoOpenOnSave == true) {
                     $this->setFlash('autoOpenOnSave', true);
                 }
+                if ($entity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC) {
+                    $entity->setIsAvailableInResult(false);
+                }
+
                 if ($entity->getTimeline() === null) {
                     $timeLine = new Timeline();
                     $entity->setTimeline($timeLine);
@@ -848,22 +853,48 @@ class ArrangementProgramController extends SEIPController {
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-
+        //$arrayGoalOrder = 0;
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
 
-        $rol = null;
+        $rol = $userStrategic = null;
+        $configUsers = $userReview = $userNotify = $userAprobe = [];
+        if ($entity->getType() == 0) {
+            $em = $this->getDoctrine()->getManager();
+            $config = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\ConfigurationNotification")->findBy(array('id' => $entity->getId(), 'typeObject' => 2));
 
-        if ($entity->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA) {
-            
-        } else {
-            
+            foreach ($config as $value) {
+                $configUser = $em->getRepository("\Pequiven\MasterBundle\Entity\Configurations\NotificationUser")->findBy(array('idObject' => $value->getId()));
+                foreach ($configUser as $valueUsers) {
+                    $userStrategic = $valueUsers->getUser()->getFullNamePersonalNumber();
+                    switch ($valueUsers->getAction()) {
+                        case 1:
+                            $userReview[] = $userStrategic;
+                            break;
+                        case 2:
+                            $userNotify[] = $userStrategic;
+                            break;
+                        case 3:
+                            $userAprobe[] = $userStrategic;
+                            break;
+                    }
+                }
+            }
         }
 
+        $configUsers = [
+            'userReview' => $userReview,
+            'userNotify' => $userNotify,
+            'userAprobe' => $userAprobe,
+        ];
+        /* if ($entity->getType() == 0) {
+          var_dump($configUsers);
+          die();
+          } */
         $rolesByType = array(
+            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_STRATEGIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_STRATEGIC', 'ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_STRATEGIC', 'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_STRATEGIC'),
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC', 'ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_TACTIC', 'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_TACTIC'),
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE', 'ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_OPERATIVE', 'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE'),
         );
@@ -914,8 +945,8 @@ class ArrangementProgramController extends SEIPController {
         $individualValues = array();
         $penalties = array();
         $i = 1;
-        $totalWeight = 0;
 
+        $totalWeight = 0;
         foreach ($entity->getTimeline()->getGoals() as $goal) {
             $arrayGoalOrder[$goal->getId()] = $i;
             $totalWeight+=$goal->getWeight();
@@ -934,6 +965,7 @@ class ArrangementProgramController extends SEIPController {
         $resultService = $this->container->get('seip.service.result');
         $date = $entity->getLastDateCalculateResult();
         $totales = $resultService->CalculateAdvancePenaltyAP($entity, $date);
+        $periodActive = $this->getPeriodService()->getPeriodActive();
 
         return array(
             'entity' => $entity,
@@ -953,6 +985,8 @@ class ArrangementProgramController extends SEIPController {
             'isAllowToNotity' => $isAllowToNotity,
             'isAllowSuperAdmin' => $isAllowSuperAdmin,
             'gerenciaSIG' => $gerenciaSIG,
+            'configUsers' => $configUsers,
+            'periodActive' => $periodActive
         );
     }
 

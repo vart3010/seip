@@ -1,8 +1,10 @@
 /*
-    Notify.js - Funciones jQuery para la seccion de notificación del SEIP
-
-    Máximo Sojo <maximosojo@atechnologies.com.ve>
-*/
+ *
+ *  Notify.js - Funciones jQuery para la seccion de notificación del SEIP
+ *
+ * @author Máximo Sojo <maximosojo@atechnologies.com.ve>
+ *
+ */
 
 var urlData;
 

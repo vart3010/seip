@@ -4,6 +4,12 @@
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
+{% block before_body %}
+    {{ contentHeader(
+        ('Planificación de la Producción') ,
+         (product_report.plantReport ~' / '~product_report.product)         
+    ) }}
+{% endblock %}
 
 {% block body %}
     <fieldset class="fieldset">
@@ -114,33 +120,48 @@
         {% set colspan = "2" %}
     {% endif %}
 
-
+    <table width="100%">
+        <tr>
+            <td width="50%" style="padding-right: 2px;">
+                {% set labelProductPlanning = ("pequiven_seip.gross"|trans) %}
+                {% set urlProductPlanning = (path('pequiven_product_planning_create',{productReport: product_report.id, type: constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\Production\\ProductPlanning::TYPE_GROSS')})) %}
+                {% set productPlannings = product_report.getProductPlanningsGross %}
+                {% set typeProduction = "gross" %}
+                {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/products_planning.html.twig' %} 
+            </td>
+            <td width="50%" style="padding-left: 2px;">
+                {% set labelProductPlanning = ("pequiven_seip.net"|trans) %}
+                {% set urlProductPlanning = (path('pequiven_product_planning_create',{productReport: product_report.id, type: constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\Production\\ProductPlanning::TYPE_NET')})) %}
+                {% set productPlannings = product_report.getProductPlanningsNet %}
+                {% set typeProduction = "Net" %}
+                {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/products_planning.html.twig' %} 
+            </td>
+        </tr>
+    </table>   
     <br /><br />
-    {% set labelProductPlanning = ("pequiven_seip.gross"|trans) %}
-    {% set urlProductPlanning = (path('pequiven_product_planning_create',{productReport: product_report.id, type: constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\Production\\ProductPlanning::TYPE_GROSS')})) %}
-    {% set productPlannings = product_report.getProductPlanningsGross %}
-    {% set typeProduction = "gross" %}
-    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/products_planning.html.twig' %}
-    <br /><br />
-
-    {% set labelProductPlanning = ("pequiven_seip.net"|trans) %}
-    {% set urlProductPlanning = (path('pequiven_product_planning_create',{productReport: product_report.id, type: constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\Production\\ProductPlanning::TYPE_NET')})) %}
-    {% set productPlannings = product_report.getProductPlanningsNet %}
-    {% set typeProduction = "Net" %}
-    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/products_planning.html.twig' %}
-    <br /><br />
-
     {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/product_detail_daily_months.html.twig' %}
     <br /><br />
-
-
-
-
     {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/raw_materials_consumption.html.twig' %}
     <br /><br />
-    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/unrealized_productions.html.twig' %}
-    <br /><br />
-    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/inventorys.html.twig' %}
+    <table width="100%">
+        <tr>
+            <td width="50%" style="padding-right: 2px;">
+                {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/unrealized_productions.html.twig' %}
+            </td>
+            <td width="50%" style="padding-left: 2px;">
+                {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/inventorys.html.twig' %}
+               {# <br>
+                <span style="text-align: right">
+                    <form action="{{ path("pequiven_product_report_export", { 'id': product_report.id }) }}">
+                        <button type="submit" class="button glossy mid-margin-right">
+                            <span class="button-icon blue-gradient"><span class="icon-download"></span></span>
+                            Exportar a PDF
+                        </button>    
+                    </form>            
+                </span>#}
+            </td>
+        </tr>
+    </table>
     <br /><br />
     <p class="button-height align-right">
         {% if isAllowPlanningReport %}

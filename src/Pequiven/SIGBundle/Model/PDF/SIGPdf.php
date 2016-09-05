@@ -28,7 +28,8 @@ class SIGPdf extends TCPDF implements ContainerAwareInterface{
     //Header del documento pdf de resultados
     public function Header() {
         // Logo SEIP
-        $image_file = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logo_pqv2.gif'); //K_PATH_IMAGES.'logo_example.jpg';
+        //$image_file = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logo_pqv2.gif'); //K_PATH_IMAGES.'logo_example.jpg';
+        $image_file = 'bundles/pequivenseip/logotipos-pqv/logo_pqv2.gif'; //K_PATH_IMAGES.'logo_example.jpg';
         $this->Image($image_file, 10, 10, 15, '', 'GIF', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Set font
         $this->SetFont('helvetica', 'B', 16);
@@ -37,7 +38,7 @@ class SIGPdf extends TCPDF implements ContainerAwareInterface{
         $text='<div align="center" style="font-size: 1em;color: red;">'.$this->title.'<br>'./*$this->period->getDescription().*/'</div>';
         $this->writeHTML($text);
         // Logo Pqv
-        $image_file = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.png'); //K_PATH_IMAGES.'logo_example.jpg';
+        $image_file = 'bundles/pequivenseip/logotipos-pqv/logo_menu_seip.png'; //K_PATH_IMAGES.'logo_example.jpg';
         $this->Image($image_file, 270, 10, 15, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Línea HR
         $lineRed = array('width' => 1.0, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(255, 0, 0));

@@ -1,0 +1,335 @@
+{# empty Twig template #}
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/jQuery-Mask-Plugin-master/jquery.mask.min.js') }}"></script>   
+    <script src="{{  asset('bundles/pequivenseip/tableGrid.js') }}"></script>
+    <script type="text/javascript">
+        var totalOrder;
+
+        {% if order %}        
+        totalOrder = "{{ order.getTotalOrder}}";
+        {% else %}
+            totalOrder = 0;
+        {% endif %}
+
+            $(document).ready(function () {
+                charge();
+                $("button#confirmarOrden").attr("disabled", true);
+                $("#dataProduct").val('{"datos":{}}');
+
+                setTable("listaPagos");
+                setMsjAlertaRepetido("Ya existe una Referencia igual");
+                var arrayNames = new Array("concepto", "ref", "monto");
+                setNameCampos(arrayNames);
+                campoClave(1);
+                setFieldRsJson("#dataProduct");
+
+                var ids = ["2"];
+                setColumsTotals(ids);
+                setSelectorTotals("span#totales_");
+
+                var right = new Array(2, 7); //7 para q funcione
+                setColsRight(right);
+
+                $("p.assistance input").change(function () {
+
+                    var check = $(this).is(':checked');
+                    var idMember = $(this).attr("data");
+                    var form = $("form#editmember_" + idMember);
+                    var url = form.attr("action");
+                    url = url + "&status=" + check;
+                    form.attr("action", url);
+                    form.submit();
+
+                });
+
+                $("a#registroPago").click(function () {
+
+                    var ref = [$("input#ref").val(), $("input#ref").val()];
+                    var monto = [$("input#monto").val(), $("input#monto").val()];
+                    var tipo = [$("select#metodo").val(), $("select#metodo").find('option:selected').attr("name")];
+                    var icono = ["", "<a href='#' id='" + index + "' name='" + ref[0] + "' onclick='delRow(this.id,this.name)' {#class='button icon-trash delItem'#}><i class=\"fa fa-trash\"></i></a>"];
+
+                    if ((ref[0] != "") && (monto[0] != "") && (tipo[0] != "")) {
+                        var data = [tipo, ref, monto, icono];
+                        delRowDefault();
+                        addRow(data);
+                        index = index + 1;
+                        getJson();
+                        $("input#ref").val('');
+                        $("input#monto").val('');
+                        validaBoton();
+                    } else {
+                        alert("Debe llenar Todos los campos");
+                    }
+
+                });
+
+
+            });
+
+            function validaBoton() {
+                var totalPagado = $("span#totales_2").attr("data");
+                //alert(totalPagado+" "+totalOrder);
+                if (totalPagado >= totalOrder) {
+                    $("button#confirmarOrden").attr("disabled", false);
+                    ;
+                } else {
+                    $("button#confirmarOrden").attr("disabled", true);
+                }
+            }
+
+            function delRow(id, idProduct) {
+                delRowAction(id, idProduct);
+                getJson();
+                totals();
+                validaBoton();
+            }
+
+            function charge() {
+                $('.select2').select2({
+                    allowClear: true
+
+                });
+
+                $('#idOrder').select2({
+                    minimumInputLength: 4
+                });
+            }
+    </script>    
+{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader(
+        { ( '*' ): ('Órdenes de Pedidos') },
+         (' Cancelar/Devolver')
+    ) }}
+{% endblock %}
+
+
+
+{% block body %}
+    <style>
+        table#datos{
+            border-collapse:separate;
+            border-spacing: 0px 10px;
+        }
+        .fa-trash{
+            color: red;    
+        } 
+        .fa-plus-square{
+            color: green;    
+            font-size: 18pt;
+        }
+        .rounded{
+            border-radius: 50px 50px 50px 50px;
+            -moz-border-radius: 50px 50px 50px 50px;
+            -webkit-border-radius: 50px 50px 50px 50px;
+        }          
+        table#listaPagos tbody tr td.gridTd {
+            text-align: right;
+        }
+    </style>
+    <div class="columns">
+        <div class="twelve-columns"> 
+            <center>
+                <table width="95%">
+                    <tr>
+                        <td>
+                            <form name="formula" method="POST" action="{{ path("pequiven_housesupply_orderkit_cancel")}}">
+                                <select onchange="this.form.submit();" name="idOrder" id="idOrder" class="select2 input-large form-control" style="width: 100%">
+                                    {% if(order) %}                        
+                                        <option value="{{order.id}}" selected>Nro: {{"%05d" | format(order.nroOrder)}} | {{ order.getWorkStudyCircle.codigo }} | {{ order.getCreatedAt|date("d/m/Y h:i:s a") }} </option>                                           
+                                    {%else%}
+                                        <option value="0" selected>Ingrese el Número de Pedido</option>                                           
+                                    {%endif%}
+                                    {% for orders in ordersArray %}
+                                        {% if((order==null)or(orders.id!=order.id)) %}
+                                            <option value="{{orders.id}}">Nro: {{"%05d" | format(orders.nroOrder)}} | {{ orders.getWorkStudyCircle.codigo }} | {{ orders.getCreatedAt|date("d/m/Y h:i:s a") }} </option>                                           
+                                        {%endif%}
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </center>
+        </div>       
+        {% if order %}
+            <div class="twelve-columns">            
+                <center>
+                    <table width="100%" class="rounded simple-table" style="border: 1px #D8D8D8 solid;">
+                        <tr style="height: 30px;">
+                            <td colspan="2" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">                                
+                                Datos del Pedido                                                                  
+                            </td>         
+                            <td colspan="2" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">                                
+                                Estatus: {{arrayStatus[order.getType]}}
+                            </td>        
+                        </tr>
+                        <tr>
+                            <td width="20%" class="header bold">Fecha de Pedido:</td>
+                            <td width="30%">
+                                {{ order.getCreatedAt|date("d/m/Y h:i:s a") }} 
+                            </td>
+                            <td colspan="2" width="50%" rowspan="2" style="border: 1px #D8D8D8 solid; background-color: #D8D8D8; font-size: 30pt; vertical-align: middle; text-align: center;">
+                                Orden:
+                                {%if order.type==2%}
+                                    <span class="red bold">{{ "%05d" | format(order.nroOrder) }}</span>              
+                                {%else%}
+                                    <span class="green bold">{{ "%05d" | format(order.nroOrder) }}</span>              
+                                {%endif%}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="20%" class="header bold">Localidad:</td>
+                            <td width="30%">
+                                {{ order.getWorkStudyCircle.getComplejo.getdescription }} 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="20%" class="header bold">C.E.T.:</td>
+                            <td width="30%">
+                                {{ order.getWorkStudyCircle.codigo }} - {{ order.getWorkStudyCircle.name }} 
+                            </td>
+                            <td width="20%" class="header bold">Fecha de Pago:</td>
+                            <td width="30%">
+                                {%if order.getType==4%}                                
+                                    {{ order.getDatePay|date("d/m/Y h:i:s a") }} 
+                                {%else%}
+                                    Sin Pagar
+                                {%endif%}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="20%" class="header bold">Coordinador:</td>
+                            <td width="30%">
+                                {{ order.getWorkStudyCircle.getcoordinator.getfullname }} 
+                            </td>
+                            <td width="20%" class="header bold">Fecha de Entrega:</td>
+                            <td width="30%">
+                                {%if order.getType==5%}
+                                    {{ order.getDateDelivery|date("d/m/Y h:i:s a") }} 
+                                {%else%}
+                                    Sin Retirar
+                                {%endif%}
+                            </td>
+                        </tr>
+                    </table>
+                </center>            
+            </div>
+
+            {%set disabled='disabled' %}
+            <div class="six-columns twelve-columns-mobile">
+                <table class="simple-table"  width="100%">
+                    <tr style="height: 28px;">
+                        <td colspan="3" style="background-color: #AA0000; color: #FFFFFF; font-size: 18pt; vertical-align: middle;">Miembros del Círculo</td>         
+                    </tr>
+                    {% for member in order.getWorkStudyCircle.getMembers %}                                
+                        {%if(members[member.getId] is defined)%}
+                            {%set checked = 'checked'%}
+                        {%else%}
+                            {%set checked = ''%}
+                        {%endif%}
+                        <tr>
+                            <td>{{ loop.index  }}</td>
+                            <td>{{ member.getOnlyFullNameUser }}</td>                                           
+                            <td>
+                                <form name="editmember" id="editmember_{{ member.id  }}" method="POST" action="{{ path("pequiven_housesupply_orderkitcheck_edit", { 'idOrder': order.id , 'idMember': member.id , 'idKit': order.getProductKit.getId  })}}">
+                                    <center>
+                                        <p class="assistance button-height">
+                                            <input type="checkbox" name="members[{{ member.id}}]" data="{{ member.id}}" value="1" {{checked}} {{disabled}} class="switch green-active mid-margin-right" data-text-on="Si" data-text-off="No">
+                                        </p>
+                                    </center>
+                                </form>
+                            </td>                                            
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="six-columns twelve-columns-mobile">
+                <table width="100%" style="border: 1px #D8D8D8 solid;" class="simple-table">
+                    <tr style="height: 30px;">
+                        <td width="100%" style="background-color: #AA0000; color: #FFFFFF; font-size: 20pt; vertical-align: middle;">Productos</td>         
+                    </tr>
+                    <tr>
+                        <td width="100%">
+                            <table id="table1" class="simple-table" width="100%">
+                                <thead>
+                                    <tr>                                                    
+                                        <th class="header text-center" width="10%">Cant</th>
+                                        <th class="header" width="70%">Producto</th>
+                                        <th class="header text-center" width="10%">Precio</th>                                
+                                        <th class="header text-right" width="10%">Sub-Total</th>                                                    
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if (orderDetails) %}
+                                        {% for list in orderDetails %}                                                    
+                                            <tr>
+                                                <td class="text-center" width="10%"> {{ list.cant }} </td>
+                                                <td width="70%">{{ list.product }}</td>
+                                                <td class="text-right" width="10%">{{ (list.totalLine/list.cant)|myNumberFormat }}</td>                                                                                                                        
+                                                <td class="text-right" width="10%">{{ list.totalLine|myNumberFormat }}</td>                                
+                                            </tr>                                                                                                    
+                                        {% endfor %}   
+                                    {% endif %}
+                                </tbody> 
+                                <tfoot>
+                                    <tr>                                                    
+                                        <td colspan="2">&nbsp;</td>
+                                        <td class="text-right" style="background-color: #AA0000; font-weight: bold; color: #FFFFFF;">Sub-Total</td>
+                                        <td width="15%" class="text-right">{{ order.getTaxable|myNumberFormat}}</td>                                                    
+                                    </tr>                                    
+                                    <tr>
+                                        <td colspan="2">&nbsp;</td>
+                                        <td class="text-right" style="background-color: #AA0000; font-weight: bold; color: #FFFFFF;">Impuestos</td>
+                                        <td width="15%" class="text-right">{{ order.getTax|myNumberFormat}}</td>                                                    
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">&nbsp;</td>
+                                        <td class="text-right" style="background-color: #AA0000; font-weight: bold; color: #FFFFFF;">Total</td>
+                                        <td width="15%" class="text-right" >{{ order.getTotalOrder|myNumberFormat}}</td>                                                    
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </td>                        
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>* Productos Distribuidos en <h3 style="display:inline;">{{cantKits}} Kits </h3></b>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <div class="new-row twelve-columns" style="text-align: right;">  
+                    {%if ((order.getType==4) or (order.getType==1)) %}
+                        <form action="{{ path("pequiven_housesupply_orderkit_annul", { 'id': order.id }) }}">
+                            <button type="submit" class="button glossy mid-margin-right">
+                                <span class="button-icon red-gradient"><span class="icon-card"></span></span>
+                                Devolver Pedido {{"%05d" | format(order.nroOrder) }}
+                            </button>    
+                        </form>
+                    {%endif%}
+                    {%if order.getType==5 %}
+                        <form action="{{ path("pequiven_housesupply_orderkitdelivery_export", { 'id': order.id }) }}">
+                            <button type="submit" class="button glossy mid-margin-right">
+                                <span class="button-icon green-gradient"><span class="icon-card"></span></span>
+                                Exportar Orden de Despacho
+                            </button>    
+                        </form>
+                    {%endif %}
+                </div>
+            </div>  
+        {%endif%}
+    </div>
+{% endblock %}
+
+
+

@@ -35,7 +35,7 @@ class EvolutionController extends ResourceController
             $object->setFile($nameFile);            
             $em->flush();         
 
-            sleep(3);            
+            //sleep(3);            
             $response->setData(1);
             return $response;            
         }else{
@@ -59,7 +59,6 @@ class EvolutionController extends ResourceController
         header('Content-Disposition: attachment; filename="'.$mi_pdf.'"');
         readfile($mi_pdf);
         die();
-
     }
     
     /**
@@ -67,8 +66,7 @@ class EvolutionController extends ResourceController
      *
      *
      */
-    public function exportChrat(Request $request)
-    {          
+    public function exportChrat(Request $request){          
         if($request->isMethod('POST')){
           $exportRequestStream = $request->request->all();          
           $request->request->remove('charttype');
@@ -86,7 +84,6 @@ class EvolutionController extends ResourceController
 
         //return $fileSVG;
         $this->exportAction($request);            
-
     }
 
     /**
@@ -107,7 +104,7 @@ class EvolutionController extends ResourceController
         $routing = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/temp/*.png";
         
         //$fileSVG = $this->exportChrat($request);        
-        sleep(1);
+        //sleep(1);
         $formula = "";
         //Buscando los Archivos por Codigo
         $nameSVG = glob("$routing");
@@ -135,11 +132,11 @@ class EvolutionController extends ResourceController
             $indicator = $this->get('pequiven.repository.indicator')->find($idObject); //Obtenemos el indicador
             $indicatorBase = $indicator;
             if ($indicator->getParentCloning()) {
-                $id = $indicator->getParentCloning()->getId();            
+                $idObject = $indicator->getParentCloning()->getId();            
                 $indicator = $indicator->getParentCloning();
                 //Si el indicador es clonado y viene del estratetico
                 if ($indicator->getParentCloning()) {
-                    $id = $indicator->getParentCloning()->getId();
+                    $idObject = $indicator->getParentCloning()->getId();
                     $indicator = $indicator->getParentCloning();
                 }
             }
@@ -169,7 +166,8 @@ class EvolutionController extends ResourceController
                     $font = "3.png";
                     break;
             }
-            $font = $this->generateAsset('bundles/pequivensig/images/'.$font);
+            //$font = $this->generateAsset('bundles/pequivensig/images/'.$font);
+            $font = 'bundles/pequivensig/images/'.$font;
         } elseif ($typeObject == 2) {
             $ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($idObject);
             $name = $ArrangementProgram->getRef() . '' . $ArrangementProgram->getDescription();            

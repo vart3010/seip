@@ -252,6 +252,7 @@ pequiven_seip:
         status_revocatory_signature: Status Firma Revocatorio
         line_strategic: Línea Estratégica
         categoryFile: Categorias de Archivo
+        nomina: Nómina
     tooltips:
         click_to_show: Click para ver
     area:
@@ -328,8 +329,10 @@ pequiven_seip:
             role_seip_arrangement_program_list_for_reviewing: Usted no tiene permiso para ver la lista de los programas de gestión por revisar.
             role_seip_arrangement_program_list_for_approving: Usted no tiene permiso para ver la lista de los programas de gestión por aprobar.
             role_seip_arrangement_program_list_for_notifying: Usted no tiene permiso para ver la lista de los programas de gestión por notificar.
+            role_seip_arrangement_program_view_strategic : Usted no tiene permiso para ver los programas de gestión a nivel estrategicos.
             role_seip_arrangement_program_view_tactic: Usted no tiene permiso para ver los programas de gestión a nivel tactico.
             role_seip_arrangement_program_view_operative: Usted no tiene permiso para ver los programas de gestión a nivel operativo.
+            role_seip_arrangement_program_create_strategic: Usted no tiene permiso para crear programa de gestión a nivel estrategicos.
             role_seip_arrangement_program_create_tactic: Usted no tiene permiso para crear programa de gestión a nivel tactico.
             role_seip_arrangement_program_create_operative: Usted no tiene permiso para crear programa de gestión a nivel operativo.
             role_seip_arrangement_program_create_from_template: Usted no tiene permiso para crear programa de gestión a partir de plantillas.
@@ -383,7 +386,7 @@ pequiven_seip:
     report_template:
         report_template: Planificación de producción
         report_day: Reporte del día
-        report_template_delivery: Planificación de Despacho
+
         load:
             notification: Notificacion
             production: Producción
@@ -395,8 +398,6 @@ pequiven_seip:
         raw_material: Consumo de Materia prima
         details_raw_material: Detalle de consumo de materia prima
     
-    product_group_delivery:
-        product_group: Linea de Negocio
         
     product_report:
         product_report: Producto
@@ -446,6 +447,7 @@ pequiven_seip:
     consumer_planning_gasflow:
         consumer_planning_gasflow: Consumo de flujo de gas
         details_consumer_planning_gasflow: Detalle de consumo de flujo de gas
+        upload_file: Cargar Flujo de Gas
         question:
             delete: Desea eliminar este detalle de consumo de flujo de gas
     gasflow_consumption_planning:
@@ -455,6 +457,7 @@ pequiven_seip:
     consumer_planning_servicefactor:
         consumer_planning_servicefactor: Consumo de factor de servicio
         details_consumer_planning_servicefactor: Detalle de consumo de factor de servicio
+        upload_file: Cargar Factor de Servicio
         question:
             delete: Desea eliminar este detalle de consumo de factor de servicio
     servicefactor_consumption_planning:
@@ -654,6 +657,11 @@ chart:
         indicatorPyramidPlanSection: Pirámide 3D PLAN/COSTOS
         stackedColumn3dByIndicator: Columna Apilada de Variables de Indicador
         indicatorWithTrendlineHorizontalOnlyResult: Indicador con una línea horizontal para comparar el valor de los resultados con algún valor fijo
+        multilevelPieAit: Indicador tipo torta con subcategorias para AIT
+        mslineAit: Resultado del % de la meta de acuerdo a la resolución de casos (AIT)
+        mslineProd: Resultado del % de cumplimiento de los indicadores asociados con respecto a la meta fijada (Producción)
+        type_column_2d: Resultado del % de cumpliento del indicador padre en grafico de barras (Mantenimiento),
+        type_column_3d_mat: Cumplimiento del indicador padre (Materiales)
         example: Ejemplo
         
     

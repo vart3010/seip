@@ -1,7 +1,7 @@
-{% trans_default_domain 'PequivenSEIPBundle' %}
+{% trans_default_domain 'Delivery' %}
 
 <fieldset class="fieldset fields-list">
-    <legend class="legend">{{ 'pequiven_seip.product_report.product_report'|trans }}</legend>
+    <legend class="legend">{{ 'delivery_product.product_report'|trans }}</legend>
     <div class="field-block button-height">
         {{ form_label(form.productGroupDelivery) }}
         {{ form_widget(form.productGroupDelivery) }}
@@ -13,11 +13,11 @@
         {{ form_errors(form.product) }}
     </div>
     
-    {#<div class="field-block button-height">
-        {{ form_label(form.indicator) }}
-        {{ form_widget(form.indicator) }}
-        {{ form_errors(form.indicator) }}
-    </div>#}
+    <div class="field-block button-height">
+        {{ form_label(form.type) }}
+        {{ form_widget(form.type) }}
+        {{ form_errors(form.type) }}
+    </div>
     <div class="field-block button-height">
         {{ form_label(form.enabled) }}
         {{ form_widget(form.enabled) }}

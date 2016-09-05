@@ -98,6 +98,17 @@ pequiven_work_study_circle_export_pdf:
     options:
         expose: true
         
+pequiven_work_study_circle_export_housesupply_poll:
+    path: /{idWorkStudyCircle}/exportHouseSupplyPoll.{_format}
+    defaults:
+        _controller: pequiven.controller.work_study_circle:exportPollAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+        
 pequiven_work_study_circle_general:
     path: /view/{phase}
     defaults:

@@ -1,7 +1,7 @@
 {% trans_default_domain 'workStudyCircle' %}
 
 <style>
-    .body {
+    td,th {
         font-size: 8pt;
     }
     .title_bold {
@@ -12,6 +12,10 @@
     }
     .alin_font {
         text-align: justify;
+    }    
+    .spacing{
+        border-collapse:separate;
+        border-spacing: 4px;
     }
 </style>
 
@@ -22,142 +26,113 @@
             <th class="title_bold">1. Datos del Círculo de Estudio</th>
         </tr>
     </table> 
+    <br/>
+    <table width="100%" class="spacing"> 
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="20%">{{ "workStudyCircle.form.code"|trans }}:</td>
+            <td class="title_bold" bgcolor="#F2F2F2" width="40%">{{ "workStudyCircle.form.nombre"|trans }}:</td>
+            <td class="title_bold" bgcolor="#F2F2F2" width="40%">{{ "workStudyCircle.form.complejo"|trans }}:</td>
+        </tr>      
+        <tr>
+            <td width="20%"> {{ workStudyCircle.codigo }}</td>    
+            <td width="40%"> {{ workStudyCircle.name }}</td>
+            <td width="40%"> {{ workStudyCircle.complejo.description}}</td>
+        </tr>
 
-    <br/><br/>
-
-    <table width="95%" class="simple-table responsive-table tables-extras"> 
-        <tr>
-            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.code"|trans }}:</td>
-            <td width="70%"> {{ workStudyCircle.codigo }}</td>                        
-        </tr>
-        <tr>
-            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.nombre"|trans }}:</td>
-            <td width="70%"> {{ workStudyCircle.name }}</td>
-        </tr>
-        <tr>
-            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.complejo"|trans }}:</td>
-            <td width="70%"> {{ workStudyCircle.complejo.description}}</td>
-        </tr>
         {% if workStudyCircle.phase == 1 %}
             <tr>
-                <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaFirst"|trans }}:</td>
-                <td width="70%"> {% for gerencia in  workStudyCircle.gerencias %} - {{ gerencia }}<br/> {% endfor %}</td>
+                <td class="title_bold" bgcolor="#F2F2F2" width="50%">{{ "workStudyCircle.form.gerenciaFirst"|trans }}:</td>
+                <td class="title_bold" bgcolor="#F2F2F2" width="50%">{{ "workStudyCircle.form.gerenciaSecond"|trans }}:</td>            
             </tr>
-
-            <tr>
-                <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaSecond"|trans }}:</td>
-                <td width="70%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br> {% endfor %}</td>
+            <tr>                
+                <td width="50%"> {% for gerencia in  workStudyCircle.gerencias %} - {{ gerencia }}<br/> {% endfor %}</td>
+                <td width="50%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br/> {% endfor %}</td>                
             </tr>
         {% endif %}
     </table>
-
-    <br/><br/>
-
+    <br/>
     <table width="100%" class="title_bold">
         <tr>
             <th class="title">2. Reuniones Realizadas</th>
         </tr>
-    </table>   
+    </table>       
+    {% if workStudyCircle.phase > 1 %}
+        {% set users = workStudyCircle.getMembers %}
+    {% else %}
+        {% set users = workStudyCircle.userWorkerId %}
+    {% endif %}
 
-    <br/><br/>
+    <p style="font-size: 8pt; text-align: justify;">
+        {% for miembro in users %}
+            {{loop.index}}.  {{ miembro.firstname | ucwords}} {{ miembro.lastname | ucwords}} |
+            {% if loop.index is divisibleby(7)%}
+                <br>                
+            {%endif%}
+        {%endfor%}
+    </p>
 
-    <table width="100%">
+    <table width="100%" cellspacing="5">
+        {% set count = users|length %}
+        {% set countMiembros = (80/count)|round(0, 'floor') %}
         <thead>
             <tr>
-                <th class="title_bold" bgcolor="#F2F2F2" width="30%">Miembros del Círculo</th>
-
-
-                {% for reunion in fechas %}
-                    <th class="title_bold" bgcolor="#F2F2F2" width="7%">{{reunion.date|date('d-m')}}</th>
-                    {% endfor %}
-
-                <th class="title_bold" bgcolor="#F2F2F2" width="7%"> Total </th>
+                <th rowspan="2" class="title_bold" style="text-align: center" bgcolor="#F2F2F2" width="10%">Fecha de Reuniones</th> 
+                <th colspan="{{count}}" class="title_bold" style="text-align: center" bgcolor="#F2F2F2" width="{{countMiembros*(users|length)}}%">Miembros de Círculo de Estudio y Trabajo</th> 
+                <th colspan="2" class="title_bold" style="text-align: center" bgcolor="#F2F2F2" width="10%">Reuniones</th> 
+            </tr>
+            <tr>                
+                {% for miembro in users %}
+                    <th class="title_bold" style="text-align: center" bgcolor="#F2F2F2" width="{{countMiembros}}%">{{loop.index}}</th>                    
+                    {%endfor%}
+                <th class="title_bold" style="text-align: center" bgcolor="#F2F2F2" width="5%"> Total </th>
+                <th class="title_bold" style="text-align: center" bgcolor="#F2F2F2" width="5%"> (%) </th>
             </tr>
         </thead>
-
-        {% if workStudyCircle.phase > 1 %}
-            {% set users = workStudyCircle.getMembers %}
-        {% else %}
-            {% set users = workStudyCircle.userWorkerId %}
-        {% endif %}
-        {% for miembro in users %}
-
-            <tr>
-                <td width="30%">{{loop.index}}.  {{ miembro.firstname | ucwords}} {{ miembro.lastname | ucwords}}</td>
-
-                {% set totalAP = 0 %}
-
-                {% for reunion in fechas %}
-
-                    <th width="7%" style="text-align: center"> 
-                        {% if(asistencia[miembro.id][reunion.id]==true) %}
-                            {% set totalAP = totalAP + 1 %}                                
-                            P
-                        {% else %}
-                            -
-                        {% endif %}
-                    </th>
-
-                {% endfor %}
-
-                <th width="7%" style="text-align: center"> {{ totalAP }} </th>
-            </tr>
-        {% endfor %}
-
-        <tr bgcolor="#F2F2F2">
-            <td class="title_bold" width="30%" style="text-align: right"> Inasistentes </td>
-            {% set suma=0%}
+        <tbody>
             {% for reunion in fechas %}
-                <th width="7%" style="text-align: center"> {{ totalAT[reunion.id] - totalAR[reunion.id] }} </th>
-                    {% set suma=suma+(totalAT[reunion.id] - totalAR[reunion.id])%}  
-                {% endfor %}
-            <th width="7%" style="text-align: center"> {{ suma }} </th>
-        </tr>
+                <tr>
+                    <td width="10%" style="text-align: center">{{reunion.date|date('d-m-Y')}}</td>                
 
-        <tr bgcolor="#F2F2F2">
-            <td class="title_bold" width="30%" style="text-align: right"> Total Plan de Asistentes</td>
-            {% set sumaP=0%}
-            {% for reunion in fechas %}
-                <th width="7%" style="text-align: center"> {{ totalAT[reunion.id] }} </th>
-                    {% set sumaP=sumaP+totalAT[reunion.id]%}  
-                {% endfor %}
-            <th width="7%" style="text-align: center"> {{ sumaP }} </th>
-        </tr>
+                    {% set totalAP = 0 %}
+                    {% for miembro in users %}                                                
+                        <th width="{{countMiembros}}%" style="text-align: center"> 
+                            {% if((asistencia[miembro.id][reunion.id] is defined) and asistencia[miembro.id][reunion.id]==true) %}
+                                {% set totalAP = totalAP + 1 %}       
+                                P
+                            {% else %}
+                                -
+                            {% endif %}
+                        </th>   
 
-        <tr bgcolor="#F2F2F2">
-            <td class="title_bold" width="30%" style="text-align: right"> Total Real de Asistentes</td>
-            {% set sumaR=0%}
-            {% for reunion in fechas %}
-                <th width="7%" style="text-align: center"> {{ totalAR[reunion.id] }} </th>
-                    {% set sumaR=sumaR+totalAR[reunion.id]%}   
-                {% endfor %}
-            <th width="7%" style="text-align: center"> {{ sumaR }} </th>
-        </tr>
-
-        <tr bgcolor="#F2F2F2">
-            <td class="title_bold" width="30%" style="text-align: right"> Porcentaje (%) </td>
-            {% for reunion in fechas %}
-                <th width="7%" style="text-align: center"> 
-                    {% if totalAT[reunion.id]==0%}
-                        0
-                    {% else %}
-                        {{ ((totalAR[reunion.id]*100)/totalAT[reunion.id])|number_format(1, ',', '.') }} 
-                    {% endif%}
-                </th>
+                    {%endfor%}                       
+                    <th width="5%" style="text-align: center"> {{ totalAP }} </th>
+                    <th width="5%" style="text-align: center"> {{ (totalAP*100/count)|number_format(1, ',', '.') }} </th>                    
+                </tr>                
             {% endfor %}
-            <th width="7%" style="text-align: center">
-                {% if sumaP==0%}
-                    0
-                {% else %}
-                    {{ ((sumaR*100)/sumaP)|number_format(1, ',', '.') }} 
-                {% endif%}
-            </th>
-        </tr>
-
-
-
-
-
+        </tbody>
+        <tfoot>
+            <tr bgcolor="#F2F2F2">
+                <td class="title_bold" width="10%" style="text-align: right;"> Asistencias </td>
+                {% set suma=0%}
+                {% for miembro in users if totalMember[miembro.id] is defined %}
+                    <th width="{{countMiembros}}%" style="text-align: center">
+                        {{ totalMember[miembro.id] }}
+                    </th>
+                    {% set suma=suma+totalMember[miembro.id]%}  
+                {% endfor %}
+                <th width="5%" style="text-align: center"> {{ suma }} </th>
+                <th width="5%" style="text-align: center"> {{ (suma*100/((fechas|length)*(users|length)))|number_format(1, ',', '.') }} </th>                    
+            </tr>            
+            <tr bgcolor="#F2F2F2">
+                <td class="title_bold" width="10%" style="text-align: right;"> (%) </td>                
+                {% for miembro in users if totalMember[miembro.id] is defined %}
+                    <th width="{{countMiembros}}%" style="text-align: center">
+                        {{ (totalMember[miembro.id]*100/(fechas|length))|number_format(1, ',', '.') }}
+                    </th>                    
+                {% endfor %}
+                <th width="5%" style="text-align: center"> - </th>
+                <th width="5%" style="text-align: center"> - </th>                    
+            </tr>            
+        </tfoot>
     </table>
-
 {% endblock %}

@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block before_body %}
+
     {{ contentHeader(
         {("#"):(indicator.ref)},('Gráficos Asociados al Indicador')
     ) }}
@@ -31,13 +32,15 @@
 
 {% endblock %}
 
-
-
-{% block body %}   
-    <br>
+{% block body %}    
     <input type="hidden" id="tableroFlag" name="tableroFlag" value="{{ tablero }}" >
-    <hr class="hr-linestrategic-icons" />
     <table width="100%">
+        <tr>
+            <td style="height: 4px; background-color: #585858; font-size: 1pt;">
+            </td>
+        </tr>
+    </table>
+    <table width="100%">     
         <tr>
             <td width="30%" style="vertical-align: middle; min-height: 495px;">
                 <div style="display: inline-block; width: 100%; height: 100%" ng-controller="DashboardController" ng-init="renderWidgetIndicatorStrategic('{{ indicator.ref }}',{{ data|json_encode() }},'100%','150px')">
@@ -50,12 +53,12 @@
                         </span>
                     </a>
                     <span id="{{ indicator.ref }}">
-                    </span>  
-                    <br>
+                    </span>                      
                     <center>
                         <a href="javascript:history.back()" class="text-center button red-gradient glossy">
                             <li class="fa fa-undo" aria-hidden="true">
-                                <b> Regresar</b>
+                                <span style="font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;">                                   
+                                </span>
                             </li>
                         </a>
                     </center>
@@ -85,6 +88,8 @@
                                 <div ng-controller="ChartsDashboardController">
                                     {% set Charts = indicator.getCharts %}
                                     {% set indicatorsChartDetailsByOrderShow = indicatorService.obtainIndicatorChartDetailsByOrderShow(indicator) %}
+                                    {% set indicatorsChildrens = indicator.getChildrens %}
+
                                     <div class="standard-tabs margin-bottom" {#style="height: 600px;"#}>
                                         <ul class="tabs">
                                             {% set cont = 1 %}
@@ -107,11 +112,33 @@
                                                         {% endif %}
                                                         {% set grafico = "grafico"~loop.index %}
                                                         <li {% if cont == 1 %} class="active" {% endif %}>
-                                                            <a style="color: #000000;" href="#tab-{{ grafico }}">{{ description }} </a>
+                                                            <a style="color: #000000;" href="#tab-{{ grafico }}">{{ description }}</a>
                                                         </li>
                                                         {% set cont = cont + 1 %}
                                                     {% endif %}
                                                 {% endfor %}
+
+                                                {% if indicatorsChildrens|length >0 %}
+                                                    {% for childrens in indicatorsChildrens %}
+                                                        {% if childrens.showChartChildren != 0%}
+                                                            {% set chartsDetailsChildrens = indicatorService.obtainIndicatorChartDetailsByOrderShow(childrens) %}
+                                                            {% for data in chartsDetailsChildrens %}
+                                                                {% set chart = data.chart %}
+                                                                {% set description = chart.shortDescription %}
+                                                                {% if data != null %}
+                                                                    {% if data.description != null %}
+                                                                        {% set description = data.description %}
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                                <li>
+                                                                    <a style="color: #000000;" href="#tab-grafico{{ cont }}">{{ description }}</a>
+                                                                </li>
+                                                                {% set cont = cont + 1 %}
+                                                            {% endfor %}
+                                                        {% endif %} 
+                                                    {% endfor %}
+                                                {% endif %}
+
                                             {% else %}
                                                 {% for chart in Charts %}
                                                     {% set description = chart.shortDescription %}
@@ -130,6 +157,7 @@
                                             {% endif %}
                                         </ul>
                                         <div class="tabs-content" {#style="min-height: 500px;"#}>
+                                            {% set cont = 1 %}
                                             {% if indicatorsChartDetailsByOrderShow|length > 0 %}
                                                 {% for indicatorChartDetailsByOrderShow in indicatorsChartDetailsByOrderShow %}
                                                     {% set showChart = false %}
@@ -162,8 +190,26 @@
                                                                 {% endif %}
                                                                 <span id="{{ grafico }}"></span>
                                                             </div>
+                                                            {% set cont = cont + 1 %}
                                                         {% endif %}
                                                     {% endfor %}
+
+                                                    {% if indicatorsChildrens|length >0 %}
+                                                        {% for childrens in indicatorsChildrens %}
+                                                            {% if childrens.showChartChildren != 0%}
+                                                                {% set chartsDetailsChildrens = indicatorService.obtainIndicatorChartDetailsByOrderShow(childrens) %}
+                                                                {% for data in chartsDetailsChildrens %}
+                                                                    {% set chart = data.chart %}
+                                                                    {% set grafico = "grafico"~cont %}
+                                                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ childrens.id }},'{{ grafico }}','100','500')">
+                                                                        <span id="{{ grafico }}"></span>
+                                                                    </div>
+                                                                    {% set cont = cont + 1 %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+
                                                 {% else %}
                                                     {% for chart in Charts %}
                                                         {% set grafico = "grafico"~loop.index %}
